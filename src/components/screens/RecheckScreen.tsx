@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { AttemptRunner } from "@/components/questions/AttemptRunner";
 import { Button, buttonClass } from "@/components/ui/Button";
-import { ArrowRightIcon, FlagIcon } from "@/components/ui/Icons";
+import { ArrowRightIcon } from "@/components/ui/Icons";
 import { StatusBadge } from "@/components/ui/Progress";
 import { skillMastery } from "@/engine/mastery";
 import { answerRecheck, cancelRecheck, finishRecheck, setRecheckIndex, startRecheck, type LearnerState } from "@/engine/progress";
@@ -12,7 +12,7 @@ import { updateLearner, useHydrated, useLearner } from "@/lib/store";
 import { ASSESSMENT_FORMS, type AssessmentForm } from "@/topics/fractions/questions";
 import { skillById } from "@/topics/fractions/skills";
 import { independentResults } from "./AssessmentScreen";
-import { ScreenSkeleton } from "./DashboardScreen";
+import { ScreenSkeleton } from "@/components/ui/Screen";
 
 export function recheckPlan(skill: string, state: LearnerState): { form: AssessmentForm; order: string[] } {
   const seen = state.rechecks[skill]?.form ?? state.assessment.last?.form ?? "B";
@@ -52,11 +52,15 @@ export function RecheckScreen({ skill }: { skill: string }) {
 
   return (
     <section className="card mx-auto max-w-2xl p-6 sm:p-10">
-      <span className="grid size-12 place-items-center rounded-2xl bg-ink text-white">
-        <FlagIcon size={22} />
-      </span>
-      <p className="eyebrow mt-5">Independent recheck</p>
-      <h1 className="display mt-1 text-3xl font-semibold">{info.title}</h1>
+      <div className="flex items-center gap-4">
+        <span className="grid size-16 shrink-0 place-items-center rounded-3xl bg-gradient-to-br from-mint to-sky text-4xl shadow-[0_4px_0_#1597a0]" aria-hidden>
+          🔁
+        </span>
+        <div>
+          <p className="eyebrow">Quick recheck</p>
+          <h1 className="display text-3xl">{info.title}</h1>
+        </div>
+      </div>
 
       {r && r.skill !== skill ? (
         <>
@@ -94,7 +98,8 @@ export function RecheckScreen({ skill }: { skill: string }) {
           )}
           <div className="mt-6 flex flex-wrap gap-3">
             <Button
-              size="lg"
+              variant="go"
+              size="xl"
               onClick={() => {
                 const seed = Date.now();
                 updateLearner((s) => {
@@ -105,11 +110,8 @@ export function RecheckScreen({ skill }: { skill: string }) {
             >
               {justFinished ? "Recheck again" : "Start the recheck"} <ArrowRightIcon size={18} />
             </Button>
-            <Link href={routes.practice(skill)} className={buttonClass("secondary", "lg")}>
+            <Link href={routes.practice(skill)} className={buttonClass("secondary", "xl")}>
               Practise first
-            </Link>
-            <Link href={routes.results()} className={buttonClass("ghost", "lg")}>
-              Results
             </Link>
           </div>
         </>

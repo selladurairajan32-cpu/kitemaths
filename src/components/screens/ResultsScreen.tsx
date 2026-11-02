@@ -19,7 +19,7 @@ import { misconceptionById } from "@/topics/fractions/misconceptions";
 import { ASSESSMENT_AREAS, assessmentItem } from "@/topics/fractions/questions";
 import { skillById } from "@/topics/fractions/skills";
 import type { Response } from "@/topics/fractions/types";
-import { ScreenSkeleton } from "./DashboardScreen";
+import { ScreenSkeleton } from "@/components/ui/Screen";
 
 function SkillActions({ m }: { m: SkillMastery }) {
   const skill = skillById(m.skill);

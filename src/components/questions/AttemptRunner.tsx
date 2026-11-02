@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { ReadAloud } from "@/components/kid/ReadAloud";
 import { RichText } from "@/components/math/RichText";
 import { Button } from "@/components/ui/Button";
 import { ArrowLeftIcon, ArrowRightIcon } from "@/components/ui/Icons";
@@ -61,18 +62,21 @@ function AttemptQuestion({
       }}
       className="space-y-6"
     >
-      <h2 ref={heading} tabIndex={-1} className="text-lg font-medium leading-relaxed outline-none sm:text-xl">
-        <span className="sr-only">Question {index + 1} of {total}. </span>
-        <RichText text={q.prompt} />
-      </h2>
+      <div className="flex items-start gap-3">
+        <h2 ref={heading} tabIndex={-1} className="min-w-0 flex-1 text-xl font-semibold leading-relaxed outline-none sm:text-2xl">
+          <span className="sr-only">Question {index + 1} of {total}. </span>
+          <RichText text={q.prompt} />
+        </h2>
+        <ReadAloud text={q.prompt} label="Read the question aloud" />
+      </div>
       <QuestionInput question={q} response={response} onChange={change} locked={false} orderKey={orderKey} />
       {problem && <p className="rounded-xl border border-warn/30 bg-warn-soft px-4 py-3 text-sm text-ink-2">{problem} This answer isn&apos;t saved yet.</p>}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-5">
+      <div className="sticky bottom-0 z-10 -mx-5 flex items-center justify-between gap-3 border-t-2 border-line bg-surface/95 px-5 py-3 backdrop-blur sm:static sm:mx-0 sm:bg-transparent sm:px-0 sm:pb-0 sm:pt-5 sm:backdrop-blur-none">
         <Button variant="ghost" onClick={() => onNavigate(index - 1)} disabled={index === 0}>
           <ArrowLeftIcon size={17} /> Back
         </Button>
-        <Button type="submit" size="lg">
-          {isLast ? "Review & finish" : complete && !problem ? "Save & next" : "Skip for now"} <ArrowRightIcon size={18} />
+        <Button type="submit" variant={complete && !problem ? "go" : "secondary"} size="xl">
+          {isLast ? "Review & finish" : complete && !problem ? "Next" : "Skip for now"} <ArrowRightIcon size={20} />
         </Button>
       </div>
     </form>
@@ -131,7 +135,7 @@ export function AttemptRunner({
               aria-label={`Question ${i + 1}${done ? ", answered" : ", not answered"}`}
               aria-current={isCurrent ? "step" : undefined}
               className={`grid size-11 place-items-center rounded-xl text-sm font-semibold transition-colors ${
-                isCurrent ? "bg-ink text-white" : done ? "bg-den-soft text-den-strong" : "bg-sunk text-muted hover:bg-line"
+                isCurrent ? "bg-brand text-white shadow-[0_3px_0_var(--color-brand-strong)]" : done ? "bg-ok-soft text-ok" : "bg-sunk text-muted hover:bg-line"
               }`}
             >
               {i + 1}
@@ -139,7 +143,7 @@ export function AttemptRunner({
           );
         })}
       </nav>
-      <ProgressBar value={answered / order.length} label="Questions answered" tone="ink" />
+      <ProgressBar value={answered / order.length} label="Questions answered" tone="ok" />
 
       <section className="card p-5 sm:p-8">
         <AnimatePresence mode="wait">
@@ -154,14 +158,15 @@ export function AttemptRunner({
               </p>
               <div className="flex flex-wrap gap-3">
                 <Button
-                  size="lg"
+                  variant="go"
+                  size="xl"
                   disabled={finishing}
                   onClick={() => {
                     setFinishing(true);
                     onFinish();
                   }}
                 >
-                  Finish and see results <ArrowRightIcon size={18} />
+                  Finish! <ArrowRightIcon size={20} />
                 </Button>
                 <Button variant="secondary" size="lg" onClick={() => go(current)}>
                   Keep working

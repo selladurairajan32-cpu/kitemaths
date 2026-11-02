@@ -2,12 +2,15 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
+import { Confetti, StarGlyph } from "@/components/kid/Celebrate";
+import { Kip, KipSays } from "@/components/kid/Kip";
+import { KID_STATUS, lessonLook } from "@/components/kid/kidText";
 import { QuestionPlayer, type ResultDraft } from "@/components/questions/QuestionPlayer";
 import { Button, buttonClass } from "@/components/ui/Button";
-import { ArrowRightIcon, PracticeIcon } from "@/components/ui/Icons";
-import { EvidenceMeter, ProgressBar, StatusBadge } from "@/components/ui/Progress";
+import { ArrowRightIcon } from "@/components/ui/Icons";
+import { ScreenSkeleton } from "@/components/ui/Screen";
 import { PRACTICE_SESSION_LENGTH, selectNextQuestion } from "@/engine/adaptive";
-import { SECURE_MIN_EVIDENCE, skillMastery } from "@/engine/mastery";
+import { skillMastery } from "@/engine/mastery";
 import {
   completePracticeSession,
   dismissPracticeSummary,
@@ -17,18 +20,13 @@ import {
   startPracticeSession,
   type LearnerState,
 } from "@/engine/progress";
+import { starsForResult } from "@/engine/rewards";
 import { routes } from "@/lib/routes";
+import { playSound } from "@/lib/sound";
 import { updateLearner, useHydrated, useLearner } from "@/lib/store";
 import { practicePool } from "@/topics/fractions";
 import { questionById } from "@/topics/fractions/questions";
 import { SKILL_ORDER, SKILLS, skillById } from "@/topics/fractions/skills";
-import { ScreenSkeleton } from "./DashboardScreen";
-
-const REASON_TEXT: Record<string, string> = {
-  focus: "Chosen because this skill isn't secure yet.",
-  review: "A quick review of a skill you're already secure in — mixing skills helps them stick.",
-  "chosen-skill": "From the skill you chose to focus on.",
-};
 
 function pickNext(s: LearnerState): LearnerState {
   if (s.practice.sessionResults >= PRACTICE_SESSION_LENGTH) return completePracticeSession(s);
@@ -43,32 +41,61 @@ function pickNext(s: LearnerState): LearnerState {
   return setPracticeQuestion(s, sel.question.id, sel.reason);
 }
 
-const start = (focus: string | null) =>
+const start = (focus: string | null) => {
+  playSound("tap");
   updateLearner((s) => pickNext(startPracticeSession(completePracticeSession(s), focus, Date.now())));
+};
 
-function SkillSidebar({ learner }: { learner: LearnerState }) {
+const sessionResults = (learner: LearnerState) => {
+  const started = learner.practice.startedAt ?? 0;
+  return learner.results.filter((r) => (r.context === "practice" || r.context === "followup") && r.at >= started);
+};
+
+function SkillPicker({ learner, focusSkill }: { learner: LearnerState; focusSkill: string | null }) {
   return (
-    <div className="card p-5">
-      <h2 className="font-semibold">Your skills</h2>
-      <ul className="mt-3 space-y-3.5">
+    <nav aria-label="Choose what to practise" className="card p-5 sm:p-6">
+      <h2 className="display text-xl">Pick a power-up</h2>
+      <p className="text-sm text-muted">Practise one skill, or mix them all.</p>
+      <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
+        <li className="sm:col-span-2">
+          <Link
+            href={routes.practice()}
+            aria-current={focusSkill === null ? "page" : undefined}
+            className={`flex items-center gap-3 rounded-2xl border-2 p-3 transition-colors ${
+              focusSkill === null ? "border-brand bg-brand-soft" : "border-line bg-surface hover:bg-sunk"
+            }`}
+          >
+            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-brand to-sky text-xl" aria-hidden>
+              🎲
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block font-semibold">Mixed challenge</span>
+              <span className="block text-xs text-muted">Kip picks what helps you most</span>
+            </span>
+          </Link>
+        </li>
         {SKILLS.map((s) => {
-          const m = skillMastery(s.id, learner.results);
+          const active = focusSkill === s.id;
+          const st = KID_STATUS[skillMastery(s.id, learner.results).status];
+          const look = lessonLook(s.lessonId);
           return (
-            <li key={s.id} className="space-y-1.5">
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-sm">{s.title}</span>
-                <StatusBadge status={m.status} />
-              </div>
-              <EvidenceMeter count={m.recentCount} needed={SECURE_MIN_EVIDENCE} score={m.score} label={s.title} />
+            <li key={s.id}>
+              <Link
+                href={routes.practice(s.id)}
+                aria-current={active ? "page" : undefined}
+                className={`flex items-center gap-3 rounded-2xl border-2 p-3 transition-colors ${active ? "border-brand bg-brand-soft" : "border-line bg-surface hover:bg-sunk"}`}
+              >
+                <span className="grid size-11 shrink-0 place-items-center rounded-xl text-xl" style={{ background: look.soft }} aria-hidden>
+                  {look.emoji}
+                </span>
+                <span className="min-w-0 flex-1 text-sm font-semibold leading-tight">{s.title}</span>
+                <span className={`shrink-0 rounded-full px-2 py-0.5 text-[0.7rem] font-bold ${st.cls}`}>{st.label}</span>
+              </Link>
             </li>
           );
         })}
       </ul>
-      <p className="mt-4 text-xs leading-relaxed text-muted">
-        “Secure in practice” needs at least {SECURE_MIN_EVIDENCE} recent answers averaging 75% or more (right first time counts fully, right with help counts half).
-        Mastery also needs the independent mastery check.
-      </p>
-    </div>
+    </nav>
   );
 }
 
@@ -76,81 +103,60 @@ function Intro({ learner, focusSkill }: { learner: LearnerState; focusSkill: str
   const skill = focusSkill ? skillById(focusSkill) : null;
   const m = focusSkill ? skillMastery(focusSkill, learner.results) : null;
   return (
-    <section className="card p-5 sm:p-8">
-      <p className="eyebrow">Practice Centre</p>
-      <h1 className="display mt-1 text-3xl font-semibold">{skill ? `Practise: ${skill.title}` : "Adaptive practice"}</h1>
-      <p className="mt-2 max-w-xl text-ink-2">
-        {skill
-          ? `${skill.description} Up to ${PRACTICE_SESSION_LENGTH} questions on this skill, getting harder as you succeed.`
-          : `Each session has up to ${PRACTICE_SESSION_LENGTH} questions. Questions get harder when you're flying and easier when something's tricky — and if you get stuck, you'll get help that fits your answer.`}
-      </p>
-      {m?.status === "needs-review" && (
-        <p className="mt-3 max-w-xl rounded-xl bg-num-soft px-4 py-3 text-sm text-ink-2">
-          Your mastery check showed this skill needs another look. Practise until it feels strong, then take a short{" "}
-          <Link href={routes.recheck(focusSkill!)} className="font-medium text-den underline">
-            recheck
-          </Link>{" "}
-          to update it.
-        </p>
-      )}
-
-      <div className="mt-6 flex flex-wrap items-center gap-3">
-        <Button size="lg" onClick={() => start(focusSkill)}>
-          <PracticeIcon size={18} /> {skill ? `Start practising ${skill.title.toLowerCase()}` : "Start mixed practice"}
-        </Button>
-        {skill && (
-          <Link href={routes.lesson(skill.lessonId)} className={buttonClass("secondary", "lg")}>
-            Revisit the lesson
-          </Link>
-        )}
-      </div>
-
-      <nav aria-label="Choose what to practise" className="mt-8">
-        <p className="mb-2 text-sm font-medium">{skill ? "Practise something else" : "Or focus on one skill"}</p>
-        <ul className="flex flex-wrap gap-2">
-          {[{ id: null as string | null, title: "Mixed (recommended)" }, ...SKILLS].map((s) => {
-            const active = focusSkill === s.id;
-            return (
-              <li key={s.id ?? "mixed"}>
-                <Link
-                  href={routes.practice(s.id)}
-                  aria-current={active ? "page" : undefined}
-                  className={`inline-flex h-11 items-center rounded-full border px-4 text-sm font-medium transition-colors ${
-                    active ? "border-ink bg-ink text-white" : "border-line-strong bg-surface hover:bg-sunk"
-                  }`}
-                >
-                  {s.title}
+    <div className="space-y-5">
+      <section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-ok-bright via-[#2bc49a] to-mint p-5 text-white shadow-[0_6px_0_#139656] sm:p-8">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+          <Kip mood="cheer" size={88} />
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-bold uppercase tracking-wide text-white/85">Practice arena 🎯</p>
+            <h1 className="display text-3xl leading-tight sm:text-4xl">{skill ? skill.title : "Mixed challenge"}</h1>
+            <p className="mt-1 max-w-xl text-white/90">
+              {PRACTICE_SESSION_LENGTH} questions. They get trickier as you get stronger — and if you get stuck, Kip helps. Win up to{" "}
+              <strong>{PRACTICE_SESSION_LENGTH * 3} stars</strong>!
+            </p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Button variant="sun" size="xl" onClick={() => start(focusSkill)}>
+                Play! <ArrowRightIcon size={20} />
+              </Button>
+              {skill && (
+                <Link href={routes.lesson(skill.lessonId)} className="inline-flex h-15 items-center rounded-[1.25rem] px-5 font-semibold text-white/95 hover:bg-white/15">
+                  Watch the lesson again
                 </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-      {learner.practice.sessionsCompleted > 0 && (
-        <p className="mt-4 text-sm text-muted">
-          {learner.practice.sessionsCompleted} session{learner.practice.sessionsCompleted === 1 ? "" : "s"} completed so far.
-        </p>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {m?.status === "needs-review" && (
+        <KipSays mood="think" tone="sun" speak="Practise until this feels strong, then try a quick recheck.">
+          Practise until this feels strong, then try a quick{" "}
+          <Link href={routes.recheck(focusSkill!)} className="font-semibold text-brand underline">
+            recheck
+          </Link>
+          .
+        </KipSays>
       )}
-    </section>
+
+      <SkillPicker learner={learner} focusSkill={focusSkill} />
+    </div>
   );
 }
 
 function SwitchSession({ learner, focusSkill }: { learner: LearnerState; focusSkill: string }) {
   const current = learner.practice.focusSkill ? skillById(learner.practice.focusSkill).title : "mixed";
   return (
-    <section className="card p-5 sm:p-8">
-      <p className="eyebrow">Practice Centre</p>
-      <h1 className="display mt-1 text-3xl font-semibold">Practise: {skillById(focusSkill).title}</h1>
-      <p className="mt-3 max-w-xl text-ink-2">
-        You have an unfinished {current} practice session ({learner.practice.sessionResults} of {PRACTICE_SESSION_LENGTH} questions answered). The answers
-        you&apos;ve already given are saved either way.
-      </p>
-      <div className="mt-6 flex flex-wrap gap-3">
-        <Button size="lg" onClick={() => start(focusSkill)}>
-          Start {skillById(focusSkill).title.toLowerCase()} instead <ArrowRightIcon size={18} />
+    <section className="card mx-auto max-w-2xl p-5 sm:p-8">
+      <KipSays mood="think">
+        You&apos;re part-way through a <strong>{current}</strong> game ({learner.practice.sessionResults} of {PRACTICE_SESSION_LENGTH}). Your answers are
+        saved either way.
+      </KipSays>
+      <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+        <Button size="xl" onClick={() => start(focusSkill)}>
+          Play {skillById(focusSkill).title.toLowerCase()} <ArrowRightIcon size={20} />
         </Button>
-        <Link href={routes.practice(learner.practice.focusSkill)} className={buttonClass("secondary", "lg")}>
-          Continue my {current} session
+        <Link href={routes.practice(learner.practice.focusSkill)} className={buttonClass("secondary", "xl")}>
+          Finish my {current} game
         </Link>
       </div>
     </section>
@@ -158,58 +164,54 @@ function SwitchSession({ learner, focusSkill }: { learner: LearnerState; focusSk
 }
 
 function Summary({ learner }: { learner: LearnerState }) {
-  const started = learner.practice.startedAt ?? 0;
-  const session = learner.results.filter((r) => r.context === "practice" && r.at >= started);
+  const results = sessionResults(learner);
+  const session = results.filter((r) => r.context === "practice");
+  const stars = results.reduce((n, r) => n + starsForResult(r), 0);
   const first = session.filter((r) => r.firstTry).length;
   const supported = session.filter((r) => r.correct && !r.firstTry).length;
   const notYet = session.filter((r) => !r.correct).length;
-  const skills = [...new Set(session.map((r) => r.skill))];
+  const great = session.length > 0 && first / session.length >= 0.7;
   return (
-    <motion.section initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="card p-5 sm:p-8">
-      <p className="eyebrow">Session complete</p>
-      <h1 className="display mt-1 text-3xl font-semibold" tabIndex={-1} ref={(el) => el?.focus()}>
-        Nice work!
+    <motion.section initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} className="card relative mx-auto max-w-2xl p-6 text-center sm:p-10">
+      <Confetti burstKey={`practice-${learner.practice.startedAt}`} pieces={60} />
+      <div className="flex justify-center">
+        <Kip mood="cheer" size={104} />
+      </div>
+      <h1 className="display mt-2 text-3xl sm:text-4xl" tabIndex={-1} ref={(el) => el?.focus()}>
+        {great ? "Superstar session!" : "Great effort!"}
       </h1>
-      <p className="mt-1 text-sm text-muted">
-        {session.length} question{session.length === 1 ? "" : "s"} in this session.
+      <p className="mt-1 text-ink-2">
+        You answered {session.length} question{session.length === 1 ? "" : "s"}.
       </p>
-      <dl className="mt-6 grid grid-cols-3 gap-3">
-        <div className="rounded-2xl bg-ok-soft p-4">
-          <dt className="text-xs text-ok">Right first time</dt>
-          <dd className="text-3xl font-semibold tabular-nums">{first}</dd>
+      <motion.p
+        initial={{ scale: 0.5, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.25, type: "spring", stiffness: 300, damping: 13 }}
+        className="mx-auto mt-5 inline-flex items-center gap-2 rounded-full bg-sun px-5 py-2.5 text-2xl font-bold text-ink shadow-[0_4px_0_var(--color-sun-strong)]"
+      >
+        +{stars} <StarGlyph size={28} />
+      </motion.p>
+      <dl className="mt-6 grid grid-cols-3 gap-3 text-left">
+        <div className="rounded-3xl bg-ok-soft p-4">
+          <dt className="text-xs font-semibold text-ok">First try</dt>
+          <dd className="display text-3xl tabular-nums">{first}</dd>
         </div>
-        <div className="rounded-2xl bg-den-soft p-4">
-          <dt className="text-xs text-den-strong">Right with help</dt>
-          <dd className="text-3xl font-semibold tabular-nums">{supported}</dd>
+        <div className="rounded-3xl bg-sky-soft p-4">
+          <dt className="text-xs font-semibold text-den-strong">With a little help</dt>
+          <dd className="display text-3xl tabular-nums">{supported}</dd>
         </div>
-        <div className="rounded-2xl bg-sunk p-4">
-          <dt className="text-xs text-muted">Still learning</dt>
-          <dd className="text-3xl font-semibold tabular-nums">{notYet}</dd>
+        <div className="rounded-3xl bg-sun-soft p-4">
+          <dt className="text-xs font-semibold text-warn">Still growing</dt>
+          <dd className="display text-3xl tabular-nums">{notYet}</dd>
         </div>
       </dl>
-      {skills.length > 0 && (
-        <>
-          <h2 className="mt-6 text-sm font-medium">Skills you practised</h2>
-          <ul className="mt-2 divide-y divide-line">
-            {skills.map((id) => (
-              <li key={id} className="flex items-center justify-between py-2.5 text-sm">
-                {skillById(id).title}
-                <StatusBadge status={skillMastery(id, learner.results).status} />
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
-      <div className="mt-6 flex flex-wrap gap-3">
-        <Button size="lg" onClick={() => start(learner.practice.focusSkill)}>
-          Another session <ArrowRightIcon size={18} />
+      <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+        <Button variant="go" size="xl" onClick={() => start(learner.practice.focusSkill)}>
+          Play again <ArrowRightIcon size={20} />
         </Button>
-        <Button variant="secondary" size="lg" onClick={() => updateLearner(dismissPracticeSummary)}>
-          Choose a different focus
+        <Button variant="secondary" size="xl" onClick={() => updateLearner(dismissPracticeSummary)}>
+          Pick a different game
         </Button>
-        <Link href={routes.results()} className={buttonClass("ghost", "lg")}>
-          See my results
-        </Link>
       </div>
     </motion.section>
   );
@@ -232,59 +234,56 @@ export function PracticeScreen({ focusSkill = null }: { focusSkill?: string | nu
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  let main: React.ReactNode;
   if (active && (!focusSkill || sameFocus)) {
-    main = (
-      <section className="card p-5 sm:p-8" aria-labelledby="practice-heading">
-        <div className="mb-6 space-y-3">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <h1 id="practice-heading" className="text-sm font-medium text-muted">
-              Practice · Question {Math.min(practice.sessionResults + 1, PRACTICE_SESSION_LENGTH)} of {PRACTICE_SESSION_LENGTH}
-              <span className="mx-2 text-line-strong">·</span>
-              <span className="text-ink">{skillById(current!.skill).title}</span>
+    const sessionStars = sessionResults(learner).reduce((n, r) => n + starsForResult(r), 0);
+    const done = practice.sessionResults;
+    return (
+      <div className="mx-auto max-w-3xl space-y-4">
+        <div className="flex items-center gap-3">
+          <span className="grid size-11 shrink-0 place-items-center rounded-2xl text-xl" style={{ background: lessonLook(skillById(current!.skill).lessonId).soft }} aria-hidden>
+            {lessonLook(skillById(current!.skill).lessonId).emoji}
+          </span>
+          <div className="min-w-0 flex-1">
+            <h1 id="practice-heading" className="flex items-center justify-between gap-2 text-sm font-semibold text-muted">
+              <span className="truncate">
+                <span className="text-ink">{skillById(current!.skill).title}</span>
+                <span className="sr-only">
+                  {" "}
+                  · Question {Math.min(done + 1, PRACTICE_SESSION_LENGTH)} of {PRACTICE_SESSION_LENGTH}
+                </span>
+              </span>
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-sun-soft px-2.5 py-0.5 font-bold text-ink">
+                {sessionStars} <StarGlyph size={15} />
+              </span>
             </h1>
-            <button
-              type="button"
-              onClick={() => updateLearner(completePracticeSession)}
-              className="h-11 rounded-lg px-3 text-sm text-muted hover:bg-sunk hover:text-ink"
-            >
-              End session
-            </button>
+            <ol className="mt-1.5 flex gap-1" aria-hidden>
+              {Array.from({ length: PRACTICE_SESSION_LENGTH }, (_, i) => (
+                <li key={i} className={`h-2.5 flex-1 rounded-full transition-colors ${i < done ? "bg-ok-bright" : i === done ? "bg-brand" : "bg-line"}`} />
+              ))}
+            </ol>
           </div>
-          <ProgressBar value={practice.sessionResults / PRACTICE_SESSION_LENGTH} label="Session progress" />
-          {practice.currentReason && <p className="text-xs text-muted">{REASON_TEXT[practice.currentReason]}</p>}
         </div>
-        <AnimatePresence mode="wait">
-          <motion.div key={current!.id} initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -16 }} transition={{ duration: 0.2 }}>
-            <QuestionPlayer
-              question={current!}
-              context="practice"
-              index={practice.sessionResults}
-              usedFollowUps={usedFollowUps}
-              orderKey={`practice:${practice.startedAt}`}
-              autoFocus={practice.sessionResults > 0}
-              onComplete={onComplete}
-              onFollowUpResult={(r) => updateLearner((s) => recordResult(s, { ...r, at: Date.now() }))}
-              continueLabel={practice.sessionResults + 1 >= PRACTICE_SESSION_LENGTH ? "Finish session" : "Next question"}
-            />
-          </motion.div>
-        </AnimatePresence>
-      </section>
+        <section className="card p-5 sm:p-8" aria-labelledby="practice-heading">
+          <AnimatePresence mode="wait">
+            <motion.div key={current!.id} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.22 }}>
+              <QuestionPlayer
+                question={current!}
+                context="practice"
+                index={done}
+                usedFollowUps={usedFollowUps}
+                orderKey={`practice:${practice.startedAt}`}
+                autoFocus={done > 0}
+                onComplete={onComplete}
+                onFollowUpResult={(r) => updateLearner((s) => recordResult(s, { ...r, at: Date.now() }))}
+                continueLabel={done + 1 >= PRACTICE_SESSION_LENGTH ? "Finish!" : "Next"}
+              />
+            </motion.div>
+          </AnimatePresence>
+        </section>
+      </div>
     );
-  } else if (active && focusSkill) {
-    main = <SwitchSession learner={learner} focusSkill={focusSkill} />;
-  } else if (showSummary) {
-    main = <Summary learner={learner} />;
-  } else {
-    main = <Intro learner={learner} focusSkill={focusSkill} />;
   }
-
-  return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
-      <div className="min-w-0">{main}</div>
-      <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
-        <SkillSidebar learner={learner} />
-      </aside>
-    </div>
-  );
+  if (active && focusSkill) return <SwitchSession learner={learner} focusSkill={focusSkill} />;
+  if (showSummary) return <Summary learner={learner} />;
+  return <Intro learner={learner} focusSkill={focusSkill} />;
 }

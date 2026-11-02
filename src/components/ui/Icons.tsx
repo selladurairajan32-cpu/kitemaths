@@ -106,3 +106,33 @@ export const BeakerIcon = (p: IconProps) => (
     <path d="M7.5 15h9" />
   </svg>
 );
+export const MapIcon = (p: IconProps) => (
+  <svg {...base(p)}>
+    <path d="M9 4.5 3.5 6.5v13L9 17.5l6 2 5.5-2v-13L15 6.5z" />
+    <path d="M9 4.5v13M15 6.5v13" />
+  </svg>
+);
+export const TrophyIcon = (p: IconProps) => (
+  <svg {...base(p)}>
+    <path d="M7.5 4h9v5a4.5 4.5 0 0 1-9 0z" />
+    <path d="M7.5 6H4.5a3 3 0 0 0 3 4M16.5 6h3a3 3 0 0 1-3 4M12 13.5V17M8.5 20h7M9.5 17h5" />
+  </svg>
+);
+export const CloseIcon = (p: IconProps) => (
+  <svg {...base(p)}>
+    <path d="M6 6l12 12M18 6 6 18" />
+  </svg>
+);
+export const ParentIcon = (p: IconProps) => (
+  <svg {...base(p)}>
+    <circle cx="9" cy="7.5" r="3" />
+    <circle cx="17" cy="10" r="2.2" />
+    <path d="M3.5 19.5a5.5 5.5 0 0 1 11 0M14 19.5a3.5 3.5 0 0 1 6.5-1.8" />
+  </svg>
+);
+export const SoundIcon = ({ muted = false, ...p }: IconProps & { muted?: boolean }) => (
+  <svg {...base(p)}>
+    <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" />
+    {muted ? <path d="M16 9.5l5 5M21 9.5l-5 5" /> : <path d="M15.5 9a4 4 0 0 1 0 6M18.3 6.5a7.5 7.5 0 0 1 0 11" />}
+  </svg>
+);

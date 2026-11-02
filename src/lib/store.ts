@@ -105,3 +105,14 @@ const noop = () => () => {};
 export function useHydrated(): boolean {
   return useSyncExternalStore(noop, () => true, () => false);
 }
+
+let clientNow: number | null = null;
+const readNow = () => (clientNow ??= Date.now());
+
+/**
+ * The current time, read once in the browser (0 while prerendering), so
+ * day-based things like streaks never touch the clock on the server.
+ */
+export function useNow(): number {
+  return useSyncExternalStore(noop, readNow, () => 0);
+}

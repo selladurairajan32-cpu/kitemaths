@@ -1,8 +1,8 @@
-﻿import type { Metadata } from "next";
-import { DashboardScreen } from "@/components/screens/DashboardScreen";
+import type { Metadata } from "next";
+import { KidHomeScreen } from "@/components/screens/KidHomeScreen";
 
-export const metadata: Metadata = { title: "Dashboard · Kite Maths" };
+export const metadata: Metadata = { title: "Home · Kite Maths" };
 
 export default function Page() {
-  return <DashboardScreen />;
+  return <KidHomeScreen />;
 }

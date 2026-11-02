@@ -7,6 +7,8 @@ export interface LessonProgress {
   furthestStep: number;
   completed: boolean;
   completedAt?: number;
+  /** Marked done by the placement check rather than by working through it. */
+  placedOut?: boolean;
 }
 
 export interface PracticeState {
@@ -49,8 +51,35 @@ export interface RecheckState extends AttemptRecord {
   index: number;
 }
 
+export interface LearnerProfile {
+  name: string;
+  /** School year, 3–6, if the learner chose one. */
+  year: number | null;
+  avatar: string;
+}
+
+export interface LearnerSettings {
+  sound: boolean;
+  /** Read each new question aloud automatically. */
+  autoRead: boolean;
+}
+
+export interface PlacementState {
+  status: "not-started" | "in-progress" | "complete" | "skipped";
+  order: string[];
+  index: number;
+  correct: string[];
+  wrong: string[];
+  /** Lessons the placement showed the learner already knows. */
+  placedOut: string[];
+  completedAt?: number;
+}
+
 export interface LearnerState {
   version: number;
+  profile: LearnerProfile;
+  settings: LearnerSettings;
+  placement: PlacementState;
   lessons: Record<string, LessonProgress>;
   currentLessonId: string | null;
   results: ItemResult[];
@@ -64,6 +93,9 @@ export interface LearnerState {
 export function createInitialState(): LearnerState {
   return {
     version: STATE_VERSION,
+    profile: { name: "", year: null, avatar: "kip" },
+    settings: { sound: true, autoRead: false },
+    placement: { status: "not-started", order: [], index: 0, correct: [], wrong: [], placedOut: [] },
     lessons: {},
     currentLessonId: null,
     results: [],
@@ -127,7 +159,17 @@ export function hydrateState(raw: unknown): LearnerState {
     recheck: isRecord(data.recheck) ? (data.recheck as unknown as RecheckState) : null,
     rechecks: isRecord(data.rechecks) ? data.rechecks : {},
     labChallenges: Array.isArray(data.labChallenges) ? data.labChallenges : [],
+    profile: { ...fresh.profile, ...(isRecord(data.profile) ? data.profile : {}) },
+    settings: { ...fresh.settings, ...(isRecord(data.settings) ? data.settings : {}) },
+    placement: isRecord(data.placement)
+      ? { ...fresh.placement, ...data.placement }
+      : // Learners from before placement existed already have a journey: don't ask them.
+        { ...fresh.placement, status: hasHistory(data) ? "skipped" : "not-started" },
   };
+}
+
+function hasHistory(data: Partial<LearnerState>): boolean {
+  return (Array.isArray(data.results) && data.results.length > 0) || (isRecord(data.lessons) && Object.keys(data.lessons).length > 0);
 }
 
 function isRecord(v: unknown): v is Record<string, never> {
@@ -382,4 +424,53 @@ export function finishRecheck(state: LearnerState, results: ItemResult[], at: nu
 
 export function cancelRecheck(state: LearnerState): LearnerState {
   return { ...state, recheck: null };
+}
+
+export function setProfile(state: LearnerState, profile: Partial<LearnerProfile>): LearnerState {
+  return { ...state, profile: { ...state.profile, ...profile } };
+}
+
+export function setSettings(state: LearnerState, settings: Partial<LearnerSettings>): LearnerState {
+  return { ...state, settings: { ...state.settings, ...settings } };
+}
+
+export function startPlacement(state: LearnerState, order: string[]): LearnerState {
+  return {
+    ...state,
+    placement: { status: "in-progress", order, index: 0, correct: [], wrong: [], placedOut: [] },
+  };
+}
+
+export function skipPlacement(state: LearnerState): LearnerState {
+  return { ...state, placement: { ...state.placement, status: "skipped" } };
+}
+
+/** Records one placement answer. Placement answers are kept as evidence but never count towards mastery. */
+export function answerPlacement(state: LearnerState, result: ItemResult): LearnerState {
+  const p = state.placement;
+  if (p.status !== "in-progress" || hasResult(state, result.id)) return state;
+  const id = result.questionId;
+  return {
+    ...recordResult(state, result),
+    placement: {
+      ...p,
+      index: p.index + 1,
+      correct: result.correct ? [...p.correct, id] : p.correct,
+      wrong: result.correct ? p.wrong : [...p.wrong, id],
+    },
+  };
+}
+
+/** Finishes placement: lessons the learner showed they know are marked as done. */
+export function finishPlacement(state: LearnerState, placedOut: string[], at: number): LearnerState {
+  if (state.placement.status !== "in-progress") return state;
+  let next: LearnerState = state;
+  for (const lessonId of placedOut) {
+    const current = lesson(next, lessonId);
+    next = {
+      ...next,
+      lessons: { ...next.lessons, [lessonId]: { ...current, completed: true, completedAt: current.completedAt ?? at, placedOut: true } },
+    };
+  }
+  return { ...next, placement: { ...next.placement, status: "complete", placedOut, completedAt: at } };
 }

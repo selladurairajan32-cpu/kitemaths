@@ -1,8 +1,25 @@
-# Kite Maths · Fractions foundations (prototype)
+# Kite Maths · Fractions adventure (prototype)
 
-An interactive maths tutor prototype for Years 3–6. This release is a **fractions foundations module** — fractions of one whole, equal parts, comparing, equivalence, number lines from 0 to 1 and fractions of amounts. It is a first step towards 11+ preparation, **not** complete 11+ coverage.
+A playful maths adventure for Years 3–6, guided by **Kip the kite**. This release is a **fractions foundations module** — fractions of one whole, equal parts, comparing, equivalence, number lines from 0 to 1 and fractions of amounts. It is a first step towards 11+ preparation, **not** complete 11+ coverage.
 
 Learning follows **Understand → Visualise → Explore → Practise → Explain → Apply → Master**: eight guided lessons, a Fraction Lab, adaptive practice with misconception recovery, an independent mastery check with two parallel forms, and short per-skill rechecks.
+
+## What children see
+
+- **Warm-up placement** (`/start`): name, school year, then up to 8 questions (one per lesson). Lessons answered correctly before the first gap are skipped; two misses in a row ends it early. Children can also start from the beginning.
+- **Kid home**: Kip's greeting, the next adventure, stars and level, a daily streak, a 10-question daily goal, the sky path and play tiles.
+- **Adventure map**, **Practice arena**, **Fraction Lab** and **Badges** (trophy room).
+- **Focus mode**: lessons, practice sessions, the warm-up and checks hide navigation and keep the main button pinned to the bottom of a phone screen.
+- **Read aloud**: every question and explanation has a speaker button (browser speech, UK voice when available). Grown-ups can switch on automatic reading.
+- **Rewards**: stars for every answer (3 first time, 2 with help, 1 for trying), bonus stars for lessons, lab challenges and the big challenge; levels; streaks; badges; confetti and sounds (synthesised, can be muted). Rewards are *derived* from history, never stored, so they can't be double-awarded.
+
+## What grown-ups see
+
+`/parent` (behind a simple "grown-ups only" multiplication question): the detailed overview, skills evidence, ideas being worked on, settings (name, year, sound, auto read-aloud) and reset. `/parent/journey` has the detailed journey and `/results` the full report with every answer.
+
+## Questions that never run out
+
+Alongside the hand-written bank, every skill has **seeded question generators** at three difficulty levels (`src/topics/fractions/generate.ts`). A generated question's id (`g:<template>:<level>:<seed>`) is enough to rebuild it exactly, so it can be saved and reloaded. Practice uses the hand-written questions first, then a fresh generated batch each session that skips anything the learner has already seen. Tests check thousands of generated questions with the same rules as the hand-written bank.
 
 ## Running
 
@@ -20,14 +37,17 @@ Progress is saved in this browser only (`localStorage`); there are no accounts o
 
 | Route | Screen |
 | --- | --- |
-| `/` | Dashboard: activities completed, skills secure/mastered, recommended next step |
-| `/journey` | Lessons, practice milestone, mastery check, and any skills needing review |
-| `/lesson` · `/lesson/:lessonId` · `/lesson/:lessonId/:step` | Lesson Studio (resumes, opens a lesson, or opens a step you've reached) |
+| `/` | Kid home: next adventure, stars, streak, daily goal, sky path |
+| `/start` | Warm-up placement for new learners |
+| `/journey` | Adventure map: lessons, practice milestone, the big challenge, skills |
+| `/badges` | Trophy room: badges, stars and level |
+| `/lesson` · `/lesson/:lessonId` · `/lesson/:lessonId/:step` | Lessons in focus mode (resumes, opens a lesson, or opens a step you've reached) |
 | `/lab` | Free Fraction Lab (1–12 equal parts, fractions from 0 to one whole) |
-| `/practice` · `/practice/:skill` | Adaptive mixed practice, or practice focused on one skill |
-| `/assessment` | Mastery check: start, resume, or retake (alternates forms A and B) |
+| `/practice` · `/practice/:skill` | Practice arena: adaptive mixed practice, or one skill |
+| `/assessment` | The big challenge (mastery check): start, resume, or retake (alternates forms A and B) |
 | `/assessment/recheck/:skill` | Two-question independent recheck for one skill |
-| `/results` (`#review`) | Strengths, evidence per skill, ideas to watch, next steps, full answer review |
+| `/parent` · `/parent/journey` | Grown-ups: overview, settings, detailed journey |
+| `/results` (`#review`) | Grown-ups: strengths, evidence per skill, ideas to watch, full answer review |
 
 ## Evidence policy
 
@@ -63,6 +83,7 @@ src/engine/                Topic-agnostic teaching engine (pure TypeScript)
   progress.ts              Versioned learner state, idempotent recording, attempts and rechecks
   journey.ts               Topic definition contract, activity progress, recommendations
   random.ts                Seeded shuffles (stable option order per attempt)
+  rewards.ts               Stars, levels, streaks, daily goal and badges, derived from history
 src/topics/fractions/      Fractions content and maths
   math.ts                  Exact fraction arithmetic (integer cross-multiplication)
   diagnose.ts              Rule-based misconception diagnosis
@@ -71,6 +92,9 @@ src/topics/fractions/      Fractions content and maths
   lessons.ts               Lesson steps (explain, worked with supported blanks, lab, check)
   misconceptions.ts        Misconception catalogue and follow-up links
   lab.ts                   Fraction Lab challenges, checks and feedback
+  generate.ts              Seeded question generators for every skill and level
+  placement.ts             Warm-up plan and where-to-start rules
 src/components/            SVG maths components, question inputs and players, lesson player, screens
-src/lib/                   localStorage store and stable route helpers
+  kid/                     Kip the kite, celebrations, read-aloud button, rewards HUD, child-facing wording
+src/lib/                   localStorage store, route helpers, speech and sound
 ```

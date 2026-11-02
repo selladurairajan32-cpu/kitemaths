@@ -42,7 +42,7 @@ export interface Evaluation {
   feedback?: string;
 }
 
-export type ResultContext = "lesson" | "practice" | "followup" | "assessment" | "recheck";
+export type ResultContext = "lesson" | "practice" | "followup" | "assessment" | "recheck" | "placement";
 
 export const INDEPENDENT_CONTEXTS: ResultContext[] = ["assessment", "recheck"];
 

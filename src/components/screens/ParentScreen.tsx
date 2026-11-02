@@ -4,68 +4,26 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { ArrowRightIcon, CheckIcon, RefreshIcon } from "@/components/ui/Icons";
+import { ArrowRightIcon, RefreshIcon } from "@/components/ui/Icons";
 import { ProgressRing, StatusBadge } from "@/components/ui/Progress";
 import { RecommendationLink, recommendationVerb } from "@/components/ui/RecommendationLink";
 import { lessonsCompleted, masteredSkills, recommendNext, reviewSkills, strongSkills } from "@/engine/journey";
 import { misconceptionReports, skillMastery } from "@/engine/mastery";
 import { routes } from "@/lib/routes";
-import { resetLearner, useHydrated, useLearner, useStorageStatus } from "@/lib/store";
+import { resetLearner, useHydrated, useLearner, useNow } from "@/lib/store";
+import { PhasePath, ScreenSkeleton, StorageNotice } from "@/components/ui/Screen";
 import { FRACTIONS_TOPIC } from "@/topics/fractions";
-import { learningStats, phaseStatuses, topicProgress } from "@/topics/fractions/journey";
+import { learningStats, topicProgress } from "@/topics/fractions/journey";
 import { misconceptionById } from "@/topics/fractions/misconceptions";
+import { streakFor, totalStars } from "@/engine/rewards";
+import { setProfile, setSettings } from "@/engine/progress";
+import { updateLearner } from "@/lib/store";
 
-export function PhasePath() {
-  const learner = useLearner();
-  const phases = phaseStatuses(learner);
-  return (
-    <ol className="flex flex-wrap items-center gap-x-1 gap-y-2" aria-label="Learning phases">
-      {phases.map(({ phase, status }, i) => (
-        <li key={phase} className="flex shrink-0 items-center gap-1">
-          <span
-            className={`inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-semibold ${
-              status === "done" ? "bg-ok-soft text-ok" : status === "current" ? "bg-ink text-white" : "bg-sunk text-muted"
-            }`}
-            aria-current={status === "current" ? "step" : undefined}
-          >
-            {status === "done" && <CheckIcon size={13} />}
-            {phase}
-            <span className="sr-only">{status === "done" ? " (done)" : status === "current" ? " (current)" : ""}</span>
-          </span>
-          {i < phases.length - 1 && <span className="h-px w-3 bg-line-strong" aria-hidden />}
-        </li>
-      ))}
-    </ol>
-  );
-}
-
-export function ScreenSkeleton() {
-  return (
-    <div className="grid animate-pulse gap-5 lg:grid-cols-3" aria-hidden>
-      <div className="h-72 rounded-[var(--radius-card)] bg-sunk lg:col-span-2" />
-      <div className="h-72 rounded-[var(--radius-card)] bg-sunk" />
-      <div className="h-64 rounded-[var(--radius-card)] bg-sunk lg:col-span-2" />
-      <div className="h-64 rounded-[var(--radius-card)] bg-sunk" />
-    </div>
-  );
-}
-
-export function StorageNotice() {
-  const status = useStorageStatus();
-  if (status === "ok") return null;
-  return (
-    <p role="status" className="rounded-2xl border border-warn/30 bg-warn-soft px-4 py-3 text-sm text-ink-2">
-      {status === "unavailable"
-        ? "This browser isn't letting us save progress (for example in private browsing). You can keep learning, but progress will be lost when this tab closes."
-        : "We found saved progress we couldn't read, so we kept a backup copy in this browser and started fresh."}
-    </p>
-  );
-}
-
-export function DashboardScreen() {
+export function ParentScreen() {
   const hydrated = useHydrated();
   const learner = useLearner();
   const [confirmReset, setConfirmReset] = useState(false);
+  const now = useNow();
 
   if (!hydrated) return <ScreenSkeleton />;
 
@@ -80,13 +38,22 @@ export function DashboardScreen() {
   const lastScore = last ? Object.values(last.evaluations).filter((e) => e.correct).length : 0;
   const working = misconceptionReports(learner.results, FRACTIONS_TOPIC.misconceptions).filter((r) => r.state !== "resolved");
   const total = FRACTIONS_TOPIC.skills.length;
-  const fresh = learner.results.length === 0 && lessonsDone === 0;
+  const name = learner.profile.name.trim();
+  const stars = totalStars(learner);
+  const streak = streakFor(learner, now);
+  const placement = learner.placement;
 
   return (
     <div className="space-y-6">
       <motion.header initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}>
-        <p className="text-muted">{fresh ? "Welcome!" : "Welcome back!"}</p>
-        <h1 className="display text-3xl font-semibold sm:text-4xl">Your maths dashboard</h1>
+        <p className="text-muted">Grown-ups&apos; overview</p>
+        <h1 className="display text-3xl sm:text-4xl">{name ? `How ${name} is doing` : "How your child is doing"}</h1>
+        <p className="mt-1 max-w-2xl text-ink-2">
+          {stars} stars earned · {streak.current}-day streak (best {streak.best})
+          {placement.status === "complete" &&
+            ` · Warm-up placed them past ${placement.placedOut.length} of ${FRACTIONS_TOPIC.lessons.length} lessons`}
+          {placement.status === "skipped" && " · Started from the beginning"}
+        </p>
       </motion.header>
 
       <StorageNotice />
@@ -204,7 +171,7 @@ export function DashboardScreen() {
           <div className="mt-auto space-y-3 border-t border-line pt-4">
             <p className="text-xs text-muted">
               Progress is saved in this browser on this device only. Clearing browser data, private browsing or another device will start fresh. There
-              are no accounts in this prototype.
+              are no accounts yet.
             </p>
             {confirmReset ? (
               <div className="space-y-2">
@@ -233,7 +200,51 @@ export function DashboardScreen() {
         </section>
       </div>
 
-      <section className="rounded-[var(--radius-card)] border border-dashed border-line-strong p-5 sm:p-7" aria-labelledby="roadmap-title">
+      <section className="card p-5 sm:p-7" aria-labelledby="settings-title">
+        <h2 id="settings-title" className="font-semibold">
+          Settings
+        </h2>
+        <div className="mt-4 grid gap-5 sm:grid-cols-2">
+          <label className="block text-sm">
+            <span className="font-medium">Child&apos;s first name</span>
+            <input
+              value={learner.profile.name}
+              maxLength={24}
+              onChange={(e) => updateLearner((s) => setProfile(s, { name: e.target.value }))}
+              className="mt-1 h-11 w-full rounded-xl border-2 border-line-strong bg-surface px-3"
+            />
+          </label>
+          <label className="block text-sm">
+            <span className="font-medium">School year</span>
+            <select
+              value={learner.profile.year ?? ""}
+              onChange={(e) => updateLearner((s) => setProfile(s, { year: e.target.value ? Number(e.target.value) : null }))}
+              className="mt-1 h-11 w-full rounded-xl border-2 border-line-strong bg-surface px-3"
+            >
+              <option value="">Not set</option>
+              {[3, 4, 5, 6].map((y) => (
+                <option key={y} value={y}>
+                  Year {y}
+                </option>
+              ))}
+            </select>
+          </label>
+          <Toggle
+            label="Sound effects"
+            hint="Chimes for right answers, stars and level-ups."
+            on={learner.settings.sound}
+            onChange={(v) => updateLearner((s) => setSettings(s, { sound: v }))}
+          />
+          <Toggle
+            label="Read questions aloud automatically"
+            hint="Helpful for younger or developing readers. Every question also has a speaker button."
+            on={learner.settings.autoRead}
+            onChange={(v) => updateLearner((s) => setSettings(s, { autoRead: v }))}
+          />
+        </div>
+      </section>
+
+      <section className="rounded-[var(--radius-card)] border-2 border-dashed border-line-strong p-5 sm:p-7" aria-labelledby="roadmap-title">
         <h2 id="roadmap-title" className="font-semibold">
           About this module
         </h2>
@@ -243,6 +254,27 @@ export function DashboardScreen() {
           mixed numbers, adding and subtracting fractions, multiplying and dividing fractions, and fractions–decimals–percentages.
         </p>
       </section>
+    </div>
+  );
+}
+
+function Toggle({ label, hint, on, onChange }: { label: string; hint: string; on: boolean; onChange: (v: boolean) => void }) {
+  return (
+    <div className="flex items-start justify-between gap-4 rounded-2xl bg-paper p-3">
+      <div className="text-sm">
+        <p className="font-medium">{label}</p>
+        <p className="text-muted">{hint}</p>
+      </div>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={on}
+        aria-label={label}
+        onClick={() => onChange(!on)}
+        className={`relative h-8 w-14 shrink-0 rounded-full transition-colors ${on ? "bg-ok-bright" : "bg-line-strong"}`}
+      >
+        <span className={`absolute top-1 size-6 rounded-full bg-white shadow transition-all ${on ? "left-7" : "left-1"}`} />
+      </button>
     </div>
   );
 }

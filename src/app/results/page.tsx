@@ -1,8 +1,13 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { ResultsScreen } from "@/components/screens/ResultsScreen";
+import { ParentGate } from "@/components/ui/ParentGate";
 
-export const metadata: Metadata = { title: "Mastery results · Kite Maths" };
+export const metadata: Metadata = { title: "Full report · Kite Maths" };
 
 export default function Page() {
-  return <ResultsScreen />;
+  return (
+    <ParentGate>
+      <ResultsScreen />
+    </ParentGate>
+  );
 }

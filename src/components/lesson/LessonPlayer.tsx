@@ -3,14 +3,19 @@
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Confetti, StarGlyph } from "@/components/kid/Celebrate";
+import { Kip, KipSays } from "@/components/kid/Kip";
+import { lessonLook } from "@/components/kid/kidText";
+import { ReadAloud } from "@/components/kid/ReadAloud";
 import { RichText } from "@/components/math/RichText";
 import { VisualRenderer } from "@/components/math/Visuals";
 import { QuestionPlayer, type ResultDraft } from "@/components/questions/QuestionPlayer";
 import { Button, buttonClass } from "@/components/ui/Button";
 import { ArrowLeftIcon, ArrowRightIcon, BeakerIcon, BulbIcon, CheckIcon, FlagIcon, StarIcon } from "@/components/ui/Icons";
-import { ProgressBar } from "@/components/ui/Progress";
 import { completeLabChallenge, completeLesson, goToStep, recordResult } from "@/engine/progress";
 import { routes } from "@/lib/routes";
+import { playSound } from "@/lib/sound";
+import { STARS } from "@/engine/rewards";
 import { updateLearner, useLearner } from "@/lib/store";
 import { LESSONS, type Lesson, type LessonStep } from "@/topics/fractions/lessons";
 import { questionById } from "@/topics/fractions/questions";
@@ -48,6 +53,7 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
   const [finished, setFinished] = useState(false);
   const [retryStep, setRetryStep] = useState<number | null>(null);
   const [focusStep, setFocusStep] = useState(false);
+  const [wasCompleted] = useState(() => !!progress?.completed);
 
   const stepIndex = savedStep;
   const step = lesson.steps[stepIndex];
@@ -88,6 +94,7 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
       go(stepIndex + 1);
     } else {
       updateLearner((s) => completeLesson(s, lesson.id, Date.now()));
+      playSound("complete");
       setFinished(true);
     }
   };
@@ -104,25 +111,33 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
   const nextLesson = LESSONS[lessonIndex + 1];
 
   if (finished) {
+    const firstTime = !wasCompleted;
     return (
-      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="card mx-auto max-w-2xl p-6 text-center sm:p-10">
-        <motion.div
-          initial={{ scale: 0.6, rotate: -12 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{ type: "spring", stiffness: 260, damping: 14 }}
-          className="mx-auto mb-5 grid size-16 place-items-center rounded-full bg-ok text-white"
-        >
-          <CheckIcon size={30} />
-        </motion.div>
-        <p className="eyebrow">Lesson complete</p>
-        <h2 className="display mt-1 text-3xl font-semibold" tabIndex={-1} ref={(el) => el?.focus()}>
-          {lesson.title}
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="card relative mx-auto max-w-2xl p-6 text-center sm:p-10">
+        <Confetti burstKey={`lesson-${lesson.id}`} pieces={60} />
+        <div className="flex justify-center">
+          <Kip mood="cheer" size={110} />
+        </div>
+        <p className="eyebrow mt-2 text-ok!">Lesson complete!</p>
+        <h2 className="display mt-1 text-3xl sm:text-4xl" tabIndex={-1} ref={(el) => el?.focus()}>
+          <span aria-hidden>{lessonLook(lesson.id).emoji}</span> {lesson.title}
         </h2>
-        <ul className="mx-auto mt-6 max-w-sm space-y-2 text-left">
+        {firstTime && (
+          <motion.p
+            initial={{ scale: 0.6, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.3, type: "spring", stiffness: 300, damping: 14 }}
+            className="mx-auto mt-4 inline-flex items-center gap-2 rounded-full bg-sun px-4 py-2 text-lg font-bold text-ink shadow-[0_4px_0_var(--color-sun-strong)]"
+          >
+            +{STARS.lesson} <StarGlyph size={22} /> bonus stars
+          </motion.p>
+        )}
+        <p className="mt-6 font-semibold text-ink">Now you can:</p>
+        <ul className="mx-auto mt-2 max-w-sm space-y-2 text-left">
           {lesson.objectives.map((o) => (
-            <li key={o} className="flex items-start gap-2.5 text-ink-2">
-              <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-ok-soft text-ok">
-                <CheckIcon size={13} />
+            <li key={o} className="flex items-start gap-2.5 rounded-2xl bg-ok-soft px-3 py-2 text-ink-2">
+              <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-ok-bright text-white">
+                <CheckIcon size={13} strokeWidth={3} />
               </span>
               {o}
             </li>
@@ -130,16 +145,16 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
         </ul>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           {nextLesson ? (
-            <Link href={routes.lesson(nextLesson.id)} className={buttonClass("primary", "lg")}>
-              Next: {nextLesson.title} <ArrowRightIcon size={18} />
+            <Link href={routes.lesson(nextLesson.id)} className={buttonClass("go", "xl")}>
+              Next: {nextLesson.title} <ArrowRightIcon size={20} />
             </Link>
           ) : (
-            <Link href={routes.practice()} className={buttonClass("primary", "lg")}>
-              Go to the Practice Centre <ArrowRightIcon size={18} />
+            <Link href={routes.practice()} className={buttonClass("go", "xl")}>
+              Practice time! <ArrowRightIcon size={20} />
             </Link>
           )}
-          <Link href={routes.journey()} className={buttonClass("secondary", "lg")}>
-            See my journey
+          <Link href={routes.journey()} className={buttonClass("secondary", "xl")}>
+            My map
           </Link>
         </div>
       </motion.div>
@@ -193,30 +208,28 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
 
   return (
     <div className="grid gap-6 lg:grid-cols-[270px_minmax(0,1fr)]">
-      <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
-        <div className="mb-3">
-          <p className="eyebrow">
-            Lesson {lessonIndex + 1} of {LESSONS.length} · {lesson.phase}
-          </p>
-          <p className="font-semibold">{lesson.title}</p>
+      <aside className="min-w-0 lg:sticky lg:top-20 lg:self-start">
+        <div className="mb-3 flex items-center gap-3">
+          <span className="grid size-12 shrink-0 place-items-center rounded-2xl text-2xl" style={{ background: lessonLook(lesson.id).soft }} aria-hidden>
+            {lessonLook(lesson.id).emoji}
+          </span>
+          <div className="min-w-0">
+            <p className="eyebrow">
+              Lesson {lessonIndex + 1} of {LESSONS.length}
+            </p>
+            <p className="display truncate text-xl leading-tight">{lesson.title}</p>
+          </div>
         </div>
-        <details className="group rounded-2xl border border-line bg-surface lg:hidden">
-          <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 py-2 text-sm">
-            <span>
-              Step {stepIndex + 1} of {lesson.steps.length}: <span className="font-medium">{plain(step.title)}</span>
-            </span>
-            <span className="text-muted transition-transform group-open:rotate-90" aria-hidden>
-              ›
-            </span>
-          </summary>
-          <nav aria-label="Lesson steps" className="border-t border-line p-2">
-            {stepList(() => {
-              const d = document.activeElement?.closest("details");
-              if (d) d.open = false;
-            })}
-          </nav>
-        </details>
-        <ProgressBar value={(stepIndex + (canContinue ? 1 : 0)) / lesson.steps.length} label="Lesson progress" className="mt-3 lg:hidden" />
+        <ol className="flex gap-1.5 lg:hidden" aria-label={`Step ${stepIndex + 1} of ${lesson.steps.length}`}>
+          {lesson.steps.map((_, i) => (
+            <li
+              key={i}
+              className={`h-3 flex-1 rounded-full transition-colors ${
+                i < stepIndex || (i === stepIndex && canContinue) ? "bg-ok-bright" : i === stepIndex ? "bg-brand" : "bg-line"
+              }`}
+            />
+          ))}
+        </ol>
         <nav aria-label="Lesson steps" className="hidden lg:block">
           {stepList()}
         </nav>
@@ -242,12 +255,15 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
                 {STEP_KIND[step.type].icon} {STEP_KIND[step.type].label}
                 <span className="text-line-strong">·</span> Step {stepIndex + 1} of {lesson.steps.length}
               </p>
-              <StepHeading title={step.title} focus={focusStep} />
+              <div className="flex items-start justify-between gap-3">
+                <StepHeading title={step.title} focus={focusStep} />
+                {step.type === "explain" && <ReadAloud text={[step.title, ...step.body, step.tip ?? ""].join(". ")} size="lg" label="Read this to me" />}
+              </div>
             </header>
 
             {step.type === "explain" && (
               <>
-                <div className="max-w-2xl space-y-3 text-[1.05rem] leading-relaxed text-ink-2">
+                <div className="max-w-2xl space-y-3 text-lg leading-relaxed text-ink-2">
                   {step.body.map((p) => (
                     <p key={p}>
                       <RichText text={p} />
@@ -255,18 +271,17 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
                   ))}
                 </div>
                 {step.visual && (
-                  <div className="flex justify-center rounded-2xl bg-paper px-3 py-5 sm:px-6 sm:py-8">
+                  <div className="flex justify-center rounded-3xl bg-gradient-to-b from-sky-soft to-paper px-3 py-5 sm:px-6 sm:py-8">
                     <VisualRenderer spec={step.visual} />
                   </div>
                 )}
                 {step.tip && (
-                  <p className="flex gap-2.5 rounded-xl border border-warn/25 bg-warn-soft px-4 py-3 text-sm text-ink-2">
-                    <BulbIcon size={18} className="mt-0.5 shrink-0 text-warn" />
-                    <span>
-                      <strong className="text-ink">Tip: </strong>
+                  <KipSays mood="happy" tone="sun" size={58}>
+                    <span className="text-[0.95rem]">
+                      <strong>Kip&apos;s tip: </strong>
                       <RichText text={step.tip} />
                     </span>
-                  </p>
+                  </KipSays>
                 )}
               </>
             )}
@@ -314,13 +329,13 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
           </motion.div>
         </AnimatePresence>
 
-        <footer className="sticky bottom-[calc(4rem+env(safe-area-inset-bottom))] z-10 -mx-5 mt-8 flex items-center justify-between gap-3 border-t border-line bg-surface/95 px-5 py-3 backdrop-blur sm:-mx-8 sm:px-8 lg:static lg:mx-0 lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-5 lg:backdrop-blur-none">
+        <footer className={`${step.type === "check" && !checkAlreadyDone ? "" : "sticky bottom-0"} z-10 -mx-5 mt-8 flex items-center justify-between gap-3 border-t-2 border-line bg-surface/95 px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur sm:-mx-8 sm:px-8 lg:static lg:mx-0 lg:bg-transparent lg:px-0 lg:pb-0 lg:pt-5 lg:backdrop-blur-none`}>
           <Button variant="ghost" onClick={() => go(stepIndex - 1)} disabled={stepIndex === 0}>
             <ArrowLeftIcon size={17} /> Back
           </Button>
           {(step.type !== "check" || checkAlreadyDone) && (
-            <Button size="lg" onClick={advance} disabled={!canContinue}>
-              {isLast ? "Finish lesson" : "Continue"} <ArrowRightIcon size={18} />
+            <Button size="xl" onClick={advance} disabled={!canContinue} className="min-w-0 flex-1 sm:flex-none">
+              {isLast ? "Finish lesson" : "Continue"} <ArrowRightIcon size={20} />
             </Button>
           )}
           {step.type === "check" && !checkAlreadyDone && <span className="text-sm text-muted">Answer to continue</span>}

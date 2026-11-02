@@ -14,7 +14,7 @@ import { skillById } from "@/topics/fractions/skills";
 import { FRACTIONS_TOPIC } from "@/topics/fractions";
 import { PHASE_DESCRIPTIONS, phaseStatuses } from "@/topics/fractions/journey";
 import { LESSONS } from "@/topics/fractions/lessons";
-import { ScreenSkeleton } from "./DashboardScreen";
+import { ScreenSkeleton } from "@/components/ui/Screen";
 
 type NodeStatus = "done" | "active" | "next" | "upcoming";
 

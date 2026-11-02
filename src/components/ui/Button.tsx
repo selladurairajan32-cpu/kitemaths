@@ -1,25 +1,29 @@
 import Link from "next/link";
 import type { ButtonHTMLAttributes, ComponentProps, ReactNode } from "react";
 
-type Variant = "primary" | "secondary" | "ghost" | "soft";
-type Size = "md" | "lg";
+type Variant = "primary" | "go" | "secondary" | "ghost" | "soft" | "sun";
+type Size = "md" | "lg" | "xl";
 
+/** Chunky game-style buttons: a coloured bottom edge that sinks when pressed. */
 const variants: Record<Variant, string> = {
   primary:
-    "bg-ink text-white hover:bg-ink-2 disabled:bg-line-strong disabled:text-white/90 shadow-[0_1px_0_rgb(255_255_255/0.08)_inset]",
+    "press bg-brand text-white shadow-[0_4px_0_var(--color-brand-strong)] [--press-edge:var(--color-brand-strong)] disabled:bg-line-strong disabled:text-white/90",
+  go: "press bg-ok-bright text-white shadow-[0_4px_0_#139656] [--press-edge:#139656] disabled:bg-line-strong disabled:text-white/90",
+  sun: "press bg-sun text-ink shadow-[0_4px_0_var(--color-sun-strong)] [--press-edge:var(--color-sun-strong)] disabled:opacity-50",
   secondary:
-    "bg-surface text-ink border border-line-strong hover:border-ink-2 hover:bg-sunk disabled:text-muted disabled:border-line",
-  ghost: "text-ink-2 hover:bg-sunk disabled:text-muted",
-  soft: "bg-den-soft text-den-strong hover:bg-[#d3e0f8] disabled:opacity-50",
+    "press bg-surface text-ink border-2 border-line-strong shadow-[0_3px_0_var(--color-line-strong)] [--press-edge:var(--color-line-strong)] hover:bg-sunk disabled:text-muted disabled:border-line",
+  ghost: "text-ink-2 hover:bg-sunk disabled:text-muted transition-colors",
+  soft: "bg-brand-soft text-brand-strong hover:bg-[#e0d8ff] disabled:opacity-50 transition-colors",
 };
 
 const sizes: Record<Size, string> = {
-  md: "h-11 px-4 text-[0.95rem] gap-2 rounded-xl",
+  md: "h-11 px-4 text-[0.95rem] gap-2 rounded-2xl",
   lg: "h-13 px-6 text-base gap-2.5 rounded-2xl",
+  xl: "h-15 px-8 text-lg gap-3 rounded-[1.25rem]",
 };
 
 export function buttonClass(variant: Variant = "primary", size: Size = "md", extra = "") {
-  return `inline-flex items-center justify-center font-medium transition-colors duration-150 select-none disabled:cursor-not-allowed ${variants[variant]} ${sizes[size]} ${extra}`;
+  return `inline-flex items-center justify-center font-semibold select-none disabled:cursor-not-allowed ${variants[variant]} ${sizes[size]} ${extra}`;
 }
 
 export function Button({
