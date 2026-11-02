@@ -1,26 +1,89 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-paper: #faf8f4;
+  --color-surface: #ffffff;
+  --color-sunk: #f3f0ea;
+  --color-ink: #1b2130;
+  --color-ink-2: #3a4254;
+  --color-muted: #646c7d;
+  --color-line: #e6e1d8;
+  --color-line-strong: #cfc8bb;
+
+  /* Numerator / shaded parts */
+  --color-num: #e0603f;
+  --color-num-strong: #c24a2b;
+  --color-num-soft: #fde6dd;
+  /* Denominator / all parts */
+  --color-den: #2e64d0;
+  --color-den-strong: #234fa8;
+  --color-den-soft: #e1eafb;
+
+  --color-ok: #1f8a5b;
+  --color-ok-soft: #def3e8;
+  --color-warn: #a86a12;
+  --color-warn-soft: #fbf0da;
+  --color-violet: #6b4fd8;
+  --color-violet-soft: #ece8fc;
+
+  --font-sans: var(--font-lexend), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+
+  --radius-card: 1.25rem;
+  --shadow-card: 0 1px 2px rgb(27 33 48 / 0.04), 0 4px 16px -6px rgb(27 33 48 / 0.08);
+  --shadow-lift: 0 2px 4px rgb(27 33 48 / 0.06), 0 12px 32px -12px rgb(27 33 48 / 0.18);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    font-family: var(--font-sans);
+    line-height: 1.55;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-den);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  svg :focus-visible {
+    outline: none;
+  }
+  ::selection {
+    background: var(--color-den-soft);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+  }
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .display {
+    font-family: var(--font-display);
+    letter-spacing: -0.015em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

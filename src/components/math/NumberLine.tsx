@@ -1,0 +1,186 @@
+"use client";
+
+import { motion } from "motion/react";
+import { type KeyboardEvent } from "react";
+import type { ShapeSize } from "./FractionShape";
+
+const MAX_W: Record<ShapeSize, string> = {
+  xs: "max-w-[180px]",
+  sm: "max-w-[300px]",
+  md: "max-w-[560px]",
+  lg: "max-w-[680px]",
+};
+
+export function NumberLine({
+  intervals,
+  point,
+  selected,
+  onSelect,
+  countGaps = false,
+  fractionLabels = false,
+  correctIndex,
+  size = "md",
+  className = "",
+}: {
+  intervals: number;
+  point?: number;
+  selected?: number | null;
+  onSelect?: (index: number) => void;
+  countGaps?: boolean;
+  fractionLabels?: boolean;
+  correctIndex?: number;
+  size?: ShapeSize;
+  className?: string;
+}) {
+  const W = 600;
+  const H = countGaps ? 150 : 124;
+  const left = 36;
+  const right = W - 36;
+  const y = countGaps ? 92 : 66;
+  const step = (right - left) / intervals;
+  const xs = Array.from({ length: intervals + 1 }, (_, i) => left + i * step);
+  const interactive = !!onSelect;
+  const marker = interactive ? selected ?? null : point ?? null;
+
+  const choose = (i: number, from: Element) => {
+    const clamped = Math.max(1, Math.min(intervals, i));
+    onSelect?.(clamped);
+    const svg = from.closest("svg");
+    requestAnimationFrame(() => (svg?.querySelector(`[data-mark="${clamped}"]`) as SVGGElement | null)?.focus());
+  };
+
+  const onKey = (e: KeyboardEvent<SVGGElement>, i: number) => {
+    const map: Record<string, number> = {
+      ArrowRight: i + 1,
+      ArrowUp: i + 1,
+      ArrowLeft: i - 1,
+      ArrowDown: i - 1,
+      Home: 1,
+      End: intervals,
+    };
+    if (e.key in map) {
+      e.preventDefault();
+      choose(map[e.key], e.currentTarget);
+    } else if (e.key === " " || e.key === "Enter") {
+      e.preventDefault();
+      choose(i, e.currentTarget);
+    }
+  };
+
+  const label = interactive
+    ? `Number line from 0 to 1 split into ${intervals} equal gaps. Use arrow keys to choose a mark.`
+    : `Number line from 0 to 1 split into ${intervals} equal gaps${point !== undefined ? `, with a point ${point} gaps from 0` : ""}`;
+
+  return (
+    <svg
+      viewBox={`0 0 ${W} ${H}`}
+      className={`block h-auto w-full ${MAX_W[size]} ${interactive ? "touch-manipulation" : ""} ${className}`}
+      role={interactive ? "radiogroup" : "img"}
+      aria-label={label}
+    >
+      <line x1={left - 14} y1={y} x2={right + 14} y2={y} stroke="#1b2130" strokeWidth={3} strokeLinecap="round" />
+
+      {countGaps &&
+        xs.slice(0, -1).map((x, i) => (
+          <motion.g
+            key={`gap-${i}`}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 + i * 0.3 }}
+          >
+            <path
+              d={`M${x + 4},${y - 12} Q${x + step / 2},${y - 12 - Math.min(46, step * 0.55)} ${x + step - 4},${y - 12}`}
+              fill="none"
+              stroke="#2e64d0"
+              strokeWidth={2.5}
+              strokeLinecap="round"
+            />
+            <circle cx={x + step / 2} cy={y - 14 - Math.min(40, step * 0.45)} r={13} fill="#2e64d0" />
+            <text
+              x={x + step / 2}
+              y={y - 14 - Math.min(40, step * 0.45)}
+              textAnchor="middle"
+              dominantBaseline="central"
+              fill="#fff"
+              fontSize={15}
+              fontWeight={700}
+            >
+              {i + 1}
+            </text>
+          </motion.g>
+        ))}
+
+      {xs.map((x, i) => {
+        const end = i === 0 || i === intervals;
+        return (
+          <g key={`tick-${i}`}>
+            <line x1={x} y1={y - (end ? 16 : 11)} x2={x} y2={y + (end ? 16 : 11)} stroke="#1b2130" strokeWidth={end ? 3 : 2.4} strokeLinecap="round" />
+            {end && (
+              <text x={x} y={y + 40} textAnchor="middle" fontSize={22} fontWeight={600} fill="#1b2130">
+                {i === 0 ? 0 : 1}
+              </text>
+            )}
+            {fractionLabels && !end && (
+              <text x={x} y={y + 38} textAnchor="middle" fontSize={15} fill="#646c7d">
+                {i}/{intervals}
+              </text>
+            )}
+          </g>
+        );
+      })}
+
+      {correctIndex !== undefined && correctIndex !== marker && (
+        <g>
+          <circle cx={xs[correctIndex]} cy={y} r={13} fill="none" stroke="#1f8a5b" strokeWidth={3} strokeDasharray="4 4" />
+        </g>
+      )}
+
+      {marker !== null && marker !== undefined && (
+        <motion.g
+          key={`marker-${marker}`}
+          initial={{ y: -18, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 500, damping: 26 }}
+          pointerEvents="none"
+        >
+          <path
+            d={`M${xs[marker]},${y - 6} l-11,-18 a13,13 0 1,1 22,0 Z`}
+            fill="#e0603f"
+            stroke="#c24a2b"
+            strokeWidth={1.5}
+          />
+          <circle cx={xs[marker]} cy={y - 31} r={4.5} fill="#fff" />
+        </motion.g>
+      )}
+
+      {interactive &&
+        xs.map((x, i) => {
+          if (i === 0) return null;
+          const checked = selected === i;
+          const focusable = selected ? checked : i === 1;
+          return (
+            <g
+              key={`hit-${i}`}
+              data-mark={i}
+              role="radio"
+              aria-checked={checked}
+              aria-label={`Mark ${i} of ${intervals}`}
+              tabIndex={focusable ? 0 : -1}
+              className="group cursor-pointer outline-none"
+              onClick={(e) => choose(i, e.currentTarget)}
+              onKeyDown={(e) => onKey(e, i)}
+            >
+              <rect x={x - Math.min(step, 120) / 2} y={y - 56} width={Math.min(step, 120)} height={112} fill="transparent" />
+              <circle
+                cx={x}
+                cy={y}
+                r={9}
+                className="fill-transparent stroke-transparent transition-colors group-hover:fill-num-soft group-hover:stroke-num group-focus-visible:fill-den-soft group-focus-visible:stroke-den"
+                strokeWidth={2.5}
+              />
+            </g>
+          );
+        })}
+    </svg>
+  );
+}
