@@ -1,10 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Confetti, StarGlyph } from "@/components/kid/Celebrate";
+import { Kip, KipSays } from "@/components/kid/Kip";
 import { AttemptRunner } from "@/components/questions/AttemptRunner";
 import { Button, buttonClass } from "@/components/ui/Button";
-import { ArrowRightIcon, FlagIcon } from "@/components/ui/Icons";
+import { ArrowRightIcon } from "@/components/ui/Icons";
+import { skillMastery } from "@/engine/mastery";
+import { STARS } from "@/engine/rewards";
+import { playSound } from "@/lib/sound";
+import { FRACTIONS_TOPIC } from "@/topics/fractions";
 import {
   answerAssessment,
   clearAssessmentAnswer,
@@ -17,7 +23,7 @@ import type { ItemResult } from "@/engine/types";
 import { routes } from "@/lib/routes";
 import { updateLearner, useHydrated, useLearner } from "@/lib/store";
 import { ASSESSMENT_AREAS, ASSESSMENT_FORMS, formForAttempt, questionById, type AssessmentForm } from "@/topics/fractions/questions";
-import { ScreenSkeleton } from "./DashboardScreen";
+import { ScreenSkeleton } from "@/components/ui/Screen";
 
 export function independentResults(
   order: string[],
@@ -45,10 +51,16 @@ export function independentResults(
   });
 }
 
+/** Every item for this skill in the latest independent evidence was right. */
+function latestOK(skill: string, results: ItemResult[]): boolean {
+  const m = skillMastery(skill, results);
+  return !!m.assessed && m.assessed.correct === m.assessed.total;
+}
+
 export function AssessmentScreen() {
   const hydrated = useHydrated();
   const learner = useLearner();
-  const router = useRouter();
+  const [justFinished, setJustFinished] = useState(false);
   if (!hydrated) return <ScreenSkeleton />;
 
   const a = learner.assessment;
@@ -56,7 +68,7 @@ export function AssessmentScreen() {
   if (a.status === "in-progress") {
     return (
       <AttemptRunner
-        title="Fractions mastery check"
+        title="The big challenge 🏆"
         order={a.order}
         index={a.index}
         responses={a.responses}
@@ -68,7 +80,9 @@ export function AssessmentScreen() {
           updateLearner((s) =>
             finishAssessment(s, independentResults(s.assessment.order, s.assessment.evaluations, "assessment", at, `assess:${s.assessment.seed}`), at),
           );
-          router.push(routes.review());
+          playSound("complete");
+          setJustFinished(true);
+          window.scrollTo({ top: 0 });
         }}
       />
     );
@@ -79,17 +93,59 @@ export function AssessmentScreen() {
   const items = ASSESSMENT_FORMS[nextForm];
   const lastScore = last ? Object.values(last.evaluations).filter((e) => e.correct).length : 0;
 
+  const strongNow = last ? FRACTIONS_TOPIC.skills.filter((sk) => latestOK(sk.id, learner.results)) : [];
+  const revisit = last ? FRACTIONS_TOPIC.skills.filter((sk) => !latestOK(sk.id, learner.results)) : [];
+
   return (
-    <section className="card mx-auto max-w-3xl p-6 sm:p-10">
-      <span className="grid size-12 place-items-center rounded-2xl bg-ink text-white">
-        <FlagIcon size={22} />
-      </span>
-      <p className="eyebrow mt-5">Master</p>
-      <h1 className="display mt-1 text-3xl font-semibold sm:text-4xl">Fractions mastery check</h1>
-      <p className="mt-3 max-w-xl text-ink-2">
-        A chance to show what you know on your own. There are {items.length} questions — two for every skill — and <strong>no hints</strong>. You&apos;ll see how
-        you did at the end, with every question explained.
-      </p>
+    <section className="card relative mx-auto max-w-3xl p-6 sm:p-10">
+      {justFinished && last && (
+        <div className="relative -mx-2 mb-8 rounded-3xl bg-gradient-to-br from-sun-soft to-[#ffe7c2] p-5 text-center sm:p-7">
+          <Confetti burstKey={`check-${last.completedAt}`} pieces={70} />
+          <div className="flex justify-center">
+            <Kip mood="cheer" size={96} />
+          </div>
+          <h1 className="display mt-2 text-3xl sm:text-4xl" tabIndex={-1} ref={(el) => el?.focus()}>
+            Challenge complete!
+          </h1>
+          <p className="mt-1 text-lg text-ink-2">
+            You got <strong className="text-ink">{lastScore}</strong> out of {last.order.length} — all by yourself.
+          </p>
+          <p className="mx-auto mt-4 inline-flex items-center gap-2 rounded-full bg-sun px-4 py-2 text-lg font-bold shadow-[0_4px_0_var(--color-sun-strong)]">
+            +{STARS.check} <StarGlyph size={22} /> bonus stars
+          </p>
+          {strongNow.length > 0 && (
+            <p className="mt-4 text-ink-2">
+              <strong className="text-ok">Super strong:</strong> {strongNow.map((sk) => sk.title).join(", ")}.
+            </p>
+          )}
+          {revisit.length > 0 && (
+            <p className="mt-2 text-ink-2">
+              <strong className="text-num-strong">Let&apos;s revisit:</strong> {revisit.map((sk) => sk.title).join(", ")} — Kip will help you practise these.
+            </p>
+          )}
+          <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
+            <Link href={routes.dashboard()} className={buttonClass("go", "xl")}>
+              What&apos;s next? <ArrowRightIcon size={20} />
+            </Link>
+            <Link href={routes.badges()} className={buttonClass("secondary", "xl")}>
+              My badges
+            </Link>
+          </div>
+        </div>
+      )}
+      <div className="flex items-center gap-4">
+        <span className="grid size-16 shrink-0 place-items-center rounded-3xl bg-gradient-to-br from-sun to-[#ff9d2e] text-4xl shadow-[0_4px_0_#e08a00]" aria-hidden>
+          🏆
+        </span>
+        <div>
+          <p className="eyebrow">Show what you know</p>
+          <h2 className="display text-3xl sm:text-4xl">The big challenge</h2>
+        </div>
+      </div>
+      <KipSays mood="happy" tone="sky" className="mt-5" speak={`There are ${items.length} questions, two for every skill, and no hints. Take your time and do your best thinking. You'll earn ${STARS.check} bonus stars for finishing.`}>
+        {items.length} questions — two for every skill — and <strong>no hints</strong>. Take your time and do your best thinking! Finishing earns{" "}
+        <strong>{STARS.check} bonus stars</strong>.
+      </KipSays>
 
       {last && (
         <div className="mt-6 flex flex-col gap-3 rounded-2xl border border-line bg-paper p-4 sm:flex-row sm:items-center sm:justify-between">
@@ -101,7 +157,7 @@ export function AssessmentScreen() {
             {last.completedAt && ` on ${new Date(last.completedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long" })}`}
           </p>
           <Link href={routes.review()} className={buttonClass("secondary", "md")}>
-            Review last answers
+            Answer review (grown-ups)
           </Link>
         </div>
       )}
@@ -122,19 +178,16 @@ export function AssessmentScreen() {
       </ul>
       <div className="mt-8 flex flex-wrap gap-3">
         <Button
-          size="lg"
+          variant="go"
+          size="xl"
           onClick={() => {
+            setJustFinished(false);
             const seed = Date.now();
             updateLearner((s) => startAssessment(s, ASSESSMENT_FORMS[nextForm].map((q) => q.id), nextForm, seed, seed));
           }}
         >
-          {last ? "Retake the mastery check" : "Start the mastery check"} <ArrowRightIcon size={18} />
+          {last ? "Try the challenge again" : "I'm ready!"} <ArrowRightIcon size={20} />
         </Button>
-        {last && (
-          <Link href={routes.results()} className={buttonClass("secondary", "lg")}>
-            See my results
-          </Link>
-        )}
       </div>
     </section>
   );

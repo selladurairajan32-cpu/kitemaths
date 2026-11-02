@@ -1,12 +1,18 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useAnimate, useReducedMotion } from "motion/react";
 import { useEffect, useReducer, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { Confetti, StarPop } from "@/components/kid/Celebrate";
+import { Kip } from "@/components/kid/Kip";
+import { ReadAloud } from "@/components/kid/ReadAloud";
 import { RichText } from "@/components/math/RichText";
 import { Button } from "@/components/ui/Button";
 import { ArrowRightIcon, BulbIcon, CheckIcon, SearchIcon } from "@/components/ui/Icons";
 import { initialRecovery, isFinished, recoveryReducer, recoverySummary, type RecoveryState } from "@/engine/recovery";
 import type { ItemResult, ResultContext } from "@/engine/types";
+import { speak } from "@/lib/speech";
+import { playSound } from "@/lib/sound";
+import { getLearner } from "@/lib/store";
 import { followUpFor } from "@/topics/fractions";
 import { answerText, evaluate, inputProblem, isResponseComplete } from "@/topics/fractions/evaluate";
 import { misconceptionById } from "@/topics/fractions/misconceptions";
@@ -17,7 +23,7 @@ import { RemedyVisual } from "./RemedyVisual";
 
 export type ResultDraft = Omit<ItemResult, "at">;
 
-const ENCOURAGE = ["Brilliant — that's right!", "Spot on!", "Yes! Well reasoned.", "Exactly right.", "Great work!"];
+const ENCOURAGE = ["Brilliant — that's right!", "Spot on!", "Yes! Super thinking.", "Exactly right!", "Great work!", "You nailed it!", "Fantastic!"];
 
 function newEpisodeId(questionId: string) {
   const rand = typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : Math.random().toString(36).slice(2);
@@ -42,12 +48,14 @@ function FeedbackCard({
   title,
   children,
   focus = true,
+  kip,
 }: {
   tone: "ok" | "warn" | "violet" | "neutral";
   icon: ReactNode;
   title: ReactNode;
   children?: ReactNode;
   focus?: boolean;
+  kip?: "happy" | "cheer" | "think" | "oops";
 }) {
   const styles = {
     ok: "border-ok/30 bg-ok-soft",
@@ -62,12 +70,18 @@ function FeedbackCard({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -6 }}
       transition={{ type: "spring", stiffness: 320, damping: 30 }}
-      className={`rounded-2xl border p-4 sm:p-5 ${styles}`}
+      className={`rounded-3xl border-2 p-4 sm:p-5 ${styles}`}
     >
       <div className="flex gap-3">
-        <span className={`mt-0.5 grid size-8 shrink-0 place-items-center rounded-full text-white ${iconStyles}`} aria-hidden>
-          {icon}
-        </span>
+        {kip ? (
+          <span className="-mt-1 shrink-0" aria-hidden>
+            <Kip mood={kip} size={52} />
+          </span>
+        ) : (
+          <span className={`mt-0.5 grid size-8 shrink-0 place-items-center rounded-full text-white ${iconStyles}`} aria-hidden>
+            {icon}
+          </span>
+        )}
         <div className="min-w-0 flex-1 space-y-3">
           {focus ? <FocusHeading>{title}</FocusHeading> : <p className="font-semibold text-ink">{title}</p>}
           {children}
@@ -77,15 +91,21 @@ function FeedbackCard({
   );
 }
 
-function QuestionPrompt({ q, focusOnMount = false }: { q: FractionQuestion; focusOnMount?: boolean }) {
+function QuestionPrompt({ q, focusOnMount = false, autoRead = false }: { q: FractionQuestion; focusOnMount?: boolean; autoRead?: boolean }) {
   const ref = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     if (focusOnMount) ref.current?.focus();
   }, [focusOnMount]);
+  useEffect(() => {
+    if (autoRead && getLearner().settings.autoRead) speak(q.prompt, `auto:${q.id}`);
+  }, [autoRead, q.id, q.prompt]);
   return (
-    <h3 ref={ref} tabIndex={-1} className="text-lg font-medium leading-relaxed text-ink outline-none sm:text-xl">
-      <RichText text={q.prompt} />
-    </h3>
+    <div className="flex items-start gap-3">
+      <h3 ref={ref} tabIndex={-1} className="min-w-0 flex-1 text-xl font-semibold leading-relaxed text-ink outline-none sm:text-2xl">
+        <RichText text={q.prompt} />
+      </h3>
+      <ReadAloud text={q.prompt} label="Read the question aloud" />
+    </div>
   );
 }
 
@@ -165,6 +185,8 @@ export function QuestionPlayer({
   const [praise] = useState(() => ENCOURAGE[(q.id.length + (index ?? 0)) % ENCOURAGE.length]);
   const [completed, setCompleted] = useState(false);
   const [returned, setReturned] = useState(0);
+  const [scope, animateEl] = useAnimate<HTMLFormElement>();
+  const reduceMotion = useReducedMotion();
 
   const answering = state.stage === "answering";
   const complete = isResponseComplete(q, response);
@@ -177,7 +199,10 @@ export function QuestionPlayer({
       setProblem(issue);
       return;
     }
-    dispatch({ type: "submit", evaluation: evaluate(q, response) });
+    const evaluation = evaluate(q, response);
+    playSound(evaluation.correct ? "correct" : "tryAgain");
+    if (!evaluation.correct && !reduceMotion && scope.current) void animateEl(scope.current, { x: [0, -8, 8, -6, 6, 0] }, { duration: 0.4 });
+    dispatch({ type: "submit", evaluation });
   };
 
   const backToQuestion = () => {
@@ -195,11 +220,14 @@ export function QuestionPlayer({
   const followUp = state.followUpId ? questionById(state.followUpId) : null;
   const suspected = state.suspected.map((id) => misconceptionById(id)).filter((m) => !!m);
   const finished = isFinished(state);
+  const earned = state.stage === "correct" ? (state.attempts === 1 && state.hintsUsed === 0 ? 3 : 2) : state.stage === "revealed" ? 1 : 0;
+  const showsStars = context === "practice" || context === "lesson";
 
   return (
-    <div className="space-y-5">
-      <form onSubmit={submit} className="space-y-5">
-        <QuestionPrompt key={returned} q={q} focusOnMount={autoFocus || returned > 0} />
+    <div className="relative space-y-5">
+      {state.stage === "correct" && <Confetti burstKey={episodeId} pieces={state.attempts === 1 && state.hintsUsed === 0 ? 40 : 24} />}
+      <form ref={scope} onSubmit={submit} className="space-y-5">
+        <QuestionPrompt key={returned} q={q} focusOnMount={autoFocus || returned > 0} autoRead={returned === 0} />
         <QuestionInput
           question={q}
           response={response}
@@ -236,16 +264,16 @@ export function QuestionPlayer({
         )}
 
         {answering && (
-          <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="sticky bottom-0 z-10 -mx-5 flex items-center justify-between gap-3 border-t-2 border-line bg-surface/95 px-5 py-3 backdrop-blur sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none">
             {q.hint && !state.hintVisible ? (
-              <Button variant="ghost" onClick={() => dispatch({ type: "request-hint" })}>
-                <BulbIcon size={18} /> I need a hint
+              <Button variant="soft" size="lg" onClick={() => dispatch({ type: "request-hint" })} className="shrink-0">
+                <BulbIcon size={18} /> Hint
               </Button>
             ) : (
               <span />
             )}
-            <Button type="submit" size="lg" disabled={!complete}>
-              {state.attempts > 0 ? "Check again" : "Check answer"}
+            <Button type="submit" variant="go" size="xl" disabled={!complete} className="min-w-0 flex-1 sm:flex-none">
+              {state.attempts > 0 ? "Check again" : "Check"}
             </Button>
           </div>
         )}
@@ -258,7 +286,13 @@ export function QuestionPlayer({
               key="correct"
               tone="ok"
               icon={<CheckIcon size={18} />}
-              title={state.attempts > 1 || state.hintsUsed ? "That's it — you worked it out!" : praise}
+              kip="cheer"
+              title={
+                <span className="flex flex-wrap items-center gap-2">
+                  {state.attempts > 1 || state.hintsUsed ? "That's it — you worked it out!" : praise}
+                  {showsStars && <StarPop amount={earned} show />}
+                </span>
+              }
               focus={false}
             >
               {state.lastFeedback && (
@@ -273,7 +307,7 @@ export function QuestionPlayer({
           )}
 
           {state.stage === "diagnose" && (
-            <FeedbackCard key="diagnose" tone="violet" icon={<SearchIcon size={17} />} title="Not quite. Let's look closer.">
+            <FeedbackCard key="diagnose" tone="violet" icon={<SearchIcon size={17} />} kip="think" title="Not quite. Let's look closer together.">
               {state.lastFeedback && (
                 <p className="text-ink-2">
                   <RichText text={state.lastFeedback} />
@@ -350,7 +384,7 @@ export function QuestionPlayer({
           )}
 
           {state.stage === "revealed" && (
-            <FeedbackCard key="revealed" tone="neutral" icon={<BulbIcon size={18} />} title="Let's look at the answer together">
+            <FeedbackCard key="revealed" tone="neutral" icon={<BulbIcon size={18} />} kip="happy" title="Let's look at the answer together">
               <p className="text-ink-2">
                 The answer is{" "}
                 <strong className="text-ink">
@@ -361,15 +395,15 @@ export function QuestionPlayer({
               <p className="text-ink-2">
                 <RichText text={q.explanation} />
               </p>
-              <p className="text-sm text-muted">We&apos;ll come back to this idea in practice so you can try it again.</p>
+              <p className="text-sm text-muted">Mistakes help your brain grow! We&apos;ll come back to this idea so you can try it again.</p>
             </FeedbackCard>
           )}
         </AnimatePresence>
 
         {finished && (
           <div className="flex justify-end">
-            <Button size="lg" onClick={finish} disabled={completed} autoFocus={state.stage === "correct"}>
-              {continueLabel} <ArrowRightIcon size={18} />
+            <Button size="xl" onClick={finish} disabled={completed} autoFocus={state.stage === "correct"} className="w-full sm:w-auto">
+              {continueLabel} <ArrowRightIcon size={20} />
             </Button>
           </div>
         )}

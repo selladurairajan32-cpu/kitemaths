@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { PRACTICE_SESSION_LENGTH, selectNextQuestion } from "@/engine/adaptive";
+import type { ItemResult } from "@/engine/types";
+import { practicePool } from "./index";
 import { countedParts, evaluate, numericAnswer } from "./evaluate";
 import { LAB_LIMITS } from "./lab";
 import { LESSONS } from "./lessons";
@@ -12,8 +15,9 @@ import {
   PRACTICE_QUESTIONS,
   questionById,
 } from "./questions";
-import { SKILLS } from "./skills";
-import type { Diagram } from "./types";
+import { SKILL_ORDER, SKILLS } from "./skills";
+import { GENERATED_SKILLS, contentKey, generateFromId, generatedPool } from "./generate";
+import type { Diagram, FractionQuestion } from "./types";
 import { diagramParts, diagramSizes } from "./types";
 
 function checkDiagram(d: Diagram, label: string) {
@@ -31,6 +35,103 @@ function checkDiagram(d: Diagram, label: string) {
   }
 }
 
+function checkQuestion(q: FractionQuestion) {
+  expect(q.explanation.length, q.id).toBeGreaterThan(0);
+  switch (q.kind) {
+    case "choose-fraction": {
+      checkDiagram(q.diagram, q.id);
+      const { total, counted } = countedParts(q.diagram, q.ask);
+      expect(sameFraction(q.answer, { n: counted, d: total }), q.id).toBe(true);
+      expect(q.options.filter((o) => sameFraction(o, q.answer)).length, q.id).toBe(1);
+      const keys = q.options.map((o) => `${o.n}/${o.d}`);
+      expect(new Set(keys).size, q.id).toBe(keys.length);
+      q.options
+        .filter((o) => !sameFraction(o, q.answer))
+        .forEach((o) => expect(equivalent(o, q.answer), `${q.id} equivalent distractor`).toBe(false));
+      break;
+    }
+    case "write-fraction": {
+      checkDiagram(q.diagram, q.id);
+      const { total, counted } = countedParts(q.diagram, q.ask);
+      expect(sameFraction(q.answer, { n: counted, d: total }), q.id).toBe(true);
+      break;
+    }
+    case "choose": {
+      if (q.diagram) checkDiagram(q.diagram, q.id);
+      const ids = q.options.map((o) => o.id);
+      expect(new Set(ids).size, q.id).toBe(ids.length);
+      expect(ids, q.id).toContain(q.answer);
+      expect(q.options.find((o) => o.id === q.answer)?.misconception, q.id).toBeUndefined();
+      break;
+    }
+    case "shade": {
+      checkDiagram(q.diagram, q.id);
+      expect((q.target.n * diagramParts(q.diagram)) % q.target.d, q.id).toBe(0);
+      break;
+    }
+    case "equal-parts": {
+      const equalIds = q.items
+        .filter((it) => isEqualPartition(diagramSizes(it.diagram)))
+        .map((it) => it.id);
+      expect([...q.answer].sort(), q.id).toEqual(equalIds.sort());
+      break;
+    }
+    case "match": {
+      q.rows.forEach((row) => {
+        checkDiagram(row.diagram, q.id);
+        const { total, counted } = countedParts(row.diagram);
+        expect(sameFraction(row.answer, { n: counted, d: total }), q.id).toBe(true);
+        expect(q.choices.filter((c) => sameFraction(c, row.answer)).length, q.id).toBe(1);
+      });
+      expect(q.choices.length, q.id).toBe(q.rows.length);
+      break;
+    }
+    case "number-line-place": {
+      const idx = (q.target.n * q.intervals) / q.target.d;
+      expect(Number.isInteger(idx), q.id).toBe(true);
+      expect(idx, q.id).toBeGreaterThan(0);
+      expect(idx, q.id).toBeLessThanOrEqual(q.intervals);
+      break;
+    }
+    case "fraction-of":
+    case "missing-number":
+    case "number": {
+      const v = numericAnswer(q);
+      expect(v, q.id).not.toBeNull();
+      expect(Number.isInteger(v), q.id).toBe(true);
+      if ("traps" in q && q.traps) {
+        q.traps.forEach((t) => expect(t.value, q.id).not.toBe(v));
+      }
+      break;
+    }
+    case "compare":
+      break;
+    case "explain-frame": {
+      const slots = q.frame.filter((p) => typeof p !== "string");
+      expect(slots.length, q.id).toBeGreaterThan(0);
+      expect(new Set(slots.map((p) => (typeof p === "string" ? "" : p.slot))).size, q.id).toBe(slots.length);
+      for (const p of slots) {
+        if (typeof p === "string") continue;
+        const ids = p.options.map((o) => o.id);
+        expect(new Set(ids).size, q.id).toBe(ids.length);
+        expect(ids, q.id).toContain(p.answer);
+        expect(p.options.find((o) => o.id === p.answer)?.misconception, `${q.id} correct option tagged`).toBeUndefined();
+      }
+      break;
+    }
+    case "counterexample": {
+      let found = false;
+      for (let ad = 1; ad <= q.maxDenominator && !found; ad++)
+        for (let an = 1; an <= ad && !found; an++)
+          for (let bd = 1; bd <= q.maxDenominator && !found; bd++)
+            for (let bn = 1; bn <= bd && !found; bn++)
+              found = evaluate(q, { kind: "counterexample", a: { n: an, d: ad }, b: { n: bn, d: bd } }).correct;
+      expect(found, `${q.id} has a reachable counterexample`).toBe(true);
+      break;
+    }
+  }
+}
+
 describe("question bank integrity", () => {
   it("has unique ids and known skills", () => {
     const ids = ALL_QUESTIONS.map((q) => q.id);
@@ -40,102 +141,7 @@ describe("question bank integrity", () => {
   });
 
   it("gives every question a mathematically correct answer", () => {
-    for (const q of ALL_QUESTIONS) {
-      expect(q.explanation.length, q.id).toBeGreaterThan(0);
-      switch (q.kind) {
-        case "choose-fraction": {
-          checkDiagram(q.diagram, q.id);
-          const { total, counted } = countedParts(q.diagram, q.ask);
-          expect(sameFraction(q.answer, { n: counted, d: total }), q.id).toBe(true);
-          expect(q.options.filter((o) => sameFraction(o, q.answer)).length, q.id).toBe(1);
-          const keys = q.options.map((o) => `${o.n}/${o.d}`);
-          expect(new Set(keys).size, q.id).toBe(keys.length);
-          q.options
-            .filter((o) => !sameFraction(o, q.answer))
-            .forEach((o) => expect(equivalent(o, q.answer), `${q.id} equivalent distractor`).toBe(false));
-          break;
-        }
-        case "write-fraction": {
-          checkDiagram(q.diagram, q.id);
-          const { total, counted } = countedParts(q.diagram, q.ask);
-          expect(sameFraction(q.answer, { n: counted, d: total }), q.id).toBe(true);
-          break;
-        }
-        case "choose": {
-          if (q.diagram) checkDiagram(q.diagram, q.id);
-          const ids = q.options.map((o) => o.id);
-          expect(new Set(ids).size, q.id).toBe(ids.length);
-          expect(ids, q.id).toContain(q.answer);
-          expect(q.options.find((o) => o.id === q.answer)?.misconception, q.id).toBeUndefined();
-          break;
-        }
-        case "shade": {
-          checkDiagram(q.diagram, q.id);
-          expect((q.target.n * diagramParts(q.diagram)) % q.target.d, q.id).toBe(0);
-          break;
-        }
-        case "equal-parts": {
-          const equalIds = q.items
-            .filter((it) => isEqualPartition(diagramSizes(it.diagram)))
-            .map((it) => it.id);
-          expect([...q.answer].sort(), q.id).toEqual(equalIds.sort());
-          break;
-        }
-        case "match": {
-          q.rows.forEach((row) => {
-            checkDiagram(row.diagram, q.id);
-            const { total, counted } = countedParts(row.diagram);
-            expect(sameFraction(row.answer, { n: counted, d: total }), q.id).toBe(true);
-            expect(q.choices.filter((c) => sameFraction(c, row.answer)).length, q.id).toBe(1);
-          });
-          expect(q.choices.length, q.id).toBe(q.rows.length);
-          break;
-        }
-        case "number-line-place": {
-          const idx = (q.target.n * q.intervals) / q.target.d;
-          expect(Number.isInteger(idx), q.id).toBe(true);
-          expect(idx, q.id).toBeGreaterThan(0);
-          expect(idx, q.id).toBeLessThanOrEqual(q.intervals);
-          break;
-        }
-        case "fraction-of":
-        case "missing-number":
-        case "number": {
-          const v = numericAnswer(q);
-          expect(v, q.id).not.toBeNull();
-          expect(Number.isInteger(v), q.id).toBe(true);
-          if ("traps" in q && q.traps) {
-            q.traps.forEach((t) => expect(t.value, q.id).not.toBe(v));
-          }
-          break;
-        }
-        case "compare":
-          break;
-        case "explain-frame": {
-          const slots = q.frame.filter((p) => typeof p !== "string");
-          expect(slots.length, q.id).toBeGreaterThan(0);
-          expect(new Set(slots.map((p) => (typeof p === "string" ? "" : p.slot))).size, q.id).toBe(slots.length);
-          for (const p of slots) {
-            if (typeof p === "string") continue;
-            const ids = p.options.map((o) => o.id);
-            expect(new Set(ids).size, q.id).toBe(ids.length);
-            expect(ids, q.id).toContain(p.answer);
-            expect(p.options.find((o) => o.id === p.answer)?.misconception, `${q.id} correct option tagged`).toBeUndefined();
-          }
-          break;
-        }
-        case "counterexample": {
-          let found = false;
-          for (let ad = 1; ad <= q.maxDenominator && !found; ad++)
-            for (let an = 1; an <= ad && !found; an++)
-              for (let bd = 1; bd <= q.maxDenominator && !found; bd++)
-                for (let bn = 1; bn <= bd && !found; bn++)
-                  found = evaluate(q, { kind: "counterexample", a: { n: an, d: ad }, b: { n: bn, d: bd } }).correct;
-          expect(found, `${q.id} has a reachable counterexample`).toBe(true);
-          break;
-        }
-      }
-    }
+    ALL_QUESTIONS.forEach(checkQuestion);
   });
 
   it("covers every skill in practice, at three difficulty levels where possible", () => {
@@ -219,6 +225,69 @@ describe("lesson integrity", () => {
       const firstCheck = lesson.steps.findIndex((s) => s.type === "check");
       const firstTeach = lesson.steps.findIndex((s) => s.type !== "check");
       expect(firstTeach, lesson.id).toBeLessThan(firstCheck === -1 ? Infinity : firstCheck);
+    }
+  });
+});
+
+describe("generated questions", () => {
+  const pool = Array.from({ length: 60 }, (_, i) => generatedPool(`seed-${i}`)).flat();
+
+  it("builds thousands of valid, correctly-marked questions", () => {
+    expect(pool.length).toBeGreaterThan(3000);
+    pool.forEach(checkQuestion);
+  });
+
+  it("rebuilds the same question from its id", () => {
+    for (const q of pool.slice(0, 300)) expect(generateFromId(q.id)).toEqual(q);
+    expect(generateFromId("g:nope:1:5")).toBeNull();
+    expect(generateFromId("g:nm-choose:9:5")).toBeNull();
+    expect(questionById(pool[0].id)).toEqual(pool[0]);
+  });
+
+  it("covers every skill at every difficulty", () => {
+    expect(new Set(GENERATED_SKILLS)).toEqual(new Set(SKILLS.map((s) => s.id)));
+    for (const s of SKILLS) {
+      const levels = new Set(pool.filter((q) => q.skill === s.id).map((q) => q.difficulty));
+      expect([...levels].sort(), s.id).toEqual([1, 2, 3]);
+    }
+  });
+
+  it("offers real variety and never repeats content the learner has seen", () => {
+    const first = generatedPool("a");
+    const keys = new Set(first.map(contentKey));
+    expect(keys.size).toBe(first.length);
+    const next = generatedPool("b", first.map((q) => q.id));
+    next.forEach((q) => expect(keys.has(contentKey(q)), q.id).toBe(false));
+    for (const s of SKILLS) {
+      expect(new Set(pool.filter((q) => q.skill === s.id).map(contentKey)).size, s.id).toBeGreaterThan(40);
+    }
+  });
+
+  it("gives multiple-choice questions at least three options", () => {
+    for (const q of pool) {
+      if (q.kind === "choose" || q.kind === "choose-fraction") expect(q.options.length, q.id).toBeGreaterThanOrEqual(3);
+    }
+  });
+});
+
+describe("practice never runs dry", () => {
+  it("fills a full focused session for every skill, twice in a row, without repeats", () => {
+    for (const s of SKILLS) {
+      const results: ItemResult[] = [];
+      for (const session of [1, 2]) {
+        const asked: string[] = [];
+        const pool = practicePool(`${s.id}-${session}`, results);
+        for (let i = 0; i < PRACTICE_SESSION_LENGTH; i++) {
+          const sel = selectNextQuestion({ questions: pool, skillOrder: SKILL_ORDER, results, sessionAsked: asked, focusSkill: s.id });
+          expect(sel, `${s.id} session ${session} q${i + 1}`).not.toBeNull();
+          expect(sel!.question.skill).toBe(s.id);
+          asked.push(sel!.question.id);
+          results.push({ questionId: sel!.question.id, skill: s.id, context: "practice", difficulty: sel!.question.difficulty, correct: true, firstTry: true, attempts: 1, hintsUsed: 0, misconceptions: [], at: results.length });
+        }
+        expect(new Set(asked).size).toBe(PRACTICE_SESSION_LENGTH);
+      }
+      const keys = results.map((r) => contentKey(questionById(r.questionId)));
+      expect(new Set(keys).size, s.id).toBe(keys.length);
     }
   });
 });

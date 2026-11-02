@@ -1,8 +1,8 @@
-﻿import type { Metadata } from "next";
-import { JourneyScreen } from "@/components/screens/JourneyScreen";
+import type { Metadata } from "next";
+import { SkyMapScreen } from "@/components/screens/SkyMapScreen";
 
-export const metadata: Metadata = { title: "Learning journey · Kite Maths" };
+export const metadata: Metadata = { title: "Adventure map · Kite Maths" };
 
 export default function Page() {
-  return <JourneyScreen />;
+  return <SkyMapScreen />;
 }

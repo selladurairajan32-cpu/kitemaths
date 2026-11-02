@@ -3,6 +3,10 @@ import type { SkillId } from "@/engine/types";
 export const routes = {
   dashboard: () => "/",
   journey: () => "/journey",
+  badges: () => "/badges",
+  start: () => "/start",
+  parent: () => "/parent",
+  parentJourney: () => "/parent/journey",
   studio: () => "/lesson",
   lesson: (lessonId: string, stepIndex?: number) =>
     stepIndex === undefined ? `/lesson/${lessonId}` : `/lesson/${lessonId}/${stepIndex + 1}`,

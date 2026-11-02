@@ -1,3 +1,4 @@
+import { generateFromId, isGeneratedId } from "./generate";
 import { frac as f } from "./math";
 import { M } from "./misconceptions";
 import type { Diagram, FractionQuestion } from "./types";
@@ -1892,7 +1893,7 @@ export const ALL_QUESTIONS: FractionQuestion[] = [
 const byId = new Map(ALL_QUESTIONS.map((q) => [q.id, q]));
 
 export function questionById(id: string): FractionQuestion {
-  const q = byId.get(id);
+  const q = byId.get(id) ?? (isGeneratedId(id) ? generateFromId(id) : null);
   if (!q) throw new Error(`Unknown question ${id}`);
   return q;
 }

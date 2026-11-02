@@ -1,4 +1,6 @@
 import type { TopicDefinition } from "@/engine/journey";
+import type { ItemResult } from "@/engine/types";
+import { generatedPool } from "./generate";
 import { LESSONS } from "./lessons";
 import { MISCONCEPTIONS } from "./misconceptions";
 import { ASSESSMENT_FORMS, PRACTICE_QUESTIONS, questionById } from "./questions";
@@ -26,4 +28,12 @@ export function followUpFor(suspected: string[], used: string[] = []): string | 
     if (next) return next;
   }
   return null;
+}
+
+/**
+ * Everything practice can choose from: the hand-written bank first, then a
+ * fresh batch of generated questions for this session (never ones already seen).
+ */
+export function practicePool(sessionSeed: string | number | null, results: ItemResult[]): FractionQuestion[] {
+  return [...PRACTICE_QUESTIONS, ...generatedPool(String(sessionSeed ?? 0), results.map((r) => r.questionId))];
 }

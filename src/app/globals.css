@@ -1,37 +1,90 @@
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #faf8f4;
+  /* Sky world */
+  --color-paper: #f2f8ff;
   --color-surface: #ffffff;
-  --color-sunk: #f3f0ea;
-  --color-ink: #1b2130;
-  --color-ink-2: #3a4254;
-  --color-muted: #646c7d;
-  --color-line: #e6e1d8;
-  --color-line-strong: #cfc8bb;
+  --color-sunk: #edf2fc;
+  --color-ink: #1d2350;
+  --color-ink-2: #3a4275;
+  --color-muted: #646d9a;
+  --color-line: #dde5f6;
+  --color-line-strong: #c2cdea;
+
+  /* Brand: kite violet */
+  --color-brand: #6a4cff;
+  --color-brand-strong: #4c2fe0;
+  --color-brand-soft: #ece7ff;
 
   /* Numerator / shaded parts */
-  --color-num: #e0603f;
-  --color-num-strong: #c24a2b;
-  --color-num-soft: #fde6dd;
+  --color-num: #ff6a45;
+  --color-num-strong: #db4a26;
+  --color-num-soft: #ffe7df;
   /* Denominator / all parts */
-  --color-den: #2e64d0;
-  --color-den-strong: #234fa8;
-  --color-den-soft: #e1eafb;
+  --color-den: #2f74ff;
+  --color-den-strong: #1d55d8;
+  --color-den-soft: #e2ecff;
 
-  --color-ok: #1f8a5b;
-  --color-ok-soft: #def3e8;
-  --color-warn: #a86a12;
-  --color-warn-soft: #fbf0da;
-  --color-violet: #6b4fd8;
-  --color-violet-soft: #ece8fc;
+  --color-ok: #138a50;
+  --color-ok-bright: #22c174;
+  --color-ok-soft: #d9f7e8;
+  --color-warn: #a96400;
+  --color-warn-bright: #ffb020;
+  --color-warn-soft: #fff2d3;
+  --color-violet: #7a4ff0;
+  --color-violet-soft: #efe8ff;
+  --color-sun: #ffc83a;
+  --color-sun-strong: #f0a800;
+  --color-sun-soft: #fff5cf;
+  --color-pink: #ff4f9a;
+  --color-pink-soft: #ffe3f0;
+  --color-mint: #1fbfae;
+  --color-mint-soft: #d8f7f3;
+  --color-sky: #59b8ff;
+  --color-sky-soft: #def1ff;
 
   --font-sans: var(--font-lexend), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-display: var(--font-fredoka), var(--font-lexend), ui-rounded, system-ui, sans-serif;
 
-  --radius-card: 1.25rem;
-  --shadow-card: 0 1px 2px rgb(27 33 48 / 0.04), 0 4px 16px -6px rgb(27 33 48 / 0.08);
-  --shadow-lift: 0 2px 4px rgb(27 33 48 / 0.06), 0 12px 32px -12px rgb(27 33 48 / 0.18);
+  --radius-card: 1.75rem;
+  --shadow-card: 0 4px 0 rgb(29 35 80 / 0.06), 0 12px 32px -18px rgb(29 35 80 / 0.25);
+  --shadow-lift: 0 6px 0 rgb(29 35 80 / 0.08), 0 18px 40px -16px rgb(29 35 80 / 0.3);
+
+  --animate-float: float 4s ease-in-out infinite;
+  --animate-drift: drift 60s linear infinite;
+  --animate-wiggle: wiggle 0.5s ease-in-out;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(-2deg);
+    }
+    50% {
+      transform: translateY(-8px) rotate(2deg);
+    }
+  }
+  @keyframes drift {
+    from {
+      transform: translateX(-10%);
+    }
+    to {
+      transform: translateX(110%);
+    }
+  }
+  @keyframes wiggle {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    20%,
+    60% {
+      transform: translateX(-6px);
+    }
+    40%,
+    80% {
+      transform: translateX(6px);
+    }
+  }
 }
 
 @layer base {
@@ -43,37 +96,62 @@
   body {
     font-family: var(--font-sans);
     line-height: 1.55;
+    background:
+      radial-gradient(60rem 26rem at 10% -6rem, #d4ebff 0%, transparent 70%),
+      radial-gradient(50rem 24rem at 95% -4rem, #ece4ff 0%, transparent 70%),
+      linear-gradient(180deg, #e6f3ff 0%, var(--color-paper) 28rem);
+    background-attachment: fixed;
   }
   :focus-visible {
-    outline: 3px solid var(--color-den);
-    outline-offset: 2px;
-    border-radius: 6px;
+    outline: 3px solid var(--color-brand);
+    outline-offset: 3px;
+    border-radius: 10px;
   }
   svg :focus-visible {
     outline: none;
   }
   ::selection {
-    background: var(--color-den-soft);
+    background: var(--color-brand-soft);
   }
 }
 
 @layer components {
   .card {
     background: var(--color-surface);
-    border: 1px solid var(--color-line);
+    border: 2px solid var(--color-line);
     border-radius: var(--radius-card);
     box-shadow: var(--shadow-card);
   }
   .eyebrow {
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--color-muted);
   }
   .display {
     font-family: var(--font-display);
-    letter-spacing: -0.015em;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  /* Chunky "game" press: the coloured bottom edge sinks when pressed. */
+  .press {
+    position: relative;
+    transition:
+      transform 90ms ease,
+      box-shadow 90ms ease,
+      background-color 150ms ease,
+      filter 150ms ease;
+  }
+  .press:not(:disabled):hover {
+    filter: brightness(1.04);
+  }
+  .press:not(:disabled):active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 var(--press-edge, rgb(0 0 0 / 0.2)) !important;
+  }
+  .press:disabled {
+    box-shadow: none !important;
   }
 }
 
