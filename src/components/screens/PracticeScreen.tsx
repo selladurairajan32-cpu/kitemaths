@@ -19,7 +19,7 @@ import {
 } from "@/engine/progress";
 import { routes } from "@/lib/routes";
 import { updateLearner, useHydrated, useLearner } from "@/lib/store";
-import { FRACTIONS_TOPIC } from "@/topics/fractions";
+import { practicePool } from "@/topics/fractions";
 import { questionById } from "@/topics/fractions/questions";
 import { SKILL_ORDER, SKILLS, skillById } from "@/topics/fractions/skills";
 import { ScreenSkeleton } from "./DashboardScreen";
@@ -33,7 +33,7 @@ const REASON_TEXT: Record<string, string> = {
 function pickNext(s: LearnerState): LearnerState {
   if (s.practice.sessionResults >= PRACTICE_SESSION_LENGTH) return completePracticeSession(s);
   const sel = selectNextQuestion({
-    questions: FRACTIONS_TOPIC.practiceQuestions,
+    questions: practicePool(s.practice.startedAt, s.results),
     skillOrder: SKILL_ORDER,
     results: s.results,
     sessionAsked: s.practice.sessionAsked,
