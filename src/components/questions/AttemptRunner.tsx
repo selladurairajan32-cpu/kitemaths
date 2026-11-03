@@ -70,7 +70,7 @@ function AttemptQuestion({
         <ReadAloud text={q.prompt} label="Read the question aloud" />
       </div>
       <QuestionInput question={q} response={response} onChange={change} locked={false} orderKey={orderKey} />
-      {problem && <p className="rounded-xl border border-warn/30 bg-warn-soft px-4 py-3 text-sm text-ink-2">{problem} This answer isn&apos;t saved yet.</p>}
+      {problem && <p className="rounded-xl border border-warn/30 bg-warn-soft px-4 py-3 text-[0.9375rem] text-ink-2">{problem} This answer isn&apos;t saved yet.</p>}
       <div className="sticky bottom-0 z-10 -mx-5 flex items-center justify-between gap-3 border-t-2 border-line bg-surface/95 px-5 py-3 backdrop-blur sm:static sm:mx-0 sm:bg-transparent sm:px-0 sm:pb-0 sm:pt-5 sm:backdrop-blur-none">
         <Button variant="ghost" onClick={() => onNavigate(index - 1)} disabled={index === 0}>
           <ArrowLeftIcon size={17} /> Back
@@ -118,7 +118,7 @@ export function AttemptRunner({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="display text-2xl font-semibold">{title}</h1>
-          <p className="text-sm text-muted" aria-live="polite">
+          <p className="text-[0.9375rem] text-muted" aria-live="polite">
             {reviewing ? "Review your answers" : `Question ${current + 1} of ${order.length}`} · {answered} answered · no hints
           </p>
         </div>
@@ -134,7 +134,7 @@ export function AttemptRunner({
               onClick={() => go(i)}
               aria-label={`Question ${i + 1}${done ? ", answered" : ", not answered"}`}
               aria-current={isCurrent ? "step" : undefined}
-              className={`grid size-11 place-items-center rounded-xl text-sm font-semibold transition-colors ${
+              className={`grid size-11 place-items-center rounded-xl text-[0.9375rem] font-semibold transition-colors ${
                 isCurrent ? "bg-brand text-white shadow-[0_3px_0_var(--color-brand-strong)]" : done ? "bg-ok-soft text-ok" : "bg-sunk text-muted hover:bg-line"
               }`}
             >

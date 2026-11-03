@@ -7,7 +7,7 @@ import { levelFor, streakFor, totalStars } from "@/engine/rewards";
 import { routes } from "@/lib/routes";
 import { playSound } from "@/lib/sound";
 import { useHydrated, useLearner, useNow } from "@/lib/store";
-import { FlameGlyph, StarGlyph } from "./Celebrate";
+import { Pic } from "@/components/paper/Pic";
 
 /**
  * Tracks how many stars just arrived (and whether the level went up),
@@ -44,10 +44,10 @@ export function Hud({ compact = false }: { compact?: boolean }) {
   return (
     <Link
       href={routes.badges()}
-      className="flex h-11 items-center gap-3 rounded-full px-3 hover:bg-sunk"
+      className="flex items-center gap-2 rounded-full"
       aria-label={`${stars} stars, level ${level.level}${streak.current ? `, ${streak.current} day streak` : ""}. See your kites.`}
     >
-      <span className="relative flex items-center gap-1.5">
+      <span className="relative flex h-11 items-center gap-1.5 rounded-full bg-tile-yellow pl-1.5 pr-3.5">
         <motion.span
           key={stars}
           className="grid"
@@ -55,14 +55,14 @@ export function Hud({ compact = false }: { compact?: boolean }) {
           animate={{ scale: 1 }}
           transition={{ duration: 0.35, ease: "easeOut" }}
         >
-          <StarGlyph size={22} />
+          <Pic name="star" size={28} />
         </motion.span>
-        <span className="text-lg font-semibold tabular-nums leading-none text-ink">{stars}</span>
+        <span className="text-lg font-extrabold tabular-nums leading-none text-ink">{stars}</span>
         <AnimatePresence>
           {gained > 0 && (
             <motion.span
               key={`gain-${stars}`}
-              className="absolute -top-4 left-0 whitespace-nowrap text-sm font-semibold text-ink"
+              className="absolute -top-4 left-2 whitespace-nowrap text-[0.9375rem] font-bold text-ink"
               initial={{ opacity: 1, y: 0 }}
               animate={{ opacity: 0, y: -12 }}
               transition={{ duration: 1.1, ease: "easeOut" }}
@@ -73,10 +73,10 @@ export function Hud({ compact = false }: { compact?: boolean }) {
           )}
         </AnimatePresence>
       </span>
-      {!compact && <span className="hidden whitespace-nowrap text-sm text-muted xl:inline">Level {level.level}</span>}
-      <span className="flex items-center gap-1" title={`${streak.current} day streak`}>
-        <FlameGlyph size={22} lit={streak.activeToday} />
-        <span className={`text-lg font-semibold tabular-nums leading-none ${streak.activeToday ? "text-ink" : "text-muted"}`}>{streak.current}</span>
+      {!compact && <span className="hidden whitespace-nowrap text-[0.9375rem] font-semibold text-muted xl:inline">Level {level.level}</span>}
+      <span className="flex h-11 items-center gap-1 rounded-full bg-tile-orange pl-1.5 pr-3.5" title={`${streak.current} day streak`}>
+        <Pic name="flame" size={28} muted={!streak.activeToday} />
+        <span className={`text-lg font-extrabold tabular-nums leading-none ${streak.activeToday ? "text-ink" : "text-muted"}`}>{streak.current}</span>
       </span>
     </Link>
   );

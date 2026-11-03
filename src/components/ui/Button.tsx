@@ -2,9 +2,9 @@ import Link from "next/link";
 import type { ButtonHTMLAttributes, ComponentProps, ReactNode } from "react";
 
 /**
- * Buttons are fully round pills with one flat fill (design system v2).
- * - primary: kite red, the one action on a kids' screen. Its darker bottom edge
- *   sinks when pressed (kid exception 3).
+ * Buttons are fully round pills with one flat fill (design system v3, "Crystal").
+ * - primary: friendly blue, the one action on a screen. Its darker bottom edge
+ *   sinks when pressed.
  * - secondary: paper with a quiet control edge.
  * - quiet: text only, for hints and back links.
  * - ink: near-black, the one action in the grown-ups' area.
@@ -19,21 +19,21 @@ const variants: Record<Variant, string> = {
   primary: PRIMARY,
   go: PRIMARY,
   sun: PRIMARY,
-  secondary: "bg-surface text-ink border border-line-strong hover:bg-raised disabled:text-muted disabled:border-line",
-  soft: "bg-surface text-ink border border-line-strong hover:bg-raised disabled:text-muted disabled:border-line",
+  secondary: "bg-surface text-ink border-[1.5px] border-line-strong hover:bg-raised disabled:text-muted disabled:border-line",
+  soft: "bg-surface text-ink border-[1.5px] border-line-strong hover:bg-raised disabled:text-muted disabled:border-line",
   ghost: "text-ink-2 hover:bg-sunk disabled:text-muted",
   quiet: "text-ink-2 hover:bg-sunk disabled:text-muted",
   ink: "bg-ink text-white hover:bg-ink-2 disabled:bg-line-strong",
 };
 
 const sizes: Record<Size, string> = {
-  md: "h-11 px-5 text-base gap-2",
-  lg: "h-13 px-6 text-[1.0625rem] gap-2.5",
-  xl: "h-14 px-7 text-lg gap-3",
+  md: "h-12 px-5 text-[1.0625rem] gap-2",
+  lg: "h-14 px-7 text-lg gap-2.5",
+  xl: "h-[3.75rem] px-8 text-[1.1875rem] gap-3",
 };
 
 export function buttonClass(variant: Variant = "primary", size: Size = "md", extra = "") {
-  return `inline-flex items-center justify-center rounded-full font-semibold select-none transition-colors disabled:cursor-not-allowed ${variants[variant]} ${sizes[size]} ${extra}`;
+  return `inline-flex items-center justify-center rounded-full font-bold select-none transition-colors disabled:cursor-not-allowed ${variants[variant]} ${sizes[size]} ${extra}`;
 }
 
 export function Button({

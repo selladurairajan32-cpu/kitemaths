@@ -55,7 +55,7 @@ function SkillPicker({ focusSkill }: { focusSkill: string | null }) {
   return (
     <nav aria-label="Choose what to practise" className="card p-5 sm:p-6">
       <h2 className="display text-xl">Pick a power-up</h2>
-      <p className="text-sm text-muted">Practise one skill, or mix them all.</p>
+      <p className="text-[0.9375rem] text-muted">Practise one skill, or mix them all.</p>
       <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
         <li className="sm:col-span-2">
           <Link
@@ -88,7 +88,7 @@ function SkillPicker({ focusSkill }: { focusSkill: string | null }) {
                 <span className="grid size-11 shrink-0 place-items-center rounded-xl text-xl" style={{ background: look.soft }} aria-hidden>
                   <PaperIcon name={look.icon} size={32} />
                 </span>
-                <span className="min-w-0 flex-1 text-sm font-semibold leading-tight">{s.title}</span>
+                <span className="min-w-0 flex-1 text-[0.9375rem] font-semibold leading-tight">{s.title}</span>
                 <span className={`shrink-0 rounded-full px-2 py-0.5 text-[0.7rem] font-bold ${st.cls}`}>{st.label}</span>
               </Link>
             </li>
@@ -109,7 +109,7 @@ function Intro({ focusSkill }: { focusSkill: string | null }) {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <Kip mood="cheer" size={88} />
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-bold uppercase tracking-wide text-white/85">Practice arena</p>
+            <p className="text-[0.9375rem] font-bold uppercase tracking-wide text-white/85">Practice arena</p>
             <h1 className="display text-3xl leading-tight sm:text-4xl">{skill ? skill.title : "Mixed challenge"}</h1>
             <p className="mt-1 max-w-xl text-white/90">
               {PRACTICE_SESSION_LENGTH} questions. They get trickier as you get stronger — and if you get stuck, Kip helps. Win up to{" "}
@@ -247,7 +247,7 @@ export function PracticeScreen({ focusSkill = null }: { focusSkill?: string | nu
             <PaperIcon name={topic.lessonLook(topic.skillById(current!.skill).lessonId).icon} size={32} />
           </span>
           <div className="min-w-0 flex-1">
-            <h1 id="practice-heading" className="flex items-center justify-between gap-2 text-sm font-semibold text-muted">
+            <h1 id="practice-heading" className="flex items-center justify-between gap-2 text-[0.9375rem] font-semibold text-muted">
               <span className="truncate">
                 <span className="text-ink">{topic.skillById(current!.skill).title}</span>
                 <span className="sr-only">

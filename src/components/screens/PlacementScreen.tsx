@@ -62,7 +62,7 @@ function Intro() {
             placeholder="Your first name"
             className="mt-2 h-14 w-full rounded-2xl border-2 border-line-strong bg-surface px-4 text-lg font-medium focus:border-brand focus:outline-none"
           />
-          <span className="mt-1 block text-sm text-muted">Just your first name — it stays on this device.</span>
+          <span className="mt-1 block text-[0.9375rem] text-muted">Just your first name — it stays on this device.</span>
         </label>
 
         <fieldset>
@@ -85,7 +85,7 @@ function Intro() {
               type="button"
               onClick={() => setYear(null)}
               aria-pressed={year === null}
-              className={`press h-14 rounded-2xl border-2 text-sm font-bold ${
+              className={`press h-14 rounded-2xl border-2 text-[0.9375rem] font-bold ${
                 year === null ? "border-brand bg-brand text-white shadow-[0_4px_0_var(--color-brand-strong)]" : "border-line-strong bg-surface shadow-[0_3px_0_var(--color-line-strong)]"
               }`}
             >
@@ -181,7 +181,7 @@ function PlacementQuestion({ id, index }: { id: string; index: number }) {
         locked={outcome !== null}
         orderKey={episode}
       />
-      {problem && <p className="rounded-2xl bg-warn-soft px-4 py-3 text-sm text-ink-2">{problem}</p>}
+      {problem && <p className="rounded-2xl bg-warn-soft px-4 py-3 text-[0.9375rem] text-ink-2">{problem}</p>}
       <AnimatePresence mode="wait">
         {outcome !== null && (
           <motion.div key="fb" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
@@ -233,7 +233,7 @@ function Done() {
           {placedOut.map((id) => {
             const l = LESSONS.find((x) => x.id === id)!;
             return (
-              <li key={id} className="inline-flex items-center gap-1.5 rounded-full bg-ok-soft px-3 py-1 text-sm font-semibold text-ok">
+              <li key={id} className="inline-flex items-center gap-1.5 rounded-full bg-ok-soft px-3 py-1 text-[0.9375rem] font-semibold text-ok">
                 <PaperIcon name={topic.lessonLook(id).icon} size={24} /> {l.title}
               </li>
             );
@@ -242,7 +242,7 @@ function Done() {
       )}
       {first && (
         <div className="mt-6 rounded-3xl bg-brand-soft p-4">
-          <p className="text-sm font-bold uppercase tracking-wide text-brand-strong">Your first adventure</p>
+          <p className="text-[0.9375rem] font-bold uppercase tracking-wide text-brand-strong">Your first adventure</p>
           <p className="display mt-1 text-2xl">
             <PaperIcon name={topic.lessonLook(first.id).icon} size={32} className="inline-block align-middle" /> {first.title}
           </p>

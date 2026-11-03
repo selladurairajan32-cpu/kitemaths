@@ -97,7 +97,7 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
             <span className="h-1 w-20 rounded-full bg-ink" aria-hidden />
             <NumberInput value={Number.isNaN(v.d) ? null : v.d} onValue={(d) => set({ d: d ?? NaN })} locked={locked} label="Denominator (bottom number)" size="md" tone="den" />
             {reveal && (
-              <p className="mt-1 text-sm text-ok">
+              <p className="mt-1 text-[0.9375rem] text-ok">
                 Answer: <FractionNotation n={q.answer.n} d={q.answer.d} size="inline" />
               </p>
             )}
@@ -173,11 +173,11 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
           <div className="flex w-full flex-col items-center gap-4">
             <FractionShape diagram={q.diagram} shaded={shaded} onToggle={locked ? undefined : toggle} size="lg" />
             <div className="flex items-center gap-3">
-              <p className="text-sm text-ink-2" aria-live="polite">
+              <p className="text-[0.9375rem] text-ink-2" aria-live="polite">
                 <strong className="text-num-strong">{shaded.length}</strong> of {parts} parts shaded
               </p>
               {!locked && shaded.length > 0 && (
-                <button type="button" onClick={() => onChange(null)} className="h-11 rounded-full px-3 text-sm text-muted underline-offset-2 hover:text-ink hover:underline">
+                <button type="button" onClick={() => onChange(null)} className="h-11 rounded-full px-3 text-[0.9375rem] text-muted underline-offset-2 hover:text-ink hover:underline">
                   Clear
                 </button>
               )}
@@ -206,7 +206,7 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
                 <span className="flex w-full flex-1 items-center justify-center">
                   <FractionShape diagram={it.diagram} size="sm" />
                 </span>
-                <span className="flex items-center gap-2 text-sm font-semibold">
+                <span className="flex items-center gap-2 text-[0.9375rem] font-semibold">
                   <span aria-hidden className={`grid size-5 place-items-center rounded-md border-2 text-[0.7rem] ${checked ? "border-ink bg-ink text-white" : "border-line-strong"}`}>
                     {checked && "✓"}
                   </span>
@@ -228,10 +228,10 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
             const letter = String.fromCharCode(65 + i);
             const given = pairs[row.id];
             return (
-              <fieldset key={row.id} className="flex flex-col gap-3 rounded-[4px] border border-line bg-raised p-3 sm:flex-row sm:items-center sm:gap-5 sm:p-4">
+              <fieldset key={row.id} className="flex flex-col gap-3 rounded-[16px] border border-line bg-raised p-3 sm:flex-row sm:items-center sm:gap-5 sm:p-4">
                 <legend className="sr-only">Picture {letter}: choose its fraction</legend>
                 <div className="flex items-center gap-3 sm:w-64 sm:shrink-0">
-                  <span className="grid size-8 shrink-0 place-items-center rounded-full bg-ink text-sm font-semibold text-white" aria-hidden>
+                  <span className="grid size-8 shrink-0 place-items-center rounded-full bg-ink text-[0.9375rem] font-semibold text-white" aria-hidden>
                     {letter}
                   </span>
                   <FractionShape diagram={row.diagram} size="sm" />
@@ -272,13 +272,13 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
         <div className="flex flex-col items-center gap-6">
           <div className="flex items-center gap-4 sm:gap-6" aria-hidden>
             <FractionNotation n={q.left.n} d={q.left.d} size="lg" />
-            <span className={`grid size-16 place-items-center rounded-[4px] border-2 border-dashed text-3xl font-semibold ${symbol ? "border-ink bg-sunk" : "border-line-strong text-muted"}`}>
+            <span className={`grid size-16 place-items-center rounded-[16px] border-2 border-dashed text-3xl font-semibold ${symbol ? "border-ink bg-sunk" : "border-line-strong text-muted"}`}>
               {symbol ?? "?"}
             </span>
             <FractionNotation n={q.right.n} d={q.right.d} size="lg" />
           </div>
           {q.showVisual && (
-            <div className="flex w-full justify-center rounded-[4px] bg-raised px-4 py-5">
+            <div className="flex w-full justify-center rounded-[16px] bg-raised px-4 py-5">
               <StackedBars rows={[{ f: q.left }, { f: q.right }]} />
             </div>
           )}
@@ -292,7 +292,7 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
               return (
                 <RadioOption key={s} name={name} value={s} checked={checked} onSelect={() => onChange({ kind: "compare", symbol: s })} locked={locked} mark={mark} label={SYMBOL_LABEL[s]} className="flex-col gap-0.5 py-3">
                   <span className="text-3xl font-semibold leading-none">{s}</span>
-                  <span className="text-sm text-muted">{SYMBOL_LABEL[s]}</span>
+                  <span className="text-[0.9375rem] text-muted">{SYMBOL_LABEL[s]}</span>
                 </RadioOption>
               );
             })}
@@ -315,7 +315,7 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
               correctIndex={reveal ? correctIndex : undefined}
               size="lg"
             />
-            <p className="text-sm text-ink-2" aria-live="polite">
+            <p className="text-[0.9375rem] text-ink-2" aria-live="polite">
               {index ? (
                 <>
                   Marked <strong>{index}</strong> jump{index === 1 ? "" : "s"} from 0
@@ -379,7 +379,7 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
               <FractionShape diagram={q.diagram} size="md" />
             </Figure>
           )}
-          <div className="rounded-[4px] border border-line bg-raised p-4 text-lg leading-[3.1rem] sm:p-5">
+          <div className="rounded-[16px] border border-line bg-raised p-4 text-lg leading-[3.1rem] sm:p-5">
             {q.frame.map((part, pi) => {
               if (typeof part === "string") return <RichText key={pi} text={part} />;
               const gap = q.frame.slice(0, pi + 1).filter((p) => typeof p !== "string").length;
@@ -394,7 +394,7 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
                     return (
                       <label
                         key={o.id}
-                        className={`relative inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-[4px] border-2 px-3 text-base font-medium leading-tight transition-colors has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ink ${
+                        className={`relative inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-[16px] border-2 px-3 text-base font-medium leading-tight transition-colors has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ink ${
                           mark === "correct"
                             ? "border-ok bg-ok-soft"
                             : mark === "wrong"
@@ -439,8 +439,8 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
       const builder = (which: "a" | "b", title: string) => {
         const fr = current[which];
         return (
-          <div className="flex flex-col gap-3 rounded-[4px] border border-line bg-surface p-4">
-            <p className="text-sm font-semibold">{title}</p>
+          <div className="flex flex-col gap-3 rounded-[16px] border border-line bg-surface p-4">
+            <p className="text-[0.9375rem] font-semibold">{title}</p>
             <div className="flex items-center gap-4">
               <FractionNotation n={fr.n} d={fr.d} size="lg" animate />
               <div className="flex flex-col gap-2">
@@ -457,14 +457,14 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
             {builder("a", "First fraction")}
             {builder("b", "Second fraction")}
           </div>
-          <div className="flex flex-col items-center gap-3 rounded-[4px] bg-raised px-4 py-5">
+          <div className="flex flex-col items-center gap-3 rounded-[16px] bg-raised px-4 py-5">
             <StackedBars rows={[{ f: current.a }, { f: current.b }]} />
-            <p className="text-sm text-ink-2" aria-live="polite">
+            <p className="text-[0.9375rem] text-ink-2" aria-live="polite">
               {toWords(current.a)} {sym === "<" ? "is less than" : sym === ">" ? "is greater than" : "is equal to"} {toWords(current.b)}
               {compare(current.a, current.b) === 0 && current.a.d !== current.b.d ? " — they are equivalent" : ""}
             </p>
           </div>
-          {!response && !locked && <p className="text-sm text-muted">Change the fractions to build your counterexample.</p>}
+          {!response && !locked && <p className="text-[0.9375rem] text-muted">Change the fractions to build your counterexample.</p>}
         </div>
       );
     }

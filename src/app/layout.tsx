@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Lexend } from "next/font/google";
+import { Nunito } from "next/font/google";
 import { AppShell } from "@/components/ui/AppShell";
 import "./globals.css";
 
-const lexend = Lexend({ variable: "--font-lexend", subsets: ["latin"] });
+/** Nunito: soft rounded letters with open shapes, easy and pleasant for young readers. */
+const nunito = Nunito({ variable: "--font-nunito", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Kite Maths · Fractions adventure",
@@ -11,12 +12,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#eaf4fd",
+  themeColor: "#ffffff",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en-GB" className={`${lexend.variable} antialiased`}>
+    <html lang="en-GB" className={`${nunito.variable} antialiased`}>
       <body className="min-h-dvh">
         <AppShell>{children}</AppShell>
       </body>

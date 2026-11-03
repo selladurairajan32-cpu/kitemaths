@@ -44,7 +44,7 @@ export function StorageNotice() {
   const status = useStorageStatus();
   if (status === "ok") return null;
   return (
-    <p role="status" className="rounded-2xl border border-warn/30 bg-warn-soft px-4 py-3 text-sm text-ink-2">
+    <p role="status" className="rounded-2xl border border-warn/30 bg-warn-soft px-4 py-3 text-[0.9375rem] text-ink-2">
       {status === "unavailable"
         ? "This browser isn't letting us save progress (for example in private browsing). You can keep learning, but progress will be lost when this tab closes."
         : "We found saved progress we couldn't read, so we kept a backup copy in this browser and started fresh."}

@@ -22,7 +22,7 @@ function Node({ status, index }: { status: NodeStatus; index: number }) {
     upcoming: "bg-surface text-muted ring-1 ring-line-strong",
   }[status];
   return (
-    <span className={`relative z-10 grid size-10 shrink-0 place-items-center rounded-full text-sm font-semibold ${cls}`}>
+    <span className={`relative z-10 grid size-10 shrink-0 place-items-center rounded-full text-[0.9375rem] font-semibold ${cls}`}>
       {status === "done" ? <CheckIcon size={18} /> : index}
     </span>
   );
@@ -109,7 +109,7 @@ export function JourneyScreen() {
                         </span>
                       </p>
                       <h2 className="mt-1.5 text-lg font-semibold">{l.title}</h2>
-                      <p className="text-sm text-ink-2">{l.summary}</p>
+                      <p className="text-[0.9375rem] text-ink-2">{l.summary}</p>
                     </div>
                     <Link
                       href={status === "done" ? routes.lesson(l.id, 0) : routes.lesson(l.id)}
@@ -139,7 +139,7 @@ export function JourneyScreen() {
                   <h2 className="mt-1.5 flex items-center gap-2 text-lg font-semibold">
                     <PracticeIcon size={18} /> Practice milestone
                   </h2>
-                  <p className="text-sm text-ink-2">
+                  <p className="text-[0.9375rem] text-ink-2">
                     Answer at least {PRACTICE_READY_RESULTS} practice questions and make {needStrong} skills secure.
                   </p>
                 </div>
@@ -178,7 +178,7 @@ export function JourneyScreen() {
                   <h2 className="mt-1.5 flex items-center gap-2 text-lg font-semibold">
                     <FlagIcon size={18} /> Mastery check
                   </h2>
-                  <p className="text-sm text-ink-2">
+                  <p className="text-[0.9375rem] text-ink-2">
                     {firstForm.length} questions on your own — no hints — two for every skill.
                     {a.last && ` Last result: ${lastScore} / ${a.last.order.length}.`}
                   </p>
@@ -206,13 +206,13 @@ export function JourneyScreen() {
               </div>
               {review.length > 0 && (
                 <div className="mt-4 space-y-2 border-t border-line pt-4">
-                  <p className="text-sm font-medium text-num-strong">Needs review before this is complete</p>
+                  <p className="text-[0.9375rem] font-medium text-num-strong">Needs review before this is complete</p>
                   <ul className="space-y-2">
                     {review.map((m) => {
                       const sk = skillById(m.skill);
                       return (
                         <li key={m.skill} className="flex flex-col gap-2 rounded-xl bg-paper p-3 sm:flex-row sm:items-center sm:justify-between">
-                          <span className="text-sm">{sk.title}</span>
+                          <span className="text-[0.9375rem]">{sk.title}</span>
                           <span className="flex flex-wrap gap-2">
                             <Link href={routes.lesson(sk.lessonId)} className={buttonClass("ghost", "md")}>
                               Lesson<span className="sr-only">: {sk.title}</span>
@@ -238,7 +238,7 @@ export function JourneyScreen() {
       <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
         <div className="card p-5">
           <h2 className="font-semibold">How you&apos;ll learn</h2>
-          <p className="mt-1 text-sm text-ink-2">Every topic follows the same path, so understanding comes before testing.</p>
+          <p className="mt-1 text-[0.9375rem] text-ink-2">Every topic follows the same path, so understanding comes before testing.</p>
           <ol className="mt-4 space-y-3">
             {phaseStatuses(topic, learner).map(({ phase, status }, i) => (
               <li key={phase} className="flex gap-3">
@@ -250,7 +250,7 @@ export function JourneyScreen() {
                   {status === "done" ? <CheckIcon size={12} /> : i + 1}
                 </span>
                 <div>
-                  <p className="text-sm font-medium">{phase}</p>
+                  <p className="text-[0.9375rem] font-medium">{phase}</p>
                   <p className="text-xs text-muted">{PHASE_DESCRIPTIONS[phase]}</p>
                 </div>
               </li>

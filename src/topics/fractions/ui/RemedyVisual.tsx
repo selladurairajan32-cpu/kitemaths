@@ -21,7 +21,7 @@ export function RemedyVisual({ misconception }: { misconception: string }) {
           <Panel caption="**Top number:** count the **shaded** parts → 2" tone="num">
             <FractionShape diagram={{ shape: "bar", parts: 5, shaded: [0, 1] }} countParts={[0, 1]} size="sm" />
           </Panel>
-          <p className="text-center text-sm text-ink-2 sm:col-span-2">
+          <p className="text-center text-[0.9375rem] text-ink-2 sm:col-span-2">
             <RichText text="So this bar shows {2/5}, not 5/2." />
           </p>
         </div>
@@ -48,7 +48,7 @@ export function RemedyVisual({ misconception }: { misconception: string }) {
         <Panel caption="1 shaded + 3 not shaded = **4 parts altogether**. The denominator is 4, so this is {1/4}.">
           <div className="flex w-full flex-col items-center gap-3">
             <FractionShape diagram={{ shape: "bar", parts: 4, shaded: [0] }} countParts size="sm" />
-            <div className="flex flex-wrap justify-center gap-2 text-sm font-medium">
+            <div className="flex flex-wrap justify-center gap-2 text-[0.9375rem] font-medium">
               <span className="rounded-full bg-num-soft px-2.5 py-1 text-num-strong">1 shaded</span>
               <span className="rounded-full bg-sunk px-2.5 py-1 text-ink-2">3 not shaded</span>
               <span className="rounded-full bg-den-soft px-2.5 py-1 text-den-strong">4 in the whole</span>
@@ -79,8 +79,8 @@ export function RemedyVisual({ misconception }: { misconception: string }) {
           <StackedBars
             rows={[
               { f: { n: 1, d: 3 } },
-              { f: { n: 2, d: 4 }, label: <span className="text-sm font-semibold text-num-strong">+1 ✗</span> },
-              { f: { n: 2, d: 6 }, label: <span className="text-sm font-semibold text-ok">×2 ✓</span> },
+              { f: { n: 2, d: 4 }, label: <span className="text-[0.9375rem] font-semibold text-num-strong">+1 ✗</span> },
+              { f: { n: 2, d: 6 }, label: <span className="text-[0.9375rem] font-semibold text-ok">×2 ✓</span> },
             ]}
             guide
           />
@@ -102,9 +102,9 @@ function Panel({
 }) {
   const border = tone === "num" ? "border-num/30" : tone === "den" ? "border-den/30" : tone === "ok" ? "border-ok/30" : "border-line";
   return (
-    <figure className={`flex flex-col items-center gap-3 rounded-[4px] border bg-surface p-4 ${border}`}>
+    <figure className={`flex flex-col items-center gap-3 rounded-[16px] border bg-surface p-4 ${border}`}>
       <div className="flex w-full justify-center">{children}</div>
-      <figcaption className="text-center text-sm leading-relaxed text-ink-2">
+      <figcaption className="text-center text-[0.9375rem] leading-relaxed text-ink-2">
         <RichText text={caption} />
       </figcaption>
     </figure>

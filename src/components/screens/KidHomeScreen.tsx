@@ -1,23 +1,45 @@
 "use client";
 
 import Link from "next/link";
-import { FlameGlyph, StarGlyph } from "@/components/kid/Celebrate";
-import { KipSays } from "@/components/kid/Kip";
+import type { ReactNode } from "react";
+import { Kip, KipSays } from "@/components/kid/Kip";
 import { kidNext } from "@/components/kid/kidText";
-import { PaperIcon, type PaperIconName } from "@/components/paper/PaperIcon";
-import { PaperKite } from "@/components/paper/PaperKite";
-import { SkyScene } from "@/components/paper/SkyScene";
+import { PaperIcon } from "@/components/paper/PaperIcon";
+import { isPicName, Pic, type PicName } from "@/components/paper/Pic";
 import { ButtonLink } from "@/components/ui/Button";
-import { ArrowRightIcon } from "@/components/ui/Icons";
+import { ArrowRightIcon, CheckIcon, LockIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton, StorageNotice } from "@/components/ui/Screen";
-import { recommendNext, reviewSkills } from "@/engine/journey";
-import { activeDays, answeredToday, DAILY_GOAL, dayKey, levelFor, streakFor, totalStars } from "@/engine/rewards";
+import { lessonsCompleted, recommendNext, reviewSkills } from "@/engine/journey";
+import { activeDays, answeredToday, badgesFor, DAILY_GOAL, dayKey, levelFor, STARS, streakFor, totalStars } from "@/engine/rewards";
 import { routes } from "@/lib/routes";
 import { useHydrated, useLearner, useNow } from "@/lib/store";
+import { TOPICS } from "@/topics";
 import { useTopicState } from "@/topics/context";
 import { ActiveTopicProvider } from "@/topics/ActiveTopic";
 
 const DAY_LETTERS = ["S", "M", "T", "W", "T", "F", "S"];
+/** Each lesson card gets its own pastel tile, in turn. */
+const TILES = ["bg-tile-orange", "bg-tile-pink", "bg-tile-blue", "bg-tile-yellow", "bg-tile-green", "bg-tile-sky"];
+
+/** Every badge shows as a 3D picture on the shelf. */
+export function badgePic(id: string): PicName {
+  if (id.startsWith("skill:")) return "star";
+  return (
+    ({
+      "first-flight": "kite",
+      "lesson-1": "book",
+      comeback: "rocket",
+      "hot-streak": "glowing-star",
+      goal: "medal",
+      "streak-3": "flame",
+      lab: "lab",
+      century: "trophy",
+      "all-lessons": "books",
+      "streak-7": "flame",
+      check: "trophy",
+    } as Record<string, PicName>)[id] ?? "star"
+  );
+}
 
 function greeting(now: number) {
   const h = new Date(now).getHours();
@@ -46,7 +68,7 @@ function KidHome() {
   const stars = totalStars(learner);
   const level = levelFor(stars);
   const streak = streakFor(learner, now);
-  const today = answeredToday(learner, now);
+  const today = Math.min(answeredToday(learner, now), DAILY_GOAL);
   const days = activeDays(learner);
   const week = Array.from({ length: 7 }, (_, i) => {
     const at = now - (6 - i) * 86_400_000;
@@ -54,166 +76,336 @@ function KidHome() {
   });
   const review = reviewSkills(topic, inTopic);
   const name = learner.profile.name.trim();
-  const hello = `${greeting(now)}${name ? `, ${name}` : ""}.`;
+  const done = lessonsCompleted(topic, inTopic);
+  const lessonCount = TOPICS.reduce((n, t) => n + t.lessons.length, 0);
+  const badges = badgesFor(learner, TOPICS.flatMap((t) => t.skills), lessonCount, now);
+  const won = badges.filter((b) => b.earned);
+  const shelf = [...won, ...badges.filter((b) => !b.earned).sort((a, b) => b.progress - a.progress)].slice(0, 6);
+  const nextIndex = rec.kind === "lesson" ? topic.lessons.findIndex((l) => l.id === rec.lessonId) : -1;
+  const nextIcon = nextIndex >= 0 ? lessonLook(topic.lessons[nextIndex].id).icon : "pizza";
+  const nextPic: PicName = isPicName(nextIcon) ? nextIcon : "pizza";
 
   return (
-    <div className="space-y-10 sm:space-y-14">
+    <div className="space-y-12 sm:space-y-16">
       <StorageNotice />
 
       {/* What to do next: the one question this screen answers. */}
-      <section className="grid items-center gap-6 lg:grid-cols-2 lg:gap-10" aria-labelledby="next-title">
-        <div className="min-w-0">
-          <p className="text-lg text-ink-2">{hello}</p>
-          {brandNew ? (
-            <>
-              <h1 id="next-title" className="display mt-2 text-[1.75rem] sm:text-[2rem]">
-                I&apos;m Kip. Let&apos;s find your start.
-              </h1>
-              <p className="mt-3 max-w-md text-ink-2">A short warm-up game shows me which fraction lessons you already know, so you start in the right place.</p>
-              <ButtonLink href={links.start()} size="xl" className="mt-6">
-                Play the warm-up <ArrowRightIcon size={20} />
-              </ButtonLink>
-            </>
-          ) : (
-            <>
-              <div className="mt-2 flex items-center gap-3">
-                <PaperIcon name={next.icon} size={48} />
-                <h1 id="next-title" className="display min-w-0 text-[1.75rem] sm:text-[2rem]">
+      <section className="relative overflow-hidden rounded-[32px] bg-[#edf3ff] px-5 py-8 sm:px-10 sm:py-12" aria-labelledby="next-title">
+        <div className="grid items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="min-w-0">
+            <p className="flex items-center gap-2 text-lg font-semibold text-ink-2">
+              <Pic name="sun" size={30} priority />
+              {greeting(now)}
+              {name ? `, ${name}` : ""}
+            </p>
+            {brandNew ? (
+              <>
+                <h1 id="next-title" className="display mt-3 text-[2.125rem] sm:text-[3rem]">
+                  I&apos;m Kip. Let&apos;s find your start!
+                </h1>
+                <p className="mt-4 max-w-xl text-lg text-ink-2 sm:text-[1.1875rem]">
+                  A short warm-up game shows me which fraction lessons you already know, so you start in the right place.
+                </p>
+                <div className="mt-7 flex flex-wrap gap-3">
+                  <ButtonLink href={links.start()} size="xl" className="w-full sm:w-auto">
+                    Play the warm-up <ArrowRightIcon size={20} />
+                  </ButtonLink>
+                </div>
+              </>
+            ) : (
+              <>
+                <h1 id="next-title" className="display mt-3 text-[2.125rem] sm:text-[3rem]">
                   {next.title}
                 </h1>
-              </div>
-              <p className="mt-3 max-w-md text-ink-2">
-                {next.kicker}. {next.line}
-              </p>
-              <ButtonLink href={next.href} size="xl" className="mt-6">
-                {next.cta} <ArrowRightIcon size={20} />
-              </ButtonLink>
-            </>
-          )}
+                <p className="mt-4 max-w-xl text-lg text-ink-2 sm:text-[1.1875rem]">
+                  {next.kicker}. {next.line}
+                </p>
+                <div className="mt-7 flex flex-wrap gap-3">
+                  <ButtonLink href={next.href} size="xl" className="w-full sm:w-auto">
+                    {next.cta} <ArrowRightIcon size={20} />
+                  </ButtonLink>
+                  <ButtonLink href={links.island()} variant="secondary" size="xl" className="w-full sm:w-auto">
+                    Open my island
+                  </ButtonLink>
+                </div>
+                {nextIndex >= 0 && (
+                  <p className="mt-5 text-base font-semibold text-muted">
+                    Lesson {nextIndex + 1} of {topic.lessons.length} · {topic.lessons[nextIndex].minutes} minutes
+                  </p>
+                )}
+              </>
+            )}
+          </div>
+          <HeroArt
+            mood={brandNew ? "cheer" : "happy"}
+            cards={[
+              { pic: nextPic, title: nextIndex >= 0 ? `Lesson ${nextIndex + 1}` : "Fractions", sub: nextIndex >= 0 ? `of ${topic.lessons.length}` : "island" },
+              { pic: "star", title: `+${STARS.lesson} stars`, sub: "for a lesson" },
+              { pic: "trophy", title: `Level ${level.level + 1}`, sub: `${level.needed - level.into} stars away` },
+              { pic: "flame", title: `${streak.current} day${streak.current === 1 ? "" : "s"}`, sub: "streak" },
+            ]}
+          />
         </div>
-        <SkyScene progress={level.into / level.needed} nextLevel={level.level + 1} mood={brandNew ? "cheer" : "happy"} className="rounded-[4px]" />
       </section>
 
       {review.length > 0 && (
         <KipSays mood="think" tone="sun" speak={`Let's revisit ${skillById(review[0]).title}. A little practice will make it strong again.`}>
           Let&apos;s revisit <strong>{skillById(review[0]).title}</strong>. A little practice will make it strong again.{" "}
-          <Link href={links.practice(review[0])} className="font-semibold text-ink underline underline-offset-4">
+          <Link href={links.practice(review[0])} className="font-bold text-brand-strong underline underline-offset-4">
             Practise it
           </Link>
         </KipSays>
       )}
 
-      {/* Stars, streak and today's goal: one divided panel, label over figure. */}
-      <section aria-label="Your progress" className="grid rounded-[4px] bg-surface sm:grid-cols-3">
-        <Link href={routes.badges()} className="block p-5 hover:bg-raised sm:p-6">
-          <p className="text-base text-muted">Stars</p>
-          <p className="mt-1 flex items-center gap-2 text-[2rem] font-bold leading-none tracking-[-0.02em]">
-            <StarGlyph size={28} /> {stars}
-          </p>
-          <Meter value={level.into / level.needed} fill="bg-sun" label={`Level ${level.level}: ${level.into} of ${level.needed} stars`} />
-          <p className="mt-2 text-sm text-muted">
-            Level {level.level}, {level.title.toLowerCase()} · {level.needed - level.into} stars to level {level.level + 1}
-          </p>
-        </Link>
-        <div className="border-t border-line p-5 sm:border-l sm:border-t-0 sm:p-6">
-          <p className="text-base text-muted">Streak</p>
-          <p className="mt-1 flex items-center gap-2 text-[2rem] font-bold leading-none tracking-[-0.02em]">
-            <FlameGlyph size={28} lit={streak.activeToday} /> {streak.current} <span className="text-lg font-medium text-muted">{streak.current === 1 ? "day" : "days"}</span>
-          </p>
-          <ol className="mt-4 flex justify-between gap-1" aria-label="The last 7 days">
-            {week.map((d) => (
-              <li
-                key={d.key}
-                className={`grid size-8 place-items-center rounded-full text-sm font-semibold ${
-                  d.done ? "bg-ink text-white" : d.today ? "border-2 border-dashed border-ink/40 text-ink-2" : "bg-sunk text-muted"
-                }`}
-                aria-label={`${d.today ? "Today" : d.key}: ${d.done ? "learned" : "not yet"}`}
-              >
-                {d.letter}
-              </li>
-            ))}
-          </ol>
-        </div>
-        <div className="border-t border-line p-5 sm:border-l sm:border-t-0 sm:p-6">
-          <p className="text-base text-muted">Today</p>
-          <p className="mt-1 text-[2rem] font-bold leading-none tracking-[-0.02em]">
-            {Math.min(today, DAILY_GOAL)} <span className="text-lg font-medium text-muted">of {DAILY_GOAL} questions</span>
-          </p>
-          <Meter value={Math.min(1, today / DAILY_GOAL)} fill="bg-leaf" label={`${Math.min(today, DAILY_GOAL)} of ${DAILY_GOAL} questions today`} />
-          <p className="mt-2 text-sm text-muted">{today >= DAILY_GOAL ? "Goal done for today. Anything more is a bonus." : "Every answer counts, right or not yet."}</p>
-        </div>
+      {/* Stars, streak, lessons and today's goal. */}
+      <section aria-label="Your progress">
+        <ul className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+          <StatCard href={routes.badges()} pic="star" tile="bg-tile-yellow" label="Stars" value={String(stars)} sub={`Level ${level.level} · ${level.title}`}>
+            <Meter value={level.into / level.needed} fill="bg-warn-bright" label={`Level ${level.level}: ${level.into} of ${level.needed} stars`} />
+          </StatCard>
+          <StatCard pic="flame" tile="bg-tile-orange" label="Streak" value={String(streak.current)} unit={streak.current === 1 ? "day" : "days"} sub={streak.activeToday ? "Done for today" : "Play today to keep it"}>
+            <ol className="mt-2.5 flex gap-1" aria-label="The last 7 days">
+              {week.map((d) => (
+                <li
+                  key={d.key}
+                  className={`grid size-7 place-items-center rounded-full text-[0.8125rem] font-bold ${d.done ? "bg-fire text-white" : d.today ? "border-2 border-dashed border-line-strong text-muted" : "bg-sunk text-muted"}`}
+                  aria-label={`${d.today ? "Today" : d.key}: ${d.done ? "learned" : "not yet"}`}
+                >
+                  <span aria-hidden>{d.letter}</span>
+                </li>
+              ))}
+            </ol>
+          </StatCard>
+          <StatCard href={links.island()} pic="books" tile="bg-tile-blue" label="Lessons" value={String(done)} unit={`of ${topic.lessons.length}`} sub={topic.title}>
+            <Meter value={done / topic.lessons.length} fill="bg-brand" label={`${done} of ${topic.lessons.length} lessons done`} />
+          </StatCard>
+          <StatCard href={links.practice()} pic="target" tile="bg-tile-green" label="Today" value={String(today)} unit={`of ${DAILY_GOAL}`} sub={today >= DAILY_GOAL ? "Goal done. Nice work!" : "Questions answered"}>
+            <Meter value={today / DAILY_GOAL} fill="bg-ok-bright" label={`${today} of ${DAILY_GOAL} questions today`} />
+          </StatCard>
+        </ul>
       </section>
 
-      {/* The island: one kite per lesson, filling as you go. */}
+      {/* The island: one card per lesson, then the big challenge. */}
       <section aria-labelledby="island-title">
-        <div className="flex flex-wrap items-center justify-between gap-x-4">
-          <h2 id="island-title" className="display text-2xl">
-            {topic.title}
-          </h2>
-          <Link href={links.island()} className="-ml-3 inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full px-3 font-medium text-ink-2 hover:bg-sunk">
-            Open the island <ArrowRightIcon size={18} />
-          </Link>
-        </div>
-        <ol className="mt-4 grid grid-cols-4 gap-x-1 gap-y-3 md:grid-cols-8">
+        <SectionHead id="island-title" title={topic.title} line={`${done} of ${topic.lessons.length} lessons done. Finish them all, then take the big challenge.`} href={links.island()} cta="See the map" />
+        <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
           {topic.lessons.map((l, i) => {
             const p = inTopic.lessons[l.id];
-            const done = !!p?.completed;
-            const current = rec.kind === "lesson" && rec.lessonId === l.id;
-            const panels = done ? 4 : p ? Math.min(3, Math.floor((p.furthestStep / l.steps.length) * 4)) : 0;
+            const isDone = !!p?.completed;
+            const isNext = rec.kind === "lesson" && rec.lessonId === l.id;
+            const status = isDone ? (p?.placedOut ? "You already knew this" : `Done · ${STARS.lesson} stars won`) : isNext ? (p ? `Step ${Math.min(p.furthestStep + 1, l.steps.length)} of ${l.steps.length}` : "Up next") : `${l.minutes} min`;
             return (
-              <li key={l.id}>
+              <li key={l.id} className="flex">
                 <Link
                   href={links.lesson(l.id)}
-                  className={`flex h-full flex-col items-center gap-2 rounded-[4px] px-1 py-2 text-center hover:bg-sunk ${current ? "bg-surface" : ""}`}
-                  aria-label={`Lesson ${i + 1}: ${l.title}${done ? ", done" : current ? ", next" : ""}`}
+                  className={`relative grid flex-1 grid-cols-[4.5rem_1fr] content-center items-center gap-x-4 rounded-[24px] border bg-surface p-4 shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)] sm:grid-cols-[5.25rem_1fr] sm:p-5 ${
+                    isNext ? "border-2 border-brand shadow-[0_0_0_6px_var(--color-brand-soft),var(--shadow-lift)]" : "border-line"
+                  }`}
+                  aria-label={`Lesson ${i + 1}: ${l.title}. ${status}`}
                 >
-                  <span className="relative">
-                    <PaperKite filled={panels} outline={done || current || panels > 0 ? "solid" : "dashed"} tail={false} size={52} />
-                    <span className="absolute inset-0 grid place-items-center" aria-hidden>
-                      <span className="grid size-7 place-items-center rounded-full bg-surface">
-                        <PaperIcon name={lessonLook(l.id).icon} size={22} />
-                      </span>
+                  <span className={`grid size-[4.5rem] place-items-center rounded-[20px] sm:size-[5.25rem] ${TILES[i % TILES.length]}`}>
+                    <PaperIcon name={lessonLook(l.id).icon} size={56} />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[0.9375rem] font-bold text-muted">Lesson {i + 1}</span>
+                    <span className="mt-0.5 block text-lg font-extrabold leading-snug text-ink sm:text-xl">{l.title}</span>
+                    <span className={`mt-1.5 flex items-center gap-1.5 text-[0.9375rem] font-bold ${isDone ? "text-ok" : isNext ? "text-brand-strong" : "font-semibold text-muted"}`}>
+                      {isDone && <CheckIcon size={17} strokeWidth={3} />}
+                      {status}
                     </span>
                   </span>
-                  <span className={`text-sm leading-tight ${current ? "font-semibold text-ink" : done ? "text-ink-2" : "text-muted"}`}>{l.title}</span>
+                  {isDone && (
+                    <span className="absolute right-4 top-4 grid size-7 place-items-center rounded-full bg-ok-bright text-white" aria-hidden>
+                      <CheckIcon size={16} strokeWidth={3} />
+                    </span>
+                  )}
+                  {isNext && (
+                    <span className="col-span-2 mt-4 flex h-12 items-center justify-center gap-2 rounded-full border-b-[3px] border-brand-strong bg-brand text-[1.0625rem] font-bold text-on-brand" aria-hidden>
+                      Play <ArrowRightIcon size={18} />
+                    </span>
+                  )}
                 </Link>
               </li>
             );
           })}
+          <li className="flex">
+            <Link
+              href={links.check()}
+              className="relative grid flex-1 grid-cols-[4.5rem_1fr] content-center items-center gap-x-4 rounded-[24px] border border-line bg-surface p-4 shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)] sm:grid-cols-[5.25rem_1fr] sm:p-5"
+            >
+              <span className="grid size-[4.5rem] place-items-center rounded-[20px] bg-tile-yellow sm:size-[5.25rem]">
+                <Pic name="trophy" size={56} />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-[0.9375rem] font-bold text-muted">The big challenge</span>
+                <span className="mt-0.5 block text-lg font-extrabold leading-snug text-ink sm:text-xl">Show what you know</span>
+                <span className="mt-1.5 flex items-center gap-1.5 text-[0.9375rem] font-semibold text-muted">
+                  {inTopic.assessment.last ? (
+                    <>
+                      <CheckIcon size={17} strokeWidth={3} /> Taken · try it again any time
+                    </>
+                  ) : done < topic.lessons.length ? (
+                    <>
+                      <LockIcon size={16} /> Best after all {topic.lessons.length} lessons
+                    </>
+                  ) : (
+                    `+${STARS.check} stars`
+                  )}
+                </span>
+              </span>
+            </Link>
+          </li>
         </ol>
+      </section>
+
+      {/* Badges to collect. */}
+      <section className="rounded-[32px] bg-[#f0f5ff] px-5 py-8 sm:px-10 sm:py-10" aria-labelledby="badges-title">
+        <SectionHead id="badges-title" title="Your badges" line={`${won.length} of ${badges.length} won. Every badge is a little trophy for your learning.`} href={routes.badges()} cta="See all badges" />
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
+          {shelf.map((b) => (
+            <li key={b.id} className="flex flex-col items-center gap-2 rounded-[24px] border border-line bg-surface px-3 pb-5 pt-6 text-center shadow-[var(--shadow-card)]">
+              <Pic name={badgePic(b.id)} size={72} muted={!b.earned} />
+              <span className="text-base font-extrabold leading-snug text-ink">{b.title}</span>
+              {b.earned ? (
+                <span className="text-[0.9375rem] font-bold text-ok">Won</span>
+              ) : (
+                <>
+                  <Meter value={b.progress} fill="bg-warn-bright" label={`${b.title}: ${Math.round(b.progress * 100)}%`} className="mt-0 w-4/5" />
+                  <span className="text-[0.9375rem] font-semibold text-muted">{Math.round(b.progress * 100)}% there</span>
+                </>
+              )}
+            </li>
+          ))}
+        </ul>
       </section>
 
       {/* Other things to do. */}
       <section aria-labelledby="more-title">
-        <h2 id="more-title" className="display text-2xl">
-          More to do
+        <h2 id="more-title" className="display text-[1.625rem] sm:text-[2.125rem]">
+          More to explore
         </h2>
-        <ul className="mt-4 divide-y divide-line rounded-[4px] bg-surface">
-          <MoreRow href={links.practice()} icon="target" title="Practice" line="Ten questions across every skill, with stars for each one." />
-          {topic.ui.FreeLab && <MoreRow href={links.lab()} icon="lab" title="The lab" line="Cut, colour and compare fractions in free play." />}
-          <MoreRow href={routes.journey()} icon="map" title="World map" line="Every island, and the ones opening soon." />
+        <ul className="mt-5 grid gap-4 sm:grid-cols-3">
+          <MoreCard href={links.practice()} pic="target" tile="bg-tile-green" title="Practice" line="Ten questions, a star for each one." />
+          {topic.ui.FreeLab && <MoreCard href={links.lab()} pic="lab" tile="bg-tile-sky" title="The lab" line="Cut, colour and compare in free play." />}
+          <MoreCard href={routes.journey()} pic="map" tile="bg-tile-blue" title="World map" line="Every island, and the ones on the way." />
         </ul>
       </section>
+
+      <footer className="flex flex-col gap-3 pb-4">
+        <KipSays mood="happy" tone="sky" size={72}>
+          {streak.current > 0 ? `Come back tomorrow to keep your ${streak.current}-day streak!` : "Come back tomorrow and start a streak!"}
+        </KipSays>
+        <p className="text-[0.9375rem] text-muted">3D pictures: Microsoft Fluent Emoji, MIT licence.</p>
+      </footer>
     </div>
   );
 }
 
-function Meter({ value, fill, label }: { value: number; fill: string; label: string }) {
+/** Kip flying in a pale circle, with a few real numbers floating around. */
+function HeroArt({ mood, cards }: { mood: "happy" | "cheer"; cards: { pic: PicName; title: string; sub: string }[] }) {
+  const spots = ["left-0 top-[20%] -rotate-6", "right-0 top-[30%] rotate-[5deg]", "left-[6%] bottom-[6%] -rotate-3", "right-[4%] bottom-[2%] rotate-3"];
   return (
-    <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-sunk" role="progressbar" aria-label={label} aria-valuenow={Math.round(value * 100)} aria-valuemin={0} aria-valuemax={100}>
+    <div className="relative mx-auto aspect-[1.08] w-full max-w-[34rem]" aria-hidden>
+      <div className="absolute left-[9%] top-[5%] aspect-square w-[82%] rounded-full bg-[#dde8ff]" />
+      <svg className="absolute left-[2%] top-[4%]" width="34" height="34" viewBox="0 0 24 24">
+        <path d="M12 2.5l2.6 6 6.4.6-4.9 4.2 1.5 6.3L12 16.3 6.4 19.6l1.5-6.3L3 9.1l6.4-.6z" fill="none" stroke="#ffb020" strokeWidth="2" strokeLinejoin="round" />
+      </svg>
+      <svg className="absolute right-[6%] top-[2%]" width="70" height="40" viewBox="0 0 70 40">
+        <path d="M4 30 C 16 4, 34 4, 36 20 S 58 36, 66 8" fill="none" stroke="#7fb0ff" strokeWidth="3" strokeLinecap="round" strokeDasharray="1 9" />
+      </svg>
+      <span className="absolute bottom-[3%] left-[46%] size-4 rounded-full bg-[#ff8fab]" />
+      <span className="absolute right-0 top-[58%] size-3 rounded-full bg-[#4cd38f]" />
+      <span className="absolute left-[19%] top-[3%] w-[60%]">
+        <Kip mood={mood} size={320} className="!h-auto !w-full rotate-[4deg]" />
+      </span>
+      {cards.map((c, i) => (
+        <div key={i} className={`absolute flex items-center gap-2.5 rounded-[18px] bg-surface py-2 pl-2 pr-4 shadow-[var(--shadow-lift)] ${spots[i]}`}>
+          <Pic name={c.pic} size={40} />
+          <span className="leading-tight">
+            <span className="block text-base font-extrabold text-ink">{c.title}</span>
+            <span className="block text-[0.9375rem] font-semibold text-muted">{c.sub}</span>
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SectionHead({ id, title, line, href, cta }: { id: string; title: string; line: string; href: string; cta: string }) {
+  return (
+    <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <h2 id={id} className="display text-[1.625rem] sm:text-[2.125rem]">
+          {title}
+        </h2>
+        <p className="mt-1.5 text-lg text-ink-2">{line}</p>
+      </div>
+      <Link href={href} className="inline-flex h-11 shrink-0 items-center gap-1.5 self-start rounded-full text-[1.0625rem] font-bold text-brand-strong hover:underline sm:self-auto">
+        {cta} <ArrowRightIcon size={18} />
+      </Link>
+    </div>
+  );
+}
+
+function StatCard({
+  href,
+  pic,
+  tile,
+  label,
+  value,
+  unit,
+  sub,
+  children,
+}: {
+  href?: string;
+  pic: PicName;
+  tile: string;
+  label: string;
+  value: string;
+  unit?: string;
+  sub: string;
+  children?: ReactNode;
+}) {
+  const body = (
+    <>
+      <div className="flex items-center gap-3">
+        <span className={`grid size-12 shrink-0 place-items-center rounded-[16px] sm:size-14 ${tile}`}>
+          <Pic name={pic} size={36} />
+        </span>
+        <span className="min-w-0">
+          <span className="block text-[0.9375rem] font-bold text-muted">{label}</span>
+          <span className="block text-[1.75rem] font-extrabold leading-tight text-ink">
+            {value}
+            {unit && <span className="ml-1 text-base font-bold text-muted">{unit}</span>}
+          </span>
+        </span>
+      </div>
+      <p className="mt-3 text-[0.9375rem] font-semibold text-muted">{sub}</p>
+      {children}
+    </>
+  );
+  const cls = "block h-full rounded-[24px] border border-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5";
+  return <li>{href ? <Link href={href} className={`${cls} transition hover:shadow-[var(--shadow-lift)]`}>{body}</Link> : <div className={cls}>{body}</div>}</li>;
+}
+
+function Meter({ value, fill, label, className = "mt-3" }: { value: number; fill: string; label: string; className?: string }) {
+  return (
+    <div className={`h-2.5 overflow-hidden rounded-full bg-sunk ${className}`} role="progressbar" aria-label={label} aria-valuenow={Math.round(value * 100)} aria-valuemin={0} aria-valuemax={100}>
       <div className={`h-full rounded-full ${fill}`} style={{ width: `${Math.round(Math.max(0, Math.min(1, value)) * 100)}%` }} />
     </div>
   );
 }
 
-function MoreRow({ href, icon, title, line }: { href: string; icon: PaperIconName; title: string; line: string }) {
+function MoreCard({ href, pic, tile, title, line }: { href: string; pic: PicName; tile: string; title: string; line: string }) {
   return (
     <li>
-      <Link href={href} className="flex min-h-20 items-center gap-4 px-5 py-3 hover:bg-raised">
-        <PaperIcon name={icon} size={40} />
+      <Link href={href} className="flex h-full items-center gap-4 rounded-[24px] border border-line bg-surface p-4 shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)] sm:p-5">
+        <span className={`grid size-16 shrink-0 place-items-center rounded-[20px] ${tile}`}>
+          <Pic name={pic} size={44} />
+        </span>
         <span className="min-w-0 flex-1">
-          <span className="block text-lg font-semibold text-ink">{title}</span>
-          <span className="block text-base text-muted">{line}</span>
+          <span className="block text-lg font-extrabold text-ink">{title}</span>
+          <span className="block text-base text-ink-2">{line}</span>
         </span>
         <ArrowRightIcon size={20} className="shrink-0 text-ink-2" />
       </Link>

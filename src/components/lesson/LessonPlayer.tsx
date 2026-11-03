@@ -149,7 +149,7 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
             <StarGlyph size={26} /> +{STARS.lesson} bonus stars
           </p>
         )}
-        <section className="mt-6 rounded-[4px] bg-surface p-5 sm:p-6" aria-labelledby="can-now">
+        <section className="mt-6 rounded-[16px] bg-surface p-5 sm:p-6" aria-labelledby="can-now">
           <h2 id="can-now" className="text-lg font-semibold">
             Now you can
           </h2>
@@ -203,7 +203,7 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
               }}
               aria-current={active ? "step" : undefined}
               aria-label={`Step ${i + 1}: ${plain(s.title)}${done ? " (completed)" : active ? " (current)" : !canOpen ? " (not reached yet)" : ""}`}
-              className={`flex min-h-12 w-full items-center gap-3 rounded-[4px] px-3 py-2 text-left text-base transition-colors ${
+              className={`flex min-h-12 w-full items-center gap-3 rounded-[16px] px-3 py-2 text-left text-base transition-colors ${
                 active ? "bg-surface font-semibold text-ink" : canOpen ? "text-ink-2 hover:bg-sunk" : "text-muted"
               }`}
             >
@@ -225,7 +225,7 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
           <PaperIcon name={lessonLook(lesson.id).icon} size={44} />
           <div className="min-w-0">
             <p className="truncate text-lg font-semibold leading-tight text-ink">{lesson.title}</p>
-            <p className="text-sm text-muted">
+            <p className="text-[0.9375rem] text-muted">
               Lesson {lessonIndex + 1} of {LESSONS.length} · step {stepIndex + 1} of {lesson.steps.length}
             </p>
           </div>
@@ -238,7 +238,7 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
 
       <section className="min-w-0 max-w-[720px]" aria-labelledby="step-title">
         {urlStepLocked && (
-          <p role="status" className="mb-5 rounded-[4px] bg-den-soft px-4 py-3 text-base text-ink-2">
+          <p role="status" className="mb-5 rounded-[18px] bg-den-soft px-4 py-3 text-base text-ink-2">
             Step {urlStep! + 1} opens once you&apos;ve worked through the steps before it, so you&apos;re carrying on from step {stepIndex + 1}.
           </p>
         )}
@@ -249,7 +249,7 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            className="space-y-6"
+            className={step.type === "check" ? "space-y-6" : "space-y-6 rounded-[28px] border border-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-8"}
           >
             <header>
               <div className="flex items-start justify-between gap-3">
@@ -268,7 +268,7 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
                   ))}
                 </div>
                 {step.visual !== undefined && (
-                  <div className="flex justify-center rounded-[4px] bg-surface px-3 py-6 sm:px-6 sm:py-8">
+                  <div className="flex justify-center rounded-[22px] bg-raised px-3 py-6 sm:px-6 sm:py-8">
                     <Visual spec={step.visual} />
                   </div>
                 )}
@@ -297,7 +297,7 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
 
             {step.type === "check" &&
               (checkAlreadyDone ? (
-                <div className="flex flex-col items-start gap-3 rounded-[4px] bg-ok-soft p-5">
+                <div className="flex flex-col items-start gap-3 rounded-[24px] bg-ok-soft p-5 sm:p-6">
                   <p className="flex items-center gap-2 font-semibold text-ok">
                     <CheckIcon size={18} /> You&apos;ve already completed this check.
                   </p>

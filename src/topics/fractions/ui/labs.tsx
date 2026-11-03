@@ -24,7 +24,7 @@ export function FractionsFreeLab() {
   return (
     <>
       <FractionLab modes={["build", "compare", "equivalent"]} />
-      <p className="flex items-center gap-2 text-sm text-muted">
+      <p className="flex items-center gap-2 text-[0.9375rem] text-muted">
         <CheckIcon size={15} /> Keyboard: Tab to a shape, arrow keys to move between parts, Space to shade.
       </p>
     </>

@@ -101,7 +101,7 @@ export function SkyMapScreen() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-5">
-      <Link href={appRoutes.journey()} className="inline-flex items-center gap-1.5 rounded-full px-1 text-sm font-semibold text-muted hover:text-ink">
+      <Link href={appRoutes.journey()} className="inline-flex items-center gap-1.5 rounded-full px-1 text-[0.9375rem] font-semibold text-muted hover:text-ink">
         <ArrowLeftIcon size={16} /> World map
       </Link>
       <header className="flex items-end justify-between gap-4">
@@ -186,7 +186,7 @@ export function SkyMapScreen() {
                     {s.status === "current" && " · Next!"}
                   </p>
                   <p className="display text-base leading-tight text-ink sm:text-lg">{s.title}</p>
-                  <p className="mt-0.5 line-clamp-2 text-xs text-muted sm:text-sm">{s.line}</p>
+                  <p className="mt-0.5 line-clamp-2 text-xs text-muted sm:text-[0.9375rem]">{s.line}</p>
                   {s.reward > 0 && s.status !== "done" && (
                     <p className={`mt-1 inline-flex items-center gap-1 text-xs font-bold text-sun-strong ${labelLeft ? "justify-end" : ""}`}>
                       +{s.reward} <StarGlyph size={13} />
@@ -209,7 +209,7 @@ export function SkyMapScreen() {
             return (
               <li key={sk.id}>
                 <Link href={routes.practice(sk.id)} className="flex items-center justify-between gap-3 rounded-2xl bg-paper px-3 py-2.5 hover:bg-sunk">
-                  <span className="text-sm font-medium">{sk.title}</span>
+                  <span className="text-[0.9375rem] font-medium">{sk.title}</span>
                   <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-bold ${st.cls}`}>{st.label}</span>
                 </Link>
               </li>

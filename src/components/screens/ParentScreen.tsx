@@ -106,7 +106,7 @@ function ParentOverview() {
                 <span className="block text-[0.65rem] text-muted">activities</span>
               </span>
             </ProgressRing>
-            <dl className="grid flex-1 gap-2 text-sm">
+            <dl className="grid flex-1 gap-2 text-[0.9375rem]">
               <Stat label="Lessons done" value={`${lessonsDone} / ${topic.lessons.length}`} />
               <Stat label="Secure in practice" value={`${secure} / ${total}`} />
               <Stat label="Mastered" value={`${mastered} / ${total}`} />
@@ -126,7 +126,7 @@ function ParentOverview() {
               <p className="text-xs text-muted">of those right first time</p>
             </div>
             <div className="col-span-2">
-              <p className="text-sm">
+              <p className="text-[0.9375rem]">
                 <span className="text-muted">Mastery check: </span>
                 <strong>{last ? `${lastScore} / ${last.order.length}` : t.assessment.status === "in-progress" ? "in progress" : "not taken yet"}</strong>
               </p>
@@ -139,14 +139,14 @@ function ParentOverview() {
             <h2 id="skills-title" className="font-semibold">
               Skills in this module
             </h2>
-            <Link href={routes.results()} className="rounded text-sm font-medium text-den hover:underline">
+            <Link href={routes.results()} className="rounded text-[0.9375rem] font-medium text-den hover:underline">
               Full report
             </Link>
           </div>
           <ul className="grid gap-x-8 sm:grid-cols-2">
             {topic.skills.map((s) => (
               <li key={s.id} className="flex items-center justify-between gap-3 border-b border-line py-2.5">
-                <span className="text-sm">{s.title}</span>
+                <span className="text-[0.9375rem]">{s.title}</span>
                 <StatusBadge status={skillMastery(s.id, learner.results).status} />
               </li>
             ))}
@@ -158,7 +158,7 @@ function ParentOverview() {
             Ideas we&apos;re working on
           </h2>
           {working.length === 0 ? (
-            <p className="text-sm text-ink-2">
+            <p className="text-[0.9375rem] text-ink-2">
               {stats.learningAnswered === 0
                 ? "As you answer questions, we'll notice any tricky ideas and help you with them here."
                 : "Nothing to work on right now — great thinking!"}
@@ -167,7 +167,7 @@ function ParentOverview() {
             <ul className="space-y-2.5">
               {working.slice(0, 3).map((r) => (
                 <li key={r.id} className="rounded-xl bg-paper p-3">
-                  <p className="text-sm font-medium">{misconceptionById(r.id)?.name}</p>
+                  <p className="text-[0.9375rem] font-medium">{misconceptionById(r.id)?.name}</p>
                   <p className="text-xs text-muted">
                     {r.confidence === "likely" ? `Seen ${r.timesSeen} times` : "Seen once — just keeping an eye on it"}
                     {r.state === "improving" ? " · improving" : ""}
@@ -183,7 +183,7 @@ function ParentOverview() {
             </p>
             {confirmReset ? (
               <div className="space-y-2">
-                <p className="text-sm text-ink-2">Clear all progress saved in this browser?</p>
+                <p className="text-[0.9375rem] text-ink-2">Clear all progress saved in this browser?</p>
                 <div className="flex gap-2">
                   <Button
                     variant="secondary"
@@ -200,7 +200,7 @@ function ParentOverview() {
                 </div>
               </div>
             ) : (
-              <button type="button" onClick={() => setConfirmReset(true)} className="inline-flex h-11 items-center gap-1.5 rounded text-sm text-muted hover:text-ink">
+              <button type="button" onClick={() => setConfirmReset(true)} className="inline-flex h-11 items-center gap-1.5 rounded text-[0.9375rem] text-muted hover:text-ink">
                 <RefreshIcon size={15} /> Reset progress
               </button>
             )}
@@ -213,7 +213,7 @@ function ParentOverview() {
           Settings
         </h2>
         <div className="mt-4 grid gap-5 sm:grid-cols-2">
-          <label className="block text-sm">
+          <label className="block text-[0.9375rem]">
             <span className="font-medium">Child&apos;s first name</span>
             <input
               value={learner.profile.name}
@@ -222,7 +222,7 @@ function ParentOverview() {
               className="mt-1 h-11 w-full rounded-xl border-2 border-line-strong bg-surface px-3"
             />
           </label>
-          <label className="block text-sm">
+          <label className="block text-[0.9375rem]">
             <span className="font-medium">School year</span>
             <select
               value={learner.profile.year ?? ""}
@@ -256,7 +256,7 @@ function ParentOverview() {
         <h2 id="roadmap-title" className="font-semibold">
           About this module
         </h2>
-        <p className="mt-1 max-w-3xl text-sm text-ink-2">
+        <p className="mt-1 max-w-3xl text-[0.9375rem] text-ink-2">
           This prototype covers <strong>fractions foundations</strong> only: fractions of one whole, comparing, equivalence, number lines from 0 to 1 and
           fractions of amounts. It is not complete 11+ preparation. Planned next modules (not built yet): simplifying fractions, improper fractions and
           mixed numbers, adding and subtracting fractions, multiplying and dividing fractions, and fractions–decimals–percentages.
@@ -269,7 +269,7 @@ function ParentOverview() {
 function Toggle({ label, hint, on, onChange }: { label: string; hint: string; on: boolean; onChange: (v: boolean) => void }) {
   return (
     <div className="flex items-start justify-between gap-4 rounded-2xl bg-paper p-3">
-      <div className="text-sm">
+      <div className="text-[0.9375rem]">
         <p className="font-medium">{label}</p>
         <p className="text-muted">{hint}</p>
       </div>

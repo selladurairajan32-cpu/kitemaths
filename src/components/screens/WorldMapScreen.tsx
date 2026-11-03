@@ -59,7 +59,7 @@ export function WorldMapScreen() {
                         <PaperIcon name={island.icon} size={28} muted />
                       </span>
                       <span className="min-w-0">
-                        <span className="block text-sm font-semibold leading-tight">{island.title}</span>
+                        <span className="block text-[0.9375rem] font-semibold leading-tight">{island.title}</span>
                         <span className="mt-0.5 inline-flex items-center gap-1 text-xs">
                           <LockIcon size={12} /> Coming soon
                         </span>
@@ -87,7 +87,7 @@ export function WorldMapScreen() {
                         )}
                       </span>
                       <span className="min-w-0">
-                        <span className="block text-sm font-semibold leading-tight text-ink">{island.title}</span>
+                        <span className="block text-[0.9375rem] font-semibold leading-tight text-ink">{island.title}</span>
                         <span className="text-xs text-muted">
                           {done} of {topic.lessons.length} lessons
                           {isHere && <strong className="ml-1 text-brand-strong">· You are here</strong>}

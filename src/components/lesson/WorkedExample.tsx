@@ -59,7 +59,7 @@ function BlankStep({
       </div>
       <div aria-live="polite">
         {tries > 0 && (
-          <div className="space-y-2 rounded-xl border border-warn/30 bg-warn-soft px-4 py-3 text-sm text-ink-2">
+          <div className="space-y-2 rounded-xl border border-warn/30 bg-warn-soft px-4 py-3 text-[0.9375rem] text-ink-2">
             <p className="flex gap-2">
               <BulbIcon size={16} className="mt-0.5 shrink-0 text-warn" />
               <span>
@@ -114,7 +114,7 @@ export function WorkedExample({ step, onComplete }: { step: Worked; onComplete: 
         >
           {step.support === "full" ? "Watch me" : "Let's do it together"}
         </span>
-        <span className="text-sm text-muted">
+        <span className="text-[0.9375rem] text-muted">
           Step {revealed} of {step.steps.length}
         </span>
       </div>
@@ -133,7 +133,7 @@ export function WorkedExample({ step, onComplete }: { step: Worked; onComplete: 
         <AnimatePresence initial={false}>
           {step.steps.slice(0, revealed).map((s, i) => (
             <motion.li key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex gap-3 rounded-xl border border-line bg-surface p-3.5">
-              <span className="grid size-7 shrink-0 place-items-center rounded-full bg-ink text-sm font-semibold text-white">{i + 1}</span>
+              <span className="grid size-7 shrink-0 place-items-center rounded-full bg-ink text-[0.9375rem] font-semibold text-white">{i + 1}</span>
               <div className="min-w-0 flex-1 space-y-2 pt-0.5">
                 <p className="text-ink-2">
                   <RichText text={s.text} />

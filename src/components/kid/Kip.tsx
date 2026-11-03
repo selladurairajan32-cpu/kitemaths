@@ -2,17 +2,47 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
-import { PAPER } from "@/components/paper/PaperIcon";
+import { Pic } from "@/components/paper/Pic";
 import { ReadAloud } from "./ReadAloud";
 
 export type KipMood = "happy" | "cheer" | "think" | "oops";
 
-const { ink, red, sun, sky, leaf, white } = PAPER;
+const INK = "#1b2559";
+
+/** Kip's face, drawn on the sail of the 3D kite (on a 60 × 40 grid). */
+function Face({ mood }: { mood: KipMood }) {
+  const look = mood === "think" ? 1.4 : 0;
+  return (
+    <>
+      <ellipse cx="17" cy="14" rx="6.5" ry="7.5" fill="#fff" />
+      <ellipse cx="43" cy="14" rx="6.5" ry="7.5" fill="#fff" />
+      <circle cx={18 + look} cy={15 - look} r="4" fill={INK} />
+      <circle cx={44 + look} cy={15 - look} r="4" fill={INK} />
+      <circle cx={19.5 + look} cy={13.2 - look} r="1.4" fill="#fff" />
+      <circle cx={45.5 + look} cy={13.2 - look} r="1.4" fill="#fff" />
+      {mood === "happy" && <path d="M21 27 Q30 36 39 27" fill="none" stroke={INK} strokeWidth="3.2" strokeLinecap="round" />}
+      {mood === "cheer" && (
+        <>
+          <path d="M20 25 Q30 40 40 25 Z" fill={INK} />
+          <path d="M25 31 Q30 35 35 31" fill="#ff7a8a" />
+        </>
+      )}
+      {mood === "think" && <circle cx="31" cy="29" r="3.4" fill={INK} />}
+      {mood === "oops" && (
+        <>
+          <path d="M10 5 L22 8 M50 5 L38 8" stroke={INK} strokeWidth="2.6" strokeLinecap="round" />
+          <path d="M22 30 Q26 26 30 30 Q34 34 38 30" fill="none" stroke={INK} strokeWidth="3" strokeLinecap="round" />
+        </>
+      )}
+      <ellipse cx="9" cy="26" rx="4" ry="2.4" fill="#ff8fab" opacity=".7" />
+      <ellipse cx="51" cy="26" rx="4" ry="2.4" fill="#ff8fab" opacity=".7" />
+    </>
+  );
+}
 
 /**
- * Kip, the kite who guides learners: four cut-paper panels (quarters) with an
- * ink outline, and a face drawn straight onto the sail. Kip sways gently in
- * the wind (kid exception 4: idle character motion, off with reduced motion).
+ * Kip, the kite who guides learners: a 3D kite with a face on the sail. Kip sways gently in the wind
+ * (feedback-only motion; still when reduced motion is on). `size` is Kip's width in pixels.
  */
 export function Kip({
   mood = "happy",
@@ -26,56 +56,27 @@ export function Kip({
   className?: string;
 }) {
   const reduce = useReducedMotion();
-  const look = mood === "think" ? { x: 1.5, y: -1.5 } : { x: 0, y: 0 };
-  const eye = (cx: number) =>
-    mood === "cheer" ? (
-      <path d={`M${cx - 6} 33 Q${cx} 26 ${cx + 6} 33`} fill="none" stroke={ink} strokeWidth="3.5" strokeLinecap="round" />
-    ) : (
-      <>
-        <circle cx={cx} cy={31} r="7" fill={white} stroke={ink} strokeWidth="2.5" />
-        <circle cx={cx + look.x} cy={31.5 + look.y} r="3.4" fill={ink} />
-      </>
-    );
-
   return (
-    <motion.svg
-      width={size}
-      height={size * (150 / 110)}
-      viewBox="0 0 110 150"
-      className={`shrink-0 overflow-visible ${className}`}
-      aria-hidden
-      style={{ originX: "50%", originY: "45%" }}
+    <motion.span
+      className={`relative inline-block shrink-0 leading-none ${className}`}
+      style={{ width: size, height: size, originX: "35%", originY: "45%" }}
       animate={float && !reduce ? { rotate: [-3, 3, -3] } : undefined}
       transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+      aria-hidden
     >
-      {/* tail */}
-      <path d="M55 112 C46 122 64 128 55 138 S 60 146 66 150" fill="none" stroke={ink} strokeWidth="3" strokeLinecap="round" />
-      <path d="M50 121 l-9 -4 l2 10 Z" fill={red} stroke={ink} strokeWidth="2" strokeLinejoin="round" />
-      <path d="M60 121 l9 -4 l-2 10 Z" fill={red} stroke={ink} strokeWidth="2" strokeLinejoin="round" />
-      <path d="M53 139 l-9 -3 l3 9 Z" fill={sun} stroke={ink} strokeWidth="2" strokeLinejoin="round" />
-
-      {/* sail: four paper panels */}
-      <path d="M55 4 L8 52 L55 52 Z" fill={red} />
-      <path d="M55 4 L102 52 L55 52 Z" fill={sun} />
-      <path d="M102 52 L55 112 L55 52 Z" fill={leaf} />
-      <path d="M8 52 L55 112 L55 52 Z" fill={sky} />
-      <path d="M55 4 V112 M8 52 H102" stroke={ink} strokeWidth="2.5" strokeOpacity="0.4" />
-      <path d="M55 4 L102 52 L55 112 L8 52 Z" fill="none" stroke={ink} strokeWidth="4" strokeLinejoin="round" />
-
-      {/* face */}
-      {eye(41)}
-      {eye(69)}
-      {mood === "oops" && <path d="M33 20 L46 23 M77 20 L64 23" stroke={ink} strokeWidth="3" strokeLinecap="round" />}
-      {mood === "think" && <path d="M62 19 Q69 15 77 19" fill="none" stroke={ink} strokeWidth="3" strokeLinecap="round" />}
-      {mood === "happy" && <path d="M44 57 Q55 68 66 57" fill="none" stroke={ink} strokeWidth="3.5" strokeLinecap="round" />}
-      {mood === "cheer" && <path d="M42 55 Q55 75 68 55 Z" fill={ink} stroke={ink} strokeWidth="2.5" strokeLinejoin="round" />}
-      {mood === "think" && <circle cx="58" cy="62" r="4" fill={ink} />}
-      {mood === "oops" && <path d="M44 62 Q49.5 57 55 62 Q60.5 67 66 62" fill="none" stroke={ink} strokeWidth="3.5" strokeLinecap="round" />}
-    </motion.svg>
+      <Pic name="kite" size={size} fluid className="h-full w-full" />
+      <svg
+        viewBox="0 0 60 40"
+        className="absolute"
+        style={{ left: "32%", top: "41%", width: "28%", transform: "translate(-50%, -50%) rotate(-14deg)" }}
+      >
+        <Face mood={mood} />
+      </svg>
+    </motion.span>
   );
 }
 
-/** Kip with a speech bubble: a flat tone shape, no border (kid exception 6). Text can be read aloud. */
+/** Kip with a speech bubble. Text can be read aloud. */
 export function KipSays({
   mood = "happy",
   children,
@@ -92,15 +93,11 @@ export function KipSays({
   className?: string;
   tone?: "white" | "sun" | "sky";
 }) {
-  const bg = { white: "bg-surface", sun: "bg-sun-soft", sky: "bg-sky-soft" }[tone];
-  const tailFill = { white: "#ffffff", sun: "var(--color-sun-soft)", sky: "var(--color-sky-soft)" }[tone];
+  const bg = { white: "bg-surface border border-line", sun: "bg-warn-soft", sky: "bg-brand-soft" }[tone];
   return (
-    <div className={`flex items-end gap-2 ${className}`}>
+    <div className={`flex items-center gap-3 ${className}`}>
       <Kip mood={mood} size={size} />
-      <div className={`relative mb-5 min-w-0 flex-1 rounded-[4px] px-4 py-3 ${bg}`}>
-        <svg className="absolute -left-[10px] bottom-4" width="12" height="16" viewBox="0 0 12 16" aria-hidden>
-          <path d="M12 0 L0 10 L12 16 Z" fill={tailFill} />
-        </svg>
+      <div className={`relative min-w-0 flex-1 rounded-[20px] px-5 py-3.5 ${bg}`}>
         <div className="relative flex items-start gap-2">
           <div className="min-w-0 flex-1 text-ink">{children}</div>
           {speak && <ReadAloud text={speak} className="-mr-1 -mt-1" />}

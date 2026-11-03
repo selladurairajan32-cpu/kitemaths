@@ -1,4 +1,5 @@
 import type { ReactNode, SVGProps } from "react";
+import { Pic, isPicName } from "./Pic";
 
 /**
  * The paper icon set: drawn pictures for lessons, worlds and islands, in the
@@ -353,7 +354,10 @@ export function isPaperIconName(name: string): name is PaperIconName {
   return name in ICONS;
 }
 
-/** A drawn paper icon. Decorative by default; pass `title` when it carries meaning on its own. */
+/**
+ * An icon by name. Where a 3D picture exists (most names) it shows that, which is the Crystal look;
+ * otherwise the drawn paper icon. Decorative by default; pass `title` when it carries meaning on its own.
+ */
 export function PaperIcon({
   name,
   size = 48,
@@ -362,6 +366,7 @@ export function PaperIcon({
   muted = false,
   ...props
 }: { name: PaperIconName; size?: number; title?: string; muted?: boolean } & Omit<SVGProps<SVGSVGElement>, "name">) {
+  if (isPicName(name)) return <Pic name={name} size={size} title={title} muted={muted} className={className} />;
   return (
     <svg
       width={size}

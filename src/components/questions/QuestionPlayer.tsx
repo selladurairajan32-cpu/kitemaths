@@ -16,6 +16,7 @@ import { playSound } from "@/lib/sound";
 import { getLearner } from "@/lib/store";
 import { useTopic } from "@/topics/context";
 import type { AnswerResponse, Question } from "@/topics/types";
+import { Pic } from "@/components/paper/Pic";
 
 export type ResultDraft = Omit<ItemResult, "at">;
 
@@ -59,14 +60,14 @@ function FeedbackPanel({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.15, ease: "easeOut" }}
-      className={`rounded-[4px] p-5 sm:p-6 ${bg}`}
+      className={`rounded-[24px] p-5 sm:p-6 ${bg}`}
     >
       <div className="flex gap-4">
         <span className="-mt-1 shrink-0" aria-hidden>
           <Kip mood={kip} size={52} float={false} />
         </span>
         <div className="min-w-0 flex-1 space-y-3 text-ink-2">
-          {focus ? <FocusHeading className="text-xl">{title}</FocusHeading> : <p className="text-xl font-semibold text-ink">{title}</p>}
+          {focus ? <FocusHeading className="text-[1.375rem] font-extrabold">{title}</FocusHeading> : <p className="text-[1.375rem] font-extrabold text-ink">{title}</p>}
           {children}
         </div>
       </div>
@@ -98,17 +99,17 @@ function FinishSheet({
       initial={{ y: 24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.22, ease: "easeOut" }}
-      className={`sticky bottom-0 z-20 -mx-4 border-t-2 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 sm:mx-0 sm:rounded-[4px] sm:border-t-0 sm:p-6 ${
-        tone === "ok" ? "border-ok-bright bg-ok-soft" : "border-line bg-surface"
+      className={`sticky bottom-0 z-20 -mx-4 border-t px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-5 shadow-[0_-14px_40px_rgba(27,37,89,0.1)] sm:mx-0 sm:rounded-[28px] sm:border sm:p-7 ${
+        tone === "ok" ? "border-[#c6ecd7] bg-ok-soft" : "border-line bg-surface"
       }`}
     >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex min-w-0 gap-4">
-          <span className="-mt-1 hidden shrink-0 sm:block" aria-hidden>
-            <Kip mood={kip} size={56} float={false} />
+          <span className="shrink-0" aria-hidden>
+            {tone === "ok" ? <Pic name="party" size={72} /> : <Kip mood={kip} size={64} float={false} />}
           </span>
           <div className="min-w-0 space-y-1.5 text-ink-2">
-            <p className="text-xl font-semibold text-ink">{title}</p>
+            <p className={`text-[1.5rem] font-extrabold leading-tight sm:text-[1.75rem] ${tone === "ok" ? "text-ok" : "text-ink"}`}>{title}</p>
             {children}
           </div>
         </div>
@@ -128,7 +129,7 @@ function QuestionPrompt({ q, focusOnMount = false, autoRead = false }: { q: Ques
   }, [autoRead, q.id, q.prompt]);
   return (
     <div className="flex items-start gap-3">
-      <h3 ref={ref} tabIndex={-1} className="min-w-0 flex-1 text-2xl font-semibold leading-snug tracking-[-0.01em] text-ink outline-none">
+      <h3 ref={ref} tabIndex={-1} className="min-w-0 flex-1 text-[1.5rem] font-extrabold leading-snug text-ink outline-none sm:text-[1.75rem]">
         <RichText text={q.prompt} />
       </h3>
       <ReadAloud text={q.prompt} label="Read the question aloud" />
@@ -159,7 +160,7 @@ function FollowUp({
     onSubmit(evaluate(question, response).correct);
   };
   return (
-    <form onSubmit={submit} className="space-y-5 rounded-[4px] bg-surface p-5 sm:p-6">
+    <form onSubmit={submit} className="space-y-5 rounded-[28px] border border-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-7">
       <FocusHeading className="text-base text-muted">A quick question to check the idea</FocusHeading>
       <QuestionPrompt q={question} />
       <QuestionInput
@@ -172,7 +173,7 @@ function FollowUp({
         locked={submitted}
         orderKey={orderKey}
       />
-      {problem && <p className="rounded-[4px] bg-warn-soft px-4 py-3 text-base text-warn">{problem}</p>}
+      {problem && <p className="rounded-[16px] bg-warn-soft px-4 py-3 text-base font-semibold text-warn">{problem}</p>}
       <div className="flex justify-end">
         <Button type="submit" size="lg" disabled={submitted || !isResponseComplete(question, response)}>
           Check
@@ -258,7 +259,7 @@ export function QuestionPlayer({
   return (
     <div className="relative space-y-6">
       {state.stage === "correct" && <Confetti burstKey={episodeId} pieces={state.attempts === 1 && state.hintsUsed === 0 ? 28 : 18} />}
-      <form ref={scope} onSubmit={submit} className="space-y-6">
+      <form ref={scope} onSubmit={submit} className="space-y-6 rounded-[28px] border border-line bg-surface px-5 pb-5 pt-6 shadow-[var(--shadow-card)] sm:p-8">
         <QuestionPrompt key={returned} q={q} focusOnMount={autoFocus || returned > 0} autoRead={returned === 0} />
         <QuestionInput
           question={q}
@@ -274,9 +275,9 @@ export function QuestionPlayer({
 
         {answering && (state.hintVisible || problem) && (
           <div aria-live="polite" className="space-y-3">
-            {problem && <p className="rounded-[4px] bg-warn-soft px-4 py-3 text-base text-warn">{problem}</p>}
+            {problem && <p className="rounded-[16px] bg-warn-soft px-4 py-3 text-base font-semibold text-warn">{problem}</p>}
             {state.hintVisible && q.hint && (
-              <div className="flex gap-3 rounded-[4px] bg-sun-soft px-4 py-3">
+              <div className="flex gap-3 rounded-[20px] bg-warn-soft px-4 py-4">
                 <PaperIcon name="bulb" size={32} className="shrink-0" />
                 <div className="space-y-1 text-ink-2">
                   {state.retrying && <p className="font-semibold text-ink">Not quite. Have another look.</p>}
@@ -295,7 +296,7 @@ export function QuestionPlayer({
         )}
 
         {answering && (
-          <div className="sticky bottom-0 z-10 -mx-4 flex items-center justify-between gap-3 border-t border-line bg-paper px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 sm:static sm:mx-0 sm:border-0 sm:p-0">
+          <div className="sticky bottom-0 z-10 -mx-5 flex items-center justify-between gap-3 rounded-b-[28px] border-t border-line bg-surface px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 sm:static sm:mx-0 sm:rounded-none sm:border-0 sm:p-0">
             {q.hint && !state.hintVisible ? (
               <Button variant="quiet" size="lg" onClick={() => dispatch({ type: "request-hint" })} className="shrink-0">
                 <BulbIcon size={20} /> Hint

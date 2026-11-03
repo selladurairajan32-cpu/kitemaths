@@ -9,8 +9,8 @@ import { routes, topicRoutes } from "@/lib/routes";
 import { updateLearner, updateTopic, useHydrated, useLearner } from "@/lib/store";
 import { completePracticeSession, setSettings } from "@/engine/progress";
 import { activeTopic } from "@/topics/recommend";
-import { PAPER } from "@/components/paper/PaperIcon";
 import { ArrowLeftIcon, BeakerIcon, CloseIcon, HomeIcon, KiteIcon, MapIcon, ParentIcon, PracticeIcon, SoundIcon } from "./Icons";
+import { Pic } from "@/components/paper/Pic";
 
 const KID_NAV = [
   { href: "/", label: "Home", Icon: HomeIcon },
@@ -55,18 +55,12 @@ export function shellMode(pathname: string, practiceActive: (topicId: string) =>
   return "kid";
 }
 
-/** The wordmark: the four-panel kite and the name, in ink. */
+/** The wordmark: the 3D kite and the name. */
 function Logo({ small = false }: { small?: boolean }) {
   return (
     <Link href="/" className="flex items-center gap-2 rounded-full" aria-label="Kite Maths home">
-      <svg width={small ? 26 : 30} height={small ? 26 : 30} viewBox="0 0 32 32" aria-hidden>
-        <path d="M16 2 L3 14 L16 14 Z" fill={PAPER.red} />
-        <path d="M16 2 L29 14 L16 14 Z" fill={PAPER.sun} />
-        <path d="M29 14 L16 30 L16 14 Z" fill={PAPER.leaf} />
-        <path d="M3 14 L16 30 L16 14 Z" fill={PAPER.sky} />
-        <path d="M16 2 29 14 16 30 3 14Z" fill="none" stroke={PAPER.ink} strokeWidth="2.2" strokeLinejoin="round" />
-      </svg>
-      <span className={`display whitespace-nowrap ${small ? "text-lg" : "text-xl"} leading-none text-ink`}>Kite Maths</span>
+      <Pic name="kite" size={small ? 32 : 40} priority />
+      <span className={`display whitespace-nowrap ${small ? "text-lg" : "text-[1.375rem]"} leading-none text-ink`}>Kite Maths</span>
     </Link>
   );
 }
@@ -109,7 +103,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       </a>
 
       {mode === "focus" && (
-        <header className="sticky top-0 z-40 bg-paper">
+        <header className="sticky top-0 z-40 border-b border-line bg-surface">
           <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-3 sm:px-6">
             <Link
               href={tp ? (inPractice ? topicRoutes(tp.topicId).practice() : topicRoutes(tp.topicId).island()) : routes.journey()}
@@ -136,8 +130,8 @@ export function AppShell({ children }: { children: ReactNode }) {
       )}
 
       {mode === "kid" && (
-        <header className="sticky top-0 z-40 bg-paper">
-          <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+        <header className="sticky top-0 z-40 border-b border-line bg-surface">
+          <div className="mx-auto flex h-[4.5rem] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
             <Logo />
             <nav aria-label="Main" className="hidden lg:block">
               <ul className="flex items-center gap-1">
@@ -148,8 +142,8 @@ export function AppShell({ children }: { children: ReactNode }) {
                       <Link
                         href={navHref(href)}
                         aria-current={active ? "page" : undefined}
-                        className={`flex h-11 items-center gap-2 rounded-full px-4 text-base font-medium transition-colors ${
-                          active ? "bg-sunk text-ink" : "text-ink-2 hover:bg-sunk/60"
+                        className={`flex h-11 items-center gap-2 rounded-full px-4 text-base transition-colors ${
+                          active ? "bg-brand-soft font-bold text-brand-strong" : "font-semibold text-ink-2 hover:bg-sunk"
                         }`}
                       >
                         <Icon size={20} />
@@ -166,7 +160,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Link
                 href={routes.parent()}
                 aria-label="Grown-ups"
-                className="ml-1 hidden h-10 items-center gap-1.5 whitespace-nowrap rounded-full px-3 text-sm font-medium text-ink-2 hover:bg-sunk sm:flex"
+                className="ml-1 hidden h-10 items-center gap-1.5 whitespace-nowrap rounded-full px-3 text-[0.9375rem] font-semibold text-ink-2 hover:bg-sunk sm:flex"
               >
                 <ParentIcon size={18} /> <span className="hidden xl:inline">Grown-ups</span>
               </Link>
@@ -176,11 +170,11 @@ export function AppShell({ children }: { children: ReactNode }) {
       )}
 
       {mode === "parent" && (
-        <header className="sticky top-0 z-40 border-b border-[var(--color-line)] bg-surface">
+        <header className="sticky top-0 z-40 border-b border-line bg-surface">
           <div className="mx-auto flex min-h-14 max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 sm:px-6">
             <div className="flex items-center gap-3">
               <Logo small />
-              <span className="text-sm text-muted">Grown-ups</span>
+              <span className="text-[0.9375rem] font-semibold text-muted">Grown-ups</span>
             </div>
             <nav aria-label="Grown-ups" className="order-3 w-full overflow-x-auto sm:order-none sm:w-auto">
               <ul className="flex items-center gap-1">
@@ -191,7 +185,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                       <Link
                         href={navHref(href)}
                         aria-current={active ? "page" : undefined}
-                        className={`flex h-9 items-center whitespace-nowrap rounded-[6px] px-3 text-sm font-medium ${active ? "bg-[var(--color-sunk)] text-ink" : "text-muted hover:bg-[var(--color-raised)] hover:text-ink"}`}
+                        className={`flex h-10 items-center whitespace-nowrap rounded-full px-4 text-[0.9375rem] ${active ? "bg-brand-soft font-bold text-brand-strong" : "font-semibold text-ink-2 hover:bg-sunk hover:text-ink"}`}
                       >
                         {label}
                       </Link>
@@ -200,7 +194,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 })}
               </ul>
             </nav>
-            <Link href="/" className="flex h-9 items-center gap-1.5 rounded-[6px] px-3 text-sm font-medium text-ink-2 hover:bg-[var(--color-raised)]">
+            <Link href="/" className="flex h-10 items-center gap-1.5 rounded-full px-4 text-[0.9375rem] font-semibold text-ink-2 hover:bg-sunk">
               <ArrowLeftIcon size={16} /> Child view
             </Link>
           </div>
@@ -229,9 +223,9 @@ export function AppShell({ children }: { children: ReactNode }) {
                   <Link
                     href={navHref(href)}
                     aria-current={active ? "page" : undefined}
-                    className={`flex h-16 flex-col items-center justify-center gap-1 text-sm font-medium ${active ? "text-ink" : "text-muted"}`}
+                    className={`flex h-16 flex-col items-center justify-center gap-1 text-[0.9375rem] ${active ? "font-bold text-brand-strong" : "font-semibold text-muted"}`}
                   >
-                    <span className={`grid h-8 w-14 place-items-center rounded-full transition-colors ${active ? "bg-sunk" : ""}`}>
+                    <span className={`grid h-8 w-14 place-items-center rounded-full transition-colors ${active ? "bg-brand-soft" : ""}`}>
                       <Icon size={22} />
                     </span>
                     {label}

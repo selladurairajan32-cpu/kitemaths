@@ -31,7 +31,7 @@ export function FreeLabScreen() {
         <div className="flex items-center gap-4">
           <Kip mood="cheer" size={76} />
           <div className="min-w-0">
-            <p className="text-sm font-bold uppercase tracking-wide text-white/85">Free play · {topic.title}</p>
+            <p className="text-[0.9375rem] font-bold uppercase tracking-wide text-white/85">Free play · {topic.title}</p>
             <h1 className="display text-3xl leading-tight sm:text-4xl">Lab</h1>
             {topic.ui.freeLabIntro && <p className="mt-1 max-w-xl text-white/90">{topic.ui.freeLabIntro}</p>}
           </div>

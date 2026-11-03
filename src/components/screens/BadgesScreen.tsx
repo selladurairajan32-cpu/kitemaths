@@ -28,7 +28,7 @@ export function BadgesScreen() {
         <div className="flex items-center gap-4 sm:gap-6">
           <Kip mood={earned.length ? "cheer" : "happy"} size={84} />
           <div className="min-w-0">
-            <p className="text-sm font-bold uppercase tracking-wide text-ink/70">Trophy room</p>
+            <p className="text-[0.9375rem] font-bold uppercase tracking-wide text-ink/70">Trophy room</p>
             <h1 className="display text-3xl leading-tight sm:text-4xl">
               {earned.length} badge{earned.length === 1 ? "" : "s"} collected
             </h1>

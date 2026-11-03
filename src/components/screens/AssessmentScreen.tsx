@@ -152,7 +152,7 @@ export function AssessmentScreen() {
 
       {last && (
         <div className="mt-6 flex flex-col gap-3 rounded-2xl border border-line bg-paper p-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-ink-2">
+          <p className="text-[0.9375rem] text-ink-2">
             Last check:{" "}
             <strong className="text-ink">
               {lastScore} / {last.order.length}
@@ -167,13 +167,13 @@ export function AssessmentScreen() {
 
       <ul className="mt-6 grid gap-2 sm:grid-cols-2">
         {ASSESSMENT_AREAS.map((area) => (
-          <li key={area} className="flex items-center justify-between rounded-xl bg-paper px-4 py-3 text-sm">
+          <li key={area} className="flex items-center justify-between rounded-xl bg-paper px-4 py-3 text-[0.9375rem]">
             {area}
             <span className="text-muted">{items.filter((q) => q.area === area).length} questions</span>
           </li>
         ))}
       </ul>
-      <ul className="mt-6 space-y-1.5 text-sm text-ink-2">
+      <ul className="mt-6 space-y-1.5 text-[0.9375rem] text-ink-2">
         <li>• Take your time — there&apos;s no timer.</li>
         <li>• You can skip a question and come back to it, and change any answer before you finish.</li>
         <li>• Your answers are saved on this device as you go.</li>

@@ -13,7 +13,7 @@ export type Mark = "correct" | "wrong" | "missed" | null;
  */
 export function optionClass(selected: boolean, mark: Mark, locked: boolean) {
   const base =
-    "relative flex cursor-pointer items-center justify-center gap-3 rounded-[4px] border-2 border-b-4 bg-surface px-4 py-3 transition-[border-color,background-color,transform] duration-100 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ink";
+    "relative flex cursor-pointer items-center justify-center gap-3 rounded-[18px] border-2 border-b-4 bg-surface px-4 py-3 transition-[border-color,background-color,transform] duration-100 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ink";
   if (mark === "correct") return `${base} border-ok-bright bg-ok-soft`;
   if (mark === "wrong") return `${base} border-num bg-num-soft`;
   if (mark === "missed") return `${base} border-dashed border-ok-bright`;
@@ -25,7 +25,7 @@ export function MarkIcon({ mark }: { mark: Mark }) {
   if (!mark || mark === "missed") return null;
   return (
     <span
-      className={`absolute -right-2 -top-2 grid size-7 place-items-center rounded-full text-sm font-bold text-white ${mark === "correct" ? "bg-ok" : "bg-num-strong"}`}
+      className={`absolute -right-2 -top-2 grid size-7 place-items-center rounded-full text-[0.9375rem] font-bold text-white ${mark === "correct" ? "bg-ok" : "bg-num-strong"}`}
       aria-hidden
     >
       {mark === "correct" ? <CheckIcon size={15} strokeWidth={3} /> : <CloseIcon size={15} strokeWidth={3} />}
@@ -73,7 +73,7 @@ export function RadioOption({
 }
 
 export function Figure({ children }: { children: ReactNode }) {
-  return <div className="flex w-full justify-center rounded-[4px] bg-surface px-4 py-6 sm:py-8">{children}</div>;
+  return <div className="flex w-full justify-center rounded-[22px] bg-raised px-4 py-6 sm:py-8">{children}</div>;
 }
 
 export function NumberInput({
@@ -107,7 +107,7 @@ export function NumberInput({
         const digits = e.target.value.replace(/[^0-9]/g, "").slice(0, 4);
         onValue(digits === "" ? null : Number(digits));
       }}
-      className={`rounded-[4px] border-2 bg-surface text-center font-semibold tabular-nums outline-none transition-colors disabled:bg-sunk ${ring} ${text} ${
+      className={`rounded-[16px] border-2 bg-surface text-center font-bold tabular-nums outline-none transition-colors disabled:bg-sunk ${ring} ${text} ${
         size === "lg" ? "h-16 w-28 text-[2rem]" : "h-12 w-16 text-2xl"
       }`}
     />

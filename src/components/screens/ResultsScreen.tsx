@@ -18,11 +18,11 @@ function SkillActions({ m }: { m: SkillMastery }) {
   const skill = topic.skillById(m.skill);
   return (
     <span className="flex flex-wrap gap-x-4 gap-y-1">
-      <Link href={routes.practice(m.skill)} className="inline-flex min-h-11 items-center text-sm font-medium text-den hover:underline">
+      <Link href={routes.practice(m.skill)} className="inline-flex min-h-11 items-center text-[0.9375rem] font-medium text-den hover:underline">
         Practise<span className="sr-only"> {skill.title}</span>
       </Link>
       {(m.status === "needs-review" || m.status === "passed-check") && (
-        <Link href={routes.recheck(m.skill)} className="inline-flex min-h-11 items-center text-sm font-medium text-den hover:underline">
+        <Link href={routes.recheck(m.skill)} className="inline-flex min-h-11 items-center text-[0.9375rem] font-medium text-den hover:underline">
           Recheck<span className="sr-only"> {skill.title}</span>
         </Link>
       )}
@@ -111,7 +111,7 @@ export function ResultsScreen() {
                 Last mastery check
               </h2>
               {last.completedAt && (
-                <p className="text-sm text-muted">{new Date(last.completedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</p>
+                <p className="text-[0.9375rem] text-muted">{new Date(last.completedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</p>
               )}
               <div className="flex flex-wrap gap-2">
                 <a href="#review" className={buttonClass("secondary", "md")}>
@@ -131,7 +131,7 @@ export function ResultsScreen() {
               const right = rs.filter((x) => x.ev?.correct).length;
               return (
                 <li key={area}>
-                  <div className="mb-1 flex justify-between text-sm">
+                  <div className="mb-1 flex justify-between text-[0.9375rem]">
                     <span>{area}</span>
                     <span className="tabular-nums text-muted">
                       {right} / {rs.length}
@@ -149,7 +149,7 @@ export function ResultsScreen() {
             <FlagIcon size={22} className="mt-0.5 shrink-0" />
             <div>
               <p className="font-semibold">{a.status === "in-progress" ? "Mastery check in progress" : "No mastery check yet"}</p>
-              <p className="text-sm text-ink-2">Skills can become “secure in practice” through practice. “Mastered” also needs the independent mastery check.</p>
+              <p className="text-[0.9375rem] text-ink-2">Skills can become “secure in practice” through practice. “Mastered” also needs the independent mastery check.</p>
             </div>
           </div>
           <Link href={routes.assessment()} className={buttonClass("secondary", "md", "shrink-0")}>
@@ -172,14 +172,14 @@ export function ResultsScreen() {
                 <li key={m.skill} className="flex items-start justify-between gap-3">
                   <div>
                     <p className="font-medium">{skillById(m.skill).title}</p>
-                    <p className="text-sm text-muted">{independentText(m)} · {m.evidence} learning answers</p>
+                    <p className="text-[0.9375rem] text-muted">{independentText(m)} · {m.evidence} learning answers</p>
                   </div>
                   <StatusBadge status={m.status} />
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="mt-3 text-sm text-ink-2">Keep going — strengths appear once a skill has several strong answers.</p>
+            <p className="mt-3 text-[0.9375rem] text-ink-2">Keep going — strengths appear once a skill has several strong answers.</p>
           )}
         </section>
 
@@ -191,7 +191,7 @@ export function ResultsScreen() {
             Next steps
           </h2>
           {toImprove.length === 0 ? (
-            <p className="mt-3 text-sm text-ink-2">Everything you&apos;ve worked on looks strong. Keep practising now and then so it stays that way.</p>
+            <p className="mt-3 text-[0.9375rem] text-ink-2">Everything you&apos;ve worked on looks strong. Keep practising now and then so it stays that way.</p>
           ) : (
             <ul className="mt-4 space-y-3">
               {toImprove.slice(0, 4).map((m) => {
@@ -203,7 +203,7 @@ export function ResultsScreen() {
                       <p className="font-medium">{skill.title}</p>
                       <StatusBadge status={m.status} />
                     </div>
-                    <p className="mt-1 text-sm text-ink-2">
+                    <p className="mt-1 text-[0.9375rem] text-ink-2">
                       {m.status === "needs-review"
                         ? "The latest independent check showed this needs another look: revisit the lesson, practise, then take a short recheck."
                         : m.status === "passed-check"
@@ -212,7 +212,7 @@ export function ResultsScreen() {
                     </p>
                     <div className="mt-1 flex flex-wrap gap-x-4">
                       {lesson && (
-                        <Link href={routes.lesson(lesson.id, 0)} className="inline-flex min-h-11 items-center text-sm font-medium text-den hover:underline">
+                        <Link href={routes.lesson(lesson.id, 0)} className="inline-flex min-h-11 items-center text-[0.9375rem] font-medium text-den hover:underline">
                           Revisit “{lesson.title}”
                         </Link>
                       )}
@@ -230,7 +230,7 @@ export function ResultsScreen() {
         <h2 id="skills-title" className="font-semibold">
           Skill by skill
         </h2>
-        <details className="mt-2 text-sm text-ink-2">
+        <details className="mt-2 text-[0.9375rem] text-ink-2">
           <summary className="inline-flex min-h-11 cursor-pointer items-center font-medium text-den">How we decide each label</summary>
           <ul className="mt-2 max-w-3xl list-disc space-y-1 pl-5">
             <li>
@@ -267,7 +267,7 @@ export function ResultsScreen() {
           ))}
         </ul>
         <div className="mt-4 hidden md:block">
-          <table className="w-full text-sm">
+          <table className="w-full text-[0.9375rem]">
             <caption className="sr-only">Status and evidence for each skill</caption>
             <thead>
               <tr className="border-b border-line text-left text-xs text-muted">
@@ -307,11 +307,11 @@ export function ResultsScreen() {
         <h2 id="misc-title" className="font-semibold">
           Ideas to watch
         </h2>
-        <p className="mt-1 text-sm text-muted">
+        <p className="mt-1 text-[0.9375rem] text-muted">
           We only call something a “likely pattern” after seeing it more than once, and we mark it resolved once later work shows the idea is understood.
         </p>
         {reports.length === 0 ? (
-          <p className="mt-4 rounded-xl bg-ok-soft px-4 py-3 text-sm text-ok">No common misconceptions spotted so far.</p>
+          <p className="mt-4 rounded-xl bg-ok-soft px-4 py-3 text-[0.9375rem] text-ok">No common misconceptions spotted so far.</p>
         ) : (
           <ul className="mt-4 grid gap-3 md:grid-cols-2">
             {reports.map((r) => {
@@ -326,11 +326,11 @@ export function ResultsScreen() {
                     <span className="text-xs text-muted">{r.confidence === "likely" ? `Likely pattern · seen ${r.timesSeen} times` : "Possible · seen once"}</span>
                   </div>
                   <p className="mt-2 font-medium">{def.name}</p>
-                  <p className="mt-1 text-sm text-ink-2">
+                  <p className="mt-1 text-[0.9375rem] text-ink-2">
                     <RichText text={def.description} />
                   </p>
                   {r.state !== "resolved" && (
-                    <Link href={routes.practice(def.skills[0])} className="mt-1 inline-flex min-h-11 items-center text-sm font-medium text-den hover:underline">
+                    <Link href={routes.practice(def.skills[0])} className="mt-1 inline-flex min-h-11 items-center text-[0.9375rem] font-medium text-den hover:underline">
                       Practise {skillById(def.skills[0]).title.toLowerCase()} →
                     </Link>
                   )}
@@ -346,7 +346,7 @@ export function ResultsScreen() {
           <h2 id="review-title" className="font-semibold">
             Mastery check review
           </h2>
-          <p className="mt-1 text-sm text-muted">Each question is shown as you saw it, with your answer and the correct answer marked.</p>
+          <p className="mt-1 text-[0.9375rem] text-muted">Each question is shown as you saw it, with your answer and the correct answer marked.</p>
           <ol className="mt-4 divide-y divide-line">
             {lastItems.map(({ q, ev, response }, i) => {
               const right = !!ev?.correct;
@@ -357,7 +357,7 @@ export function ResultsScreen() {
                       <span className={`grid size-7 shrink-0 place-items-center rounded-full text-xs font-bold text-white ${right ? "bg-ok" : "bg-num"}`} aria-hidden>
                         {right ? "✓" : "✗"}
                       </span>
-                      <span className="flex-1 text-sm">
+                      <span className="flex-1 text-[0.9375rem]">
                         <span className="text-muted">
                           Q{i + 1} · {q.area} ·{" "}
                         </span>
@@ -368,7 +368,7 @@ export function ResultsScreen() {
                         ›
                       </span>
                     </summary>
-                    <div className="mt-2 space-y-4 rounded-xl bg-paper p-4 text-sm sm:ml-10">
+                    <div className="mt-2 space-y-4 rounded-xl bg-paper p-4 text-[0.9375rem] sm:ml-10">
                       <div className="pointer-events-none">
                         <QuestionInput question={q} response={response ?? null} onChange={() => {}} locked reveal orderKey={`assess:${last.seed}`} />
                       </div>
@@ -402,15 +402,15 @@ export function ResultsScreen() {
       <section className="grid gap-3 sm:grid-cols-3" aria-label="Activity">
         <div className="card p-5">
           <p className="text-3xl font-semibold tabular-nums">{stats.learningAnswered}</p>
-          <p className="text-sm text-muted">lesson & practice answers</p>
+          <p className="text-[0.9375rem] text-muted">lesson & practice answers</p>
         </div>
         <div className="card p-5">
           <p className="text-3xl font-semibold tabular-nums">{stats.firstTryRate === null ? "—" : `${Math.round(stats.firstTryRate * 100)}%`}</p>
-          <p className="text-sm text-muted">of those right first time</p>
+          <p className="text-[0.9375rem] text-muted">of those right first time</p>
         </div>
         <div className="card p-5">
           <p className="text-3xl font-semibold tabular-nums">{stats.hintsUsed}</p>
-          <p className="text-sm text-muted">hints & guided explanations in those answers</p>
+          <p className="text-[0.9375rem] text-muted">hints & guided explanations in those answers</p>
         </div>
       </section>
     </div>

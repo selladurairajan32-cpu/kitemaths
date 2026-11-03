@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useMemo } from "react";
 import { PAPER } from "@/components/paper/PaperIcon";
 import { hashString, prng } from "@/engine/random";
+import { Pic } from "@/components/paper/Pic";
 
 const COLOURS = [PAPER.red, PAPER.sun, PAPER.sky, PAPER.leaf];
 
@@ -56,14 +57,14 @@ export function StarPop({ amount, show }: { amount: number; show: boolean }) {
     <AnimatePresence>
       {show && amount > 0 && (
         <motion.span
-          className="inline-flex items-center gap-1 whitespace-nowrap text-lg font-semibold text-ink"
+          className="inline-flex h-10 items-center gap-1 whitespace-nowrap rounded-full bg-surface pl-3 pr-1.5 text-lg font-extrabold text-ink"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25, ease: "easeOut" }}
           aria-label={`You earned ${amount} stars`}
         >
-          +{amount} <StarGlyph size={20} />
+          +{amount} <Pic name="star" size={28} />
         </motion.span>
       )}
     </AnimatePresence>

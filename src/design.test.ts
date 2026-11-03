@@ -1,14 +1,15 @@
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { KITE_PATTERNS } from "@/components/paper/PaperKite";
 import { isPaperIconName } from "@/components/paper/PaperIcon";
+import { PIC_NAMES } from "@/components/paper/Pic";
 import { createInitialState } from "@/engine/progress";
 import { badgesFor } from "@/engine/rewards";
 import { TOPICS } from "@/topics";
 import { WORLDS } from "@/topics/worlds";
 
-/** Design system v2 rules that can be checked without a browser (docs/DESIGN.md). */
+/** Design system rules that can be checked without a browser (docs/DESIGN.md). */
 
 function sourceFiles(dir: string): string[] {
   return readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
@@ -40,6 +41,11 @@ describe("design system", () => {
   it("gives every badge a kite pattern the shelf can draw", () => {
     const badges = badgesFor(createInitialState(), TOPICS.flatMap((t) => t.skills), 8, 0);
     badges.forEach((b) => expect(KITE_PATTERNS, b.id).toContain(b.pattern));
+  });
+
+  it("has a 3D picture file for every picture name, and keeps its licence alongside", () => {
+    PIC_NAMES.forEach((n) => expect(existsSync(join("public/3d", `${n}.png`)), n).toBe(true));
+    expect(existsSync("public/3d/LICENSE-fluentui-emoji.txt")).toBe(true);
   });
 
   it("keeps violet and gradients out of the stylesheet", () => {
