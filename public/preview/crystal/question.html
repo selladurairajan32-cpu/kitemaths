@@ -1,0 +1,271 @@
+<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Kite Maths · Question</title><style>
+@import url('../fonts/Poppins.css');
+:root{
+  --font:'Poppins',ui-sans-serif,system-ui,sans-serif;
+  --ground:#ffffff;--soft:#f3f7ff;--ink:#1b2559;--ink-soft:#4a5578;--muted:#5d6785;--line:#e6ecf7;--line-strong:#d3dcec;
+  --primary:#2563eb;--primary-dark:#1d4ed8;--primary-soft:#e8f0ff;
+  --t-blue:#e8f0ff;--t-orange:#fff0e3;--t-yellow:#fff6d4;--t-green:#e3f8ee;--t-pink:#ffe8f0;--t-sky:#e0f5fd;
+  --ok:#167a4b;--ok-bright:#22a565;--ok-soft:#e3f8ee;--sun:#ffb020;--fire:#ff7a2f;
+  --num:#f4623a;--num-ink:#b33a1c;--den:#2f6fd8;
+  --card-shadow:0 10px 30px rgba(27,37,89,.06);--lift:0 18px 44px rgba(27,37,89,.10);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--font);font-size:18px;line-height:1.7;color:var(--ink-soft);background:var(--ground);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+a{color:inherit;text-decoration:none}
+img{display:block}
+:focus-visible{outline:3px solid var(--primary);outline-offset:3px;border-radius:12px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 32px}
+h1,h2,h3{margin:0;color:var(--ink);font-weight:600;letter-spacing:-.01em}
+h1{font-size:48px;line-height:1.15}
+h2{font-size:34px;line-height:1.2}
+h3{font-size:20px;line-height:1.3}
+p{margin:0}
+
+/* Kip: 3D kite with a face */
+.kip{position:relative;display:inline-block;line-height:0}
+.kip img{width:100%;height:auto}
+.kip svg{position:absolute;left:32%;top:41%;width:28%;transform:translate(-50%,-50%) rotate(-14deg)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:56px;padding:0 28px;border-radius:999px;font-family:var(--font);font-size:18px;font-weight:600;border:0;cursor:pointer;white-space:nowrap;transition:transform .1s,box-shadow .1s,background .15s}
+.btn svg{width:20px;height:20px}
+.btn.primary{background:var(--primary);color:#fff;box-shadow:0 4px 0 var(--primary-dark)}
+.btn.primary:hover{background:#1f5be0}
+.btn.primary:active{transform:translateY(3px);box-shadow:0 1px 0 var(--primary-dark)}
+.btn.secondary{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line-strong)}
+.btn.secondary:hover{box-shadow:inset 0 0 0 1.5px #b9c6dd}
+.btn.sm{height:46px;padding:0 20px;font-size:16px}
+.textlink{display:inline-flex;align-items:center;gap:6px;font-weight:600;color:var(--primary-dark);font-size:17px}
+.textlink svg{width:18px;height:18px}
+
+/* fraction notation */
+.frac{display:inline-flex;flex-direction:column;align-items:center;line-height:1;font-weight:700;vertical-align:middle;margin:0 .1em;font-size:.86em}
+.frac .fn{color:var(--num-ink);padding:0 .14em .08em;border-bottom:.09em solid var(--ink)}
+.frac .fd{color:var(--den);padding-top:.06em}
+
+/* top bar */
+.top{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.top .wrap{display:flex;align-items:center;gap:16px;height:80px}
+.logo{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:700;color:var(--ink)}
+.logo img{width:42px;height:42px}
+.links{display:flex;gap:4px;margin-left:28px}
+.links a{display:flex;align-items:center;gap:8px;height:44px;padding:0 16px;border-radius:999px;font-size:16px;font-weight:500;color:var(--ink-soft)}
+.links a svg{width:20px;height:20px}
+.links a.on{background:var(--primary-soft);color:var(--primary-dark);font-weight:600}
+.me{margin-left:auto;display:flex;align-items:center;gap:10px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 14px 0 8px;border-radius:999px;font-size:18px;font-weight:600;color:var(--ink)}
+.chip img{width:28px;height:28px}
+.chip.star{background:var(--t-yellow)}.chip.fire{background:var(--t-orange)}
+.avatar{width:44px;height:44px;border-radius:50%;background:var(--primary-soft);color:var(--primary-dark);display:grid;place-items:center;font-weight:600}
+
+/* hero */
+.hero{position:relative;background:var(--soft);padding:56px 0 132px;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:40px}
+.hello{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:500;color:var(--ink-soft);margin-bottom:12px}
+.hello img{width:30px;height:30px}
+.lead{margin:18px 0 30px;font-size:19px;max-width:30em}
+.actions{display:flex;flex-wrap:wrap;gap:14px}
+.meta{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:22px;font-size:16px;font-weight:500;color:var(--muted)}
+.meta span{display:inline-flex;align-items:center;gap:8px}
+.meta svg{width:18px;height:18px}
+.art{position:relative;aspect-ratio:1.08;width:100%;max-width:540px;justify-self:end}
+.halo{position:absolute;left:9%;top:5%;width:82%;aspect-ratio:1;border-radius:50%;background:#e2ecff}
+.art .kip{position:absolute;left:19%;top:3%;width:60%;transform:rotate(4deg)}
+.float{position:absolute;display:flex;align-items:center;gap:10px;background:#fff;border-radius:20px;padding:10px 16px 10px 10px;box-shadow:var(--lift);font-size:17px;font-weight:600;color:var(--ink);line-height:1.25}
+.float img{width:44px;height:44px}
+.float small{display:block;font-size:15px;font-weight:500;color:var(--muted)}
+.f1{left:0;top:20%;transform:rotate(-6deg)}
+.f2{right:0;top:30%;transform:rotate(5deg)}
+.f3{left:6%;bottom:6%;transform:rotate(-3deg)}
+.f4{right:4%;bottom:2%;transform:rotate(3deg)}
+.doodle{position:absolute;pointer-events:none}
+.wave{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:90px}
+
+/* progress */
+.stats{position:relative;z-index:2;margin-top:-92px}
+.statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;list-style:none;margin:0;padding:0}
+.stat{background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:var(--card-shadow);padding:22px;display:grid;grid-template-columns:64px 1fr;column-gap:16px;align-items:center}
+.tile{width:64px;height:64px;border-radius:18px;display:grid;place-items:center}
+.tile img{width:44px;height:44px}
+.stat .lab{font-size:16px;font-weight:500;color:var(--ink-soft);line-height:1.3}
+.stat .val{font-size:30px;font-weight:600;color:var(--ink);line-height:1.15}
+.stat .val small{font-size:17px;font-weight:500;color:var(--muted);margin-left:4px}
+.stat .sub{grid-column:1/-1;margin-top:14px;font-size:15px;font-weight:500;color:var(--muted)}
+.bar{height:10px;border-radius:99px;background:#edf1f8;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--primary)}
+.days{display:flex;gap:6px;margin-top:8px}
+.days span{width:28px;height:28px;border-radius:50%;background:#edf1f8;font-size:15px;font-weight:600;display:grid;place-items:center;color:var(--muted)}
+.days span.on{background:var(--fire);color:#fff}
+
+/* island */
+section.block{padding:96px 0}
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:36px}
+.head p{margin-top:8px;font-size:18px}
+.lessons{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;list-style:none;margin:0;padding:0}
+.lessons li{display:flex}
+.lessons .lesson{flex:1;align-content:center}
+.lesson{position:relative;display:grid;grid-template-columns:84px 1fr;column-gap:18px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:var(--card-shadow);padding:20px;transition:transform .15s,box-shadow .15s}
+.lesson:hover{transform:translateY(-2px);box-shadow:var(--lift)}
+.lesson .tile{width:84px;height:84px;border-radius:22px}
+.lesson .tile img{width:60px;height:60px}
+.lesson .n{font-size:15px;font-weight:600;color:var(--muted)}
+.lesson h3{margin-top:2px}
+.lesson .st{margin-top:6px;display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600}
+.lesson .st svg{width:18px;height:18px}
+.lesson.done .st{color:var(--ok)}
+.lesson.open .st{color:var(--muted);font-weight:500}
+.lesson.now{border:2px solid var(--primary);box-shadow:0 0 0 6px var(--primary-soft),var(--lift)}
+.lesson.now .st{color:var(--primary-dark)}
+.lesson .tick{position:absolute;right:16px;top:16px;width:30px;height:30px;border-radius:50%;background:var(--ok-bright);color:#fff;display:grid;place-items:center}
+.lesson .tick svg{width:17px;height:17px}
+.lesson .play{grid-column:1/-1;margin-top:16px}
+.lesson.goal .tile{background:var(--t-yellow)}
+.lesson .lock{position:absolute;right:16px;top:16px;color:var(--muted)}
+
+/* badges */
+.band{background:var(--soft)}
+.badges{display:grid;grid-template-columns:repeat(6,1fr);gap:18px;list-style:none;margin:0;padding:0}
+.badge{background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:var(--card-shadow);padding:22px 14px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
+.badge img{width:76px;height:76px}
+.badge b{font-size:16px;font-weight:600;color:var(--ink);line-height:1.3}
+.badge .won{font-size:15px;font-weight:600;color:var(--ok)}
+.badge.locked img{filter:grayscale(1);opacity:.4}
+.badge .bar{width:80%;margin-top:2px}
+.badge .bar i{background:var(--sun)}
+.badge .prog{font-size:15px;font-weight:500;color:var(--muted)}
+
+/* closing */
+.close{padding:56px 0 64px}
+.close .wrap{display:flex;align-items:center;gap:18px}
+.close .kip{width:84px}
+.bubble{position:relative;background:var(--primary-soft);border-radius:22px;padding:16px 22px;font-size:18px;font-weight:500;color:var(--ink)}
+.credit{margin-top:28px;font-size:15px;color:var(--muted)}
+
+.tabbar{display:none}
+
+/* question */
+.qpage{background:var(--soft)}
+.qtop .wrap{display:flex;align-items:center;gap:18px;height:84px;max-width:1120px}
+.round{width:48px;height:48px;border-radius:50%;background:#fff;border:1px solid var(--line);display:grid;place-items:center;color:var(--ink);cursor:pointer;flex:none}
+.round svg{width:22px;height:22px}
+.qprog{flex:1}
+.qprog .bar{height:14px;margin:0}
+.qprog .lbl{display:flex;justify-content:space-between;font-size:15px;font-weight:500;color:var(--muted);margin-top:6px}
+.qgrid{max-width:1120px;margin:0 auto;padding:8px 32px 220px;display:grid;grid-template-columns:1fr 320px;gap:28px;align-items:start}
+.qcard{background:#fff;border:1px solid var(--line);border-radius:28px;box-shadow:var(--card-shadow);padding:32px 36px 30px}
+.lchip{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:5px 16px 5px 8px;border-radius:20px;line-height:1.35;background:var(--t-blue);color:var(--primary-dark);font-size:15px;font-weight:600}
+.lchip img{width:28px;height:28px}
+.qcard h1{font-size:34px;margin:18px 0 6px}
+.qcard h1 .frac{margin:-.35em .1em}
+.bigbar{display:flex;height:112px;border:4px solid var(--ink);border-radius:20px;overflow:hidden;margin:28px 0 14px}
+.bigbar i{flex:1;border-right:4px solid var(--ink);background:#fff}
+.bigbar i:last-child{border-right:0}
+.bigbar i.on{background:var(--num)}
+.count{text-align:center;font-size:18px;font-weight:600;color:var(--ink)}
+.count b{color:var(--num-ink)}
+.qact{display:flex;justify-content:space-between;align-items:center;margin-top:26px}
+.ghostbtn{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 8px;border:0;background:none;font-family:var(--font);font-size:17px;font-weight:600;color:var(--ink-soft);cursor:pointer}
+.ghostbtn svg{width:20px;height:20px}
+.tip{background:#fff;border:1px solid var(--line);border-radius:24px;box-shadow:var(--card-shadow);padding:22px;position:sticky;top:20px}
+.tip .who{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.tip .kip{width:70px}
+.tip h2{font-size:20px}
+.tip p{font-size:17px;line-height:1.6}
+.tip .btn{width:100%;margin-top:16px}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--ok-soft);border-top:1px solid #c6ecd7;box-shadow:0 -14px 40px rgba(27,37,89,.10)}
+.sheet .in{position:relative;max-width:1120px;margin:0 auto;padding:30px 32px 32px;display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center}
+.sheet .pop{width:96px;height:96px}
+.sheet h2{color:var(--ok);display:flex;align-items:center;gap:12px;font-size:30px}
+.sheet .plus{display:inline-flex;align-items:center;gap:4px;height:40px;padding:0 14px 0 8px;border-radius:999px;background:#fff;font-size:18px;color:var(--ink)}
+.sheet .plus img{width:28px;height:28px}
+.sheet p{margin-top:4px;font-size:18px;color:#24513a}
+.confetti{position:absolute;left:0;right:0;top:6px;height:22px;width:100%;pointer-events:none}
+
+@media (max-width:1100px){.links a span{display:none}.links{margin-left:8px}.badges{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:900px){
+  .hero .wrap{grid-template-columns:1fr}
+  .art{justify-self:center}
+  .statgrid{grid-template-columns:repeat(2,1fr)}
+  .lessons{grid-template-columns:repeat(2,1fr)}
+  .qgrid{grid-template-columns:1fr}
+  .tip{position:static}
+}
+@media (max-width:640px){
+  body{font-size:17px;padding-bottom:84px}
+  .wrap{padding:0 20px}
+  .top .wrap{height:68px;gap:8px}
+  .links,.avatar{display:none}
+  .logo{font-size:20px}.logo img{width:36px;height:36px}
+  .chip{height:40px;font-size:17px}.chip img{width:24px;height:24px}
+  h1{font-size:34px}
+  h2{font-size:26px}
+  .hero{padding:28px 0 112px}
+  .hello{font-size:17px}
+  .lead{font-size:17px;margin:14px 0 22px}
+  .actions .btn{flex:1 1 100%}
+  .art{max-width:380px;margin-top:6px}
+  .float{font-size:16px;padding:8px 12px 8px 8px;border-radius:16px;gap:8px}
+  .float img{width:34px;height:34px}
+  .float small{font-size:15px}
+  .stats{margin-top:-84px}
+  .statgrid{gap:12px}
+  .stat{grid-template-columns:1fr;padding:16px;row-gap:8px}
+  .stat .tile{width:52px;height:52px;border-radius:16px}.stat .tile img{width:36px;height:36px}
+  .stat .val{font-size:26px}
+  .stat .sub{margin-top:4px}
+  .days{gap:3px}.days span{width:20px;height:20px;font-size:0}
+  section.block{padding:64px 0}
+  .head{flex-direction:column;align-items:flex-start;gap:10px;margin-bottom:24px}
+  .head p{font-size:17px}
+  .lessons{grid-template-columns:1fr;gap:14px}
+  .lesson{grid-template-columns:68px 1fr;padding:16px;column-gap:14px}
+  .lesson .tile{width:68px;height:68px;border-radius:18px}.lesson .tile img{width:48px;height:48px}
+  .badges{grid-template-columns:repeat(2,1fr);gap:12px}
+  .close .wrap{align-items:flex-start}
+  .close .kip{width:64px;flex:none}
+  .bubble{font-size:17px}
+  .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;background:#fff;border-top:1px solid var(--line);padding:8px 12px calc(10px + env(safe-area-inset-bottom))}
+  .tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:15px;font-weight:500;color:var(--muted)}
+  .tabbar a span.t{display:grid;place-items:center;width:56px;height:32px;border-radius:999px}
+  .tabbar a.on{color:var(--primary-dark);font-weight:600}.tabbar a.on span.t{background:var(--primary-soft)}
+  .tabbar svg{width:22px;height:22px}
+  .qtop .wrap{height:72px;gap:12px}
+  .qprog .lbl span:last-child{display:none}
+  .qgrid{padding:4px 20px 300px;gap:16px}
+  .qcard{padding:22px 20px 22px;border-radius:24px}
+  .qcard h1{font-size:28px}
+  .bigbar{height:84px;border-width:3px;border-radius:16px;margin:22px 0 12px}
+  .bigbar i{border-right-width:3px}
+  .qact{flex-direction:column-reverse;align-items:stretch;gap:8px}
+  .qact .btn{width:100%}
+  .is-right .tip{display:none}
+  .sheet .in{grid-template-columns:72px 1fr;gap:4px 14px;padding:34px 20px 22px}
+  .sheet .pop{width:72px;height:72px;grid-row:span 2}
+  .sheet h2{font-size:26px}
+  .sheet p{font-size:17px}
+  .sheet .btn{grid-column:1/-1;width:100%;margin-top:14px}
+}
+</style></head><body class="qpage">
+<header class="qtop"><div class="wrap">
+  <a class="round" href="index.html" aria-label="Close lesson"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></a>
+  <div class="qprog"><div class="bar" role="progressbar" aria-label="Lesson progress" aria-valuenow="2" aria-valuemin="0" aria-valuemax="6"><i style="width:20%"></i></div><div class="lbl"><span>Step 2 of 6</span><span>Numerator and denominator</span></div></div>
+  <span class="chip star"><img src="img/star.png" width="28" height="28" alt="" loading="lazy">56</span>
+</div></header>
+<main class="qgrid">
+  <section class="qcard" aria-labelledby="qt">
+    <span class="lchip"><img src="img/chocolate_bar.png" width="28" height="28" alt="" loading="lazy">Lesson 2 · Numerator and denominator</span>
+    <h1 id="qt">Shade <span class="frac" role="img" aria-label="3 over 5"><span class="fn">3</span><span class="fd">5</span></span> of the bar</h1>
+    <p>Tap the parts to colour them in.</p>
+    <div class="bigbar" role="group" aria-label="A bar in 5 equal parts, 3 shaded"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+    <p class="count"><b>3</b> of 5 parts shaded</p>
+    <div class="qact"><button class="ghostbtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"></path><path d="M4 4v4h4"></path><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"></path><path d="M20 20v-4h-4"></path></svg>Start again</button><a class="btn primary" href="right.html">Check my answer</a></div>
+  </section>
+  <aside class="tip" aria-label="Kip's tip">
+    <div class="who"><span class="kip " aria-hidden="true"><img src="img/kite.png" alt=""><svg viewBox="0 0 60 40"><ellipse cx="17" cy="14" rx="6.5" ry="7.5" fill="#fff"/><ellipse cx="43" cy="14" rx="6.5" ry="7.5" fill="#fff"/><circle cx="18" cy="15" r="4" fill="#1b2559"/><circle cx="44" cy="15" r="4" fill="#1b2559"/><circle cx="19.5" cy="13.2" r="1.4" fill="#fff"/><circle cx="45.5" cy="13.2" r="1.4" fill="#fff"/><circle cx="31" cy="29" r="3.4" fill="#1b2559"/><ellipse cx="9" cy="26" rx="4" ry="2.4" fill="#ff8fab" opacity=".7"/><ellipse cx="51" cy="26" rx="4" ry="2.4" fill="#ff8fab" opacity=".7"/></svg></span><h2>Kip's tip</h2></div>
+    <p>The bottom number says how many equal parts. The top number says how many to shade.</p>
+    <button class="btn secondary sm"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"></path><path d="M15.5 9a4 4 0 0 1 0 6M18.3 6.5a7.5 7.5 0 0 1 0 11"></path></svg>Read it to me</button>
+  </aside>
+</main>
+
+</body></html>

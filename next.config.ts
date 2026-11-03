@@ -19,8 +19,9 @@ const nextConfig: NextConfig = {
       { source: "/practice", destination: `${t}/practice`, permanent: false },
       { source: "/lab", destination: `${t}/lab`, permanent: false },
       { source: "/start", destination: `${t}/start`, permanent: false },
-      // Design preview of the Sky redesign (static pages in public/preview), for the owner to check.
+      // Design previews (static pages in public/preview), for the owner to check.
       { source: "/sky", destination: "/preview/sky/index.html", permanent: false },
+      { source: "/crystal", destination: "/preview/crystal/index.html", permanent: false },
     ];
   },
   cacheComponents: true,
