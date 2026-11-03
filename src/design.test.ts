@@ -2,7 +2,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { KITE_PATTERNS } from "@/components/paper/PaperKite";
-import { isPaperIconName } from "@/components/paper/PaperIcon";
+import { isIconName, isPaperIconName } from "@/components/paper/PaperIcon";
 import { PIC_NAMES } from "@/components/paper/Pic";
 import { createInitialState } from "@/engine/progress";
 import { badgesFor } from "@/engine/rewards";
@@ -33,8 +33,8 @@ describe("design system", () => {
       w.islands.forEach((i) => expect(isPaperIconName(i.icon), i.title).toBe(true));
     }
     for (const t of TOPICS) {
-      expect(isPaperIconName(t.look.icon), t.id).toBe(true);
-      t.lessons.forEach((l) => expect(isPaperIconName(t.lessonLook(l.id).icon), l.id).toBe(true));
+      expect(isIconName(t.look.icon), t.id).toBe(true);
+      t.lessons.forEach((l) => expect(isIconName(t.lessonLook(l.id).icon), l.id).toBe(true));
     }
   });
 

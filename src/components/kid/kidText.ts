@@ -1,7 +1,7 @@
 import type { Recommendation } from "@/engine/journey";
 import type { SkillStatus } from "@/engine/mastery";
 import { routes, topicRoutes } from "@/lib/routes";
-import type { PaperIconName } from "@/components/paper/PaperIcon";
+import type { IconName } from "@/components/paper/PaperIcon";
 import type { TopicModule } from "@/topics/types";
 
 /** Child-facing skill labels: encouraging, short, no jargon. */
@@ -15,7 +15,7 @@ export const KID_STATUS: Record<SkillStatus, { label: string; cls: string }> = {
 };
 
 export interface KidNext {
-  icon: PaperIconName;
+  icon: IconName;
   /** What kind of thing this is, said plainly (shown as the subline, never as a label above the title). */
   kicker: string;
   title: string;

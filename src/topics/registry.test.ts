@@ -18,7 +18,8 @@ describe("topic registry", () => {
         ...Object.values(t.assessment.forms).flat().map((q) => q.id),
       ];
       for (const id of ids) {
-        expect(id.startsWith(`${t.id}.`), id).toBe(true);
+        // Generated question ids carry a "g:" marker before the topic: g:<topic>.<template>:<level>:<seed>.
+        expect(id.replace(/^g:/, "").startsWith(`${t.id}.`), id).toBe(true);
         expect(topicIdOf(id)).toBe(t.id);
       }
       for (const id of new Set(ids)) {

@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import type { PaperIconName } from "@/components/paper/PaperIcon";
+import type { IconName } from "@/components/paper/PaperIcon";
 import type { TopicDefinition } from "@/engine/journey";
 import type { Evaluation, ItemResult, MisconceptionDef, Phase, QuestionBase, Skill } from "@/engine/types";
 import type { Lesson, LessonStep } from "@/lessons/types";
@@ -45,8 +45,8 @@ export interface QuestionKit<Q extends Question = Question, R extends AnswerResp
 }
 
 export interface Look {
-  /** A drawn paper icon (no emoji). */
-  icon: PaperIconName;
+  /** A 3D picture or drawn icon (no emoji). */
+  icon: IconName;
   color: string;
   soft: string;
 }

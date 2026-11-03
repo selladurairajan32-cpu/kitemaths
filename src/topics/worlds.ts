@@ -29,7 +29,7 @@ export const WORLDS: World[] = [
     field: "#d6ecfd",
     text: "ink",
     islands: [
-      { title: "Place value", icon: "place-value" },
+      { title: "Place value", icon: "place-value", topicId: "place-value" },
       { title: "Rounding and estimating", icon: "rounding" },
       { title: "Negative numbers", icon: "thermometer" },
     ],

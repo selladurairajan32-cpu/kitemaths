@@ -1,6 +1,6 @@
 "use client";
 
-import { PaperIcon, type PaperIconName } from "@/components/paper/PaperIcon";
+import { PaperIcon, type IconName } from "@/components/paper/PaperIcon";
 import Link from "next/link";
 import { Kip, KipSays } from "@/components/kid/Kip";
 import { KID_STATUS } from "@/components/kid/kidText";
@@ -20,7 +20,7 @@ type Status = "done" | "current" | "open";
 interface Stop {
   key: string;
   href: string;
-  icon: PaperIconName;
+  icon: IconName;
   color: string;
   soft: string;
   title: string;
