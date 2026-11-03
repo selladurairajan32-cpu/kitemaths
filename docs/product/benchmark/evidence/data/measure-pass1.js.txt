@@ -1,0 +1,164 @@
+// UX-001 evidence: measures public pages of competitors and Kite Maths on the same rubric.
+// Usage: node measure.js  -> research/results.json + research/shots/*.jpg
+const { chromium } = require('playwright');
+const fs = require('fs');
+const OUT = __dirname;
+fs.mkdirSync(`${OUT}/shots`, { recursive: true });
+
+const KA = 'https://www.khanacademy.org/math/arithmetic/fraction-arithmetic/x18ca194a:';
+const TARGETS = [
+  { id: 'ATOM-M', who: 'Atom Learning', kind: 'marketing', url: 'https://atomlearning.com/11-plus' },
+  { id: 'TTRS-M', who: 'Times Tables Rock Stars', kind: 'marketing', url: 'https://ttrockstars.com/' },
+  { id: 'DOODLE-M', who: 'DoodleMaths', kind: 'marketing', url: 'https://doodlelearning.com/maths-app' },
+  { id: 'MATHLETICS-M', who: 'Mathletics', kind: 'marketing', url: 'https://www.mathletics.com/uk/' },
+  { id: 'IXL-P1', who: 'IXL', kind: 'product (public practice)', url: 'https://uk.ixl.com/maths/year-4/understand-fractions-fraction-bars' },
+  { id: 'IXL-P2', who: 'IXL', kind: 'product (public practice)', url: 'https://uk.ixl.com/maths/year-4/fractions-of-a-group' },
+  { id: 'KHAN-P1', who: 'Khan Academy', kind: 'product (public exercise)', url: `${KA}fractions-intro/e/that-s-not-fair-` },
+  { id: 'KHAN-P2', who: 'Khan Academy', kind: 'product (public exercise)', url: `${KA}fractions-on-the-number-line/e/fractions_on_the_number_line_1` },
+  { id: 'POLYPAD-T', who: 'Polypad (Amplify/Mathigon)', kind: 'tool (public)', url: 'https://polypad.amplify.com/' },
+  { id: 'KITE-H', who: 'Kite Maths', kind: 'product (home)', url: 'https://kitemaths.vercel.app/' },
+  { id: 'KITE-L', who: 'Kite Maths', kind: 'product (lesson)', url: 'https://kitemaths.vercel.app/t/fractions/lesson/wholes/1' },
+  { id: 'KITE-Q', who: 'Kite Maths', kind: 'product (practice question)', url: 'https://kitemaths.vercel.app/t/fractions/practice/equal-parts', play: true },
+];
+
+const MEASURE = () => {
+  const vis = (el) => {
+    const r = el.getBoundingClientRect();
+    const s = getComputedStyle(el);
+    return r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && s.display !== 'none' && parseFloat(s.opacity) > 0;
+  };
+  const own = (el) => [...el.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join('').trim();
+  const textEls = [...document.querySelectorAll('body *')].filter((el) => own(el).length > 1 && vis(el) && !['SCRIPT', 'STYLE', 'NOSCRIPT'].includes(el.tagName));
+  const px = (el) => parseFloat(getComputedStyle(el).fontSize);
+  const sizes = textEls.map(px);
+  const fam = {};
+  for (const el of textEls) {
+    const f = getComputedStyle(el).fontFamily.split(',')[0].replace(/["']/g, '').trim();
+    fam[f] = (fam[f] || 0) + own(el).length;
+  }
+  // Dominant reading size: the size carrying the most characters in longer runs of text.
+  const hist = {};
+  for (const el of textEls) {
+    const t = own(el);
+    if (t.length < 30) continue;
+    const k = Math.round(px(el) * 10) / 10;
+    hist[k] = (hist[k] || 0) + t.length;
+  }
+  const readingSize = Number(Object.entries(hist).sort((a, b) => b[1] - a[1])[0]?.[0] ?? NaN);
+  const reading = textEls.find((el) => own(el).length >= 30 && Math.round(px(el) * 10) / 10 === readingSize);
+  const lum = (c) => {
+    const m = c.match(/[\d.]+/g);
+    if (!m) return null;
+    const [r, g, b] = m.slice(0, 3).map((v) => {
+      v = Number(v) / 255;
+      return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const bgOf = (el) => {
+    for (let e = el; e; e = e.parentElement) {
+      const c = getComputedStyle(e).backgroundColor;
+      const a = c.match(/[\d.]+/g);
+      if (a && (a.length < 4 || Number(a[3]) > 0.5)) return c;
+    }
+    return 'rgb(255, 255, 255)';
+  };
+  let contrast = null;
+  if (reading) {
+    const L1 = lum(getComputedStyle(reading).color);
+    const L2 = lum(bgOf(reading));
+    if (L1 != null && L2 != null) contrast = Math.round(((Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05)) * 10) / 10;
+  }
+  let rm = 0;
+  let blocked = 0;
+  for (const sh of document.styleSheets) {
+    try {
+      for (const r of sh.cssRules) if (r.media && /prefers-reduced-motion/.test(r.media.mediaText)) rm++;
+    } catch {
+      blocked++;
+    }
+  }
+  const inter = [...document.querySelectorAll('a,button,input,select,textarea,[role=button],[role=radio],[role=checkbox]')].filter(vis);
+  const inlineLink = (el) => el.tagName === 'A' && el.closest('p,li') && own(el.closest('p,li')).length > 20;
+  const small = inter.filter((el) => !inlineLink(el)).filter((el) => {
+    const r = el.getBoundingClientRect();
+    return r.width < 24 || r.height < 24;
+  });
+  const h1 = document.querySelector('h1');
+  return {
+    title: document.title,
+    fonts: Object.entries(fam).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([f, n]) => `${f} (${n})`),
+    bodyFont: getComputedStyle(document.body).fontFamily.split(',')[0].replace(/["']/g, ''),
+    bodySize: px(document.body),
+    readingSize,
+    readingLineHeight: reading ? getComputedStyle(reading).lineHeight : null,
+    readingWeight: reading ? getComputedStyle(reading).fontWeight : null,
+    readingSample: reading ? own(reading).slice(0, 70) : null,
+    readingContrast: contrast,
+    h1: h1 ? { size: px(h1), weight: getComputedStyle(h1).fontWeight, font: getComputedStyle(h1).fontFamily.split(',')[0].replace(/["']/g, ''), text: h1.textContent.trim().slice(0, 60) } : null,
+    minTextSize: sizes.length ? Math.min(...sizes) : null,
+    shareTextUnder14px: sizes.length ? Math.round((sizes.filter((s) => s < 14).length / sizes.length) * 100) : null,
+    textElements: sizes.length,
+    reducedMotionRules: rm,
+    stylesheetsUnreadable: blocked,
+    runningAnimations: document.getAnimations ? document.getAnimations().length : null,
+    sidewaysScroll: document.documentElement.scrollWidth > innerWidth + 1,
+    interactive: inter.length,
+    targetsUnder24px: small.length,
+  };
+};
+
+async function dismissBanners(p) {
+  for (const label of [/^reject all$/i, /^necessary only$/i, /^only necessary/i, /^decline/i, /^accept all$/i, /^accept$/i, /^got it$/i, /^ok$/i]) {
+    const b = p.getByRole('button', { name: label }).first();
+    if (await b.count().catch(() => 0)) {
+      await b.click({ timeout: 2000 }).catch(() => {});
+      await p.waitForTimeout(600);
+      return label.source;
+    }
+  }
+  return null;
+}
+
+(async () => {
+  const b = await chromium.launch();
+  const results = [];
+  for (const [vw, w, h] of [['desktop', 1280, 800], ['phone', 390, 844]]) {
+    const ctx = await b.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, locale: 'en-GB', bypassCSP: true, isMobile: vw === 'phone', hasTouch: vw === 'phone' });
+    for (const t of TARGETS) {
+      const p = await ctx.newPage();
+      const rec = { id: t.id, who: t.who, kind: t.kind, url: t.url, viewport: vw, observed: new Date().toISOString() };
+      try {
+        const res = await p.goto(t.url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        rec.status = res ? res.status() : null;
+        await p.waitForLoadState('networkidle', { timeout: 20000 }).catch(() => {});
+        await p.waitForTimeout(2500);
+        rec.banner = await dismissBanners(p);
+        if (t.play) {
+          await p.getByRole('button', { name: /^Play/ }).first().click({ timeout: 5000 }).catch(() => {});
+          await p.waitForTimeout(1500);
+        }
+        rec.finalUrl = p.url();
+        Object.assign(rec, await p.evaluate(MEASURE));
+        try {
+          await p.addScriptTag({ url: 'https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.10.2/axe.min.js' });
+          rec.axe = await p.evaluate(async () => {
+            const r = await window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] }, resultTypes: ['violations'] });
+            return r.violations.map((v) => ({ id: v.id, impact: v.impact, nodes: v.nodes.length }));
+          });
+        } catch (e) {
+          rec.axeError = e.message.slice(0, 120);
+        }
+        await p.screenshot({ path: `${OUT}/shots/${t.id}-${vw}.jpg`, type: 'jpeg', quality: 70 });
+      } catch (e) {
+        rec.error = e.message.slice(0, 160);
+      }
+      results.push(rec);
+      console.log(vw, t.id, rec.status ?? rec.error, rec.readingSize, rec.fonts?.[0], 'axe', rec.axe ? rec.axe.length : rec.axeError);
+      await p.close();
+    }
+    await ctx.close();
+  }
+  fs.writeFileSync(`${OUT}/results.json`, JSON.stringify(results, null, 1));
+  await b.close();
+})();
