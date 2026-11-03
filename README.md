@@ -1,8 +1,27 @@
-# Kite Maths · Fractions adventure (prototype)
+# Kite Maths (prototype)
 
-A playful maths adventure for Years 3–6, guided by **Kip the kite**. This release is a **fractions foundations module** — fractions of one whole, equal parts, comparing, equivalence, number lines from 0 to 1 and fractions of amounts. It is a first step towards 11+ preparation, **not** complete 11+ coverage.
+A playful maths adventure for Years 3–6 and 11+ preparation, guided by **Kip the kite**.
 
-Learning follows **Understand → Visualise → Explore → Practise → Explain → Apply → Master**: eight guided lessons, a Fraction Lab, adaptive practice with misconception recovery, an independent mastery check with two parallel forms, and short per-skill rechecks.
+> **Product source of truth:** [`docs/product/`](docs/product/README.md).
+> - **Scope and acceptance criteria:** the backlog.
+> - **Item status:** the status register.
+> - **Decisions:** the decision log.
+> - **Requirement-to-test traceability:** the traceability folder.
+>
+> Where this README and `docs/product/` disagree, `docs/product/` is right.
+
+**Where the product stands:**
+- The first release under the product backlog is the **Fractions foundations** island (R1): fractions
+  of one whole, equal parts, comparing, equivalence, number lines from 0 to 1, and fractions of amounts.
+- The map also has 18 more islands across six worlds, from place value to mock exams. They are live as
+  **unaccepted previews**: built, but not yet QA-accepted against the backlog (decision D-001).
+- No item is QA-accepted yet except the repository audit (GOV-001). See
+  [`docs/product/STATUS.md`](docs/product/STATUS.md).
+
+On the Fractions island, learning follows **Understand → Visualise → Explore → Practise → Explain →
+Apply → Master**. The island has eight guided lessons, a Fraction Lab, adaptive practice with
+misconception recovery, an independent mastery check with two parallel forms, and short per-skill
+rechecks. The other islands use the shared island kit (`src/topics/kit`) with the same engine.
 
 ## What children see
 
@@ -35,7 +54,10 @@ Progress is saved in this browser only (`localStorage`, key `kite-maths:v2`); th
 
 ## Routes
 
-The app is a map of **worlds** and **islands** (topics). Each island lives under `/t/<topic>`; today the only island is `fractions`. The plan for the rest is in [`docs/ROADMAP.md`](docs/ROADMAP.md).
+The app is a map of **worlds** and **islands** (topics). Each island lives under `/t/<topic>`.
+- There are 19 islands. `fractions` is the R1 island; the other 18 are unaccepted previews (D-001).
+- The island list is in `src/topics/index.ts` and `src/topics/worlds.ts`.
+- Scope and priorities are in [`docs/product/backlog.md`](docs/product/backlog.md).
 
 | Route | Screen |
 | --- | --- |
@@ -66,14 +88,19 @@ Links from before islands existed (`/lesson/...`, `/practice/...`, `/assessment/
 
 Misconceptions are reported as *possible* after one sighting and *likely* only after repeated evidence; they are marked *improving* or *resolved* from later correct work. Reasoning is assessed with sentence frames and learner-built counterexamples, not free written explanations.
 
-## Extension path (not built)
+## Extension path
 
-1. Simplifying fractions and common factors
-2. Improper fractions and mixed numbers (number lines beyond 1)
-3. Adding and subtracting fractions (same, then related denominators)
-4. Multiplying and dividing fractions
-5. Fractions, decimals and percentages
-6. Multi-step 11+ style problems mixing all of the above
+The original extension list (simplifying, mixed numbers, adding and subtracting fractions,
+fractions/decimals/percentages, multi-step problems) now exists as **unaccepted preview** islands:
+Fractions 2, Decimals, Percentages and Problem solving.
+
+What comes next, and in what order, is set by the backlog:
+- Times Tables (R2);
+- Mental Maths (R3);
+- the curriculum (R4);
+- 11+ preparation (R5).
+
+See [`docs/product/README.md`](docs/product/README.md#product-map).
 
 Each future island reuses the engine: teach with representations, model a method, guide, then check a new instance independently. To add one, build a `TopicModule` like `src/topics/fractions/module.tsx`, list it in `src/topics/index.ts`, and give its world-map entry a `topicId` in `src/topics/worlds.ts`. `src/topics/registry.test.ts` checks the ids and shows a second island working alongside fractions.
 

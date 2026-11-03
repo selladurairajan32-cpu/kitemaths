@@ -1,5 +1,15 @@
 # Kite Maths design system v3: "Crystal"
 
+> **Current design reference. Not yet the accepted design system.**
+> - This describes the design as built ("Crystal").
+> - The backlog's design-system items (UX-002 tokens, UX-003 typography, UX-004 content
+>   differentiation) will replace or confirm it.
+> - Known drift from the code is tracked as defects: undefined violet classes (DEF-009), and text below
+>   the 15px minimum (DEF-010).
+> - Hero sizes and the "feedback only" motion rule differ from the code; see GOV-001 §5.
+> - The status of each design item is in [`docs/product/STATUS.md`](product/STATUS.md).
+
+
 Chosen by the owner after several rounds: clean and calm, easy to read, with the fun of a children's game.
 The references were the Rohi Kids case study (white pages, 3D cartoon pictures, soft cards) and kindergarten
 themes (rounded, bright, friendly).

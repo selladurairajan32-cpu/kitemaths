@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Backlog item** | GOV-001 — Inspect the existing repository (P0, R0, size S) |
-| **Status** | READY FOR QA. This audit is waiting for Product Owner review. |
+| **Status** | **ACCEPTED** by the Product Owner on 3 November 2026 (D-005). Kept as a point-in-time record. Current status lives in [`STATUS.md`](STATUS.md). |
 | **Date** | 3 November 2026 |
 | **Code audited** | `main` at `bbf210a`. Branch `claude/pensive-pasteur-bs5979` at `1c14d24` has the same tree. |
 | **Live site** | https://kitemaths.vercel.app (deployed from `main` on 3 Nov, before the backlog arrived) |
