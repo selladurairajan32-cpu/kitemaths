@@ -78,9 +78,9 @@ export const WORLDS: World[] = [
     field: "#d6ecfd",
     text: "ink",
     islands: [
-      { title: "Shapes and angles", icon: "angle" },
-      { title: "Coordinates", icon: "compass" },
-      { title: "Charts and data", icon: "chart" },
+      { title: "Shapes and angles", icon: "angle", topicId: "shapes-angles" },
+      { title: "Coordinates", icon: "compass", topicId: "coordinates" },
+      { title: "Charts and data", icon: "chart", topicId: "charts-data" },
     ],
   },
   {

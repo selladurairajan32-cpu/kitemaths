@@ -48,8 +48,8 @@ export function money(n: number): string {
 function withUnit(q: KitQuestion, value: number): string {
   if (q.kind !== "number" || !q.unit) return num(value);
   if (q.unit === "£") return money(value);
-  // Short units sit right next to the number: 45p, 30%. Others take a space: 12 cm.
-  return q.unit === "%" || q.unit === "p" ? `${num(value)}${q.unit}` : `${num(value)} ${q.unit}`;
+  // Short units sit right next to the number: 45p, 30%, 90°. Others take a space: 12 cm.
+  return q.unit === "%" || q.unit === "p" || q.unit === "°" ? `${num(value)}${q.unit}` : `${num(value)} ${q.unit}`;
 }
 
 export function answerText(q: KitQuestion): string {

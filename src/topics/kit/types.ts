@@ -55,9 +55,47 @@ export type KitVisual =
    * A rectangle w × h, or an L-shape with a cut.w × cut.h corner taken from the top right.
    * `grid` draws the unit squares; `labels` writes side lengths (L-shapes also have innerV and innerH).
    */
-  | { kind: "rect"; w: number; h: number; cut?: { w: number; h: number }; grid?: boolean; labels?: Partial<Record<RectSide, string>> };
+  | { kind: "rect"; w: number; h: number; cut?: { w: number; h: number }; grid?: boolean; labels?: Partial<Record<RectSide, string>> }
+  | ShapeVisualSpec;
 
 export type RectSide = "top" | "right" | "bottom" | "left" | "innerV" | "innerH";
+
+/** Shape Shores pictures: angles, shapes, coordinate grids, charts and tables. */
+export type ShapeVisualSpec =
+  /** One angle, drawn true to size from a flat arm, with an arc (a square for a right angle). */
+  | { kind: "angle"; degrees: number; label?: string }
+  /** Angles meeting at a point: on a straight line (parts add to 180) or all the way round (360). */
+  | { kind: "angle-split"; parts: number[]; labels: string[] }
+  /** A triangle drawn with these angles at the left, right and top corners, each labelled. */
+  | { kind: "triangle"; angles: [number, number, number]; labels: [string, string, string] }
+  /** A named 2D shape. */
+  | { kind: "shape"; name: ShapeName }
+  /** A coordinate grid from min to max on both axes, with lettered points (joined up if `join`). */
+  | { kind: "coords"; min: number; max: number; points: { x: number; y: number; label?: string }[]; join?: boolean }
+  /** A bar chart with a scale going up in `step`s. */
+  | { kind: "barchart"; bars: { label: string; value: number }[]; max: number; step: number; axis?: string }
+  /** A pictogram: each icon is worth `key`; half an icon is half that. */
+  | { kind: "pictogram"; rows: { label: string; value: number }[]; key: number; keyLabel: string }
+  /** A table with a header row. */
+  | { kind: "table"; head: string[]; rows: string[][] }
+  /** A line graph. */
+  | { kind: "linegraph"; points: { label: string; value: number }[]; min: number; max: number; step: number; axis?: string };
+
+export type ShapeName =
+  | "square"
+  | "rectangle"
+  | "equilateral"
+  | "right-triangle"
+  | "isosceles"
+  | "scalene"
+  | "rhombus"
+  | "parallelogram"
+  | "trapezium"
+  | "kite"
+  | "pentagon"
+  | "hexagon"
+  | "octagon"
+  | "circle";
 
 export interface NumericTrap {
   value: number;

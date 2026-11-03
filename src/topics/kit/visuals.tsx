@@ -1,14 +1,9 @@
-import type { ReactNode } from "react";
 import { num } from "./evaluate";
+import { BRAND, CORAL, Frame, INK, TONE } from "./frame";
+import { ShapeVisual } from "./visuals-shape";
 import type { KitVisual, PlaceColumn, RectSide } from "./types";
 
 /** The kit's maths pictures, drawn for the Crystal look: ink outlines, pastel fills, big readable labels. */
-
-const INK = "#1b2559";
-const BRAND = "#2563eb";
-const CORAL = "#f4623a";
-const GREEN = "#22a565";
-const TONE = { brand: BRAND, num: CORAL, ok: GREEN } as const;
 
 export const PLACE: Record<PlaceColumn, number> = { M: 1e6, HTh: 1e5, TTh: 1e4, Th: 1e3, H: 100, T: 10, O: 1, t: 0.1, h: 0.01 };
 const COLUMN_NAME: Record<PlaceColumn, string> = {
@@ -30,14 +25,6 @@ export function digitIn(value: number, col: PlaceColumn): number | null {
   const p = Math.round(place * 100);
   if (p >= 100 && scaled < p && col !== "O") return null;
   return Math.floor(scaled / p) % 10;
-}
-
-function Frame({ children, label }: { children: ReactNode; label: string }) {
-  return (
-    <figure className="m-0 flex w-full flex-col items-center" role="img" aria-label={label}>
-      {children}
-    </figure>
-  );
 }
 
 function PlaceValueChart({ v }: { v: Extract<KitVisual, { kind: "pv-chart" }> }) {
@@ -559,6 +546,6 @@ export function MathVisual({ spec }: { spec: unknown }) {
     case "rect":
       return <RectVisual v={v} />;
     default:
-      return null;
+      return <ShapeVisual v={v} />;
   }
 }
