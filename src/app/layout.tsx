@@ -1,10 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Fredoka, Lexend } from "next/font/google";
+import { Lexend } from "next/font/google";
 import { AppShell } from "@/components/ui/AppShell";
 import "./globals.css";
 
 const lexend = Lexend({ variable: "--font-lexend", subsets: ["latin"] });
-const fredoka = Fredoka({ variable: "--font-fredoka", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Kite Maths · Fractions adventure",
@@ -12,12 +11,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#e6f3ff",
+  themeColor: "#eaf4fd",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en-GB" className={`${lexend.variable} ${fredoka.variable} antialiased`}>
+    <html lang="en-GB" className={`${lexend.variable} antialiased`}>
       <body className="min-h-dvh">
         <AppShell>{children}</AppShell>
       </body>

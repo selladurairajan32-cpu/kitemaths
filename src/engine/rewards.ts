@@ -129,7 +129,8 @@ export interface Badge {
   id: string;
   title: string;
   description: string;
-  icon: string;
+  /** The kite this badge becomes on the shelf: "plain", "stripes", "dots", "chevrons", "checks", "waves" or "sun". */
+  pattern: string;
   earned: boolean;
   /** 0–1 progress towards the badge, for ones not yet earned. */
   progress: number;
@@ -160,21 +161,21 @@ export function badgesFor(state: LearnerState, skills: Skill[], lessonCount: num
   const ratio = (n: number, of: number) => Math.min(1, n / of);
 
   const badges: Omit<Badge, "earned">[] = [
-    { id: "first-flight", title: "First flight", description: "Answer your first question.", icon: "🪁", progress: ratio(answered, 1) },
-    { id: "lesson-1", title: "Lesson learner", description: "Finish a lesson.", icon: "📘", progress: ratio(lessonsDone, 1) },
-    { id: "comeback", title: "Never give up", description: "Fix a mistake and get it right.", icon: "💪", progress: comeback ? 1 : 0 },
-    { id: "hot-streak", title: "Hot streak", description: "Get 5 right first time in a row.", icon: "🔥", progress: ratio(run, 5) },
-    { id: "goal", title: "Daily hero", description: `Answer ${DAILY_GOAL} questions in one day.`, icon: "🎯", progress: goalDays ? 1 : ratio(answeredToday(state, now), DAILY_GOAL) },
-    { id: "streak-3", title: "Three in a row", description: "Learn 3 days in a row.", icon: "📅", progress: ratio(streak.best, 3) },
-    { id: "lab", title: "Lab explorer", description: "Complete 3 lab challenges.", icon: "🧪", progress: ratio(totals.labChallenges, 3) },
-    { id: "century", title: "Century", description: "Answer 100 questions.", icon: "💯", progress: ratio(answered, 100) },
-    { id: "all-lessons", title: "Sky scholar", description: "Finish every lesson.", icon: "🎓", progress: ratio(lessonsDone, lessonCount) },
-    { id: "streak-7", title: "Super week", description: "Learn 7 days in a row.", icon: "🌈", progress: ratio(streak.best, 7) },
-    { id: "check", title: "Show what you know", description: "Complete the big check.", icon: "🏆", progress: totals.checks > 0 ? 1 : 0 },
+    { id: "first-flight", title: "First flight", description: "Answer your first question.", pattern: "plain", progress: ratio(answered, 1) },
+    { id: "lesson-1", title: "Lesson learner", description: "Finish a lesson.", pattern: "stripes", progress: ratio(lessonsDone, 1) },
+    { id: "comeback", title: "Never give up", description: "Fix a mistake and get it right.", pattern: "chevrons", progress: comeback ? 1 : 0 },
+    { id: "hot-streak", title: "Hot streak", description: "Get 5 right first time in a row.", pattern: "sun", progress: ratio(run, 5) },
+    { id: "goal", title: "Daily hero", description: `Answer ${DAILY_GOAL} questions in one day.`, pattern: "dots", progress: goalDays ? 1 : ratio(answeredToday(state, now), DAILY_GOAL) },
+    { id: "streak-3", title: "Three in a row", description: "Learn 3 days in a row.", pattern: "checks", progress: ratio(streak.best, 3) },
+    { id: "lab", title: "Lab explorer", description: "Complete 3 lab challenges.", pattern: "waves", progress: ratio(totals.labChallenges, 3) },
+    { id: "century", title: "Century", description: "Answer 100 questions.", pattern: "stripes", progress: ratio(answered, 100) },
+    { id: "all-lessons", title: "Sky scholar", description: "Finish every lesson.", pattern: "checks", progress: ratio(lessonsDone, lessonCount) },
+    { id: "streak-7", title: "Super week", description: "Learn 7 days in a row.", pattern: "waves", progress: ratio(streak.best, 7) },
+    { id: "check", title: "Show what you know", description: "Complete the big check.", pattern: "sun", progress: totals.checks > 0 ? 1 : 0 },
     ...skills.map((s) => {
       const status = skillMastery(s.id, state.results).status;
       const p = status === "mastered" ? 1 : status === "passed-check" || status === "secure" ? 0.66 : status === "developing" ? 0.33 : 0;
-      return { id: `skill:${s.id}`, title: `${s.title} star`, description: `Master “${s.title}”.`, icon: "⭐", progress: p };
+      return { id: `skill:${s.id}`, title: `${s.title} star`, description: `Master “${s.title}”.`, pattern: "dots", progress: p };
     }),
   ];
   return badges.map((b) => ({ ...b, earned: b.progress >= 1 }));

@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import type { LabStepProps, QuestionInputProps, TopicModule } from "@/topics/types";
+import type { LabStepProps, Look, QuestionInputProps, TopicModule } from "@/topics/types";
 import { followUpFor, FRACTIONS_TOPIC, practicePool } from "./index";
 import { PHASE_DESCRIPTIONS } from "./journey";
 import { LESSONS, lessonById } from "./lessons";
@@ -14,18 +14,18 @@ import { FractionsFreeLab, FractionsLessonLab, FREE_LAB_INTRO, isFractionsLabSte
 import { RemedyVisual } from "./ui/RemedyVisual";
 import { VisualRenderer } from "./ui/Visuals";
 
-const LESSON_LOOKS: Record<string, { emoji: string; color: string; soft: string }> = {
-  wholes: { emoji: "🍕", color: "#ff6a45", soft: "#ffe7df" },
-  naming: { emoji: "🔢", color: "#2f74ff", soft: "#e2ecff" },
-  lab: { emoji: "🎨", color: "#ff4f9a", soft: "#ffe3f0" },
-  comparing: { emoji: "⚖️", color: "#6a4cff", soft: "#ece7ff" },
-  equivalent: { emoji: "🧩", color: "#1fbfae", soft: "#d8f7f3" },
-  "number-line": { emoji: "📏", color: "#f0a800", soft: "#fff5cf" },
-  amounts: { emoji: "🍬", color: "#22c174", soft: "#d9f7e8" },
-  reasoning: { emoji: "🕵️", color: "#7a4ff0", soft: "#efe8ff" },
+const LESSON_LOOKS: Record<string, Look> = {
+  wholes: { icon: "pizza", color: "#f4623a", soft: "#fde5dc" },
+  naming: { icon: "fraction-bar", color: "#2f6fd8", soft: "#dfeafb" },
+  lab: { icon: "paint", color: "#e8343f", soft: "#fbe1e3" },
+  comparing: { icon: "scales", color: "#d99a00", soft: "#fff4d4" },
+  equivalent: { icon: "puzzle", color: "#3dae6b", soft: "#dcf3e5" },
+  "number-line": { icon: "ruler", color: "#e8343f", soft: "#fbe1e3" },
+  amounts: { icon: "sweets", color: "#f4623a", soft: "#fde5dc" },
+  reasoning: { icon: "magnifier", color: "#2f6fd8", soft: "#dfeafb" },
 };
 
-const LOOK = { emoji: "🍕", color: "#ff6a45", soft: "#ffe7df" };
+const LOOK: Look = { icon: "pizza", color: "#f4623a", soft: "#fde5dc" };
 
 /*
  * The topic's own components take its own question and picture types. The app

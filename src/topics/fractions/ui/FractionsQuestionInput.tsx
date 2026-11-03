@@ -177,7 +177,7 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
                 <strong className="text-num-strong">{shaded.length}</strong> of {parts} parts shaded
               </p>
               {!locked && shaded.length > 0 && (
-                <button type="button" onClick={() => onChange(null)} className="h-11 rounded-lg px-3 text-sm text-muted underline-offset-2 hover:text-ink hover:underline">
+                <button type="button" onClick={() => onChange(null)} className="h-11 rounded-full px-3 text-sm text-muted underline-offset-2 hover:text-ink hover:underline">
                   Clear
                 </button>
               )}
@@ -228,7 +228,7 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
             const letter = String.fromCharCode(65 + i);
             const given = pairs[row.id];
             return (
-              <fieldset key={row.id} className="flex flex-col gap-3 rounded-2xl border border-line bg-paper p-3 sm:flex-row sm:items-center sm:gap-5 sm:p-4">
+              <fieldset key={row.id} className="flex flex-col gap-3 rounded-[4px] border border-line bg-raised p-3 sm:flex-row sm:items-center sm:gap-5 sm:p-4">
                 <legend className="sr-only">Picture {letter}: choose its fraction</legend>
                 <div className="flex items-center gap-3 sm:w-64 sm:shrink-0">
                   <span className="grid size-8 shrink-0 place-items-center rounded-full bg-ink text-sm font-semibold text-white" aria-hidden>
@@ -272,13 +272,13 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
         <div className="flex flex-col items-center gap-6">
           <div className="flex items-center gap-4 sm:gap-6" aria-hidden>
             <FractionNotation n={q.left.n} d={q.left.d} size="lg" />
-            <span className={`grid size-16 place-items-center rounded-2xl border-2 border-dashed text-3xl font-semibold ${symbol ? "border-ink bg-sunk" : "border-line-strong text-muted"}`}>
+            <span className={`grid size-16 place-items-center rounded-[4px] border-2 border-dashed text-3xl font-semibold ${symbol ? "border-ink bg-sunk" : "border-line-strong text-muted"}`}>
               {symbol ?? "?"}
             </span>
             <FractionNotation n={q.right.n} d={q.right.d} size="lg" />
           </div>
           {q.showVisual && (
-            <div className="flex w-full justify-center rounded-2xl bg-paper px-4 py-5">
+            <div className="flex w-full justify-center rounded-[4px] bg-raised px-4 py-5">
               <StackedBars rows={[{ f: q.left }, { f: q.right }]} />
             </div>
           )}
@@ -292,7 +292,7 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
               return (
                 <RadioOption key={s} name={name} value={s} checked={checked} onSelect={() => onChange({ kind: "compare", symbol: s })} locked={locked} mark={mark} label={SYMBOL_LABEL[s]} className="flex-col gap-0.5 py-3">
                   <span className="text-3xl font-semibold leading-none">{s}</span>
-                  <span className="text-xs text-muted">{SYMBOL_LABEL[s]}</span>
+                  <span className="text-sm text-muted">{SYMBOL_LABEL[s]}</span>
                 </RadioOption>
               );
             })}
@@ -379,7 +379,7 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
               <FractionShape diagram={q.diagram} size="md" />
             </Figure>
           )}
-          <div className="rounded-2xl border border-line bg-paper p-4 text-lg leading-[3.1rem] sm:p-5">
+          <div className="rounded-[4px] border border-line bg-raised p-4 text-lg leading-[3.1rem] sm:p-5">
             {q.frame.map((part, pi) => {
               if (typeof part === "string") return <RichText key={pi} text={part} />;
               const gap = q.frame.slice(0, pi + 1).filter((p) => typeof p !== "string").length;
@@ -394,7 +394,7 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
                     return (
                       <label
                         key={o.id}
-                        className={`relative inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-xl border-2 px-3 text-base font-medium leading-tight transition-colors has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-den/25 ${
+                        className={`relative inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-[4px] border-2 px-3 text-base font-medium leading-tight transition-colors has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ink ${
                           mark === "correct"
                             ? "border-ok bg-ok-soft"
                             : mark === "wrong"
@@ -439,7 +439,7 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
       const builder = (which: "a" | "b", title: string) => {
         const fr = current[which];
         return (
-          <div className="flex flex-col gap-3 rounded-2xl border border-line bg-surface p-4">
+          <div className="flex flex-col gap-3 rounded-[4px] border border-line bg-surface p-4">
             <p className="text-sm font-semibold">{title}</p>
             <div className="flex items-center gap-4">
               <FractionNotation n={fr.n} d={fr.d} size="lg" animate />
@@ -457,7 +457,7 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
             {builder("a", "First fraction")}
             {builder("b", "Second fraction")}
           </div>
-          <div className="flex flex-col items-center gap-3 rounded-2xl bg-paper px-4 py-5">
+          <div className="flex flex-col items-center gap-3 rounded-[4px] bg-raised px-4 py-5">
             <StackedBars rows={[{ f: current.a }, { f: current.b }]} />
             <p className="text-sm text-ink-2" aria-live="polite">
               {toWords(current.a)} {sym === "<" ? "is less than" : sym === ">" ? "is greater than" : "is equal to"} {toWords(current.b)}

@@ -22,10 +22,10 @@ const CIRCLE_W: Record<ShapeSize, string> = {
   lg: "max-w-[300px]",
 };
 
-const FILL_SHADED = "#ef8a6b";
+const FILL_SHADED = "#f4623a";
 const FILL_EMPTY = "#ffffff";
-const FILL_HOVER = "#fdeee8";
-const STROKE = "#1b2130";
+const FILL_HOVER = "#fde5dc";
+const STROKE = "#13203a";
 
 interface Part {
   index: number;
@@ -117,7 +117,7 @@ export function FractionShape({
   const parts = diagramParts(diagram);
   const shaded = new Set(shadedProp ?? diagram.shaded ?? []);
   const interactive = !!onToggle;
-  const strokeW = size === "xs" ? 2.4 : 2;
+  const strokeW = size === "xs" ? 3 : 2.5;
 
   let geometry: Part[];
   let vw: number;
@@ -232,13 +232,13 @@ export function FractionShape({
         })}
       </g>
       {isBar && (
-        <rect x={0} y={0} width={vw} height={vh} rx={10} fill="none" stroke={STROKE} strokeWidth={strokeW + 0.6} pointerEvents="none" />
+        <rect x={0} y={0} width={vw} height={vh} rx={4} fill="none" stroke={STROKE} strokeWidth={strokeW + 0.5} pointerEvents="none" />
       )}
       {focused !== null && (
         <path
           d={geometry[focused].d}
           fill="none"
-          stroke="#2e64d0"
+          stroke="#2f6fd8"
           strokeWidth={5}
           strokeLinejoin="round"
           pointerEvents="none"
@@ -252,11 +252,11 @@ export function FractionShape({
             key={`count-${p.index}`}
             initial={{ opacity: 0, scale: 0.4 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.15 + i * 0.22, type: "spring", stiffness: 400, damping: 22 }}
+            transition={{ delay: 0.15 + i * 0.22, duration: 0.2, ease: "easeOut" }}
             style={{ transformOrigin: `${p.cx}px ${p.cy}px`, transformBox: "view-box" }}
             pointerEvents="none"
           >
-            <circle cx={p.cx} cy={p.cy} r={fontSize * 0.72} fill={countParts === true ? "#2e64d0" : "#c24a2b"} />
+            <circle cx={p.cx} cy={p.cy} r={fontSize * 0.72} fill={countParts === true ? "#2f6fd8" : "#a3361a"} />
             <text
               x={p.cx}
               y={p.cy}

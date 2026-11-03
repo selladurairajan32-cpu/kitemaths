@@ -1,12 +1,14 @@
 "use client";
 
-import { motion } from "motion/react";
 import Link from "next/link";
 import { FlameGlyph, StarGlyph } from "@/components/kid/Celebrate";
-import { Kip, KipSays } from "@/components/kid/Kip";
+import { KipSays } from "@/components/kid/Kip";
 import { kidNext } from "@/components/kid/kidText";
+import { PaperIcon, type PaperIconName } from "@/components/paper/PaperIcon";
+import { PaperKite } from "@/components/paper/PaperKite";
+import { SkyScene } from "@/components/paper/SkyScene";
 import { ButtonLink } from "@/components/ui/Button";
-import { ArrowRightIcon, CheckIcon } from "@/components/ui/Icons";
+import { ArrowRightIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton, StorageNotice } from "@/components/ui/Screen";
 import { recommendNext, reviewSkills } from "@/engine/journey";
 import { activeDays, answeredToday, DAILY_GOAL, dayKey, levelFor, streakFor, totalStars } from "@/engine/rewards";
@@ -37,7 +39,6 @@ function KidHome() {
   const { topic, learner: inTopic, links } = useTopicState();
   const now = useNow();
   const { skillById, lessonLook } = topic;
-  const LESSONS = topic.lessons;
 
   const brandNew = inTopic.placement.status === "not-started" && learner.results.length === 0;
   const rec = recommendNext(topic, inTopic);
@@ -53,171 +54,128 @@ function KidHome() {
   });
   const review = reviewSkills(topic, inTopic);
   const name = learner.profile.name.trim();
-  const goalPct = Math.min(1, today / DAILY_GOAL);
+  const hello = `${greeting(now)}${name ? `, ${name}` : ""}.`;
 
   return (
-    <div className="space-y-5 sm:space-y-6">
+    <div className="space-y-10 sm:space-y-14">
       <StorageNotice />
 
-      {/* Hero */}
-      <motion.section
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand via-[#5b63ff] to-sky p-5 text-white shadow-[0_6px_0_var(--color-brand-strong)] sm:p-8"
-        aria-labelledby="hero-title"
-      >
-        <Clouds />
-        <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center">
-          <div className="flex items-center gap-4 sm:block">
-            <Kip mood={brandNew ? "cheer" : "happy"} size={brandNew ? 110 : 96} />
-            <p className="text-lg font-semibold sm:hidden">
-              {greeting(now)}
-              {name ? `, ${name}` : ""}!
-            </p>
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="hidden text-lg font-semibold text-white/85 sm:block">
-              {greeting(now)}
-              {name ? `, ${name}` : ""}!
-            </p>
-            {brandNew ? (
-              <>
-                <h1 id="hero-title" className="display mt-1 text-3xl leading-tight sm:text-4xl">
-                  I&apos;m Kip! Let&apos;s fly into fractions together.
-                </h1>
-                <p className="mt-2 max-w-lg text-white/90">First, a quick warm-up game so I know where your adventure should start.</p>
-                <ButtonLink href={links.start()} variant="sun" size="xl" className="mt-5">
-                  Start my adventure <ArrowRightIcon size={20} />
-                </ButtonLink>
-              </>
-            ) : (
-              <>
-                <p className="mt-1 inline-flex items-center gap-2 rounded-full bg-white/20 px-3 py-1 text-sm font-semibold">
-                  <span aria-hidden>{next.emoji}</span> {next.kicker}
-                </p>
-                <h1 id="hero-title" className="display mt-2 text-3xl leading-tight sm:text-4xl">
+      {/* What to do next: the one question this screen answers. */}
+      <section className="grid items-center gap-6 lg:grid-cols-2 lg:gap-10" aria-labelledby="next-title">
+        <div className="min-w-0">
+          <p className="text-lg text-ink-2">{hello}</p>
+          {brandNew ? (
+            <>
+              <h1 id="next-title" className="display mt-2 text-[1.75rem] sm:text-[2rem]">
+                I&apos;m Kip. Let&apos;s find your start.
+              </h1>
+              <p className="mt-3 max-w-md text-ink-2">A short warm-up game shows me which fraction lessons you already know, so you start in the right place.</p>
+              <ButtonLink href={links.start()} size="xl" className="mt-6">
+                Play the warm-up <ArrowRightIcon size={20} />
+              </ButtonLink>
+            </>
+          ) : (
+            <>
+              <div className="mt-2 flex items-center gap-3">
+                <PaperIcon name={next.icon} size={48} />
+                <h1 id="next-title" className="display min-w-0 text-[1.75rem] sm:text-[2rem]">
                   {next.title}
                 </h1>
-                <p className="mt-1.5 max-w-lg text-white/90">{next.line}</p>
-                <ButtonLink href={next.href} variant="sun" size="xl" className="mt-5">
-                  {next.cta} <ArrowRightIcon size={20} />
-                </ButtonLink>
-              </>
-            )}
-          </div>
+              </div>
+              <p className="mt-3 max-w-md text-ink-2">
+                {next.kicker}. {next.line}
+              </p>
+              <ButtonLink href={next.href} size="xl" className="mt-6">
+                {next.cta} <ArrowRightIcon size={20} />
+              </ButtonLink>
+            </>
+          )}
         </div>
-      </motion.section>
-
-      {/* Stats */}
-      <div className="grid gap-4 sm:grid-cols-3">
-        <Link href={routes.badges()} className="card group flex flex-col gap-3 p-5 transition-transform hover:-translate-y-0.5">
-          <div className="flex items-center justify-between">
-            <span className="eyebrow">My stars</span>
-            <span className="rounded-full bg-brand-soft px-2.5 py-0.5 text-xs font-bold text-brand-strong">Level {level.level}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <StarGlyph size={34} />
-            <span className="display text-4xl tabular-nums">{stars}</span>
-          </div>
-          <div>
-            <div className="h-3 overflow-hidden rounded-full bg-sun-soft" role="progressbar" aria-label="Progress to next level" aria-valuenow={level.into} aria-valuemax={level.needed} aria-valuemin={0}>
-              <motion.div className="h-full rounded-full bg-sun" initial={{ width: 0 }} animate={{ width: `${(level.into / level.needed) * 100}%` }} transition={{ type: "spring", stiffness: 80, damping: 18 }} />
-            </div>
-            <p className="mt-1.5 text-sm text-muted">
-              <strong className="text-ink">{level.title}</strong> · {level.needed - level.into} stars to level {level.level + 1}
-            </p>
-          </div>
-        </Link>
-
-        <section className="card flex flex-col gap-3 p-5" aria-labelledby="streak-title">
-          <div className="flex items-center justify-between">
-            <span id="streak-title" className="eyebrow">
-              My streak
-            </span>
-            {streak.best > 1 && <span className="text-xs font-semibold text-muted">Best: {streak.best}</span>}
-          </div>
-          <div className="flex items-center gap-2">
-            <FlameGlyph size={34} lit={streak.activeToday} />
-            <span className="display text-4xl tabular-nums">{streak.current}</span>
-            <span className="text-sm font-medium text-muted">{streak.current === 1 ? "day" : "days"}</span>
-          </div>
-          <ol className="flex justify-between gap-1" aria-label="Last 7 days">
-            {week.map((d) => (
-              <li key={d.key} className="flex flex-col items-center gap-1">
-                <span
-                  className={`grid size-8 place-items-center rounded-full text-xs font-bold ${
-                    d.done ? "bg-num text-white" : d.today ? "border-2 border-dashed border-num/60 text-num-strong" : "bg-sunk text-muted"
-                  }`}
-                  aria-label={`${d.today ? "Today" : d.key}: ${d.done ? "learned" : "not yet"}`}
-                >
-                  {d.done ? "✓" : d.letter}
-                </span>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        <section className="card flex items-center gap-4 p-5" aria-labelledby="goal-title">
-          <GoalRing value={goalPct}>
-            <span className="display text-2xl tabular-nums">{Math.min(today, DAILY_GOAL)}</span>
-            <span className="text-[0.7rem] font-semibold text-muted">of {DAILY_GOAL}</span>
-          </GoalRing>
-          <div>
-            <p id="goal-title" className="eyebrow">
-              Today&apos;s goal
-            </p>
-            <p className="display mt-1 text-xl leading-snug">{today >= DAILY_GOAL ? "Goal smashed! 🎉" : `Answer ${DAILY_GOAL} questions`}</p>
-            <p className="mt-1 text-sm text-muted">{today >= DAILY_GOAL ? "Anything more is a bonus." : "Every answer gets you closer."}</p>
-          </div>
-        </section>
-      </div>
+        <SkyScene progress={level.into / level.needed} nextLevel={level.level + 1} mood={brandNew ? "cheer" : "happy"} className="rounded-[4px]" />
+      </section>
 
       {review.length > 0 && (
         <KipSays mood="think" tone="sun" speak={`Let's revisit ${skillById(review[0]).title}. A little practice will make it strong again.`}>
-          Let&apos;s revisit <strong>{skillById(review[0]).title}</strong>. A little practice will make it strong again!{" "}
-          <Link href={links.practice(review[0])} className="font-semibold text-brand underline underline-offset-2">
+          Let&apos;s revisit <strong>{skillById(review[0]).title}</strong>. A little practice will make it strong again.{" "}
+          <Link href={links.practice(review[0])} className="font-semibold text-ink underline underline-offset-4">
             Practise it
           </Link>
         </KipSays>
       )}
 
-      {/* Sky path preview */}
-      <section className="card p-5 sm:p-6" aria-labelledby="path-title">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 id="path-title" className="display text-2xl">
-            {topic.look.emoji} {topic.title}
+      {/* Stars, streak and today's goal: one divided panel, label over figure. */}
+      <section aria-label="Your progress" className="grid rounded-[4px] bg-surface sm:grid-cols-3">
+        <Link href={routes.badges()} className="block p-5 hover:bg-raised sm:p-6">
+          <p className="text-base text-muted">Stars</p>
+          <p className="mt-1 flex items-center gap-2 text-[2rem] font-bold leading-none tracking-[-0.02em]">
+            <StarGlyph size={28} /> {stars}
+          </p>
+          <Meter value={level.into / level.needed} fill="bg-sun" label={`Level ${level.level}: ${level.into} of ${level.needed} stars`} />
+          <p className="mt-2 text-sm text-muted">
+            Level {level.level}, {level.title.toLowerCase()} · {level.needed - level.into} stars to level {level.level + 1}
+          </p>
+        </Link>
+        <div className="border-t border-line p-5 sm:border-l sm:border-t-0 sm:p-6">
+          <p className="text-base text-muted">Streak</p>
+          <p className="mt-1 flex items-center gap-2 text-[2rem] font-bold leading-none tracking-[-0.02em]">
+            <FlameGlyph size={28} lit={streak.activeToday} /> {streak.current} <span className="text-lg font-medium text-muted">{streak.current === 1 ? "day" : "days"}</span>
+          </p>
+          <ol className="mt-4 flex justify-between gap-1" aria-label="The last 7 days">
+            {week.map((d) => (
+              <li
+                key={d.key}
+                className={`grid size-8 place-items-center rounded-full text-sm font-semibold ${
+                  d.done ? "bg-ink text-white" : d.today ? "border-2 border-dashed border-ink/40 text-ink-2" : "bg-sunk text-muted"
+                }`}
+                aria-label={`${d.today ? "Today" : d.key}: ${d.done ? "learned" : "not yet"}`}
+              >
+                {d.letter}
+              </li>
+            ))}
+          </ol>
+        </div>
+        <div className="border-t border-line p-5 sm:border-l sm:border-t-0 sm:p-6">
+          <p className="text-base text-muted">Today</p>
+          <p className="mt-1 text-[2rem] font-bold leading-none tracking-[-0.02em]">
+            {Math.min(today, DAILY_GOAL)} <span className="text-lg font-medium text-muted">of {DAILY_GOAL} questions</span>
+          </p>
+          <Meter value={Math.min(1, today / DAILY_GOAL)} fill="bg-leaf" label={`${Math.min(today, DAILY_GOAL)} of ${DAILY_GOAL} questions today`} />
+          <p className="mt-2 text-sm text-muted">{today >= DAILY_GOAL ? "Goal done for today. Anything more is a bonus." : "Every answer counts, right or not yet."}</p>
+        </div>
+      </section>
+
+      {/* The island: one kite per lesson, filling as you go. */}
+      <section aria-labelledby="island-title">
+        <div className="flex flex-wrap items-center justify-between gap-x-4">
+          <h2 id="island-title" className="display text-2xl">
+            {topic.title}
           </h2>
-          <Link href={links.island()} className="inline-flex items-center gap-1 rounded-full bg-sky-soft px-3 py-1.5 text-sm font-semibold text-den-strong hover:bg-[#cce8ff]">
-            Open map <ArrowRightIcon size={15} />
+          <Link href={links.island()} className="-ml-3 inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full px-3 font-medium text-ink-2 hover:bg-sunk">
+            Open the island <ArrowRightIcon size={18} />
           </Link>
         </div>
-        <ol className="-mx-1 flex snap-x gap-3 overflow-x-auto px-1 pb-2">
-          {LESSONS.map((l, i) => {
+        <ol className="mt-4 grid grid-cols-4 gap-x-1 gap-y-3 md:grid-cols-8">
+          {topic.lessons.map((l, i) => {
             const p = inTopic.lessons[l.id];
             const done = !!p?.completed;
             const current = rec.kind === "lesson" && rec.lessonId === l.id;
-            const later = !done && !current && !(p && p.furthestStep > 0);
-            const look = lessonLook(l.id);
+            const panels = done ? 4 : p ? Math.min(3, Math.floor((p.furthestStep / l.steps.length) * 4)) : 0;
             return (
-              <li key={l.id} className="snap-start">
+              <li key={l.id}>
                 <Link
                   href={links.lesson(l.id)}
-                  className={`flex w-28 flex-col items-center gap-2 rounded-3xl border-2 p-3 text-center transition-transform hover:-translate-y-0.5 ${
-                    current ? "border-brand bg-brand-soft" : "border-line bg-surface"
-                  }`}
-                  aria-label={`Lesson ${i + 1}: ${l.title}${done ? " (done)" : current ? " (next)" : ""}`}
+                  className={`flex h-full flex-col items-center gap-2 rounded-[4px] px-1 py-2 text-center hover:bg-sunk ${current ? "bg-surface" : ""}`}
+                  aria-label={`Lesson ${i + 1}: ${l.title}${done ? ", done" : current ? ", next" : ""}`}
                 >
-                  <span className="relative grid size-14 place-items-center rounded-full text-2xl" style={{ background: look.soft }}>
-                    <span aria-hidden className={later ? "opacity-50" : ""}>
-                      {look.emoji}
-                    </span>
-                    {done && (
-                      <span className="absolute -bottom-1 -right-1 grid size-6 place-items-center rounded-full bg-ok-bright text-white ring-2 ring-white">
-                        <CheckIcon size={13} strokeWidth={3} />
+                  <span className="relative">
+                    <PaperKite filled={panels} outline={done || current || panels > 0 ? "solid" : "dashed"} tail={false} size={52} />
+                    <span className="absolute inset-0 grid place-items-center" aria-hidden>
+                      <span className="grid size-7 place-items-center rounded-full bg-surface">
+                        <PaperIcon name={lessonLook(l.id).icon} size={22} />
                       </span>
-                    )}
+                    </span>
                   </span>
-                  <span className={`text-xs font-semibold leading-tight ${later ? "text-muted" : "text-ink"}`}>{l.title}</span>
+                  <span className={`text-sm leading-tight ${current ? "font-semibold text-ink" : done ? "text-ink-2" : "text-muted"}`}>{l.title}</span>
                 </Link>
               </li>
             );
@@ -225,72 +183,40 @@ function KidHome() {
         </ol>
       </section>
 
-      {/* Play tiles */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <PlayTile href={links.practice()} emoji="🎯" title="Practice" line="Win stars" from="from-ok-bright" to="to-mint" edge="#139656" />
-        <PlayTile href={topic.ui.FreeLab ? links.lab() : routes.lab()} emoji="🧪" title="Lab" line="Build & explore" from="from-pink" to="to-num" edge="#d93a7f" />
-        <PlayTile href={routes.journey()} emoji="🗺️" title="World map" line="Every island" from="from-sky" to="to-den" edge="#1d55d8" />
-        <PlayTile href={routes.badges()} emoji="🏅" title="Badges" line="Your trophies" from="from-sun" to="to-[#ff9d2e]" edge="#e08a00" dark />
-      </div>
+      {/* Other things to do. */}
+      <section aria-labelledby="more-title">
+        <h2 id="more-title" className="display text-2xl">
+          More to do
+        </h2>
+        <ul className="mt-4 divide-y divide-line rounded-[4px] bg-surface">
+          <MoreRow href={links.practice()} icon="target" title="Practice" line="Ten questions across every skill, with stars for each one." />
+          {topic.ui.FreeLab && <MoreRow href={links.lab()} icon="lab" title="The lab" line="Cut, colour and compare fractions in free play." />}
+          <MoreRow href={routes.journey()} icon="map" title="World map" line="Every island, and the ones opening soon." />
+        </ul>
+      </section>
     </div>
   );
 }
 
-function PlayTile({ href, emoji, title, line, from, to, edge, dark = false }: { href: string; emoji: string; title: string; line: string; from: string; to: string; edge: string; dark?: boolean }) {
+function Meter({ value, fill, label }: { value: number; fill: string; label: string }) {
   return (
-    <Link
-      href={href}
-      className={`press flex min-h-32 flex-col justify-between rounded-[1.75rem] bg-gradient-to-br ${from} ${to} p-4 ${dark ? "text-ink" : "text-white"} sm:p-5`}
-      style={{ boxShadow: `0 5px 0 ${edge}`, ["--press-edge" as string]: edge }}
-    >
-      <span className="text-4xl drop-shadow-sm" aria-hidden>
-        {emoji}
-      </span>
-      <span>
-        <span className="display block text-xl leading-tight">{title}</span>
-        <span className={`text-sm font-medium ${dark ? "text-ink/75" : "text-white/90"}`}>{line}</span>
-      </span>
-    </Link>
-  );
-}
-
-function GoalRing({ value, children }: { value: number; children: React.ReactNode }) {
-  const size = 92;
-  const stroke = 10;
-  const r = (size - stroke) / 2;
-  const c = 2 * Math.PI * r;
-  return (
-    <div className="relative grid shrink-0 place-items-center" style={{ width: size, height: size }} role="img" aria-label={`Daily goal ${Math.round(value * 100)}% done`}>
-      <svg width={size} height={size} className="-rotate-90" aria-hidden>
-        <circle cx={size / 2} cy={size / 2} r={r} strokeWidth={stroke} className="fill-none stroke-ok-soft" />
-        <motion.circle
-          cx={size / 2}
-          cy={size / 2}
-          r={r}
-          strokeWidth={stroke}
-          strokeLinecap="round"
-          className="fill-none stroke-ok-bright"
-          strokeDasharray={c}
-          initial={{ strokeDashoffset: c }}
-          animate={{ strokeDashoffset: c * (1 - value) }}
-          transition={{ type: "spring", stiffness: 70, damping: 18 }}
-        />
-      </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center leading-none">{children}</div>
+    <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-sunk" role="progressbar" aria-label={label} aria-valuenow={Math.round(value * 100)} aria-valuemin={0} aria-valuemax={100}>
+      <div className={`h-full rounded-full ${fill}`} style={{ width: `${Math.round(Math.max(0, Math.min(1, value)) * 100)}%` }} />
     </div>
   );
 }
 
-function Clouds() {
+function MoreRow({ href, icon, title, line }: { href: string; icon: PaperIconName; title: string; line: string }) {
   return (
-    <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-25" aria-hidden preserveAspectRatio="none">
-      <g fill="#fff">
-        <ellipse cx="85%" cy="18%" rx="70" ry="22" />
-        <ellipse cx="80%" cy="14%" rx="38" ry="22" />
-        <ellipse cx="60%" cy="88%" rx="90" ry="24" />
-        <ellipse cx="66%" cy="82%" rx="44" ry="24" />
-        <ellipse cx="10%" cy="92%" rx="60" ry="18" />
-      </g>
-    </svg>
+    <li>
+      <Link href={href} className="flex min-h-20 items-center gap-4 px-5 py-3 hover:bg-raised">
+        <PaperIcon name={icon} size={40} />
+        <span className="min-w-0 flex-1">
+          <span className="block text-lg font-semibold text-ink">{title}</span>
+          <span className="block text-base text-muted">{line}</span>
+        </span>
+        <ArrowRightIcon size={20} className="shrink-0 text-ink-2" />
+      </Link>
+    </li>
   );
 }

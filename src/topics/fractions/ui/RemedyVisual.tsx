@@ -48,7 +48,7 @@ export function RemedyVisual({ misconception }: { misconception: string }) {
         <Panel caption="1 shaded + 3 not shaded = **4 parts altogether**. The denominator is 4, so this is {1/4}.">
           <div className="flex w-full flex-col items-center gap-3">
             <FractionShape diagram={{ shape: "bar", parts: 4, shaded: [0] }} countParts size="sm" />
-            <div className="flex flex-wrap justify-center gap-2 text-xs font-medium">
+            <div className="flex flex-wrap justify-center gap-2 text-sm font-medium">
               <span className="rounded-full bg-num-soft px-2.5 py-1 text-num-strong">1 shaded</span>
               <span className="rounded-full bg-sunk px-2.5 py-1 text-ink-2">3 not shaded</span>
               <span className="rounded-full bg-den-soft px-2.5 py-1 text-den-strong">4 in the whole</span>
@@ -102,7 +102,7 @@ function Panel({
 }) {
   const border = tone === "num" ? "border-num/30" : tone === "den" ? "border-den/30" : tone === "ok" ? "border-ok/30" : "border-line";
   return (
-    <figure className={`flex flex-col items-center gap-3 rounded-2xl border bg-surface p-4 ${border}`}>
+    <figure className={`flex flex-col items-center gap-3 rounded-[4px] border bg-surface p-4 ${border}`}>
       <div className="flex w-full justify-center">{children}</div>
       <figcaption className="text-center text-sm leading-relaxed text-ink-2">
         <RichText text={caption} />

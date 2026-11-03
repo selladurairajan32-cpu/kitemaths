@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { PaperIcon } from "@/components/paper/PaperIcon";
 import Link from "next/link";
 import { Kip } from "@/components/kid/Kip";
 import { CheckIcon, LockIcon } from "@/components/ui/Icons";
@@ -40,11 +41,11 @@ export function WorldMapScreen() {
             transition={{ delay: wi * 0.05 }}
             className="overflow-hidden rounded-[2rem] border-2 border-line bg-surface shadow-[var(--shadow-card)]"
           >
-            <div className="flex items-center gap-3 px-5 py-4" style={{ background: world.soft }}>
+            <div className="flex items-center gap-3 px-5 py-4" style={{ background: world.field }}>
               <span className="grid size-12 place-items-center rounded-2xl bg-white/80 text-2xl" aria-hidden>
-                {world.emoji}
+                <PaperIcon name={world.icon} size={36} />
               </span>
-              <h2 className="display text-2xl" style={{ color: world.color }}>
+              <h2 className="display text-2xl" style={{ color: world.text === "white" ? "#ffffff" : "#13203a" }}>
                 {world.title}
               </h2>
             </div>
@@ -55,7 +56,7 @@ export function WorldMapScreen() {
                   return (
                     <li key={island.title} className="flex items-center gap-3 rounded-2xl border-2 border-dashed border-line bg-paper p-3 text-muted">
                       <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-sunk text-xl opacity-60" aria-hidden>
-                        {island.emoji}
+                        <PaperIcon name={island.icon} size={28} muted />
                       </span>
                       <span className="min-w-0">
                         <span className="block text-sm font-semibold leading-tight">{island.title}</span>
@@ -78,7 +79,7 @@ export function WorldMapScreen() {
                       style={{ boxShadow: `0 4px 0 ${isHere ? "var(--color-brand-strong)" : "var(--color-line)"}` }}
                     >
                       <span className="relative grid size-11 shrink-0 place-items-center rounded-xl text-xl" style={{ background: topic.look.soft }} aria-hidden>
-                        {topic.look.emoji}
+                        <PaperIcon name={topic.look.icon} size={28} />
                         {finished && (
                           <span className="absolute -bottom-1 -right-1 grid size-5 place-items-center rounded-full bg-ok-bright text-white ring-2 ring-white">
                             <CheckIcon size={11} strokeWidth={3} />

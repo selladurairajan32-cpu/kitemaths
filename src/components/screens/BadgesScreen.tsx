@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { PaperKite, type KitePattern } from "@/components/paper/PaperKite";
 import { StarGlyph } from "@/components/kid/Celebrate";
 import { Kip } from "@/components/kid/Kip";
 import { ScreenSkeleton } from "@/components/ui/Screen";
@@ -58,7 +59,7 @@ export function BadgesScreen() {
               }`}
             >
               <span aria-hidden className={b.earned ? "" : "opacity-30 grayscale"}>
-                {b.icon}
+                <PaperKite pattern={b.pattern as KitePattern} filled={b.earned ? 4 : 0} outline={b.earned ? "solid" : "dashed"} tail={false} size={44} />
               </span>
             </span>
             <p className="display text-base leading-tight">{b.title}</p>

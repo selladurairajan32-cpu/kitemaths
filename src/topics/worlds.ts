@@ -1,20 +1,23 @@
+import type { PaperIconName } from "@/components/paper/PaperIcon";
+
 /**
  * The worlds (strands) of the maths map and the islands planned for each.
- * Islands with a `topicId` are playable; the rest show as "coming soon".
+ * Islands with a `topicId` are playable; the rest show as "opens soon".
  * The order follows docs/ROADMAP.md.
  */
 export interface IslandPlan {
   title: string;
-  emoji: string;
+  icon: PaperIconName;
   topicId?: string;
 }
 
 export interface World {
   id: string;
   title: string;
-  emoji: string;
-  color: string;
-  soft: string;
+  icon: PaperIconName;
+  /** The world's band: a flat field of one paper colour, with ink or white text on it. */
+  field: string;
+  text: "ink" | "white";
   islands: IslandPlan[];
 }
 
@@ -22,74 +25,74 @@ export const WORLDS: World[] = [
   {
     id: "number",
     title: "Number Peaks",
-    emoji: "🏔️",
-    color: "#2f74ff",
-    soft: "#e2ecff",
+    icon: "mountain",
+    field: "#d6ecfd",
+    text: "ink",
     islands: [
-      { title: "Place value", emoji: "🔟" },
-      { title: "Rounding & estimating", emoji: "🎯" },
-      { title: "Negative numbers", emoji: "🌡️" },
+      { title: "Place value", icon: "place-value" },
+      { title: "Rounding and estimating", icon: "rounding" },
+      { title: "Negative numbers", icon: "thermometer" },
     ],
   },
   {
     id: "calc",
     title: "Calculation Coast",
-    emoji: "🏖️",
-    color: "#1fbfae",
-    soft: "#d8f7f3",
+    icon: "wave",
+    field: "#dcf3e5",
+    text: "ink",
     islands: [
-      { title: "Add & subtract", emoji: "➕" },
-      { title: "Times tables", emoji: "✖️" },
-      { title: "Multiply & divide", emoji: "➗" },
+      { title: "Add and subtract", icon: "plus" },
+      { title: "Times tables", icon: "times" },
+      { title: "Multiply and divide", icon: "divide" },
     ],
   },
   {
     id: "fdp",
     title: "Fraction Falls",
-    emoji: "🍕",
-    color: "#ff6a45",
-    soft: "#ffe7df",
+    icon: "falls",
+    field: "#fde5dc",
+    text: "ink",
     islands: [
-      { title: "Fractions foundations", emoji: "🍕", topicId: "fractions" },
-      { title: "Fractions 2", emoji: "🧩" },
-      { title: "Decimals", emoji: "🔸" },
-      { title: "Percentages", emoji: "💯" },
+      { title: "Fractions foundations", icon: "pizza", topicId: "fractions" },
+      { title: "Fractions 2", icon: "puzzle" },
+      { title: "Decimals", icon: "decimal" },
+      { title: "Percentages", icon: "percent" },
     ],
   },
   {
     id: "measure",
     title: "Measure Meadows",
-    emoji: "📏",
-    color: "#22c174",
-    soft: "#d9f7e8",
+    icon: "meadow",
+    field: "#fff4d4",
+    text: "ink",
     islands: [
-      { title: "Money", emoji: "🪙" },
-      { title: "Time", emoji: "⏰" },
-      { title: "Area & perimeter", emoji: "📐" },
+      { title: "Money", icon: "coin" },
+      { title: "Time", icon: "clock" },
+      { title: "Area and perimeter", icon: "area" },
     ],
   },
   {
     id: "shape",
     title: "Shape Shores",
-    emoji: "🔺",
-    color: "#6a4cff",
-    soft: "#ece7ff",
+    icon: "shapes",
+    field: "#d6ecfd",
+    text: "ink",
     islands: [
-      { title: "Shapes & angles", emoji: "📐" },
-      { title: "Coordinates", emoji: "🧭" },
-      { title: "Charts & data", emoji: "📊" },
+      { title: "Shapes and angles", icon: "angle" },
+      { title: "Coordinates", icon: "compass" },
+      { title: "Charts and data", icon: "chart" },
     ],
   },
   {
     id: "summit",
     title: "11+ Summit",
-    emoji: "🏆",
-    color: "#f0a800",
-    soft: "#fff5cf",
+    icon: "summit",
+    field: "#13203a",
+    text: "white",
     islands: [
-      { title: "Ratio & algebra", emoji: "⚖️" },
-      { title: "Problem solving", emoji: "🧠" },
-      { title: "Mock exams", emoji: "📝" },
+      { title: "Ratio and algebra", icon: "ratio" },
+      { title: "Problem solving", icon: "bulb" },
+      { title: "Mock exams", icon: "exam" },
     ],
   },
 ];

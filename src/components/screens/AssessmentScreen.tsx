@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { PaperIcon } from "@/components/paper/PaperIcon";
 import { useState } from "react";
 import { Confetti, StarGlyph } from "@/components/kid/Celebrate";
 import { Kip, KipSays } from "@/components/kid/Kip";
@@ -70,7 +71,7 @@ export function AssessmentScreen() {
   if (a.status === "in-progress") {
     return (
       <AttemptRunner
-        title="The big challenge 🏆"
+        title="The big challenge"
         order={a.order}
         index={a.index}
         responses={a.responses}
@@ -137,7 +138,7 @@ export function AssessmentScreen() {
       )}
       <div className="flex items-center gap-4">
         <span className="grid size-16 shrink-0 place-items-center rounded-3xl bg-gradient-to-br from-sun to-[#ff9d2e] text-4xl shadow-[0_4px_0_#e08a00]" aria-hidden>
-          🏆
+          <PaperIcon name="trophy" size={40} />
         </span>
         <div>
           <p className="eyebrow">Show what you know</p>

@@ -46,15 +46,15 @@ export function StackedBars({
                   y={y}
                   width={pw}
                   height={rowH}
-                  fill={i < r.f.n ? "#ef8a6b" : "#fff"}
-                  stroke="#1b2130"
-                  strokeWidth={2}
+                  fill={i < r.f.n ? "#f4623a" : "#fff"}
+                  stroke="#13203a"
+                  strokeWidth={2.5}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: ri * 0.12 + i * 0.03 }}
                 />
               ))}
-              <rect x={0} y={y} width={W} height={rowH} fill="none" stroke="#1b2130" strokeWidth={2.6} rx={4} />
+              <rect x={0} y={y} width={W} height={rowH} fill="none" stroke="#13203a" strokeWidth={3} rx={4} />
             </g>
           );
         })}
@@ -64,7 +64,7 @@ export function StackedBars({
             x2={guideX}
             y1={-2}
             y2={H + 2}
-            stroke="#2e64d0"
+            stroke="#2f6fd8"
             strokeWidth={3}
             strokeDasharray="7 6"
             initial={{ pathLength: 0 }}
@@ -121,9 +121,9 @@ export function FractionWall({ denominators, highlight = [] }: { denominators: n
                   y={y}
                   width={pw}
                   height={rowH}
-                  fill={hl && i === 0 ? "#ef8a6b" : ri % 2 ? "#f3f0ea" : "#ffffff"}
-                  stroke="#1b2130"
-                  strokeWidth={1.8}
+                  fill={hl && i === 0 ? "#f4623a" : ri % 2 ? "#f4f9fe" : "#ffffff"}
+                  stroke="#13203a"
+                  strokeWidth={2.2}
                 />
                 <text
                   x={i * pw + pw / 2}
@@ -132,7 +132,7 @@ export function FractionWall({ denominators, highlight = [] }: { denominators: n
                   dominantBaseline="central"
                   fontSize={d >= 8 ? 13 : 15}
                   fontWeight={600}
-                  fill={hl && i === 0 ? "#fff" : "#3a4254"}
+                  fill={hl && i === 0 ? "#fff" : "#2e3a52"}
                 >
                   {d === 1 ? "1 whole" : `1/${d}`}
                 </text>
@@ -161,7 +161,7 @@ export function Counters({ amount, groups, highlight }: { amount: number; groups
             <motion.div
               key={g}
               layout
-              className={`flex flex-col items-center gap-1.5 rounded-2xl border-2 p-2.5 transition-colors ${
+              className={`flex flex-col items-center gap-1.5 rounded-[4px] border-2 p-2.5 transition-colors ${
                 on ? "border-num bg-num-soft" : "border-dashed border-line-strong bg-surface"
               }`}
             >
@@ -172,11 +172,11 @@ export function Counters({ amount, groups, highlight }: { amount: number; groups
                     className={`block size-5 rounded-full border-2 sm:size-6 ${on ? "border-num-strong bg-num" : "border-ink-2 bg-white"}`}
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    transition={{ delay: (g * per + i) * 0.02, type: "spring", stiffness: 500, damping: 25 }}
+                    transition={{ delay: (g * per + i) * 0.02, duration: 0.2, ease: "easeOut" }}
                   />
                 ))}
               </div>
-              <span className={`text-xs font-semibold ${on ? "text-num-strong" : "text-muted"}`}>{per}</span>
+              <span className={`text-sm font-semibold ${on ? "text-num-strong" : "text-muted"}`}>{per}</span>
             </motion.div>
           );
         })}
@@ -193,10 +193,10 @@ export function Counters({ amount, groups, highlight }: { amount: number; groups
 function Pizza() {
   return (
     <svg viewBox="0 0 100 100" className="size-12 sm:size-20" aria-hidden>
-      <circle cx="50" cy="50" r="44" fill="#f4c27a" stroke="#1b2130" strokeWidth="2.5" />
-      <circle cx="50" cy="50" r="36" fill="#ef8a6b" />
+      <circle cx="50" cy="50" r="44" fill="#ffc23d" stroke="#13203a" strokeWidth="2.5" />
+      <circle cx="50" cy="50" r="36" fill="#f4623a" />
       {[[38, 36], [62, 40], [46, 62], [66, 62], [30, 56], [54, 28]].map(([x, y], i) => (
-        <circle key={i} cx={x} cy={y} r="5" fill="#fff4dc" />
+        <circle key={i} cx={x} cy={y} r="5" fill="#fff4d4" />
       ))}
     </svg>
   );
@@ -204,7 +204,7 @@ function Pizza() {
 function Chocolate() {
   return (
     <svg viewBox="0 0 120 70" className="h-9 w-16 sm:h-16 sm:w-28" aria-hidden>
-      <rect x="4" y="6" width="112" height="58" rx="6" fill="#7a4a32" stroke="#1b2130" strokeWidth="2.5" />
+      <rect x="4" y="6" width="112" height="58" rx="6" fill="#7a4a32" stroke="#13203a" strokeWidth="2.5" />
       {range(4).map((c) =>
         range(2).map((r) => <rect key={`${c}${r}`} x={10 + c * 26.5} y={12 + r * 25} width="22" height="21" rx="3" fill="#8f5a3e" stroke="#5f3826" strokeWidth="1.5" />),
       )}
@@ -214,8 +214,8 @@ function Chocolate() {
 function Ribbon() {
   return (
     <svg viewBox="0 0 140 50" className="h-8 w-18 sm:h-14 sm:w-32" aria-hidden>
-      <path d="M6 18 h128 v14 h-128 Z" fill="#6b4fd8" stroke="#1b2130" strokeWidth="2.5" strokeLinejoin="round" />
-      <path d="M6 18 l-4 7 4 7 M134 18 l4 7 -4 7" fill="none" stroke="#1b2130" strokeWidth="2" />
+      <path d="M6 18 h128 v14 h-128 Z" fill="#4da8f0" stroke="#13203a" strokeWidth="2.5" strokeLinejoin="round" />
+      <path d="M6 18 l-4 7 4 7 M134 18 l4 7 -4 7" fill="none" stroke="#13203a" strokeWidth="2" />
     </svg>
   );
 }
@@ -223,7 +223,7 @@ function Marbles() {
   return (
     <svg viewBox="0 0 110 70" className="h-9 w-16 sm:h-16 sm:w-28" aria-hidden>
       {[[22, 48], [46, 48], [70, 48], [34, 26], [58, 26], [90, 48]].map(([x, y], i) => (
-        <circle key={i} cx={x} cy={y} r="10" fill={["#2e64d0", "#e0603f", "#1f8a5b", "#a86a12", "#6b4fd8", "#2e64d0"][i]} stroke="#1b2130" strokeWidth="2" />
+        <circle key={i} cx={x} cy={y} r="10" fill={["#2f6fd8", "#f4623a", "#2e9d61", "#d99a00", "#4da8f0", "#2f6fd8"][i]} stroke="#13203a" strokeWidth="2" />
       ))}
     </svg>
   );
@@ -241,7 +241,7 @@ export function EverydayWholes() {
       {items.map((it, i) => (
         <motion.li
           key={it.label}
-          className="flex items-center gap-3 rounded-2xl border border-line bg-surface px-3 py-2.5 sm:flex-col sm:gap-2 sm:py-4 sm:text-center"
+          className="flex items-center gap-3 rounded-[4px] border border-line bg-surface px-3 py-2.5 sm:flex-col sm:gap-2 sm:py-4 sm:text-center"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.08 }}
@@ -266,7 +266,7 @@ export function SplitDemo() {
             role="radio"
             aria-checked={people === n}
             onClick={() => setPeople(n)}
-            className={`h-11 min-w-11 rounded-xl px-3 text-sm font-semibold transition-colors ${
+            className={`h-11 min-w-11 rounded-[4px] px-3 text-sm font-semibold transition-colors ${
               people === n ? "bg-ink text-white" : "border border-line-strong bg-surface hover:bg-sunk"
             }`}
           >
@@ -274,7 +274,7 @@ export function SplitDemo() {
           </button>
         ))}
       </div>
-      <motion.div key={people} className="w-full" initial={{ scaleX: 0.96, opacity: 0.4 }} animate={{ scaleX: 1, opacity: 1 }} transition={{ type: "spring", stiffness: 300, damping: 24 }}>
+      <motion.div key={people} className="w-full" initial={{ scaleX: 0.96, opacity: 0.4 }} animate={{ scaleX: 1, opacity: 1 }} transition={{ duration: 0.2, ease: "easeOut" }}>
         <FractionShape diagram={{ shape: "bar", parts: people, shaded: [0] }} size="lg" className="mx-auto" />
       </motion.div>
       <p className="text-center text-ink-2" aria-live="polite">
@@ -294,14 +294,14 @@ export function SplitDemo() {
 export function FairUnfair() {
   return (
     <div className="grid w-full grid-cols-2 gap-3 sm:gap-6">
-      <figure className="flex flex-col items-center gap-3 rounded-2xl border-2 border-ok/40 bg-ok-soft/50 p-4">
+      <figure className="flex flex-col items-center gap-3 rounded-[4px] border-2 border-ok/40 bg-ok-soft/50 p-4">
         <FractionShape diagram={{ shape: "circle", parts: 4 }} size="sm" label="A pizza cut into 4 equal slices" />
         <figcaption className="text-center text-sm">
           <span className="font-semibold text-ok">Fair ✓</span>
           <br />4 equal slices — these are quarters
         </figcaption>
       </figure>
-      <figure className="flex flex-col items-center gap-3 rounded-2xl border-2 border-num/40 bg-num-soft/50 p-4">
+      <figure className="flex flex-col items-center gap-3 rounded-[4px] border-2 border-num/40 bg-num-soft/50 p-4">
         <FractionShape diagram={{ shape: "circle", parts: 4, sizes: [3, 1, 2, 2] }} size="sm" label="A pizza cut into 4 unequal slices" />
         <figcaption className="text-center text-sm">
           <span className="font-semibold text-num-strong">Not fair ✗</span>
@@ -324,7 +324,7 @@ export function Anatomy({ fraction }: { fraction: Fraction }) {
             type="button"
             onClick={() => setFocus(focus === "num" ? null : "num")}
             aria-pressed={focus === "num"}
-            className={`rounded-xl border-2 px-3 py-2 text-left transition-colors ${focus === "num" ? "border-num bg-num-soft" : "border-transparent hover:bg-sunk"}`}
+            className={`rounded-[4px] border-2 px-3 py-2 text-left transition-colors ${focus === "num" ? "border-num bg-num-soft" : "border-transparent hover:bg-sunk"}`}
           >
             <span className="block font-semibold text-num-strong">Numerator</span>
             <span className="text-ink-2">parts we&apos;re talking about</span>
@@ -333,7 +333,7 @@ export function Anatomy({ fraction }: { fraction: Fraction }) {
             type="button"
             onClick={() => setFocus(focus === "den" ? null : "den")}
             aria-pressed={focus === "den"}
-            className={`rounded-xl border-2 px-3 py-2 text-left transition-colors ${focus === "den" ? "border-den bg-den-soft" : "border-transparent hover:bg-sunk"}`}
+            className={`rounded-[4px] border-2 px-3 py-2 text-left transition-colors ${focus === "den" ? "border-den bg-den-soft" : "border-transparent hover:bg-sunk"}`}
           >
             <span className="block font-semibold text-den">Denominator</span>
             <span className="text-ink-2">equal parts in the whole</span>

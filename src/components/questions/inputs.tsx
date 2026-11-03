@@ -1,29 +1,34 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { CheckIcon, CloseIcon } from "@/components/ui/Icons";
 
 /* Building blocks shared by every topic's question inputs. */
 
 export type Mark = "correct" | "wrong" | "missed" | null;
 
+/**
+ * Answer tiles: square paper with a quiet edge and a darker bottom edge that
+ * sinks when pressed (kid exception 3). Selected tiles get a 2px ink outline.
+ */
 export function optionClass(selected: boolean, mark: Mark, locked: boolean) {
   const base =
-    "relative flex cursor-pointer items-center justify-center gap-3 rounded-2xl border-2 bg-surface px-4 py-3 transition-[border-color,background-color,box-shadow,transform] duration-150 has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-den/25";
-  if (mark === "correct") return `${base} border-ok bg-ok-soft`;
+    "relative flex cursor-pointer items-center justify-center gap-3 rounded-[4px] border-2 border-b-4 bg-surface px-4 py-3 transition-[border-color,background-color,transform] duration-100 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ink";
+  if (mark === "correct") return `${base} border-ok-bright bg-ok-soft`;
   if (mark === "wrong") return `${base} border-num bg-num-soft`;
-  if (mark === "missed") return `${base} border-dashed border-ok`;
-  if (selected) return `${base} border-ink bg-sunk shadow-[0_0_0_1px_var(--color-ink)]`;
-  return `${base} border-line ${locked ? "cursor-default" : "hover:border-line-strong hover:bg-paper active:scale-[0.99]"}`;
+  if (mark === "missed") return `${base} border-dashed border-ok-bright`;
+  if (selected) return `${base} border-ink`;
+  return `${base} border-line border-b-line-strong ${locked ? "cursor-default" : "hover:bg-raised active:translate-y-[2px] active:border-b-2"}`;
 }
 
 export function MarkIcon({ mark }: { mark: Mark }) {
   if (!mark || mark === "missed") return null;
   return (
     <span
-      className={`absolute -right-2 -top-2 grid size-6 place-items-center rounded-full text-xs font-bold text-white ${mark === "correct" ? "bg-ok" : "bg-num"}`}
+      className={`absolute -right-2 -top-2 grid size-7 place-items-center rounded-full text-sm font-bold text-white ${mark === "correct" ? "bg-ok" : "bg-num-strong"}`}
       aria-hidden
     >
-      {mark === "correct" ? "✓" : "✗"}
+      {mark === "correct" ? <CheckIcon size={15} strokeWidth={3} /> : <CloseIcon size={15} strokeWidth={3} />}
     </span>
   );
 }
@@ -68,7 +73,7 @@ export function RadioOption({
 }
 
 export function Figure({ children }: { children: ReactNode }) {
-  return <div className="flex w-full justify-center rounded-2xl bg-paper px-4 py-6 sm:py-8">{children}</div>;
+  return <div className="flex w-full justify-center rounded-[4px] bg-surface px-4 py-6 sm:py-8">{children}</div>;
 }
 
 export function NumberInput({
@@ -88,8 +93,8 @@ export function NumberInput({
   size?: "md" | "lg";
   tone?: "ink" | "num" | "den";
 }) {
-  const ring = { ink: "border-line-strong focus:border-ink", num: "border-num/60 focus:border-num", den: "border-den/60 focus:border-den" }[tone];
-  const text = { ink: "text-ink", num: "text-num-strong", den: "text-den" }[tone];
+  const ring = { ink: "border-line-strong focus:border-ink", num: "border-num focus:border-num-strong", den: "border-den focus:border-den-strong" }[tone];
+  const text = { ink: "text-ink", num: "text-num-strong", den: "text-den-strong" }[tone];
   const input = (
     <input
       type="text"
@@ -102,8 +107,8 @@ export function NumberInput({
         const digits = e.target.value.replace(/[^0-9]/g, "").slice(0, 4);
         onValue(digits === "" ? null : Number(digits));
       }}
-      className={`rounded-xl border-2 bg-surface text-center font-semibold tabular-nums outline-none transition-colors disabled:bg-sunk ${ring} ${text} ${
-        size === "lg" ? "h-16 w-28 text-3xl" : "h-12 w-16 text-2xl"
+      className={`rounded-[4px] border-2 bg-surface text-center font-semibold tabular-nums outline-none transition-colors disabled:bg-sunk ${ring} ${text} ${
+        size === "lg" ? "h-16 w-28 text-[2rem]" : "h-12 w-16 text-2xl"
       }`}
     />
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { PaperIcon } from "@/components/paper/PaperIcon";
 import { AttemptRunner } from "@/components/questions/AttemptRunner";
 import { Button, buttonClass } from "@/components/ui/Button";
 import { ArrowRightIcon } from "@/components/ui/Icons";
@@ -56,7 +57,7 @@ export function RecheckScreen({ skill }: { skill: string }) {
     <section className="card mx-auto max-w-2xl p-6 sm:p-10">
       <div className="flex items-center gap-4">
         <span className="grid size-16 shrink-0 place-items-center rounded-3xl bg-gradient-to-br from-mint to-sky text-4xl shadow-[0_4px_0_#1597a0]" aria-hidden>
-          🔁
+          <PaperIcon name="recheck" size={40} />
         </span>
         <div>
           <p className="eyebrow">Quick recheck</p>

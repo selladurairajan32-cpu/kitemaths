@@ -36,7 +36,7 @@ export function Stepper({
       <span className="text-sm font-medium text-ink-2" id={labelId}>
         {label}
       </span>
-      <div className="flex items-center rounded-xl border border-line-strong bg-surface" role="group" aria-labelledby={labelId}>
+      <div className="flex items-center rounded-full border border-line-strong bg-surface" role="group" aria-labelledby={labelId}>
         <button
           type="button"
           className="grid size-11 place-items-center rounded-l-xl text-xl font-medium hover:bg-sunk disabled:text-line-strong"
@@ -76,7 +76,7 @@ function Segmented<T extends string>({
 }) {
   const layoutId = useId();
   return (
-    <div role="radiogroup" aria-label={label} className="inline-flex rounded-xl bg-sunk p-1">
+    <div role="radiogroup" aria-label={label} className="inline-flex rounded-full bg-sunk p-1">
       {options.map((o) => (
         <button
           key={o.value}
@@ -84,10 +84,10 @@ function Segmented<T extends string>({
           role="radio"
           aria-checked={value === o.value}
           onClick={() => onChange(o.value)}
-          className={`relative h-11 rounded-lg px-4 text-sm font-medium transition-colors ${value === o.value ? "text-ink" : "text-muted hover:text-ink"}`}
+          className={`relative h-11 rounded-full px-4 text-sm font-medium transition-colors ${value === o.value ? "text-ink" : "text-muted hover:text-ink"}`}
         >
           {value === o.value && (
-            <motion.span layoutId={layoutId} className="absolute inset-0 rounded-lg bg-surface shadow-sm" transition={{ type: "spring", stiffness: 400, damping: 32 }} />
+            <motion.span layoutId={layoutId} className="absolute inset-0 rounded-full bg-surface" transition={{ duration: 0.18, ease: "easeOut" }} />
           )}
           <span className="relative">{o.label}</span>
         </button>
@@ -167,7 +167,7 @@ export function FractionLab({
         />
       )}
 
-      <div className="rounded-2xl border border-line bg-paper p-4 sm:p-6">
+      <div className="rounded-[4px] border border-line bg-raised p-4 sm:p-6">
         {mode === "build" && (
           <div className="space-y-6">
             <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
@@ -194,15 +194,15 @@ export function FractionLab({
               <div className="flex flex-col items-center gap-3 md:w-64 md:items-start">
                 <Readout f={snapshot.build} />
                 <div className="flex gap-2">
-                  <button type="button" className="h-11 rounded-lg px-3 text-sm font-medium text-ink-2 hover:bg-sunk" onClick={() => setBuild((s) => ({ ...s, shaded: range(s.parts) }))}>
+                  <button type="button" className="h-11 rounded-full px-3 text-sm font-medium text-ink-2 hover:bg-sunk" onClick={() => setBuild((s) => ({ ...s, shaded: range(s.parts) }))}>
                     Shade all
                   </button>
-                  <button type="button" className="h-11 rounded-lg px-3 text-sm font-medium text-ink-2 hover:bg-sunk" onClick={() => setBuild((s) => ({ ...s, shaded: [] }))}>
+                  <button type="button" className="h-11 rounded-full px-3 text-sm font-medium text-ink-2 hover:bg-sunk" onClick={() => setBuild((s) => ({ ...s, shaded: [] }))}>
                     Clear
                   </button>
                 </div>
                 {snapshot.build.n > 0 && snapshot.build.n === snapshot.build.d && (
-                  <p className="rounded-lg bg-ok-soft px-3 py-1.5 text-sm text-ok">All parts shaded = one whole!</p>
+                  <p className="rounded-[4px] bg-ok-soft px-3 py-1.5 text-sm text-ok">All parts shaded = one whole!</p>
                 )}
               </div>
             </div>
@@ -255,7 +255,7 @@ export function FractionLab({
 
       {visibleChallenges.length > 0 && (
         <div>
-          <p className="eyebrow mb-2">Challenges</p>
+          <h3 className="mb-2 text-lg font-semibold">Challenges</h3>
           <ul className="space-y-2">
             {visibleChallenges.map((c) => (
               <ChallengeItem
@@ -301,7 +301,7 @@ function ChallengeItem({
   };
 
   return (
-    <li className={`rounded-xl border px-3.5 py-3 transition-colors ${done ? "border-ok/40 bg-ok-soft" : "border-line bg-surface"}`}>
+    <li className={`rounded-[4px] border px-3.5 py-3 transition-colors ${done ? "border-ok/40 bg-ok-soft" : "border-line bg-surface"}`}>
       <div className="flex flex-wrap items-center gap-3">
         <span className={`grid size-7 shrink-0 place-items-center rounded-full ${done ? "bg-ok text-white" : "border-2 border-line-strong"}`}>
           <AnimatePresence>
@@ -322,7 +322,7 @@ function ChallengeItem({
               type="button"
               onClick={() => setHintOpen((o) => !o)}
               aria-expanded={hintOpen}
-              className="inline-flex h-11 items-center gap-1 rounded-lg px-2.5 text-sm text-muted hover:bg-sunk hover:text-ink"
+              className="inline-flex h-11 items-center gap-1 rounded-full px-2.5 text-sm text-muted hover:bg-sunk hover:text-ink"
             >
               <BulbIcon size={16} /> Hint
             </button>
@@ -331,7 +331,7 @@ function ChallengeItem({
                 type="button"
                 onClick={check}
                 aria-label={`Check: ${c.text.replace(/[{}*]/g, "")}`}
-                className="inline-flex h-11 items-center rounded-lg bg-ink px-4 text-sm font-medium text-white hover:bg-ink-2"
+                className="inline-flex h-11 items-center rounded-full bg-ink px-4 text-sm font-medium text-white hover:bg-ink-2"
               >
                 Check
               </button>
@@ -358,7 +358,7 @@ function ChallengeItem({
                   if (o.id === c.observe!.answer) onComplete();
                   else setObserveWrong(true);
                 }}
-                className="min-h-11 rounded-xl border-2 border-line-strong bg-surface px-3 py-2 text-left text-sm font-medium hover:bg-sunk"
+                className="min-h-11 rounded-[4px] border-2 border-line-strong bg-surface px-3 py-2 text-left text-sm font-medium hover:bg-sunk"
               >
                 <RichText text={o.label} />
               </button>
@@ -376,7 +376,7 @@ function CompareResult({ a, b }: { a: Fraction; b: Fraction }) {
   const words = sym === "<" ? "is less than" : sym === ">" ? "is greater than" : "is equal to";
   const same = equivalent(a, b);
   return (
-    <div className="flex flex-col items-center gap-2 rounded-xl bg-surface px-4 py-3 text-center sm:flex-row sm:justify-center sm:gap-4" aria-live="polite">
+    <div className="flex flex-col items-center gap-2 rounded-[4px] bg-surface px-4 py-3 text-center sm:flex-row sm:justify-center sm:gap-4" aria-live="polite">
       <span className="flex items-center gap-3 text-lg">
         <FractionNotation n={a.n} d={a.d} size="sm" />
         <span className="grid size-9 place-items-center rounded-full bg-ink font-semibold text-white">{sym}</span>

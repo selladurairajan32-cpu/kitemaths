@@ -3,11 +3,11 @@ import type { Evaluation, MisconceptionId } from "./types";
 /**
  * Misconception recovery flow for a single question.
  *
- * answering ──correct──▶ correct
+ * answering ──correct──→ correct
  *     │ wrong (attempt < max)
- *     ├─ misconception suspected ─▶ diagnose ─▶ followup ─▶ followup-review ─▶ answering
- *     └─ no clear cause ──────────▶ answering again, with the hint shown inline
- *     │ wrong (attempt = max) ────▶ revealed
+ *     ├─ misconception suspected ─→ diagnose ─→ followup ─→ followup-review ─→ answering
+ *     └─ no clear cause ──────────→ answering again, with the hint shown inline
+ *     │ wrong (attempt = max) ────→ revealed
  */
 export type RecoveryStage =
   | "answering"

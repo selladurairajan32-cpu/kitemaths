@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
+import { PaperIcon } from "@/components/paper/PaperIcon";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { Confetti } from "@/components/kid/Celebrate";
@@ -233,7 +234,7 @@ function Done() {
             const l = LESSONS.find((x) => x.id === id)!;
             return (
               <li key={id} className="inline-flex items-center gap-1.5 rounded-full bg-ok-soft px-3 py-1 text-sm font-semibold text-ok">
-                <span aria-hidden>{topic.lessonLook(id).emoji}</span> {l.title}
+                <PaperIcon name={topic.lessonLook(id).icon} size={24} /> {l.title}
               </li>
             );
           })}
@@ -243,7 +244,7 @@ function Done() {
         <div className="mt-6 rounded-3xl bg-brand-soft p-4">
           <p className="text-sm font-bold uppercase tracking-wide text-brand-strong">Your first adventure</p>
           <p className="display mt-1 text-2xl">
-            <span aria-hidden>{topic.lessonLook(first.id).emoji}</span> {first.title}
+            <PaperIcon name={topic.lessonLook(first.id).icon} size={32} className="inline-block align-middle" /> {first.title}
           </p>
         </div>
       )}

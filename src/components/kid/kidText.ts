@@ -1,6 +1,7 @@
 import type { Recommendation } from "@/engine/journey";
 import type { SkillStatus } from "@/engine/mastery";
 import { routes, topicRoutes } from "@/lib/routes";
+import type { PaperIconName } from "@/components/paper/PaperIcon";
 import type { TopicModule } from "@/topics/types";
 
 /** Child-facing skill labels: encouraging, short, no jargon. */
@@ -14,7 +15,8 @@ export const KID_STATUS: Record<SkillStatus, { label: string; cls: string }> = {
 };
 
 export interface KidNext {
-  emoji: string;
+  icon: PaperIconName;
+  /** What kind of thing this is, said plainly (shown as the subline, never as a label above the title). */
   kicker: string;
   title: string;
   line: string;
@@ -28,47 +30,47 @@ export function kidNext(rec: Recommendation, topic: TopicModule): KidNext {
   switch (rec.kind) {
     case "lesson":
       return {
-        emoji: topic.lessonLook(rec.lessonId).emoji,
-        kicker: rec.resume ? "Keep going" : "Next adventure",
+        icon: topic.lessonLook(rec.lessonId).icon,
+        kicker: rec.resume ? "Your lesson so far" : "Your next lesson",
         title: rec.title,
-        line: rec.resume ? "You're part-way through — let's finish it!" : "A short lesson with pictures, puzzles and a quick challenge.",
-        cta: rec.resume ? "Keep going" : "Let's go!",
+        line: rec.resume ? "You're part of the way through. Pick up where you stopped." : "A short lesson with pictures, a puzzle and a quick question at the end.",
+        cta: rec.resume ? "Carry on" : "Start the lesson",
         href: links.lesson(rec.lessonId),
       };
     case "practice":
       return {
-        emoji: "🎯",
-        kicker: "Practice time",
-        title: rec.focusSkill ? rec.title.replace(/^(Practise|Strengthen): /, "Power up: ") : "Mixed challenge",
-        line: "10 questions that get trickier as you get stronger. Collect stars!",
-        cta: "Play",
+        icon: "target",
+        kicker: "Practice",
+        title: rec.focusSkill ? rec.title.replace(/^(Practise|Strengthen): /, "") : "Mixed practice",
+        line: "Ten questions that get harder as you get stronger. Each one earns stars.",
+        cta: "Play ten questions",
         href: links.practice(rec.focusSkill),
       };
     case "assessment":
       return {
-        emoji: "🏆",
-        kicker: "Big challenge",
-        title: rec.resume ? "Finish your big challenge" : "Show what you know!",
-        line: "Answer on your own — no hints. Do your best thinking!",
-        cta: rec.resume ? "Carry on" : "I'm ready",
+        icon: "trophy",
+        kicker: "The big challenge",
+        title: rec.resume ? "Finish the big challenge" : "The big challenge",
+        line: "Questions on every skill, on your own, with no hints.",
+        cta: rec.resume ? "Carry on" : "Start the challenge",
         href: links.check(),
       };
     case "recheck":
       return {
-        emoji: "🔁",
-        kicker: "Quick recheck",
+        icon: "recheck",
+        kicker: "A quick recheck",
         title: rec.title.replace(/^(Finish your recheck|Recheck): /, ""),
-        line: "Two quick questions to show you've got it now.",
-        cta: rec.resume ? "Carry on" : "Try it",
+        line: "Two questions to show you have it now.",
+        cta: rec.resume ? "Carry on" : "Start the recheck",
         href: links.recheck(rec.skill),
       };
     case "results":
       return {
-        emoji: "🌈",
-        kicker: "Amazing!",
-        title: `You've mastered ${topic.title.toLowerCase()}!`,
-        line: "Keep your skills sharp with practice, or play in the lab.",
-        cta: "See my badges",
+        icon: "kite",
+        kicker: "Island complete",
+        title: `${topic.title}: mastered`,
+        line: "Keep your skills sharp with practice, or build in the lab.",
+        cta: "See my kites",
         href: routes.badges(),
       };
   }

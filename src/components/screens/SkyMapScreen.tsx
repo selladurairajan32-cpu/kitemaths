@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import { PaperIcon, type PaperIconName } from "@/components/paper/PaperIcon";
 import Link from "next/link";
 import { StarGlyph } from "@/components/kid/Celebrate";
 import { Kip, KipSays } from "@/components/kid/Kip";
@@ -19,7 +20,7 @@ type Status = "done" | "current" | "open";
 interface Stop {
   key: string;
   href: string;
-  emoji: string;
+  icon: PaperIconName;
   color: string;
   soft: string;
   title: string;
@@ -65,7 +66,7 @@ export function SkyMapScreen() {
     {
       key: "practice",
       href: routes.practice(),
-      emoji: "🎯",
+      icon: "target",
       color: "#22c174",
       soft: "#d9f7e8",
       title: "Power-up practice",
@@ -76,7 +77,7 @@ export function SkyMapScreen() {
     {
       key: "check",
       href: routes.assessment(),
-      emoji: "🏆",
+      icon: "trophy",
       color: "#f0a800",
       soft: "#fff5cf",
       title: "The big challenge",
@@ -106,7 +107,7 @@ export function SkyMapScreen() {
       <header className="flex items-end justify-between gap-4">
         <div>
           <p className="eyebrow">
-            <span aria-hidden>{topic.look.emoji}</span> Island
+            Island
           </p>
           <h1 className="display text-3xl sm:text-4xl">{topic.title}</h1>
           <p className="mt-1 text-ink-2">
@@ -163,7 +164,7 @@ export function SkyMapScreen() {
                     }}
                   >
                     <span aria-hidden className={s.status === "open" ? "opacity-70" : ""}>
-                      {s.emoji}
+                      <PaperIcon name={s.icon} size={36} />
                     </span>
                     {s.status === "done" && (
                       <span className="absolute -bottom-1 -right-1 grid size-7 place-items-center rounded-full bg-ok-bright text-white ring-[3px] ring-white">

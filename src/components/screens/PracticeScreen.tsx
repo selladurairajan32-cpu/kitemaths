@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
+import { PaperIcon } from "@/components/paper/PaperIcon";
 import Link from "next/link";
 import { Confetti, StarGlyph } from "@/components/kid/Celebrate";
 import { Kip, KipSays } from "@/components/kid/Kip";
@@ -65,7 +66,7 @@ function SkillPicker({ focusSkill }: { focusSkill: string | null }) {
             }`}
           >
             <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-brand to-sky text-xl" aria-hidden>
-              🎲
+              <PaperIcon name="dice" size={28} />
             </span>
             <span className="min-w-0 flex-1">
               <span className="block font-semibold">Mixed challenge</span>
@@ -85,7 +86,7 @@ function SkillPicker({ focusSkill }: { focusSkill: string | null }) {
                 className={`flex items-center gap-3 rounded-2xl border-2 p-3 transition-colors ${active ? "border-brand bg-brand-soft" : "border-line bg-surface hover:bg-sunk"}`}
               >
                 <span className="grid size-11 shrink-0 place-items-center rounded-xl text-xl" style={{ background: look.soft }} aria-hidden>
-                  {look.emoji}
+                  <PaperIcon name={look.icon} size={32} />
                 </span>
                 <span className="min-w-0 flex-1 text-sm font-semibold leading-tight">{s.title}</span>
                 <span className={`shrink-0 rounded-full px-2 py-0.5 text-[0.7rem] font-bold ${st.cls}`}>{st.label}</span>
@@ -108,7 +109,7 @@ function Intro({ focusSkill }: { focusSkill: string | null }) {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <Kip mood="cheer" size={88} />
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-bold uppercase tracking-wide text-white/85">Practice arena 🎯</p>
+            <p className="text-sm font-bold uppercase tracking-wide text-white/85">Practice arena</p>
             <h1 className="display text-3xl leading-tight sm:text-4xl">{skill ? skill.title : "Mixed challenge"}</h1>
             <p className="mt-1 max-w-xl text-white/90">
               {PRACTICE_SESSION_LENGTH} questions. They get trickier as you get stronger — and if you get stuck, Kip helps. Win up to{" "}
@@ -243,7 +244,7 @@ export function PracticeScreen({ focusSkill = null }: { focusSkill?: string | nu
       <div className="mx-auto max-w-3xl space-y-4">
         <div className="flex items-center gap-3">
           <span className="grid size-11 shrink-0 place-items-center rounded-2xl text-xl" style={{ background: topic.lessonLook(topic.skillById(current!.skill).lessonId).soft }} aria-hidden>
-            {topic.lessonLook(topic.skillById(current!.skill).lessonId).emoji}
+            <PaperIcon name={topic.lessonLook(topic.skillById(current!.skill).lessonId).icon} size={32} />
           </span>
           <div className="min-w-0 flex-1">
             <h1 id="practice-heading" className="flex items-center justify-between gap-2 text-sm font-semibold text-muted">
