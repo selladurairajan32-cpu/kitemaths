@@ -30,8 +30,8 @@ export const WORLDS: World[] = [
     text: "ink",
     islands: [
       { title: "Place value", icon: "place-value", topicId: "place-value" },
-      { title: "Rounding and estimating", icon: "rounding" },
-      { title: "Negative numbers", icon: "thermometer" },
+      { title: "Rounding and estimating", icon: "rounding", topicId: "rounding" },
+      { title: "Negative numbers", icon: "thermometer", topicId: "negative" },
     ],
   },
   {
@@ -41,7 +41,7 @@ export const WORLDS: World[] = [
     field: "#dcf3e5",
     text: "ink",
     islands: [
-      { title: "Add and subtract", icon: "plus" },
+      { title: "Add and subtract", icon: "plus", topicId: "add-subtract" },
       { title: "Times tables", icon: "times" },
       { title: "Multiply and divide", icon: "divide" },
     ],

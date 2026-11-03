@@ -121,6 +121,8 @@ function NumberLineVisual({ v }: { v: Extract<KitVisual, { kind: "line" }> }) {
   const x = (value: number) => pad + ((value - v.min) / (v.max - v.min)) * (W - pad * 2);
   const every = v.labelEvery ?? (count > 12 ? Math.ceil(count / 10) : 1);
   const ticks = Array.from({ length: count + 1 }, (_, i) => v.min + i * v.step);
+  // Label round values (multiples of step × every, counted from zero), wherever the line starts.
+  const labelled = (t: number) => Math.round(t / v.step) % every === 0 || t === v.min || t === v.max;
   return (
     <Frame label={`Number line from ${num(v.min)} to ${num(v.max)}`}>
       <svg viewBox={`0 0 ${W} 112`} className="h-auto w-full max-w-2xl" aria-hidden>
@@ -142,10 +144,10 @@ function NumberLineVisual({ v }: { v: Extract<KitVisual, { kind: "line" }> }) {
           );
         })}
         <line x1={pad - 10} y1={y} x2={W - pad + 10} y2={y} stroke={INK} strokeWidth="3" strokeLinecap="round" />
-        {ticks.map((t, i) => (
+        {ticks.map((t) => (
           <g key={t}>
-            <line x1={x(t)} y1={y - (i % every === 0 ? 10 : 6)} x2={x(t)} y2={y + (i % every === 0 ? 10 : 6)} stroke={INK} strokeWidth={i % every === 0 ? 2.5 : 1.5} />
-            {i % every === 0 && (
+            <line x1={x(t)} y1={y - (labelled(t) ? 10 : 6)} x2={x(t)} y2={y + (labelled(t) ? 10 : 6)} stroke={INK} strokeWidth={labelled(t) ? 2.5 : 1.5} />
+            {labelled(t) && (
               <text x={x(t)} y={y + 30} textAnchor="middle" fontSize="16" fontWeight="700" fill={INK}>
                 {num(t)}
               </text>

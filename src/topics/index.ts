@@ -1,5 +1,8 @@
+import { addSubtract } from "./add-subtract";
 import { fractions } from "./fractions/module";
+import { negative } from "./negative";
 import { placeValue } from "./place-value";
+import { rounding } from "./rounding";
 import type { Question, TopicModule } from "./types";
 
 /**
@@ -7,7 +10,13 @@ import type { Question, TopicModule } from "./types";
  * `fractions/module.tsx`) and listing it here; ids for its skills, questions
  * and misconceptions must start with `<topic id>.`.
  */
-export const TOPICS: TopicModule[] = [fractions as unknown as TopicModule, placeValue as unknown as TopicModule];
+export const TOPICS: TopicModule[] = [
+  fractions as unknown as TopicModule,
+  placeValue as unknown as TopicModule,
+  rounding as unknown as TopicModule,
+  negative as unknown as TopicModule,
+  addSubtract as unknown as TopicModule,
+];
 
 export const DEFAULT_TOPIC_ID = TOPICS[0].id;
 
