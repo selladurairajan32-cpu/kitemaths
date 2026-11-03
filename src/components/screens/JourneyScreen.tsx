@@ -5,15 +5,11 @@ import Link from "next/link";
 import { buttonClass } from "@/components/ui/Button";
 import { CheckIcon, FlagIcon, PracticeIcon } from "@/components/ui/Icons";
 import { ProgressBar } from "@/components/ui/Progress";
-import { isPracticeMilestoneMet, practiceResultsCount, PRACTICE_READY_RESULTS, recommendNext, strongSkills } from "@/engine/journey";
+import { isPracticeMilestoneMet, phaseStatuses, practiceResultsCount, PRACTICE_READY_RESULTS, recommendNext, strongSkills } from "@/engine/journey";
 import { skillMastery } from "@/engine/mastery";
-import { routes } from "@/lib/routes";
-import { useHydrated, useLearner } from "@/lib/store";
-import { ASSESSMENT_FORMS } from "@/topics/fractions/questions";
-import { skillById } from "@/topics/fractions/skills";
-import { FRACTIONS_TOPIC } from "@/topics/fractions";
-import { PHASE_DESCRIPTIONS, phaseStatuses } from "@/topics/fractions/journey";
-import { LESSONS } from "@/topics/fractions/lessons";
+import { routes as appRoutes } from "@/lib/routes";
+import { useHydrated } from "@/lib/store";
+import { useTopicState } from "@/topics/context";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 
 type NodeStatus = "done" | "active" | "next" | "upcoming";
@@ -26,7 +22,7 @@ function Node({ status, index }: { status: NodeStatus; index: number }) {
     upcoming: "bg-surface text-muted ring-1 ring-line-strong",
   }[status];
   return (
-    <span className={`relative z-10 grid size-10 shrink-0 place-items-center rounded-full text-sm font-semibold ${cls}`}>
+    <span className={`relative z-10 grid size-10 shrink-0 place-items-center rounded-full text-[0.9375rem] font-semibold ${cls}`}>
       {status === "done" ? <CheckIcon size={18} /> : index}
     </span>
   );
@@ -41,14 +37,18 @@ const STATUS_TEXT: Record<NodeStatus, string> = {
 
 export function JourneyScreen() {
   const hydrated = useHydrated();
-  const learner = useLearner();
+  const { topic, learner, links } = useTopicState();
+  const LESSONS = topic.lessons;
+  const { skillById, phaseDescriptions: PHASE_DESCRIPTIONS } = topic;
+  const firstForm = Object.values(topic.assessment.forms)[0] ?? [];
+  const routes = { ...links, assessment: links.check, review: appRoutes.review };
   if (!hydrated) return <ScreenSkeleton />;
 
-  const rec = recommendNext(FRACTIONS_TOPIC, learner);
-  const practiceMet = isPracticeMilestoneMet(FRACTIONS_TOPIC, learner);
-  const strong = strongSkills(FRACTIONS_TOPIC, learner).length;
-  const practiced = practiceResultsCount(learner);
-  const needStrong = Math.ceil(FRACTIONS_TOPIC.skills.length / 2);
+  const rec = recommendNext(topic, learner);
+  const practiceMet = isPracticeMilestoneMet(topic, learner);
+  const strong = strongSkills(topic, learner).length;
+  const practiced = practiceResultsCount(topic, learner);
+  const needStrong = Math.ceil(topic.skills.length / 2);
 
   const lessonStatus = (id: string): NodeStatus => {
     const p = learner.lessons[id];
@@ -59,7 +59,7 @@ export function JourneyScreen() {
   };
   const practiceStatus: NodeStatus = practiceMet ? "done" : rec.kind === "practice" ? "next" : practiced > 0 ? "active" : "upcoming";
   const a = learner.assessment;
-  const review = FRACTIONS_TOPIC.skills.map((sk) => skillMastery(sk.id, learner.results)).filter((m) => m.status === "needs-review");
+  const review = topic.skills.map((sk) => skillMastery(sk.id, learner.results)).filter((m) => m.status === "needs-review");
   const assessStatus: NodeStatus =
     a.status === "in-progress"
       ? "active"
@@ -74,11 +74,10 @@ export function JourneyScreen() {
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
       <div>
         <header className="mb-6">
-          <p className="eyebrow">Fractions</p>
-          <h1 className="display text-3xl font-semibold sm:text-4xl">Your learning journey</h1>
+          <p className="text-[0.9375rem] font-bold text-muted">{topic.title}</p>
+          <h1 className="display text-3xl font-semibold sm:text-4xl">Learning journey</h1>
           <p className="mt-2 max-w-xl text-ink-2">
-            {LESSONS.length} short lessons take you from “what is a whole?” to solving fraction problems and explaining your thinking. Then practise until
-            you&apos;re secure, and show your mastery. This is the fractions foundations module — later modules will extend it.
+            {topic.subtitle}. {LESSONS.length} short lessons, then practice until each skill is secure, then an independent mastery check.
           </p>
         </header>
 
@@ -100,7 +99,7 @@ export function JourneyScreen() {
                 <div className={`card flex-1 p-4 sm:p-5 ${status === "next" || status === "active" ? "ring-1 ring-ink/15" : ""}`}>
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div className="min-w-0">
-                      <p className="flex flex-wrap items-center gap-2 text-xs">
+                      <p className="flex flex-wrap items-center gap-2 text-[0.9375rem]">
                         <span className="rounded-full bg-sunk px-2 py-0.5 font-semibold text-ink-2">{l.phase}</span>
                         <span className="text-muted">
                           {l.minutes} min · {l.steps.length} steps
@@ -110,7 +109,7 @@ export function JourneyScreen() {
                         </span>
                       </p>
                       <h2 className="mt-1.5 text-lg font-semibold">{l.title}</h2>
-                      <p className="text-sm text-ink-2">{l.summary}</p>
+                      <p className="text-[0.9375rem] text-ink-2">{l.summary}</p>
                     </div>
                     <Link
                       href={status === "done" ? routes.lesson(l.id, 0) : routes.lesson(l.id)}
@@ -131,7 +130,7 @@ export function JourneyScreen() {
             <div className={`card flex-1 p-4 sm:p-5 ${practiceStatus === "next" ? "ring-1 ring-ink/15" : ""}`}>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="flex items-center gap-2 text-xs">
+                  <p className="flex items-center gap-2 text-[0.9375rem]">
                     <span className="rounded-full bg-sunk px-2 py-0.5 font-semibold text-ink-2">Practise</span>
                     <span className={practiceStatus === "done" ? "font-medium text-ok" : practiceStatus === "next" ? "font-medium text-den" : "text-muted"}>
                       {STATUS_TEXT[practiceStatus]}
@@ -140,7 +139,7 @@ export function JourneyScreen() {
                   <h2 className="mt-1.5 flex items-center gap-2 text-lg font-semibold">
                     <PracticeIcon size={18} /> Practice milestone
                   </h2>
-                  <p className="text-sm text-ink-2">
+                  <p className="text-[0.9375rem] text-ink-2">
                     Answer at least {PRACTICE_READY_RESULTS} practice questions and make {needStrong} skills secure.
                   </p>
                 </div>
@@ -148,7 +147,7 @@ export function JourneyScreen() {
                   Practise<span className="sr-only"> (practice milestone)</span>
                 </Link>
               </div>
-              <div className="mt-3 grid gap-2 text-xs text-muted sm:grid-cols-2">
+              <div className="mt-3 grid gap-2 text-[0.9375rem] text-muted sm:grid-cols-2">
                 <div>
                   <ProgressBar value={Math.min(1, practiced / PRACTICE_READY_RESULTS)} label="Practice questions answered" tone="den" />
                   <p className="mt-1">
@@ -170,7 +169,7 @@ export function JourneyScreen() {
             <div className={`card flex-1 p-4 sm:p-5 ${assessStatus === "next" || assessStatus === "active" ? "ring-1 ring-ink/15" : ""}`}>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="flex items-center gap-2 text-xs">
+                  <p className="flex items-center gap-2 text-[0.9375rem]">
                     <span className="rounded-full bg-sunk px-2 py-0.5 font-semibold text-ink-2">Master</span>
                     <span className={assessStatus === "done" ? "font-medium text-ok" : assessStatus === "next" ? "font-medium text-den" : "text-muted"}>
                       {STATUS_TEXT[assessStatus]}
@@ -179,8 +178,8 @@ export function JourneyScreen() {
                   <h2 className="mt-1.5 flex items-center gap-2 text-lg font-semibold">
                     <FlagIcon size={18} /> Mastery check
                   </h2>
-                  <p className="text-sm text-ink-2">
-                    {ASSESSMENT_FORMS.A.length} questions on your own — no hints — two for every skill.
+                  <p className="text-[0.9375rem] text-ink-2">
+                    {firstForm.length} questions on your own — no hints — two for every skill.
                     {a.last && ` Last result: ${lastScore} / ${a.last.order.length}.`}
                   </p>
                 </div>
@@ -207,13 +206,13 @@ export function JourneyScreen() {
               </div>
               {review.length > 0 && (
                 <div className="mt-4 space-y-2 border-t border-line pt-4">
-                  <p className="text-sm font-medium text-num-strong">Needs review before this is complete</p>
+                  <p className="text-[0.9375rem] font-medium text-num-strong">Needs review before this is complete</p>
                   <ul className="space-y-2">
                     {review.map((m) => {
                       const sk = skillById(m.skill);
                       return (
-                        <li key={m.skill} className="flex flex-col gap-2 rounded-xl bg-paper p-3 sm:flex-row sm:items-center sm:justify-between">
-                          <span className="text-sm">{sk.title}</span>
+                        <li key={m.skill} className="flex flex-col gap-2 rounded-[16px] bg-paper p-3 sm:flex-row sm:items-center sm:justify-between">
+                          <span className="text-[0.9375rem]">{sk.title}</span>
                           <span className="flex flex-wrap gap-2">
                             <Link href={routes.lesson(sk.lessonId)} className={buttonClass("ghost", "md")}>
                               Lesson<span className="sr-only">: {sk.title}</span>
@@ -239,20 +238,20 @@ export function JourneyScreen() {
       <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
         <div className="card p-5">
           <h2 className="font-semibold">How you&apos;ll learn</h2>
-          <p className="mt-1 text-sm text-ink-2">Every topic follows the same path, so understanding comes before testing.</p>
+          <p className="mt-1 text-[0.9375rem] text-ink-2">Every topic follows the same path, so understanding comes before testing.</p>
           <ol className="mt-4 space-y-3">
-            {phaseStatuses(learner).map(({ phase, status }, i) => (
+            {phaseStatuses(topic, learner).map(({ phase, status }, i) => (
               <li key={phase} className="flex gap-3">
                 <span
-                  className={`grid size-6 shrink-0 place-items-center rounded-full text-[0.7rem] font-semibold ${
+                  className={`grid size-6 shrink-0 place-items-center rounded-full text-[0.9375rem] font-semibold ${
                     status === "done" ? "bg-ok text-white" : status === "current" ? "bg-ink text-white" : "bg-sunk text-muted"
                   }`}
                 >
                   {status === "done" ? <CheckIcon size={12} /> : i + 1}
                 </span>
                 <div>
-                  <p className="text-sm font-medium">{phase}</p>
-                  <p className="text-xs text-muted">{PHASE_DESCRIPTIONS[phase]}</p>
+                  <p className="text-[0.9375rem] font-medium">{phase}</p>
+                  <p className="text-[0.9375rem] text-muted">{PHASE_DESCRIPTIONS[phase]}</p>
                 </div>
               </li>
             ))}

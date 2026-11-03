@@ -1,38 +1,36 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
+import { PaperIcon } from "@/components/paper/PaperIcon";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { Confetti } from "@/components/kid/Celebrate";
 import { Kip, KipSays } from "@/components/kid/Kip";
-import { lessonLook } from "@/components/kid/kidText";
 import { ReadAloud } from "@/components/kid/ReadAloud";
 import { RichText } from "@/components/math/RichText";
-import { QuestionInput } from "@/components/questions/QuestionInput";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { ArrowRightIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton } from "@/components/ui/Screen";
-import { answerPlacement, finishPlacement, setProfile, skipPlacement, startPlacement, type LearnerState } from "@/engine/progress";
+import { answerPlacement, finishPlacement, inTopic, setProfile, skipPlacement, startPlacement, type LearnerState, type TopicLearner } from "@/engine/progress";
 import { recommendNext } from "@/engine/journey";
-import { routes } from "@/lib/routes";
+import { topicRoutes } from "@/lib/routes";
 import { playSound } from "@/lib/sound";
 import { updateLearner, useHydrated, useLearner } from "@/lib/store";
-import { FRACTIONS_TOPIC } from "@/topics/fractions";
-import { evaluate, inputProblem, isResponseComplete } from "@/topics/fractions/evaluate";
-import { LESSONS } from "@/topics/fractions/lessons";
-import { placedOutLessons, placementOrder, placementShouldStop, PLACEMENT_PLAN } from "@/topics/fractions/placement";
-import { questionById } from "@/topics/fractions/questions";
-import type { Response } from "@/topics/fractions/types";
+import { useTopic, useTopicState } from "@/topics/context";
+import type { AnswerResponse as Response, PlacementKit } from "@/topics/types";
 
 const YEARS = [3, 4, 5, 6];
 
-function answersSoFar(s: LearnerState): boolean[] {
+function answersSoFar(s: TopicLearner): boolean[] {
   const { order, correct } = s.placement;
   return order.slice(0, s.placement.index).map((id) => correct.includes(id));
 }
 
 function Intro() {
   const learner = useLearner();
+  const topic = useTopic();
+  const placement = topic.placement!;
+  const links = topicRoutes(topic.id);
   const router = useRouter();
   const [name, setName] = useState(learner.profile.name);
   const [year, setYear] = useState<number | null>(learner.profile.year);
@@ -42,7 +40,7 @@ function Intro() {
   const play = (e: FormEvent) => {
     e.preventDefault();
     playSound("tap");
-    updateLearner((s) => startPlacement(saveProfile(s), placementOrder(Date.now())));
+    updateLearner((s) => inTopic(saveProfile(s), topic.id, (t) => startPlacement(t, placement.order(Date.now()))));
   };
 
   return (
@@ -62,9 +60,9 @@ function Intro() {
             maxLength={24}
             autoComplete="given-name"
             placeholder="Your first name"
-            className="mt-2 h-14 w-full rounded-2xl border-2 border-line-strong bg-surface px-4 text-lg font-medium focus:border-brand focus:outline-none"
+            className="mt-2 h-14 w-full rounded-[20px] border-2 border-line-strong bg-surface px-4 text-lg font-medium focus:border-brand focus:outline-none"
           />
-          <span className="mt-1 block text-sm text-muted">Just your first name — it stays on this device.</span>
+          <span className="mt-1 block text-[0.9375rem] text-muted">Just your first name — it stays on this device.</span>
         </label>
 
         <fieldset>
@@ -76,8 +74,8 @@ function Intro() {
                 type="button"
                 onClick={() => setYear(y)}
                 aria-pressed={year === y}
-                className={`press h-14 rounded-2xl border-2 text-lg font-bold ${
-                  year === y ? "border-brand bg-brand text-white shadow-[0_4px_0_var(--color-brand-strong)]" : "border-line-strong bg-surface shadow-[0_3px_0_var(--color-line-strong)]"
+                className={`press h-14 rounded-[20px] border-2 text-lg font-bold ${
+                  year === y ? "border-brand bg-brand text-white shadow-[var(--shadow-card)]" : "border-line-strong bg-surface shadow-[var(--shadow-card)]"
                 }`}
               >
                 Y{y}
@@ -87,8 +85,8 @@ function Intro() {
               type="button"
               onClick={() => setYear(null)}
               aria-pressed={year === null}
-              className={`press h-14 rounded-2xl border-2 text-sm font-bold ${
-                year === null ? "border-brand bg-brand text-white shadow-[0_4px_0_var(--color-brand-strong)]" : "border-line-strong bg-surface shadow-[0_3px_0_var(--color-line-strong)]"
+              className={`press h-14 rounded-[20px] border-2 text-[0.9375rem] font-bold ${
+                year === null ? "border-brand bg-brand text-white shadow-[var(--shadow-card)]" : "border-line-strong bg-surface shadow-[var(--shadow-card)]"
               }`}
             >
               Not sure
@@ -109,8 +107,8 @@ function Intro() {
           variant="secondary"
           size="xl"
           onClick={() => {
-            updateLearner((s) => skipPlacement(saveProfile(s)));
-            router.push(routes.lesson(LESSONS[0].id));
+            updateLearner((s) => inTopic(saveProfile(s), topic.id, skipPlacement));
+            router.push(links.lesson(topic.lessons[0].id));
           }}
         >
           Start from the beginning
@@ -121,7 +119,10 @@ function Intro() {
 }
 
 function PlacementQuestion({ id, index }: { id: string; index: number }) {
-  const q = questionById(id);
+  const { topic, update } = useTopicState();
+  const { Input: QuestionInput, evaluate, inputProblem, isComplete: isResponseComplete } = topic.questions;
+  const placement: PlacementKit = topic.placement!;
+  const q = topic.questionById(id);
   const [response, setResponse] = useState<Response | null>(null);
   const [problem, setProblem] = useState<string | null>(null);
   const [outcome, setOutcome] = useState<boolean | null>(null);
@@ -140,7 +141,7 @@ function PlacementQuestion({ id, index }: { id: string; index: number }) {
 
   const next = () => {
     const ok = outcome === true;
-    updateLearner((s) => {
+    update((s) => {
       let n = answerPlacement(s, {
         id: episode,
         questionId: id,
@@ -155,8 +156,8 @@ function PlacementQuestion({ id, index }: { id: string; index: number }) {
         at: Date.now(),
       });
       const answers = answersSoFar(n);
-      if (n.placement.index >= n.placement.order.length || placementShouldStop(answers)) {
-        n = finishPlacement(n, placedOutLessons(answers), Date.now());
+      if (n.placement.index >= n.placement.order.length || placement.shouldStop(answers)) {
+        n = finishPlacement(n, placement.placedOut(answers), Date.now());
       }
       return n;
     });
@@ -180,7 +181,7 @@ function PlacementQuestion({ id, index }: { id: string; index: number }) {
         locked={outcome !== null}
         orderKey={episode}
       />
-      {problem && <p className="rounded-2xl bg-warn-soft px-4 py-3 text-sm text-ink-2">{problem}</p>}
+      {problem && <p className="rounded-[20px] bg-warn-soft px-4 py-3 text-[0.9375rem] text-ink-2">{problem}</p>}
       <AnimatePresence mode="wait">
         {outcome !== null && (
           <motion.div key="fb" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
@@ -190,7 +191,7 @@ function PlacementQuestion({ id, index }: { id: string; index: number }) {
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="sticky bottom-0 -mx-5 flex justify-end border-t-2 border-line bg-surface/95 px-5 py-3 backdrop-blur sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
+      <div className="sticky bottom-0 -mx-5 flex justify-end border-t border-line bg-surface px-5 py-3 sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
         {outcome === null ? (
           <Button type="submit" variant="go" size="xl" disabled={!complete} className="w-full sm:w-auto">
             Check
@@ -206,11 +207,13 @@ function PlacementQuestion({ id, index }: { id: string; index: number }) {
 }
 
 function Done() {
-  const learner = useLearner();
+  const { topic, learner, links } = useTopicState();
+  const profile = useLearner().profile;
+  const LESSONS = topic.lessons;
   const { placedOut } = learner.placement;
-  const rec = recommendNext(FRACTIONS_TOPIC, learner);
+  const rec = recommendNext(topic, learner);
   const first = rec.kind === "lesson" ? LESSONS.find((l) => l.id === rec.lessonId) : null;
-  const name = learner.profile.name.trim();
+  const name = profile.name.trim();
   return (
     <motion.section initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="card relative mx-auto max-w-xl overflow-visible p-6 text-center sm:p-10">
       <Confetti burstKey="placement-done" />
@@ -222,7 +225,7 @@ function Done() {
       </h1>
       <p className="mt-2 text-lg text-ink-2">
         {placedOut.length
-          ? `You already know ${placedOut.length} of the ${PLACEMENT_PLAN.length} topics — so we'll skip ahead.`
+          ? `You already know ${placedOut.length} of the ${topic.placement?.plan.length ?? LESSONS.length} topics — so we'll skip ahead.`
           : "We'll start right at the beginning and build up step by step. Every expert starts here!"}
       </p>
       {placedOut.length > 0 && (
@@ -230,26 +233,26 @@ function Done() {
           {placedOut.map((id) => {
             const l = LESSONS.find((x) => x.id === id)!;
             return (
-              <li key={id} className="inline-flex items-center gap-1.5 rounded-full bg-ok-soft px-3 py-1 text-sm font-semibold text-ok">
-                <span aria-hidden>{lessonLook(id).emoji}</span> {l.title}
+              <li key={id} className="inline-flex items-center gap-1.5 rounded-full bg-ok-soft px-3 py-1 text-[0.9375rem] font-semibold text-ok">
+                <PaperIcon name={topic.lessonLook(id).icon} size={24} /> {l.title}
               </li>
             );
           })}
         </ul>
       )}
       {first && (
-        <div className="mt-6 rounded-3xl bg-brand-soft p-4">
-          <p className="text-sm font-bold uppercase tracking-wide text-brand-strong">Your first adventure</p>
+        <div className="mt-6 rounded-[24px] bg-brand-soft p-4">
+          <p className="text-[0.9375rem] font-bold text-brand-strong">Your first adventure</p>
           <p className="display mt-1 text-2xl">
-            <span aria-hidden>{lessonLook(first.id).emoji}</span> {first.title}
+            <PaperIcon name={topic.lessonLook(first.id).icon} size={32} className="inline-block align-middle" /> {first.title}
           </p>
         </div>
       )}
       <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-        <ButtonLink href={first ? routes.lesson(first.id) : routes.practice()} variant="go" size="xl">
+        <ButtonLink href={first ? links.lesson(first.id) : links.practice()} variant="go" size="xl">
           Let&apos;s go! <ArrowRightIcon size={20} />
         </ButtonLink>
-        <ButtonLink href={routes.journey()} variant="secondary" size="xl">
+        <ButtonLink href={links.island()} variant="secondary" size="xl">
           See my map
         </ButtonLink>
       </div>
@@ -259,7 +262,7 @@ function Done() {
 
 export function PlacementScreen() {
   const hydrated = useHydrated();
-  const learner = useLearner();
+  const { learner } = useTopicState();
   if (!hydrated) return <ScreenSkeleton />;
   const p = learner.placement;
 

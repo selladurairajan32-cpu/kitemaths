@@ -43,13 +43,11 @@ export function ReadAloud({
       aria-label={active ? "Stop reading" : label}
       aria-pressed={active}
       title={active ? "Stop reading" : label}
-      className={`grid ${dims} shrink-0 place-items-center rounded-full border-2 transition-colors ${
-        active ? "border-brand bg-brand text-white" : "border-sky/50 bg-sky-soft text-den-strong hover:bg-[#cce8ff]"
+      className={`grid ${dims} shrink-0 place-items-center rounded-full transition-colors ${
+        active ? "bg-ink text-white" : "border border-line-strong bg-surface text-ink hover:bg-raised"
       } ${className}`}
     >
-      <span className={active ? "animate-pulse" : ""}>
-        <SpeakerIcon size={size === "lg" ? 24 : 20} />
-      </span>
+      <SpeakerIcon size={size === "lg" ? 24 : 20} waves={!active} />
     </button>
   );
 }

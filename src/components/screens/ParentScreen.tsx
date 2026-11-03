@@ -7,41 +7,49 @@ import { Button } from "@/components/ui/Button";
 import { ArrowRightIcon, RefreshIcon } from "@/components/ui/Icons";
 import { ProgressRing, StatusBadge } from "@/components/ui/Progress";
 import { RecommendationLink, recommendationVerb } from "@/components/ui/RecommendationLink";
-import { lessonsCompleted, masteredSkills, recommendNext, reviewSkills, strongSkills } from "@/engine/journey";
+import { activityProgress, learningStats, lessonsCompleted, masteredSkills, recommendNext, reviewSkills, strongSkills, topicResults } from "@/engine/journey";
 import { misconceptionReports, skillMastery } from "@/engine/mastery";
 import { routes } from "@/lib/routes";
 import { resetLearner, useHydrated, useLearner, useNow } from "@/lib/store";
 import { PhasePath, ScreenSkeleton, StorageNotice } from "@/components/ui/Screen";
-import { FRACTIONS_TOPIC } from "@/topics/fractions";
-import { learningStats, topicProgress } from "@/topics/fractions/journey";
-import { misconceptionById } from "@/topics/fractions/misconceptions";
+import { useTopicState } from "@/topics/context";
+import { ActiveTopicProvider } from "@/topics/ActiveTopic";
 import { streakFor, totalStars } from "@/engine/rewards";
 import { setProfile, setSettings } from "@/engine/progress";
 import { updateLearner } from "@/lib/store";
 
 export function ParentScreen() {
   const hydrated = useHydrated();
+  if (!hydrated) return <ScreenSkeleton />;
+  return (
+    <ActiveTopicProvider>
+      <ParentOverview />
+    </ActiveTopicProvider>
+  );
+}
+
+function ParentOverview() {
   const learner = useLearner();
+  const { topic, learner: t } = useTopicState();
   const [confirmReset, setConfirmReset] = useState(false);
   const now = useNow();
+  const { misconceptionById } = topic;
 
-  if (!hydrated) return <ScreenSkeleton />;
-
-  const rec = recommendNext(FRACTIONS_TOPIC, learner);
-  const activity = topicProgress(learner);
-  const lessonsDone = lessonsCompleted(FRACTIONS_TOPIC, learner);
-  const secure = strongSkills(FRACTIONS_TOPIC, learner).length;
-  const mastered = masteredSkills(FRACTIONS_TOPIC, learner).length;
-  const review = reviewSkills(FRACTIONS_TOPIC, learner).length;
-  const stats = learningStats(learner);
-  const last = learner.assessment.last;
+  const rec = recommendNext(topic, t);
+  const activity = activityProgress(topic, t);
+  const lessonsDone = lessonsCompleted(topic, t);
+  const secure = strongSkills(topic, t).length;
+  const mastered = masteredSkills(topic, t).length;
+  const review = reviewSkills(topic, t).length;
+  const stats = learningStats(topic, t);
+  const last = t.assessment.last;
   const lastScore = last ? Object.values(last.evaluations).filter((e) => e.correct).length : 0;
-  const working = misconceptionReports(learner.results, FRACTIONS_TOPIC.misconceptions).filter((r) => r.state !== "resolved");
-  const total = FRACTIONS_TOPIC.skills.length;
+  const working = misconceptionReports(topicResults(topic, t.results), topic.misconceptions).filter((r) => r.state !== "resolved");
+  const total = topic.skills.length;
   const name = learner.profile.name.trim();
   const stars = totalStars(learner);
   const streak = streakFor(learner, now);
-  const placement = learner.placement;
+  const placement = t.placement;
 
   return (
     <div className="space-y-6">
@@ -51,7 +59,7 @@ export function ParentScreen() {
         <p className="mt-1 max-w-2xl text-ink-2">
           {stars} stars earned · {streak.current}-day streak (best {streak.best})
           {placement.status === "complete" &&
-            ` · Warm-up placed them past ${placement.placedOut.length} of ${FRACTIONS_TOPIC.lessons.length} lessons`}
+            ` · Warm-up placed them past ${placement.placedOut.length} of ${topic.lessons.length} lessons`}
           {placement.status === "skipped" && " · Started from the beginning"}
         </p>
       </motion.header>
@@ -63,18 +71,18 @@ export function ParentScreen() {
           <div className="space-y-5 p-5 sm:p-7">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="eyebrow">Current module</p>
+                <p className="text-[0.9375rem] font-bold text-muted">Current module</p>
                 <h2 id="topic-title" className="display mt-1 text-3xl font-semibold sm:text-4xl">
-                  {FRACTIONS_TOPIC.title}
+                  {topic.title}
                 </h2>
-                <p className="mt-1 text-ink-2">{FRACTIONS_TOPIC.subtitle}</p>
+                <p className="mt-1 text-ink-2">{topic.subtitle}</p>
               </div>
               <TopicMark />
             </div>
             <PhasePath />
           </div>
           <div className="border-t border-line bg-paper p-5 sm:p-7">
-            <p className="eyebrow text-den!">Recommended next</p>
+            <p className="text-[0.9375rem] font-bold text-den-strong">Recommended next</p>
             <div className="mt-2 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <h3 className="text-xl font-semibold">{rec.title}</h3>
@@ -98,29 +106,29 @@ export function ParentScreen() {
                 <span className="block text-[0.65rem] text-muted">activities</span>
               </span>
             </ProgressRing>
-            <dl className="grid flex-1 gap-2 text-sm">
-              <Stat label="Lessons done" value={`${lessonsDone} / ${FRACTIONS_TOPIC.lessons.length}`} />
+            <dl className="grid flex-1 gap-2 text-[0.9375rem]">
+              <Stat label="Lessons done" value={`${lessonsDone} / ${topic.lessons.length}`} />
               <Stat label="Secure in practice" value={`${secure} / ${total}`} />
               <Stat label="Mastered" value={`${mastered} / ${total}`} />
               {review > 0 && <Stat label="Needs review" value={`${review}`} tone="num" />}
             </dl>
           </div>
-          <p className="text-xs text-muted">
+          <p className="text-[0.9375rem] text-muted">
             The ring shows activities completed (lessons, practice milestone, mastery check) — not how much is mastered.
           </p>
           <div className="grid grid-cols-2 gap-3 border-t border-line pt-4">
             <div>
               <p className="text-2xl font-semibold tabular-nums">{stats.learningAnswered}</p>
-              <p className="text-xs text-muted">lesson & practice answers</p>
+              <p className="text-[0.9375rem] text-muted">lesson & practice answers</p>
             </div>
             <div>
               <p className="text-2xl font-semibold tabular-nums">{stats.firstTryRate === null ? "—" : `${Math.round(stats.firstTryRate * 100)}%`}</p>
-              <p className="text-xs text-muted">of those right first time</p>
+              <p className="text-[0.9375rem] text-muted">of those right first time</p>
             </div>
             <div className="col-span-2">
-              <p className="text-sm">
+              <p className="text-[0.9375rem]">
                 <span className="text-muted">Mastery check: </span>
-                <strong>{last ? `${lastScore} / ${last.order.length}` : learner.assessment.status === "in-progress" ? "in progress" : "not taken yet"}</strong>
+                <strong>{last ? `${lastScore} / ${last.order.length}` : t.assessment.status === "in-progress" ? "in progress" : "not taken yet"}</strong>
               </p>
             </div>
           </div>
@@ -131,14 +139,14 @@ export function ParentScreen() {
             <h2 id="skills-title" className="font-semibold">
               Skills in this module
             </h2>
-            <Link href={routes.results()} className="rounded text-sm font-medium text-den hover:underline">
+            <Link href={routes.results()} className="rounded text-[0.9375rem] font-medium text-den hover:underline">
               Full report
             </Link>
           </div>
           <ul className="grid gap-x-8 sm:grid-cols-2">
-            {FRACTIONS_TOPIC.skills.map((s) => (
+            {topic.skills.map((s) => (
               <li key={s.id} className="flex items-center justify-between gap-3 border-b border-line py-2.5">
-                <span className="text-sm">{s.title}</span>
+                <span className="text-[0.9375rem]">{s.title}</span>
                 <StatusBadge status={skillMastery(s.id, learner.results).status} />
               </li>
             ))}
@@ -150,7 +158,7 @@ export function ParentScreen() {
             Ideas we&apos;re working on
           </h2>
           {working.length === 0 ? (
-            <p className="text-sm text-ink-2">
+            <p className="text-[0.9375rem] text-ink-2">
               {stats.learningAnswered === 0
                 ? "As you answer questions, we'll notice any tricky ideas and help you with them here."
                 : "Nothing to work on right now — great thinking!"}
@@ -158,9 +166,9 @@ export function ParentScreen() {
           ) : (
             <ul className="space-y-2.5">
               {working.slice(0, 3).map((r) => (
-                <li key={r.id} className="rounded-xl bg-paper p-3">
-                  <p className="text-sm font-medium">{misconceptionById(r.id)?.name}</p>
-                  <p className="text-xs text-muted">
+                <li key={r.id} className="rounded-[16px] bg-paper p-3">
+                  <p className="text-[0.9375rem] font-medium">{misconceptionById(r.id)?.name}</p>
+                  <p className="text-[0.9375rem] text-muted">
                     {r.confidence === "likely" ? `Seen ${r.timesSeen} times` : "Seen once — just keeping an eye on it"}
                     {r.state === "improving" ? " · improving" : ""}
                   </p>
@@ -169,13 +177,13 @@ export function ParentScreen() {
             </ul>
           )}
           <div className="mt-auto space-y-3 border-t border-line pt-4">
-            <p className="text-xs text-muted">
+            <p className="text-[0.9375rem] text-muted">
               Progress is saved in this browser on this device only. Clearing browser data, private browsing or another device will start fresh. There
               are no accounts yet.
             </p>
             {confirmReset ? (
               <div className="space-y-2">
-                <p className="text-sm text-ink-2">Clear all progress saved in this browser?</p>
+                <p className="text-[0.9375rem] text-ink-2">Clear all progress saved in this browser?</p>
                 <div className="flex gap-2">
                   <Button
                     variant="secondary"
@@ -192,7 +200,7 @@ export function ParentScreen() {
                 </div>
               </div>
             ) : (
-              <button type="button" onClick={() => setConfirmReset(true)} className="inline-flex h-11 items-center gap-1.5 rounded text-sm text-muted hover:text-ink">
+              <button type="button" onClick={() => setConfirmReset(true)} className="inline-flex h-11 items-center gap-1.5 rounded text-[0.9375rem] text-muted hover:text-ink">
                 <RefreshIcon size={15} /> Reset progress
               </button>
             )}
@@ -205,21 +213,21 @@ export function ParentScreen() {
           Settings
         </h2>
         <div className="mt-4 grid gap-5 sm:grid-cols-2">
-          <label className="block text-sm">
+          <label className="block text-[0.9375rem]">
             <span className="font-medium">Child&apos;s first name</span>
             <input
               value={learner.profile.name}
               maxLength={24}
               onChange={(e) => updateLearner((s) => setProfile(s, { name: e.target.value }))}
-              className="mt-1 h-11 w-full rounded-xl border-2 border-line-strong bg-surface px-3"
+              className="mt-1 h-11 w-full rounded-[16px] border-2 border-line-strong bg-surface px-3"
             />
           </label>
-          <label className="block text-sm">
+          <label className="block text-[0.9375rem]">
             <span className="font-medium">School year</span>
             <select
               value={learner.profile.year ?? ""}
               onChange={(e) => updateLearner((s) => setProfile(s, { year: e.target.value ? Number(e.target.value) : null }))}
-              className="mt-1 h-11 w-full rounded-xl border-2 border-line-strong bg-surface px-3"
+              className="mt-1 h-11 w-full rounded-[16px] border-2 border-line-strong bg-surface px-3"
             >
               <option value="">Not set</option>
               {[3, 4, 5, 6].map((y) => (
@@ -248,7 +256,7 @@ export function ParentScreen() {
         <h2 id="roadmap-title" className="font-semibold">
           About this module
         </h2>
-        <p className="mt-1 max-w-3xl text-sm text-ink-2">
+        <p className="mt-1 max-w-3xl text-[0.9375rem] text-ink-2">
           This prototype covers <strong>fractions foundations</strong> only: fractions of one whole, comparing, equivalence, number lines from 0 to 1 and
           fractions of amounts. It is not complete 11+ preparation. Planned next modules (not built yet): simplifying fractions, improper fractions and
           mixed numbers, adding and subtracting fractions, multiplying and dividing fractions, and fractions–decimals–percentages.
@@ -260,8 +268,8 @@ export function ParentScreen() {
 
 function Toggle({ label, hint, on, onChange }: { label: string; hint: string; on: boolean; onChange: (v: boolean) => void }) {
   return (
-    <div className="flex items-start justify-between gap-4 rounded-2xl bg-paper p-3">
-      <div className="text-sm">
+    <div className="flex items-start justify-between gap-4 rounded-[20px] bg-paper p-3">
+      <div className="text-[0.9375rem]">
         <p className="font-medium">{label}</p>
         <p className="text-muted">{hint}</p>
       </div>

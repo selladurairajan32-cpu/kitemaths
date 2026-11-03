@@ -136,3 +136,10 @@ export const SoundIcon = ({ muted = false, ...p }: IconProps & { muted?: boolean
     {muted ? <path d="M16 9.5l5 5M21 9.5l-5 5" /> : <path d="M15.5 9a4 4 0 0 1 0 6M18.3 6.5a7.5 7.5 0 0 1 0 11" />}
   </svg>
 );
+export const KiteIcon = (p: IconProps) => (
+  <svg {...base(p)}>
+    <path d="M12 2.5 19 10 12 19 5 10Z" />
+    <path d="M12 2.5V19M5 10h14" />
+    <path d="M12 19c-1.5 1.2 1.5 2 0 3" />
+  </svg>
+);

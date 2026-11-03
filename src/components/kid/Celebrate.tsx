@@ -2,59 +2,69 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useMemo } from "react";
+import { PAPER } from "@/components/paper/PaperIcon";
 import { hashString, prng } from "@/engine/random";
+import { Pic } from "@/components/paper/Pic";
 
-const COLORS = ["#ff6a45", "#ffc83a", "#2f74ff", "#6a4cff", "#22c174", "#ff4f9a", "#1fbfae"];
+const COLOURS = [PAPER.red, PAPER.sun, PAPER.sky, PAPER.leaf];
 
-/** A one-shot confetti burst. Remount (change `burstKey`) to fire again. */
-export function Confetti({ burstKey, pieces = 36 }: { burstKey: string | number; pieces?: number }) {
+/**
+ * A short burst of paper bits (kite-panel triangles and ribbons) when a child
+ * gets something right. Feedback motion (kid exception 4): one burst, no
+ * loops, nothing at all with reduced motion. Remount with a new `burstKey` to
+ * fire again.
+ */
+export function Confetti({ burstKey, pieces = 24 }: { burstKey: string | number; pieces?: number }) {
   const reduce = useReducedMotion();
   const bits = useMemo(() => {
-    // Deterministic per burst so renders are stable.
+    // Seeded per burst so renders are stable.
     const rand = prng(hashString(String(burstKey)));
     return Array.from({ length: pieces }, (_, i) => ({
       id: i,
-      x: (rand() - 0.5) * 520,
-      y: -120 - rand() * 260,
-      r: rand() * 720 - 360,
-      color: COLORS[i % COLORS.length],
-      w: 6 + rand() * 6,
-      h: 8 + rand() * 10,
-      round: rand() < 0.3,
-      delay: rand() * 0.12,
+      x: (rand() - 0.5) * 460,
+      rise: 90 + rand() * 170,
+      r: rand() * 540 - 270,
+      color: COLOURS[i % COLOURS.length],
+      kind: rand() < 0.55 ? ("triangle" as const) : ("ribbon" as const),
+      size: 10 + rand() * 8,
+      delay: rand() * 0.08,
     }));
   }, [burstKey, pieces]);
   if (reduce) return null;
   return (
     <div className="pointer-events-none absolute inset-x-0 top-1/2 z-30 flex justify-center" aria-hidden key={burstKey}>
       {bits.map((b) => (
-        <motion.span
+        <motion.svg
           key={b.id}
           className="absolute"
-          style={{ width: b.w, height: b.round ? b.w : b.h, background: b.color, borderRadius: b.round ? 999 : 2 }}
-          initial={{ x: 0, y: 0, opacity: 1, rotate: 0, scale: 0.6 }}
-          animate={{ x: b.x, y: [0, b.y, b.y + 420], opacity: [1, 1, 0], rotate: b.r, scale: 1 }}
-          transition={{ duration: 1.6, delay: b.delay, ease: [0.2, 0.7, 0.4, 1], times: [0, 0.35, 1] }}
-        />
+          width={b.size}
+          height={b.size}
+          viewBox="0 0 10 10"
+          initial={{ x: 0, y: 0, opacity: 1, rotate: 0 }}
+          animate={{ x: b.x, y: [0, -b.rise, -b.rise + 260], opacity: [1, 1, 0], rotate: b.r }}
+          transition={{ duration: 1.3, delay: b.delay, ease: "easeOut", times: [0, 0.4, 1] }}
+        >
+          {b.kind === "triangle" ? <path d="M5 0 L10 9 L0 9 Z" fill={b.color} /> : <rect x="3.5" y="0" width="3" height="10" fill={b.color} />}
+        </motion.svg>
       ))}
     </div>
   );
 }
 
-/** "+3 ⭐" that floats up and fades. */
+/** "+3" with a star, beside the praise line. */
 export function StarPop({ amount, show }: { amount: number; show: boolean }) {
   return (
     <AnimatePresence>
       {show && amount > 0 && (
         <motion.span
-          className="pointer-events-none inline-flex items-center gap-1 rounded-full bg-sun px-3 py-1 text-sm font-bold text-ink shadow-[0_3px_0_var(--color-sun-strong)]"
-          initial={{ opacity: 0, y: 8, scale: 0.7 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -12 }}
-          transition={{ type: "spring", stiffness: 420, damping: 18 }}
+          className="inline-flex h-10 items-center gap-1 whitespace-nowrap rounded-full bg-surface pl-3 pr-1.5 text-lg font-extrabold text-ink"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
           aria-label={`You earned ${amount} stars`}
         >
-          +{amount} <StarGlyph size={16} />
+          +{amount} <Pic name="star" size={28} />
         </motion.span>
       )}
     </AnimatePresence>
@@ -65,10 +75,10 @@ export function StarGlyph({ size = 20, className = "" }: { size?: number; classN
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" className={className} aria-hidden>
       <path
-        d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"
-        fill="#ffc83a"
-        stroke="#e09a00"
-        strokeWidth="1.4"
+        d="M12 2.6l2.8 5.8 6.3.8-4.6 4.4 1.1 6.3L12 16.9l-5.6 3 1.1-6.3L2.9 9.2l6.3-.8z"
+        fill={PAPER.sun}
+        stroke={PAPER.ink}
+        strokeWidth="1.6"
         strokeLinejoin="round"
       />
     </svg>
@@ -79,10 +89,14 @@ export function FlameGlyph({ size = 20, lit = true }: { size?: number; lit?: boo
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden>
       <path
-        d="M12 2.5c.6 3.2 4.8 5.3 4.8 10.2A4.8 4.8 0 0 1 12 17.6a4.8 4.8 0 0 1-4.8-4.9c0-2.1 1-3.5 2-4.6.2 1.4.9 2.4 1.9 2.8-.3-3.4.6-6 .9-8.4z"
-        fill={lit ? "#ff6a45" : "#c2cdea"}
+        d="M12 2.5c.6 3.2 5 5.3 5 10.2a5 5 0 0 1-10 0c0-2.1 1-3.5 2-4.6.2 1.4.9 2.4 1.9 2.8-.3-3.4.7-6 1.1-8.4z"
+        fill={lit ? PAPER.red : "var(--color-line)"}
+        stroke={PAPER.ink}
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+        strokeOpacity={lit ? 1 : 0.4}
       />
-      <path d="M12 21.5a3.4 3.4 0 0 1-3.4-3.4c0-2 1.6-3 2.4-4.6.6 1.5 4.4 2.3 4.4 4.6a3.4 3.4 0 0 1-3.4 3.4z" fill={lit ? "#ffc83a" : "#dde5f6"} />
+      <path d="M12 21.4a3.3 3.3 0 0 1-3.3-3.3c0-2 1.6-3 2.4-4.6.6 1.5 4.2 2.3 4.2 4.6a3.3 3.3 0 0 1-3.3 3.3z" fill={lit ? PAPER.sun : "var(--color-sunk)"} />
     </svg>
   );
 }

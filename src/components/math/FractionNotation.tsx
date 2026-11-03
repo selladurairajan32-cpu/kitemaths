@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { toWords } from "@/topics/fractions/math";
+import { toWords } from "@/maths/fraction";
 
 type Size = "inline" | "sm" | "md" | "lg" | "xl";
 
@@ -24,7 +24,7 @@ function Digit({ value, className, animate }: { value: string; className: string
           initial={{ y: "60%", opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: "-60%", opacity: 0 }}
-          transition={{ type: "spring", stiffness: 420, damping: 30 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
         >
           {value}
         </motion.span>

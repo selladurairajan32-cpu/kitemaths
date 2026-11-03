@@ -8,7 +8,7 @@ import type { ChoiceOption, Diagram, FractionOption, FractionQuestion, NumericTr
  * Procedural question generators.
  *
  * A generated question's id encodes everything needed to rebuild it:
- * `g:<template>:<difficulty>:<seed>`. So a question can be persisted by id,
+ * `g:fractions.<template>:<difficulty>:<seed>`. So a question can be persisted by id,
  * reloaded later, and regenerated identically — no question bank to exhaust.
  */
 
@@ -115,7 +115,7 @@ const TEMPLATES: Template[] = [
   /* ─────────── Wholes and equal parts ─────────── */
   {
     key: "ep-pick",
-    skill: "equal-parts",
+    skill: "fractions.equal-parts",
     difficulties: [1, 2, 3],
     make: (r, base) => {
       const maxParts = base.difficulty === 1 ? 4 : base.difficulty === 2 ? 6 : 8;
@@ -139,7 +139,7 @@ const TEMPLATES: Template[] = [
   },
   {
     key: "ep-yesno",
-    skill: "equal-parts",
+    skill: "fractions.equal-parts",
     difficulties: [1, 2, 3],
     make: (r, base) => {
       const parts = int(r, 2, base.difficulty === 1 ? 4 : 6);
@@ -172,7 +172,7 @@ const TEMPLATES: Template[] = [
   /* ─────────── Reading fractions ─────────── */
   {
     key: "nm-choose",
-    skill: "name",
+    skill: "fractions.name",
     difficulties: [1, 2, 3],
     make: (r, base) => {
       const diagram = namingDiagram(r, base.difficulty);
@@ -197,7 +197,7 @@ const TEMPLATES: Template[] = [
   },
   {
     key: "nm-write",
-    skill: "name",
+    skill: "fractions.name",
     difficulties: [2, 3],
     make: (r, base) => {
       const diagram = namingDiagram(r, base.difficulty);
@@ -217,7 +217,7 @@ const TEMPLATES: Template[] = [
   },
   {
     key: "nm-line",
-    skill: "number-line",
+    skill: "fractions.number-line",
     difficulties: [2, 3],
     make: (r, base) => {
       const intervals = base.difficulty === 2 ? int(r, 3, 6) : int(r, 6, 10);
@@ -239,7 +239,7 @@ const TEMPLATES: Template[] = [
   /* ─────────── Showing fractions ─────────── */
   {
     key: "rp-shade",
-    skill: "represent",
+    skill: "fractions.represent",
     difficulties: [1, 2, 3],
     make: (r, base) => {
       const shape = pick(r, ["bar", "circle"] as const);
@@ -276,7 +276,7 @@ const TEMPLATES: Template[] = [
   /* ─────────── Comparing ─────────── */
   {
     key: "cp-sign",
-    skill: "compare",
+    skill: "fractions.compare",
     difficulties: [1, 2, 3],
     make: (r, base) => {
       let left: Fraction;
@@ -328,7 +328,7 @@ const TEMPLATES: Template[] = [
   /* ─────────── Equivalent fractions ─────────── */
   {
     key: "eq-missing",
-    skill: "equivalent",
+    skill: "fractions.equivalent",
     difficulties: [1, 2, 3],
     make: (r, base) => {
       const left = properFraction(r, 2, base.difficulty === 3 ? 7 : 5);
@@ -352,7 +352,7 @@ const TEMPLATES: Template[] = [
   },
   {
     key: "eq-choose",
-    skill: "equivalent",
+    skill: "fractions.equivalent",
     difficulties: [2, 3],
     make: (r, base) => {
       const target = properFraction(r, 2, 6);
@@ -388,7 +388,7 @@ const TEMPLATES: Template[] = [
   /* ─────────── Number lines ─────────── */
   {
     key: "nl-place",
-    skill: "number-line",
+    skill: "fractions.number-line",
     difficulties: [1, 2, 3],
     make: (r, base) => {
       if (base.difficulty === 3) {
@@ -424,7 +424,7 @@ const TEMPLATES: Template[] = [
   /* ─────────── Fractions of amounts ─────────── */
   {
     key: "fo-amount",
-    skill: "fraction-of",
+    skill: "fractions.fraction-of",
     difficulties: [1, 2, 3],
     make: (r, base) => {
       const fraction = properFraction(r, 2, base.difficulty === 1 ? 5 : base.difficulty === 2 ? 8 : 10, base.difficulty === 1);
@@ -475,7 +475,7 @@ const TEMPLATES: Template[] = [
   /* ─────────── Reasoning ─────────── */
   {
     key: "rs-claim",
-    skill: "reasoning",
+    skill: "fractions.reasoning",
     difficulties: [1, 2, 3],
     make: (r, base) => {
       const who = pick(r, PEOPLE);
@@ -544,7 +544,7 @@ const TEMPLATES: Template[] = [
 
 const BY_KEY = new Map(TEMPLATES.map((t) => [t.key, t]));
 
-export const GENERATED_PREFIX = "g:";
+export const GENERATED_PREFIX = "g:fractions.";
 
 export function isGeneratedId(id: string) {
   return id.startsWith(GENERATED_PREFIX);
@@ -552,12 +552,14 @@ export function isGeneratedId(id: string) {
 
 /** Rebuilds a generated question from its id, or returns null if the id isn't valid. */
 export function generateFromId(id: string): FractionQuestion | null {
-  const m = /^g:([a-z-]+):([123]):(\d+)$/.exec(id);
+  const m = /^g:fractions\.([a-z-]+):([123]):(\d+)$/.exec(id);
   if (!m) return null;
   const t = BY_KEY.get(m[1]);
   const difficulty = Number(m[2]) as Difficulty;
   if (!t || !t.difficulties.includes(difficulty)) return null;
-  return t.make(prng(hashString(id)), { id, skill: t.skill, difficulty });
+  // Seeded from the id's pre-namespacing form (`g:<template>:<level>:<seed>`) so
+  // questions saved before topics were namespaced rebuild exactly as the child saw them.
+  return t.make(prng(hashString(`g:${m[1]}:${m[2]}:${m[3]}`)), { id, skill: t.skill, difficulty });
 }
 
 /** A content fingerprint, so two seeds that happen to build the same question count as one. */
@@ -588,7 +590,7 @@ export function generatedPool(
       let made = 0;
       for (let attempt = 0; attempt < perTemplateLevel * 4 && made < perTemplateLevel; attempt++) {
         const seed = hashString(`${sessionSeed}:${t.key}:${d}:${attempt}`) % 1_000_000_000;
-        const q = generateFromId(`g:${t.key}:${d}:${seed}`);
+        const q = generateFromId(`${GENERATED_PREFIX}${t.key}:${d}:${seed}`);
         if (!q) continue;
         const key = contentKey(q);
         if (seenKeys.has(key)) continue;

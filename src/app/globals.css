@@ -1,90 +1,72 @@
 @import "tailwindcss";
 
-@theme {
-  /* Sky world */
-  --color-paper: #f2f8ff;
-  --color-surface: #ffffff;
-  --color-sunk: #edf2fc;
-  --color-ink: #1d2350;
-  --color-ink-2: #3a4275;
-  --color-muted: #646d9a;
-  --color-line: #dde5f6;
-  --color-line-strong: #c2cdea;
+/*
+ * Kite Maths design system v3: "Crystal". See docs/DESIGN.md.
+ * A calm white base, one friendly font (Nunito) at easy reading sizes, one blue action,
+ * white cards with soft shadows, and the fun carried by 3D pictures (public/3d).
+ * Fractions keep their data colours: coral numerator, blue denominator.
+ * No gradients and no violet.
+ */
+@theme static {
+  /* Ground, surfaces and ink: a calm, clean base (the "Crystal" look). */
+  --color-paper: #f6f8fd; /* page ground */
+  --color-surface: #ffffff; /* cards */
+  --color-sunk: #edf2fa; /* one tone step below the ground: tracks, chips */
+  --color-raised: #f8faff; /* hover and quiet panels inside white cards */
+  --color-ink: #1b2559;
+  --color-ink-2: #4a5578; /* body text, 7.4:1 on white */
+  --color-muted: #5d6785; /* labels and meta, 5.6:1 on white */
+  --color-line: #e6ecf7; /* card borders */
+  --color-line-strong: #d3dcec; /* control borders */
 
-  /* Brand: kite violet */
-  --color-brand: #6a4cff;
-  --color-brand-strong: #4c2fe0;
-  --color-brand-soft: #ece7ff;
+  /* The one action colour: a clear, friendly blue. */
+  --color-brand: #2563eb;
+  --color-brand-strong: #1d4ed8;
+  --color-brand-soft: #e8f0ff;
+  --color-on-brand: #ffffff; /* text on the action colour, 5.2:1 */
 
-  /* Numerator / shaded parts */
-  --color-num: #ff6a45;
-  --color-num-strong: #db4a26;
-  --color-num-soft: #ffe7df;
-  /* Denominator / all parts */
-  --color-den: #2f74ff;
-  --color-den-strong: #1d55d8;
-  --color-den-soft: #e2ecff;
+  /* Pastel tiles behind 3D pictures */
+  --color-tile-blue: #e8f0ff;
+  --color-tile-orange: #fff0e3;
+  --color-tile-yellow: #fff6d4;
+  --color-tile-green: #e3f8ee;
+  --color-tile-pink: #ffe8f0;
+  --color-tile-sky: #e0f5fd;
 
-  --color-ok: #138a50;
-  --color-ok-bright: #22c174;
-  --color-ok-soft: #d9f7e8;
-  --color-warn: #a96400;
-  --color-warn-bright: #ffb020;
-  --color-warn-soft: #fff2d3;
-  --color-violet: #7a4ff0;
-  --color-violet-soft: #efe8ff;
-  --color-sun: #ffc83a;
-  --color-sun-strong: #f0a800;
-  --color-sun-soft: #fff5cf;
-  --color-pink: #ff4f9a;
-  --color-pink-soft: #ffe3f0;
-  --color-mint: #1fbfae;
-  --color-mint-soft: #d8f7f3;
-  --color-sky: #59b8ff;
-  --color-sky-soft: #def1ff;
+  /* Data: numerator / shaded parts */
+  --color-num: #f4623a;
+  --color-num-strong: #a3361a;
+  --color-num-soft: #fde5dc;
+  /* Data: denominator / all parts */
+  --color-den: #2f6fd8;
+  --color-den-strong: #1d55b8;
+  --color-den-soft: #dfeafb;
 
-  --font-sans: var(--font-lexend), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-fredoka), var(--font-lexend), ui-rounded, system-ui, sans-serif;
+  /* Status */
+  --color-ok: #167a4b;
+  --color-ok-bright: #22a565;
+  --color-ok-soft: #e3f8ee;
+  --color-warn: #8a5300;
+  --color-warn-bright: #f2a516;
+  --color-warn-soft: #fff4d6;
 
-  --radius-card: 1.75rem;
-  --shadow-card: 0 4px 0 rgb(29 35 80 / 0.06), 0 12px 32px -18px rgb(29 35 80 / 0.25);
-  --shadow-lift: 0 6px 0 rgb(29 35 80 / 0.08), 0 18px 40px -16px rgb(29 35 80 / 0.3);
+  /* Paper colours: used by the drawn fraction pictures */
+  --color-kite-red: #e8343f;
+  --color-sun: #ffc23d;
+  --color-sun-strong: #d99a00;
+  --color-sun-soft: #fff4d4;
+  --color-sky: #4da8f0;
+  --color-sky-soft: #e0f0fd;
+  --color-leaf: #3dae6b;
+  --color-leaf-soft: #dcf3e5;
+  --color-fire: #ff7a2f;
 
-  --animate-float: float 4s ease-in-out infinite;
-  --animate-drift: drift 60s linear infinite;
-  --animate-wiggle: wiggle 0.5s ease-in-out;
+  --font-sans: var(--font-nunito), ui-rounded, ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-nunito), ui-rounded, ui-sans-serif, system-ui, sans-serif;
 
-  @keyframes float {
-    0%,
-    100% {
-      transform: translateY(0) rotate(-2deg);
-    }
-    50% {
-      transform: translateY(-8px) rotate(2deg);
-    }
-  }
-  @keyframes drift {
-    from {
-      transform: translateX(-10%);
-    }
-    to {
-      transform: translateX(110%);
-    }
-  }
-  @keyframes wiggle {
-    0%,
-    100% {
-      transform: translateX(0);
-    }
-    20%,
-    60% {
-      transform: translateX(-6px);
-    }
-    40%,
-    80% {
-      transform: translateX(6px);
-    }
-  }
+  --radius-card: 24px;
+  --shadow-card: 0 10px 30px rgba(27, 37, 89, 0.06);
+  --shadow-lift: 0 18px 44px rgba(27, 37, 89, 0.1);
 }
 
 @layer base {
@@ -95,63 +77,63 @@
   }
   body {
     font-family: var(--font-sans);
-    line-height: 1.55;
-    background:
-      radial-gradient(60rem 26rem at 10% -6rem, #d4ebff 0%, transparent 70%),
-      radial-gradient(50rem 24rem at 95% -4rem, #ece4ff 0%, transparent 70%),
-      linear-gradient(180deg, #e6f3ff 0%, var(--color-paper) 28rem);
-    background-attachment: fixed;
+    font-size: 1.125rem; /* 18px: easy reading for young readers */
+    font-weight: 500;
+    line-height: 1.6;
+    background: var(--color-paper);
+    font-variant-numeric: tabular-nums;
   }
   :focus-visible {
     outline: 3px solid var(--color-brand);
     outline-offset: 3px;
-    border-radius: 10px;
+    border-radius: 6px;
   }
   svg :focus-visible {
     outline: none;
   }
+  /* Headings and panels that receive focus from script (so screen readers announce them) show no ring. */
+  [tabindex="-1"]:focus {
+    outline: none;
+  }
   ::selection {
-    background: var(--color-brand-soft);
+    background: var(--color-sun-soft);
   }
 }
 
 @layer components {
+  /* A paper panel: white on the sky, separated by tone, never by a shadow. */
   .card {
     background: var(--color-surface);
-    border: 2px solid var(--color-line);
+    border: 1px solid var(--color-line);
     border-radius: var(--radius-card);
     box-shadow: var(--shadow-card);
   }
-  .eyebrow {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-muted);
-  }
+  /* Screen and section titles: one face, tight tracking. */
   .display {
     font-family: var(--font-display);
-    font-weight: 600;
+    font-weight: 800;
     letter-spacing: -0.01em;
+    line-height: 1.15;
   }
-  /* Chunky "game" press: the coloured bottom edge sinks when pressed. */
+  /*
+   * Tactile press (kid exception 3): a darker bottom edge drawn as a border,
+   * not a shadow, that sinks when pressed. Only on the primary button and
+   * answer tiles.
+   */
   .press {
-    position: relative;
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
     transition:
-      transform 90ms ease,
-      box-shadow 90ms ease,
-      background-color 150ms ease,
-      filter 150ms ease;
+      transform 80ms ease-out,
+      border-bottom-width 80ms ease-out,
+      margin-bottom 80ms ease-out,
+      background-color 120ms ease-out;
   }
-  .press:not(:disabled):hover {
-    filter: brightness(1.04);
-  }
+  /* The edge shrinks by 2px and the margin takes it up, so nothing below moves. */
   .press:not(:disabled):active {
-    transform: translateY(3px);
-    box-shadow: 0 1px 0 var(--press-edge, rgb(0 0 0 / 0.2)) !important;
-  }
-  .press:disabled {
-    box-shadow: none !important;
+    transform: translateY(2px);
+    border-bottom-width: 1px;
+    margin-bottom: 2px;
   }
 }
 

@@ -1,29 +1,39 @@
 import Link from "next/link";
 import type { ButtonHTMLAttributes, ComponentProps, ReactNode } from "react";
 
-type Variant = "primary" | "go" | "secondary" | "ghost" | "soft" | "sun";
+/**
+ * Buttons are fully round pills with one flat fill (design system v3, "Crystal").
+ * - primary: friendly blue, the one action on a screen. Its darker bottom edge
+ *   sinks when pressed.
+ * - secondary: paper with a quiet control edge.
+ * - quiet: text only, for hints and back links.
+ * - ink: near-black, the one action in the grown-ups' area.
+ * "go", "sun" and "soft" are older names kept so callers read naturally.
+ */
+type Variant = "primary" | "go" | "sun" | "secondary" | "ghost" | "quiet" | "soft" | "ink";
 type Size = "md" | "lg" | "xl";
 
-/** Chunky game-style buttons: a coloured bottom edge that sinks when pressed. */
+const PRIMARY = "press bg-brand text-on-brand border-brand-strong hover:bg-[color-mix(in_srgb,var(--color-brand)_86%,black)] disabled:bg-line-strong disabled:border-line-strong";
+
 const variants: Record<Variant, string> = {
-  primary:
-    "press bg-brand text-white shadow-[0_4px_0_var(--color-brand-strong)] [--press-edge:var(--color-brand-strong)] disabled:bg-line-strong disabled:text-white/90",
-  go: "press bg-ok-bright text-white shadow-[0_4px_0_#139656] [--press-edge:#139656] disabled:bg-line-strong disabled:text-white/90",
-  sun: "press bg-sun text-ink shadow-[0_4px_0_var(--color-sun-strong)] [--press-edge:var(--color-sun-strong)] disabled:opacity-50",
-  secondary:
-    "press bg-surface text-ink border-2 border-line-strong shadow-[0_3px_0_var(--color-line-strong)] [--press-edge:var(--color-line-strong)] hover:bg-sunk disabled:text-muted disabled:border-line",
-  ghost: "text-ink-2 hover:bg-sunk disabled:text-muted transition-colors",
-  soft: "bg-brand-soft text-brand-strong hover:bg-[#e0d8ff] disabled:opacity-50 transition-colors",
+  primary: PRIMARY,
+  go: PRIMARY,
+  sun: PRIMARY,
+  secondary: "bg-surface text-ink border-[1.5px] border-line-strong hover:bg-raised disabled:text-muted disabled:border-line",
+  soft: "bg-surface text-ink border-[1.5px] border-line-strong hover:bg-raised disabled:text-muted disabled:border-line",
+  ghost: "text-ink-2 hover:bg-sunk disabled:text-muted",
+  quiet: "text-ink-2 hover:bg-sunk disabled:text-muted",
+  ink: "bg-ink text-white hover:bg-ink-2 disabled:bg-line-strong",
 };
 
 const sizes: Record<Size, string> = {
-  md: "h-11 px-4 text-[0.95rem] gap-2 rounded-2xl",
-  lg: "h-13 px-6 text-base gap-2.5 rounded-2xl",
-  xl: "h-15 px-8 text-lg gap-3 rounded-[1.25rem]",
+  md: "h-12 px-5 text-[1.0625rem] gap-2",
+  lg: "h-14 px-7 text-lg gap-2.5",
+  xl: "h-[3.75rem] px-8 text-[1.1875rem] gap-3",
 };
 
 export function buttonClass(variant: Variant = "primary", size: Size = "md", extra = "") {
-  return `inline-flex items-center justify-center font-semibold select-none disabled:cursor-not-allowed ${variants[variant]} ${sizes[size]} ${extra}`;
+  return `inline-flex items-center justify-center rounded-full font-bold select-none transition-colors disabled:cursor-not-allowed ${variants[variant]} ${sizes[size]} ${extra}`;
 }
 
 export function Button({

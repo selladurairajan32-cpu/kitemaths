@@ -28,8 +28,8 @@ const line = (intervals: number, point?: number): Diagram => ({ shape: "line", i
 export const PRACTICE_QUESTIONS: FractionQuestion[] = [
   // Wholes and equal parts
   {
-    id: "ep-1",
-    skill: "equal-parts",
+    id: "fractions.ep-1",
+    skill: "fractions.equal-parts",
     difficulty: 1,
     kind: "equal-parts",
     prompt: "Which shapes are split into **equal parts**? Select all that are.",
@@ -44,8 +44,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "Only the shapes where every piece is the same size show equal parts.",
   },
   {
-    id: "ep-2",
-    skill: "equal-parts",
+    id: "fractions.ep-2",
+    skill: "fractions.equal-parts",
     difficulty: 1,
     kind: "choose",
     prompt: "Mia cuts a ribbon into 2 pieces like this. Has she cut it **in half**?",
@@ -60,8 +60,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "Halves must be 2 equal pieces. One piece is longer, so these are not halves.",
   },
   {
-    id: "ep-3",
-    skill: "equal-parts",
+    id: "fractions.ep-3",
+    skill: "fractions.equal-parts",
     difficulty: 2,
     kind: "equal-parts",
     prompt: "Select every shape that is split into **equal parts**.",
@@ -76,8 +76,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "The square, the bar of 6 and the circle of 8 all have equal pieces. The bar of 3 has a bigger middle piece.",
   },
   {
-    id: "ep-4",
-    skill: "equal-parts",
+    id: "fractions.ep-4",
+    skill: "fractions.equal-parts",
     difficulty: 2,
     kind: "choose",
     prompt: "Which picture shows **quarters**?",
@@ -92,8 +92,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "Quarters are 4 equal parts. Only C has 4 pieces that are all the same size.",
   },
   {
-    id: "ep-5",
-    skill: "equal-parts",
+    id: "fractions.ep-5",
+    skill: "fractions.equal-parts",
     difficulty: 3,
     kind: "choose",
     prompt:
@@ -111,8 +111,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
 
   // Reading fractions
   {
-    id: "nm-1",
-    skill: "name",
+    id: "fractions.nm-1",
+    skill: "fractions.name",
     difficulty: 1,
     kind: "choose-fraction",
     prompt: "What fraction of the bar is shaded?",
@@ -123,8 +123,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "There are 4 equal parts and 1 is shaded, so {1/4} is shaded.",
   },
   {
-    id: "nm-2",
-    skill: "name",
+    id: "fractions.nm-2",
+    skill: "fractions.name",
     difficulty: 1,
     kind: "choose-fraction",
     prompt: "What fraction of the circle is shaded?",
@@ -135,8 +135,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "The circle has 3 equal parts and 2 are shaded, so {2/3} is shaded.",
   },
   {
-    id: "nm-3",
-    skill: "name",
+    id: "fractions.nm-3",
+    skill: "fractions.name",
     difficulty: 2,
     kind: "choose-fraction",
     prompt: "What fraction of the bar is shaded?",
@@ -147,8 +147,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "There are 5 equal parts and 3 are shaded, so {3/5} is shaded.",
   },
   {
-    id: "nm-4",
-    skill: "name",
+    id: "fractions.nm-4",
+    skill: "fractions.name",
     difficulty: 2,
     kind: "choose-fraction",
     prompt: "What fraction of the rectangle is shaded?",
@@ -159,8 +159,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "There are 6 equal squares and 3 are shaded, so {3/6} is shaded.",
   },
   {
-    id: "nm-5",
-    skill: "name",
+    id: "fractions.nm-5",
+    skill: "fractions.name",
     difficulty: 2,
     kind: "write-fraction",
     prompt: "Write the fraction of the circle that is shaded.",
@@ -170,8 +170,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "There are 6 equal slices and 5 are shaded, so {5/6} is shaded.",
   },
   {
-    id: "nm-6",
-    skill: "name",
+    id: "fractions.nm-6",
+    skill: "fractions.name",
     difficulty: 2,
     kind: "match",
     prompt: "Match each picture to the fraction it shows shaded.",
@@ -185,8 +185,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "A shows {1/4}, B shows {2/3} and C shows {3/5}.",
   },
   {
-    id: "nm-7",
-    skill: "name",
+    id: "fractions.nm-7",
+    skill: "fractions.name",
     difficulty: 3,
     kind: "choose-fraction",
     prompt: "What fraction of the bar is shaded?",
@@ -197,8 +197,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "There are 6 equal parts and 4 are shaded, so {4/6} is shaded.",
   },
   {
-    id: "nm-8",
-    skill: "name",
+    id: "fractions.nm-8",
+    skill: "fractions.name",
     difficulty: 3,
     kind: "write-fraction",
     prompt: "What fraction of the rectangle is **not** shaded?",
@@ -209,8 +209,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "There are 10 equal squares and 3 are shaded, so 7 are not shaded: {7/10}.",
   },
   {
-    id: "nm-9",
-    skill: "name",
+    id: "fractions.nm-9",
+    skill: "fractions.name",
     difficulty: 3,
     kind: "match",
     prompt: "Match each picture to the fraction it shows shaded. Look carefully — they are similar!",
@@ -224,8 +224,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "A shows {2/6}, B shows {4/6} and C shows {2/4}.",
   },
   {
-    id: "nm-10",
-    skill: "name",
+    id: "fractions.nm-10",
+    skill: "fractions.name",
     difficulty: 3,
     kind: "choose-fraction",
     prompt: "What fraction of the grid is shaded?",
@@ -238,8 +238,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
 
   // Showing fractions
   {
-    id: "rp-1",
-    skill: "represent",
+    id: "fractions.rp-1",
+    skill: "fractions.represent",
     difficulty: 1,
     kind: "shade",
     prompt: "Shade {1/3} of the bar.",
@@ -249,8 +249,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "{1/3} means 1 of the 3 equal parts.",
   },
   {
-    id: "rp-2",
-    skill: "represent",
+    id: "fractions.rp-2",
+    skill: "fractions.represent",
     difficulty: 1,
     kind: "shade",
     prompt: "Shade {3/4} of the circle.",
@@ -260,8 +260,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "{3/4} means 3 of the 4 equal parts.",
   },
   {
-    id: "rp-3",
-    skill: "represent",
+    id: "fractions.rp-3",
+    skill: "fractions.represent",
     difficulty: 2,
     kind: "shade",
     prompt: "Shade {2/5} of the bar.",
@@ -271,8 +271,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "{2/5} means 2 of the 5 equal parts.",
   },
   {
-    id: "rp-4",
-    skill: "represent",
+    id: "fractions.rp-4",
+    skill: "fractions.represent",
     difficulty: 2,
     kind: "shade",
     prompt: "Shade {5/8} of the circle.",
@@ -282,8 +282,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "{5/8} means 5 of the 8 equal slices.",
   },
   {
-    id: "rp-5",
-    skill: "represent",
+    id: "fractions.rp-5",
+    skill: "fractions.represent",
     difficulty: 3,
     kind: "shade",
     prompt: "Shade {1/2} of this bar.",
@@ -293,8 +293,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "Half of 8 parts is 4 parts, because {1/2} = {4/8}.",
   },
   {
-    id: "rp-6",
-    skill: "represent",
+    id: "fractions.rp-6",
+    skill: "fractions.represent",
     difficulty: 3,
     kind: "shade",
     prompt: "Shade {2/3} of the rectangle.",
@@ -304,8 +304,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "6 squares in 3 equal groups is 2 per group. {2/3} is 2 groups, so shade 4 squares: {2/3} = {4/6}.",
   },
   {
-    id: "rp-7",
-    skill: "represent",
+    id: "fractions.rp-7",
+    skill: "fractions.represent",
     difficulty: 3,
     kind: "shade",
     prompt: "Shade {3/4} of the rectangle.",
@@ -317,8 +317,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
 
   // Comparing
   {
-    id: "cp-1",
-    skill: "compare",
+    id: "fractions.cp-1",
+    skill: "fractions.compare",
     difficulty: 1,
     kind: "compare",
     prompt: "Choose the correct sign.",
@@ -329,8 +329,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "Both fractions are fifths. 2 fifths is less than 4 fifths, so {2/5} < {4/5}.",
   },
   {
-    id: "cp-2",
-    skill: "compare",
+    id: "fractions.cp-2",
+    skill: "fractions.compare",
     difficulty: 1,
     kind: "compare",
     prompt: "Choose the correct sign.",
@@ -341,8 +341,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "Halves are bigger pieces than quarters, so {1/2} > {1/4}.",
   },
   {
-    id: "cp-3",
-    skill: "compare",
+    id: "fractions.cp-3",
+    skill: "fractions.compare",
     difficulty: 2,
     kind: "compare",
     prompt: "Choose the correct sign.",
@@ -352,8 +352,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "Sharing between more people gives smaller pieces. Thirds are bigger than fifths, so {1/3} > {1/5}.",
   },
   {
-    id: "cp-4",
-    skill: "compare",
+    id: "fractions.cp-4",
+    skill: "fractions.compare",
     difficulty: 2,
     kind: "compare",
     prompt: "Choose the correct sign.",
@@ -363,8 +363,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "Both are eighths. 5 eighths is more than 3 eighths, so {5/8} > {3/8}.",
   },
   {
-    id: "cp-5",
-    skill: "compare",
+    id: "fractions.cp-5",
+    skill: "fractions.compare",
     difficulty: 2,
     kind: "compare",
     prompt: "Choose the correct sign.",
@@ -374,8 +374,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "Sixths are smaller pieces than thirds, so {1/6} < {1/3}.",
   },
   {
-    id: "cp-6",
-    skill: "compare",
+    id: "fractions.cp-6",
+    skill: "fractions.compare",
     difficulty: 3,
     kind: "compare",
     prompt: "Choose the correct sign.",
@@ -385,8 +385,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "2 quarters cover exactly half the whole, so {2/4} = {1/2}.",
   },
   {
-    id: "cp-7",
-    skill: "compare",
+    id: "fractions.cp-7",
+    skill: "fractions.compare",
     difficulty: 3,
     kind: "compare",
     prompt: "Choose the correct sign.",
@@ -396,8 +396,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "Both are 3 pieces, but quarters are bigger than fifths, so {3/4} > {3/5}.",
   },
   {
-    id: "cp-8",
-    skill: "compare",
+    id: "fractions.cp-8",
+    skill: "fractions.compare",
     difficulty: 3,
     kind: "choose",
     prompt: "Put these in order from **smallest to largest**: {1/3}, {1/8}, {1/5}",
@@ -411,8 +411,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "With the same numerator, more pieces means smaller pieces: {1/8} < {1/5} < {1/3}.",
   },
   {
-    id: "cp-9",
-    skill: "compare",
+    id: "fractions.cp-9",
+    skill: "fractions.compare",
     difficulty: 3,
     kind: "choose",
     prompt:
@@ -429,8 +429,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
 
   // Equivalent
   {
-    id: "eq-1",
-    skill: "equivalent",
+    id: "fractions.eq-1",
+    skill: "fractions.equivalent",
     difficulty: 1,
     kind: "choose",
     prompt: "Which fraction is the **same amount** as {1/2}?",
@@ -445,8 +445,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "Splitting each half into 2 gives 4 quarters, and 2 of them are shaded: {1/2} = {2/4}.",
   },
   {
-    id: "eq-2",
-    skill: "equivalent",
+    id: "fractions.eq-2",
+    skill: "fractions.equivalent",
     difficulty: 1,
     kind: "missing-number",
     prompt: "Find the missing number.",
@@ -456,8 +456,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "2 × 2 = 4, so multiply the numerator by 2 too: {1/2} = {2/4}.",
   },
   {
-    id: "eq-3",
-    skill: "equivalent",
+    id: "fractions.eq-3",
+    skill: "fractions.equivalent",
     difficulty: 2,
     kind: "missing-number",
     prompt: "Find the missing number.",
@@ -467,8 +467,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "3 × 2 = 6, so 1 × 2 = 2: {1/3} = {2/6}.",
   },
   {
-    id: "eq-4",
-    skill: "equivalent",
+    id: "fractions.eq-4",
+    skill: "fractions.equivalent",
     difficulty: 2,
     kind: "missing-number",
     prompt: "Find the missing number.",
@@ -478,8 +478,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "4 × 2 = 8, so 3 × 2 = 6: {3/4} = {6/8}.",
   },
   {
-    id: "eq-5",
-    skill: "equivalent",
+    id: "fractions.eq-5",
+    skill: "fractions.equivalent",
     difficulty: 2,
     kind: "missing-number",
     prompt: "Find the missing number.",
@@ -489,8 +489,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "2 × 2 = 4, so 5 × 2 = 10: {2/5} = {4/10}.",
   },
   {
-    id: "eq-6",
-    skill: "equivalent",
+    id: "fractions.eq-6",
+    skill: "fractions.equivalent",
     difficulty: 3,
     kind: "missing-number",
     prompt: "Find the missing number.",
@@ -500,8 +500,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "3 × 4 = 12, so 2 × 4 = 8: {2/3} = {8/12}.",
   },
   {
-    id: "eq-7",
-    skill: "equivalent",
+    id: "fractions.eq-7",
+    skill: "fractions.equivalent",
     difficulty: 3,
     kind: "choose",
     prompt: "Which fraction is **not** equal to {1/2}?",
@@ -516,8 +516,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "3 is half of 6, 4 is half of 8 and 5 is half of 10. But 4 is not half of 6, so {4/6} is not equal to {1/2}.",
   },
   {
-    id: "eq-8",
-    skill: "equivalent",
+    id: "fractions.eq-8",
+    skill: "fractions.equivalent",
     difficulty: 3,
     kind: "missing-number",
     prompt: "Find the missing number.",
@@ -529,8 +529,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
 
   // Number lines
   {
-    id: "nl-1",
-    skill: "number-line",
+    id: "fractions.nl-1",
+    skill: "fractions.number-line",
     difficulty: 1,
     kind: "number-line-place",
     prompt: "Tap the number line to mark {1/4}.",
@@ -540,8 +540,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "4 equal jumps make quarters. {1/4} is 1 jump from 0.",
   },
   {
-    id: "nl-2",
-    skill: "number-line",
+    id: "fractions.nl-2",
+    skill: "fractions.number-line",
     difficulty: 1,
     kind: "number-line-place",
     prompt: "Tap the number line to mark {2/3}.",
@@ -551,8 +551,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "3 equal jumps make thirds. {2/3} is 2 jumps from 0.",
   },
   {
-    id: "nl-3",
-    skill: "number-line",
+    id: "fractions.nl-3",
+    skill: "fractions.number-line",
     difficulty: 2,
     kind: "choose-fraction",
     prompt: "What fraction is marked on the number line?",
@@ -563,8 +563,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "There are 5 equal gaps from 0 to 1 and the point is 2 gaps along: {2/5}.",
   },
   {
-    id: "nl-4",
-    skill: "number-line",
+    id: "fractions.nl-4",
+    skill: "fractions.number-line",
     difficulty: 2,
     kind: "number-line-place",
     prompt: "Tap the number line to mark {3/8}.",
@@ -574,8 +574,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "{3/8} is 3 of the 8 equal jumps from 0.",
   },
   {
-    id: "nl-5",
-    skill: "number-line",
+    id: "fractions.nl-5",
+    skill: "fractions.number-line",
     difficulty: 3,
     kind: "number-line-place",
     prompt: "This line is split into eighths. Mark {1/2}.",
@@ -585,8 +585,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "{1/2} = {4/8}, so it is 4 jumps along — exactly halfway.",
   },
   {
-    id: "nl-6",
-    skill: "number-line",
+    id: "fractions.nl-6",
+    skill: "fractions.number-line",
     difficulty: 3,
     kind: "choose-fraction",
     prompt: "What fraction is marked on the number line?",
@@ -599,8 +599,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
 
   // Fractions of amounts
   {
-    id: "fo-1",
-    skill: "fraction-of",
+    id: "fractions.fo-1",
+    skill: "fractions.fraction-of",
     difficulty: 1,
     kind: "fraction-of",
     prompt: "What is {1/2} of 10?",
@@ -611,8 +611,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "10 shared into 2 equal groups is 5 in each group. So {1/2} of 10 = 5.",
   },
   {
-    id: "fo-2",
-    skill: "fraction-of",
+    id: "fractions.fo-2",
+    skill: "fractions.fraction-of",
     difficulty: 1,
     kind: "fraction-of",
     prompt: "What is {1/3} of 12?",
@@ -623,8 +623,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "12 ÷ 3 = 4, so {1/3} of 12 = 4.",
   },
   {
-    id: "fo-3",
-    skill: "fraction-of",
+    id: "fractions.fo-3",
+    skill: "fractions.fraction-of",
     difficulty: 2,
     kind: "fraction-of",
     prompt: "What is {1/4} of 20?",
@@ -634,8 +634,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "20 ÷ 4 = 5, so {1/4} of 20 = 5.",
   },
   {
-    id: "fo-4",
-    skill: "fraction-of",
+    id: "fractions.fo-4",
+    skill: "fractions.fraction-of",
     difficulty: 2,
     kind: "fraction-of",
     prompt: "What is {3/4} of 12?",
@@ -646,8 +646,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "12 ÷ 4 = 3 in each quarter. 3 quarters is 3 × 3 = 9.",
   },
   {
-    id: "fo-5",
-    skill: "fraction-of",
+    id: "fractions.fo-5",
+    skill: "fractions.fraction-of",
     difficulty: 2,
     kind: "fraction-of",
     prompt: "There are 15 sweets in a bag. Sam eats {2/5} of them. How many sweets does Sam eat?",
@@ -658,8 +658,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "15 ÷ 5 = 3, so {1/5} is 3 sweets. {2/5} is 2 × 3 = 6 sweets.",
   },
   {
-    id: "fo-6",
-    skill: "fraction-of",
+    id: "fractions.fo-6",
+    skill: "fractions.fraction-of",
     difficulty: 3,
     kind: "fraction-of",
     prompt: "A ribbon is 24 cm long. {3/8} of it is cut off. How long is the piece that is cut off?",
@@ -670,8 +670,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "24 ÷ 8 = 3 cm for each eighth. 3 eighths is 3 × 3 = 9 cm.",
   },
   {
-    id: "fo-7",
-    skill: "fraction-of",
+    id: "fractions.fo-7",
+    skill: "fractions.fraction-of",
     difficulty: 3,
     kind: "number",
     prompt: "Mum has £18. She spends {2/3} of it. How much money does she have **left**?",
@@ -687,8 +687,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "She spends {2/3}, so {1/3} is left. 18 ÷ 3 = 6, so £6 is left.",
   },
   {
-    id: "fo-8",
-    skill: "fraction-of",
+    id: "fractions.fo-8",
+    skill: "fractions.fraction-of",
     difficulty: 3,
     kind: "number",
     prompt: "{1/5} of a number is 7. What is the number?",
@@ -705,8 +705,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
 
   // Reasoning
   {
-    id: "rs-1",
-    skill: "reasoning",
+    id: "fractions.rs-1",
+    skill: "fractions.reasoning",
     difficulty: 1,
     kind: "choose",
     prompt: "Leo says **{1/3}** of this bar is shaded. Is he right?",
@@ -721,8 +721,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "The shaded part is twice the size of the others. Thirds must be equal, so Leo is wrong.",
   },
   {
-    id: "rs-2",
-    skill: "reasoning",
+    id: "fractions.rs-2",
+    skill: "fractions.reasoning",
     difficulty: 2,
     kind: "choose",
     prompt: "Priya says “{1/5} is bigger than {1/3} because 5 is bigger than 3.” Is she right?",
@@ -736,8 +736,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "Sharing into 5 gives smaller pieces than sharing into 3, so {1/5} < {1/3}.",
   },
   {
-    id: "rs-3",
-    skill: "reasoning",
+    id: "fractions.rs-3",
+    skill: "fractions.reasoning",
     difficulty: 2,
     kind: "choose",
     prompt:
@@ -753,8 +753,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "There are 4 equal parts altogether and 1 is shaded, so {1/4} is shaded.",
   },
   {
-    id: "rs-4",
-    skill: "reasoning",
+    id: "fractions.rs-4",
+    skill: "fractions.reasoning",
     difficulty: 3,
     kind: "choose",
     prompt: "Zara says “{1/2} = {2/3} because I added 1 to the top and the bottom.” Is she right?",
@@ -768,8 +768,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "{2/3} is more than {1/2}. Equivalent fractions come from multiplying: {1/2} = {2/4}.",
   },
   {
-    id: "rs-5",
-    skill: "reasoning",
+    id: "fractions.rs-5",
+    skill: "fractions.reasoning",
     difficulty: 3,
     kind: "choose",
     prompt:
@@ -785,8 +785,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "5 marks make 4 equal gaps, so the point is 1 of 4 jumps: {1/4}.",
   },
   {
-    id: "rs-6",
-    skill: "reasoning",
+    id: "fractions.rs-6",
+    skill: "fractions.reasoning",
     difficulty: 3,
     kind: "choose",
     prompt: "Which statement is **true**?",
@@ -801,8 +801,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "8 ÷ 4 = 2 and 2 × 3 = 6, so {3/4} of 8 is 6. The others are wrong: {1/3} of 9 is 3, {2/5} of 10 is 4 and {1/2} of 7 is 3½.",
   },
   {
-    id: "fo-9",
-    skill: "fraction-of",
+    id: "fractions.fo-9",
+    skill: "fractions.fraction-of",
     difficulty: 3,
     kind: "number",
     prompt:
@@ -818,8 +818,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "{1/3} of £24 = £8 and {1/4} of £24 = £6. Altogether she spends £8 + £6 = £14.",
   },
   {
-    id: "rs-7",
-    skill: "reasoning",
+    id: "fractions.rs-7",
+    skill: "fractions.reasoning",
     difficulty: 2,
     kind: "explain-frame",
     prompt: "Jess says **{2/6}** is bigger than **{1/3}** because 2 is bigger than 1. Build an explanation.",
@@ -868,8 +868,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
     explanation: "Splitting each third into 2 makes sixths, and 1 third becomes 2 sixths. So {2/6} = {1/3} — they are equal, not bigger.",
   },
   {
-    id: "rs-8",
-    skill: "reasoning",
+    id: "fractions.rs-8",
+    skill: "fractions.reasoning",
     difficulty: 3,
     kind: "counterexample",
     prompt:
@@ -885,8 +885,8 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
 
 export const LESSON_QUESTIONS: FractionQuestion[] = [
   {
-    id: "ls-wholes-1",
-    skill: "equal-parts",
+    id: "fractions.ls-wholes-1",
+    skill: "fractions.equal-parts",
     difficulty: 1,
     kind: "equal-parts",
     prompt: "Which of these are split into **equal parts**? Select all that are.",
@@ -901,8 +901,8 @@ export const LESSON_QUESTIONS: FractionQuestion[] = [
     explanation: "The bar of 3 and the circle of 4 have equal parts. The others have one bigger piece.",
   },
   {
-    id: "ls-wholes-2",
-    skill: "equal-parts",
+    id: "fractions.ls-wholes-2",
+    skill: "fractions.equal-parts",
     difficulty: 1,
     kind: "choose",
     prompt: "Is this chocolate bar split into **halves**?",
@@ -916,8 +916,8 @@ export const LESSON_QUESTIONS: FractionQuestion[] = [
     explanation: "Halves are 2 equal pieces. One piece is bigger, so these are not halves.",
   },
   {
-    id: "ls-naming-shade",
-    skill: "represent",
+    id: "fractions.ls-naming-shade",
+    skill: "fractions.represent",
     difficulty: 1,
     kind: "shade",
     prompt: "Tap the parts to shade {3/5} of the bar.",
@@ -927,8 +927,8 @@ export const LESSON_QUESTIONS: FractionQuestion[] = [
     explanation: "{3/5} means 3 of the 5 equal parts are shaded.",
   },
   {
-    id: "ls-naming-1",
-    skill: "name",
+    id: "fractions.ls-naming-1",
+    skill: "fractions.name",
     difficulty: 1,
     kind: "choose-fraction",
     prompt: "What fraction of the bar is shaded?",
@@ -939,8 +939,8 @@ export const LESSON_QUESTIONS: FractionQuestion[] = [
     explanation: "8 equal parts with 5 shaded is {5/8}.",
   },
   {
-    id: "ls-naming-2",
-    skill: "name",
+    id: "fractions.ls-naming-2",
+    skill: "fractions.name",
     difficulty: 1,
     kind: "choose-fraction",
     prompt: "What fraction of the bar is shaded?",
@@ -951,8 +951,8 @@ export const LESSON_QUESTIONS: FractionQuestion[] = [
     explanation: "4 equal parts with 1 shaded is {1/4}.",
   },
   {
-    id: "ls-comparing-1",
-    skill: "compare",
+    id: "fractions.ls-comparing-1",
+    skill: "fractions.compare",
     difficulty: 1,
     kind: "compare",
     prompt: "Choose the correct sign.",
@@ -962,8 +962,8 @@ export const LESSON_QUESTIONS: FractionQuestion[] = [
     explanation: "Fifths are smaller pieces than thirds, so {1/5} < {1/3}.",
   },
   {
-    id: "ls-comparing-2",
-    skill: "compare",
+    id: "fractions.ls-comparing-2",
+    skill: "fractions.compare",
     difficulty: 1,
     kind: "compare",
     prompt: "Choose the correct sign.",
@@ -973,8 +973,8 @@ export const LESSON_QUESTIONS: FractionQuestion[] = [
     explanation: "Both are sixths, and 2 is fewer than 5, so {2/6} < {5/6}.",
   },
   {
-    id: "ls-equivalent-1",
-    skill: "equivalent",
+    id: "fractions.ls-equivalent-1",
+    skill: "fractions.equivalent",
     difficulty: 1,
     kind: "missing-number",
     prompt: "Find the missing number.",
@@ -984,8 +984,8 @@ export const LESSON_QUESTIONS: FractionQuestion[] = [
     explanation: "Multiply top and bottom by 2: {3/4} = {6/8}.",
   },
   {
-    id: "ls-equivalent-2",
-    skill: "represent",
+    id: "fractions.ls-equivalent-2",
+    skill: "fractions.represent",
     difficulty: 2,
     kind: "shade",
     prompt: "Shade {1/2} of this bar of eighths.",
@@ -995,8 +995,8 @@ export const LESSON_QUESTIONS: FractionQuestion[] = [
     explanation: "{1/2} = {4/8}, so shade 4 parts.",
   },
   {
-    id: "ls-line-1",
-    skill: "number-line",
+    id: "fractions.ls-line-1",
+    skill: "fractions.number-line",
     difficulty: 1,
     kind: "number-line-place",
     prompt: "Tap the number line to mark {3/4}.",
@@ -1006,8 +1006,8 @@ export const LESSON_QUESTIONS: FractionQuestion[] = [
     explanation: "4 equal jumps make quarters. {3/4} is 3 jumps from 0.",
   },
   {
-    id: "ls-line-2",
-    skill: "number-line",
+    id: "fractions.ls-line-2",
+    skill: "fractions.number-line",
     difficulty: 1,
     kind: "choose-fraction",
     prompt: "What fraction is marked on the number line?",
@@ -1018,8 +1018,8 @@ export const LESSON_QUESTIONS: FractionQuestion[] = [
     explanation: "5 equal gaps from 0 to 1. The point is 3 gaps along: {3/5}.",
   },
   {
-    id: "ls-amounts-1",
-    skill: "fraction-of",
+    id: "fractions.ls-amounts-1",
+    skill: "fractions.fraction-of",
     difficulty: 1,
     kind: "fraction-of",
     prompt: "What is {1/4} of 16?",
@@ -1030,8 +1030,8 @@ export const LESSON_QUESTIONS: FractionQuestion[] = [
     explanation: "16 ÷ 4 = 4, so {1/4} of 16 is 4.",
   },
   {
-    id: "ls-amounts-2",
-    skill: "fraction-of",
+    id: "fractions.ls-amounts-2",
+    skill: "fractions.fraction-of",
     difficulty: 2,
     kind: "fraction-of",
     prompt: "There are 24 children in a class. {3/8} of them walk to school. How many children walk?",
@@ -1042,8 +1042,8 @@ export const LESSON_QUESTIONS: FractionQuestion[] = [
     explanation: "24 ÷ 8 = 3, so {1/8} is 3 children. {3/8} is 3 × 3 = 9 children.",
   },
   {
-    id: "ls-amounts-3",
-    skill: "reasoning",
+    id: "fractions.ls-amounts-3",
+    skill: "fractions.reasoning",
     difficulty: 2,
     kind: "choose",
     prompt: "Ravi says “{3/4} of 12 is 3.” What mistake has he made?",
@@ -1057,8 +1057,8 @@ export const LESSON_QUESTIONS: FractionQuestion[] = [
     explanation: "12 ÷ 4 = 3 is only one quarter. Three quarters is 3 × 3 = 9.",
   },
   {
-    id: "ls-amounts-4",
-    skill: "fraction-of",
+    id: "fractions.ls-amounts-4",
+    skill: "fractions.fraction-of",
     difficulty: 3,
     kind: "number",
     prompt:
@@ -1074,8 +1074,8 @@ export const LESSON_QUESTIONS: FractionQuestion[] = [
     explanation: "{1/2} of 30 = 15 brown and {1/3} of 30 = 10 white. 15 + 10 = 25 eggs are brown or white.",
   },
   {
-    id: "ls-reason-1",
-    skill: "reasoning",
+    id: "fractions.ls-reason-1",
+    skill: "fractions.reasoning",
     difficulty: 2,
     kind: "explain-frame",
     prompt: "Sam says **{3/5}** of this bar is shaded. Build the explanation by choosing in each gap.",
@@ -1125,8 +1125,8 @@ export const LESSON_QUESTIONS: FractionQuestion[] = [
     explanation: "The bar has 8 equal parts and 3 are shaded, so {3/8} is shaded. Sam compared the 3 shaded parts with the 5 unshaded parts.",
   },
   {
-    id: "ls-reason-2",
-    skill: "reasoning",
+    id: "fractions.ls-reason-2",
+    skill: "fractions.reasoning",
     difficulty: 3,
     kind: "counterexample",
     prompt:
@@ -1142,8 +1142,8 @@ export const LESSON_QUESTIONS: FractionQuestion[] = [
 
 export const FOLLOWUP_QUESTIONS: FractionQuestion[] = [
   {
-    id: "fu-swap-1",
-    skill: "name",
+    id: "fractions.fu-swap-1",
+    skill: "fractions.name",
     difficulty: 1,
     kind: "choose",
     prompt: "In the fraction {3/4}, what does the **4** tell you?",
@@ -1158,8 +1158,8 @@ export const FOLLOWUP_QUESTIONS: FractionQuestion[] = [
     explanation: "The denominator 4 tells us the whole is split into 4 equal parts.",
   },
   {
-    id: "fu-swap-2",
-    skill: "name",
+    id: "fractions.fu-swap-2",
+    skill: "fractions.name",
     difficulty: 1,
     kind: "write-fraction",
     prompt: "Write the fraction that is shaded. Put the total number of parts on the bottom.",
@@ -1169,8 +1169,8 @@ export const FOLLOWUP_QUESTIONS: FractionQuestion[] = [
     explanation: "5 parts altogether, 2 shaded: {2/5}.",
   },
   {
-    id: "fu-bd-1",
-    skill: "compare",
+    id: "fractions.fu-bd-1",
+    skill: "fractions.compare",
     difficulty: 1,
     kind: "compare",
     prompt: "Look at the bars, then choose the correct sign.",
@@ -1181,8 +1181,8 @@ export const FOLLOWUP_QUESTIONS: FractionQuestion[] = [
     explanation: "The half piece is much longer than the eighth piece, so {1/2} > {1/8}.",
   },
   {
-    id: "fu-bd-2",
-    skill: "compare",
+    id: "fractions.fu-bd-2",
+    skill: "fractions.compare",
     difficulty: 1,
     kind: "choose",
     prompt:
@@ -1196,8 +1196,8 @@ export const FOLLOWUP_QUESTIONS: FractionQuestion[] = [
     explanation: "Fewer people sharing means bigger pieces, so {1/3} is more than {1/8}.",
   },
   {
-    id: "fu-ue-1",
-    skill: "equal-parts",
+    id: "fractions.fu-ue-1",
+    skill: "fractions.equal-parts",
     difficulty: 1,
     kind: "choose",
     prompt: "Which bar shows **thirds**?",
@@ -1210,8 +1210,8 @@ export const FOLLOWUP_QUESTIONS: FractionQuestion[] = [
     explanation: "B has 3 equal parts. A has 3 parts, but the middle one is bigger.",
   },
   {
-    id: "fu-ue-2",
-    skill: "equal-parts",
+    id: "fractions.fu-ue-2",
+    skill: "fractions.equal-parts",
     difficulty: 1,
     kind: "equal-parts",
     prompt: "Select the shapes that show **quarters**.",
@@ -1225,8 +1225,8 @@ export const FOLLOWUP_QUESTIONS: FractionQuestion[] = [
     explanation: "The first circle and the square have 4 equal parts. The middle circle has 4 parts of different sizes.",
   },
   {
-    id: "fu-pp-1",
-    skill: "name",
+    id: "fractions.fu-pp-1",
+    skill: "fractions.name",
     difficulty: 1,
     kind: "number",
     prompt: "How many equal parts is this whole split into **altogether**?",
@@ -1243,8 +1243,8 @@ export const FOLLOWUP_QUESTIONS: FractionQuestion[] = [
     explanation: "There are 5 parts altogether, so the denominator is 5.",
   },
   {
-    id: "fu-pp-2",
-    skill: "name",
+    id: "fractions.fu-pp-2",
+    skill: "fractions.name",
     difficulty: 1,
     kind: "choose-fraction",
     prompt: "What fraction of the circle is shaded?",
@@ -1255,8 +1255,8 @@ export const FOLLOWUP_QUESTIONS: FractionQuestion[] = [
     explanation: "3 parts altogether and 1 is shaded: {1/3}.",
   },
   {
-    id: "fu-mc-1",
-    skill: "number-line",
+    id: "fractions.fu-mc-1",
+    skill: "fractions.number-line",
     difficulty: 1,
     kind: "number",
     prompt: "How many equal **gaps** are there between 0 and 1?",
@@ -1273,8 +1273,8 @@ export const FOLLOWUP_QUESTIONS: FractionQuestion[] = [
     explanation: "6 marks make 5 equal gaps, so the line is split into fifths.",
   },
   {
-    id: "fu-mc-2",
-    skill: "name",
+    id: "fractions.fu-mc-2",
+    skill: "fractions.name",
     difficulty: 1,
     kind: "write-fraction",
     prompt: "Count carefully. What fraction of the bar is shaded?",
@@ -1284,8 +1284,8 @@ export const FOLLOWUP_QUESTIONS: FractionQuestion[] = [
     explanation: "There are 7 parts and 3 are shaded: {3/7}.",
   },
   {
-    id: "fu-uo-1",
-    skill: "fraction-of",
+    id: "fractions.fu-uo-1",
+    skill: "fractions.fraction-of",
     difficulty: 1,
     kind: "fraction-of",
     prompt: "What is {2/3} of 9? Use the groups to help.",
@@ -1296,8 +1296,8 @@ export const FOLLOWUP_QUESTIONS: FractionQuestion[] = [
     explanation: "9 ÷ 3 = 3 in each group. 2 groups is 6.",
   },
   {
-    id: "fu-uo-2",
-    skill: "fraction-of",
+    id: "fractions.fu-uo-2",
+    skill: "fractions.fraction-of",
     difficulty: 1,
     kind: "number",
     prompt: "{1/4} of 16 is 4. What is {3/4} of 16?",
@@ -1309,8 +1309,8 @@ export const FOLLOWUP_QUESTIONS: FractionQuestion[] = [
     explanation: "3 × 4 = 12.",
   },
   {
-    id: "fu-add-1",
-    skill: "equivalent",
+    id: "fractions.fu-add-1",
+    skill: "fractions.equivalent",
     difficulty: 1,
     kind: "compare",
     prompt: "Look at the bars. Is {1/3} the same as {2/4}?",
@@ -1321,8 +1321,8 @@ export const FOLLOWUP_QUESTIONS: FractionQuestion[] = [
     explanation: "{1/3} is less than {2/4} — adding 1 to the top and bottom changed the amount.",
   },
   {
-    id: "fu-add-2",
-    skill: "equivalent",
+    id: "fractions.fu-add-2",
+    skill: "fractions.equivalent",
     difficulty: 1,
     kind: "missing-number",
     prompt: "Each quarter is split into 2 eighths. Find the missing number.",
@@ -1352,9 +1352,9 @@ export const ASSESSMENT_AREAS: AssessmentArea[] = [
 
 const ASSESSMENT_QUESTIONS_A: (FractionQuestion & { area: AssessmentArea })[] = [
   {
-    id: "as-1",
+    id: "fractions.as-1",
     area: "Conceptual understanding",
-    skill: "equal-parts",
+    skill: "fractions.equal-parts",
     difficulty: 2,
     kind: "equal-parts",
     prompt: "Select every shape that is split into **equal parts**.",
@@ -1369,9 +1369,9 @@ const ASSESSMENT_QUESTIONS_A: (FractionQuestion & { area: AssessmentArea })[] = 
     explanation: "The circle of 6 and the 3 × 3 grid have equal parts. The other two have pieces of different sizes.",
   },
   {
-    id: "as-2",
+    id: "fractions.as-2",
     area: "Conceptual understanding",
-    skill: "name",
+    skill: "fractions.name",
     difficulty: 2,
     kind: "write-fraction",
     prompt: "Write the fraction of the circle that is shaded.",
@@ -1381,9 +1381,9 @@ const ASSESSMENT_QUESTIONS_A: (FractionQuestion & { area: AssessmentArea })[] = 
     explanation: "5 equal parts with 2 shaded is {2/5}.",
   },
   {
-    id: "as-3",
+    id: "fractions.as-3",
     area: "Representation",
-    skill: "represent",
+    skill: "fractions.represent",
     difficulty: 3,
     kind: "shade",
     prompt: "This bar has 10 parts. Shade {3/5} of it.",
@@ -1393,9 +1393,9 @@ const ASSESSMENT_QUESTIONS_A: (FractionQuestion & { area: AssessmentArea })[] = 
     explanation: "Each fifth is 2 tenths, so {3/5} = {6/10}: shade 6 parts.",
   },
   {
-    id: "as-4",
+    id: "fractions.as-4",
     area: "Representation",
-    skill: "name",
+    skill: "fractions.name",
     difficulty: 3,
     kind: "write-fraction",
     prompt: "What fraction of the rectangle is **not** shaded?",
@@ -1406,9 +1406,9 @@ const ASSESSMENT_QUESTIONS_A: (FractionQuestion & { area: AssessmentArea })[] = 
     explanation: "8 equal squares, 3 shaded, so 5 are not shaded: {5/8}.",
   },
   {
-    id: "as-5",
+    id: "fractions.as-5",
     area: "Comparison and equivalence",
-    skill: "compare",
+    skill: "fractions.compare",
     difficulty: 2,
     kind: "compare",
     prompt: "Choose the correct sign.",
@@ -1418,9 +1418,9 @@ const ASSESSMENT_QUESTIONS_A: (FractionQuestion & { area: AssessmentArea })[] = 
     explanation: "Sevenths are smaller pieces than quarters, so {1/7} < {1/4}.",
   },
   {
-    id: "as-6",
+    id: "fractions.as-6",
     area: "Comparison and equivalence",
-    skill: "compare",
+    skill: "fractions.compare",
     difficulty: 2,
     kind: "compare",
     prompt: "Choose the correct sign.",
@@ -1430,9 +1430,9 @@ const ASSESSMENT_QUESTIONS_A: (FractionQuestion & { area: AssessmentArea })[] = 
     explanation: "Both are ninths, and 7 ninths is more than 4 ninths: {7/9} > {4/9}.",
   },
   {
-    id: "as-7",
+    id: "fractions.as-7",
     area: "Comparison and equivalence",
-    skill: "equivalent",
+    skill: "fractions.equivalent",
     difficulty: 3,
     kind: "missing-number",
     prompt: "Find the missing number.",
@@ -1442,9 +1442,9 @@ const ASSESSMENT_QUESTIONS_A: (FractionQuestion & { area: AssessmentArea })[] = 
     explanation: "5 × 4 = 20, so 3 × 4 = 12: {3/5} = {12/20}.",
   },
   {
-    id: "as-8",
+    id: "fractions.as-8",
     area: "Comparison and equivalence",
-    skill: "equivalent",
+    skill: "fractions.equivalent",
     difficulty: 3,
     kind: "choose",
     prompt: "Which fraction is **not** equivalent to {2/3}?",
@@ -1459,9 +1459,9 @@ const ASSESSMENT_QUESTIONS_A: (FractionQuestion & { area: AssessmentArea })[] = 
     explanation: "{4/6}, {6/9} and {8/12} are {2/3} multiplied by 2, 3 and 4. {3/4} adds 1 to the top and bottom, which changes the amount.",
   },
   {
-    id: "as-9",
+    id: "fractions.as-9",
     area: "Application",
-    skill: "number-line",
+    skill: "fractions.number-line",
     difficulty: 3,
     kind: "number-line-place",
     prompt: "This line is split into sixths. Mark {2/3}.",
@@ -1471,9 +1471,9 @@ const ASSESSMENT_QUESTIONS_A: (FractionQuestion & { area: AssessmentArea })[] = 
     explanation: "{2/3} = {4/6}, so it is 4 jumps from 0.",
   },
   {
-    id: "as-10",
+    id: "fractions.as-10",
     area: "Application",
-    skill: "fraction-of",
+    skill: "fractions.fraction-of",
     difficulty: 3,
     kind: "fraction-of",
     prompt: "A bag holds 32 marbles. {5/8} of them are blue. How many marbles are blue?",
@@ -1484,9 +1484,9 @@ const ASSESSMENT_QUESTIONS_A: (FractionQuestion & { area: AssessmentArea })[] = 
     explanation: "32 ÷ 8 = 4 in each eighth. 5 eighths is 5 × 4 = 20 marbles.",
   },
   {
-    id: "as-11",
+    id: "fractions.as-11",
     area: "Application",
-    skill: "fraction-of",
+    skill: "fractions.fraction-of",
     difficulty: 3,
     kind: "number",
     prompt:
@@ -1501,9 +1501,9 @@ const ASSESSMENT_QUESTIONS_A: (FractionQuestion & { area: AssessmentArea })[] = 
     explanation: "{1/4} of 48 = 12 and {1/3} of 48 = 16. 12 + 16 = 28 pages.",
   },
   {
-    id: "as-12",
+    id: "fractions.as-12",
     area: "Reasoning",
-    skill: "reasoning",
+    skill: "fractions.reasoning",
     difficulty: 3,
     kind: "choose",
     prompt:
@@ -1518,9 +1518,9 @@ const ASSESSMENT_QUESTIONS_A: (FractionQuestion & { area: AssessmentArea })[] = 
     explanation: "A bigger denominator means smaller pieces, so with the same numerator the fraction is smaller.",
   },
   {
-    id: "as-13",
+    id: "fractions.as-13",
     area: "Reasoning",
-    skill: "reasoning",
+    skill: "fractions.reasoning",
     difficulty: 3,
     kind: "explain-frame",
     prompt: "Ella says **{2/3}** of this circle is shaded. Build the explanation by choosing in each gap.",
@@ -1561,9 +1561,9 @@ const ASSESSMENT_QUESTIONS_A: (FractionQuestion & { area: AssessmentArea })[] = 
     explanation: "The circle has 5 equal parts altogether and 2 are shaded: {2/5}. Ella compared the shaded parts with the unshaded parts.",
   },
   {
-    id: "as-14",
+    id: "fractions.as-14",
     area: "Conceptual understanding",
-    skill: "equal-parts",
+    skill: "fractions.equal-parts",
     difficulty: 2,
     kind: "choose",
     prompt: "Which picture shows **fifths**?",
@@ -1578,9 +1578,9 @@ const ASSESSMENT_QUESTIONS_A: (FractionQuestion & { area: AssessmentArea })[] = 
     explanation: "Fifths are 5 equal parts. Only the circle B has 5 parts that are all the same size.",
   },
   {
-    id: "as-15",
+    id: "fractions.as-15",
     area: "Representation",
-    skill: "represent",
+    skill: "fractions.represent",
     difficulty: 3,
     kind: "shade",
     prompt: "This circle has 8 slices. Shade {3/4} of it.",
@@ -1590,9 +1590,9 @@ const ASSESSMENT_QUESTIONS_A: (FractionQuestion & { area: AssessmentArea })[] = 
     explanation: "Each quarter is 2 eighths, so {3/4} = {6/8}: shade 6 slices.",
   },
   {
-    id: "as-16",
+    id: "fractions.as-16",
     area: "Representation",
-    skill: "number-line",
+    skill: "fractions.number-line",
     difficulty: 2,
     kind: "choose-fraction",
     prompt: "What fraction is marked on the number line?",
@@ -1606,9 +1606,9 @@ const ASSESSMENT_QUESTIONS_A: (FractionQuestion & { area: AssessmentArea })[] = 
 
 const FORM_B: (FractionQuestion & { area: AssessmentArea })[] = [
   {
-    id: "bs-1",
+    id: "fractions.bs-1",
     area: "Conceptual understanding",
-    skill: "equal-parts",
+    skill: "fractions.equal-parts",
     difficulty: 2,
     kind: "equal-parts",
     prompt: "Select every shape that is split into **equal parts**.",
@@ -1623,9 +1623,9 @@ const FORM_B: (FractionQuestion & { area: AssessmentArea })[] = [
     explanation: "The bar of 5 and the 2 × 3 grid have equal parts. The other two have pieces of different sizes.",
   },
   {
-    id: "bs-2",
+    id: "fractions.bs-2",
     area: "Conceptual understanding",
-    skill: "name",
+    skill: "fractions.name",
     difficulty: 2,
     kind: "write-fraction",
     prompt: "Write the fraction of the bar that is shaded.",
@@ -1635,9 +1635,9 @@ const FORM_B: (FractionQuestion & { area: AssessmentArea })[] = [
     explanation: "7 equal parts with 4 shaded is {4/7}.",
   },
   {
-    id: "bs-14",
+    id: "fractions.bs-14",
     area: "Conceptual understanding",
-    skill: "equal-parts",
+    skill: "fractions.equal-parts",
     difficulty: 2,
     kind: "choose",
     prompt: "Which picture shows **thirds**?",
@@ -1652,9 +1652,9 @@ const FORM_B: (FractionQuestion & { area: AssessmentArea })[] = [
     explanation: "Thirds are 3 equal parts. Only circle C has 3 parts that are all the same size.",
   },
   {
-    id: "bs-3",
+    id: "fractions.bs-3",
     area: "Representation",
-    skill: "represent",
+    skill: "fractions.represent",
     difficulty: 3,
     kind: "shade",
     prompt: "This bar has 12 parts. Shade {2/3} of it.",
@@ -1664,9 +1664,9 @@ const FORM_B: (FractionQuestion & { area: AssessmentArea })[] = [
     explanation: "Each third is 4 twelfths, so {2/3} = {8/12}: shade 8 parts.",
   },
   {
-    id: "bs-4",
+    id: "fractions.bs-4",
     area: "Representation",
-    skill: "name",
+    skill: "fractions.name",
     difficulty: 3,
     kind: "write-fraction",
     prompt: "What fraction of the circle is **not** shaded?",
@@ -1677,9 +1677,9 @@ const FORM_B: (FractionQuestion & { area: AssessmentArea })[] = [
     explanation: "6 equal slices, 2 shaded, so 4 are not shaded: {4/6}.",
   },
   {
-    id: "bs-15",
+    id: "fractions.bs-15",
     area: "Representation",
-    skill: "represent",
+    skill: "fractions.represent",
     difficulty: 3,
     kind: "shade",
     prompt: "This rectangle has 12 squares. Shade {1/4} of it.",
@@ -1689,9 +1689,9 @@ const FORM_B: (FractionQuestion & { area: AssessmentArea })[] = [
     explanation: "12 ÷ 4 = 3, so {1/4} = {3/12}: shade 3 squares.",
   },
   {
-    id: "bs-16",
+    id: "fractions.bs-16",
     area: "Representation",
-    skill: "number-line",
+    skill: "fractions.number-line",
     difficulty: 2,
     kind: "choose-fraction",
     prompt: "What fraction is marked on the number line?",
@@ -1702,9 +1702,9 @@ const FORM_B: (FractionQuestion & { area: AssessmentArea })[] = [
     explanation: "There are 6 equal gaps from 0 to 1 and the point is 4 gaps along: {4/6}.",
   },
   {
-    id: "bs-5",
+    id: "fractions.bs-5",
     area: "Comparison and equivalence",
-    skill: "compare",
+    skill: "fractions.compare",
     difficulty: 2,
     kind: "compare",
     prompt: "Choose the correct sign.",
@@ -1714,9 +1714,9 @@ const FORM_B: (FractionQuestion & { area: AssessmentArea })[] = [
     explanation: "Ninths of a whole are smaller pieces than fifths of the same whole, so {1/9} < {1/5}.",
   },
   {
-    id: "bs-6",
+    id: "fractions.bs-6",
     area: "Comparison and equivalence",
-    skill: "compare",
+    skill: "fractions.compare",
     difficulty: 2,
     kind: "compare",
     prompt: "Choose the correct sign.",
@@ -1726,9 +1726,9 @@ const FORM_B: (FractionQuestion & { area: AssessmentArea })[] = [
     explanation: "Both are sevenths, and 5 sevenths is more than 3 sevenths: {5/7} > {3/7}.",
   },
   {
-    id: "bs-7",
+    id: "fractions.bs-7",
     area: "Comparison and equivalence",
-    skill: "equivalent",
+    skill: "fractions.equivalent",
     difficulty: 3,
     kind: "missing-number",
     prompt: "Find the missing number.",
@@ -1738,9 +1738,9 @@ const FORM_B: (FractionQuestion & { area: AssessmentArea })[] = [
     explanation: "3 × 5 = 15, so 2 × 5 = 10: {2/3} = {10/15}.",
   },
   {
-    id: "bs-8",
+    id: "fractions.bs-8",
     area: "Comparison and equivalence",
-    skill: "equivalent",
+    skill: "fractions.equivalent",
     difficulty: 3,
     kind: "choose",
     prompt: "Which fraction is **not** equivalent to {3/4}?",
@@ -1755,9 +1755,9 @@ const FORM_B: (FractionQuestion & { area: AssessmentArea })[] = [
     explanation: "{6/8}, {9/12} and {12/16} are {3/4} multiplied by 2, 3 and 4. {4/5} adds 1 to the top and bottom, which changes the amount.",
   },
   {
-    id: "bs-9",
+    id: "fractions.bs-9",
     area: "Application",
-    skill: "number-line",
+    skill: "fractions.number-line",
     difficulty: 3,
     kind: "number-line-place",
     prompt: "This line is split into tenths. Mark {3/5}.",
@@ -1767,9 +1767,9 @@ const FORM_B: (FractionQuestion & { area: AssessmentArea })[] = [
     explanation: "{3/5} = {6/10}, so it is 6 jumps from 0.",
   },
   {
-    id: "bs-10",
+    id: "fractions.bs-10",
     area: "Application",
-    skill: "fraction-of",
+    skill: "fractions.fraction-of",
     difficulty: 3,
     kind: "fraction-of",
     prompt: "A box holds 36 pencils. {3/4} of them are sharpened. How many pencils are sharpened?",
@@ -1780,9 +1780,9 @@ const FORM_B: (FractionQuestion & { area: AssessmentArea })[] = [
     explanation: "36 ÷ 4 = 9 in each quarter. 3 quarters is 3 × 9 = 27 pencils.",
   },
   {
-    id: "bs-11",
+    id: "fractions.bs-11",
     area: "Application",
-    skill: "fraction-of",
+    skill: "fractions.fraction-of",
     difficulty: 3,
     kind: "number",
     prompt:
@@ -1797,9 +1797,9 @@ const FORM_B: (FractionQuestion & { area: AssessmentArea })[] = [
     explanation: "Both fractions are of the whole comic: {1/5} of 40 = 8 and {1/4} of 40 = 10. 8 + 10 = 18 pages.",
   },
   {
-    id: "bs-12",
+    id: "fractions.bs-12",
     area: "Reasoning",
-    skill: "reasoning",
+    skill: "fractions.reasoning",
     difficulty: 3,
     kind: "choose",
     prompt:
@@ -1814,9 +1814,9 @@ const FORM_B: (FractionQuestion & { area: AssessmentArea })[] = [
     explanation: "With the same numerator, fewer pieces in the whole means bigger pieces, so the smaller denominator gives the bigger fraction.",
   },
   {
-    id: "bs-13",
+    id: "fractions.bs-13",
     area: "Reasoning",
-    skill: "reasoning",
+    skill: "fractions.reasoning",
     difficulty: 3,
     kind: "explain-frame",
     prompt: "Leo says **{3/4}** of this circle is shaded. Build the explanation by choosing in each gap.",

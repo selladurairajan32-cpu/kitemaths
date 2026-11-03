@@ -1,0 +1,423 @@
+<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Kite Maths · Home</title><style>
+@import url('../fonts/Baloo2.css');
+@import url('../fonts/Nunito.css');
+:root{
+  /* type: one display face for headings, numbers and buttons; one text face for reading */
+  --display:'Baloo 2',ui-rounded,system-ui,sans-serif;
+  --text:'Nunito',ui-rounded,system-ui,sans-serif;
+  --t-hero:76px;--t-h2:46px;--t-h3:26px;--t-body:19px;--t-small:15px;
+  /* colour */
+  --sky:#5ebfff;--sky-pale:#eaf6ff;--sky-ink:#0f5fa8;
+  --navy:#0f2240;--navy-2:#34486b;--muted:#5a6a85;--line:#dbe7f3;
+  --red:#ec3a3a;--red-edge:#b3201f;
+  --sun:#ffcc33;--sun-soft:#fff1c2;--sun-ink:#7a5200;
+  --grass:#2fbf71;--grass-back:#8ddc8f;--ok-soft:#ddf7e8;--ok-ink:#13663e;
+  --coral-soft:#ffe3de;--night:#0f2240;--night-2:#1c355b;
+  /* shape */
+  --r-panel:28px;--r-tile:20px;
+  --shadow:0 18px 44px rgba(15,34,64,.10);--shadow-sm:0 8px 22px rgba(15,34,64,.08);
+  /* the app's own paper colours, used by Kip and the drawings */
+  --color-ink:#13203a;--color-ink-2:#2e3a52;--color-muted:#56627b;--color-kite-red:#e8343f;--color-sun:#ffc23d;--color-sun-strong:#d99a00;
+  --color-sun-soft:#fff4d4;--color-sky:#4da8f0;--color-sky-soft:#d6ecfd;--color-leaf:#3dae6b;--color-leaf-soft:#dcf3e5;
+  --color-num:#f4623a;--color-num-strong:#a3361a;--color-num-soft:#fde5dc;--color-den:#2f6fd8;--color-den-soft:#dfeafb;
+  --color-ok-bright:#2e9d61;--color-surface:#fff;--color-line:#d3e1ef;--color-sunk:#eaf1f8;--color-raised:#f4f9fe;--color-brand-soft:#fbe1e3;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--text);font-size:var(--t-body);line-height:1.55;color:var(--navy);background:#fff;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--navy);outline-offset:3px;border-radius:14px}
+.wrap{max-width:1200px;margin:0 auto;padding:0 32px}
+h1,h2,h3,.d{font-family:var(--display);font-weight:800;letter-spacing:-.01em;margin:0;color:var(--navy)}
+h1{font-size:var(--t-hero);line-height:.98}
+h2{font-size:var(--t-h2);line-height:1.02}
+h3{font-size:var(--t-h3);line-height:1.1}
+p{margin:0}
+.small{font-size:var(--t-small);font-weight:700;color:var(--muted)}
+
+/* buttons: one family, pill shaped, with a tactile edge */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:60px;padding:0 30px;border-radius:999px;border:0;font-family:var(--display);font-weight:800;font-size:23px;text-decoration:none;cursor:pointer;transition:transform .08s,box-shadow .08s;white-space:nowrap}
+.btn svg{width:22px;height:22px}
+.btn.red{background:var(--red);color:#fff;box-shadow:0 6px 0 var(--red-edge)}
+.btn.white{background:#fff;color:var(--navy);box-shadow:0 6px 0 #c4d6ea}
+.btn:active{transform:translateY(5px);box-shadow:0 1px 0 var(--red-edge)}
+.btn.sm{height:48px;font-size:19px;padding:0 22px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 13px;border-radius:999px;font-weight:800;font-size:14px;white-space:nowrap}
+.chip svg{width:16px;height:16px}
+
+/* fraction notation */
+.frac{display:inline-flex;flex-direction:column;align-items:center;line-height:1;font-family:var(--display);font-weight:800;vertical-align:middle;margin:0 .08em}
+.frac .fn{color:var(--color-num-strong);padding:0 .14em .06em;border-bottom:.1em solid var(--color-ink)}
+.frac .fd{color:var(--color-den);padding-top:.04em}
+
+/* ---------- 1. the sky ---------- */
+.sky{position:relative;background:var(--sky);overflow:hidden}
+.topbar{position:relative;z-index:5;display:flex;align-items:center;gap:22px;height:84px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:27px;text-decoration:none;color:var(--navy)}
+.logo svg{width:38px;height:38px}
+.links{display:flex;gap:4px;margin-left:24px}
+.links a{display:flex;align-items:center;gap:8px;height:46px;padding:0 18px;border-radius:999px;font-weight:800;font-size:17px;text-decoration:none;color:var(--navy)}
+.links a svg{width:20px;height:20px}
+.links a.on{background:#fff}
+.me{margin-left:auto;display:flex;align-items:center;gap:10px}
+.pillstat{display:flex;align-items:center;gap:6px;height:46px;padding:0 16px 0 10px;border-radius:999px;background:rgba(255,255,255,.92);font-family:var(--display);font-weight:800;font-size:21px}
+.pillstat svg{width:28px;height:28px}
+.avatar{width:46px;height:46px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:21px;text-decoration:none}
+.hero{position:relative;z-index:3;display:grid;grid-template-columns:560px 1fr;gap:24px;padding:36px 0 196px;min-height:600px}
+.hello{font-family:var(--display);font-weight:700;font-size:24px;color:var(--navy-2);margin-bottom:6px}
+.mission{margin-top:30px;background:#fff;border-radius:var(--r-panel);box-shadow:var(--shadow);padding:24px 26px 26px;display:grid;grid-template-columns:auto 1fr;gap:4px 18px}
+.mission .ic{grid-row:span 2;width:76px;height:76px;border-radius:50%;background:var(--sky-pale);display:grid;place-items:center}
+.mission .k{font-weight:800;font-size:15px;color:var(--sky-ink)}
+.mission h3{font-size:30px}
+.mission .bar{grid-column:1/-1;margin-top:16px}
+.mission .go{grid-column:1/-1;display:flex;align-items:center;gap:18px;margin-top:20px}
+.reward{display:inline-flex;align-items:center;gap:6px;font-weight:800;color:var(--sun-ink)}
+.reward svg{width:24px;height:24px}
+.bar{height:14px;border-radius:99px;background:#e8eff7;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--grass)}
+.barlabel{display:flex;justify-content:space-between;margin-top:8px;font-size:var(--t-small);font-weight:700;color:var(--muted)}
+.scene{position:absolute;inset:0;pointer-events:none}
+.sun{position:absolute;right:6%;top:96px;width:340px;height:340px;border-radius:50%;background:var(--sun)}
+.sun::after{content:'';position:absolute;inset:-34px;border-radius:50%;background:rgba(255,224,120,.35)}
+.scene .cl{position:absolute}
+.flyer{position:absolute;right:20%;top:120px;width:230px;transform:rotate(-8deg)}
+.flyer .kip{width:100%;height:auto;display:block;overflow:visible}
+.hills{position:absolute;left:0;right:0;bottom:0;width:100%;height:230px}
+.heroart{display:none}
+
+/* ---------- 2. flight deck ---------- */
+.deck{position:relative;z-index:4;margin-top:-118px}
+.deckcard{background:#fff;border-radius:var(--r-panel);box-shadow:var(--shadow);display:grid;grid-template-columns:1.5fr 1fr 1.35fr 1.1fr}
+.deckcard > div{padding:26px 28px}
+.deckcard > div + div{border-left:2px solid #f0f4f9}
+.lab{font-weight:800;font-size:var(--t-small);color:var(--muted)}
+.big{font-family:var(--display);font-weight:800;font-size:46px;line-height:1;display:flex;align-items:center;gap:8px;margin-top:6px}
+.big svg{width:38px;height:38px}
+.big small{font-size:20px;color:var(--muted)}
+.alt{position:relative;margin-top:16px;height:14px;border-radius:99px;background:#e8eff7}
+.alt i{position:absolute;inset:0 auto 0 0;border-radius:99px;background:var(--sky)}
+.alt b{position:absolute;top:50%;transform:translate(-50%,-56%)}
+.alt b svg{width:30px;height:30px}
+.days{display:flex;gap:8px;margin-top:14px}
+.days span{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:13px;background:#eef3f9;color:var(--muted)}
+.days span.lit{background:var(--sun-soft)}
+.days span.lit svg{width:22px;height:22px}
+.ring{display:flex;align-items:center;gap:14px;margin-top:6px}
+.ring svg{width:76px;height:76px}
+
+/* ---------- 3. the island path ---------- */
+.island{padding:104px 0 48px}
+.sechead{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:12px}
+.sechead p{margin-top:10px;font-size:20px;color:var(--navy-2)}
+.ghost{display:inline-flex;align-items:center;gap:8px;height:50px;padding:0 22px;border-radius:999px;background:var(--sky-pale);font-weight:800;text-decoration:none;font-size:17px;white-space:nowrap}
+.ghost svg{width:20px;height:20px}
+.path{position:relative;height:610px;list-style:none;margin:36px 0 0;padding:0}
+.path > svg{position:absolute;left:0;top:0;width:100%;height:560px}
+.stop{position:absolute;transform:translateX(-50%);width:190px;display:flex;flex-direction:column;align-items:center;text-align:center;text-decoration:none}
+.dot{position:relative;width:96px;height:96px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:var(--shadow-sm)}
+.dot svg{width:54px;height:54px}
+.stop.done .dot{box-shadow:0 0 0 7px var(--grass),var(--shadow-sm)}
+.stop.done .dot .tick{position:absolute;right:-8px;top:-8px;width:34px;height:34px;border-radius:50%;background:var(--grass);color:#fff;display:grid;place-items:center;box-shadow:0 0 0 4px #fff}
+.stop.done .dot .tick svg{width:18px;height:18px}
+.stop.open .dot{box-shadow:0 0 0 5px #dbe7f3}
+.stop.open .dot svg{opacity:.55}
+.stop.now .dot{width:116px;height:116px;box-shadow:0 0 0 9px var(--red),0 0 0 22px rgba(236,58,58,.14),var(--shadow)}
+.stop.now .dot svg{width:64px;height:64px}
+.stop.goal .dot{background:var(--sun);box-shadow:0 0 0 6px #ffe08a,var(--shadow-sm)}
+.stop .nm{margin-top:14px;font-weight:800;font-size:17px;line-height:1.25;color:var(--navy);background:#fff;border-radius:10px;padding:2px 8px}
+.stop.open .nm{color:var(--navy-2)}
+.stop .st{margin-top:2px;font-size:14px;font-weight:700;color:var(--muted);background:#fff;border-radius:8px;padding:0 6px}
+.stop .play{margin-top:10px}
+.pin{position:absolute;top:-92px;left:50%;width:62px;transform:translateX(-12%) rotate(-10deg)}
+.pin .kip{width:100%;height:auto;overflow:visible}
+.path-v{display:none}
+
+/* ---------- 4. quests ---------- */
+.quests{background:var(--sky-pale);padding:96px 0}
+.qgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px;list-style:none;padding:0}
+.quest{border-radius:var(--r-panel);padding:26px 26px 24px;display:flex;flex-direction:column;gap:14px;min-height:250px}
+.quest .qi{width:76px;height:76px;border-radius:24px;background:#fff;display:grid;place-items:center}
+.quest .qi svg{width:52px;height:52px}
+.quest h3{font-size:28px}
+.quest .bar{background:rgba(255,255,255,.85);margin-top:auto}
+.quest .foot{display:flex;align-items:center;justify-content:space-between;font-weight:800;font-size:16px}
+.quest .prize{display:inline-flex;align-items:center;gap:5px;height:36px;padding:0 14px;border-radius:999px;background:#fff;font-family:var(--display);font-size:18px}
+.quest .prize svg{width:22px;height:22px}
+.q-sun{background:var(--sun-soft)}
+.q-coral{background:var(--coral-soft)}
+.q-grass{background:var(--ok-soft)}
+
+/* ---------- 5. the kite shelf, at night ---------- */
+.night{position:relative;background:var(--night);color:#fff;padding:96px 0 64px;overflow:hidden}
+.night h2{color:#fff}
+.night .sechead p{color:#c3d3ea}
+.starsbg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.shelf{position:relative;display:grid;grid-template-columns:repeat(7,1fr);gap:18px;margin:44px 0 0;padding:0;list-style:none}
+.kt{display:flex;flex-direction:column;align-items:center;text-align:center}
+.kt .disc{width:140px;height:156px;border-radius:70px 70px 32px 32px;background:var(--night-2);display:grid;place-items:center}
+.kt .disc svg{filter:drop-shadow(0 8px 0 rgba(0,0,0,.18))}
+.kt .nm{margin-top:12px;font-family:var(--display);font-weight:800;font-size:20px;line-height:1.1}
+.kt .st{margin-top:2px;font-size:14px;font-weight:700;color:#9fb6d6}
+.kt.locked .disc{background:transparent;box-shadow:inset 0 0 0 3px #2c4a76}
+.kt.locked .nm{color:#c3d3ea}
+.ghostkite{width:58px;height:76px}
+.minibar{width:96px;height:8px;border-radius:99px;background:#2c4a76;margin-top:8px;overflow:hidden}
+.minibar i{display:block;height:100%;background:var(--sun);border-radius:99px}
+.kipsays{position:relative;display:flex;align-items:center;gap:16px;margin-top:52px}
+.kipsays .kip{width:70px;height:auto;overflow:visible}
+.kipsays p{background:#fff;color:var(--navy);border-radius:22px;padding:14px 20px;font-weight:800;font-size:18px;position:relative}
+.kipsays p::before{content:'';position:absolute;left:-10px;top:50%;width:20px;height:20px;background:#fff;transform:translateY(-50%) rotate(45deg);border-radius:3px}
+
+.tabbar{display:none}
+
+/* ---------- question screen ---------- */
+.qpage{background:var(--sky-pale);min-height:100vh}
+.qbar{display:flex;align-items:center;gap:22px;height:88px;max-width:1140px;margin:0 auto;padding:0 32px}
+.round{width:50px;height:50px;border-radius:50%;background:#fff;border:0;display:grid;place-items:center;box-shadow:var(--shadow-sm);color:var(--navy);flex:none;cursor:pointer}
+.round svg{width:22px;height:22px}
+.tail{flex:1;display:flex;align-items:center}
+.tail span{flex:1;height:4px;background:#b9cfe6}
+.tail svg{flex:none}
+.qgridp{max-width:1140px;margin:0 auto;padding:8px 32px 200px;display:grid;grid-template-columns:1fr 300px;gap:36px;align-items:start}
+.qcard{background:#fff;border-radius:34px;box-shadow:var(--shadow);padding:34px 38px 36px}
+.qchip{background:var(--sky-pale);color:var(--sky-ink)}
+.qcard h1{font-size:52px;line-height:1.05;margin:16px 0 8px}
+.qcard .sub{font-size:20px;color:var(--navy-2);font-weight:700}
+.qcard h1 .frac{font-size:.78em;margin:-.42em .08em}
+.bigbar{display:flex;height:132px;border:5px solid var(--color-ink);border-radius:22px;overflow:hidden;margin:30px 0 16px}
+.bigbar i{flex:1;border-right:5px solid var(--color-ink);background:#fff}
+.bigbar i:last-child{border-right:0}
+.bigbar i.on{background:var(--color-num)}
+.count{text-align:center;font-family:var(--display);font-weight:800;font-size:22px;color:var(--navy-2)}
+.count b{color:var(--color-num-strong)}
+.qactions{display:flex;align-items:center;justify-content:space-between;margin-top:28px}
+.textbtn{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 6px;border:0;background:none;font-family:var(--text);font-weight:800;font-size:18px;color:var(--navy-2);cursor:pointer}
+.textbtn svg{width:20px;height:20px}
+.helper{position:sticky;top:20px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:left}
+.helper .kip{width:150px;height:auto;overflow:visible}
+.bubble{position:relative;background:#fff;border-radius:26px;padding:20px 22px;box-shadow:var(--shadow-sm);font-size:18px;font-weight:700;color:var(--navy-2)}
+.bubble::before{content:'';position:absolute;left:50%;top:-10px;width:22px;height:22px;background:#fff;transform:translateX(-50%) rotate(45deg);border-radius:4px}
+.bubble b{display:block;font-family:var(--display);font-size:22px;color:var(--navy);margin-bottom:4px}
+.helper .btn{width:100%}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--ok-soft);box-shadow:0 -12px 40px rgba(15,34,64,.12)}
+.sheet .in{max-width:1140px;margin:0 auto;padding:26px 32px 30px;display:grid;grid-template-columns:120px 1fr auto;gap:24px;align-items:center}
+.sheet .kip{width:120px;height:auto;overflow:visible;margin-top:-64px}
+.sheet h2{color:var(--ok-ink);display:flex;align-items:center;gap:14px;font-size:44px}
+.sheet .plus{display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 16px;border-radius:999px;background:#fff;color:var(--navy);font-size:24px}
+.sheet .plus svg{width:26px;height:26px}
+.sheet p{margin-top:6px;font-size:20px;font-weight:700;color:#1f4a33}
+.confetti{position:absolute;left:0;right:0;top:-70px;height:70px;width:100%;pointer-events:none}
+
+@media (max-width:1180px){.links a span{display:none}.links{margin-left:4px}.shelf{grid-template-columns:repeat(4,1fr);row-gap:28px}}
+@media (max-width:980px){
+  .hero{grid-template-columns:1fr;padding-bottom:260px}
+  .deckcard{grid-template-columns:1fr 1fr}
+  .deckcard > div:nth-child(3){border-left:0;border-top:2px solid #f0f4f9}
+  .deckcard > div:nth-child(4){border-top:2px solid #f0f4f9}
+  .qgrid{grid-template-columns:1fr}
+  .qgridp{grid-template-columns:1fr}
+  .helper{position:static;flex-direction:row;align-items:center}
+  .helper .kip{width:84px}
+  .helper .btn{width:auto}
+}
+@media (max-width:860px){
+  .path-h{display:none}
+  .path-v{display:block;position:relative;list-style:none;margin:28px 0 0;padding:0}
+  .path-v > svg{position:absolute;left:0;top:0;width:100%}
+  .path-v .stop{width:150px}
+  .path-v .pin{top:4px;left:auto;right:-62px;transform:rotate(10deg);width:54px}
+}
+@media (max-width:640px){
+  :root{--t-hero:46px;--t-h2:34px;--t-h3:22px;--t-body:17px;--t-small:14px}
+  body{padding-bottom:86px}
+  .wrap{padding:0 18px}
+  .topbar{height:68px;gap:10px}
+  .links,.avatar{display:none}
+  .logo{font-size:23px}.logo svg{width:32px;height:32px}
+  .pillstat{height:40px;font-size:18px;padding:0 12px 0 8px}.pillstat svg{width:24px;height:24px}
+  .hero{padding:14px 0 0;min-height:0;display:block}
+  .hello{font-size:19px}
+  .heroart{display:block;position:relative;height:300px;margin:4px -18px 0}
+  .sky > .hills{display:none}
+  .heroart .sun{width:190px;height:190px;right:8%;top:28px}
+  .heroart .sun::after{inset:-20px}
+  .heroart .flyer{width:130px;right:20%;top:30px}
+  .heroart .hills{height:120px}
+  .mission{margin-top:-74px;position:relative;z-index:4;padding:18px 18px 20px;gap:2px 14px}
+  .mission .ic{width:60px;height:60px}.mission .ic svg{width:40px;height:40px}
+  .mission h3{font-size:24px}
+  .mission .go{flex-wrap:wrap;gap:10px 14px}
+  .mission .go .btn{flex:1}
+  .sky .scene.desk{display:none}
+  .deck{margin-top:24px}
+  .deckcard{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .deckcard > div{padding:18px 16px;border:0!important;border-top:2px solid #f0f4f9!important}
+  .deckcard > div:nth-child(1){grid-column:1/-1;border-top:0!important}
+  .deckcard > div:nth-child(2){order:2}
+  .deckcard > div:nth-child(4){order:3;border-left:2px solid #f0f4f9!important}
+  .deckcard > div:nth-child(3){order:4;grid-column:1/-1}
+  .big{font-size:36px}.big svg{width:30px;height:30px}
+  .days{gap:4px}.days span{width:26px;height:26px;font-size:11px}.days span.lit svg{width:17px;height:17px}
+  .ring svg{width:58px;height:58px}
+  .island{padding:64px 0 56px}
+  .sechead{flex-direction:column;align-items:flex-start;gap:14px}
+  .sechead p{font-size:17px}
+  .quests{padding:64px 0}
+  .quest{min-height:0;padding:20px}
+  .quest h3{font-size:24px}
+  .night{padding:64px 0 48px}
+  .shelf{grid-template-columns:repeat(3,1fr);gap:22px 10px}
+  .kt .disc{width:100px;height:112px;border-radius:50px 50px 24px 24px}
+  .kt .disc svg{width:48px;height:72px}
+  .kt .nm{font-size:17px}
+  .kt:nth-child(n+7){display:none}
+  .kipsays{margin-top:40px;align-items:flex-start}
+  .tabbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;background:#fff;box-shadow:0 -6px 24px rgba(15,34,64,.10);padding:8px 6px calc(10px + env(safe-area-inset-bottom))}
+  .tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;font-size:13px;font-weight:800;color:var(--muted)}
+  .tabbar a span.t{display:grid;place-items:center;width:58px;height:34px;border-radius:999px}
+  .tabbar a.on{color:var(--navy)}.tabbar a.on span.t{background:var(--sky-pale)}
+  .tabbar svg{width:23px;height:23px}
+  .qbar{height:70px;gap:12px;padding:0 18px}
+  .qgridp{padding:4px 18px 300px;gap:18px}
+  .qcard{padding:22px 20px 24px;border-radius:28px}
+  .qcard h1{font-size:36px}
+  .qcard .sub{font-size:17px}
+  .bigbar{height:88px;border-width:4px;border-radius:16px;margin:22px 0 12px}
+  .bigbar i{border-right-width:4px}
+  .count{font-size:19px}
+  .qactions{flex-direction:column-reverse;align-items:stretch;gap:10px}
+  .qactions .btn{width:100%}
+  .helper .kip{width:64px}
+  .bubble{font-size:16px;padding:14px 16px}
+  .bubble b{font-size:19px}
+  .bubble::before{left:-8px;top:28px;transform:rotate(45deg)}
+  .helper .btn{display:none}
+  .is-right .helper{display:none}
+  .tail svg{width:24px;height:17px}
+  .sheet .in{grid-template-columns:76px 1fr;gap:6px 16px;padding:20px 18px 24px}
+  .sheet .kip{width:76px;margin-top:-44px;grid-row:span 2}
+  .sheet h2{font-size:32px}
+  .sheet .plus{height:36px;font-size:20px}
+  .sheet p{font-size:17px}
+  .sheet .btn{grid-column:1/-1;width:100%;margin-top:12px}
+}
+</style></head><body>
+<div class="sky">
+  <div class="scene desk" aria-hidden="true">
+  <div class="sun"></div>
+  <span class="cl" style="left:48%;top:206px"><svg width="140" viewBox="0 0 120 60" aria-hidden="true" style="opacity:1"><path d="M22 54a18 18 0 0 1 2-36 26 26 0 0 1 48-6 20 20 0 0 1 30 14 16 16 0 0 1-2 28z" fill="#fff"/></svg></span>
+  <span class="cl" style="right:4%;top:420px"><svg width="120" viewBox="0 0 120 60" aria-hidden="true" style="opacity:1"><path d="M22 54a18 18 0 0 1 2-36 26 26 0 0 1 48-6 20 20 0 0 1 30 14 16 16 0 0 1-2 28z" fill="#fff"/></svg></span>
+  <span class="cl" style="left:62%;top:330px"><svg width="90" viewBox="0 0 120 60" aria-hidden="true" style="opacity:0.9"><path d="M22 54a18 18 0 0 1 2-36 26 26 0 0 1 48-6 20 20 0 0 1 30 14 16 16 0 0 1-2 28z" fill="#fff"/></svg></span>
+  <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 1440 820" preserveAspectRatio="xMidYMid slice"><path d="M1027 268 C 1000 420, 760 560, 576 700" fill="none" stroke="#13203a" stroke-width="2.5" stroke-linecap="round"/></svg>
+  <div class="flyer"><svg width="110" height="150" viewBox="0 0 110 150" class="kip" aria-hidden="true"><path d="M55 112 C46 122 64 128 55 138 S 60 146 66 150" fill="none" stroke="var(--color-ink)" stroke-width="3" stroke-linecap="round"></path><path d="M50 121 l-9 -4 l2 10 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2" stroke-linejoin="round"></path><path d="M60 121 l9 -4 l-2 10 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2" stroke-linejoin="round"></path><path d="M53 139 l-9 -3 l3 9 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2" stroke-linejoin="round"></path><path d="M55 4 L8 52 L55 52 Z" fill="var(--color-kite-red)"></path><path d="M55 4 L102 52 L55 52 Z" fill="var(--color-sun)"></path><path d="M102 52 L55 112 L55 52 Z" fill="var(--color-leaf)"></path><path d="M8 52 L55 112 L55 52 Z" fill="var(--color-sky)"></path><path d="M55 4 V112 M8 52 H102" stroke="var(--color-ink)" stroke-width="2.5" stroke-opacity="0.4"></path><path d="M55 4 L102 52 L55 112 L8 52 Z" fill="none" stroke="var(--color-ink)" stroke-width="4" stroke-linejoin="round"></path><path d="M35 33 Q41 26 47 33" fill="none" stroke="var(--color-ink)" stroke-width="3.5" stroke-linecap="round"></path><path d="M63 33 Q69 26 75 33" fill="none" stroke="var(--color-ink)" stroke-width="3.5" stroke-linecap="round"></path><path d="M42 55 Q55 75 68 55 Z" fill="var(--color-ink)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round"></path></svg></div>
+</div>
+  <div class="wrap">
+    <header class="topbar">
+      <a class="logo" href="#"><svg width="38" height="38" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 3 L10 20 L24 20 Z" fill="var(--color-kite-red)"></path><path d="M24 3 L38 20 L24 20 Z" fill="var(--color-sun)"></path><path d="M10 20 L24 38 L24 20 Z" fill="var(--color-sky)"></path><path d="M38 20 L24 38 L24 20 Z" fill="var(--color-leaf)"></path><path d="M24 3 L38 20 L24 38 L10 20 Z M24 3 V38 M10 20 H38" fill="none" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M24 38 Q19 41 24 44 T27 47" fill="none" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg>Kite Maths</a>
+      <nav class="links" aria-label="Main"><a href="#" class="on" aria-current="page"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z"></path></svg><span>Home</span></a><a href="#" class=""><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5 3.5 6.5v13L9 17.5l6 2 5.5-2v-13L15 6.5z"></path><path d="M9 4.5v13M15 6.5v13"></path></svg><span>Island</span></a><a href="#" class=""><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="4.2"></circle><circle cx="12" cy="12" r="0.8" fill="currentColor"></circle></svg><span>Practice</span></a><a href="#" class=""><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6l-5.2 9A2 2 0 0 0 6.5 21h11a2 2 0 0 0 1.7-3L14 9V3"></path><path d="M7.5 15h9"></path></svg><span>Lab</span></a><a href="#" class=""><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5 19 10 12 19 5 10Z"></path><path d="M12 2.5V19M5 10h14"></path><path d="M12 19c-1.5 1.2 1.5 2 0 3"></path></svg><span>Kites</span></a></nav>
+      <div class="me"><span class="pillstat" title="Stars"><svg width="28" height="28" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 4 L30 17 L44 18.5 L33.5 28 L36.5 42 L24 35 L11.5 42 L14.5 28 L4 18.5 L18 17 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg>56</span><span class="pillstat" title="Day streak"><svg width="28" height="28" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 4 C26 13 37 17 37 29 A13 13 0 0 1 11 29 C11 22 15 18 18 15 C18.5 20 20.5 23 23 24 C22 17 22.5 10 24 4 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M24 43 A7 7 0 0 1 17 36 C17 31 21 29 23 26 C24.5 30 31 31 31 36 A7 7 0 0 1 24 43 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg>4</span><a class="avatar" href="#" aria-label="Ava's account and grown-ups">A</a></div>
+    </header>
+    <main>
+    <section class="hero" aria-labelledby="t">
+      <div>
+        <p class="hello">Good morning, Ava!</p>
+        <h1 id="t">Let's fly higher today</h1>
+        <div class="heroart" aria-hidden="true">
+          <div class="sun"></div>
+          <span class="cl" style="position:absolute;left:6%;top:40px"><svg width="96" viewBox="0 0 120 60" aria-hidden="true" style="opacity:1"><path d="M22 54a18 18 0 0 1 2-36 26 26 0 0 1 48-6 20 20 0 0 1 30 14 16 16 0 0 1-2 28z" fill="#fff"/></svg></span>
+          <span class="cl" style="position:absolute;left:40%;top:150px"><svg width="70" viewBox="0 0 120 60" aria-hidden="true" style="opacity:0.9"><path d="M22 54a18 18 0 0 1 2-36 26 26 0 0 1 48-6 20 20 0 0 1 30 14 16 16 0 0 1-2 28z" fill="#fff"/></svg></span>
+          <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 390 300" preserveAspectRatio="none"><path d="M262 116 C 250 170, 190 210, 150 252" fill="none" stroke="#13203a" stroke-width="2" stroke-linecap="round"/></svg>
+          <div class="flyer"><svg width="110" height="150" viewBox="0 0 110 150" class="kip" aria-hidden="true"><path d="M55 112 C46 122 64 128 55 138 S 60 146 66 150" fill="none" stroke="var(--color-ink)" stroke-width="3" stroke-linecap="round"></path><path d="M50 121 l-9 -4 l2 10 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2" stroke-linejoin="round"></path><path d="M60 121 l9 -4 l-2 10 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2" stroke-linejoin="round"></path><path d="M53 139 l-9 -3 l3 9 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2" stroke-linejoin="round"></path><path d="M55 4 L8 52 L55 52 Z" fill="var(--color-kite-red)"></path><path d="M55 4 L102 52 L55 52 Z" fill="var(--color-sun)"></path><path d="M102 52 L55 112 L55 52 Z" fill="var(--color-leaf)"></path><path d="M8 52 L55 112 L55 52 Z" fill="var(--color-sky)"></path><path d="M55 4 V112 M8 52 H102" stroke="var(--color-ink)" stroke-width="2.5" stroke-opacity="0.4"></path><path d="M55 4 L102 52 L55 112 L8 52 Z" fill="none" stroke="var(--color-ink)" stroke-width="4" stroke-linejoin="round"></path><path d="M35 33 Q41 26 47 33" fill="none" stroke="var(--color-ink)" stroke-width="3.5" stroke-linecap="round"></path><path d="M63 33 Q69 26 75 33" fill="none" stroke="var(--color-ink)" stroke-width="3.5" stroke-linecap="round"></path><path d="M42 55 Q55 75 68 55 Z" fill="var(--color-ink)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round"></path></svg></div>
+          <svg class="hills" viewBox="0 0 390 120" preserveAspectRatio="none"><path d="M0 60 C 80 20, 160 40, 230 60 S 330 30, 390 50 V120 H0Z" fill="var(--grass-back)"/><path d="M0 90 C 90 60, 190 80, 260 92 S 350 70, 390 80 V120 H0Z" fill="var(--grass)"/><g transform="translate(150 252) scale(.7)"></g></svg>
+        </div>
+        <article class="mission" aria-label="Next up">
+          <span class="ic"><svg width="50" height="50" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 6 C35 6 43 13 43 22 C43 28 38 30 34 29 C30 28 28 31 30 35 C32 40 28 43 22 42 C12 41 5 33 5 23 C5 13 13 6 24 6 Z" fill="#ffffff" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><circle cx="15" cy="20" r="4" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><circle cx="24" cy="14" r="4" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><circle cx="34" cy="18" r="4" fill="var(--color-sky)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><circle cx="16" cy="31" r="4" fill="var(--color-leaf)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle></svg></span>
+          <span class="k">Next up · Lesson 3</span>
+          <h3>The Fraction Lab</h3>
+          <div class="bar" style="grid-column:1/-1"><i style="width:43%"></i></div>
+          <div class="barlabel" style="grid-column:1/-1"><span>Cut, colour and compare fractions</span><span>Step 3 of 7</span></div>
+          <div class="go"><a class="btn red" href="question.html">Continue <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a><span class="reward"><svg width="24" height="24" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 4 L30 17 L44 18.5 L33.5 28 L36.5 42 L24 35 L11.5 42 L14.5 28 L4 18.5 L18 17 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg>+5 stars when you finish</span></div>
+        </article>
+      </div>
+    </section>
+    </main>
+  </div>
+  <svg class="hills" viewBox="0 0 1440 230" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M0 120 C 220 40, 420 70, 640 110 S 1060 40, 1440 90 V230 H0Z" fill="var(--grass-back)"/>
+  <path d="M0 170 C 260 110, 520 150, 760 170 S 1200 120, 1440 150 V230 H0Z" fill="var(--grass)"/>
+  <g transform="translate(560 150)"><path d="M0 0 v26" stroke="#13203a" stroke-width="4" stroke-linecap="round"/><rect x="-16" y="-13" width="32" height="22" rx="4" fill="#e8343f" stroke="#13203a" stroke-width="3"/></g>
+</svg>
+</div>
+
+<div class="deck"><div class="wrap"><section class="deckcard" aria-label="Your flight">
+  <div><p class="lab">Level 2 · Breeze rider</p><p class="big d"><svg width="38" height="38" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 3 L10 20 L24 20 Z" fill="var(--color-kite-red)"></path><path d="M24 3 L38 20 L24 20 Z" fill="var(--color-sun)"></path><path d="M10 20 L24 38 L24 20 Z" fill="var(--color-sky)"></path><path d="M38 20 L24 38 L24 20 Z" fill="var(--color-leaf)"></path><path d="M24 3 L38 20 L24 38 L10 20 Z M24 3 V38 M10 20 H38" fill="none" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M24 38 Q19 41 24 44 T27 47" fill="none" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg>Level 2</p><div class="alt" aria-hidden="true"><i style="width:28%"></i><b style="left:28%"><svg width="30" height="30" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 3 L10 20 L24 20 Z" fill="var(--color-kite-red)"></path><path d="M24 3 L38 20 L24 20 Z" fill="var(--color-sun)"></path><path d="M10 20 L24 38 L24 20 Z" fill="var(--color-sky)"></path><path d="M38 20 L24 38 L24 20 Z" fill="var(--color-leaf)"></path><path d="M24 3 L38 20 L24 38 L10 20 Z M24 3 V38 M10 20 H38" fill="none" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M24 38 Q19 41 24 44 T27 47" fill="none" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg></b></div><p class="barlabel"><span>44 stars to Cloud hopper</span><span>Level 3</span></p></div>
+  <div><p class="lab">Stars</p><p class="big d"><svg width="38" height="38" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 4 L30 17 L44 18.5 L33.5 28 L36.5 42 L24 35 L11.5 42 L14.5 28 L4 18.5 L18 17 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg>56</p><p class="barlabel"><span>+12 this week</span></p></div>
+  <div><p class="lab">Streak</p><p class="big d"><svg width="38" height="38" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 4 C26 13 37 17 37 29 A13 13 0 0 1 11 29 C11 22 15 18 18 15 C18.5 20 20.5 23 23 24 C22 17 22.5 10 24 4 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M24 43 A7 7 0 0 1 17 36 C17 31 21 29 23 26 C24.5 30 31 31 31 36 A7 7 0 0 1 24 43 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg>4 <small>days</small></p><div class="days" aria-label="Played on the last 4 days"><span class="">M</span><span class="">T</span><span class="">W</span><span class="lit"><svg width="22" height="22" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 4 C26 13 37 17 37 29 A13 13 0 0 1 11 29 C11 22 15 18 18 15 C18.5 20 20.5 23 23 24 C22 17 22.5 10 24 4 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M24 43 A7 7 0 0 1 17 36 C17 31 21 29 23 26 C24.5 30 31 31 31 36 A7 7 0 0 1 24 43 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg></span><span class="lit"><svg width="22" height="22" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 4 C26 13 37 17 37 29 A13 13 0 0 1 11 29 C11 22 15 18 18 15 C18.5 20 20.5 23 23 24 C22 17 22.5 10 24 4 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M24 43 A7 7 0 0 1 17 36 C17 31 21 29 23 26 C24.5 30 31 31 31 36 A7 7 0 0 1 24 43 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg></span><span class="lit"><svg width="22" height="22" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 4 C26 13 37 17 37 29 A13 13 0 0 1 11 29 C11 22 15 18 18 15 C18.5 20 20.5 23 23 24 C22 17 22.5 10 24 4 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M24 43 A7 7 0 0 1 17 36 C17 31 21 29 23 26 C24.5 30 31 31 31 36 A7 7 0 0 1 24 43 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg></span><span class="lit"><svg width="22" height="22" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 4 C26 13 37 17 37 29 A13 13 0 0 1 11 29 C11 22 15 18 18 15 C18.5 20 20.5 23 23 24 C22 17 22.5 10 24 4 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M24 43 A7 7 0 0 1 17 36 C17 31 21 29 23 26 C24.5 30 31 31 31 36 A7 7 0 0 1 24 43 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg></span></div></div>
+  <div><p class="lab">Today</p><div class="ring"><svg viewBox="0 0 76 76" aria-hidden="true"><circle cx="38" cy="38" r="30" fill="none" stroke="#e8eff7" stroke-width="10"/><circle cx="38" cy="38" r="30" fill="none" stroke="var(--grass)" stroke-width="10" stroke-linecap="round" stroke-dasharray="75.39822368615503 188.49555921538757" transform="rotate(-90 38 38)"/></svg><p class="big d" style="margin:0">4<small>/10</small></p></div><p class="barlabel"><span>questions answered</span></p></div>
+</section></div></div>
+
+<section class="island" aria-labelledby="isl"><div class="wrap">
+  <div class="sechead"><div><h2 id="isl">Fractions Island</h2><p>2 of 8 lessons done. The big challenge waits at the end of the path.</p></div><a class="ghost" href="#"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5 3.5 6.5v13L9 17.5l6 2 5.5-2v-13L15 6.5z"></path><path d="M9 4.5v13M15 6.5v13"></path></svg>Open the map</a></div>
+  <ol class="path path-h" aria-label="Lessons on Fractions Island">
+    <svg viewBox="0 0 1000 560" preserveAspectRatio="none" aria-hidden="true"><path d="M 90 120 L 290 120 L 500 120 L 710 120 L 910 120 C 1030 160, 960 340, 800 400 L 580 400 L 360 400 L 130 400" fill="none" stroke="#cfe3f5" stroke-width="10" stroke-linecap="round" stroke-dasharray="2 20" vector-effect="non-scaling-stroke"/></svg>
+    <li><a href="#" class="stop done" style="left:9%;top:72px">
+  <span class="dot"><svg width="54" height="54" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M9 13 L39 13 L24 41 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M7 10 Q24 4 41 10 L39 15 Q24 10 9 15 Z" fill="var(--color-sun-strong)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><circle cx="20" cy="21" r="3" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><circle cx="28" cy="25" r="2.6" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><circle cx="23" cy="31" r="2.2" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle></svg><span class="tick"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span></span>
+  <span class="nm">Wholes and equal parts</span><span class="st">+5 stars won</span></a></li><li><a href="#" class="stop done" style="left:29%;top:72px">
+  <span class="dot"><svg width="54" height="54" viewBox="0 0 48 48" aria-hidden="true" class=" "><rect x="5" y="15" width="38" height="18" rx="1.5" fill="#ffffff" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></rect><rect x="5" y="15" width="28.5" height="18" fill="var(--color-num)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></rect><path d="M14.5 15 V33 M24 15 V33 M33.5 15 V33" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" fill="none"></path></svg><span class="tick"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span></span>
+  <span class="nm">Numerator and denominator</span><span class="st">+5 stars won</span></a></li><li><a href="question.html" class="stop now" style="left:50%;top:62px">
+  <span class="dot"><span class="pin"><svg width="110" height="150" viewBox="0 0 110 150" class="kip" aria-hidden="true"><path d="M55 112 C46 122 64 128 55 138 S 60 146 66 150" fill="none" stroke="var(--color-ink)" stroke-width="3" stroke-linecap="round"></path><path d="M50 121 l-9 -4 l2 10 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2" stroke-linejoin="round"></path><path d="M60 121 l9 -4 l-2 10 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2" stroke-linejoin="round"></path><path d="M53 139 l-9 -3 l3 9 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2" stroke-linejoin="round"></path><path d="M55 4 L8 52 L55 52 Z" fill="var(--color-kite-red)"></path><path d="M55 4 L102 52 L55 52 Z" fill="var(--color-sun)"></path><path d="M102 52 L55 112 L55 52 Z" fill="var(--color-leaf)"></path><path d="M8 52 L55 112 L55 52 Z" fill="var(--color-sky)"></path><path d="M55 4 V112 M8 52 H102" stroke="var(--color-ink)" stroke-width="2.5" stroke-opacity="0.4"></path><path d="M55 4 L102 52 L55 112 L8 52 Z" fill="none" stroke="var(--color-ink)" stroke-width="4" stroke-linejoin="round"></path><circle cx="41" cy="31" r="7" fill="#ffffff" stroke="var(--color-ink)" stroke-width="2.5"></circle><circle cx="41" cy="31.5" r="3.4" fill="var(--color-ink)"></circle><circle cx="69" cy="31" r="7" fill="#ffffff" stroke="var(--color-ink)" stroke-width="2.5"></circle><circle cx="69" cy="31.5" r="3.4" fill="var(--color-ink)"></circle><path d="M44 57 Q55 68 66 57" fill="none" stroke="var(--color-ink)" stroke-width="3.5" stroke-linecap="round"></path></svg></span><svg width="64" height="64" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 6 C35 6 43 13 43 22 C43 28 38 30 34 29 C30 28 28 31 30 35 C32 40 28 43 22 42 C12 41 5 33 5 23 C5 13 13 6 24 6 Z" fill="#ffffff" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><circle cx="15" cy="20" r="4" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><circle cx="24" cy="14" r="4" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><circle cx="34" cy="18" r="4" fill="var(--color-sky)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><circle cx="16" cy="31" r="4" fill="var(--color-leaf)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle></svg></span>
+  <span class="nm">The Fraction Lab</span><span class="st">Step 3 of 7</span><span class="btn red sm play">Play <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></a></li><li><a href="#" class="stop open" style="left:71%;top:72px">
+  <span class="dot"><svg width="54" height="54" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 9 V40 M15 41 H33" fill="none" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M8 14 H40" fill="none" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M8 14 L3 26 H13 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M40 14 L35 26 H45 Z" fill="var(--color-sky)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><circle cx="24" cy="9" r="3" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle></svg></span>
+  <span class="nm">Comparing fractions</span><span class="st">6 min</span></a></li><li><a href="#" class="stop open" style="left:91%;top:72px">
+  <span class="dot"><svg width="54" height="54" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M8 14 H19 A5 5 0 1 1 29 14 H40 V24 A5 5 0 1 0 40 34 V42 H8 V34 A5 5 0 1 1 8 24 Z" fill="var(--color-leaf)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg></span>
+  <span class="nm">Equivalent fractions</span><span class="st">8 min</span></a></li><li><a href="#" class="stop open" style="left:80%;top:352px">
+  <span class="dot"><svg width="54" height="54" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M5 30 H43" fill="none" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M7 24 V36 M41 24 V36 M15.5 27 V33 M24 27 V33 M32.5 27 V33" fill="none" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M32.5 12 C27.5 12 25 15.5 25 18.5 C25 22 32.5 27 32.5 27 C32.5 27 40 22 40 18.5 C40 15.5 37.5 12 32.5 12 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><circle cx="32.5" cy="18.5" r="2.2" fill="#ffffff" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle></svg></span>
+  <span class="nm">On a number line</span><span class="st">7 min</span></a></li><li><a href="#" class="stop open" style="left:58%;top:352px">
+  <span class="dot"><svg width="54" height="54" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M14 24 L4 16 V32 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M34 24 L44 16 V32 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><circle cx="24" cy="24" r="10" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><path d="M19 19 Q24 24 29 29" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"></path></svg></span>
+  <span class="nm">Fractions of amounts</span><span class="st">6 min</span></a></li><li><a href="#" class="stop open" style="left:36%;top:352px">
+  <span class="dot"><svg width="54" height="54" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M30 30 L42 42" fill="none" stroke="var(--color-ink)" stroke-width="6" stroke-linecap="round"></path><circle cx="20" cy="20" r="13" fill="var(--color-sky-soft)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><path d="M13 17 A8 8 0 0 1 20 11" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"></path></svg></span>
+  <span class="nm">Explaining your thinking</span><span class="st">5 min</span></a></li><li><a href="#" class="stop goal" style="left:13%;top:352px">
+  <span class="dot"><svg width="54" height="54" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M14 6 H34 V18 C34 25 29 29 24 29 C19 29 14 25 14 18 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M14 10 H7 C7 17 10 20 14 20 M34 10 H41 C41 17 38 20 34 20" fill="none" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M24 29 V36 M15 42 H33 L31 36 H17 Z" fill="var(--color-sun-strong)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg></span>
+  <span class="nm">The big challenge</span><span class="st">+20 stars</span></a></li>
+  </ol>
+  <ol class="path-v" aria-label="Lessons on Fractions Island" style="height:1924px">
+    <svg viewBox="0 0 100 1924" preserveAspectRatio="none" style="height:1924px" aria-hidden="true"><path d="M 28 104 C 28 204, 70 204, 70 304 C 70 404, 46 404, 46 504 C 46 604, 24 684, 24 784 C 24 884, 50 884, 50 984 C 50 1084, 74 1084, 74 1184 C 74 1284, 50 1284, 50 1384 C 50 1484, 26 1484, 26 1584 C 26 1684, 50 1684, 50 1784" fill="none" stroke="#cfe3f5" stroke-width="9" stroke-linecap="round" stroke-dasharray="2 18" vector-effect="non-scaling-stroke"/></svg>
+    <li><a href="#" class="stop done" style="left:28%;top:56px">
+  <span class="dot"><svg width="54" height="54" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M9 13 L39 13 L24 41 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M7 10 Q24 4 41 10 L39 15 Q24 10 9 15 Z" fill="var(--color-sun-strong)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><circle cx="20" cy="21" r="3" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><circle cx="28" cy="25" r="2.6" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><circle cx="23" cy="31" r="2.2" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle></svg><span class="tick"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span></span>
+  <span class="nm">Wholes and equal parts</span><span class="st">+5 stars won</span></a></li><li><a href="#" class="stop done" style="left:70%;top:256px">
+  <span class="dot"><svg width="54" height="54" viewBox="0 0 48 48" aria-hidden="true" class=" "><rect x="5" y="15" width="38" height="18" rx="1.5" fill="#ffffff" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></rect><rect x="5" y="15" width="28.5" height="18" fill="var(--color-num)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></rect><path d="M14.5 15 V33 M24 15 V33 M33.5 15 V33" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" fill="none"></path></svg><span class="tick"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span></span>
+  <span class="nm">Numerator and denominator</span><span class="st">+5 stars won</span></a></li><li><a href="question.html" class="stop now" style="left:46%;top:446px">
+  <span class="dot"><span class="pin"><svg width="110" height="150" viewBox="0 0 110 150" class="kip" aria-hidden="true"><path d="M55 112 C46 122 64 128 55 138 S 60 146 66 150" fill="none" stroke="var(--color-ink)" stroke-width="3" stroke-linecap="round"></path><path d="M50 121 l-9 -4 l2 10 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2" stroke-linejoin="round"></path><path d="M60 121 l9 -4 l-2 10 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2" stroke-linejoin="round"></path><path d="M53 139 l-9 -3 l3 9 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2" stroke-linejoin="round"></path><path d="M55 4 L8 52 L55 52 Z" fill="var(--color-kite-red)"></path><path d="M55 4 L102 52 L55 52 Z" fill="var(--color-sun)"></path><path d="M102 52 L55 112 L55 52 Z" fill="var(--color-leaf)"></path><path d="M8 52 L55 112 L55 52 Z" fill="var(--color-sky)"></path><path d="M55 4 V112 M8 52 H102" stroke="var(--color-ink)" stroke-width="2.5" stroke-opacity="0.4"></path><path d="M55 4 L102 52 L55 112 L8 52 Z" fill="none" stroke="var(--color-ink)" stroke-width="4" stroke-linejoin="round"></path><circle cx="41" cy="31" r="7" fill="#ffffff" stroke="var(--color-ink)" stroke-width="2.5"></circle><circle cx="41" cy="31.5" r="3.4" fill="var(--color-ink)"></circle><circle cx="69" cy="31" r="7" fill="#ffffff" stroke="var(--color-ink)" stroke-width="2.5"></circle><circle cx="69" cy="31.5" r="3.4" fill="var(--color-ink)"></circle><path d="M44 57 Q55 68 66 57" fill="none" stroke="var(--color-ink)" stroke-width="3.5" stroke-linecap="round"></path></svg></span><svg width="64" height="64" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 6 C35 6 43 13 43 22 C43 28 38 30 34 29 C30 28 28 31 30 35 C32 40 28 43 22 42 C12 41 5 33 5 23 C5 13 13 6 24 6 Z" fill="#ffffff" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><circle cx="15" cy="20" r="4" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><circle cx="24" cy="14" r="4" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><circle cx="34" cy="18" r="4" fill="var(--color-sky)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><circle cx="16" cy="31" r="4" fill="var(--color-leaf)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle></svg></span>
+  <span class="nm">The Fraction Lab</span><span class="st">Step 3 of 7</span><span class="btn red sm play">Play <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span></a></li><li><a href="#" class="stop open" style="left:24%;top:736px">
+  <span class="dot"><svg width="54" height="54" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 9 V40 M15 41 H33" fill="none" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M8 14 H40" fill="none" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M8 14 L3 26 H13 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M40 14 L35 26 H45 Z" fill="var(--color-sky)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><circle cx="24" cy="9" r="3" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle></svg></span>
+  <span class="nm">Comparing fractions</span><span class="st">6 min</span></a></li><li><a href="#" class="stop open" style="left:50%;top:936px">
+  <span class="dot"><svg width="54" height="54" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M8 14 H19 A5 5 0 1 1 29 14 H40 V24 A5 5 0 1 0 40 34 V42 H8 V34 A5 5 0 1 1 8 24 Z" fill="var(--color-leaf)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg></span>
+  <span class="nm">Equivalent fractions</span><span class="st">8 min</span></a></li><li><a href="#" class="stop open" style="left:74%;top:1136px">
+  <span class="dot"><svg width="54" height="54" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M5 30 H43" fill="none" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M7 24 V36 M41 24 V36 M15.5 27 V33 M24 27 V33 M32.5 27 V33" fill="none" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M32.5 12 C27.5 12 25 15.5 25 18.5 C25 22 32.5 27 32.5 27 C32.5 27 40 22 40 18.5 C40 15.5 37.5 12 32.5 12 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><circle cx="32.5" cy="18.5" r="2.2" fill="#ffffff" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle></svg></span>
+  <span class="nm">On a number line</span><span class="st">7 min</span></a></li><li><a href="#" class="stop open" style="left:50%;top:1336px">
+  <span class="dot"><svg width="54" height="54" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M14 24 L4 16 V32 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M34 24 L44 16 V32 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><circle cx="24" cy="24" r="10" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><path d="M19 19 Q24 24 29 29" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"></path></svg></span>
+  <span class="nm">Fractions of amounts</span><span class="st">6 min</span></a></li><li><a href="#" class="stop open" style="left:26%;top:1536px">
+  <span class="dot"><svg width="54" height="54" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M30 30 L42 42" fill="none" stroke="var(--color-ink)" stroke-width="6" stroke-linecap="round"></path><circle cx="20" cy="20" r="13" fill="var(--color-sky-soft)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><path d="M13 17 A8 8 0 0 1 20 11" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"></path></svg></span>
+  <span class="nm">Explaining your thinking</span><span class="st">5 min</span></a></li><li><a href="#" class="stop goal" style="left:50%;top:1736px">
+  <span class="dot"><svg width="54" height="54" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M14 6 H34 V18 C34 25 29 29 24 29 C19 29 14 25 14 18 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M14 10 H7 C7 17 10 20 14 20 M34 10 H41 C41 17 38 20 34 20" fill="none" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M24 29 V36 M15 42 H33 L31 36 H17 Z" fill="var(--color-sun-strong)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg></span>
+  <span class="nm">The big challenge</span><span class="st">+20 stars</span></a></li>
+  </ol>
+</div></section>
+
+<section class="quests" aria-labelledby="qq"><div class="wrap">
+  <div class="sechead"><div><h2 id="qq">Today's quests</h2><p>Finish all three for a bonus kite. New quests tomorrow.</p></div></div>
+  <ul class="qgrid">
+    <li class="quest q-sun"><span class="qi"><svg width="52" height="52" viewBox="0 0 48 48" aria-hidden="true" class=" "><circle cx="22" cy="26" r="17" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><circle cx="22" cy="26" r="11" fill="#ffffff" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><circle cx="22" cy="26" r="5" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></circle><path d="M22 26 L42 6" fill="none" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M37 5 L43 5 L43 11" fill="none" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg></span><h3>Answer 10 questions</h3><div class="bar"><i style="width:40%"></i></div><div class="foot"><span>4 of 10</span><span class="prize">+10 <svg width="22" height="22" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 4 L30 17 L44 18.5 L33.5 28 L36.5 42 L24 35 L11.5 42 L14.5 28 L4 18.5 L18 17 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg></span></div></li>
+    <li class="quest q-coral"><span class="qi"><svg width="52" height="52" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 12 C18 8 11 8 5 10 V39 C11 37 18 37 24 41 Z" fill="#ffffff" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M24 12 C30 8 37 8 43 10 V39 C37 37 30 37 24 41 Z" fill="var(--color-sky)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M10 17 H19 M10 23 H19 M10 29 H17" fill="none" stroke="var(--color-ink)" stroke-opacity="0.35" stroke-width="2.5" stroke-linecap="round"></path></svg></span><h3>Finish a lesson</h3><div class="bar"><i style="width:43%"></i></div><div class="foot"><span>Step 3 of 7</span><span class="prize">+5 <svg width="22" height="22" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 4 L30 17 L44 18.5 L33.5 28 L36.5 42 L24 35 L11.5 42 L14.5 28 L4 18.5 L18 17 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg></span></div></li>
+    <li class="quest q-grass"><span class="qi"><svg width="52" height="52" viewBox="0 0 48 48" aria-hidden="true" class=" "><path d="M24 4 C26 13 37 17 37 29 A13 13 0 0 1 11 29 C11 22 15 18 18 15 C18.5 20 20.5 23 23 24 C22 17 22.5 10 24 4 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path><path d="M24 43 A7 7 0 0 1 17 36 C17 31 21 29 23 26 C24.5 30 31 31 31 36 A7 7 0 0 1 24 43 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"></path></svg></span><h3>Keep your streak</h3><div class="bar"><i style="width:100%"></i></div><div class="foot"><span>Done for today</span><span class="prize"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg> Done</span></div></li>
+  </ul>
+</div></section>
+
+<section class="night" aria-labelledby="kk"><svg class="starsbg" viewBox="0 0 1440 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><circle cx="0" cy="0" r="1" fill="#fff" opacity="0.25"/><circle cx="337" cy="191" r="1.8" fill="#fff" opacity="0.4"/><circle cx="674" cy="382" r="2.6" fill="#fff" opacity="0.55"/><circle cx="1011" cy="573" r="1" fill="#fff" opacity="0.7"/><circle cx="1348" cy="64" r="1.8" fill="#fff" opacity="0.25"/><circle cx="245" cy="255" r="2.6" fill="#fff" opacity="0.4"/><circle cx="582" cy="446" r="1" fill="#fff" opacity="0.55"/><circle cx="919" cy="637" r="1.8" fill="#fff" opacity="0.7"/><circle cx="1256" cy="128" r="2.6" fill="#fff" opacity="0.25"/><circle cx="153" cy="319" r="1" fill="#fff" opacity="0.4"/><circle cx="490" cy="510" r="1.8" fill="#fff" opacity="0.55"/><circle cx="827" cy="1" r="2.6" fill="#fff" opacity="0.7"/><circle cx="1164" cy="192" r="1" fill="#fff" opacity="0.25"/><circle cx="61" cy="383" r="1.8" fill="#fff" opacity="0.4"/><circle cx="398" cy="574" r="2.6" fill="#fff" opacity="0.55"/><circle cx="735" cy="65" r="1" fill="#fff" opacity="0.7"/><circle cx="1072" cy="256" r="1.8" fill="#fff" opacity="0.25"/><circle cx="1409" cy="447" r="2.6" fill="#fff" opacity="0.4"/><circle cx="306" cy="638" r="1" fill="#fff" opacity="0.55"/><circle cx="643" cy="129" r="1.8" fill="#fff" opacity="0.7"/><circle cx="980" cy="320" r="2.6" fill="#fff" opacity="0.25"/><circle cx="1317" cy="511" r="1" fill="#fff" opacity="0.4"/><circle cx="214" cy="2" r="1.8" fill="#fff" opacity="0.55"/><circle cx="551" cy="193" r="2.6" fill="#fff" opacity="0.7"/><circle cx="888" cy="384" r="1" fill="#fff" opacity="0.25"/><circle cx="1225" cy="575" r="1.8" fill="#fff" opacity="0.4"/><circle cx="122" cy="66" r="2.6" fill="#fff" opacity="0.55"/><circle cx="459" cy="257" r="1" fill="#fff" opacity="0.7"/><circle cx="796" cy="448" r="1.8" fill="#fff" opacity="0.25"/><circle cx="1133" cy="639" r="2.6" fill="#fff" opacity="0.4"/><circle cx="30" cy="130" r="1" fill="#fff" opacity="0.55"/><circle cx="367" cy="321" r="1.8" fill="#fff" opacity="0.7"/><circle cx="704" cy="512" r="2.6" fill="#fff" opacity="0.25"/><circle cx="1041" cy="3" r="1" fill="#fff" opacity="0.4"/><circle cx="1378" cy="194" r="1.8" fill="#fff" opacity="0.55"/><circle cx="275" cy="385" r="2.6" fill="#fff" opacity="0.7"/><circle cx="612" cy="576" r="1" fill="#fff" opacity="0.25"/><circle cx="949" cy="67" r="1.8" fill="#fff" opacity="0.4"/><circle cx="1286" cy="258" r="2.6" fill="#fff" opacity="0.55"/><circle cx="183" cy="449" r="1" fill="#fff" opacity="0.7"/><circle cx="520" cy="640" r="1.8" fill="#fff" opacity="0.25"/><circle cx="857" cy="131" r="2.6" fill="#fff" opacity="0.4"/><circle cx="1194" cy="322" r="1" fill="#fff" opacity="0.55"/><circle cx="91" cy="513" r="1.8" fill="#fff" opacity="0.7"/><circle cx="428" cy="4" r="2.6" fill="#fff" opacity="0.25"/><circle cx="765" cy="195" r="1" fill="#fff" opacity="0.4"/></svg><div class="wrap" style="position:relative">
+  <div class="sechead"><div><h2 id="kk">Your kite collection</h2><p>4 of 12 kites won. Every kite is a badge you earn by learning.</p></div><a class="btn white sm" href="#">See all kites</a></div>
+  <ul class="shelf"><li class="kt"><span class="disc"><svg width="64" height="96" viewBox="0 0 60 90" aria-hidden="true"><g><path d="M30 4 L8 32 L30 32 Z" fill="var(--color-kite-red)"></path></g><g><path d="M30 4 L52 32 L30 32 Z" fill="var(--color-sun)"></path></g><g><path d="M52 32 L30 66 L30 32 Z" fill="var(--color-leaf)"></path></g><g><path d="M8 32 L30 66 L30 32 Z" fill="var(--color-sky)"></path></g><path d="M30 4 L52 32 L30 66 L8 32 Z" fill="none" stroke="var(--color-ink)" stroke-width="3" stroke-linejoin="round"></path><path d="M30 4 V66 M8 32 H52" fill="none" stroke="var(--color-ink)" stroke-width="2" stroke-opacity="1"></path><g><path d="M30 66 C24 72 36 76 30 82 S 33 88 36 90" fill="none" stroke="var(--color-ink)" stroke-width="2" stroke-linecap="round" stroke-opacity="1"></path><path d="M27 73 l-6 -3 l1 7 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="1.5" stroke-linejoin="round"></path><path d="M33 73 l6 -3 l-1 7 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="1.5" stroke-linejoin="round"></path></g></svg></span><span class="nm">First flight</span><span class="st">Won</span></li><li class="kt"><span class="disc"><svg width="64" height="96" viewBox="0 0 60 90" aria-hidden="true"><defs><pattern id="kp-_R_0_" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="3.5" height="8" fill="rgba(255,255,255,0.55)"></rect></pattern></defs><g><path d="M30 4 L8 32 L30 32 Z" fill="var(--color-kite-red)"></path><path d="M30 4 L8 32 L30 32 Z" fill="url(#kp-_R_0_)"></path></g><g><path d="M30 4 L52 32 L30 32 Z" fill="var(--color-sun)"></path><path d="M30 4 L52 32 L30 32 Z" fill="url(#kp-_R_0_)"></path></g><g><path d="M52 32 L30 66 L30 32 Z" fill="var(--color-leaf)"></path><path d="M52 32 L30 66 L30 32 Z" fill="url(#kp-_R_0_)"></path></g><g><path d="M8 32 L30 66 L30 32 Z" fill="var(--color-sky)"></path><path d="M8 32 L30 66 L30 32 Z" fill="url(#kp-_R_0_)"></path></g><path d="M30 4 L52 32 L30 66 L8 32 Z" fill="none" stroke="var(--color-ink)" stroke-width="3" stroke-linejoin="round"></path><path d="M30 4 V66 M8 32 H52" fill="none" stroke="var(--color-ink)" stroke-width="2" stroke-opacity="1"></path><g><path d="M30 66 C24 72 36 76 30 82 S 33 88 36 90" fill="none" stroke="var(--color-ink)" stroke-width="2" stroke-linecap="round" stroke-opacity="1"></path><path d="M27 73 l-6 -3 l1 7 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="1.5" stroke-linejoin="round"></path><path d="M33 73 l6 -3 l-1 7 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="1.5" stroke-linejoin="round"></path></g></svg></span><span class="nm">Lesson learner</span><span class="st">Won</span></li><li class="kt"><span class="disc"><svg width="64" height="96" viewBox="0 0 60 90" aria-hidden="true"><defs><pattern id="kp-_R_0_" width="10" height="8" patternUnits="userSpaceOnUse"><path d="M0 6 L5 2 L10 6" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="2"></path></pattern></defs><g><path d="M30 4 L8 32 L30 32 Z" fill="var(--color-kite-red)"></path><path d="M30 4 L8 32 L30 32 Z" fill="url(#kp-_R_0_)"></path></g><g><path d="M30 4 L52 32 L30 32 Z" fill="var(--color-sun)"></path><path d="M30 4 L52 32 L30 32 Z" fill="url(#kp-_R_0_)"></path></g><g><path d="M52 32 L30 66 L30 32 Z" fill="var(--color-leaf)"></path><path d="M52 32 L30 66 L30 32 Z" fill="url(#kp-_R_0_)"></path></g><g><path d="M8 32 L30 66 L30 32 Z" fill="var(--color-sky)"></path><path d="M8 32 L30 66 L30 32 Z" fill="url(#kp-_R_0_)"></path></g><path d="M30 4 L52 32 L30 66 L8 32 Z" fill="none" stroke="var(--color-ink)" stroke-width="3" stroke-linejoin="round"></path><path d="M30 4 V66 M8 32 H52" fill="none" stroke="var(--color-ink)" stroke-width="2" stroke-opacity="1"></path><g><path d="M30 66 C24 72 36 76 30 82 S 33 88 36 90" fill="none" stroke="var(--color-ink)" stroke-width="2" stroke-linecap="round" stroke-opacity="1"></path><path d="M27 73 l-6 -3 l1 7 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="1.5" stroke-linejoin="round"></path><path d="M33 73 l6 -3 l-1 7 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="1.5" stroke-linejoin="round"></path></g></svg></span><span class="nm">Never give up</span><span class="st">Won</span></li><li class="kt"><span class="disc"><svg width="64" height="96" viewBox="0 0 60 90" aria-hidden="true"><defs><pattern id="kp-_R_0_" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="5" height="5" fill="rgba(255,255,255,0.55)"></rect><rect x="5" y="5" width="5" height="5" fill="rgba(255,255,255,0.55)"></rect></pattern></defs><g><path d="M30 4 L8 32 L30 32 Z" fill="var(--color-kite-red)"></path><path d="M30 4 L8 32 L30 32 Z" fill="url(#kp-_R_0_)"></path></g><g><path d="M30 4 L52 32 L30 32 Z" fill="var(--color-sun)"></path><path d="M30 4 L52 32 L30 32 Z" fill="url(#kp-_R_0_)"></path></g><g><path d="M52 32 L30 66 L30 32 Z" fill="var(--color-leaf)"></path><path d="M52 32 L30 66 L30 32 Z" fill="url(#kp-_R_0_)"></path></g><g><path d="M8 32 L30 66 L30 32 Z" fill="var(--color-sky)"></path><path d="M8 32 L30 66 L30 32 Z" fill="url(#kp-_R_0_)"></path></g><path d="M30 4 L52 32 L30 66 L8 32 Z" fill="none" stroke="var(--color-ink)" stroke-width="3" stroke-linejoin="round"></path><path d="M30 4 V66 M8 32 H52" fill="none" stroke="var(--color-ink)" stroke-width="2" stroke-opacity="1"></path><g><path d="M30 66 C24 72 36 76 30 82 S 33 88 36 90" fill="none" stroke="var(--color-ink)" stroke-width="2" stroke-linecap="round" stroke-opacity="1"></path><path d="M27 73 l-6 -3 l1 7 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="1.5" stroke-linejoin="round"></path><path d="M33 73 l6 -3 l-1 7 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="1.5" stroke-linejoin="round"></path></g></svg></span><span class="nm">Three in a row</span><span class="st">Won</span></li><li class="kt locked"><span class="disc"><svg class="ghostkite" viewBox="0 0 60 80" aria-hidden="true"><path d="M30 4 L56 34 L30 76 L4 34 Z" fill="none" stroke="#5f80ad" stroke-width="3" stroke-dasharray="6 6" stroke-linejoin="round"/><text x="30" y="44" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="22" fill="#8fa8cc">?</text></svg></span><span class="nm">Hot streak</span><span class="minibar"><i style="width:60%"></i></span><span class="st">3 of 5</span></li><li class="kt locked"><span class="disc"><svg class="ghostkite" viewBox="0 0 60 80" aria-hidden="true"><path d="M30 4 L56 34 L30 76 L4 34 Z" fill="none" stroke="#5f80ad" stroke-width="3" stroke-dasharray="6 6" stroke-linejoin="round"/><text x="30" y="44" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="22" fill="#8fa8cc">?</text></svg></span><span class="nm">Daily hero</span><span class="minibar"><i style="width:40%"></i></span><span class="st">4 of 10</span></li><li class="kt locked"><span class="disc"><svg class="ghostkite" viewBox="0 0 60 80" aria-hidden="true"><path d="M30 4 L56 34 L30 76 L4 34 Z" fill="none" stroke="#5f80ad" stroke-width="3" stroke-dasharray="6 6" stroke-linejoin="round"/><text x="30" y="44" text-anchor="middle" font-family="Baloo 2" font-weight="800" font-size="22" fill="#8fa8cc">?</text></svg></span><span class="nm">Lab explorer</span><span class="minibar"><i style="width:33.33333333333333%"></i></span><span class="st">1 of 3</span></li></ul>
+  <div class="kipsays"><svg width="110" height="150" viewBox="0 0 110 150" class="kip" aria-hidden="true"><path d="M55 112 C46 122 64 128 55 138 S 60 146 66 150" fill="none" stroke="var(--color-ink)" stroke-width="3" stroke-linecap="round"></path><path d="M50 121 l-9 -4 l2 10 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2" stroke-linejoin="round"></path><path d="M60 121 l9 -4 l-2 10 Z" fill="var(--color-kite-red)" stroke="var(--color-ink)" stroke-width="2" stroke-linejoin="round"></path><path d="M53 139 l-9 -3 l3 9 Z" fill="var(--color-sun)" stroke="var(--color-ink)" stroke-width="2" stroke-linejoin="round"></path><path d="M55 4 L8 52 L55 52 Z" fill="var(--color-kite-red)"></path><path d="M55 4 L102 52 L55 52 Z" fill="var(--color-sun)"></path><path d="M102 52 L55 112 L55 52 Z" fill="var(--color-leaf)"></path><path d="M8 52 L55 112 L55 52 Z" fill="var(--color-sky)"></path><path d="M55 4 V112 M8 52 H102" stroke="var(--color-ink)" stroke-width="2.5" stroke-opacity="0.4"></path><path d="M55 4 L102 52 L55 112 L8 52 Z" fill="none" stroke="var(--color-ink)" stroke-width="4" stroke-linejoin="round"></path><circle cx="41" cy="31" r="7" fill="#ffffff" stroke="var(--color-ink)" stroke-width="2.5"></circle><circle cx="41" cy="31.5" r="3.4" fill="var(--color-ink)"></circle><circle cx="69" cy="31" r="7" fill="#ffffff" stroke="var(--color-ink)" stroke-width="2.5"></circle><circle cx="69" cy="31.5" r="3.4" fill="var(--color-ink)"></circle><path d="M44 57 Q55 68 66 57" fill="none" stroke="var(--color-ink)" stroke-width="3.5" stroke-linecap="round"></path></svg><p>Come back tomorrow to keep your 4-day streak!</p></div>
+</div></section>
+
+<nav class="tabbar" aria-label="Main"><a href="#" class="on"><span class="t"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z"></path></svg></span>Home</a><a href="#" class=""><span class="t"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4.5 3.5 6.5v13L9 17.5l6 2 5.5-2v-13L15 6.5z"></path><path d="M9 4.5v13M15 6.5v13"></path></svg></span>Island</a><a href="#" class=""><span class="t"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="4.2"></circle><circle cx="12" cy="12" r="0.8" fill="currentColor"></circle></svg></span>Practice</a><a href="#" class=""><span class="t"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6l-5.2 9A2 2 0 0 0 6.5 21h11a2 2 0 0 0 1.7-3L14 9V3"></path><path d="M7.5 15h9"></path></svg></span>Lab</a><a href="#" class=""><span class="t"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5 19 10 12 19 5 10Z"></path><path d="M12 2.5V19M5 10h14"></path><path d="M12 19c-1.5 1.2 1.5 2 0 3"></path></svg></span>Kites</a></nav>
+</body></html>

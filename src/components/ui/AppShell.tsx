@@ -5,17 +5,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { Hud } from "@/components/kid/Hud";
-import { routes } from "@/lib/routes";
-import { updateLearner, useHydrated, useLearner } from "@/lib/store";
+import { routes, topicRoutes } from "@/lib/routes";
+import { updateLearner, updateTopic, useHydrated, useLearner } from "@/lib/store";
 import { completePracticeSession, setSettings } from "@/engine/progress";
-import { BeakerIcon, CloseIcon, HomeIcon, MapIcon, ParentIcon, PracticeIcon, ResultsIcon, SoundIcon, TrophyIcon } from "./Icons";
+import { activeTopic } from "@/topics/recommend";
+import { ArrowLeftIcon, BeakerIcon, CloseIcon, HomeIcon, KiteIcon, MapIcon, ParentIcon, PracticeIcon, SoundIcon } from "./Icons";
+import { Pic } from "@/components/paper/Pic";
 
 const KID_NAV = [
-  { href: "/", label: "Home", Icon: HomeIcon, color: "bg-brand" },
-  { href: "/journey", label: "Map", Icon: MapIcon, color: "bg-sky" },
-  { href: "/practice", label: "Practice", Icon: PracticeIcon, color: "bg-ok-bright" },
-  { href: "/lab", label: "Lab", Icon: BeakerIcon, color: "bg-pink" },
-  { href: "/badges", label: "Badges", Icon: TrophyIcon, color: "bg-sun" },
+  { href: "/", label: "Home", Icon: HomeIcon },
+  { href: "/journey", label: "Map", Icon: MapIcon },
+  { href: "/practice", label: "Practice", Icon: PracticeIcon },
+  { href: "/lab", label: "Lab", Icon: BeakerIcon },
+  { href: "/badges", label: "Kites", Icon: KiteIcon },
 ];
 
 const PARENT_NAV = [
@@ -24,35 +26,41 @@ const PARENT_NAV = [
   { href: routes.results(), label: "Full report" },
 ];
 
+/** "/t/fractions/practice/compare" → { topicId: "fractions", section: "practice" }. */
+export function topicPath(pathname: string): { topicId: string; section: string } | null {
+  const m = /^\/t\/([^/]+)(?:\/([^/]+))?/.exec(pathname);
+  return m ? { topicId: m[1], section: m[2] ?? "" } : null;
+}
+
 function isActive(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
-  if (href === "/journey") return pathname.startsWith("/journey") || pathname.startsWith("/lesson");
+  const tp = topicPath(pathname);
+  if (tp) {
+    if (href === "/practice") return tp.section === "practice";
+    if (href === "/lab") return tp.section === "lab";
+    if (href === "/journey") return tp.section !== "practice" && tp.section !== "lab";
+  }
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 export type ShellMode = "kid" | "focus" | "parent";
 
 /** Which chrome a route gets. Focus mode hides navigation so activities fill a phone screen. */
-export function shellMode(pathname: string, practiceActive: boolean): ShellMode {
+export function shellMode(pathname: string, practiceActive: (topicId: string) => boolean): ShellMode {
   if (pathname.startsWith("/parent") || pathname.startsWith("/results")) return "parent";
-  if (pathname.startsWith("/lesson") || pathname.startsWith("/assessment") || pathname.startsWith("/start")) return "focus";
-  if (pathname.startsWith("/practice") && practiceActive) return "focus";
+  const tp = topicPath(pathname);
+  if (!tp) return "kid";
+  if (["lesson", "check", "recheck", "start"].includes(tp.section)) return "focus";
+  if (tp.section === "practice" && practiceActive(tp.topicId)) return "focus";
   return "kid";
 }
 
+/** The wordmark: the 3D kite and the name. */
 function Logo({ small = false }: { small?: boolean }) {
   return (
-    <Link href="/" className="flex items-center gap-2 rounded-xl" aria-label="Kite Maths home">
-      <svg width={small ? 28 : 34} height={small ? 28 : 34} viewBox="0 0 32 32" aria-hidden>
-        <path d="M16 2 L29 14 L16 14 Z" fill="#ffc83a" />
-        <path d="M16 2 L3 14 L16 14 Z" fill="#ff6a45" />
-        <path d="M3 14 L16 30 L16 14 Z" fill="#6a4cff" />
-        <path d="M29 14 L16 30 L16 14 Z" fill="#2f74ff" />
-        <path d="M16 2 29 14 16 30 3 14Z" fill="none" stroke="#1d2350" strokeWidth="2" strokeLinejoin="round" />
-      </svg>
-      <span className={`display whitespace-nowrap ${small ? "text-lg" : "text-2xl"} leading-none text-ink`}>
-        Kite <span className="text-brand">Maths</span>
-      </span>
+    <Link href="/" className="flex items-center gap-2 rounded-full" aria-label="Kite Maths home">
+      <Pic name="kite" size={small ? 32 : 40} priority />
+      <span className={`display whitespace-nowrap ${small ? "text-lg" : "text-[1.375rem]"} leading-none text-ink`}>Kite Maths</span>
     </Link>
   );
 }
@@ -78,7 +86,12 @@ function SoundToggle() {
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const learner = useLearner();
-  const mode = shellMode(pathname, learner.practice.active);
+  const mode = shellMode(pathname, (id) => !!learner.topics[id]?.practice.active);
+  const tp = topicPath(pathname);
+  const inPractice = tp?.section === "practice";
+  const navTopic = topicRoutes(tp?.topicId ?? activeTopic(learner).id);
+  /** Practice and Lab open the island the learner is in (or their active one). */
+  const navHref = (href: string) => (href === "/practice" ? navTopic.practice() : href === "/lab" ? navTopic.lab() : href);
 
   return (
     <MotionConfig reducedMotion="user">
@@ -90,14 +103,14 @@ export function AppShell({ children }: { children: ReactNode }) {
       </a>
 
       {mode === "focus" && (
-        <header className="sticky top-0 z-40 border-b-2 border-line/70 bg-paper/90 backdrop-blur-md">
+        <header className="sticky top-0 z-40 border-b border-line bg-surface">
           <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-3 sm:px-6">
             <Link
-              href={pathname.startsWith("/practice") ? routes.practice() : routes.journey()}
+              href={tp ? (inPractice ? topicRoutes(tp.topicId).practice() : topicRoutes(tp.topicId).island()) : routes.journey()}
               onClick={(e) => {
-                if (pathname.startsWith("/practice")) {
+                if (tp && inPractice) {
                   e.preventDefault();
-                  updateLearner(completePracticeSession);
+                  updateTopic(tp.topicId, completePracticeSession);
                 }
               }}
               className="grid size-11 place-items-center rounded-full text-muted hover:bg-sunk hover:text-ink"
@@ -117,25 +130,23 @@ export function AppShell({ children }: { children: ReactNode }) {
       )}
 
       {mode === "kid" && (
-        <header className="sticky top-0 z-40 bg-paper/80 backdrop-blur-md">
-          <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+        <header className="sticky top-0 z-40 border-b border-line bg-surface">
+          <div className="mx-auto flex h-[4.5rem] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
             <Logo />
             <nav aria-label="Main" className="hidden lg:block">
               <ul className="flex items-center gap-1">
-                {KID_NAV.map(({ href, label, Icon, color }) => {
+                {KID_NAV.map(({ href, label, Icon }) => {
                   const active = isActive(pathname, href);
                   return (
                     <li key={href}>
                       <Link
-                        href={href}
+                        href={navHref(href)}
                         aria-current={active ? "page" : undefined}
-                        className={`flex h-11 items-center gap-2 rounded-2xl px-3.5 text-[0.95rem] font-semibold transition-colors ${
-                          active ? "bg-surface text-ink shadow-[0_3px_0_var(--color-line)] ring-2 ring-line" : "text-ink-2 hover:bg-surface/70"
+                        className={`flex h-11 items-center gap-2 rounded-full px-4 text-base transition-colors ${
+                          active ? "bg-brand-soft font-bold text-brand-strong" : "font-semibold text-ink-2 hover:bg-sunk"
                         }`}
                       >
-                        <span className={`grid size-7 place-items-center rounded-lg text-white ${color}`}>
-                          <Icon size={16} strokeWidth={2.4} />
-                        </span>
+                        <Icon size={20} />
                         {label}
                       </Link>
                     </li>
@@ -149,7 +160,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Link
                 href={routes.parent()}
                 aria-label="Grown-ups"
-                className="ml-1 hidden h-10 items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 text-sm font-medium text-muted hover:bg-surface hover:text-ink sm:flex"
+                className="ml-1 hidden h-10 items-center gap-1.5 whitespace-nowrap rounded-full px-3 text-[0.9375rem] font-semibold text-ink-2 hover:bg-sunk sm:flex"
               >
                 <ParentIcon size={18} /> <span className="hidden xl:inline">Grown-ups</span>
               </Link>
@@ -159,11 +170,11 @@ export function AppShell({ children }: { children: ReactNode }) {
       )}
 
       {mode === "parent" && (
-        <header className="sticky top-0 z-40 border-b-2 border-line bg-surface/95 backdrop-blur-md">
-          <div className="mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 sm:px-6">
+        <header className="sticky top-0 z-40 border-b border-line bg-surface">
+          <div className="mx-auto flex min-h-14 max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 sm:px-6">
             <div className="flex items-center gap-3">
               <Logo small />
-              <span className="rounded-full bg-sunk px-2.5 py-1 text-xs font-semibold text-muted">Grown-ups</span>
+              <span className="text-[0.9375rem] font-semibold text-muted">Grown-ups</span>
             </div>
             <nav aria-label="Grown-ups" className="order-3 w-full overflow-x-auto sm:order-none sm:w-auto">
               <ul className="flex items-center gap-1">
@@ -172,9 +183,9 @@ export function AppShell({ children }: { children: ReactNode }) {
                   return (
                     <li key={href}>
                       <Link
-                        href={href}
+                        href={navHref(href)}
                         aria-current={active ? "page" : undefined}
-                        className={`flex h-10 items-center whitespace-nowrap rounded-xl px-3 text-sm font-medium ${active ? "bg-ink text-white" : "text-ink-2 hover:bg-sunk"}`}
+                        className={`flex h-10 items-center whitespace-nowrap rounded-full px-4 text-[0.9375rem] ${active ? "bg-brand-soft font-bold text-brand-strong" : "font-semibold text-ink-2 hover:bg-sunk hover:text-ink"}`}
                       >
                         {label}
                       </Link>
@@ -183,8 +194,8 @@ export function AppShell({ children }: { children: ReactNode }) {
                 })}
               </ul>
             </nav>
-            <Link href="/" className="flex h-10 items-center gap-1.5 rounded-full bg-brand-soft px-3.5 text-sm font-semibold text-brand-strong hover:bg-[#e0d8ff]">
-              <ResultsIcon size={16} /> Back to child view
+            <Link href="/" className="flex h-10 items-center gap-1.5 rounded-full px-4 text-[0.9375rem] font-semibold text-ink-2 hover:bg-sunk">
+              <ArrowLeftIcon size={16} /> Child view
             </Link>
           </div>
         </header>
@@ -202,24 +213,20 @@ export function AppShell({ children }: { children: ReactNode }) {
       {mode === "kid" && (
         <nav
           aria-label="Main"
-          className="fixed inset-x-0 bottom-0 z-40 border-t-2 border-line bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-md lg:hidden"
+          className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] lg:hidden"
         >
           <ul className="mx-auto grid max-w-xl grid-cols-5">
-            {KID_NAV.map(({ href, label, Icon, color }) => {
+            {KID_NAV.map(({ href, label, Icon }) => {
               const active = isActive(pathname, href);
               return (
                 <li key={href}>
                   <Link
-                    href={href}
+                    href={navHref(href)}
                     aria-current={active ? "page" : undefined}
-                    className={`flex h-16 flex-col items-center justify-center gap-1 text-[0.72rem] font-semibold ${active ? "text-ink" : "text-muted"}`}
+                    className={`flex h-16 flex-col items-center justify-center gap-1 text-[0.9375rem] ${active ? "font-bold text-brand-strong" : "font-semibold text-muted"}`}
                   >
-                    <span
-                      className={`grid h-8 w-12 place-items-center rounded-2xl transition-all ${
-                        active ? `${color} -translate-y-0.5 text-white shadow-[0_3px_0_rgb(29_35_80/0.18)]` : ""
-                      }`}
-                    >
-                      <Icon size={20} strokeWidth={active ? 2.4 : 2} />
+                    <span className={`grid h-8 w-14 place-items-center rounded-full transition-colors ${active ? "bg-brand-soft" : ""}`}>
+                      <Icon size={22} />
                     </span>
                     {label}
                   </Link>

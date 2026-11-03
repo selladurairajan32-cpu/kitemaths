@@ -1,48 +1,23 @@
-import type { Phase } from "@/engine/types";
+import type {
+  Lesson as GenericLesson,
+  LessonStep as GenericLessonStep,
+  WorkedBlank as GenericWorkedBlank,
+  WorkedStep as GenericWorkedStep,
+} from "@/lessons/types";
 import type { LabChallenge, LabMode } from "./lab";
 import { frac as f } from "./math";
-import type { NumericTrap, VisualSpec } from "./types";
+import type { VisualSpec } from "./types";
 
-export interface WorkedBlank {
-  prompt: string;
-  answer: number;
-  hint: string;
-  traps?: NumericTrap[];
-  support?: VisualSpec;
-  worked: string;
+/** Extra fields a fractions lab step carries. */
+export interface FractionsLabStep {
+  mode: LabMode;
+  challenges: LabChallenge[];
 }
 
-export interface WorkedStep {
-  text: string;
-  visual?: VisualSpec;
-  /** When present the learner must supply this value before the step is complete. */
-  blank?: WorkedBlank;
-}
-
-export type LessonStep =
-  | { type: "explain"; title: string; body: string[]; visual?: VisualSpec; tip?: string }
-  | {
-      type: "worked";
-      title: string;
-      /** full = "watch me", faded = "let's do it together". */
-      support: "full" | "faded";
-      problem: string;
-      visual?: VisualSpec;
-      steps: WorkedStep[];
-      conclusion: string;
-    }
-  | { type: "check"; title: string; questionId: string; intro?: string }
-  | { type: "lab"; title: string; body: string[]; mode: LabMode; challenges: LabChallenge[] };
-
-export interface Lesson {
-  id: string;
-  title: string;
-  phase: Phase;
-  summary: string;
-  minutes: number;
-  objectives: string[];
-  steps: LessonStep[];
-}
+export type Lesson = GenericLesson<VisualSpec, FractionsLabStep>;
+export type LessonStep = GenericLessonStep<VisualSpec, FractionsLabStep>;
+export type WorkedStep = GenericWorkedStep<VisualSpec>;
+export type WorkedBlank = GenericWorkedBlank<VisualSpec>;
 
 export const LESSONS: Lesson[] = [
   {
@@ -82,8 +57,8 @@ export const LESSONS: Lesson[] = [
         ],
         visual: { type: "fair-unfair" },
       },
-      { type: "check", title: "Spot the equal parts", questionId: "ls-wholes-1" },
-      { type: "check", title: "Is it cut into halves?", questionId: "ls-wholes-2" },
+      { type: "check", title: "Spot the equal parts", questionId: "fractions.ls-wholes-1" },
+      { type: "check", title: "Is it cut into halves?", questionId: "fractions.ls-wholes-2" },
     ],
   },
   {
@@ -108,7 +83,7 @@ export const LESSONS: Lesson[] = [
       {
         type: "check",
         title: "Build it: shade three fifths",
-        questionId: "ls-naming-shade",
+        questionId: "fractions.ls-naming-shade",
         intro: "Tap parts to shade them. The count below updates as you go.",
       },
       {
@@ -164,11 +139,11 @@ export const LESSONS: Lesson[] = [
         ],
         conclusion: "So {3/8} of the bar is shaded.",
       },
-      { type: "check", title: "Name the fraction", questionId: "ls-naming-1" },
+      { type: "check", title: "Name the fraction", questionId: "fractions.ls-naming-1" },
       {
         type: "check",
         title: "Watch out for the trap",
-        questionId: "ls-naming-2",
+        questionId: "fractions.ls-naming-2",
         intro: "This one has a trap. Think about what the bottom number counts.",
       },
     ],
@@ -347,8 +322,8 @@ export const LESSONS: Lesson[] = [
         ],
         conclusion: "So {5/8} > {3/8}.",
       },
-      { type: "check", title: "Compare unit fractions", questionId: "ls-comparing-1" },
-      { type: "check", title: "Compare sixths", questionId: "ls-comparing-2" },
+      { type: "check", title: "Compare unit fractions", questionId: "fractions.ls-comparing-1" },
+      { type: "check", title: "Compare sixths", questionId: "fractions.ls-comparing-2" },
     ],
   },
   {
@@ -447,8 +422,8 @@ export const LESSONS: Lesson[] = [
         ],
         conclusion: "So {2/3} = {6/9}.",
       },
-      { type: "check", title: "Find the missing number", questionId: "ls-equivalent-1" },
-      { type: "check", title: "Shade a half using eighths", questionId: "ls-equivalent-2" },
+      { type: "check", title: "Find the missing number", questionId: "fractions.ls-equivalent-1" },
+      { type: "check", title: "Shade a half using eighths", questionId: "fractions.ls-equivalent-2" },
     ],
   },
   {
@@ -485,8 +460,8 @@ export const LESSONS: Lesson[] = [
         ],
         conclusion: "The point shows {2/5}.",
       },
-      { type: "check", title: "Place a fraction", questionId: "ls-line-1" },
-      { type: "check", title: "Read a fraction", questionId: "ls-line-2" },
+      { type: "check", title: "Place a fraction", questionId: "fractions.ls-line-1" },
+      { type: "check", title: "Read a fraction", questionId: "fractions.ls-line-2" },
     ],
   },
   {
@@ -562,8 +537,8 @@ export const LESSONS: Lesson[] = [
         ],
         conclusion: "So {2/5} of 15 = 6.",
       },
-      { type: "check", title: "A fraction of a number", questionId: "ls-amounts-1" },
-      { type: "check", title: "Solve a word problem", questionId: "ls-amounts-2" },
+      { type: "check", title: "A fraction of a number", questionId: "fractions.ls-amounts-1" },
+      { type: "check", title: "Solve a word problem", questionId: "fractions.ls-amounts-2" },
       {
         type: "worked",
         title: "Watch me: a two-step problem",
@@ -625,8 +600,8 @@ export const LESSONS: Lesson[] = [
         ],
         conclusion: "Zoe has read 21 pages altogether.",
       },
-      { type: "check", title: "Your own two-step problem", questionId: "ls-amounts-4" },
-      { type: "check", title: "Spot the mistake", questionId: "ls-amounts-3" },
+      { type: "check", title: "Your own two-step problem", questionId: "fractions.ls-amounts-4" },
+      { type: "check", title: "Spot the mistake", questionId: "fractions.ls-amounts-3" },
     ],
   },
   {
@@ -670,7 +645,7 @@ export const LESSONS: Lesson[] = [
       {
         type: "check",
         title: "Build an explanation",
-        questionId: "ls-reason-1",
+        questionId: "fractions.ls-reason-1",
         intro: "Choose a word or number for each gap to build a full explanation.",
       },
       {
@@ -685,7 +660,7 @@ export const LESSONS: Lesson[] = [
       {
         type: "check",
         title: "Find a counterexample",
-        questionId: "ls-reason-2",
+        questionId: "fractions.ls-reason-2",
         intro: "This time there is no sentence to fill in — build the fractions that prove the claim wrong.",
       },
     ],

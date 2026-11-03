@@ -7,7 +7,7 @@ import { levelFor, streakFor, totalStars } from "@/engine/rewards";
 import { routes } from "@/lib/routes";
 import { playSound } from "@/lib/sound";
 import { useHydrated, useLearner, useNow } from "@/lib/store";
-import { FlameGlyph, StarGlyph } from "./Celebrate";
+import { Pic } from "@/components/paper/Pic";
 
 /**
  * Tracks how many stars just arrived (and whether the level went up),
@@ -44,21 +44,28 @@ export function Hud({ compact = false }: { compact?: boolean }) {
   return (
     <Link
       href={routes.badges()}
-      className="group flex items-center gap-1.5 rounded-full border-2 border-line bg-surface py-1 pl-1.5 pr-3 shadow-[0_3px_0_var(--color-line)] transition-transform hover:-translate-y-0.5"
-      aria-label={`${stars} stars, level ${level.level}${streak.current ? `, ${streak.current} day streak` : ""}. See your badges.`}
+      className="flex items-center gap-2 rounded-full"
+      aria-label={`${stars} stars, level ${level.level}${streak.current ? `, ${streak.current} day streak` : ""}. See your kites.`}
     >
-      <span className="relative grid size-8 place-items-center rounded-full bg-sun-soft">
-        <motion.span key={stars} initial={gained ? { scale: 1.6, rotate: -20 } : false} animate={{ scale: 1, rotate: 0 }} transition={{ type: "spring", stiffness: 380, damping: 12 }}>
-          <StarGlyph size={20} />
+      <span className="relative flex h-11 items-center gap-1.5 rounded-full bg-tile-yellow pl-1.5 pr-3.5">
+        <motion.span
+          key={stars}
+          className="grid"
+          initial={gained ? { scale: 1.35 } : false}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.35, ease: "easeOut" }}
+        >
+          <Pic name="star" size={28} />
         </motion.span>
+        <span className="text-lg font-extrabold tabular-nums leading-none text-ink">{stars}</span>
         <AnimatePresence>
           {gained > 0 && (
             <motion.span
               key={`gain-${stars}`}
-              className="absolute -top-5 left-1/2 -translate-x-1/2 whitespace-nowrap text-xs font-bold text-sun-strong"
+              className="absolute -top-4 left-2 whitespace-nowrap text-[0.9375rem] font-bold text-ink"
               initial={{ opacity: 1, y: 0 }}
-              animate={{ opacity: 0, y: -14 }}
-              transition={{ duration: 1.2 }}
+              animate={{ opacity: 0, y: -12 }}
+              transition={{ duration: 1.1, ease: "easeOut" }}
               aria-hidden
             >
               +{gained}
@@ -66,13 +73,10 @@ export function Hud({ compact = false }: { compact?: boolean }) {
           )}
         </AnimatePresence>
       </span>
-      <span className="display text-lg tabular-nums leading-none">{stars}</span>
-      {!compact && (
-        <span className="ml-1 hidden whitespace-nowrap rounded-full bg-brand-soft px-2 py-0.5 text-xs font-bold text-brand-strong xl:inline">Lv {level.level}</span>
-      )}
-      <span className="ml-1.5 flex items-center gap-0.5" title={`${streak.current} day streak`}>
-        <FlameGlyph size={20} lit={streak.activeToday} />
-        <span className={`display text-lg tabular-nums leading-none ${streak.activeToday ? "text-num-strong" : "text-muted"}`}>{streak.current}</span>
+      {!compact && <span className="hidden whitespace-nowrap text-[0.9375rem] font-semibold text-muted xl:inline">Level {level.level}</span>}
+      <span className="flex h-11 items-center gap-1 rounded-full bg-tile-orange pl-1.5 pr-3.5" title={`${streak.current} day streak`}>
+        <Pic name="flame" size={28} muted={!streak.activeToday} />
+        <span className={`text-lg font-extrabold tabular-nums leading-none ${streak.activeToday ? "text-ink" : "text-muted"}`}>{streak.current}</span>
       </span>
     </Link>
   );

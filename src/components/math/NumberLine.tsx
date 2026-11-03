@@ -2,7 +2,8 @@
 
 import { motion } from "motion/react";
 import { type KeyboardEvent } from "react";
-import type { ShapeSize } from "./FractionShape";
+/** Shared size scale for maths pictures. */
+export type ShapeSize = "xs" | "sm" | "md" | "lg";
 
 const MAX_W: Record<ShapeSize, string> = {
   xs: "max-w-[180px]",
@@ -78,7 +79,7 @@ export function NumberLine({
       role={interactive ? "radiogroup" : "img"}
       aria-label={label}
     >
-      <line x1={left - 14} y1={y} x2={right + 14} y2={y} stroke="#1b2130" strokeWidth={3} strokeLinecap="round" />
+      <line x1={left - 14} y1={y} x2={right + 14} y2={y} stroke="var(--color-ink)" strokeWidth={3} strokeLinecap="round" />
 
       {countGaps &&
         xs.slice(0, -1).map((x, i) => (
@@ -91,11 +92,11 @@ export function NumberLine({
             <path
               d={`M${x + 4},${y - 12} Q${x + step / 2},${y - 12 - Math.min(46, step * 0.55)} ${x + step - 4},${y - 12}`}
               fill="none"
-              stroke="#2e64d0"
+              stroke="var(--color-den)"
               strokeWidth={2.5}
               strokeLinecap="round"
             />
-            <circle cx={x + step / 2} cy={y - 14 - Math.min(40, step * 0.45)} r={13} fill="#2e64d0" />
+            <circle cx={x + step / 2} cy={y - 14 - Math.min(40, step * 0.45)} r={13} fill="var(--color-den)" />
             <text
               x={x + step / 2}
               y={y - 14 - Math.min(40, step * 0.45)}
@@ -114,14 +115,14 @@ export function NumberLine({
         const end = i === 0 || i === intervals;
         return (
           <g key={`tick-${i}`}>
-            <line x1={x} y1={y - (end ? 16 : 11)} x2={x} y2={y + (end ? 16 : 11)} stroke="#1b2130" strokeWidth={end ? 3 : 2.4} strokeLinecap="round" />
+            <line x1={x} y1={y - (end ? 16 : 11)} x2={x} y2={y + (end ? 16 : 11)} stroke="var(--color-ink)" strokeWidth={end ? 3 : 2.4} strokeLinecap="round" />
             {end && (
-              <text x={x} y={y + 40} textAnchor="middle" fontSize={22} fontWeight={600} fill="#1b2130">
+              <text x={x} y={y + 40} textAnchor="middle" fontSize={22} fontWeight={600} fill="var(--color-ink)">
                 {i === 0 ? 0 : 1}
               </text>
             )}
             {fractionLabels && !end && (
-              <text x={x} y={y + 38} textAnchor="middle" fontSize={15} fill="#646c7d">
+              <text x={x} y={y + 38} textAnchor="middle" fontSize={15} fill="var(--color-muted)">
                 {i}/{intervals}
               </text>
             )}
@@ -131,7 +132,7 @@ export function NumberLine({
 
       {correctIndex !== undefined && correctIndex !== marker && (
         <g>
-          <circle cx={xs[correctIndex]} cy={y} r={13} fill="none" stroke="#1f8a5b" strokeWidth={3} strokeDasharray="4 4" />
+          <circle cx={xs[correctIndex]} cy={y} r={13} fill="none" stroke="var(--color-ok-bright)" strokeWidth={3} strokeDasharray="4 4" />
         </g>
       )}
 
@@ -140,13 +141,13 @@ export function NumberLine({
           key={`marker-${marker}`}
           initial={{ y: -18, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 500, damping: 26 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
           pointerEvents="none"
         >
           <path
             d={`M${xs[marker]},${y - 6} l-11,-18 a13,13 0 1,1 22,0 Z`}
-            fill="#e0603f"
-            stroke="#c24a2b"
+            fill="var(--color-num)"
+            stroke="var(--color-num-strong)"
             strokeWidth={1.5}
           />
           <circle cx={xs[marker]} cy={y - 31} r={4.5} fill="#fff" />

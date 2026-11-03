@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { PaperIcon } from "@/components/paper/PaperIcon";
 import { useState } from "react";
-import { Confetti, StarGlyph } from "@/components/kid/Celebrate";
+import { Confetti } from "@/components/kid/Celebrate";
 import { Kip, KipSays } from "@/components/kid/Kip";
 import { AttemptRunner } from "@/components/questions/AttemptRunner";
 import { Button, buttonClass } from "@/components/ui/Button";
@@ -10,30 +11,32 @@ import { ArrowRightIcon } from "@/components/ui/Icons";
 import { skillMastery } from "@/engine/mastery";
 import { STARS } from "@/engine/rewards";
 import { playSound } from "@/lib/sound";
-import { FRACTIONS_TOPIC } from "@/topics/fractions";
 import {
   answerAssessment,
   clearAssessmentAnswer,
   finishAssessment,
   setAssessmentIndex,
   startAssessment,
-  type LearnerState,
+  type TopicLearner,
 } from "@/engine/progress";
 import type { ItemResult } from "@/engine/types";
 import { routes } from "@/lib/routes";
-import { updateLearner, useHydrated, useLearner } from "@/lib/store";
-import { ASSESSMENT_AREAS, ASSESSMENT_FORMS, formForAttempt, questionById, type AssessmentForm } from "@/topics/fractions/questions";
+import { useHydrated } from "@/lib/store";
+import { useTopicState } from "@/topics/context";
+import type { TopicModule } from "@/topics/types";
 import { ScreenSkeleton } from "@/components/ui/Screen";
+import { Pic } from "@/components/paper/Pic";
 
 export function independentResults(
+  topic: TopicModule,
   order: string[],
-  evaluations: LearnerState["assessment"]["evaluations"],
+  evaluations: TopicLearner["assessment"]["evaluations"],
   context: ItemResult["context"],
   at: number,
   idPrefix: string,
 ): ItemResult[] {
   return order.map((id) => {
-    const q = questionById(id);
+    const q = topic.questionById(id);
     const ev = evaluations[id];
     return {
       id: `${idPrefix}:${id}`,
@@ -59,7 +62,8 @@ function latestOK(skill: string, results: ItemResult[]): boolean {
 
 export function AssessmentScreen() {
   const hydrated = useHydrated();
-  const learner = useLearner();
+  const { topic, learner, update: updateLearner } = useTopicState();
+  const { areas: ASSESSMENT_AREAS, forms: ASSESSMENT_FORMS, formForAttempt } = topic.assessment;
   const [justFinished, setJustFinished] = useState(false);
   if (!hydrated) return <ScreenSkeleton />;
 
@@ -68,7 +72,7 @@ export function AssessmentScreen() {
   if (a.status === "in-progress") {
     return (
       <AttemptRunner
-        title="The big challenge 🏆"
+        title="The big challenge"
         order={a.order}
         index={a.index}
         responses={a.responses}
@@ -78,7 +82,7 @@ export function AssessmentScreen() {
         onFinish={() => {
           const at = Date.now();
           updateLearner((s) =>
-            finishAssessment(s, independentResults(s.assessment.order, s.assessment.evaluations, "assessment", at, `assess:${s.assessment.seed}`), at),
+            finishAssessment(s, independentResults(topic, s.assessment.order, s.assessment.evaluations, "assessment", at, `assess:${s.assessment.seed}`), at),
           );
           playSound("complete");
           setJustFinished(true);
@@ -89,17 +93,17 @@ export function AssessmentScreen() {
   }
 
   const last = a.last;
-  const nextForm: AssessmentForm = formForAttempt(a.timesCompleted, last?.form);
+  const nextForm = formForAttempt(a.timesCompleted, last?.form);
   const items = ASSESSMENT_FORMS[nextForm];
   const lastScore = last ? Object.values(last.evaluations).filter((e) => e.correct).length : 0;
 
-  const strongNow = last ? FRACTIONS_TOPIC.skills.filter((sk) => latestOK(sk.id, learner.results)) : [];
-  const revisit = last ? FRACTIONS_TOPIC.skills.filter((sk) => !latestOK(sk.id, learner.results)) : [];
+  const strongNow = last ? topic.skills.filter((sk) => latestOK(sk.id, learner.results)) : [];
+  const revisit = last ? topic.skills.filter((sk) => !latestOK(sk.id, learner.results)) : [];
 
   return (
     <section className="card relative mx-auto max-w-3xl p-6 sm:p-10">
       {justFinished && last && (
-        <div className="relative -mx-2 mb-8 rounded-3xl bg-gradient-to-br from-sun-soft to-[#ffe7c2] p-5 text-center sm:p-7">
+        <div className="relative -mx-2 mb-8 rounded-[28px] bg-ok-soft p-5 text-center sm:p-8">
           <Confetti burstKey={`check-${last.completedAt}`} pieces={70} />
           <div className="flex justify-center">
             <Kip mood="cheer" size={96} />
@@ -110,8 +114,8 @@ export function AssessmentScreen() {
           <p className="mt-1 text-lg text-ink-2">
             You got <strong className="text-ink">{lastScore}</strong> out of {last.order.length} — all by yourself.
           </p>
-          <p className="mx-auto mt-4 inline-flex items-center gap-2 rounded-full bg-sun px-4 py-2 text-lg font-bold shadow-[0_4px_0_var(--color-sun-strong)]">
-            +{STARS.check} <StarGlyph size={22} /> bonus stars
+          <p className="mx-auto mt-4 inline-flex items-center gap-2 rounded-full bg-surface px-4 py-2 text-lg font-extrabold shadow-[var(--shadow-card)]">
+            +{STARS.check} <Pic name="star" size={28} /> bonus stars
           </p>
           {strongNow.length > 0 && (
             <p className="mt-4 text-ink-2">
@@ -134,11 +138,10 @@ export function AssessmentScreen() {
         </div>
       )}
       <div className="flex items-center gap-4">
-        <span className="grid size-16 shrink-0 place-items-center rounded-3xl bg-gradient-to-br from-sun to-[#ff9d2e] text-4xl shadow-[0_4px_0_#e08a00]" aria-hidden>
-          🏆
+        <span className="grid size-20 shrink-0 place-items-center rounded-[24px] bg-tile-yellow" aria-hidden>
+          <PaperIcon name="trophy" size={56} />
         </span>
         <div>
-          <p className="eyebrow">Show what you know</p>
           <h2 className="display text-3xl sm:text-4xl">The big challenge</h2>
         </div>
       </div>
@@ -148,8 +151,8 @@ export function AssessmentScreen() {
       </KipSays>
 
       {last && (
-        <div className="mt-6 flex flex-col gap-3 rounded-2xl border border-line bg-paper p-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-sm text-ink-2">
+        <div className="mt-6 flex flex-col gap-3 rounded-[20px] border border-line bg-paper p-4 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-[0.9375rem] text-ink-2">
             Last check:{" "}
             <strong className="text-ink">
               {lastScore} / {last.order.length}
@@ -164,13 +167,13 @@ export function AssessmentScreen() {
 
       <ul className="mt-6 grid gap-2 sm:grid-cols-2">
         {ASSESSMENT_AREAS.map((area) => (
-          <li key={area} className="flex items-center justify-between rounded-xl bg-paper px-4 py-3 text-sm">
+          <li key={area} className="flex items-center justify-between rounded-[16px] bg-paper px-4 py-3 text-[0.9375rem]">
             {area}
             <span className="text-muted">{items.filter((q) => q.area === area).length} questions</span>
           </li>
         ))}
       </ul>
-      <ul className="mt-6 space-y-1.5 text-sm text-ink-2">
+      <ul className="mt-6 space-y-1.5 text-[0.9375rem] text-ink-2">
         <li>• Take your time — there&apos;s no timer.</li>
         <li>• You can skip a question and come back to it, and change any answer before you finish.</li>
         <li>• Your answers are saved on this device as you go.</li>

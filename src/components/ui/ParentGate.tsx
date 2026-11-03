@@ -81,13 +81,13 @@ export function ParentGate({ children }: { children: ReactNode }) {
               setValue(e.target.value.replace(/\D/g, ""));
               setWrong(false);
             }}
-            className="h-12 w-24 rounded-xl border-2 border-line-strong bg-surface text-center text-xl"
+            className="h-12 w-24 rounded-[16px] border-2 border-line-strong bg-surface text-center text-xl"
             aria-label={`${a} times ${b}`}
             autoFocus
           />
         </label>
         {wrong && (
-          <p role="alert" className="text-sm text-num-strong">
+          <p role="alert" className="text-[0.9375rem] text-num-strong">
             That&apos;s not it — try again.
           </p>
         )}

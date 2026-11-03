@@ -1,22 +1,27 @@
 "use client";
 
-import { motion } from "motion/react";
 import Link from "next/link";
-import { FlameGlyph, StarGlyph } from "@/components/kid/Celebrate";
+import type { ReactNode } from "react";
 import { Kip, KipSays } from "@/components/kid/Kip";
-import { kidNext, lessonLook } from "@/components/kid/kidText";
+import { kidNext } from "@/components/kid/kidText";
+import { PaperIcon } from "@/components/paper/PaperIcon";
+import { isPicName, Pic, type PicName } from "@/components/paper/Pic";
 import { ButtonLink } from "@/components/ui/Button";
-import { ArrowRightIcon, CheckIcon } from "@/components/ui/Icons";
+import { ArrowRightIcon, CheckIcon, LockIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton, StorageNotice } from "@/components/ui/Screen";
-import { recommendNext, reviewSkills } from "@/engine/journey";
-import { activeDays, answeredToday, DAILY_GOAL, dayKey, levelFor, streakFor, totalStars } from "@/engine/rewards";
+import { lessonsCompleted, recommendNext, reviewSkills } from "@/engine/journey";
+import { activeDays, answeredToday, badgesFor, DAILY_GOAL, dayKey, levelFor, STARS, streakFor, totalStars } from "@/engine/rewards";
 import { routes } from "@/lib/routes";
 import { useHydrated, useLearner, useNow } from "@/lib/store";
-import { FRACTIONS_TOPIC } from "@/topics/fractions";
-import { LESSONS } from "@/topics/fractions/lessons";
-import { skillById } from "@/topics/fractions/skills";
+import { TOPICS } from "@/topics";
+import { useTopicState } from "@/topics/context";
+import { ActiveTopicProvider } from "@/topics/ActiveTopic";
+import { badgePic } from "@/components/kid/badgePic";
 
 const DAY_LETTERS = ["S", "M", "T", "W", "T", "F", "S"];
+/** Each lesson card gets its own pastel tile, in turn. */
+const TILES = ["bg-tile-orange", "bg-tile-pink", "bg-tile-blue", "bg-tile-yellow", "bg-tile-green", "bg-tile-sky"];
+
 
 function greeting(now: number) {
   const h = new Date(now).getHours();
@@ -25,262 +30,367 @@ function greeting(now: number) {
 
 export function KidHomeScreen() {
   const hydrated = useHydrated();
-  const learner = useLearner();
-  const now = useNow();
   if (!hydrated) return <ScreenSkeleton />;
+  return (
+    <ActiveTopicProvider>
+      <KidHome />
+    </ActiveTopicProvider>
+  );
+}
 
-  const brandNew = learner.placement.status === "not-started" && learner.results.length === 0;
-  const rec = recommendNext(FRACTIONS_TOPIC, learner);
-  const next = kidNext(rec);
+function KidHome() {
+  const learner = useLearner();
+  const { topic, learner: inTopic, links } = useTopicState();
+  const now = useNow();
+  const { skillById, lessonLook } = topic;
+
+  const brandNew = inTopic.placement.status === "not-started" && learner.results.length === 0;
+  const rec = recommendNext(topic, inTopic);
+  const next = kidNext(rec, topic);
   const stars = totalStars(learner);
   const level = levelFor(stars);
   const streak = streakFor(learner, now);
-  const today = answeredToday(learner, now);
+  const today = Math.min(answeredToday(learner, now), DAILY_GOAL);
   const days = activeDays(learner);
   const week = Array.from({ length: 7 }, (_, i) => {
     const at = now - (6 - i) * 86_400_000;
     return { key: dayKey(at), letter: DAY_LETTERS[new Date(at).getDay()], done: days.has(dayKey(at)), today: i === 6 };
   });
-  const review = reviewSkills(FRACTIONS_TOPIC, learner);
+  const review = reviewSkills(topic, inTopic);
   const name = learner.profile.name.trim();
-  const goalPct = Math.min(1, today / DAILY_GOAL);
+  const done = lessonsCompleted(topic, inTopic);
+  const lessonCount = TOPICS.reduce((n, t) => n + t.lessons.length, 0);
+  const badges = badgesFor(learner, TOPICS.flatMap((t) => t.skills), lessonCount, now);
+  const won = badges.filter((b) => b.earned);
+  const shelf = [...won, ...badges.filter((b) => !b.earned).sort((a, b) => b.progress - a.progress)].slice(0, 6);
+  const nextIndex = rec.kind === "lesson" ? topic.lessons.findIndex((l) => l.id === rec.lessonId) : -1;
+  const nextIcon = nextIndex >= 0 ? lessonLook(topic.lessons[nextIndex].id).icon : "pizza";
+  const nextPic: PicName = isPicName(nextIcon) ? nextIcon : "pizza";
 
   return (
-    <div className="space-y-5 sm:space-y-6">
+    <div className="space-y-12 sm:space-y-16">
       <StorageNotice />
 
-      {/* Hero */}
-      <motion.section
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand via-[#5b63ff] to-sky p-5 text-white shadow-[0_6px_0_var(--color-brand-strong)] sm:p-8"
-        aria-labelledby="hero-title"
-      >
-        <Clouds />
-        <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center">
-          <div className="flex items-center gap-4 sm:block">
-            <Kip mood={brandNew ? "cheer" : "happy"} size={brandNew ? 110 : 96} />
-            <p className="text-lg font-semibold sm:hidden">
+      {/* What to do next: the one question this screen answers. */}
+      <section className="relative overflow-hidden rounded-[32px] bg-[#edf3ff] px-5 py-8 sm:px-10 sm:py-12" aria-labelledby="next-title">
+        <div className="grid items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="min-w-0">
+            <p className="flex items-center gap-2 text-lg font-semibold text-ink-2">
+              <Pic name="sun" size={30} priority />
               {greeting(now)}
-              {name ? `, ${name}` : ""}!
-            </p>
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="hidden text-lg font-semibold text-white/85 sm:block">
-              {greeting(now)}
-              {name ? `, ${name}` : ""}!
+              {name ? `, ${name}` : ""}
             </p>
             {brandNew ? (
               <>
-                <h1 id="hero-title" className="display mt-1 text-3xl leading-tight sm:text-4xl">
-                  I&apos;m Kip! Let&apos;s fly into fractions together.
+                <h1 id="next-title" className="display mt-3 text-[2.125rem] sm:text-[3rem]">
+                  I&apos;m Kip. Let&apos;s find your start!
                 </h1>
-                <p className="mt-2 max-w-lg text-white/90">First, a quick warm-up game so I know where your adventure should start.</p>
-                <ButtonLink href={routes.start()} variant="sun" size="xl" className="mt-5">
-                  Start my adventure <ArrowRightIcon size={20} />
-                </ButtonLink>
+                <p className="mt-4 max-w-xl text-lg text-ink-2 sm:text-[1.1875rem]">
+                  A short warm-up game shows me which fraction lessons you already know, so you start in the right place.
+                </p>
+                <div className="mt-7 flex flex-wrap gap-3">
+                  <ButtonLink href={links.start()} size="xl" className="w-full sm:w-auto">
+                    Play the warm-up <ArrowRightIcon size={20} />
+                  </ButtonLink>
+                </div>
               </>
             ) : (
               <>
-                <p className="mt-1 inline-flex items-center gap-2 rounded-full bg-white/20 px-3 py-1 text-sm font-semibold">
-                  <span aria-hidden>{next.emoji}</span> {next.kicker}
-                </p>
-                <h1 id="hero-title" className="display mt-2 text-3xl leading-tight sm:text-4xl">
+                <h1 id="next-title" className="display mt-3 text-[2.125rem] sm:text-[3rem]">
                   {next.title}
                 </h1>
-                <p className="mt-1.5 max-w-lg text-white/90">{next.line}</p>
-                <ButtonLink href={next.href} variant="sun" size="xl" className="mt-5">
-                  {next.cta} <ArrowRightIcon size={20} />
-                </ButtonLink>
+                <p className="mt-4 max-w-xl text-lg text-ink-2 sm:text-[1.1875rem]">
+                  {next.kicker}. {next.line}
+                </p>
+                <div className="mt-7 flex flex-wrap gap-3">
+                  <ButtonLink href={next.href} size="xl" className="w-full sm:w-auto">
+                    {next.cta} <ArrowRightIcon size={20} />
+                  </ButtonLink>
+                  <ButtonLink href={links.island()} variant="secondary" size="xl" className="w-full sm:w-auto">
+                    Open my island
+                  </ButtonLink>
+                </div>
+                {nextIndex >= 0 && (
+                  <p className="mt-5 text-base font-semibold text-muted">
+                    Lesson {nextIndex + 1} of {topic.lessons.length} · {topic.lessons[nextIndex].minutes} minutes
+                  </p>
+                )}
               </>
             )}
           </div>
+          <HeroArt
+            mood={brandNew ? "cheer" : "happy"}
+            cards={[
+              { pic: nextPic, title: nextIndex >= 0 ? `Lesson ${nextIndex + 1}` : "Fractions", sub: nextIndex >= 0 ? `of ${topic.lessons.length}` : "island" },
+              { pic: "star", title: `+${STARS.lesson} stars`, sub: "for a lesson" },
+              { pic: "trophy", title: `Level ${level.level + 1}`, sub: `${level.needed - level.into} stars away` },
+              { pic: "flame", title: `${streak.current} day${streak.current === 1 ? "" : "s"}`, sub: "streak" },
+            ]}
+          />
         </div>
-      </motion.section>
-
-      {/* Stats */}
-      <div className="grid gap-4 sm:grid-cols-3">
-        <Link href={routes.badges()} className="card group flex flex-col gap-3 p-5 transition-transform hover:-translate-y-0.5">
-          <div className="flex items-center justify-between">
-            <span className="eyebrow">My stars</span>
-            <span className="rounded-full bg-brand-soft px-2.5 py-0.5 text-xs font-bold text-brand-strong">Level {level.level}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <StarGlyph size={34} />
-            <span className="display text-4xl tabular-nums">{stars}</span>
-          </div>
-          <div>
-            <div className="h-3 overflow-hidden rounded-full bg-sun-soft" role="progressbar" aria-label="Progress to next level" aria-valuenow={level.into} aria-valuemax={level.needed} aria-valuemin={0}>
-              <motion.div className="h-full rounded-full bg-sun" initial={{ width: 0 }} animate={{ width: `${(level.into / level.needed) * 100}%` }} transition={{ type: "spring", stiffness: 80, damping: 18 }} />
-            </div>
-            <p className="mt-1.5 text-sm text-muted">
-              <strong className="text-ink">{level.title}</strong> · {level.needed - level.into} stars to level {level.level + 1}
-            </p>
-          </div>
-        </Link>
-
-        <section className="card flex flex-col gap-3 p-5" aria-labelledby="streak-title">
-          <div className="flex items-center justify-between">
-            <span id="streak-title" className="eyebrow">
-              My streak
-            </span>
-            {streak.best > 1 && <span className="text-xs font-semibold text-muted">Best: {streak.best}</span>}
-          </div>
-          <div className="flex items-center gap-2">
-            <FlameGlyph size={34} lit={streak.activeToday} />
-            <span className="display text-4xl tabular-nums">{streak.current}</span>
-            <span className="text-sm font-medium text-muted">{streak.current === 1 ? "day" : "days"}</span>
-          </div>
-          <ol className="flex justify-between gap-1" aria-label="Last 7 days">
-            {week.map((d) => (
-              <li key={d.key} className="flex flex-col items-center gap-1">
-                <span
-                  className={`grid size-8 place-items-center rounded-full text-xs font-bold ${
-                    d.done ? "bg-num text-white" : d.today ? "border-2 border-dashed border-num/60 text-num-strong" : "bg-sunk text-muted"
-                  }`}
-                  aria-label={`${d.today ? "Today" : d.key}: ${d.done ? "learned" : "not yet"}`}
-                >
-                  {d.done ? "✓" : d.letter}
-                </span>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        <section className="card flex items-center gap-4 p-5" aria-labelledby="goal-title">
-          <GoalRing value={goalPct}>
-            <span className="display text-2xl tabular-nums">{Math.min(today, DAILY_GOAL)}</span>
-            <span className="text-[0.7rem] font-semibold text-muted">of {DAILY_GOAL}</span>
-          </GoalRing>
-          <div>
-            <p id="goal-title" className="eyebrow">
-              Today&apos;s goal
-            </p>
-            <p className="display mt-1 text-xl leading-snug">{today >= DAILY_GOAL ? "Goal smashed! 🎉" : `Answer ${DAILY_GOAL} questions`}</p>
-            <p className="mt-1 text-sm text-muted">{today >= DAILY_GOAL ? "Anything more is a bonus." : "Every answer gets you closer."}</p>
-          </div>
-        </section>
-      </div>
+      </section>
 
       {review.length > 0 && (
         <KipSays mood="think" tone="sun" speak={`Let's revisit ${skillById(review[0]).title}. A little practice will make it strong again.`}>
-          Let&apos;s revisit <strong>{skillById(review[0]).title}</strong>. A little practice will make it strong again!{" "}
-          <Link href={routes.practice(review[0])} className="font-semibold text-brand underline underline-offset-2">
+          Let&apos;s revisit <strong>{skillById(review[0]).title}</strong>. A little practice will make it strong again.{" "}
+          <Link href={links.practice(review[0])} className="font-bold text-brand-strong underline underline-offset-4">
             Practise it
           </Link>
         </KipSays>
       )}
 
-      {/* Sky path preview */}
-      <section className="card p-5 sm:p-6" aria-labelledby="path-title">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 id="path-title" className="display text-2xl">
-            My sky path
-          </h2>
-          <Link href={routes.journey()} className="inline-flex items-center gap-1 rounded-full bg-sky-soft px-3 py-1.5 text-sm font-semibold text-den-strong hover:bg-[#cce8ff]">
-            Open map <ArrowRightIcon size={15} />
-          </Link>
-        </div>
-        <ol className="-mx-1 flex snap-x gap-3 overflow-x-auto px-1 pb-2">
-          {LESSONS.map((l, i) => {
-            const p = learner.lessons[l.id];
-            const done = !!p?.completed;
-            const current = rec.kind === "lesson" && rec.lessonId === l.id;
-            const later = !done && !current && !(p && p.furthestStep > 0);
-            const look = lessonLook(l.id);
-            return (
-              <li key={l.id} className="snap-start">
-                <Link
-                  href={routes.lesson(l.id)}
-                  className={`flex w-28 flex-col items-center gap-2 rounded-3xl border-2 p-3 text-center transition-transform hover:-translate-y-0.5 ${
-                    current ? "border-brand bg-brand-soft" : "border-line bg-surface"
-                  }`}
-                  aria-label={`Lesson ${i + 1}: ${l.title}${done ? " (done)" : current ? " (next)" : ""}`}
+      {/* Stars, streak, lessons and today's goal. */}
+      <section aria-label="Your progress">
+        <ul className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+          <StatCard href={routes.badges()} pic="star" tile="bg-tile-yellow" label="Stars" value={String(stars)} sub={`Level ${level.level} · ${level.title}`}>
+            <Meter value={level.into / level.needed} fill="bg-warn-bright" label={`Level ${level.level}: ${level.into} of ${level.needed} stars`} />
+          </StatCard>
+          <StatCard pic="flame" tile="bg-tile-orange" label="Streak" value={String(streak.current)} unit={streak.current === 1 ? "day" : "days"} sub={streak.activeToday ? "Done for today" : "Play today to keep it"}>
+            <ol className="mt-2.5 flex gap-1" aria-label="The last 7 days">
+              {week.map((d) => (
+                <li
+                  key={d.key}
+                  className={`grid size-7 place-items-center rounded-full text-[0.8125rem] font-bold ${d.done ? "bg-fire text-white" : d.today ? "border-2 border-dashed border-line-strong text-muted" : "bg-sunk text-muted"}`}
+                  aria-label={`${d.today ? "Today" : d.key}: ${d.done ? "learned" : "not yet"}`}
                 >
-                  <span className="relative grid size-14 place-items-center rounded-full text-2xl" style={{ background: look.soft }}>
-                    <span aria-hidden className={later ? "opacity-50" : ""}>
-                      {look.emoji}
-                    </span>
-                    {done && (
-                      <span className="absolute -bottom-1 -right-1 grid size-6 place-items-center rounded-full bg-ok-bright text-white ring-2 ring-white">
-                        <CheckIcon size={13} strokeWidth={3} />
-                      </span>
-                    )}
+                  <span aria-hidden>{d.letter}</span>
+                </li>
+              ))}
+            </ol>
+          </StatCard>
+          <StatCard href={links.island()} pic="books" tile="bg-tile-blue" label="Lessons" value={String(done)} unit={`of ${topic.lessons.length}`} sub={topic.title}>
+            <Meter value={done / topic.lessons.length} fill="bg-brand" label={`${done} of ${topic.lessons.length} lessons done`} />
+          </StatCard>
+          <StatCard href={links.practice()} pic="target" tile="bg-tile-green" label="Today" value={String(today)} unit={`of ${DAILY_GOAL}`} sub={today >= DAILY_GOAL ? "Goal done. Nice work!" : "Questions answered"}>
+            <Meter value={today / DAILY_GOAL} fill="bg-ok-bright" label={`${today} of ${DAILY_GOAL} questions today`} />
+          </StatCard>
+        </ul>
+      </section>
+
+      {/* The island: one card per lesson, then the big challenge. */}
+      <section aria-labelledby="island-title">
+        <SectionHead id="island-title" title={topic.title} line={`${done} of ${topic.lessons.length} lessons done. Finish them all, then take the big challenge.`} href={links.island()} cta="See the map" />
+        <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+          {topic.lessons.map((l, i) => {
+            const p = inTopic.lessons[l.id];
+            const isDone = !!p?.completed;
+            const isNext = rec.kind === "lesson" && rec.lessonId === l.id;
+            const status = isDone ? (p?.placedOut ? "You already knew this" : `Done · ${STARS.lesson} stars won`) : isNext ? (p ? `Step ${Math.min(p.furthestStep + 1, l.steps.length)} of ${l.steps.length}` : "Up next") : `${l.minutes} min`;
+            return (
+              <li key={l.id} className="flex">
+                <Link
+                  href={links.lesson(l.id)}
+                  className={`relative grid flex-1 grid-cols-[4.5rem_1fr] content-center items-center gap-x-4 rounded-[24px] border bg-surface p-4 shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)] sm:grid-cols-[5.25rem_1fr] sm:p-5 ${
+                    isNext ? "border-2 border-brand shadow-[0_0_0_6px_var(--color-brand-soft),var(--shadow-lift)]" : "border-line"
+                  }`}
+                  aria-label={`Lesson ${i + 1}: ${l.title}. ${status}`}
+                >
+                  <span className={`grid size-[4.5rem] place-items-center rounded-[20px] sm:size-[5.25rem] ${TILES[i % TILES.length]}`}>
+                    <PaperIcon name={lessonLook(l.id).icon} size={56} />
                   </span>
-                  <span className={`text-xs font-semibold leading-tight ${later ? "text-muted" : "text-ink"}`}>{l.title}</span>
+                  <span className="min-w-0">
+                    <span className="block text-[0.9375rem] font-bold text-muted">Lesson {i + 1}</span>
+                    <span className="mt-0.5 block text-lg font-extrabold leading-snug text-ink sm:text-xl">{l.title}</span>
+                    <span className={`mt-1.5 flex items-center gap-1.5 text-[0.9375rem] font-bold ${isDone ? "text-ok" : isNext ? "text-brand-strong" : "font-semibold text-muted"}`}>
+                      {isDone && <CheckIcon size={17} strokeWidth={3} />}
+                      {status}
+                    </span>
+                  </span>
+                  {isDone && (
+                    <span className="absolute right-4 top-4 grid size-7 place-items-center rounded-full bg-ok-bright text-white" aria-hidden>
+                      <CheckIcon size={16} strokeWidth={3} />
+                    </span>
+                  )}
+                  {isNext && (
+                    <span className="col-span-2 mt-4 flex h-12 items-center justify-center gap-2 rounded-full border-b-[3px] border-brand-strong bg-brand text-[1.0625rem] font-bold text-on-brand" aria-hidden>
+                      Play <ArrowRightIcon size={18} />
+                    </span>
+                  )}
                 </Link>
               </li>
             );
           })}
+          <li className="flex">
+            <Link
+              href={links.check()}
+              className="relative grid flex-1 grid-cols-[4.5rem_1fr] content-center items-center gap-x-4 rounded-[24px] border border-line bg-surface p-4 shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)] sm:grid-cols-[5.25rem_1fr] sm:p-5"
+            >
+              <span className="grid size-[4.5rem] place-items-center rounded-[20px] bg-tile-yellow sm:size-[5.25rem]">
+                <Pic name="trophy" size={56} />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-[0.9375rem] font-bold text-muted">The big challenge</span>
+                <span className="mt-0.5 block text-lg font-extrabold leading-snug text-ink sm:text-xl">Show what you know</span>
+                <span className="mt-1.5 flex items-center gap-1.5 text-[0.9375rem] font-semibold text-muted">
+                  {inTopic.assessment.last ? (
+                    <>
+                      <CheckIcon size={17} strokeWidth={3} /> Taken · try it again any time
+                    </>
+                  ) : done < topic.lessons.length ? (
+                    <>
+                      <LockIcon size={16} /> Best after all {topic.lessons.length} lessons
+                    </>
+                  ) : (
+                    `+${STARS.check} stars`
+                  )}
+                </span>
+              </span>
+            </Link>
+          </li>
         </ol>
       </section>
 
-      {/* Play tiles */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <PlayTile href={routes.practice()} emoji="🎯" title="Practice" line="Win stars" from="from-ok-bright" to="to-mint" edge="#139656" />
-        <PlayTile href={routes.lab()} emoji="🧪" title="Fraction Lab" line="Build & explore" from="from-pink" to="to-num" edge="#d93a7f" />
-        <PlayTile href={routes.journey()} emoji="🗺️" title="Adventure map" line="All the lessons" from="from-sky" to="to-den" edge="#1d55d8" />
-        <PlayTile href={routes.badges()} emoji="🏅" title="Badges" line="Your trophies" from="from-sun" to="to-[#ff9d2e]" edge="#e08a00" dark />
-      </div>
+      {/* Badges to collect. */}
+      <section className="rounded-[32px] bg-[#f0f5ff] px-5 py-8 sm:px-10 sm:py-10" aria-labelledby="badges-title">
+        <SectionHead id="badges-title" title="Your badges" line={`${won.length} of ${badges.length} won. Every badge is a little trophy for your learning.`} href={routes.badges()} cta="See all badges" />
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
+          {shelf.map((b) => (
+            <li key={b.id} className="flex flex-col items-center gap-2 rounded-[24px] border border-line bg-surface px-3 pb-5 pt-6 text-center shadow-[var(--shadow-card)]">
+              <Pic name={badgePic(b.id)} size={72} muted={!b.earned} />
+              <span className="text-base font-extrabold leading-snug text-ink">{b.title}</span>
+              {b.earned ? (
+                <span className="text-[0.9375rem] font-bold text-ok">Won</span>
+              ) : (
+                <>
+                  <Meter value={b.progress} fill="bg-warn-bright" label={`${b.title}: ${Math.round(b.progress * 100)}%`} className="mt-0 w-4/5" />
+                  <span className="text-[0.9375rem] font-semibold text-muted">{Math.round(b.progress * 100)}% there</span>
+                </>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Other things to do. */}
+      <section aria-labelledby="more-title">
+        <h2 id="more-title" className="display text-[1.625rem] sm:text-[2.125rem]">
+          More to explore
+        </h2>
+        <ul className="mt-5 grid gap-4 sm:grid-cols-3">
+          <MoreCard href={links.practice()} pic="target" tile="bg-tile-green" title="Practice" line="Ten questions, a star for each one." />
+          {topic.ui.FreeLab && <MoreCard href={links.lab()} pic="lab" tile="bg-tile-sky" title="The lab" line="Cut, colour and compare in free play." />}
+          <MoreCard href={routes.journey()} pic="map" tile="bg-tile-blue" title="World map" line="Every island, and the ones on the way." />
+        </ul>
+      </section>
+
+      <footer className="flex flex-col gap-3 pb-4">
+        <KipSays mood="happy" tone="sky" size={72}>
+          {streak.current > 0 ? `Come back tomorrow to keep your ${streak.current}-day streak!` : "Come back tomorrow and start a streak!"}
+        </KipSays>
+        <p className="text-[0.9375rem] text-muted">3D pictures: Microsoft Fluent Emoji, MIT licence.</p>
+      </footer>
     </div>
   );
 }
 
-function PlayTile({ href, emoji, title, line, from, to, edge, dark = false }: { href: string; emoji: string; title: string; line: string; from: string; to: string; edge: string; dark?: boolean }) {
+/** Kip flying in a pale circle, with a few real numbers floating around. */
+function HeroArt({ mood, cards }: { mood: "happy" | "cheer"; cards: { pic: PicName; title: string; sub: string }[] }) {
+  const spots = ["left-0 top-[20%] -rotate-6", "right-0 top-[30%] rotate-[5deg]", "left-[6%] bottom-[6%] -rotate-3", "right-[4%] bottom-[2%] rotate-3"];
   return (
-    <Link
-      href={href}
-      className={`press flex min-h-32 flex-col justify-between rounded-[1.75rem] bg-gradient-to-br ${from} ${to} p-4 ${dark ? "text-ink" : "text-white"} sm:p-5`}
-      style={{ boxShadow: `0 5px 0 ${edge}`, ["--press-edge" as string]: edge }}
-    >
-      <span className="text-4xl drop-shadow-sm" aria-hidden>
-        {emoji}
-      </span>
-      <span>
-        <span className="display block text-xl leading-tight">{title}</span>
-        <span className={`text-sm font-medium ${dark ? "text-ink/75" : "text-white/90"}`}>{line}</span>
-      </span>
-    </Link>
-  );
-}
-
-function GoalRing({ value, children }: { value: number; children: React.ReactNode }) {
-  const size = 92;
-  const stroke = 10;
-  const r = (size - stroke) / 2;
-  const c = 2 * Math.PI * r;
-  return (
-    <div className="relative grid shrink-0 place-items-center" style={{ width: size, height: size }} role="img" aria-label={`Daily goal ${Math.round(value * 100)}% done`}>
-      <svg width={size} height={size} className="-rotate-90" aria-hidden>
-        <circle cx={size / 2} cy={size / 2} r={r} strokeWidth={stroke} className="fill-none stroke-ok-soft" />
-        <motion.circle
-          cx={size / 2}
-          cy={size / 2}
-          r={r}
-          strokeWidth={stroke}
-          strokeLinecap="round"
-          className="fill-none stroke-ok-bright"
-          strokeDasharray={c}
-          initial={{ strokeDashoffset: c }}
-          animate={{ strokeDashoffset: c * (1 - value) }}
-          transition={{ type: "spring", stiffness: 70, damping: 18 }}
-        />
+    <div className="relative mx-auto aspect-[1.08] w-full max-w-[34rem]" aria-hidden>
+      <div className="absolute left-[9%] top-[5%] aspect-square w-[82%] rounded-full bg-[#dde8ff]" />
+      <svg className="absolute left-[2%] top-[4%]" width="34" height="34" viewBox="0 0 24 24">
+        <path d="M12 2.5l2.6 6 6.4.6-4.9 4.2 1.5 6.3L12 16.3 6.4 19.6l1.5-6.3L3 9.1l6.4-.6z" fill="none" stroke="#ffb020" strokeWidth="2" strokeLinejoin="round" />
       </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center leading-none">{children}</div>
+      <svg className="absolute right-[6%] top-[2%]" width="70" height="40" viewBox="0 0 70 40">
+        <path d="M4 30 C 16 4, 34 4, 36 20 S 58 36, 66 8" fill="none" stroke="#7fb0ff" strokeWidth="3" strokeLinecap="round" strokeDasharray="1 9" />
+      </svg>
+      <span className="absolute bottom-[3%] left-[46%] size-4 rounded-full bg-[#ff8fab]" />
+      <span className="absolute right-0 top-[58%] size-3 rounded-full bg-[#4cd38f]" />
+      <span className="absolute left-[19%] top-[3%] w-[60%]">
+        <Kip mood={mood} size={320} className="!h-auto !w-full rotate-[4deg]" />
+      </span>
+      {cards.map((c, i) => (
+        <div key={i} className={`absolute flex items-center gap-2.5 rounded-[18px] bg-surface py-2 pl-2 pr-4 shadow-[var(--shadow-lift)] ${spots[i]}`}>
+          <Pic name={c.pic} size={40} />
+          <span className="leading-tight">
+            <span className="block text-base font-extrabold text-ink">{c.title}</span>
+            <span className="block text-[0.9375rem] font-semibold text-muted">{c.sub}</span>
+          </span>
+        </div>
+      ))}
     </div>
   );
 }
 
-function Clouds() {
+function SectionHead({ id, title, line, href, cta }: { id: string; title: string; line: string; href: string; cta: string }) {
   return (
-    <svg className="pointer-events-none absolute inset-0 h-full w-full opacity-25" aria-hidden preserveAspectRatio="none">
-      <g fill="#fff">
-        <ellipse cx="85%" cy="18%" rx="70" ry="22" />
-        <ellipse cx="80%" cy="14%" rx="38" ry="22" />
-        <ellipse cx="60%" cy="88%" rx="90" ry="24" />
-        <ellipse cx="66%" cy="82%" rx="44" ry="24" />
-        <ellipse cx="10%" cy="92%" rx="60" ry="18" />
-      </g>
-    </svg>
+    <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <h2 id={id} className="display text-[1.625rem] sm:text-[2.125rem]">
+          {title}
+        </h2>
+        <p className="mt-1.5 text-lg text-ink-2">{line}</p>
+      </div>
+      <Link href={href} className="inline-flex h-11 shrink-0 items-center gap-1.5 self-start rounded-full text-[1.0625rem] font-bold text-brand-strong hover:underline sm:self-auto">
+        {cta} <ArrowRightIcon size={18} />
+      </Link>
+    </div>
+  );
+}
+
+function StatCard({
+  href,
+  pic,
+  tile,
+  label,
+  value,
+  unit,
+  sub,
+  children,
+}: {
+  href?: string;
+  pic: PicName;
+  tile: string;
+  label: string;
+  value: string;
+  unit?: string;
+  sub: string;
+  children?: ReactNode;
+}) {
+  const body = (
+    <>
+      <div className="flex items-center gap-3">
+        <span className={`grid size-12 shrink-0 place-items-center rounded-[16px] sm:size-14 ${tile}`}>
+          <Pic name={pic} size={36} />
+        </span>
+        <span className="min-w-0">
+          <span className="block text-[0.9375rem] font-bold text-muted">{label}</span>
+          <span className="block text-[1.75rem] font-extrabold leading-tight text-ink">
+            {value}
+            {unit && <span className="ml-1 text-base font-bold text-muted">{unit}</span>}
+          </span>
+        </span>
+      </div>
+      <p className="mt-3 text-[0.9375rem] font-semibold text-muted">{sub}</p>
+      {children}
+    </>
+  );
+  const cls = "block h-full rounded-[24px] border border-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5";
+  return <li>{href ? <Link href={href} className={`${cls} transition hover:shadow-[var(--shadow-lift)]`}>{body}</Link> : <div className={cls}>{body}</div>}</li>;
+}
+
+function Meter({ value, fill, label, className = "mt-3" }: { value: number; fill: string; label: string; className?: string }) {
+  return (
+    <div className={`h-2.5 overflow-hidden rounded-full bg-sunk ${className}`} role="progressbar" aria-label={label} aria-valuenow={Math.round(value * 100)} aria-valuemin={0} aria-valuemax={100}>
+      <div className={`h-full rounded-full ${fill}`} style={{ width: `${Math.round(Math.max(0, Math.min(1, value)) * 100)}%` }} />
+    </div>
+  );
+}
+
+function MoreCard({ href, pic, tile, title, line }: { href: string; pic: PicName; tile: string; title: string; line: string }) {
+  return (
+    <li>
+      <Link href={href} className="flex h-full items-center gap-4 rounded-[24px] border border-line bg-surface p-4 shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)] sm:p-5">
+        <span className={`grid size-16 shrink-0 place-items-center rounded-[20px] ${tile}`}>
+          <Pic name={pic} size={44} />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-lg font-extrabold text-ink">{title}</span>
+          <span className="block text-base text-ink-2">{line}</span>
+        </span>
+        <ArrowRightIcon size={20} className="shrink-0 text-ink-2" />
+      </Link>
+    </li>
   );
 }

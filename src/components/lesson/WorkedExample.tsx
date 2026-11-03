@@ -3,11 +3,11 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useState, type FormEvent } from "react";
 import { RichText } from "@/components/math/RichText";
-import { VisualRenderer } from "@/components/math/Visuals";
-import { NumberInput } from "@/components/questions/QuestionInput";
+import { NumberInput } from "@/components/questions/inputs";
 import { Button } from "@/components/ui/Button";
 import { ArrowRightIcon, BulbIcon, CheckIcon } from "@/components/ui/Icons";
-import type { LessonStep, WorkedBlank } from "@/topics/fractions/lessons";
+import type { LessonStep, WorkedBlank } from "@/lessons/types";
+import { useTopic } from "@/topics/context";
 
 type Worked = Extract<LessonStep, { type: "worked" }>;
 
@@ -59,7 +59,7 @@ function BlankStep({
       </div>
       <div aria-live="polite">
         {tries > 0 && (
-          <div className="space-y-2 rounded-xl border border-warn/30 bg-warn-soft px-4 py-3 text-sm text-ink-2">
+          <div className="space-y-2 rounded-[16px] border border-warn/30 bg-warn-soft px-4 py-3 text-[0.9375rem] text-ink-2">
             <p className="flex gap-2">
               <BulbIcon size={16} className="mt-0.5 shrink-0 text-warn" />
               <span>
@@ -80,6 +80,7 @@ function BlankStep({
 }
 
 export function WorkedExample({ step, onComplete }: { step: Worked; onComplete: () => void }) {
+  const { Visual } = useTopic().ui;
   const [revealed, setRevealed] = useState(1);
   const [solved, setSolved] = useState<Set<number>>(new Set());
   const [supportFor, setSupportFor] = useState<number | null>(null);
@@ -107,13 +108,13 @@ export function WorkedExample({ step, onComplete }: { step: Worked; onComplete: 
     <div className="space-y-5">
       <div className="flex flex-wrap items-center gap-2">
         <span
-          className={`rounded-full px-3 py-1 text-xs font-semibold ${
+          className={`rounded-full px-3 py-1 text-[0.9375rem] font-semibold ${
             step.support === "full" ? "bg-den-soft text-den-strong" : "bg-violet-soft text-violet"
           }`}
         >
           {step.support === "full" ? "Watch me" : "Let's do it together"}
         </span>
-        <span className="text-sm text-muted">
+        <span className="text-[0.9375rem] text-muted">
           Step {revealed} of {step.steps.length}
         </span>
       </div>
@@ -122,17 +123,17 @@ export function WorkedExample({ step, onComplete }: { step: Worked; onComplete: 
         <RichText text={step.problem} />
       </p>
 
-      {visual && (
-        <div className="flex justify-center rounded-2xl bg-paper px-4 py-6">
-          <VisualRenderer key={JSON.stringify(visual)} spec={visual} />
+      {visual !== undefined && (
+        <div className="flex justify-center rounded-[20px] bg-paper px-4 py-6">
+          <Visual key={JSON.stringify(visual)} spec={visual} />
         </div>
       )}
 
       <ol className="space-y-3">
         <AnimatePresence initial={false}>
           {step.steps.slice(0, revealed).map((s, i) => (
-            <motion.li key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex gap-3 rounded-xl border border-line bg-surface p-3.5">
-              <span className="grid size-7 shrink-0 place-items-center rounded-full bg-ink text-sm font-semibold text-white">{i + 1}</span>
+            <motion.li key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex gap-3 rounded-[16px] border border-line bg-surface p-3.5">
+              <span className="grid size-7 shrink-0 place-items-center rounded-full bg-ink text-[0.9375rem] font-semibold text-white">{i + 1}</span>
               <div className="min-w-0 flex-1 space-y-2 pt-0.5">
                 <p className="text-ink-2">
                   <RichText text={s.text} />
@@ -154,7 +155,7 @@ export function WorkedExample({ step, onComplete }: { step: Worked; onComplete: 
         <motion.p
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="rounded-xl bg-ok-soft px-4 py-3 text-lg font-medium text-ink"
+          className="rounded-[16px] bg-ok-soft px-4 py-3 text-lg font-medium text-ink"
           aria-live="polite"
         >
           <RichText text={step.conclusion} />
