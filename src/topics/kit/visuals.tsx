@@ -46,14 +46,16 @@ function PlaceValueChart({ v }: { v: Extract<KitVisual, { kind: "pv-chart" }> })
     <Frame label={`Place-value chart showing ${num(v.value)}`}>
       <div className="w-full max-w-xl overflow-hidden rounded-[18px] border-2 border-ink" aria-hidden>
         <div className="grid" style={{ gridTemplateColumns: `repeat(${v.columns.length}, minmax(0, 1fr))` }}>
-          {v.columns.map((c) => (
-            <div key={c} className={`border-b-2 border-r-2 border-ink px-1 py-2 text-center text-[0.9375rem] font-extrabold last:border-r-0 ${c === v.highlight ? "bg-brand text-white" : "bg-tile-blue text-ink"}`}>
+          {v.columns.map((c, i) => (
+            <div key={c} className={`border-b-2 border-ink px-1 py-2 text-center text-[0.9375rem] font-extrabold ${i < v.columns.length - 1 ? "border-r-2" : ""} ${c === v.highlight ? "bg-brand text-white" : "bg-tile-blue text-ink"}`}>
               {c}
             </div>
           ))}
           {v.columns.map((c, i) => (
-            <div key={c} className={`border-r-2 border-ink py-3 text-center text-[2rem] font-extrabold tabular-nums last:border-r-0 ${c === v.highlight ? "bg-brand-soft text-brand-strong" : "bg-surface text-ink"}`}>
+            <div key={c} className={`relative border-ink py-3 text-center text-[2rem] font-extrabold tabular-nums ${i < v.columns.length - 1 ? "border-r-2" : ""} ${c === v.highlight ? "bg-brand-soft text-brand-strong" : "bg-surface text-ink"}`}>
               {v.hideDigits && c === v.highlight ? "?" : (digits[i] ?? "")}
+              {/* The decimal point sits on the line between ones and tenths. */}
+              {c === "O" && v.columns[i + 1] === "t" && <span className="absolute -right-[8px] bottom-4 z-10 size-[14px] rounded-full bg-num ring-2 ring-white" />}
             </div>
           ))}
         </div>
@@ -120,7 +122,7 @@ function NumberLineVisual({ v }: { v: Extract<KitVisual, { kind: "line" }> }) {
   const count = Math.round((v.max - v.min) / v.step);
   const x = (value: number) => pad + ((value - v.min) / (v.max - v.min)) * (W - pad * 2);
   const every = v.labelEvery ?? (count > 12 ? Math.ceil(count / 10) : 1);
-  const ticks = Array.from({ length: count + 1 }, (_, i) => v.min + i * v.step);
+  const ticks = Array.from({ length: count + 1 }, (_, i) => Math.round((v.min + i * v.step) * 1e6) / 1e6);
   // Label round values (multiples of step × every, counted from zero), wherever the line starts.
   const labelled = (t: number) => Math.round(t / v.step) % every === 0 || t === v.min || t === v.max;
   return (
@@ -219,7 +221,7 @@ function BarModel({ v }: { v: Extract<KitVisual, { kind: "bar" }> }) {
   const total = v.parts.reduce((s, p) => s + (p.size ?? 1), 0);
   const fill = { brand: "#dbe6ff", num: "#ffe1d6", ok: "#d6f3e3", plain: "#ffffff" } as const;
   return (
-    <Frame label={`Bar model: ${v.parts.map((p) => p.label).join(", ")}${v.total ? `, total ${v.total}` : ""}`}>
+    <Frame label={`Bar model: ${v.parts.map((p) => p.label).filter(Boolean).join(", ")}${v.total ? `, total ${v.total}` : ""}${v.note ? `. ${v.note}` : ""}`}>
       <div className="w-full max-w-xl" aria-hidden>
         {v.total && (
           <div className="mb-2 flex items-center gap-2 text-center text-[0.9375rem] font-extrabold text-brand-strong">
@@ -241,6 +243,7 @@ function BarModel({ v }: { v: Extract<KitVisual, { kind: "bar" }> }) {
         </div>
         <p className="sr-only">{total}</p>
       </div>
+      {v.note && <figcaption className="mt-2 text-[0.9375rem] font-semibold text-muted">{v.note}</figcaption>}
     </Frame>
   );
 }
@@ -328,6 +331,53 @@ function TimesRow({ v }: { v: Extract<KitVisual, { kind: "times-row" }> }) {
   );
 }
 
+function FractionPicture({ v }: { v: Extract<KitVisual, { kind: "fraction" }> }) {
+  const wholes = v.wholes ?? 1;
+  const shape = v.shape ?? "bar";
+  const items = Array.from({ length: wholes }, (_, w) => Math.max(0, Math.min(v.parts, v.shaded - w * v.parts)));
+  return (
+    <Frame label={v.label ?? `${v.shaded} of ${v.parts * wholes} equal parts shaded`}>
+      <div className="flex flex-wrap items-center justify-center gap-4" aria-hidden>
+        {items.map((shaded, w) =>
+          shape === "circle" ? (
+            <svg key={w} width="132" height="132" viewBox="-66 -66 132 132">
+              {Array.from({ length: v.parts }, (_, i) => {
+                const a0 = (i / v.parts) * Math.PI * 2 - Math.PI / 2;
+                const a1 = ((i + 1) / v.parts) * Math.PI * 2 - Math.PI / 2;
+                const R = 60;
+                const d = v.parts === 1 ? `M 0 -${R} A ${R} ${R} 0 1 1 -0.01 -${R} Z` : `M 0 0 L ${R * Math.cos(a0)} ${R * Math.sin(a0)} A ${R} ${R} 0 ${a1 - a0 > Math.PI ? 1 : 0} 1 ${R * Math.cos(a1)} ${R * Math.sin(a1)} Z`;
+                return <path key={i} d={d} fill={i < shaded ? CORAL : "#fff"} stroke={INK} strokeWidth="2.5" strokeLinejoin="round" />;
+              })}
+            </svg>
+          ) : (
+            <div key={w} className="flex h-14 w-full max-w-md overflow-hidden rounded-[12px] border-[3px] border-ink">
+              {Array.from({ length: v.parts }, (_, i) => (
+                <span key={i} className="flex-1 border-r-[3px] border-ink last:border-r-0" style={{ background: i < shaded ? CORAL : "#fff" }} />
+              ))}
+            </div>
+          ),
+        )}
+      </div>
+      {v.label && <figcaption className="mt-2 text-[0.9375rem] font-bold text-ink-2">{v.label}</figcaption>}
+    </Frame>
+  );
+}
+
+function HundredSquare({ v }: { v: Extract<KitVisual, { kind: "grid100" }> }) {
+  const c = 22;
+  return (
+    <Frame label={`A hundred square with ${v.shaded} of 100 squares shaded`}>
+      <svg viewBox={`0 0 ${c * 10 + 6} ${c * 10 + 6}`} className="h-auto w-full max-w-[16rem]" aria-hidden>
+        {Array.from({ length: 100 }, (_, i) => (
+          <rect key={i} x={3 + (i % 10) * c} y={3 + Math.floor(i / 10) * c} width={c} height={c} fill={i < v.shaded ? CORAL : "#fff"} stroke={INK} strokeWidth={1} strokeOpacity={0.55} />
+        ))}
+        <rect x="3" y="3" width={c * 10} height={c * 10} fill="none" stroke={INK} strokeWidth="3" rx="3" />
+      </svg>
+      <figcaption className="mt-2 text-[0.9375rem] font-bold text-ink-2">{v.shaded} out of 100 shaded</figcaption>
+    </Frame>
+  );
+}
+
 export function MathVisual({ spec }: { spec: unknown }) {
   const v = spec as KitVisual;
   switch (v.kind) {
@@ -349,6 +399,10 @@ export function MathVisual({ spec }: { spec: unknown }) {
       return <Thermometer v={v} />;
     case "times-row":
       return <TimesRow v={v} />;
+    case "fraction":
+      return <FractionPicture v={v} />;
+    case "grid100":
+      return <HundredSquare v={v} />;
     default:
       return null;
   }

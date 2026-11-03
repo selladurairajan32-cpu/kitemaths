@@ -54,9 +54,9 @@ export const WORLDS: World[] = [
     text: "ink",
     islands: [
       { title: "Fractions foundations", icon: "pizza", topicId: "fractions" },
-      { title: "Fractions 2", icon: "puzzle" },
-      { title: "Decimals", icon: "decimal" },
-      { title: "Percentages", icon: "percent" },
+      { title: "Fractions 2", icon: "puzzle", topicId: "fractions-2" },
+      { title: "Decimals", icon: "decimal", topicId: "decimals" },
+      { title: "Percentages", icon: "percent", topicId: "percentages" },
     ],
   },
   {

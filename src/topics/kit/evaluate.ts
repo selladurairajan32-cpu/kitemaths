@@ -23,30 +23,41 @@ export function evaluate(q: KitQuestion, r: KitResponse): Evaluation {
     return { correct: false, misconceptions: o?.misconception ? [o.misconception] : [], feedback: o?.feedback };
   }
   const value = r.kind === "number" ? r.value : null;
-  if (value !== null && value === q.answer) return { correct: true, misconceptions: [] };
-  const trap = q.traps?.find((t) => t.value === value);
+  if (value !== null && same(value, q.answer)) return { correct: true, misconceptions: [] };
+  const trap = q.traps?.find((t) => value !== null && same(t.value, value));
   if (trap) return { correct: false, misconceptions: trap.misconception ? [trap.misconception] : [], feedback: trap.feedback };
   return { correct: false, misconceptions: [] };
 }
 
-/** Numbers the way UK children read them: 12,345 and −5. */
+/** Two numbers are the same answer (decimals compared to the thousandth, so 0.1 + 0.2 = 0.3). */
+export function same(a: number, b: number): boolean {
+  return Math.abs(a - b) < 1e-9 || Math.round(a * 1000) === Math.round(b * 1000);
+}
+
+/** Numbers the way UK children read them: 12,345, 0.75 and −5. */
 export function num(n: number): string {
-  const s = Math.abs(n).toLocaleString("en-GB");
+  const s = Math.abs(n).toLocaleString("en-GB", { maximumFractionDigits: 3 });
   return n < 0 ? `−${s}` : s;
 }
 
-function withUnit(q: KitQuestion, value: string): string {
-  if (q.kind !== "number" || !q.unit) return value;
-  return q.unit === "£" ? `£${value}` : `${value} ${q.unit}`;
+/** Money shows pence in full: £11.10, not £11.1. */
+export function money(n: number): string {
+  return `£${n.toLocaleString("en-GB", { minimumFractionDigits: Number.isInteger(n) ? 0 : 2, maximumFractionDigits: 2 })}`;
+}
+
+function withUnit(q: KitQuestion, value: number): string {
+  if (q.kind !== "number" || !q.unit) return num(value);
+  if (q.unit === "£") return money(value);
+  return q.unit === "%" ? `${num(value)}%` : `${num(value)} ${q.unit}`;
 }
 
 export function answerText(q: KitQuestion): string {
   if (q.kind === "choose") return q.options[q.answer].text;
-  return `**${withUnit(q, num(q.answer))}**`;
+  return `**${withUnit(q, q.answer)}**`;
 }
 
 export function responseText(q: KitQuestion, r: KitResponse | undefined): string {
   if (!r) return "No answer";
   if (q.kind === "choose") return r.kind === "choose" ? (q.options[r.choice]?.text ?? "No answer") : "No answer";
-  return r.kind === "number" && r.value !== null ? withUnit(q, num(r.value)) : "No answer";
+  return r.kind === "number" && r.value !== null ? withUnit(q, r.value) : "No answer";
 }

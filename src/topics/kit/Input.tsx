@@ -5,6 +5,7 @@ import { Figure, MarkIcon, RadioOption, type Mark } from "@/components/questions
 import { RichText } from "@/components/math/RichText";
 import { seededShuffle } from "@/engine/random";
 import type { QuestionInputProps } from "@/topics/types";
+import { answerText } from "./evaluate";
 import { MathVisual } from "./visuals";
 import type { KitQuestion, KitResponse } from "./types";
 
@@ -16,6 +17,7 @@ function KitNumberBox({
   label,
   unit,
   negative,
+  decimals,
   mark,
 }: {
   value: number | null;
@@ -24,6 +26,7 @@ function KitNumberBox({
   label: string;
   unit?: string;
   negative?: boolean;
+  decimals?: number;
   mark: Mark;
 }) {
   // The box keeps what was typed (so a lone minus sign stays while the digits come).
@@ -34,7 +37,7 @@ function KitNumberBox({
       {unit === "£" && <span aria-hidden>£</span>}
       <input
         type="text"
-        inputMode={negative ? "text" : "numeric"}
+        inputMode={negative ? "text" : decimals ? "decimal" : "numeric"}
         autoComplete="off"
         aria-label={label}
         disabled={locked}
@@ -42,9 +45,16 @@ function KitNumberBox({
         onChange={(e) => {
           const raw = e.target.value.replace(/[−–]/g, "-");
           const minus = !!negative && raw.trim().startsWith("-");
-          const digits = raw.replace(/[^0-9]/g, "").slice(0, 8);
-          setText(`${minus ? "−" : ""}${digits}`);
-          onValue(digits === "" ? null : (minus ? -1 : 1) * Number(digits));
+          // Digits, and one decimal point when this answer can have decimals.
+          let body = raw.replace(decimals ? /[^0-9.]/g : /[^0-9]/g, "");
+          if (decimals) {
+            const [whole, ...rest] = body.split(".");
+            body = rest.length ? `${whole}.${rest.join("").slice(0, decimals)}` : whole;
+          }
+          body = body.slice(0, 9);
+          setText(`${minus ? "−" : ""}${body}`);
+          const value = Number(body === "." ? "" : body);
+          onValue(body === "" || body === "." || Number.isNaN(value) ? null : (minus ? -1 : 1) * value);
         }}
         className={`h-16 w-40 rounded-[18px] border-2 text-center text-[2rem] font-extrabold tabular-nums text-ink outline-none transition-colors disabled:opacity-100 ${ring}`}
       />
@@ -116,12 +126,13 @@ export function KitQuestionInput({ question, response, onChange, locked, reveal,
           label="Your answer"
           unit={q.unit}
           negative={q.negative}
+          decimals={q.decimals}
           mark={mark}
         />
       </div>
       {reveal && (
         <p className="text-center text-lg font-semibold text-ok">
-          The answer is <RichText text={`**${q.unit === "£" ? "£" : ""}${q.answer.toLocaleString("en-GB")}${q.unit && q.unit !== "£" ? ` ${q.unit}` : ""}**`} />
+          The answer is <RichText text={answerText(q)} />
         </p>
       )}
     </div>

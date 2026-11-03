@@ -34,13 +34,17 @@ export type KitVisual =
   /** Equal groups of dots (for multiplying and sharing). */
   | { kind: "groups"; groups: number; each: number; label?: string }
   /** A bar model: a whole split into labelled parts. */
-  | { kind: "bar"; parts: { label: string; size?: number; tone?: "brand" | "num" | "ok" | "plain" }[]; total?: string }
+  | { kind: "bar"; parts: { label: string; size?: number; tone?: "brand" | "num" | "ok" | "plain" }[]; total?: string; note?: string }
   /** A written column sum, with an optional blank answer row. */
   | { kind: "column"; op: "+" | "−"; a: number; b: number; result?: number }
   /** A thermometer from min to max, with the reading marked. */
   | { kind: "thermo"; min: number; max: number; value: number; step?: number }
   /** A times-table grid row: n × 1 … n × 12 with one gap. */
-  | { kind: "times-row"; table: number; upTo: number; gap?: number };
+  | { kind: "times-row"; table: number; upTo: number; gap?: number }
+  /** Fraction pictures: one or more wholes, each split into equal parts, some shaded. */
+  | { kind: "fraction"; parts: number; shaded: number; wholes?: number; shape?: "bar" | "circle"; label?: string }
+  /** A 100 square (10 × 10) with some squares shaded: tenths, hundredths and per cent. */
+  | { kind: "grid100"; shaded: number };
 
 export interface NumericTrap {
   value: number;
@@ -77,6 +81,8 @@ export interface KitNumberQuestion extends KitQuestionCommon {
   traps?: NumericTrap[];
   /** Allow a minus sign. */
   negative?: boolean;
+  /** Allow a decimal point, with up to this many decimal places. */
+  decimals?: number;
 }
 
 export type KitQuestion = KitChooseQuestion | KitNumberQuestion;

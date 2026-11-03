@@ -28,10 +28,12 @@ describe.each(KIT_TOPICS.map((t) => [t.id, t] as const))("kit island %s", (_id, 
         q.options.forEach((_, i) => i !== q.answer && expect(topic.questions.evaluate(q, { kind: "choose", choice: i } as never).correct, q.id).toBe(false));
       } else {
         expect(Number.isFinite(q.answer), q.id).toBe(true);
-        expect(Number.isInteger(q.answer), `${q.id} answer ${q.answer}`).toBe(true);
+        // Whole-number answers, unless the question allows decimals (then to its number of places).
+        if (q.decimals) expect(Math.round(q.answer * 10 ** q.decimals) / 10 ** q.decimals, `${q.id} answer ${q.answer}`).toBeCloseTo(q.answer, 9);
+        else expect(Number.isInteger(q.answer), `${q.id} answer ${q.answer}`).toBe(true);
         expect(topic.questions.evaluate(q, { kind: "number", value: q.answer } as never).correct, q.id).toBe(true);
         for (const t of q.traps ?? []) {
-          expect(t.value, `${q.id} trap equals the answer`).not.toBe(q.answer);
+          expect(Math.abs(t.value - q.answer) > 1e-6, `${q.id} trap equals the answer`).toBe(true);
           expect(topic.questions.evaluate(q, { kind: "number", value: t.value } as never).correct, q.id).toBe(false);
         }
       }
