@@ -81,7 +81,7 @@ export function ParentGate({ children }: { children: ReactNode }) {
               setValue(e.target.value.replace(/\D/g, ""));
               setWrong(false);
             }}
-            className="h-12 w-24 rounded-xl border-2 border-line-strong bg-surface text-center text-xl"
+            className="h-12 w-24 rounded-[16px] border-2 border-line-strong bg-surface text-center text-xl"
             aria-label={`${a} times ${b}`}
             autoFocus
           />

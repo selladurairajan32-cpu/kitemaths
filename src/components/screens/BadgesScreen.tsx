@@ -1,9 +1,8 @@
 "use client";
 
-import { motion } from "motion/react";
-import { PaperKite, type KitePattern } from "@/components/paper/PaperKite";
-import { StarGlyph } from "@/components/kid/Celebrate";
-import { Kip } from "@/components/kid/Kip";
+import { badgePic } from "@/components/kid/badgePic";
+import { ScreenHero } from "@/components/kid/ScreenHero";
+import { Pic } from "@/components/paper/Pic";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 import { badgesFor, levelFor, totalStars } from "@/engine/rewards";
 import { useHydrated, useLearner, useNow } from "@/lib/store";
@@ -23,57 +22,58 @@ export function BadgesScreen() {
   const ordered = [...earned, ...badges.filter((b) => !b.earned).sort((a, b) => b.progress - a.progress)];
 
   return (
-    <div className="space-y-6">
-      <section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-sun via-[#ffb347] to-num p-5 text-ink shadow-[0_6px_0_#e08a00] sm:p-8">
-        <div className="flex items-center gap-4 sm:gap-6">
-          <Kip mood={earned.length ? "cheer" : "happy"} size={84} />
-          <div className="min-w-0">
-            <p className="text-[0.9375rem] font-bold uppercase tracking-wide text-ink/70">Trophy room</p>
-            <h1 className="display text-3xl leading-tight sm:text-4xl">
-              {earned.length} badge{earned.length === 1 ? "" : "s"} collected
-            </h1>
-            <p className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 font-semibold">
-              <span className="inline-flex items-center gap-1">
-                <StarGlyph size={20} /> {stars} stars
-              </span>
-              <span>
-                Level {level.level} · {level.title}
-              </span>
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-        {ordered.map((b, i) => (
-          <motion.li
-            key={b.id}
-            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ delay: Math.min(i, 12) * 0.03 }}
-            className={`card flex flex-col items-center gap-2 p-4 text-center ${b.earned ? "" : "bg-paper"}`}
-          >
-            <span
-              className={`relative grid size-20 place-items-center rounded-full text-4xl ${
-                b.earned ? "bg-gradient-to-br from-sun-soft to-[#ffe0a3] shadow-[0_4px_0_#f0c040] ring-4 ring-white" : "bg-sunk"
-              }`}
-            >
-              <span aria-hidden className={b.earned ? "" : "opacity-30 grayscale"}>
-                <PaperKite pattern={b.pattern as KitePattern} filled={b.earned ? 4 : 0} outline={b.earned ? "solid" : "dashed"} tail={false} size={44} />
+    <div className="space-y-10">
+      <ScreenHero
+        kip={earned.length ? "cheer" : "happy"}
+        titleId="badges-title"
+        title="Your badges"
+        line={`${earned.length} of ${badges.length} won. Every badge is a little trophy for your learning.`}
+        aside={
+          <div className="flex gap-3">
+            <span className="flex items-center gap-2 rounded-[20px] bg-surface px-4 py-3 shadow-[var(--shadow-card)]">
+              <Pic name="star" size={40} />
+              <span className="leading-tight">
+                <span className="block text-2xl font-extrabold text-ink">{stars}</span>
+                <span className="block text-[0.9375rem] font-semibold text-muted">stars</span>
               </span>
             </span>
-            <p className="display text-base leading-tight">{b.title}</p>
-            <p className="text-xs text-muted">{b.description}</p>
+            <span className="flex items-center gap-2 rounded-[20px] bg-surface px-4 py-3 shadow-[var(--shadow-card)]">
+              <Pic name="trophy" size={40} />
+              <span className="leading-tight">
+                <span className="block text-2xl font-extrabold text-ink">Level {level.level}</span>
+                <span className="block text-[0.9375rem] font-semibold text-muted">{level.title}</span>
+              </span>
+            </span>
+          </div>
+        }
+      />
+
+      <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+        {ordered.map((b) => (
+          <li key={b.id} className="flex flex-col items-center gap-2 rounded-[24px] border border-line bg-surface px-4 pb-5 pt-6 text-center shadow-[var(--shadow-card)]">
+            <span className={`grid size-24 place-items-center rounded-full ${b.earned ? "bg-tile-yellow" : "bg-sunk"}`}>
+              <Pic name={badgePic(b.id)} size={64} muted={!b.earned} />
+            </span>
+            <p className="mt-1 text-lg font-extrabold leading-snug text-ink">{b.title}</p>
+            <p className="text-[0.9375rem] text-ink-2">{b.description}</p>
             {b.earned ? (
-              <span className="rounded-full bg-ok-soft px-2.5 py-0.5 text-xs font-bold text-ok">Earned!</span>
+              <span className="mt-auto rounded-full bg-ok-soft px-3 py-1 text-[0.9375rem] font-bold text-ok">Won</span>
             ) : (
-              <div className="mt-auto w-full" role="progressbar" aria-label={`${b.title} progress`} aria-valuenow={Math.round(b.progress * 100)} aria-valuemin={0} aria-valuemax={100}>
-                <div className="h-2 overflow-hidden rounded-full bg-sunk">
-                  <div className="h-full rounded-full bg-brand" style={{ width: `${b.progress * 100}%` }} />
+              <div className="mt-auto w-full pt-1">
+                <div
+                  className="h-2.5 overflow-hidden rounded-full bg-sunk"
+                  role="progressbar"
+                  aria-label={`${b.title} progress`}
+                  aria-valuenow={Math.round(b.progress * 100)}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                >
+                  <div className="h-full rounded-full bg-warn-bright" style={{ width: `${b.progress * 100}%` }} />
                 </div>
+                <p className="mt-1.5 text-[0.9375rem] font-semibold text-muted">{Math.round(b.progress * 100)}% there</p>
               </div>
             )}
-          </motion.li>
+          </li>
         ))}
       </ul>
     </div>

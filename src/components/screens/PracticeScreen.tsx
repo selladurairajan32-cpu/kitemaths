@@ -3,11 +3,11 @@
 import { AnimatePresence, motion } from "motion/react";
 import { PaperIcon } from "@/components/paper/PaperIcon";
 import Link from "next/link";
-import { Confetti, StarGlyph } from "@/components/kid/Celebrate";
+import { Confetti } from "@/components/kid/Celebrate";
 import { Kip, KipSays } from "@/components/kid/Kip";
 import { KID_STATUS } from "@/components/kid/kidText";
 import { QuestionPlayer, type ResultDraft } from "@/components/questions/QuestionPlayer";
-import { Button, buttonClass } from "@/components/ui/Button";
+import { Button, ButtonLink, buttonClass } from "@/components/ui/Button";
 import { ArrowRightIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 import { PRACTICE_SESSION_LENGTH, selectNextQuestion } from "@/engine/adaptive";
@@ -26,6 +26,8 @@ import { playSound } from "@/lib/sound";
 import { updateTopic, useHydrated } from "@/lib/store";
 import { useTopicState } from "@/topics/context";
 import type { TopicModule } from "@/topics/types";
+import { ScreenHero } from "@/components/kid/ScreenHero";
+import { Pic } from "@/components/paper/Pic";
 
 function pickNext(topic: TopicModule, s: TopicLearner): TopicLearner {
   if (s.practice.sessionResults >= PRACTICE_SESSION_LENGTH) return completePracticeSession(s);
@@ -61,16 +63,16 @@ function SkillPicker({ focusSkill }: { focusSkill: string | null }) {
           <Link
             href={links.practice()}
             aria-current={focusSkill === null ? "page" : undefined}
-            className={`flex items-center gap-3 rounded-2xl border-2 p-3 transition-colors ${
+            className={`flex items-center gap-3 rounded-[20px] border-2 p-3 transition-colors ${
               focusSkill === null ? "border-brand bg-brand-soft" : "border-line bg-surface hover:bg-sunk"
             }`}
           >
-            <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-brand to-sky text-xl" aria-hidden>
+            <span className="grid size-12 shrink-0 place-items-center rounded-[16px] bg-tile-blue" aria-hidden>
               <PaperIcon name="dice" size={28} />
             </span>
             <span className="min-w-0 flex-1">
               <span className="block font-semibold">Mixed challenge</span>
-              <span className="block text-xs text-muted">Kip picks what helps you most</span>
+              <span className="block text-[0.9375rem] text-muted">Kip picks what helps you most</span>
             </span>
           </Link>
         </li>
@@ -83,13 +85,13 @@ function SkillPicker({ focusSkill }: { focusSkill: string | null }) {
               <Link
                 href={links.practice(s.id)}
                 aria-current={active ? "page" : undefined}
-                className={`flex items-center gap-3 rounded-2xl border-2 p-3 transition-colors ${active ? "border-brand bg-brand-soft" : "border-line bg-surface hover:bg-sunk"}`}
+                className={`flex items-center gap-3 rounded-[20px] border-2 p-3 transition-colors ${active ? "border-brand bg-brand-soft" : "border-line bg-surface hover:bg-sunk"}`}
               >
-                <span className="grid size-11 shrink-0 place-items-center rounded-xl text-xl" style={{ background: look.soft }} aria-hidden>
+                <span className="grid size-12 shrink-0 place-items-center rounded-[16px] bg-tile-yellow" aria-hidden>
                   <PaperIcon name={look.icon} size={32} />
                 </span>
                 <span className="min-w-0 flex-1 text-[0.9375rem] font-semibold leading-tight">{s.title}</span>
-                <span className={`shrink-0 rounded-full px-2 py-0.5 text-[0.7rem] font-bold ${st.cls}`}>{st.label}</span>
+                <span className={`shrink-0 rounded-full px-2 py-0.5 text-[0.9375rem] font-bold ${st.cls}`}>{st.label}</span>
               </Link>
             </li>
           );
@@ -105,29 +107,26 @@ function Intro({ focusSkill }: { focusSkill: string | null }) {
   const m = focusSkill ? skillMastery(focusSkill, learner.results) : null;
   return (
     <div className="space-y-5">
-      <section className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-ok-bright via-[#2bc49a] to-mint p-5 text-white shadow-[0_6px_0_#139656] sm:p-8">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-          <Kip mood="cheer" size={88} />
-          <div className="min-w-0 flex-1">
-            <p className="text-[0.9375rem] font-bold uppercase tracking-wide text-white/85">Practice arena</p>
-            <h1 className="display text-3xl leading-tight sm:text-4xl">{skill ? skill.title : "Mixed challenge"}</h1>
-            <p className="mt-1 max-w-xl text-white/90">
-              {PRACTICE_SESSION_LENGTH} questions. They get trickier as you get stronger — and if you get stuck, Kip helps. Win up to{" "}
-              <strong>{PRACTICE_SESSION_LENGTH * 3} stars</strong>!
-            </p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <Button variant="sun" size="xl" onClick={() => start(topic, focusSkill)}>
-                Play! <ArrowRightIcon size={20} />
-              </Button>
-              {skill && (
-                <Link href={links.lesson(skill.lessonId)} className="inline-flex h-15 items-center rounded-[1.25rem] px-5 font-semibold text-white/95 hover:bg-white/15">
-                  Watch the lesson again
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
+      <ScreenHero
+        kip="cheer"
+        titleId="practice-title"
+        title={skill ? skill.title : "Mixed challenge"}
+        line={
+          <>
+            {PRACTICE_SESSION_LENGTH} questions that get trickier as you get stronger. If you get stuck, Kip helps. Win up to{" "}
+            <strong className="text-ink">{PRACTICE_SESSION_LENGTH * 3} stars</strong>!
+          </>
+        }
+      >
+        <Button size="xl" onClick={() => start(topic, focusSkill)}>
+          Play <ArrowRightIcon size={20} />
+        </Button>
+        {skill && (
+          <ButtonLink href={links.lesson(skill.lessonId)} variant="secondary" size="xl">
+            Watch the lesson again
+          </ButtonLink>
+        )}
+      </ScreenHero>
 
       {m?.status === "needs-review" && (
         <KipSays mood="think" tone="sun" speak="Practise until this feels strong, then try a quick recheck.">
@@ -190,21 +189,21 @@ function Summary() {
         initial={{ scale: 0.5, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.25, type: "spring", stiffness: 300, damping: 13 }}
-        className="mx-auto mt-5 inline-flex items-center gap-2 rounded-full bg-sun px-5 py-2.5 text-2xl font-bold text-ink shadow-[0_4px_0_var(--color-sun-strong)]"
+        className="mx-auto mt-5 inline-flex items-center gap-2 rounded-full bg-sun px-5 py-2.5 text-2xl font-bold text-ink shadow-[var(--shadow-card)]"
       >
-        +{stars} <StarGlyph size={28} />
+        +{stars} <Pic name="star" size={34} />
       </motion.p>
       <dl className="mt-6 grid grid-cols-3 gap-3 text-left">
-        <div className="rounded-3xl bg-ok-soft p-4">
-          <dt className="text-xs font-semibold text-ok">First try</dt>
+        <div className="rounded-[24px] bg-ok-soft p-4">
+          <dt className="text-[0.9375rem] font-semibold text-ok">First try</dt>
           <dd className="display text-3xl tabular-nums">{first}</dd>
         </div>
-        <div className="rounded-3xl bg-sky-soft p-4">
-          <dt className="text-xs font-semibold text-den-strong">With a little help</dt>
+        <div className="rounded-[24px] bg-sky-soft p-4">
+          <dt className="text-[0.9375rem] font-semibold text-den-strong">With a little help</dt>
           <dd className="display text-3xl tabular-nums">{supported}</dd>
         </div>
-        <div className="rounded-3xl bg-sun-soft p-4">
-          <dt className="text-xs font-semibold text-warn">Still growing</dt>
+        <div className="rounded-[24px] bg-sun-soft p-4">
+          <dt className="text-[0.9375rem] font-semibold text-warn">Still growing</dt>
           <dd className="display text-3xl tabular-nums">{notYet}</dd>
         </div>
       </dl>
@@ -243,7 +242,7 @@ export function PracticeScreen({ focusSkill = null }: { focusSkill?: string | nu
     return (
       <div className="mx-auto max-w-3xl space-y-4">
         <div className="flex items-center gap-3">
-          <span className="grid size-11 shrink-0 place-items-center rounded-2xl text-xl" style={{ background: topic.lessonLook(topic.skillById(current!.skill).lessonId).soft }} aria-hidden>
+          <span className="grid size-11 shrink-0 place-items-center rounded-[20px] text-xl" style={{ background: topic.lessonLook(topic.skillById(current!.skill).lessonId).soft }} aria-hidden>
             <PaperIcon name={topic.lessonLook(topic.skillById(current!.skill).lessonId).icon} size={32} />
           </span>
           <div className="min-w-0 flex-1">
@@ -256,7 +255,7 @@ export function PracticeScreen({ focusSkill = null }: { focusSkill?: string | nu
                 </span>
               </span>
               <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-sun-soft px-2.5 py-0.5 font-bold text-ink">
-                {sessionStars} <StarGlyph size={15} />
+                {sessionStars} <Pic name="star" size={21} />
               </span>
             </h1>
             <ol className="mt-1.5 flex gap-1" aria-hidden>

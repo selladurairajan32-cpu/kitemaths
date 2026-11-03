@@ -74,7 +74,7 @@ export function JourneyScreen() {
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
       <div>
         <header className="mb-6">
-          <p className="eyebrow">{topic.title}</p>
+          <p className="text-[0.9375rem] font-bold text-muted">{topic.title}</p>
           <h1 className="display text-3xl font-semibold sm:text-4xl">Learning journey</h1>
           <p className="mt-2 max-w-xl text-ink-2">
             {topic.subtitle}. {LESSONS.length} short lessons, then practice until each skill is secure, then an independent mastery check.
@@ -99,7 +99,7 @@ export function JourneyScreen() {
                 <div className={`card flex-1 p-4 sm:p-5 ${status === "next" || status === "active" ? "ring-1 ring-ink/15" : ""}`}>
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div className="min-w-0">
-                      <p className="flex flex-wrap items-center gap-2 text-xs">
+                      <p className="flex flex-wrap items-center gap-2 text-[0.9375rem]">
                         <span className="rounded-full bg-sunk px-2 py-0.5 font-semibold text-ink-2">{l.phase}</span>
                         <span className="text-muted">
                           {l.minutes} min · {l.steps.length} steps
@@ -130,7 +130,7 @@ export function JourneyScreen() {
             <div className={`card flex-1 p-4 sm:p-5 ${practiceStatus === "next" ? "ring-1 ring-ink/15" : ""}`}>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="flex items-center gap-2 text-xs">
+                  <p className="flex items-center gap-2 text-[0.9375rem]">
                     <span className="rounded-full bg-sunk px-2 py-0.5 font-semibold text-ink-2">Practise</span>
                     <span className={practiceStatus === "done" ? "font-medium text-ok" : practiceStatus === "next" ? "font-medium text-den" : "text-muted"}>
                       {STATUS_TEXT[practiceStatus]}
@@ -147,7 +147,7 @@ export function JourneyScreen() {
                   Practise<span className="sr-only"> (practice milestone)</span>
                 </Link>
               </div>
-              <div className="mt-3 grid gap-2 text-xs text-muted sm:grid-cols-2">
+              <div className="mt-3 grid gap-2 text-[0.9375rem] text-muted sm:grid-cols-2">
                 <div>
                   <ProgressBar value={Math.min(1, practiced / PRACTICE_READY_RESULTS)} label="Practice questions answered" tone="den" />
                   <p className="mt-1">
@@ -169,7 +169,7 @@ export function JourneyScreen() {
             <div className={`card flex-1 p-4 sm:p-5 ${assessStatus === "next" || assessStatus === "active" ? "ring-1 ring-ink/15" : ""}`}>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="flex items-center gap-2 text-xs">
+                  <p className="flex items-center gap-2 text-[0.9375rem]">
                     <span className="rounded-full bg-sunk px-2 py-0.5 font-semibold text-ink-2">Master</span>
                     <span className={assessStatus === "done" ? "font-medium text-ok" : assessStatus === "next" ? "font-medium text-den" : "text-muted"}>
                       {STATUS_TEXT[assessStatus]}
@@ -211,7 +211,7 @@ export function JourneyScreen() {
                     {review.map((m) => {
                       const sk = skillById(m.skill);
                       return (
-                        <li key={m.skill} className="flex flex-col gap-2 rounded-xl bg-paper p-3 sm:flex-row sm:items-center sm:justify-between">
+                        <li key={m.skill} className="flex flex-col gap-2 rounded-[16px] bg-paper p-3 sm:flex-row sm:items-center sm:justify-between">
                           <span className="text-[0.9375rem]">{sk.title}</span>
                           <span className="flex flex-wrap gap-2">
                             <Link href={routes.lesson(sk.lessonId)} className={buttonClass("ghost", "md")}>
@@ -243,7 +243,7 @@ export function JourneyScreen() {
             {phaseStatuses(topic, learner).map(({ phase, status }, i) => (
               <li key={phase} className="flex gap-3">
                 <span
-                  className={`grid size-6 shrink-0 place-items-center rounded-full text-[0.7rem] font-semibold ${
+                  className={`grid size-6 shrink-0 place-items-center rounded-full text-[0.9375rem] font-semibold ${
                     status === "done" ? "bg-ok text-white" : status === "current" ? "bg-ink text-white" : "bg-sunk text-muted"
                   }`}
                 >
@@ -251,7 +251,7 @@ export function JourneyScreen() {
                 </span>
                 <div>
                   <p className="text-[0.9375rem] font-medium">{phase}</p>
-                  <p className="text-xs text-muted">{PHASE_DESCRIPTIONS[phase]}</p>
+                  <p className="text-[0.9375rem] text-muted">{PHASE_DESCRIPTIONS[phase]}</p>
                 </div>
               </li>
             ))}

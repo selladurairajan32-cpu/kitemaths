@@ -70,8 +70,8 @@ function AttemptQuestion({
         <ReadAloud text={q.prompt} label="Read the question aloud" />
       </div>
       <QuestionInput question={q} response={response} onChange={change} locked={false} orderKey={orderKey} />
-      {problem && <p className="rounded-xl border border-warn/30 bg-warn-soft px-4 py-3 text-[0.9375rem] text-ink-2">{problem} This answer isn&apos;t saved yet.</p>}
-      <div className="sticky bottom-0 z-10 -mx-5 flex items-center justify-between gap-3 border-t-2 border-line bg-surface/95 px-5 py-3 backdrop-blur sm:static sm:mx-0 sm:bg-transparent sm:px-0 sm:pb-0 sm:pt-5 sm:backdrop-blur-none">
+      {problem && <p className="rounded-[16px] border border-warn/30 bg-warn-soft px-4 py-3 text-[0.9375rem] text-ink-2">{problem} This answer isn&apos;t saved yet.</p>}
+      <div className="sticky bottom-0 z-10 -mx-5 flex items-center justify-between gap-3 border-t border-line bg-surface px-5 py-3 sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:pb-0 sm:pt-5">
         <Button variant="ghost" onClick={() => onNavigate(index - 1)} disabled={index === 0}>
           <ArrowLeftIcon size={17} /> Back
         </Button>
@@ -134,8 +134,8 @@ export function AttemptRunner({
               onClick={() => go(i)}
               aria-label={`Question ${i + 1}${done ? ", answered" : ", not answered"}`}
               aria-current={isCurrent ? "step" : undefined}
-              className={`grid size-11 place-items-center rounded-xl text-[0.9375rem] font-semibold transition-colors ${
-                isCurrent ? "bg-brand text-white shadow-[0_3px_0_var(--color-brand-strong)]" : done ? "bg-ok-soft text-ok" : "bg-sunk text-muted hover:bg-line"
+              className={`grid size-11 place-items-center rounded-[16px] text-[0.9375rem] font-semibold transition-colors ${
+                isCurrent ? "bg-brand text-white shadow-[var(--shadow-card)]" : done ? "bg-ok-soft text-ok" : "bg-sunk text-muted hover:bg-line"
               }`}
             >
               {i + 1}

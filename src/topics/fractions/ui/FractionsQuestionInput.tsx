@@ -207,7 +207,7 @@ export function FractionsQuestionInput({ question: q, response, onChange, locked
                   <FractionShape diagram={it.diagram} size="sm" />
                 </span>
                 <span className="flex items-center gap-2 text-[0.9375rem] font-semibold">
-                  <span aria-hidden className={`grid size-5 place-items-center rounded-md border-2 text-[0.7rem] ${checked ? "border-ink bg-ink text-white" : "border-line-strong"}`}>
+                  <span aria-hidden className={`grid size-5 place-items-center rounded-md border-2 text-[0.9375rem] ${checked ? "border-ink bg-ink text-white" : "border-line-strong"}`}>
                     {checked && "✓"}
                   </span>
                   {String.fromCharCode(65 + i)}

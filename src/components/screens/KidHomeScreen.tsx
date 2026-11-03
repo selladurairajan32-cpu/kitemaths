@@ -16,30 +16,12 @@ import { useHydrated, useLearner, useNow } from "@/lib/store";
 import { TOPICS } from "@/topics";
 import { useTopicState } from "@/topics/context";
 import { ActiveTopicProvider } from "@/topics/ActiveTopic";
+import { badgePic } from "@/components/kid/badgePic";
 
 const DAY_LETTERS = ["S", "M", "T", "W", "T", "F", "S"];
 /** Each lesson card gets its own pastel tile, in turn. */
 const TILES = ["bg-tile-orange", "bg-tile-pink", "bg-tile-blue", "bg-tile-yellow", "bg-tile-green", "bg-tile-sky"];
 
-/** Every badge shows as a 3D picture on the shelf. */
-export function badgePic(id: string): PicName {
-  if (id.startsWith("skill:")) return "star";
-  return (
-    ({
-      "first-flight": "kite",
-      "lesson-1": "book",
-      comeback: "rocket",
-      "hot-streak": "glowing-star",
-      goal: "medal",
-      "streak-3": "flame",
-      lab: "lab",
-      century: "trophy",
-      "all-lessons": "books",
-      "streak-7": "flame",
-      check: "trophy",
-    } as Record<string, PicName>)[id] ?? "star"
-  );
-}
 
 function greeting(now: number) {
   const h = new Date(now).getHours();

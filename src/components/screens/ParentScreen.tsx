@@ -71,7 +71,7 @@ function ParentOverview() {
           <div className="space-y-5 p-5 sm:p-7">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="eyebrow">Current module</p>
+                <p className="text-[0.9375rem] font-bold text-muted">Current module</p>
                 <h2 id="topic-title" className="display mt-1 text-3xl font-semibold sm:text-4xl">
                   {topic.title}
                 </h2>
@@ -82,7 +82,7 @@ function ParentOverview() {
             <PhasePath />
           </div>
           <div className="border-t border-line bg-paper p-5 sm:p-7">
-            <p className="eyebrow text-den!">Recommended next</p>
+            <p className="text-[0.9375rem] font-bold text-den-strong">Recommended next</p>
             <div className="mt-2 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <h3 className="text-xl font-semibold">{rec.title}</h3>
@@ -113,17 +113,17 @@ function ParentOverview() {
               {review > 0 && <Stat label="Needs review" value={`${review}`} tone="num" />}
             </dl>
           </div>
-          <p className="text-xs text-muted">
+          <p className="text-[0.9375rem] text-muted">
             The ring shows activities completed (lessons, practice milestone, mastery check) — not how much is mastered.
           </p>
           <div className="grid grid-cols-2 gap-3 border-t border-line pt-4">
             <div>
               <p className="text-2xl font-semibold tabular-nums">{stats.learningAnswered}</p>
-              <p className="text-xs text-muted">lesson & practice answers</p>
+              <p className="text-[0.9375rem] text-muted">lesson & practice answers</p>
             </div>
             <div>
               <p className="text-2xl font-semibold tabular-nums">{stats.firstTryRate === null ? "—" : `${Math.round(stats.firstTryRate * 100)}%`}</p>
-              <p className="text-xs text-muted">of those right first time</p>
+              <p className="text-[0.9375rem] text-muted">of those right first time</p>
             </div>
             <div className="col-span-2">
               <p className="text-[0.9375rem]">
@@ -166,9 +166,9 @@ function ParentOverview() {
           ) : (
             <ul className="space-y-2.5">
               {working.slice(0, 3).map((r) => (
-                <li key={r.id} className="rounded-xl bg-paper p-3">
+                <li key={r.id} className="rounded-[16px] bg-paper p-3">
                   <p className="text-[0.9375rem] font-medium">{misconceptionById(r.id)?.name}</p>
-                  <p className="text-xs text-muted">
+                  <p className="text-[0.9375rem] text-muted">
                     {r.confidence === "likely" ? `Seen ${r.timesSeen} times` : "Seen once — just keeping an eye on it"}
                     {r.state === "improving" ? " · improving" : ""}
                   </p>
@@ -177,7 +177,7 @@ function ParentOverview() {
             </ul>
           )}
           <div className="mt-auto space-y-3 border-t border-line pt-4">
-            <p className="text-xs text-muted">
+            <p className="text-[0.9375rem] text-muted">
               Progress is saved in this browser on this device only. Clearing browser data, private browsing or another device will start fresh. There
               are no accounts yet.
             </p>
@@ -219,7 +219,7 @@ function ParentOverview() {
               value={learner.profile.name}
               maxLength={24}
               onChange={(e) => updateLearner((s) => setProfile(s, { name: e.target.value }))}
-              className="mt-1 h-11 w-full rounded-xl border-2 border-line-strong bg-surface px-3"
+              className="mt-1 h-11 w-full rounded-[16px] border-2 border-line-strong bg-surface px-3"
             />
           </label>
           <label className="block text-[0.9375rem]">
@@ -227,7 +227,7 @@ function ParentOverview() {
             <select
               value={learner.profile.year ?? ""}
               onChange={(e) => updateLearner((s) => setProfile(s, { year: e.target.value ? Number(e.target.value) : null }))}
-              className="mt-1 h-11 w-full rounded-xl border-2 border-line-strong bg-surface px-3"
+              className="mt-1 h-11 w-full rounded-[16px] border-2 border-line-strong bg-surface px-3"
             >
               <option value="">Not set</option>
               {[3, 4, 5, 6].map((y) => (
@@ -268,7 +268,7 @@ function ParentOverview() {
 
 function Toggle({ label, hint, on, onChange }: { label: string; hint: string; on: boolean; onChange: (v: boolean) => void }) {
   return (
-    <div className="flex items-start justify-between gap-4 rounded-2xl bg-paper p-3">
+    <div className="flex items-start justify-between gap-4 rounded-[20px] bg-paper p-3">
       <div className="text-[0.9375rem]">
         <p className="font-medium">{label}</p>
         <p className="text-muted">{hint}</p>

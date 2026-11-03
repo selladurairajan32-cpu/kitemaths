@@ -56,11 +56,11 @@ export function RecheckScreen({ skill }: { skill: string }) {
   return (
     <section className="card mx-auto max-w-2xl p-6 sm:p-10">
       <div className="flex items-center gap-4">
-        <span className="grid size-16 shrink-0 place-items-center rounded-3xl bg-gradient-to-br from-mint to-sky text-4xl shadow-[0_4px_0_#1597a0]" aria-hidden>
+        <span className="grid size-20 shrink-0 place-items-center rounded-[24px] bg-tile-sky" aria-hidden>
           <PaperIcon name="recheck" size={40} />
         </span>
         <div>
-          <p className="eyebrow">Quick recheck</p>
+          <p className="text-[0.9375rem] font-bold text-muted">Quick recheck</p>
           <h1 className="display text-3xl">{info.title}</h1>
         </div>
       </div>
@@ -80,7 +80,7 @@ export function RecheckScreen({ skill }: { skill: string }) {
       ) : (
         <>
           {justFinished && m.assessed && (
-            <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border border-line bg-paper p-4" aria-live="polite">
+            <div className="mt-4 flex flex-wrap items-center gap-3 rounded-[20px] border border-line bg-paper p-4" aria-live="polite">
               <p className="text-ink-2">
                 Recheck result:{" "}
                 <strong className="text-ink">
@@ -95,7 +95,7 @@ export function RecheckScreen({ skill }: { skill: string }) {
             mastery-check evidence with the newer result.
           </p>
           {m.status === "passed-check" && !m.learningSecure && (
-            <p className="mt-3 rounded-xl bg-violet-soft px-4 py-3 text-[0.9375rem] text-ink-2">
+            <p className="mt-3 rounded-[16px] bg-violet-soft px-4 py-3 text-[0.9375rem] text-ink-2">
               To reach “Mastered”, this skill also needs secure practice (at least 3 recent answers, mostly right first time).
             </p>
           )}

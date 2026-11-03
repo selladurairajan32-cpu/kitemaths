@@ -55,7 +55,7 @@ export function ResultsScreen() {
   if (learner.results.length === 0) {
     return (
       <section className="card mx-auto max-w-2xl p-8 text-center sm:p-12">
-        <span className="mx-auto grid size-14 place-items-center rounded-2xl bg-sunk">
+        <span className="mx-auto grid size-14 place-items-center rounded-[20px] bg-sunk">
           <StarIcon size={24} />
         </span>
         <h1 className="display mt-5 text-3xl font-semibold">Your results will appear here</h1>
@@ -78,7 +78,7 @@ export function ResultsScreen() {
     <div className="space-y-6">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="eyebrow">Fractions foundations</p>
+          <p className="text-[0.9375rem] font-bold text-muted">Fractions foundations</p>
           <h1 className="display text-3xl font-semibold sm:text-4xl">Mastery results</h1>
           <p className="mt-1 text-ink-2">
             Based on {stats.learningAnswered} lesson & practice answers{last ? " and your latest independent check" : ""}.
@@ -103,7 +103,7 @@ export function ResultsScreen() {
             <ProgressRing value={score / last.order.length} size={120} label="Mastery check score">
               <span className="text-center">
                 <span className="block text-3xl font-semibold tabular-nums">{score}</span>
-                <span className="block text-xs text-muted">of {last.order.length}</span>
+                <span className="block text-[0.9375rem] text-muted">of {last.order.length}</span>
               </span>
             </ProgressRing>
             <div className="space-y-2">
@@ -198,7 +198,7 @@ export function ResultsScreen() {
                 const skill = skillById(m.skill);
                 const lesson = lessonById(skill.lessonId);
                 return (
-                  <li key={m.skill} className="rounded-xl bg-paper p-3.5">
+                  <li key={m.skill} className="rounded-[16px] bg-paper p-3.5">
                     <div className="flex items-center justify-between gap-3">
                       <p className="font-medium">{skill.title}</p>
                       <StatusBadge status={m.status} />
@@ -261,7 +261,7 @@ export function ResultsScreen() {
                 <StatusBadge status={m.status} />
               </div>
               <EvidenceMeter count={m.recentCount} needed={SECURE_MIN_EVIDENCE} score={m.score} label={`${skillById(m.skill).title} practice`} />
-              <p className="text-xs text-muted">{independentText(m)}</p>
+              <p className="text-[0.9375rem] text-muted">{independentText(m)}</p>
               <SkillActions m={m} />
             </li>
           ))}
@@ -270,7 +270,7 @@ export function ResultsScreen() {
           <table className="w-full text-[0.9375rem]">
             <caption className="sr-only">Status and evidence for each skill</caption>
             <thead>
-              <tr className="border-b border-line text-left text-xs text-muted">
+              <tr className="border-b border-line text-left text-[0.9375rem] text-muted">
                 <th scope="col" className="py-2 pr-3 font-medium">Skill</th>
                 <th scope="col" className="py-2 pr-3 font-medium">Status</th>
                 <th scope="col" className="py-2 pr-3 font-medium">Practice evidence</th>
@@ -292,7 +292,7 @@ export function ResultsScreen() {
                   <td className="py-2 pr-3">
                     <EvidenceMeter count={m.recentCount} needed={SECURE_MIN_EVIDENCE} score={m.score} label={`${skillById(m.skill).title} practice`} />
                   </td>
-                  <td className="py-2 pr-3 text-xs">{independentText(m)}</td>
+                  <td className="py-2 pr-3 text-[0.9375rem]">{independentText(m)}</td>
                   <td className="py-2 text-right">
                     <SkillActions m={m} />
                   </td>
@@ -311,19 +311,19 @@ export function ResultsScreen() {
           We only call something a “likely pattern” after seeing it more than once, and we mark it resolved once later work shows the idea is understood.
         </p>
         {reports.length === 0 ? (
-          <p className="mt-4 rounded-xl bg-ok-soft px-4 py-3 text-[0.9375rem] text-ok">No common misconceptions spotted so far.</p>
+          <p className="mt-4 rounded-[16px] bg-ok-soft px-4 py-3 text-[0.9375rem] text-ok">No common misconceptions spotted so far.</p>
         ) : (
           <ul className="mt-4 grid gap-3 md:grid-cols-2">
             {reports.map((r) => {
               const def = misconceptionById(r.id)!;
               const stateStyle = { watching: "bg-warn-soft text-warn", improving: "bg-den-soft text-den-strong", resolved: "bg-ok-soft text-ok" }[r.state];
               return (
-                <li key={r.id} className="rounded-2xl border border-line p-4">
+                <li key={r.id} className="rounded-[20px] border border-line p-4">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${stateStyle}`}>
+                    <span className={`rounded-full px-2.5 py-0.5 text-[0.9375rem] font-medium ${stateStyle}`}>
                       {r.state === "watching" ? "Still working on it" : r.state === "improving" ? "Improving" : "Resolved"}
                     </span>
-                    <span className="text-xs text-muted">{r.confidence === "likely" ? `Likely pattern · seen ${r.timesSeen} times` : "Possible · seen once"}</span>
+                    <span className="text-[0.9375rem] text-muted">{r.confidence === "likely" ? `Likely pattern · seen ${r.timesSeen} times` : "Possible · seen once"}</span>
                   </div>
                   <p className="mt-2 font-medium">{def.name}</p>
                   <p className="mt-1 text-[0.9375rem] text-ink-2">
@@ -354,7 +354,7 @@ export function ResultsScreen() {
                 <li key={q.id}>
                   <details className="group py-2">
                     <summary className="flex min-h-11 cursor-pointer list-none items-center gap-3 rounded-lg py-1">
-                      <span className={`grid size-7 shrink-0 place-items-center rounded-full text-xs font-bold text-white ${right ? "bg-ok" : "bg-num"}`} aria-hidden>
+                      <span className={`grid size-7 shrink-0 place-items-center rounded-full text-[0.9375rem] font-bold text-white ${right ? "bg-ok" : "bg-num"}`} aria-hidden>
                         {right ? "✓" : "✗"}
                       </span>
                       <span className="flex-1 text-[0.9375rem]">
@@ -368,7 +368,7 @@ export function ResultsScreen() {
                         ›
                       </span>
                     </summary>
-                    <div className="mt-2 space-y-4 rounded-xl bg-paper p-4 text-[0.9375rem] sm:ml-10">
+                    <div className="mt-2 space-y-4 rounded-[16px] bg-paper p-4 text-[0.9375rem] sm:ml-10">
                       <div className="pointer-events-none">
                         <QuestionInput question={q} response={response ?? null} onChange={() => {}} locked reveal orderKey={`assess:${last.seed}`} />
                       </div>
