@@ -8,15 +8,15 @@ import type { ReactNode, SVGProps } from "react";
  */
 
 export const PAPER = {
-  ink: "#13203a",
-  red: "#e8343f",
-  sun: "#ffc23d",
-  sunDeep: "#d99a00",
-  sky: "#4da8f0",
-  skySoft: "#d6ecfd",
-  leaf: "#3dae6b",
-  leafSoft: "#dcf3e5",
-  coral: "#f4623a",
+  ink: "var(--color-ink)",
+  red: "var(--color-kite-red)",
+  sun: "var(--color-sun)",
+  sunDeep: "var(--color-sun-strong)",
+  sky: "var(--color-sky)",
+  skySoft: "var(--color-sky-soft)",
+  leaf: "var(--color-leaf)",
+  leafSoft: "var(--color-leaf-soft)",
+  coral: "var(--color-num)",
   white: "#ffffff",
 } as const;
 

@@ -93,7 +93,7 @@ export function KipSays({
   tone?: "white" | "sun" | "sky";
 }) {
   const bg = { white: "bg-surface", sun: "bg-sun-soft", sky: "bg-sky-soft" }[tone];
-  const tailFill = { white: "#ffffff", sun: "#fff4d4", sky: "#d6ecfd" }[tone];
+  const tailFill = { white: "#ffffff", sun: "var(--color-sun-soft)", sky: "var(--color-sky-soft)" }[tone];
   return (
     <div className={`flex items-end gap-2 ${className}`}>
       <Kip mood={mood} size={size} />

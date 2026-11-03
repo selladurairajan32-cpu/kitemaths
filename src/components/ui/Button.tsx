@@ -13,7 +13,7 @@ import type { ButtonHTMLAttributes, ComponentProps, ReactNode } from "react";
 type Variant = "primary" | "go" | "sun" | "secondary" | "ghost" | "quiet" | "soft" | "ink";
 type Size = "md" | "lg" | "xl";
 
-const PRIMARY = "press bg-brand text-white border-brand-strong hover:bg-[#c3341b] disabled:bg-line-strong disabled:border-line-strong";
+const PRIMARY = "press bg-brand text-on-brand border-brand-strong hover:bg-[color-mix(in_srgb,var(--color-brand)_86%,black)] disabled:bg-line-strong disabled:border-line-strong";
 
 const variants: Record<Variant, string> = {
   primary: PRIMARY,

@@ -46,15 +46,15 @@ export function StackedBars({
                   y={y}
                   width={pw}
                   height={rowH}
-                  fill={i < r.f.n ? "#f4623a" : "#fff"}
-                  stroke="#13203a"
+                  fill={i < r.f.n ? "var(--color-num)" : "#fff"}
+                  stroke="var(--color-ink)"
                   strokeWidth={2.5}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: ri * 0.12 + i * 0.03 }}
                 />
               ))}
-              <rect x={0} y={y} width={W} height={rowH} fill="none" stroke="#13203a" strokeWidth={3} rx={4} />
+              <rect x={0} y={y} width={W} height={rowH} fill="none" stroke="var(--color-ink)" strokeWidth={3} rx={4} />
             </g>
           );
         })}
@@ -64,7 +64,7 @@ export function StackedBars({
             x2={guideX}
             y1={-2}
             y2={H + 2}
-            stroke="#2f6fd8"
+            stroke="var(--color-den)"
             strokeWidth={3}
             strokeDasharray="7 6"
             initial={{ pathLength: 0 }}
@@ -121,8 +121,8 @@ export function FractionWall({ denominators, highlight = [] }: { denominators: n
                   y={y}
                   width={pw}
                   height={rowH}
-                  fill={hl && i === 0 ? "#f4623a" : ri % 2 ? "#f4f9fe" : "#ffffff"}
-                  stroke="#13203a"
+                  fill={hl && i === 0 ? "var(--color-num)" : ri % 2 ? "var(--color-raised)" : "#ffffff"}
+                  stroke="var(--color-ink)"
                   strokeWidth={2.2}
                 />
                 <text
@@ -132,7 +132,7 @@ export function FractionWall({ denominators, highlight = [] }: { denominators: n
                   dominantBaseline="central"
                   fontSize={d >= 8 ? 13 : 15}
                   fontWeight={600}
-                  fill={hl && i === 0 ? "#fff" : "#2e3a52"}
+                  fill={hl && i === 0 ? "#fff" : "var(--color-ink-2)"}
                 >
                   {d === 1 ? "1 whole" : `1/${d}`}
                 </text>
@@ -193,10 +193,10 @@ export function Counters({ amount, groups, highlight }: { amount: number; groups
 function Pizza() {
   return (
     <svg viewBox="0 0 100 100" className="size-12 sm:size-20" aria-hidden>
-      <circle cx="50" cy="50" r="44" fill="#ffc23d" stroke="#13203a" strokeWidth="2.5" />
-      <circle cx="50" cy="50" r="36" fill="#f4623a" />
+      <circle cx="50" cy="50" r="44" fill="var(--color-sun)" stroke="var(--color-ink)" strokeWidth="2.5" />
+      <circle cx="50" cy="50" r="36" fill="var(--color-num)" />
       {[[38, 36], [62, 40], [46, 62], [66, 62], [30, 56], [54, 28]].map(([x, y], i) => (
-        <circle key={i} cx={x} cy={y} r="5" fill="#fff4d4" />
+        <circle key={i} cx={x} cy={y} r="5" fill="var(--color-sun-soft)" />
       ))}
     </svg>
   );
@@ -204,7 +204,7 @@ function Pizza() {
 function Chocolate() {
   return (
     <svg viewBox="0 0 120 70" className="h-9 w-16 sm:h-16 sm:w-28" aria-hidden>
-      <rect x="4" y="6" width="112" height="58" rx="6" fill="#7a4a32" stroke="#13203a" strokeWidth="2.5" />
+      <rect x="4" y="6" width="112" height="58" rx="6" fill="#7a4a32" stroke="var(--color-ink)" strokeWidth="2.5" />
       {range(4).map((c) =>
         range(2).map((r) => <rect key={`${c}${r}`} x={10 + c * 26.5} y={12 + r * 25} width="22" height="21" rx="3" fill="#8f5a3e" stroke="#5f3826" strokeWidth="1.5" />),
       )}
@@ -214,8 +214,8 @@ function Chocolate() {
 function Ribbon() {
   return (
     <svg viewBox="0 0 140 50" className="h-8 w-18 sm:h-14 sm:w-32" aria-hidden>
-      <path d="M6 18 h128 v14 h-128 Z" fill="#4da8f0" stroke="#13203a" strokeWidth="2.5" strokeLinejoin="round" />
-      <path d="M6 18 l-4 7 4 7 M134 18 l4 7 -4 7" fill="none" stroke="#13203a" strokeWidth="2" />
+      <path d="M6 18 h128 v14 h-128 Z" fill="var(--color-sky)" stroke="var(--color-ink)" strokeWidth="2.5" strokeLinejoin="round" />
+      <path d="M6 18 l-4 7 4 7 M134 18 l4 7 -4 7" fill="none" stroke="var(--color-ink)" strokeWidth="2" />
     </svg>
   );
 }
@@ -223,7 +223,7 @@ function Marbles() {
   return (
     <svg viewBox="0 0 110 70" className="h-9 w-16 sm:h-16 sm:w-28" aria-hidden>
       {[[22, 48], [46, 48], [70, 48], [34, 26], [58, 26], [90, 48]].map(([x, y], i) => (
-        <circle key={i} cx={x} cy={y} r="10" fill={["#2f6fd8", "#f4623a", "#2e9d61", "#d99a00", "#4da8f0", "#2f6fd8"][i]} stroke="#13203a" strokeWidth="2" />
+        <circle key={i} cx={x} cy={y} r="10" fill={["var(--color-den)", "var(--color-num)", "var(--color-ok-bright)", "var(--color-sun-strong)", "var(--color-sky)", "var(--color-den)"][i]} stroke="var(--color-ink)" strokeWidth="2" />
       ))}
     </svg>
   );

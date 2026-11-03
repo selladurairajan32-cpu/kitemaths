@@ -22,10 +22,10 @@ const CIRCLE_W: Record<ShapeSize, string> = {
   lg: "max-w-[300px]",
 };
 
-const FILL_SHADED = "#f4623a";
+const FILL_SHADED = "var(--color-num)";
 const FILL_EMPTY = "#ffffff";
-const FILL_HOVER = "#fde5dc";
-const STROKE = "#13203a";
+const FILL_HOVER = "var(--color-num-soft)";
+const STROKE = "var(--color-ink)";
 
 interface Part {
   index: number;
@@ -238,7 +238,7 @@ export function FractionShape({
         <path
           d={geometry[focused].d}
           fill="none"
-          stroke="#2f6fd8"
+          stroke="var(--color-den)"
           strokeWidth={5}
           strokeLinejoin="round"
           pointerEvents="none"
@@ -256,7 +256,7 @@ export function FractionShape({
             style={{ transformOrigin: `${p.cx}px ${p.cy}px`, transformBox: "view-box" }}
             pointerEvents="none"
           >
-            <circle cx={p.cx} cy={p.cy} r={fontSize * 0.72} fill={countParts === true ? "#2f6fd8" : "#a3361a"} />
+            <circle cx={p.cx} cy={p.cy} r={fontSize * 0.72} fill={countParts === true ? "var(--color-den)" : "var(--color-num-strong)"} />
             <text
               x={p.cx}
               y={p.cy}

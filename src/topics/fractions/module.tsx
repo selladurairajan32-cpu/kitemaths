@@ -15,17 +15,17 @@ import { RemedyVisual } from "./ui/RemedyVisual";
 import { VisualRenderer } from "./ui/Visuals";
 
 const LESSON_LOOKS: Record<string, Look> = {
-  wholes: { icon: "pizza", color: "#f4623a", soft: "#fde5dc" },
-  naming: { icon: "fraction-bar", color: "#2f6fd8", soft: "#dfeafb" },
-  lab: { icon: "paint", color: "#e8343f", soft: "#fbe1e3" },
-  comparing: { icon: "scales", color: "#d99a00", soft: "#fff4d4" },
-  equivalent: { icon: "puzzle", color: "#3dae6b", soft: "#dcf3e5" },
-  "number-line": { icon: "ruler", color: "#e8343f", soft: "#fbe1e3" },
-  amounts: { icon: "sweets", color: "#f4623a", soft: "#fde5dc" },
-  reasoning: { icon: "magnifier", color: "#2f6fd8", soft: "#dfeafb" },
+  wholes: { icon: "pizza", color: "var(--color-num)", soft: "var(--color-num-soft)" },
+  naming: { icon: "fraction-bar", color: "var(--color-den)", soft: "var(--color-den-soft)" },
+  lab: { icon: "paint", color: "var(--color-kite-red)", soft: "var(--color-brand-soft)" },
+  comparing: { icon: "scales", color: "var(--color-sun-strong)", soft: "var(--color-sun-soft)" },
+  equivalent: { icon: "puzzle", color: "var(--color-leaf)", soft: "var(--color-leaf-soft)" },
+  "number-line": { icon: "ruler", color: "var(--color-kite-red)", soft: "var(--color-brand-soft)" },
+  amounts: { icon: "sweets", color: "var(--color-num)", soft: "var(--color-num-soft)" },
+  reasoning: { icon: "magnifier", color: "var(--color-den)", soft: "var(--color-den-soft)" },
 };
 
-const LOOK: Look = { icon: "pizza", color: "#f4623a", soft: "#fde5dc" };
+const LOOK: Look = { icon: "pizza", color: "var(--color-num)", soft: "var(--color-num-soft)" };
 
 /*
  * The topic's own components take its own question and picture types. The app

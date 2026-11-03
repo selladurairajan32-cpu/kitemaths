@@ -7,7 +7,7 @@
  * coral for the numerator / shaded parts, blue for the denominator / all parts.
  * No gradients, no glass, no resting shadows, no violet.
  */
-@theme {
+@theme static {
   /* Ground, surfaces and ink */
   --color-paper: #eaf4fd; /* the sky: page ground */
   --color-surface: #ffffff; /* paper */
@@ -23,6 +23,7 @@
   --color-brand: #d6283a;
   --color-brand-strong: #a81c2b;
   --color-brand-soft: #fbe1e3;
+  --color-on-brand: #ffffff; /* text on the accent */
 
   /* Data: numerator / shaded parts */
   --color-num: #f4623a;

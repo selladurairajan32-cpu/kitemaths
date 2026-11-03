@@ -176,7 +176,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       )}
 
       {mode === "parent" && (
-        <header className="sticky top-0 z-40 border-b border-[#e3e8ef] bg-surface">
+        <header className="sticky top-0 z-40 border-b border-[var(--color-line)] bg-surface">
           <div className="mx-auto flex min-h-14 max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 sm:px-6">
             <div className="flex items-center gap-3">
               <Logo small />
@@ -191,7 +191,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                       <Link
                         href={navHref(href)}
                         aria-current={active ? "page" : undefined}
-                        className={`flex h-9 items-center whitespace-nowrap rounded-[6px] px-3 text-sm font-medium ${active ? "bg-[#eef1f5] text-ink" : "text-muted hover:bg-[#f4f6f9] hover:text-ink"}`}
+                        className={`flex h-9 items-center whitespace-nowrap rounded-[6px] px-3 text-sm font-medium ${active ? "bg-[var(--color-sunk)] text-ink" : "text-muted hover:bg-[var(--color-raised)] hover:text-ink"}`}
                       >
                         {label}
                       </Link>
@@ -200,7 +200,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 })}
               </ul>
             </nav>
-            <Link href="/" className="flex h-9 items-center gap-1.5 rounded-[6px] px-3 text-sm font-medium text-ink-2 hover:bg-[#f4f6f9]">
+            <Link href="/" className="flex h-9 items-center gap-1.5 rounded-[6px] px-3 text-sm font-medium text-ink-2 hover:bg-[var(--color-raised)]">
               <ArrowLeftIcon size={16} /> Child view
             </Link>
           </div>

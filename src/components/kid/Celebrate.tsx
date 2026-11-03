@@ -89,13 +89,13 @@ export function FlameGlyph({ size = 20, lit = true }: { size?: number; lit?: boo
     <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden>
       <path
         d="M12 2.5c.6 3.2 5 5.3 5 10.2a5 5 0 0 1-10 0c0-2.1 1-3.5 2-4.6.2 1.4.9 2.4 1.9 2.8-.3-3.4.7-6 1.1-8.4z"
-        fill={lit ? PAPER.red : "#d3e1ef"}
+        fill={lit ? PAPER.red : "var(--color-line)"}
         stroke={PAPER.ink}
         strokeWidth="1.5"
         strokeLinejoin="round"
         strokeOpacity={lit ? 1 : 0.4}
       />
-      <path d="M12 21.4a3.3 3.3 0 0 1-3.3-3.3c0-2 1.6-3 2.4-4.6.6 1.5 4.2 2.3 4.2 4.6a3.3 3.3 0 0 1-3.3 3.3z" fill={lit ? PAPER.sun : "#eaf1f8"} />
+      <path d="M12 21.4a3.3 3.3 0 0 1-3.3-3.3c0-2 1.6-3 2.4-4.6.6 1.5 4.2 2.3 4.2 4.6a3.3 3.3 0 0 1-3.3 3.3z" fill={lit ? PAPER.sun : "var(--color-sunk)"} />
     </svg>
   );
 }
