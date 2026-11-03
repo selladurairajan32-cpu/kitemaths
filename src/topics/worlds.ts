@@ -42,8 +42,8 @@ export const WORLDS: World[] = [
     text: "ink",
     islands: [
       { title: "Add and subtract", icon: "plus", topicId: "add-subtract" },
-      { title: "Times tables", icon: "times" },
-      { title: "Multiply and divide", icon: "divide" },
+      { title: "Times tables", icon: "times", topicId: "times-tables" },
+      { title: "Multiply and divide", icon: "divide", topicId: "multiply-divide" },
     ],
   },
   {

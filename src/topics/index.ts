@@ -1,8 +1,10 @@
 import { addSubtract } from "./add-subtract";
 import { fractions } from "./fractions/module";
+import { multiplyDivide } from "./multiply-divide";
 import { negative } from "./negative";
 import { placeValue } from "./place-value";
 import { rounding } from "./rounding";
+import { timesTables } from "./times-tables";
 import type { Question, TopicModule } from "./types";
 
 /**
@@ -16,6 +18,8 @@ export const TOPICS: TopicModule[] = [
   rounding as unknown as TopicModule,
   negative as unknown as TopicModule,
   addSubtract as unknown as TopicModule,
+  timesTables as unknown as TopicModule,
+  multiplyDivide as unknown as TopicModule,
 ];
 
 export const DEFAULT_TOPIC_ID = TOPICS[0].id;

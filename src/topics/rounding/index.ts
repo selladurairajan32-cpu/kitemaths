@@ -35,7 +35,8 @@ const templates: Template[] = [
     skill: S.ten,
     difficulties: [1, 2, 3],
     make: (r, { difficulty }) => {
-      const n = difficulty === 1 ? int(r, 11, 99) : difficulty === 2 ? int(r, 101, 999) : pick(r, [int(r, 1001, 9999), int(r, 1, 99) * 10 + 5, 995]);
+      const raw = difficulty === 1 ? int(r, 11, 99) : difficulty === 2 ? int(r, 101, 999) : pick(r, [int(r, 1001, 9999), int(r, 1, 99) * 10 + 5, 995]);
+      const n = raw % 10 === 0 ? raw + int(r, 1, 9) : raw; // already a ten would be nothing to round
       const right = roundTo(n, 10);
       const down = Math.floor(n / 10) * 10;
       return {
@@ -77,7 +78,8 @@ const templates: Template[] = [
     difficulties: [1, 2, 3],
     make: (r, { difficulty }) => {
       const p = difficulty === 1 ? 100 : pick(r, [100, 1000]);
-      const n = difficulty === 1 ? int(r, 110, 990) : difficulty === 2 ? int(r, 1010, 9990) : pick(r, [9000 + int(r, 950, 999), int(r, 10, 99) * 1000 + 500, int(r, 1001, 9999)]);
+      const raw = difficulty === 1 ? int(r, 110, 990) : difficulty === 2 ? int(r, 1010, 9990) : pick(r, [9000 + int(r, 950, 999), int(r, 10, 99) * 1000 + 500, int(r, 1001, 9999)]);
+      const n = raw % p === 0 ? raw + int(r, 1, 9) * (p / 10) : raw;
       const right = roundTo(n, p);
       const down = Math.floor(n / p) * p;
       return {

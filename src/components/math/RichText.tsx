@@ -19,7 +19,7 @@ function renderInline(text: string, keyPrefix: string, compact: boolean): ReactN
     if (frac) return <FractionNotation key={key} n={Number(frac[1])} d={Number(frac[2])} size="inline" />;
     if (part.startsWith("**") && part.endsWith("**")) {
       return (
-        <strong key={key} className="font-semibold text-ink">
+        <strong key={key} className="font-extrabold text-ink">
           {renderInline(part.slice(2, -2), key, compact)}
         </strong>
       );
