@@ -26,12 +26,23 @@ export function starsForResult(r: ItemResult): number {
 
 export const STARS = { lesson: 10, lab: 5, check: 20 } as const;
 
+/** Lessons, lab challenges and big-check completions, added up across every topic. */
+function topicTotals(state: LearnerState) {
+  const topics = Object.values(state.topics);
+  const lessons = topics.flatMap((t) => Object.values(t.lessons));
+  return {
+    lessons,
+    lessonsWorkedThrough: lessons.filter((l) => l.completed && !l.placedOut).length,
+    lessonsDone: lessons.filter((l) => l.completed).length,
+    labChallenges: topics.reduce((n, t) => n + t.labChallenges.length, 0),
+    checks: topics.reduce((n, t) => n + t.assessment.timesCompleted, 0),
+  };
+}
+
 export function totalStars(state: LearnerState): number {
   const answers = state.results.reduce((n, r) => n + starsForResult(r), 0);
-  const lessons = Object.values(state.lessons).filter((l) => l.completed && !l.placedOut).length * STARS.lesson;
-  const lab = state.labChallenges.length * STARS.lab;
-  const checks = state.assessment.timesCompleted * STARS.check;
-  return answers + lessons + lab + checks;
+  const t = topicTotals(state);
+  return answers + t.lessonsWorkedThrough * STARS.lesson + t.labChallenges * STARS.lab + t.checks * STARS.check;
 }
 
 export interface Level {
@@ -71,7 +82,7 @@ function shiftDay(key: string, days: number): string {
 export function activeDays(state: LearnerState): Set<string> {
   const days = new Set<string>();
   for (const r of state.results) if (r.at > 0) days.add(dayKey(r.at));
-  for (const l of Object.values(state.lessons)) if (l.completedAt && !l.placedOut) days.add(dayKey(l.completedAt));
+  for (const l of topicTotals(state).lessons) if (l.completedAt && !l.placedOut) days.add(dayKey(l.completedAt));
   return days;
 }
 
@@ -137,7 +148,8 @@ function longestFirstTryRun(results: ItemResult[]): number {
 
 export function badgesFor(state: LearnerState, skills: Skill[], lessonCount: number, now: number): Badge[] {
   const answered = state.results.filter((r) => r.context !== "followup").length;
-  const lessonsDone = Object.values(state.lessons).filter((l) => l.completed).length;
+  const totals = topicTotals(state);
+  const lessonsDone = totals.lessonsDone;
   const streak = streakFor(state, now);
   const run = longestFirstTryRun(state.results);
   const comeback = state.results.some(
@@ -154,11 +166,11 @@ export function badgesFor(state: LearnerState, skills: Skill[], lessonCount: num
     { id: "hot-streak", title: "Hot streak", description: "Get 5 right first time in a row.", icon: "🔥", progress: ratio(run, 5) },
     { id: "goal", title: "Daily hero", description: `Answer ${DAILY_GOAL} questions in one day.`, icon: "🎯", progress: goalDays ? 1 : ratio(answeredToday(state, now), DAILY_GOAL) },
     { id: "streak-3", title: "Three in a row", description: "Learn 3 days in a row.", icon: "📅", progress: ratio(streak.best, 3) },
-    { id: "lab", title: "Lab explorer", description: "Complete 3 lab challenges.", icon: "🧪", progress: ratio(state.labChallenges.length, 3) },
+    { id: "lab", title: "Lab explorer", description: "Complete 3 lab challenges.", icon: "🧪", progress: ratio(totals.labChallenges, 3) },
     { id: "century", title: "Century", description: "Answer 100 questions.", icon: "💯", progress: ratio(answered, 100) },
     { id: "all-lessons", title: "Sky scholar", description: "Finish every lesson.", icon: "🎓", progress: ratio(lessonsDone, lessonCount) },
     { id: "streak-7", title: "Super week", description: "Learn 7 days in a row.", icon: "🌈", progress: ratio(streak.best, 7) },
-    { id: "check", title: "Show what you know", description: "Complete the big check.", icon: "🏆", progress: state.assessment.timesCompleted > 0 ? 1 : 0 },
+    { id: "check", title: "Show what you know", description: "Complete the big check.", icon: "🏆", progress: totals.checks > 0 ? 1 : 0 },
     ...skills.map((s) => {
       const status = skillMastery(s.id, state.results).status;
       const p = status === "mastered" ? 1 : status === "passed-check" || status === "secure" ? 0.66 : status === "developing" ? 0.33 : 0;

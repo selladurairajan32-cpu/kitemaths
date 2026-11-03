@@ -6,23 +6,25 @@ import { Button, buttonClass } from "@/components/ui/Button";
 import { ArrowRightIcon } from "@/components/ui/Icons";
 import { StatusBadge } from "@/components/ui/Progress";
 import { skillMastery } from "@/engine/mastery";
-import { answerRecheck, cancelRecheck, finishRecheck, setRecheckIndex, startRecheck, type LearnerState } from "@/engine/progress";
-import { routes } from "@/lib/routes";
-import { updateLearner, useHydrated, useLearner } from "@/lib/store";
-import { ASSESSMENT_FORMS, type AssessmentForm } from "@/topics/fractions/questions";
-import { skillById } from "@/topics/fractions/skills";
+import { answerRecheck, cancelRecheck, finishRecheck, setRecheckIndex, startRecheck, type TopicLearner } from "@/engine/progress";
+import { useHydrated } from "@/lib/store";
+import { useTopicState } from "@/topics/context";
+import type { TopicModule } from "@/topics/types";
 import { independentResults } from "./AssessmentScreen";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 
-export function recheckPlan(skill: string, state: LearnerState): { form: AssessmentForm; order: string[] } {
-  const seen = state.rechecks[skill]?.form ?? state.assessment.last?.form ?? "B";
-  const form: AssessmentForm = seen === "A" ? "B" : "A";
-  return { form, order: ASSESSMENT_FORMS[form].filter((q) => q.skill === skill).map((q) => q.id) };
+/** Two fresh questions for one skill, from the form the learner saw least recently. */
+export function recheckPlan(topic: TopicModule, skill: string, state: TopicLearner): { form: string; order: string[] } {
+  const forms = Object.keys(topic.assessment.forms);
+  const seen = state.rechecks[skill]?.form ?? state.assessment.last?.form ?? forms[forms.length - 1];
+  const form = forms.find((f) => f !== seen) ?? forms[0];
+  return { form, order: topic.assessment.forms[form].filter((q) => q.skill === skill).map((q) => q.id) };
 }
 
 export function RecheckScreen({ skill }: { skill: string }) {
   const hydrated = useHydrated();
-  const learner = useLearner();
+  const { topic, learner, update: updateLearner, links: routes } = useTopicState();
+  const skillById = topic.skillById;
   if (!hydrated) return <ScreenSkeleton />;
 
   const info = skillById(skill);
@@ -41,7 +43,7 @@ export function RecheckScreen({ skill }: { skill: string }) {
         onIndex={(i) => updateLearner((s) => setRecheckIndex(s, i))}
         onFinish={() => {
           const at = Date.now();
-          updateLearner((s) => (s.recheck ? finishRecheck(s, independentResults(s.recheck.order, s.recheck.evaluations, "recheck", at, `recheck:${s.recheck.seed}`), at) : s));
+          updateLearner((s) => (s.recheck ? finishRecheck(s, independentResults(topic, s.recheck.order, s.recheck.evaluations, "recheck", at, `recheck:${s.recheck.seed}`), at) : s));
         }}
       />
     );
@@ -103,7 +105,7 @@ export function RecheckScreen({ skill }: { skill: string }) {
               onClick={() => {
                 const seed = Date.now();
                 updateLearner((s) => {
-                  const plan = recheckPlan(skill, s);
+                  const plan = recheckPlan(topic, skill, s);
                   return startRecheck(s, skill, plan.order, plan.form, seed, seed);
                 });
               }}

@@ -1,6 +1,6 @@
 import { readyForRecheck, skillMastery } from "./mastery";
-import type { LearnerState } from "./progress";
-import type { MisconceptionDef, Phase, QuestionBase, Skill, SkillId } from "./types";
+import type { TopicLearner } from "./progress";
+import { PHASES, type ItemResult, type MisconceptionDef, type Phase, type QuestionBase, type Skill, type SkillId } from "./types";
 
 export interface LessonSummary {
   id: string;
@@ -26,50 +26,59 @@ export interface TopicDefinition<Q extends QuestionBase = QuestionBase> {
 
 export const PRACTICE_READY_RESULTS = 8;
 
-export type Recommendation =
+type RecommendationBody =
   | { kind: "lesson"; lessonId: string; resume: boolean; title: string; reason: string }
   | { kind: "practice"; focusSkill: SkillId | null; title: string; reason: string }
   | { kind: "assessment"; resume: boolean; title: string; reason: string }
   | { kind: "recheck"; skill: SkillId; resume: boolean; title: string; reason: string }
   | { kind: "results"; title: string; reason: string };
 
-export function lessonsCompleted(topic: TopicDefinition, state: LearnerState): number {
+/** What to do next, and in which topic. */
+export type Recommendation = RecommendationBody & { topicId: string };
+
+export function lessonsCompleted(topic: TopicDefinition, state: TopicLearner): number {
   return topic.lessons.filter((l) => state.lessons[l.id]?.completed).length;
 }
 
-export function strongSkills(topic: TopicDefinition, state: LearnerState): SkillId[] {
+export function strongSkills(topic: TopicDefinition, state: TopicLearner): SkillId[] {
   return topic.skills
     .map((s) => skillMastery(s.id, state.results))
     .filter((m) => m.learningSecure)
     .map((m) => m.skill);
 }
 
-export function masteredSkills(topic: TopicDefinition, state: LearnerState): SkillId[] {
+export function masteredSkills(topic: TopicDefinition, state: TopicLearner): SkillId[] {
   return topic.skills
     .map((s) => skillMastery(s.id, state.results))
     .filter((m) => m.status === "mastered")
     .map((m) => m.skill);
 }
 
-export function reviewSkills(topic: TopicDefinition, state: LearnerState): SkillId[] {
+export function reviewSkills(topic: TopicDefinition, state: TopicLearner): SkillId[] {
   return topic.skills
     .map((s) => skillMastery(s.id, state.results))
     .filter((m) => m.status === "needs-review")
     .map((m) => m.skill);
 }
 
-export function practiceResultsCount(state: LearnerState): number {
-  return state.results.filter((r) => r.context === "practice").length;
+/** This topic's results only: the learner's results cover every topic. */
+export function topicResults(topic: TopicDefinition, results: ItemResult[]): ItemResult[] {
+  const skills = new Set(topic.skills.map((s) => s.id));
+  return results.filter((r) => skills.has(r.skill));
 }
 
-export function isPracticeMilestoneMet(topic: TopicDefinition, state: LearnerState): boolean {
+export function practiceResultsCount(topic: TopicDefinition, state: TopicLearner): number {
+  return topicResults(topic, state.results).filter((r) => r.context === "practice").length;
+}
+
+export function isPracticeMilestoneMet(topic: TopicDefinition, state: TopicLearner): boolean {
   return (
-    practiceResultsCount(state) >= PRACTICE_READY_RESULTS &&
+    practiceResultsCount(topic, state) >= PRACTICE_READY_RESULTS &&
     strongSkills(topic, state).length >= Math.ceil(topic.skills.length / 2)
   );
 }
 
-export function activityProgress(topic: TopicDefinition, state: LearnerState): number {
+export function activityProgress(topic: TopicDefinition, state: TopicLearner): number {
   const total = topic.lessons.length + 2;
   const done =
     lessonsCompleted(topic, state) +
@@ -78,7 +87,11 @@ export function activityProgress(topic: TopicDefinition, state: LearnerState): n
   return done / total;
 }
 
-export function recommendNext(topic: TopicDefinition, state: LearnerState): Recommendation {
+export function recommendNext(topic: TopicDefinition, state: TopicLearner): Recommendation {
+  return { ...recommendInTopic(topic, state), topicId: topic.id };
+}
+
+function recommendInTopic(topic: TopicDefinition, state: TopicLearner): RecommendationBody {
   const skillTitle = (id: SkillId) => topic.skills.find((s) => s.id === id)?.title ?? id;
 
   if (state.recheck) {
@@ -168,5 +181,49 @@ export function recommendNext(topic: TopicDefinition, state: LearnerState): Reco
     kind: "results",
     title: "Review your mastery results",
     reason: "Your latest evidence is strong across the module. See what you've achieved.",
+  };
+}
+
+export type PhaseStatus = "done" | "current" | "todo";
+
+function phaseDone(topic: TopicDefinition, phase: Phase, state: TopicLearner): boolean {
+  switch (phase) {
+    case "Practise":
+      return isPracticeMilestoneMet(topic, state);
+    case "Master":
+      return !!state.assessment.last && reviewSkills(topic, state).length === 0;
+    default: {
+      const lessons = topic.lessons.filter((l) => l.phase === phase);
+      return lessons.length > 0 && lessons.every((l) => state.lessons[l.id]?.completed);
+    }
+  }
+}
+
+/** Understand → … → Master, with the first unfinished phase marked current. */
+export function phaseStatuses(topic: TopicDefinition, state: TopicLearner): { phase: Phase; status: PhaseStatus }[] {
+  let currentAssigned = false;
+  return PHASES.map((phase) => {
+    if (phaseDone(topic, phase, state)) return { phase, status: "done" as const };
+    if (!currentAssigned) {
+      currentAssigned = true;
+      return { phase, status: "current" as const };
+    }
+    return { phase, status: "todo" as const };
+  });
+}
+
+export interface LearningStats {
+  learningAnswered: number;
+  firstTryRate: number | null;
+  hintsUsed: number;
+}
+
+/** Lesson and practice answers in this topic. */
+export function learningStats(topic: TopicDefinition, state: TopicLearner): LearningStats {
+  const scored = topicResults(topic, state.results).filter((r) => r.context === "practice" || r.context === "lesson");
+  return {
+    learningAnswered: scored.length,
+    firstTryRate: scored.length ? scored.filter((r) => r.firstTry).length / scored.length : null,
+    hintsUsed: scored.reduce((n, r) => n + r.hintsUsed, 0),
   };
 }

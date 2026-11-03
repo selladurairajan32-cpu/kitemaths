@@ -1,5 +1,6 @@
 import type { QuestionBase } from "@/engine/types";
 import type { CompareSymbol, Fraction } from "./math";
+import type { NumericTrap } from "@/lessons/types";
 
 export type Diagram =
   | { shape: "bar"; parts: number; shaded?: number[]; sizes?: number[] }
@@ -19,11 +20,7 @@ export interface ChoiceOption {
   misconception?: string;
 }
 
-export interface NumericTrap {
-  value: number;
-  misconception?: string;
-  feedback: string;
-}
+export type { NumericTrap } from "@/lessons/types";
 
 export interface FrameSlotOption {
   id: string;

@@ -5,34 +5,31 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { Confetti } from "@/components/kid/Celebrate";
 import { Kip, KipSays } from "@/components/kid/Kip";
-import { lessonLook } from "@/components/kid/kidText";
 import { ReadAloud } from "@/components/kid/ReadAloud";
 import { RichText } from "@/components/math/RichText";
-import { QuestionInput } from "@/components/questions/QuestionInput";
 import { Button, ButtonLink } from "@/components/ui/Button";
 import { ArrowRightIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton } from "@/components/ui/Screen";
-import { answerPlacement, finishPlacement, setProfile, skipPlacement, startPlacement, type LearnerState } from "@/engine/progress";
+import { answerPlacement, finishPlacement, inTopic, setProfile, skipPlacement, startPlacement, type LearnerState, type TopicLearner } from "@/engine/progress";
 import { recommendNext } from "@/engine/journey";
-import { routes } from "@/lib/routes";
+import { topicRoutes } from "@/lib/routes";
 import { playSound } from "@/lib/sound";
 import { updateLearner, useHydrated, useLearner } from "@/lib/store";
-import { FRACTIONS_TOPIC } from "@/topics/fractions";
-import { evaluate, inputProblem, isResponseComplete } from "@/topics/fractions/evaluate";
-import { LESSONS } from "@/topics/fractions/lessons";
-import { placedOutLessons, placementOrder, placementShouldStop, PLACEMENT_PLAN } from "@/topics/fractions/placement";
-import { questionById } from "@/topics/fractions/questions";
-import type { Response } from "@/topics/fractions/types";
+import { useTopic, useTopicState } from "@/topics/context";
+import type { AnswerResponse as Response, PlacementKit } from "@/topics/types";
 
 const YEARS = [3, 4, 5, 6];
 
-function answersSoFar(s: LearnerState): boolean[] {
+function answersSoFar(s: TopicLearner): boolean[] {
   const { order, correct } = s.placement;
   return order.slice(0, s.placement.index).map((id) => correct.includes(id));
 }
 
 function Intro() {
   const learner = useLearner();
+  const topic = useTopic();
+  const placement = topic.placement!;
+  const links = topicRoutes(topic.id);
   const router = useRouter();
   const [name, setName] = useState(learner.profile.name);
   const [year, setYear] = useState<number | null>(learner.profile.year);
@@ -42,7 +39,7 @@ function Intro() {
   const play = (e: FormEvent) => {
     e.preventDefault();
     playSound("tap");
-    updateLearner((s) => startPlacement(saveProfile(s), placementOrder(Date.now())));
+    updateLearner((s) => inTopic(saveProfile(s), topic.id, (t) => startPlacement(t, placement.order(Date.now()))));
   };
 
   return (
@@ -109,8 +106,8 @@ function Intro() {
           variant="secondary"
           size="xl"
           onClick={() => {
-            updateLearner((s) => skipPlacement(saveProfile(s)));
-            router.push(routes.lesson(LESSONS[0].id));
+            updateLearner((s) => inTopic(saveProfile(s), topic.id, skipPlacement));
+            router.push(links.lesson(topic.lessons[0].id));
           }}
         >
           Start from the beginning
@@ -121,7 +118,10 @@ function Intro() {
 }
 
 function PlacementQuestion({ id, index }: { id: string; index: number }) {
-  const q = questionById(id);
+  const { topic, update } = useTopicState();
+  const { Input: QuestionInput, evaluate, inputProblem, isComplete: isResponseComplete } = topic.questions;
+  const placement: PlacementKit = topic.placement!;
+  const q = topic.questionById(id);
   const [response, setResponse] = useState<Response | null>(null);
   const [problem, setProblem] = useState<string | null>(null);
   const [outcome, setOutcome] = useState<boolean | null>(null);
@@ -140,7 +140,7 @@ function PlacementQuestion({ id, index }: { id: string; index: number }) {
 
   const next = () => {
     const ok = outcome === true;
-    updateLearner((s) => {
+    update((s) => {
       let n = answerPlacement(s, {
         id: episode,
         questionId: id,
@@ -155,8 +155,8 @@ function PlacementQuestion({ id, index }: { id: string; index: number }) {
         at: Date.now(),
       });
       const answers = answersSoFar(n);
-      if (n.placement.index >= n.placement.order.length || placementShouldStop(answers)) {
-        n = finishPlacement(n, placedOutLessons(answers), Date.now());
+      if (n.placement.index >= n.placement.order.length || placement.shouldStop(answers)) {
+        n = finishPlacement(n, placement.placedOut(answers), Date.now());
       }
       return n;
     });
@@ -206,11 +206,13 @@ function PlacementQuestion({ id, index }: { id: string; index: number }) {
 }
 
 function Done() {
-  const learner = useLearner();
+  const { topic, learner, links } = useTopicState();
+  const profile = useLearner().profile;
+  const LESSONS = topic.lessons;
   const { placedOut } = learner.placement;
-  const rec = recommendNext(FRACTIONS_TOPIC, learner);
+  const rec = recommendNext(topic, learner);
   const first = rec.kind === "lesson" ? LESSONS.find((l) => l.id === rec.lessonId) : null;
-  const name = learner.profile.name.trim();
+  const name = profile.name.trim();
   return (
     <motion.section initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="card relative mx-auto max-w-xl overflow-visible p-6 text-center sm:p-10">
       <Confetti burstKey="placement-done" />
@@ -222,7 +224,7 @@ function Done() {
       </h1>
       <p className="mt-2 text-lg text-ink-2">
         {placedOut.length
-          ? `You already know ${placedOut.length} of the ${PLACEMENT_PLAN.length} topics — so we'll skip ahead.`
+          ? `You already know ${placedOut.length} of the ${topic.placement?.plan.length ?? LESSONS.length} topics — so we'll skip ahead.`
           : "We'll start right at the beginning and build up step by step. Every expert starts here!"}
       </p>
       {placedOut.length > 0 && (
@@ -231,7 +233,7 @@ function Done() {
             const l = LESSONS.find((x) => x.id === id)!;
             return (
               <li key={id} className="inline-flex items-center gap-1.5 rounded-full bg-ok-soft px-3 py-1 text-sm font-semibold text-ok">
-                <span aria-hidden>{lessonLook(id).emoji}</span> {l.title}
+                <span aria-hidden>{topic.lessonLook(id).emoji}</span> {l.title}
               </li>
             );
           })}
@@ -241,15 +243,15 @@ function Done() {
         <div className="mt-6 rounded-3xl bg-brand-soft p-4">
           <p className="text-sm font-bold uppercase tracking-wide text-brand-strong">Your first adventure</p>
           <p className="display mt-1 text-2xl">
-            <span aria-hidden>{lessonLook(first.id).emoji}</span> {first.title}
+            <span aria-hidden>{topic.lessonLook(first.id).emoji}</span> {first.title}
           </p>
         </div>
       )}
       <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-        <ButtonLink href={first ? routes.lesson(first.id) : routes.practice()} variant="go" size="xl">
+        <ButtonLink href={first ? links.lesson(first.id) : links.practice()} variant="go" size="xl">
           Let&apos;s go! <ArrowRightIcon size={20} />
         </ButtonLink>
-        <ButtonLink href={routes.journey()} variant="secondary" size="xl">
+        <ButtonLink href={links.island()} variant="secondary" size="xl">
           See my map
         </ButtonLink>
       </div>
@@ -259,7 +261,7 @@ function Done() {
 
 export function PlacementScreen() {
   const hydrated = useHydrated();
-  const learner = useLearner();
+  const { learner } = useTopicState();
   if (!hydrated) return <ScreenSkeleton />;
   const p = learner.placement;
 

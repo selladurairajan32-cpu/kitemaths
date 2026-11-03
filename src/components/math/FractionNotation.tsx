@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { toWords } from "@/topics/fractions/math";
+import { toWords } from "@/maths/fraction";
 
 type Size = "inline" | "sm" | "md" | "lg" | "xl";
 

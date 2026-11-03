@@ -31,23 +31,28 @@ npm run lint
 npm run build
 ```
 
-Progress is saved in this browser only (`localStorage`); there are no accounts or cross-device sync. Saved data from earlier versions is migrated on load; data that can't be read is copied to a backup key before starting fresh. **Reset progress** on the dashboard asks for confirmation.
+Progress is saved in this browser only (`localStorage`, key `kite-maths:v2`); there are no accounts or cross-device sync yet. Saves from before islands existed (`kite-maths:fractions:v1`) are migrated on first load and the old key is kept untouched as a backup; data that can't be read is copied to a backup key before starting fresh. **Reset progress** in the grown-ups' area asks for confirmation.
 
 ## Routes
 
+The app is a map of **worlds** and **islands** (topics). Each island lives under `/t/<topic>`; today the only island is `fractions`. The plan for the rest is in [`docs/ROADMAP.md`](docs/ROADMAP.md).
+
 | Route | Screen |
 | --- | --- |
-| `/` | Kid home: next adventure, stars, streak, daily goal, sky path |
-| `/start` | Warm-up placement for new learners |
-| `/journey` | Adventure map: lessons, practice milestone, the big challenge, skills |
-| `/badges` | Trophy room: badges, stars and level |
-| `/lesson` · `/lesson/:lessonId` · `/lesson/:lessonId/:step` | Lessons in focus mode (resumes, opens a lesson, or opens a step you've reached) |
-| `/lab` | Free Fraction Lab (1–12 equal parts, fractions from 0 to one whole) |
-| `/practice` · `/practice/:skill` | Practice arena: adaptive mixed practice, or one skill |
-| `/assessment` | The big challenge (mastery check): start, resume, or retake (alternates forms A and B) |
-| `/assessment/recheck/:skill` | Two-question independent recheck for one skill |
+| `/` | Kid home: next adventure on the active island, stars, streak, daily goal |
+| `/journey` | World map: every world and island (playable or coming soon) |
+| `/badges` | Trophy room: badges, stars and level across all islands |
+| `/t/:topic` | Island map: lessons, practice milestone, the big challenge, skills |
+| `/t/:topic/start` | Warm-up placement for the island |
+| `/t/:topic/lesson` · `/lesson/:lessonId` · `/lesson/:lessonId/:step` | Lessons in focus mode |
+| `/t/:topic/lab` | Free-play lab, if the island has one |
+| `/t/:topic/practice` · `/practice/:skill` | Practice arena: adaptive mixed practice, or one skill |
+| `/t/:topic/check` | The big challenge (mastery check), alternating forms A and B |
+| `/t/:topic/recheck/:skill` | Two-question independent recheck for one skill |
 | `/parent` · `/parent/journey` | Grown-ups: overview, settings, detailed journey |
 | `/results` (`#review`) | Grown-ups: strengths, evidence per skill, ideas to watch, full answer review |
+
+Links from before islands existed (`/lesson/...`, `/practice/...`, `/assessment/...`) redirect permanently to the fractions island. `/practice`, `/lab` and `/start` currently open the first island.
 
 ## Evidence policy
 
@@ -70,9 +75,11 @@ Misconceptions are reported as *possible* after one sighting and *likely* only a
 5. Fractions, decimals and percentages
 6. Multi-step 11+ style problems mixing all of the above
 
-Each future module should reuse the engine: teach with representations, model a method, guide, then check a new instance independently.
+Each future island reuses the engine: teach with representations, model a method, guide, then check a new instance independently. To add one, build a `TopicModule` like `src/topics/fractions/module.tsx`, list it in `src/topics/index.ts`, and give its world-map entry a `topicId` in `src/topics/worlds.ts`. `src/topics/registry.test.ts` checks the ids and shows a second island working alongside fractions.
 
 ## Architecture
+
+Every skill, question and misconception id is namespaced by its island (`fractions.compare`, `fractions.nm-1`, `g:fractions.nm-choose:2:123`), so islands never clash and any id leads back to its island. Results are shared across islands; each island keeps its own lessons, practice session, checks and placement.
 
 ```
 src/engine/                Topic-agnostic teaching engine (pure TypeScript)
@@ -80,12 +87,15 @@ src/engine/                Topic-agnostic teaching engine (pure TypeScript)
   recovery.ts              Misconception recovery state machine (inline hints, diagnosis, follow-up, reveal)
   adaptive.ts              Deterministic adaptive question selection
   mastery.ts               Evidence policy and cautious misconception reporting
-  progress.ts              Versioned learner state, idempotent recording, attempts and rechecks
-  journey.ts               Topic definition contract, activity progress, recommendations
+  progress.ts              Versioned learner state (per-island progress + shared results), idempotent recording
+  journey.ts               Topic definition contract, phases, activity progress, recommendations
   random.ts                Seeded shuffles (stable option order per attempt)
   rewards.ts               Stars, levels, streaks, daily goal and badges, derived from history
-src/topics/fractions/      Fractions content and maths
-  math.ts                  Exact fraction arithmetic (integer cross-multiplication)
+src/topics/                Island registry (index.ts), module contract (types.ts), world map (worlds.ts),
+                           topic context for the UI, active-island choice
+src/topics/fractions/      The fractions island: content, marking, generators, and its own UI (ui/)
+  module.tsx               Plugs the island into the app: question kit, visuals, lab, assessment, placement
+  math.ts                  Re-exports src/maths/fraction.ts (exact fraction arithmetic, shared)
   diagnose.ts              Rule-based misconception diagnosis
   evaluate.ts              Marking for every question type, input validation, equivalence notes
   questions.ts             Practice, lesson, follow-up questions and assessment forms A/B
@@ -94,7 +104,8 @@ src/topics/fractions/      Fractions content and maths
   lab.ts                   Fraction Lab challenges, checks and feedback
   generate.ts              Seeded question generators for every skill and level
   placement.ts             Warm-up plan and where-to-start rules
-src/components/            SVG maths components, question inputs and players, lesson player, screens
+src/lessons/types.ts       Lesson structure shared by every island
+src/components/            Shared maths pictures, question/lesson players, screens (read the island from context)
   kid/                     Kip the kite, celebrations, read-aloud button, rewards HUD, child-facing wording
-src/lib/                   localStorage store, route helpers, speech and sound
+src/lib/                   localStorage store + v1 migration, route helpers, speech and sound
 ```

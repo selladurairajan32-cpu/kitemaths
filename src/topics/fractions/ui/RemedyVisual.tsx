@@ -1,10 +1,10 @@
 "use client";
 
-import { FractionShape } from "@/components/math/FractionShape";
+import { FractionShape } from "./FractionShape";
 import { NumberLine } from "@/components/math/NumberLine";
 import { RichText } from "@/components/math/RichText";
-import { Counters, FractionWall, StackedBars } from "@/components/math/Visuals";
-import { M } from "@/topics/fractions/misconceptions";
+import { Counters, FractionWall, StackedBars } from "./Visuals";
+import { M } from "../misconceptions";
 
 /**
  * Targeted visual explanations. Each uses a parallel example (different numbers

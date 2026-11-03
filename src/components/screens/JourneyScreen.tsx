@@ -5,15 +5,11 @@ import Link from "next/link";
 import { buttonClass } from "@/components/ui/Button";
 import { CheckIcon, FlagIcon, PracticeIcon } from "@/components/ui/Icons";
 import { ProgressBar } from "@/components/ui/Progress";
-import { isPracticeMilestoneMet, practiceResultsCount, PRACTICE_READY_RESULTS, recommendNext, strongSkills } from "@/engine/journey";
+import { isPracticeMilestoneMet, phaseStatuses, practiceResultsCount, PRACTICE_READY_RESULTS, recommendNext, strongSkills } from "@/engine/journey";
 import { skillMastery } from "@/engine/mastery";
-import { routes } from "@/lib/routes";
-import { useHydrated, useLearner } from "@/lib/store";
-import { ASSESSMENT_FORMS } from "@/topics/fractions/questions";
-import { skillById } from "@/topics/fractions/skills";
-import { FRACTIONS_TOPIC } from "@/topics/fractions";
-import { PHASE_DESCRIPTIONS, phaseStatuses } from "@/topics/fractions/journey";
-import { LESSONS } from "@/topics/fractions/lessons";
+import { routes as appRoutes } from "@/lib/routes";
+import { useHydrated } from "@/lib/store";
+import { useTopicState } from "@/topics/context";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 
 type NodeStatus = "done" | "active" | "next" | "upcoming";
@@ -41,14 +37,18 @@ const STATUS_TEXT: Record<NodeStatus, string> = {
 
 export function JourneyScreen() {
   const hydrated = useHydrated();
-  const learner = useLearner();
+  const { topic, learner, links } = useTopicState();
+  const LESSONS = topic.lessons;
+  const { skillById, phaseDescriptions: PHASE_DESCRIPTIONS } = topic;
+  const firstForm = Object.values(topic.assessment.forms)[0] ?? [];
+  const routes = { ...links, assessment: links.check, review: appRoutes.review };
   if (!hydrated) return <ScreenSkeleton />;
 
-  const rec = recommendNext(FRACTIONS_TOPIC, learner);
-  const practiceMet = isPracticeMilestoneMet(FRACTIONS_TOPIC, learner);
-  const strong = strongSkills(FRACTIONS_TOPIC, learner).length;
-  const practiced = practiceResultsCount(learner);
-  const needStrong = Math.ceil(FRACTIONS_TOPIC.skills.length / 2);
+  const rec = recommendNext(topic, learner);
+  const practiceMet = isPracticeMilestoneMet(topic, learner);
+  const strong = strongSkills(topic, learner).length;
+  const practiced = practiceResultsCount(topic, learner);
+  const needStrong = Math.ceil(topic.skills.length / 2);
 
   const lessonStatus = (id: string): NodeStatus => {
     const p = learner.lessons[id];
@@ -59,7 +59,7 @@ export function JourneyScreen() {
   };
   const practiceStatus: NodeStatus = practiceMet ? "done" : rec.kind === "practice" ? "next" : practiced > 0 ? "active" : "upcoming";
   const a = learner.assessment;
-  const review = FRACTIONS_TOPIC.skills.map((sk) => skillMastery(sk.id, learner.results)).filter((m) => m.status === "needs-review");
+  const review = topic.skills.map((sk) => skillMastery(sk.id, learner.results)).filter((m) => m.status === "needs-review");
   const assessStatus: NodeStatus =
     a.status === "in-progress"
       ? "active"
@@ -74,11 +74,10 @@ export function JourneyScreen() {
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
       <div>
         <header className="mb-6">
-          <p className="eyebrow">Fractions</p>
-          <h1 className="display text-3xl font-semibold sm:text-4xl">Your learning journey</h1>
+          <p className="eyebrow">{topic.title}</p>
+          <h1 className="display text-3xl font-semibold sm:text-4xl">Learning journey</h1>
           <p className="mt-2 max-w-xl text-ink-2">
-            {LESSONS.length} short lessons take you from “what is a whole?” to solving fraction problems and explaining your thinking. Then practise until
-            you&apos;re secure, and show your mastery. This is the fractions foundations module — later modules will extend it.
+            {topic.subtitle}. {LESSONS.length} short lessons, then practice until each skill is secure, then an independent mastery check.
           </p>
         </header>
 
@@ -180,7 +179,7 @@ export function JourneyScreen() {
                     <FlagIcon size={18} /> Mastery check
                   </h2>
                   <p className="text-sm text-ink-2">
-                    {ASSESSMENT_FORMS.A.length} questions on your own — no hints — two for every skill.
+                    {firstForm.length} questions on your own — no hints — two for every skill.
                     {a.last && ` Last result: ${lastScore} / ${a.last.order.length}.`}
                   </p>
                 </div>
@@ -241,7 +240,7 @@ export function JourneyScreen() {
           <h2 className="font-semibold">How you&apos;ll learn</h2>
           <p className="mt-1 text-sm text-ink-2">Every topic follows the same path, so understanding comes before testing.</p>
           <ol className="mt-4 space-y-3">
-            {phaseStatuses(learner).map(({ phase, status }, i) => (
+            {phaseStatuses(topic, learner).map(({ phase, status }, i) => (
               <li key={phase} className="flex gap-3">
                 <span
                   className={`grid size-6 shrink-0 place-items-center rounded-full text-[0.7rem] font-semibold ${

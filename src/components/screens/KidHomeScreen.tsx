@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { FlameGlyph, StarGlyph } from "@/components/kid/Celebrate";
 import { Kip, KipSays } from "@/components/kid/Kip";
-import { kidNext, lessonLook } from "@/components/kid/kidText";
+import { kidNext } from "@/components/kid/kidText";
 import { ButtonLink } from "@/components/ui/Button";
 import { ArrowRightIcon, CheckIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton, StorageNotice } from "@/components/ui/Screen";
@@ -12,9 +12,8 @@ import { recommendNext, reviewSkills } from "@/engine/journey";
 import { activeDays, answeredToday, DAILY_GOAL, dayKey, levelFor, streakFor, totalStars } from "@/engine/rewards";
 import { routes } from "@/lib/routes";
 import { useHydrated, useLearner, useNow } from "@/lib/store";
-import { FRACTIONS_TOPIC } from "@/topics/fractions";
-import { LESSONS } from "@/topics/fractions/lessons";
-import { skillById } from "@/topics/fractions/skills";
+import { useTopicState } from "@/topics/context";
+import { ActiveTopicProvider } from "@/topics/ActiveTopic";
 
 const DAY_LETTERS = ["S", "M", "T", "W", "T", "F", "S"];
 
@@ -25,13 +24,24 @@ function greeting(now: number) {
 
 export function KidHomeScreen() {
   const hydrated = useHydrated();
-  const learner = useLearner();
-  const now = useNow();
   if (!hydrated) return <ScreenSkeleton />;
+  return (
+    <ActiveTopicProvider>
+      <KidHome />
+    </ActiveTopicProvider>
+  );
+}
 
-  const brandNew = learner.placement.status === "not-started" && learner.results.length === 0;
-  const rec = recommendNext(FRACTIONS_TOPIC, learner);
-  const next = kidNext(rec);
+function KidHome() {
+  const learner = useLearner();
+  const { topic, learner: inTopic, links } = useTopicState();
+  const now = useNow();
+  const { skillById, lessonLook } = topic;
+  const LESSONS = topic.lessons;
+
+  const brandNew = inTopic.placement.status === "not-started" && learner.results.length === 0;
+  const rec = recommendNext(topic, inTopic);
+  const next = kidNext(rec, topic);
   const stars = totalStars(learner);
   const level = levelFor(stars);
   const streak = streakFor(learner, now);
@@ -41,7 +51,7 @@ export function KidHomeScreen() {
     const at = now - (6 - i) * 86_400_000;
     return { key: dayKey(at), letter: DAY_LETTERS[new Date(at).getDay()], done: days.has(dayKey(at)), today: i === 6 };
   });
-  const review = reviewSkills(FRACTIONS_TOPIC, learner);
+  const review = reviewSkills(topic, inTopic);
   const name = learner.profile.name.trim();
   const goalPct = Math.min(1, today / DAILY_GOAL);
 
@@ -76,7 +86,7 @@ export function KidHomeScreen() {
                   I&apos;m Kip! Let&apos;s fly into fractions together.
                 </h1>
                 <p className="mt-2 max-w-lg text-white/90">First, a quick warm-up game so I know where your adventure should start.</p>
-                <ButtonLink href={routes.start()} variant="sun" size="xl" className="mt-5">
+                <ButtonLink href={links.start()} variant="sun" size="xl" className="mt-5">
                   Start my adventure <ArrowRightIcon size={20} />
                 </ButtonLink>
               </>
@@ -165,7 +175,7 @@ export function KidHomeScreen() {
       {review.length > 0 && (
         <KipSays mood="think" tone="sun" speak={`Let's revisit ${skillById(review[0]).title}. A little practice will make it strong again.`}>
           Let&apos;s revisit <strong>{skillById(review[0]).title}</strong>. A little practice will make it strong again!{" "}
-          <Link href={routes.practice(review[0])} className="font-semibold text-brand underline underline-offset-2">
+          <Link href={links.practice(review[0])} className="font-semibold text-brand underline underline-offset-2">
             Practise it
           </Link>
         </KipSays>
@@ -175,15 +185,15 @@ export function KidHomeScreen() {
       <section className="card p-5 sm:p-6" aria-labelledby="path-title">
         <div className="mb-4 flex items-center justify-between">
           <h2 id="path-title" className="display text-2xl">
-            My sky path
+            {topic.look.emoji} {topic.title}
           </h2>
-          <Link href={routes.journey()} className="inline-flex items-center gap-1 rounded-full bg-sky-soft px-3 py-1.5 text-sm font-semibold text-den-strong hover:bg-[#cce8ff]">
+          <Link href={links.island()} className="inline-flex items-center gap-1 rounded-full bg-sky-soft px-3 py-1.5 text-sm font-semibold text-den-strong hover:bg-[#cce8ff]">
             Open map <ArrowRightIcon size={15} />
           </Link>
         </div>
         <ol className="-mx-1 flex snap-x gap-3 overflow-x-auto px-1 pb-2">
           {LESSONS.map((l, i) => {
-            const p = learner.lessons[l.id];
+            const p = inTopic.lessons[l.id];
             const done = !!p?.completed;
             const current = rec.kind === "lesson" && rec.lessonId === l.id;
             const later = !done && !current && !(p && p.furthestStep > 0);
@@ -191,7 +201,7 @@ export function KidHomeScreen() {
             return (
               <li key={l.id} className="snap-start">
                 <Link
-                  href={routes.lesson(l.id)}
+                  href={links.lesson(l.id)}
                   className={`flex w-28 flex-col items-center gap-2 rounded-3xl border-2 p-3 text-center transition-transform hover:-translate-y-0.5 ${
                     current ? "border-brand bg-brand-soft" : "border-line bg-surface"
                   }`}
@@ -217,9 +227,9 @@ export function KidHomeScreen() {
 
       {/* Play tiles */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <PlayTile href={routes.practice()} emoji="🎯" title="Practice" line="Win stars" from="from-ok-bright" to="to-mint" edge="#139656" />
-        <PlayTile href={routes.lab()} emoji="🧪" title="Fraction Lab" line="Build & explore" from="from-pink" to="to-num" edge="#d93a7f" />
-        <PlayTile href={routes.journey()} emoji="🗺️" title="Adventure map" line="All the lessons" from="from-sky" to="to-den" edge="#1d55d8" />
+        <PlayTile href={links.practice()} emoji="🎯" title="Practice" line="Win stars" from="from-ok-bright" to="to-mint" edge="#139656" />
+        <PlayTile href={topic.ui.FreeLab ? links.lab() : routes.lab()} emoji="🧪" title="Lab" line="Build & explore" from="from-pink" to="to-num" edge="#d93a7f" />
+        <PlayTile href={routes.journey()} emoji="🗺️" title="World map" line="Every island" from="from-sky" to="to-den" edge="#1d55d8" />
         <PlayTile href={routes.badges()} emoji="🏅" title="Badges" line="Your trophies" from="from-sun" to="to-[#ff9d2e]" edge="#e08a00" dark />
       </div>
     </div>

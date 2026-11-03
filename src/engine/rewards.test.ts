@@ -9,15 +9,17 @@ import {
   answerPlacement,
   completeLesson,
   createInitialState,
+  createTopicLearner,
   finishPlacement,
-  hydrateState,
-  recordResult,
+  hydrateTopic,
+  inTopic,
   skipPlacement,
   startPlacement,
   type LearnerState,
 } from "./progress";
 import { answeredToday, badgesFor, DAILY_GOAL, dayKey, levelFor, STARS, starsForResult, streakFor, totalStars } from "./rewards";
 import type { ItemResult } from "./types";
+import { migrateV1 } from "@/lib/migrate";
 
 const DAY = 86_400_000;
 const NOON = new Date(2026, 10, 2, 12).getTime();
@@ -28,7 +30,7 @@ function res(partial: Partial<ItemResult> = {}): ItemResult {
   return {
     id: `r${n}`,
     questionId: `q${n}`,
-    skill: "name",
+    skill: "fractions.name",
     context: "practice",
     correct: true,
     firstTry: true,
@@ -41,7 +43,7 @@ function res(partial: Partial<ItemResult> = {}): ItemResult {
 }
 
 function withResults(results: ItemResult[]): LearnerState {
-  return results.reduce(recordResult, createInitialState());
+  return { ...createInitialState(), results };
 }
 
 describe("stars", () => {
@@ -54,11 +56,13 @@ describe("stars", () => {
 
   it("adds lessons, lab challenges and checks, but not lessons skipped by placement", () => {
     let s = withResults([res(), res()]);
-    s = completeLesson(s, "wholes", NOON);
-    s = { ...s, labChallenges: ["a", "b"], assessment: { ...s.assessment, timesCompleted: 1 } };
+    s = inTopic(s, "fractions", (t) => ({ ...completeLesson(t, "wholes", NOON), labChallenges: ["a", "b"], assessment: { ...t.assessment, timesCompleted: 1 } }));
     expect(totalStars(s)).toBe(6 + STARS.lesson + 2 * STARS.lab + STARS.check);
-    const placed = { ...s, lessons: { ...s.lessons, naming: { step: 0, furthestStep: 0, completed: true, placedOut: true } } };
+    const placed = inTopic(s, "fractions", (t) => ({ ...t, lessons: { ...t.lessons, naming: { step: 0, furthestStep: 0, completed: true, placedOut: true } } }));
     expect(totalStars(placed)).toBe(totalStars(s));
+    // Progress in a second topic adds up with the first.
+    const two = inTopic(s, "other", (t) => completeLesson(t, "intro", NOON));
+    expect(totalStars(two)).toBe(totalStars(s) + STARS.lesson);
   });
 
   it("levels need a few more stars each time", () => {
@@ -73,7 +77,7 @@ describe("streaks and daily goal", () => {
   it("counts consecutive days, and keeps yesterday's streak alive until today is done", () => {
     const s = withResults([res({ at: NOON - 3 * DAY }), res({ at: NOON - 2 * DAY }), res({ at: NOON - DAY })]);
     expect(streakFor(s, NOON)).toEqual({ current: 3, best: 3, activeToday: false });
-    const today = recordResult(s, res({ at: NOON }));
+    const today = { ...s, results: [...s.results, res({ at: NOON })] };
     expect(streakFor(today, NOON)).toEqual({ current: 4, best: 4, activeToday: true });
     expect(streakFor(s, NOON + DAY).current).toBe(0);
     expect(streakFor(s, NOON + DAY).best).toBe(3);
@@ -116,29 +120,26 @@ describe("placement", () => {
 
   it("marks placed-out lessons done without counting placement towards mastery", () => {
     const order = placementOrder("x");
-    let s = startPlacement(createInitialState(), order);
-    s = answerPlacement(s, res({ id: "p1", questionId: order[0], skill: "equal-parts", context: "placement" }));
-    s = answerPlacement(s, res({ id: "p1", questionId: order[0], skill: "equal-parts", context: "placement" }));
+    let s = startPlacement(createTopicLearner(), order);
+    s = answerPlacement(s, res({ id: "p1", questionId: order[0], skill: "fractions.equal-parts", context: "placement" }));
+    s = answerPlacement(s, res({ id: "p1", questionId: order[0], skill: "fractions.equal-parts", context: "placement" }));
     expect(s.placement.index).toBe(1);
-    s = answerPlacement(s, res({ id: "p2", questionId: order[1], skill: "name", context: "placement", correct: false, firstTry: false }));
+    s = answerPlacement(s, res({ id: "p2", questionId: order[1], skill: "fractions.name", context: "placement", correct: false, firstTry: false }));
     s = finishPlacement(s, placedOutLessons([true, false]), NOON);
     expect(s.placement.status).toBe("complete");
     expect(s.lessons.wholes).toMatchObject({ completed: true, placedOut: true });
     expect(s.lessons.naming).toBeUndefined();
-    expect(skillMastery("equal-parts", s.results).status).toBe("not-started");
+    expect(skillMastery("fractions.equal-parts", s.results).status).toBe("not-started");
     const rec = recommendNext(FRACTIONS_TOPIC, s);
     expect(rec.kind === "lesson" && rec.lessonId).toBe("naming");
   });
 
   it("doesn't ask existing learners to take placement, and keeps new fields when loading", () => {
-    const old = { ...withResults([res()]) } as Partial<LearnerState>;
-    delete old.placement;
-    delete old.profile;
-    delete old.settings;
-    const loaded = hydrateState(old);
-    expect(loaded.placement.status).toBe("skipped");
-    expect(loaded.settings.sound).toBe(true);
-    expect(hydrateState(createInitialState()).placement.status).toBe("not-started");
-    expect(skipPlacement(createInitialState()).placement.status).toBe("skipped");
+    // A version-1 save from before placement, profile and settings existed.
+    const loaded = migrateV1({ version: 1, results: [res({ skill: "name" })], lessons: {} });
+    expect(loaded?.topics.fractions.placement.status).toBe("skipped");
+    expect(loaded?.settings.sound).toBe(true);
+    expect(hydrateTopic({}, false).placement.status).toBe("not-started");
+    expect(skipPlacement(createTopicLearner()).placement.status).toBe("skipped");
   });
 });

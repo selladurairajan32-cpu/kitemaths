@@ -3,19 +3,20 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import type { Recommendation } from "@/engine/journey";
-import { routes } from "@/lib/routes";
+import { routes, topicRoutes } from "@/lib/routes";
 import { buttonClass } from "./Button";
 
 export function recommendationHref(rec: Recommendation): string {
+  const links = topicRoutes(rec.topicId);
   switch (rec.kind) {
     case "lesson":
-      return routes.lesson(rec.lessonId);
+      return links.lesson(rec.lessonId);
     case "practice":
-      return routes.practice(rec.focusSkill);
+      return links.practice(rec.focusSkill);
     case "assessment":
-      return routes.assessment();
+      return links.check();
     case "recheck":
-      return routes.recheck(rec.skill);
+      return links.recheck(rec.skill);
     case "results":
       return routes.results();
   }

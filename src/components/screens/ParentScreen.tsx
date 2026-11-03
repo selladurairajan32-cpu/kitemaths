@@ -7,41 +7,49 @@ import { Button } from "@/components/ui/Button";
 import { ArrowRightIcon, RefreshIcon } from "@/components/ui/Icons";
 import { ProgressRing, StatusBadge } from "@/components/ui/Progress";
 import { RecommendationLink, recommendationVerb } from "@/components/ui/RecommendationLink";
-import { lessonsCompleted, masteredSkills, recommendNext, reviewSkills, strongSkills } from "@/engine/journey";
+import { activityProgress, learningStats, lessonsCompleted, masteredSkills, recommendNext, reviewSkills, strongSkills, topicResults } from "@/engine/journey";
 import { misconceptionReports, skillMastery } from "@/engine/mastery";
 import { routes } from "@/lib/routes";
 import { resetLearner, useHydrated, useLearner, useNow } from "@/lib/store";
 import { PhasePath, ScreenSkeleton, StorageNotice } from "@/components/ui/Screen";
-import { FRACTIONS_TOPIC } from "@/topics/fractions";
-import { learningStats, topicProgress } from "@/topics/fractions/journey";
-import { misconceptionById } from "@/topics/fractions/misconceptions";
+import { useTopicState } from "@/topics/context";
+import { ActiveTopicProvider } from "@/topics/ActiveTopic";
 import { streakFor, totalStars } from "@/engine/rewards";
 import { setProfile, setSettings } from "@/engine/progress";
 import { updateLearner } from "@/lib/store";
 
 export function ParentScreen() {
   const hydrated = useHydrated();
+  if (!hydrated) return <ScreenSkeleton />;
+  return (
+    <ActiveTopicProvider>
+      <ParentOverview />
+    </ActiveTopicProvider>
+  );
+}
+
+function ParentOverview() {
   const learner = useLearner();
+  const { topic, learner: t } = useTopicState();
   const [confirmReset, setConfirmReset] = useState(false);
   const now = useNow();
+  const { misconceptionById } = topic;
 
-  if (!hydrated) return <ScreenSkeleton />;
-
-  const rec = recommendNext(FRACTIONS_TOPIC, learner);
-  const activity = topicProgress(learner);
-  const lessonsDone = lessonsCompleted(FRACTIONS_TOPIC, learner);
-  const secure = strongSkills(FRACTIONS_TOPIC, learner).length;
-  const mastered = masteredSkills(FRACTIONS_TOPIC, learner).length;
-  const review = reviewSkills(FRACTIONS_TOPIC, learner).length;
-  const stats = learningStats(learner);
-  const last = learner.assessment.last;
+  const rec = recommendNext(topic, t);
+  const activity = activityProgress(topic, t);
+  const lessonsDone = lessonsCompleted(topic, t);
+  const secure = strongSkills(topic, t).length;
+  const mastered = masteredSkills(topic, t).length;
+  const review = reviewSkills(topic, t).length;
+  const stats = learningStats(topic, t);
+  const last = t.assessment.last;
   const lastScore = last ? Object.values(last.evaluations).filter((e) => e.correct).length : 0;
-  const working = misconceptionReports(learner.results, FRACTIONS_TOPIC.misconceptions).filter((r) => r.state !== "resolved");
-  const total = FRACTIONS_TOPIC.skills.length;
+  const working = misconceptionReports(topicResults(topic, t.results), topic.misconceptions).filter((r) => r.state !== "resolved");
+  const total = topic.skills.length;
   const name = learner.profile.name.trim();
   const stars = totalStars(learner);
   const streak = streakFor(learner, now);
-  const placement = learner.placement;
+  const placement = t.placement;
 
   return (
     <div className="space-y-6">
@@ -51,7 +59,7 @@ export function ParentScreen() {
         <p className="mt-1 max-w-2xl text-ink-2">
           {stars} stars earned · {streak.current}-day streak (best {streak.best})
           {placement.status === "complete" &&
-            ` · Warm-up placed them past ${placement.placedOut.length} of ${FRACTIONS_TOPIC.lessons.length} lessons`}
+            ` · Warm-up placed them past ${placement.placedOut.length} of ${topic.lessons.length} lessons`}
           {placement.status === "skipped" && " · Started from the beginning"}
         </p>
       </motion.header>
@@ -65,9 +73,9 @@ export function ParentScreen() {
               <div>
                 <p className="eyebrow">Current module</p>
                 <h2 id="topic-title" className="display mt-1 text-3xl font-semibold sm:text-4xl">
-                  {FRACTIONS_TOPIC.title}
+                  {topic.title}
                 </h2>
-                <p className="mt-1 text-ink-2">{FRACTIONS_TOPIC.subtitle}</p>
+                <p className="mt-1 text-ink-2">{topic.subtitle}</p>
               </div>
               <TopicMark />
             </div>
@@ -99,7 +107,7 @@ export function ParentScreen() {
               </span>
             </ProgressRing>
             <dl className="grid flex-1 gap-2 text-sm">
-              <Stat label="Lessons done" value={`${lessonsDone} / ${FRACTIONS_TOPIC.lessons.length}`} />
+              <Stat label="Lessons done" value={`${lessonsDone} / ${topic.lessons.length}`} />
               <Stat label="Secure in practice" value={`${secure} / ${total}`} />
               <Stat label="Mastered" value={`${mastered} / ${total}`} />
               {review > 0 && <Stat label="Needs review" value={`${review}`} tone="num" />}
@@ -120,7 +128,7 @@ export function ParentScreen() {
             <div className="col-span-2">
               <p className="text-sm">
                 <span className="text-muted">Mastery check: </span>
-                <strong>{last ? `${lastScore} / ${last.order.length}` : learner.assessment.status === "in-progress" ? "in progress" : "not taken yet"}</strong>
+                <strong>{last ? `${lastScore} / ${last.order.length}` : t.assessment.status === "in-progress" ? "in progress" : "not taken yet"}</strong>
               </p>
             </div>
           </div>
@@ -136,7 +144,7 @@ export function ParentScreen() {
             </Link>
           </div>
           <ul className="grid gap-x-8 sm:grid-cols-2">
-            {FRACTIONS_TOPIC.skills.map((s) => (
+            {topic.skills.map((s) => (
               <li key={s.id} className="flex items-center justify-between gap-3 border-b border-line py-2.5">
                 <span className="text-sm">{s.title}</span>
                 <StatusBadge status={skillMastery(s.id, learner.results).status} />

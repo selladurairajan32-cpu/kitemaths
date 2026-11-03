@@ -5,21 +5,17 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Confetti, StarGlyph } from "@/components/kid/Celebrate";
 import { Kip, KipSays } from "@/components/kid/Kip";
-import { lessonLook } from "@/components/kid/kidText";
 import { ReadAloud } from "@/components/kid/ReadAloud";
 import { RichText } from "@/components/math/RichText";
-import { VisualRenderer } from "@/components/math/Visuals";
 import { QuestionPlayer, type ResultDraft } from "@/components/questions/QuestionPlayer";
 import { Button, buttonClass } from "@/components/ui/Button";
 import { ArrowLeftIcon, ArrowRightIcon, BeakerIcon, BulbIcon, CheckIcon, FlagIcon, StarIcon } from "@/components/ui/Icons";
 import { completeLabChallenge, completeLesson, goToStep, recordResult } from "@/engine/progress";
-import { routes } from "@/lib/routes";
 import { playSound } from "@/lib/sound";
+import { updateTopic } from "@/lib/store";
 import { STARS } from "@/engine/rewards";
-import { updateLearner, useLearner } from "@/lib/store";
-import { LESSONS, type Lesson, type LessonStep } from "@/topics/fractions/lessons";
-import { questionById } from "@/topics/fractions/questions";
-import { FractionLab } from "./FractionLab";
+import type { Lesson, LessonStep } from "@/lessons/types";
+import { useTopicState } from "@/topics/context";
 import { WorkedExample } from "./WorkedExample";
 
 const STEP_KIND: Record<LessonStep["type"], { label: string; icon: React.ReactNode }> = {
@@ -44,7 +40,10 @@ function StepHeading({ title, focus }: { title: string; focus: boolean }) {
 }
 
 export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: number }) {
-  const learner = useLearner();
+  const { topic, learner, update: updateLearner, links } = useTopicState();
+  const LESSONS = topic.lessons;
+  const { Visual, LabStep } = topic.ui;
+  const lessonLook = topic.lessonLook;
   const progress = learner.lessons[lesson.id];
   const furthest = progress?.furthestStep ?? 0;
   const savedStep = Math.min(progress?.step ?? 0, lesson.steps.length - 1);
@@ -69,11 +68,11 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
   }, [lesson.id]);
 
   useEffect(() => {
-    const target = finished ? routes.lesson(lesson.id) : routes.lesson(lesson.id, stepIndex);
+    const target = finished ? links.lesson(lesson.id) : links.lesson(lesson.id, stepIndex);
     if (window.location.pathname !== target) window.history.replaceState(window.history.state, "", target);
-  }, [lesson.id, stepIndex, finished]);
+  }, [lesson.id, stepIndex, finished, links]);
 
-  const labDone = (s: LessonStep) => s.type === "lab" && s.challenges.every((c) => learner.labChallenges.includes(c.id));
+  const labDone = (s: LessonStep) => s.type === "lab" && (topic.ui.isLabStepDone?.(s, learner.labChallenges) ?? true);
 
   const isStepDone = (i: number) => {
     const s = lesson.steps[i];
@@ -105,7 +104,7 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
     advance();
   };
 
-  const onLabChallenge = useCallback((id: string) => updateLearner((s) => completeLabChallenge(s, id)), []);
+  const onLabChallenge = useCallback((id: string) => updateTopic(topic.id, (s) => completeLabChallenge(s, id)), [topic.id]);
 
   const lessonIndex = LESSONS.findIndex((l) => l.id === lesson.id);
   const nextLesson = LESSONS[lessonIndex + 1];
@@ -145,15 +144,15 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
         </ul>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           {nextLesson ? (
-            <Link href={routes.lesson(nextLesson.id)} className={buttonClass("go", "xl")}>
+            <Link href={links.lesson(nextLesson.id)} className={buttonClass("go", "xl")}>
               Next: {nextLesson.title} <ArrowRightIcon size={20} />
             </Link>
           ) : (
-            <Link href={routes.practice()} className={buttonClass("go", "xl")}>
+            <Link href={links.practice()} className={buttonClass("go", "xl")}>
               Practice time! <ArrowRightIcon size={20} />
             </Link>
           )}
-          <Link href={routes.journey()} className={buttonClass("secondary", "xl")}>
+          <Link href={links.island()} className={buttonClass("secondary", "xl")}>
             My map
           </Link>
         </div>
@@ -270,9 +269,9 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
                     </p>
                   ))}
                 </div>
-                {step.visual && (
+                {step.visual !== undefined && (
                   <div className="flex justify-center rounded-3xl bg-gradient-to-b from-sky-soft to-paper px-3 py-5 sm:px-6 sm:py-8">
-                    <VisualRenderer spec={step.visual} />
+                    <Visual spec={step.visual} />
                   </div>
                 )}
                 {step.tip && (
@@ -297,7 +296,7 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
                     </p>
                   ))}
                 </div>
-                <FractionLab modes={[step.mode]} challenges={step.challenges} completed={learner.labChallenges} onChallengeComplete={onLabChallenge} />
+                {LabStep && <LabStep step={step} completed={learner.labChallenges} onChallengeComplete={onLabChallenge} />}
               </>
             )}
 
@@ -316,7 +315,7 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
                   {step.intro && <p className="text-ink-2">{step.intro}</p>}
                   <QuestionPlayer
                     key={`${step.questionId}-${retryStep === stepIndex ? "retry" : "first"}`}
-                    question={questionById(step.questionId)}
+                    question={topic.questionById(step.questionId)}
                     context="lesson"
                     usedFollowUps={usedFollowUps}
                     orderKey={`lesson:${lesson.id}`}

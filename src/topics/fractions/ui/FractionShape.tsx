@@ -2,11 +2,12 @@
 
 import { motion } from "motion/react";
 import { useId, useRef, useState, type KeyboardEvent } from "react";
-import type { Diagram } from "@/topics/fractions/types";
-import { diagramParts, diagramSizes } from "@/topics/fractions/types";
-import { NumberLine } from "./NumberLine";
+import type { Diagram } from "../types";
+import { diagramParts, diagramSizes } from "../types";
+import { NumberLine } from "@/components/math/NumberLine";
 
-export type ShapeSize = "xs" | "sm" | "md" | "lg";
+import type { ShapeSize } from "@/components/math/NumberLine";
+export type { ShapeSize };
 
 const MAX_W: Record<ShapeSize, string> = {
   xs: "max-w-[132px]",

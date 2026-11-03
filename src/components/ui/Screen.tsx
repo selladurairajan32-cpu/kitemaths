@@ -1,12 +1,13 @@
 "use client";
 
 import { CheckIcon } from "@/components/ui/Icons";
-import { useLearner, useStorageStatus } from "@/lib/store";
-import { phaseStatuses } from "@/topics/fractions/journey";
+import { phaseStatuses } from "@/engine/journey";
+import { useStorageStatus } from "@/lib/store";
+import { useTopicState } from "@/topics/context";
 
 export function PhasePath() {
-  const learner = useLearner();
-  const phases = phaseStatuses(learner);
+  const { topic, learner } = useTopicState();
+  const phases = phaseStatuses(topic, learner);
   return (
     <ol className="flex flex-wrap items-center gap-x-1 gap-y-2" aria-label="Learning phases">
       {phases.map(({ phase, status }, i) => (

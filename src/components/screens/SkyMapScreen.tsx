@@ -4,17 +4,15 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { StarGlyph } from "@/components/kid/Celebrate";
 import { Kip, KipSays } from "@/components/kid/Kip";
-import { KID_STATUS, lessonLook } from "@/components/kid/kidText";
-import { CheckIcon } from "@/components/ui/Icons";
+import { KID_STATUS } from "@/components/kid/kidText";
+import { ArrowLeftIcon, CheckIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 import { isPracticeMilestoneMet, recommendNext, reviewSkills, strongSkills } from "@/engine/journey";
 import { skillMastery } from "@/engine/mastery";
 import { STARS } from "@/engine/rewards";
-import { routes } from "@/lib/routes";
-import { useHydrated, useLearner } from "@/lib/store";
-import { FRACTIONS_TOPIC } from "@/topics/fractions";
-import { LESSONS } from "@/topics/fractions/lessons";
-import { skillById } from "@/topics/fractions/skills";
+import { routes as appRoutes } from "@/lib/routes";
+import { useHydrated } from "@/lib/store";
+import { useTopicState } from "@/topics/context";
 
 type Status = "done" | "current" | "open";
 
@@ -36,14 +34,17 @@ const ROW = 128;
 
 export function SkyMapScreen() {
   const hydrated = useHydrated();
-  const learner = useLearner();
+  const { topic, learner, links } = useTopicState();
+  const { skillById, lessonLook } = topic;
+  const LESSONS = topic.lessons;
+  const routes = { ...links, assessment: links.check };
   if (!hydrated) return <ScreenSkeleton />;
 
-  const rec = recommendNext(FRACTIONS_TOPIC, learner);
-  const practiceMet = isPracticeMilestoneMet(FRACTIONS_TOPIC, learner);
-  const strong = strongSkills(FRACTIONS_TOPIC, learner).length;
-  const needStrong = Math.ceil(FRACTIONS_TOPIC.skills.length / 2);
-  const review = reviewSkills(FRACTIONS_TOPIC, learner);
+  const rec = recommendNext(topic, learner);
+  const practiceMet = isPracticeMilestoneMet(topic, learner);
+  const strong = strongSkills(topic, learner).length;
+  const needStrong = Math.ceil(topic.skills.length / 2);
+  const review = reviewSkills(topic, learner);
   const a = learner.assessment;
 
   const stops: Stop[] = [
@@ -99,10 +100,15 @@ export function SkyMapScreen() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-5">
+      <Link href={appRoutes.journey()} className="inline-flex items-center gap-1.5 rounded-full px-1 text-sm font-semibold text-muted hover:text-ink">
+        <ArrowLeftIcon size={16} /> World map
+      </Link>
       <header className="flex items-end justify-between gap-4">
         <div>
-          <p className="eyebrow">Fractions island</p>
-          <h1 className="display text-3xl sm:text-4xl">Adventure map</h1>
+          <p className="eyebrow">
+            <span aria-hidden>{topic.look.emoji}</span> Island
+          </p>
+          <h1 className="display text-3xl sm:text-4xl">{topic.title}</h1>
           <p className="mt-1 text-ink-2">
             {doneCount} of {stops.length} stops reached. Tap any stop to play!
           </p>
@@ -197,7 +203,7 @@ export function SkyMapScreen() {
           My skills
         </h2>
         <ul className="mt-3 grid gap-2 sm:grid-cols-2">
-          {FRACTIONS_TOPIC.skills.map((sk) => {
+          {topic.skills.map((sk) => {
             const st = KID_STATUS[skillMastery(sk.id, learner.results).status];
             return (
               <li key={sk.id}>

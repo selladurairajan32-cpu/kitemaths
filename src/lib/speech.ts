@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { toWords } from "@/topics/fractions/math";
+import { toWords } from "@/maths/fraction";
 
 /** Turns lesson markup into natural speech: **bold** → plain, {3/4} → "three quarters". */
 export function toSpeech(text: string): string {

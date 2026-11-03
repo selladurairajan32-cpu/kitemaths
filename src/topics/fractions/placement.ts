@@ -23,7 +23,7 @@ export const PLACEMENT_PLAN: { lessonId: string; template: string }[] = [
 export const PLACEMENT_STOP_AFTER = 2;
 
 export function placementOrder(seed: string | number): string[] {
-  return PLACEMENT_PLAN.map((p) => `g:${p.template}:2:${hashString(`${seed}:${p.lessonId}`) % 1_000_000_000}`);
+  return PLACEMENT_PLAN.map((p) => `g:fractions.${p.template}:2:${hashString(`${seed}:${p.lessonId}`) % 1_000_000_000}`);
 }
 
 /** True once the learner has missed the last two questions in a row. */

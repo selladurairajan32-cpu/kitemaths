@@ -1,13 +1,13 @@
 import type { MisconceptionDef } from "@/engine/types";
 
 export const M = {
-  SWAP: "numerator-denominator-swap",
-  BIGGER_DEN: "bigger-denominator-bigger-piece",
-  UNEQUAL: "unequal-parts",
-  PART_PART: "part-to-part",
-  MISCOUNT: "miscounted-total",
-  UNIT_ONLY: "found-one-part-only",
-  ADDITIVE: "additive-equivalence",
+  SWAP: "fractions.numerator-denominator-swap",
+  BIGGER_DEN: "fractions.bigger-denominator-bigger-piece",
+  UNEQUAL: "fractions.unequal-parts",
+  PART_PART: "fractions.part-to-part",
+  MISCOUNT: "fractions.miscounted-total",
+  UNIT_ONLY: "fractions.found-one-part-only",
+  ADDITIVE: "fractions.additive-equivalence",
 } as const;
 
 export const MISCONCEPTIONS: MisconceptionDef[] = [
@@ -22,8 +22,8 @@ export const MISCONCEPTIONS: MisconceptionDef[] = [
       "The **bottom number (denominator)** tells us how many equal parts the whole is split into. Count every part.",
       "The **top number (numerator)** tells us how many of those parts we are talking about. Count only the shaded parts.",
     ],
-    skills: ["name", "represent", "fraction-of", "number-line"],
-    followUps: ["fu-swap-1", "fu-swap-2"],
+    skills: ["fractions.name", "fractions.represent", "fractions.fraction-of", "fractions.number-line"],
+    followUps: ["fractions.fu-swap-1", "fractions.fu-swap-2"],
   },
   {
     id: M.BIGGER_DEN,
@@ -36,8 +36,8 @@ export const MISCONCEPTIONS: MisconceptionDef[] = [
       "The denominator tells us how many pieces the **same whole** is shared into.",
       "Sharing the same whole into **more** pieces makes each piece **smaller**. So with the same numerator, {1/8} is smaller than {1/3}.",
     ],
-    skills: ["compare", "reasoning"],
-    followUps: ["fu-bd-1", "fu-bd-2"],
+    skills: ["fractions.compare", "fractions.reasoning"],
+    followUps: ["fractions.fu-bd-1", "fractions.fu-bd-2"],
   },
   {
     id: M.UNEQUAL,
@@ -50,8 +50,8 @@ export const MISCONCEPTIONS: MisconceptionDef[] = [
       "Fractions only work when the whole is split into **equal** parts — fair shares.",
       "Three pieces are only thirds if all three pieces are exactly the same size.",
     ],
-    skills: ["equal-parts", "reasoning"],
-    followUps: ["fu-ue-1", "fu-ue-2"],
+    skills: ["fractions.equal-parts", "fractions.reasoning"],
+    followUps: ["fractions.fu-ue-1", "fractions.fu-ue-2"],
   },
   {
     id: M.PART_PART,
@@ -64,8 +64,8 @@ export const MISCONCEPTIONS: MisconceptionDef[] = [
       "The denominator counts **all** the equal parts in the whole — shaded and unshaded together.",
       "1 shaded and 3 unshaded makes 4 parts altogether, so 1 of them is {1/4}.",
     ],
-    skills: ["name", "reasoning"],
-    followUps: ["fu-pp-1", "fu-pp-2"],
+    skills: ["fractions.name", "fractions.reasoning"],
+    followUps: ["fractions.fu-pp-1", "fractions.fu-pp-2"],
   },
   {
     id: M.MISCOUNT,
@@ -78,8 +78,8 @@ export const MISCONCEPTIONS: MisconceptionDef[] = [
       "Count the **parts**, not the lines between them.",
       "On a number line, count the **gaps (jumps)** from 0 to 1, not the marks. 5 marks make only 4 gaps.",
     ],
-    skills: ["name", "number-line"],
-    followUps: ["fu-mc-1", "fu-mc-2"],
+    skills: ["fractions.name", "fractions.number-line"],
+    followUps: ["fractions.fu-mc-1", "fractions.fu-mc-2"],
   },
   {
     id: M.UNIT_ONLY,
@@ -92,8 +92,8 @@ export const MISCONCEPTIONS: MisconceptionDef[] = [
       "Dividing by the **denominator** gives the size of **one** equal part.",
       "Then multiply by the **numerator** to collect the number of parts you need.",
     ],
-    skills: ["fraction-of", "reasoning"],
-    followUps: ["fu-uo-1", "fu-uo-2"],
+    skills: ["fractions.fraction-of", "fractions.reasoning"],
+    followUps: ["fractions.fu-uo-1", "fractions.fu-uo-2"],
   },
   {
     id: M.ADDITIVE,
@@ -106,8 +106,8 @@ export const MISCONCEPTIONS: MisconceptionDef[] = [
       "Equivalent fractions show the **same amount**.",
       "Splitting every part into the same number of smaller parts **multiplies** the top and bottom by the same number. Adding changes the amount.",
     ],
-    skills: ["equivalent", "reasoning"],
-    followUps: ["fu-add-1", "fu-add-2"],
+    skills: ["fractions.equivalent", "fractions.reasoning"],
+    followUps: ["fractions.fu-add-1", "fractions.fu-add-2"],
   },
 ];
 

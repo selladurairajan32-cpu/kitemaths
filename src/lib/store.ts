@@ -1,9 +1,12 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
-import { createInitialState, hydrateState, isCompatibleState, type LearnerState } from "@/engine/progress";
+import { useMemo, useSyncExternalStore } from "react";
+import { createInitialState, hydrateState, inTopic, isCompatibleState, topicLearner, type LearnerState, type TopicLearner } from "@/engine/progress";
+import { migrateV1 } from "./migrate";
 
-export const STORAGE_KEY = "kite-maths:fractions:v1";
+export const STORAGE_KEY = "kite-maths:v2";
+/** Version-1 saves (fractions only). Read once to migrate, then left untouched as a backup. */
+export const LEGACY_STORAGE_KEY = "kite-maths:fractions:v1";
 const SERVER_STATE = createInitialState();
 
 export type StorageStatus = "ok" | "unavailable" | "recovered";
@@ -19,6 +22,14 @@ function load() {
   let raw: string | null = null;
   try {
     raw = window.localStorage.getItem(STORAGE_KEY);
+    if (raw === null) {
+      const legacy = window.localStorage.getItem(LEGACY_STORAGE_KEY);
+      if (legacy !== null) {
+        if (migrateLegacy(legacy)) return;
+        // Unreadable old save: it stays where it is as the backup, and we start fresh.
+        status = "recovered";
+      }
+    }
   } catch {
     status = "unavailable";
     state = createInitialState();
@@ -40,6 +51,24 @@ function load() {
     status = "recovered";
     state = createInitialState();
   }
+}
+
+/** Migrates version-1 progress into a new version-2 save. Returns false if it couldn't be read. */
+function migrateLegacy(raw: string): boolean {
+  let migrated: LearnerState | null = null;
+  try {
+    migrated = migrateV1(JSON.parse(raw));
+  } catch {
+    migrated = null;
+  }
+  if (!migrated) return false;
+  state = migrated;
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    status = "unavailable";
+  }
+  return true;
 }
 
 function emit() {
@@ -78,6 +107,17 @@ export function updateLearner(fn: (s: LearnerState) => LearnerState) {
     status = "unavailable";
   }
   emit();
+}
+
+/** Applies a change to one topic's progress (results are shared across topics). */
+export function updateTopic(topicId: string, fn: (t: TopicLearner) => TopicLearner) {
+  updateLearner((s) => inTopic(s, topicId, fn));
+}
+
+/** One topic's progress plus every result, kept stable between renders. */
+export function useTopicLearner(topicId: string): TopicLearner {
+  const state = useLearner();
+  return useMemo(() => topicLearner(state, topicId), [state, topicId]);
 }
 
 export function resetLearner() {

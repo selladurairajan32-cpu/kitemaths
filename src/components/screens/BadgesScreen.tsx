@@ -6,7 +6,7 @@ import { Kip } from "@/components/kid/Kip";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 import { badgesFor, levelFor, totalStars } from "@/engine/rewards";
 import { useHydrated, useLearner, useNow } from "@/lib/store";
-import { FRACTIONS_TOPIC } from "@/topics/fractions";
+import { TOPICS } from "@/topics";
 
 export function BadgesScreen() {
   const hydrated = useHydrated();
@@ -16,7 +16,7 @@ export function BadgesScreen() {
 
   const stars = totalStars(learner);
   const level = levelFor(stars);
-  const badges = badgesFor(learner, FRACTIONS_TOPIC.skills, FRACTIONS_TOPIC.lessons.length, now);
+  const badges = badgesFor(learner, TOPICS.flatMap((t) => t.skills), TOPICS.reduce((n, t) => n + t.lessons.length, 0), now);
   const earned = badges.filter((b) => b.earned);
   // Show the earned ones first, then the closest to being earned.
   const ordered = [...earned, ...badges.filter((b) => !b.earned).sort((a, b) => b.progress - a.progress)];

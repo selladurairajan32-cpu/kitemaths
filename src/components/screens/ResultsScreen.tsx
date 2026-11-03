@@ -2,27 +2,20 @@
 
 import Link from "next/link";
 import { RichText } from "@/components/math/RichText";
-import { QuestionInput } from "@/components/questions/QuestionInput";
 import { buttonClass } from "@/components/ui/Button";
 import { ArrowRightIcon, CheckIcon, FlagIcon, StarIcon } from "@/components/ui/Icons";
 import { EvidenceMeter, ProgressBar, ProgressRing, StatusBadge } from "@/components/ui/Progress";
 import { RecommendationLink, recommendationVerb } from "@/components/ui/RecommendationLink";
-import { recommendNext } from "@/engine/journey";
+import { learningStats, recommendNext, topicResults } from "@/engine/journey";
 import { MASTERY_MIN_INDEPENDENT, SECURE_MIN_EVIDENCE, misconceptionReports, skillMastery, type SkillMastery } from "@/engine/mastery";
-import { routes } from "@/lib/routes";
-import { useHydrated, useLearner } from "@/lib/store";
-import { FRACTIONS_TOPIC } from "@/topics/fractions";
-import { answerText, responseText } from "@/topics/fractions/evaluate";
-import { learningStats } from "@/topics/fractions/journey";
-import { lessonById } from "@/topics/fractions/lessons";
-import { misconceptionById } from "@/topics/fractions/misconceptions";
-import { ASSESSMENT_AREAS, assessmentItem } from "@/topics/fractions/questions";
-import { skillById } from "@/topics/fractions/skills";
-import type { Response } from "@/topics/fractions/types";
+import { useHydrated } from "@/lib/store";
+import { useTopic, useTopicState } from "@/topics/context";
+import type { AnswerResponse as Response } from "@/topics/types";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 
 function SkillActions({ m }: { m: SkillMastery }) {
-  const skill = skillById(m.skill);
+  const { topic, links: routes } = useTopicState();
+  const skill = topic.skillById(m.skill);
   return (
     <span className="flex flex-wrap gap-x-4 gap-y-1">
       <Link href={routes.practice(m.skill)} className="inline-flex min-h-11 items-center text-sm font-medium text-den hover:underline">
@@ -44,13 +37,18 @@ function independentText(m: SkillMastery) {
 
 export function ResultsScreen() {
   const hydrated = useHydrated();
-  const learner = useLearner();
+  const topic = useTopic();
+  const { learner, links } = useTopicState();
+  const routes = { ...links, assessment: links.check };
+  const { skillById, lessonById, misconceptionById } = topic;
+  const { areas: ASSESSMENT_AREAS, item: assessmentItem } = topic.assessment;
+  const { Input: QuestionInput, answerText, responseText } = topic.questions;
   if (!hydrated) return <ScreenSkeleton />;
 
-  const mastery = FRACTIONS_TOPIC.skills.map((s) => skillMastery(s.id, learner.results));
-  const reports = misconceptionReports(learner.results, FRACTIONS_TOPIC.misconceptions);
-  const rec = recommendNext(FRACTIONS_TOPIC, learner);
-  const stats = learningStats(learner);
+  const mastery = topic.skills.map((s) => skillMastery(s.id, learner.results));
+  const reports = misconceptionReports(topicResults(topic, learner.results), topic.misconceptions);
+  const rec = recommendNext(topic, learner);
+  const stats = learningStats(topic, learner);
   const a = learner.assessment;
   const last = a.last;
 

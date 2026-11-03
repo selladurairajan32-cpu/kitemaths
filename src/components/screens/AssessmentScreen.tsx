@@ -10,30 +10,31 @@ import { ArrowRightIcon } from "@/components/ui/Icons";
 import { skillMastery } from "@/engine/mastery";
 import { STARS } from "@/engine/rewards";
 import { playSound } from "@/lib/sound";
-import { FRACTIONS_TOPIC } from "@/topics/fractions";
 import {
   answerAssessment,
   clearAssessmentAnswer,
   finishAssessment,
   setAssessmentIndex,
   startAssessment,
-  type LearnerState,
+  type TopicLearner,
 } from "@/engine/progress";
 import type { ItemResult } from "@/engine/types";
 import { routes } from "@/lib/routes";
-import { updateLearner, useHydrated, useLearner } from "@/lib/store";
-import { ASSESSMENT_AREAS, ASSESSMENT_FORMS, formForAttempt, questionById, type AssessmentForm } from "@/topics/fractions/questions";
+import { useHydrated } from "@/lib/store";
+import { useTopicState } from "@/topics/context";
+import type { TopicModule } from "@/topics/types";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 
 export function independentResults(
+  topic: TopicModule,
   order: string[],
-  evaluations: LearnerState["assessment"]["evaluations"],
+  evaluations: TopicLearner["assessment"]["evaluations"],
   context: ItemResult["context"],
   at: number,
   idPrefix: string,
 ): ItemResult[] {
   return order.map((id) => {
-    const q = questionById(id);
+    const q = topic.questionById(id);
     const ev = evaluations[id];
     return {
       id: `${idPrefix}:${id}`,
@@ -59,7 +60,8 @@ function latestOK(skill: string, results: ItemResult[]): boolean {
 
 export function AssessmentScreen() {
   const hydrated = useHydrated();
-  const learner = useLearner();
+  const { topic, learner, update: updateLearner } = useTopicState();
+  const { areas: ASSESSMENT_AREAS, forms: ASSESSMENT_FORMS, formForAttempt } = topic.assessment;
   const [justFinished, setJustFinished] = useState(false);
   if (!hydrated) return <ScreenSkeleton />;
 
@@ -78,7 +80,7 @@ export function AssessmentScreen() {
         onFinish={() => {
           const at = Date.now();
           updateLearner((s) =>
-            finishAssessment(s, independentResults(s.assessment.order, s.assessment.evaluations, "assessment", at, `assess:${s.assessment.seed}`), at),
+            finishAssessment(s, independentResults(topic, s.assessment.order, s.assessment.evaluations, "assessment", at, `assess:${s.assessment.seed}`), at),
           );
           playSound("complete");
           setJustFinished(true);
@@ -89,12 +91,12 @@ export function AssessmentScreen() {
   }
 
   const last = a.last;
-  const nextForm: AssessmentForm = formForAttempt(a.timesCompleted, last?.form);
+  const nextForm = formForAttempt(a.timesCompleted, last?.form);
   const items = ASSESSMENT_FORMS[nextForm];
   const lastScore = last ? Object.values(last.evaluations).filter((e) => e.correct).length : 0;
 
-  const strongNow = last ? FRACTIONS_TOPIC.skills.filter((sk) => latestOK(sk.id, learner.results)) : [];
-  const revisit = last ? FRACTIONS_TOPIC.skills.filter((sk) => !latestOK(sk.id, learner.results)) : [];
+  const strongNow = last ? topic.skills.filter((sk) => latestOK(sk.id, learner.results)) : [];
+  const revisit = last ? topic.skills.filter((sk) => !latestOK(sk.id, learner.results)) : [];
 
   return (
     <section className="card relative mx-auto max-w-3xl p-6 sm:p-10">

@@ -3,11 +3,11 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useState, type FormEvent } from "react";
 import { RichText } from "@/components/math/RichText";
-import { VisualRenderer } from "@/components/math/Visuals";
-import { NumberInput } from "@/components/questions/QuestionInput";
+import { NumberInput } from "@/components/questions/inputs";
 import { Button } from "@/components/ui/Button";
 import { ArrowRightIcon, BulbIcon, CheckIcon } from "@/components/ui/Icons";
-import type { LessonStep, WorkedBlank } from "@/topics/fractions/lessons";
+import type { LessonStep, WorkedBlank } from "@/lessons/types";
+import { useTopic } from "@/topics/context";
 
 type Worked = Extract<LessonStep, { type: "worked" }>;
 
@@ -80,6 +80,7 @@ function BlankStep({
 }
 
 export function WorkedExample({ step, onComplete }: { step: Worked; onComplete: () => void }) {
+  const { Visual } = useTopic().ui;
   const [revealed, setRevealed] = useState(1);
   const [solved, setSolved] = useState<Set<number>>(new Set());
   const [supportFor, setSupportFor] = useState<number | null>(null);
@@ -122,9 +123,9 @@ export function WorkedExample({ step, onComplete }: { step: Worked; onComplete: 
         <RichText text={step.problem} />
       </p>
 
-      {visual && (
+      {visual !== undefined && (
         <div className="flex justify-center rounded-2xl bg-paper px-4 py-6">
-          <VisualRenderer key={JSON.stringify(visual)} spec={visual} />
+          <Visual key={JSON.stringify(visual)} spec={visual} />
         </div>
       )}
 

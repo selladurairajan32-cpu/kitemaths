@@ -2,7 +2,8 @@
 
 import { motion } from "motion/react";
 import { type KeyboardEvent } from "react";
-import type { ShapeSize } from "./FractionShape";
+/** Shared size scale for maths pictures. */
+export type ShapeSize = "xs" | "sm" | "md" | "lg";
 
 const MAX_W: Record<ShapeSize, string> = {
   xs: "max-w-[180px]",

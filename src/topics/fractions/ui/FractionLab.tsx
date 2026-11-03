@@ -3,12 +3,12 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useId, useMemo, useState } from "react";
 import { FractionNotation } from "@/components/math/FractionNotation";
-import { FractionShape } from "@/components/math/FractionShape";
+import { FractionShape } from "./FractionShape";
 import { RichText } from "@/components/math/RichText";
-import { StackedBars } from "@/components/math/Visuals";
+import { StackedBars } from "./Visuals";
 import { BulbIcon, CheckIcon } from "@/components/ui/Icons";
-import { challengeFeedback, checkChallenge, LAB_LIMITS, type LabChallenge, type LabMode, type LabSnapshot } from "@/topics/fractions/lab";
-import { compareSymbol, equivalent, simplify, toWords, type Fraction } from "@/topics/fractions/math";
+import { challengeFeedback, checkChallenge, LAB_LIMITS, type LabChallenge, type LabMode, type LabSnapshot } from "../lab";
+import { compareSymbol, equivalent, simplify, toWords, type Fraction } from "../math";
 
 const range = (n: number) => Array.from({ length: n }, (_, i) => i);
 

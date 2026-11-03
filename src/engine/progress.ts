@@ -1,6 +1,6 @@
 import type { Evaluation, ItemResult, SkillId } from "./types";
 
-export const STATE_VERSION = 1;
+export const STATE_VERSION = 2;
 
 export interface LessonProgress {
   step: number;
@@ -75,14 +75,11 @@ export interface PlacementState {
   completedAt?: number;
 }
 
-export interface LearnerState {
-  version: number;
-  profile: LearnerProfile;
-  settings: LearnerSettings;
+/** One topic's progress. Results are shared across topics, so they live on the learner. */
+export interface TopicProgress {
   placement: PlacementState;
   lessons: Record<string, LessonProgress>;
   currentLessonId: string | null;
-  results: ItemResult[];
   practice: PracticeState;
   assessment: AssessmentState;
   recheck: RecheckState | null;
@@ -90,15 +87,30 @@ export interface LearnerState {
   labChallenges: string[];
 }
 
-export function createInitialState(): LearnerState {
+/**
+ * What topic-level logic works on: one topic's progress plus every result.
+ * Build it with `topicLearner()` and write it back with `inTopic()`.
+ */
+export interface TopicLearner extends TopicProgress {
+  results: ItemResult[];
+}
+
+export interface LearnerState {
+  version: number;
+  profile: LearnerProfile;
+  settings: LearnerSettings;
+  /** The topic the learner was last working in. */
+  currentTopicId: string | null;
+  topics: Record<string, TopicProgress>;
+  /** Every answer, in every topic. Skill and question ids are namespaced by topic. */
+  results: ItemResult[];
+}
+
+export function createTopicProgress(): TopicProgress {
   return {
-    version: STATE_VERSION,
-    profile: { name: "", year: null, avatar: "kip" },
-    settings: { sound: true, autoRead: false },
     placement: { status: "not-started", order: [], index: 0, correct: [], wrong: [], placedOut: [] },
     lessons: {},
     currentLessonId: null,
-    results: [],
     practice: {
       active: false,
       startedAt: null,
@@ -125,6 +137,36 @@ export function createInitialState(): LearnerState {
   };
 }
 
+export function createInitialState(): LearnerState {
+  return {
+    version: STATE_VERSION,
+    profile: { name: "", year: null, avatar: "kip" },
+    settings: { sound: true, autoRead: false },
+    currentTopicId: null,
+    topics: {},
+    results: [],
+  };
+}
+
+/** A fresh learner with a topic view, for topic-level logic and tests. */
+export function createTopicLearner(): TopicLearner {
+  return { ...createTopicProgress(), results: [] };
+}
+
+/** One topic's progress (fresh if the learner hasn't started it) with every result. */
+export function topicLearner(state: LearnerState, topicId: string): TopicLearner {
+  return { ...(state.topics[topicId] ?? createTopicProgress()), results: state.results };
+}
+
+/** Applies a topic-level change and writes it back. Returns the same state if nothing changed. */
+export function inTopic(state: LearnerState, topicId: string, fn: (t: TopicLearner) => TopicLearner): LearnerState {
+  const view = topicLearner(state, topicId);
+  const next = fn(view);
+  if (next === view) return state;
+  const { results, ...progress } = next;
+  return { ...state, currentTopicId: topicId, results, topics: { ...state.topics, [topicId]: progress } };
+}
+
 export function isCompatibleState(raw: unknown): boolean {
   return !!raw && typeof raw === "object" && (raw as { version?: unknown }).version === STATE_VERSION;
 }
@@ -134,6 +176,31 @@ export function hydrateState(raw: unknown): LearnerState {
   const fresh = createInitialState();
   if (!isCompatibleState(raw)) return fresh;
   const data = raw as Partial<LearnerState>;
+  const results = Array.isArray(data.results) ? data.results : [];
+  const topics: Record<string, TopicProgress> = {};
+  if (isRecord(data.topics)) {
+    for (const [id, t] of Object.entries(data.topics as Record<string, unknown>)) topics[id] = hydrateTopic(t, false);
+  }
+  return {
+    ...fresh,
+    profile: { ...fresh.profile, ...(isRecord(data.profile) ? data.profile : {}) },
+    settings: { ...fresh.settings, ...(isRecord(data.settings) ? data.settings : {}) },
+    currentTopicId: typeof data.currentTopicId === "string" ? data.currentTopicId : null,
+    topics,
+    results,
+  };
+}
+
+/**
+ * Accepts one topic's saved progress (or a version-1 learner, which had the
+ * same fields at the top level) and fills in anything missing.
+ * `legacy` marks version-1 data, where a missing placement means the learner
+ * predates placement and shouldn't be asked to take it.
+ */
+export function hydrateTopic(raw: unknown, legacy: boolean): TopicProgress {
+  const fresh = createTopicProgress();
+  if (!isRecord(raw)) return fresh;
+  const data = raw as Partial<TopicLearner>;
   const assessment: AssessmentState = {
     ...fresh.assessment,
     ...(isRecord(data.assessment) ? data.assessment : {}),
@@ -150,25 +217,21 @@ export function hydrateState(raw: unknown): LearnerState {
     };
   }
   return {
-    ...fresh,
-    ...data,
     lessons: isRecord(data.lessons) ? data.lessons : {},
-    results: Array.isArray(data.results) ? data.results : [],
+    currentLessonId: typeof data.currentLessonId === "string" ? data.currentLessonId : null,
     practice: { ...fresh.practice, ...(isRecord(data.practice) ? data.practice : {}) },
     assessment,
     recheck: isRecord(data.recheck) ? (data.recheck as unknown as RecheckState) : null,
     rechecks: isRecord(data.rechecks) ? data.rechecks : {},
     labChallenges: Array.isArray(data.labChallenges) ? data.labChallenges : [],
-    profile: { ...fresh.profile, ...(isRecord(data.profile) ? data.profile : {}) },
-    settings: { ...fresh.settings, ...(isRecord(data.settings) ? data.settings : {}) },
     placement: isRecord(data.placement)
       ? { ...fresh.placement, ...data.placement }
       : // Learners from before placement existed already have a journey: don't ask them.
-        { ...fresh.placement, status: hasHistory(data) ? "skipped" : "not-started" },
+        { ...fresh.placement, status: legacy && hasHistory(data) ? "skipped" : "not-started" },
   };
 }
 
-function hasHistory(data: Partial<LearnerState>): boolean {
+function hasHistory(data: Partial<TopicLearner>): boolean {
   return (Array.isArray(data.results) && data.results.length > 0) || (isRecord(data.lessons) && Object.keys(data.lessons).length > 0);
 }
 
@@ -176,11 +239,11 @@ function isRecord(v: unknown): v is Record<string, never> {
   return !!v && typeof v === "object" && !Array.isArray(v);
 }
 
-function lesson(state: LearnerState, id: string): LessonProgress {
+function lesson(state: TopicLearner, id: string): LessonProgress {
   return state.lessons[id] ?? { step: 0, furthestStep: 0, completed: false };
 }
 
-export function openLesson(state: LearnerState, lessonId: string): LearnerState {
+export function openLesson(state: TopicLearner, lessonId: string): TopicLearner {
   return {
     ...state,
     currentLessonId: lessonId,
@@ -188,7 +251,7 @@ export function openLesson(state: LearnerState, lessonId: string): LearnerState 
   };
 }
 
-export function goToStep(state: LearnerState, lessonId: string, step: number): LearnerState {
+export function goToStep(state: TopicLearner, lessonId: string, step: number): TopicLearner {
   const current = lesson(state, lessonId);
   if (state.currentLessonId === lessonId && current.step === step && state.lessons[lessonId]) return state;
   return {
@@ -205,7 +268,7 @@ export function goToStep(state: LearnerState, lessonId: string, step: number): L
   };
 }
 
-export function completeLesson(state: LearnerState, lessonId: string, at: number): LearnerState {
+export function completeLesson(state: TopicLearner, lessonId: string, at: number): TopicLearner {
   const current = lesson(state, lessonId);
   return {
     ...state,
@@ -216,26 +279,26 @@ export function completeLesson(state: LearnerState, lessonId: string, at: number
   };
 }
 
-export function hasResult(state: LearnerState, id: string | undefined): boolean {
+export function hasResult(state: TopicLearner, id: string | undefined): boolean {
   return !!id && state.results.some((r) => r.id === id);
 }
 
-export function recordResult(state: LearnerState, result: ItemResult): LearnerState {
+export function recordResult(state: TopicLearner, result: ItemResult): TopicLearner {
   if (hasResult(state, result.id)) return state;
   return { ...state, results: [...state.results, result] };
 }
 
-export function completeLabChallenge(state: LearnerState, id: string): LearnerState {
+export function completeLabChallenge(state: TopicLearner, id: string): TopicLearner {
   if (state.labChallenges.includes(id)) return state;
   return { ...state, labChallenges: [...state.labChallenges, id] };
 }
 
-export function setPracticeFocus(state: LearnerState, focusSkill: SkillId | null): LearnerState {
+export function setPracticeFocus(state: TopicLearner, focusSkill: SkillId | null): TopicLearner {
   if (state.practice.active) return state;
   return { ...state, practice: { ...state.practice, focusSkill } };
 }
 
-export function startPracticeSession(state: LearnerState, focusSkill: SkillId | null, at: number): LearnerState {
+export function startPracticeSession(state: TopicLearner, focusSkill: SkillId | null, at: number): TopicLearner {
   return {
     ...state,
     practice: {
@@ -252,10 +315,10 @@ export function startPracticeSession(state: LearnerState, focusSkill: SkillId | 
 }
 
 export function setPracticeQuestion(
-  state: LearnerState,
+  state: TopicLearner,
   questionId: string | null,
   reason: string | null = null,
-): LearnerState {
+): TopicLearner {
   const asked =
     questionId && !state.practice.sessionAsked.includes(questionId)
       ? [...state.practice.sessionAsked, questionId]
@@ -266,7 +329,7 @@ export function setPracticeQuestion(
   };
 }
 
-export function finishPracticeQuestion(state: LearnerState, result: ItemResult): LearnerState {
+export function finishPracticeQuestion(state: TopicLearner, result: ItemResult): TopicLearner {
   if (hasResult(state, result.id)) return state;
   const next = recordResult(state, result);
   return {
@@ -275,7 +338,7 @@ export function finishPracticeQuestion(state: LearnerState, result: ItemResult):
   };
 }
 
-export function completePracticeSession(state: LearnerState): LearnerState {
+export function completePracticeSession(state: TopicLearner): TopicLearner {
   if (!state.practice.active) return state;
   return {
     ...state,
@@ -289,12 +352,12 @@ export function completePracticeSession(state: LearnerState): LearnerState {
   };
 }
 
-export function dismissPracticeSummary(state: LearnerState): LearnerState {
+export function dismissPracticeSummary(state: TopicLearner): TopicLearner {
   if (state.practice.active) return state;
   return { ...state, practice: { ...state.practice, startedAt: null, sessionResults: 0, sessionAsked: [] } };
 }
 
-export function startAssessment(state: LearnerState, order: string[], form = "A", seed = 0, at = 0): LearnerState {
+export function startAssessment(state: TopicLearner, order: string[], form = "A", seed = 0, at = 0): TopicLearner {
   return {
     ...state,
     assessment: {
@@ -313,11 +376,11 @@ export function startAssessment(state: LearnerState, order: string[], form = "A"
 }
 
 export function answerAssessment(
-  state: LearnerState,
+  state: TopicLearner,
   questionId: string,
   response: unknown,
   evaluation: Evaluation,
-): LearnerState {
+): TopicLearner {
   return {
     ...state,
     assessment: {
@@ -328,7 +391,7 @@ export function answerAssessment(
   };
 }
 
-export function clearAssessmentAnswer(state: LearnerState, questionId: string): LearnerState {
+export function clearAssessmentAnswer(state: TopicLearner, questionId: string): TopicLearner {
   const responses = { ...state.assessment.responses };
   const evaluations = { ...state.assessment.evaluations };
   delete responses[questionId];
@@ -336,11 +399,11 @@ export function clearAssessmentAnswer(state: LearnerState, questionId: string): 
   return { ...state, assessment: { ...state.assessment, responses, evaluations } };
 }
 
-export function setAssessmentIndex(state: LearnerState, index: number): LearnerState {
+export function setAssessmentIndex(state: TopicLearner, index: number): TopicLearner {
   return { ...state, assessment: { ...state.assessment, index } };
 }
 
-export function finishAssessment(state: LearnerState, results: ItemResult[], at: number): LearnerState {
+export function finishAssessment(state: TopicLearner, results: ItemResult[], at: number): TopicLearner {
   if (state.assessment.status !== "in-progress") return state;
   const a = state.assessment;
   return {
@@ -365,13 +428,13 @@ export function finishAssessment(state: LearnerState, results: ItemResult[], at:
 }
 
 export function startRecheck(
-  state: LearnerState,
+  state: TopicLearner,
   skill: SkillId,
   order: string[],
   form: string,
   seed: number,
   at: number,
-): LearnerState {
+): TopicLearner {
   return {
     ...state,
     recheck: { skill, order, form, seed, startedAt: at, index: 0, responses: {}, evaluations: {} },
@@ -379,11 +442,11 @@ export function startRecheck(
 }
 
 export function answerRecheck(
-  state: LearnerState,
+  state: TopicLearner,
   questionId: string,
   response: unknown | null,
   evaluation: Evaluation | null,
-): LearnerState {
+): TopicLearner {
   if (!state.recheck) return state;
   const responses = { ...state.recheck.responses };
   const evaluations = { ...state.recheck.evaluations };
@@ -397,12 +460,12 @@ export function answerRecheck(
   return { ...state, recheck: { ...state.recheck, responses, evaluations } };
 }
 
-export function setRecheckIndex(state: LearnerState, index: number): LearnerState {
+export function setRecheckIndex(state: TopicLearner, index: number): TopicLearner {
   if (!state.recheck) return state;
   return { ...state, recheck: { ...state.recheck, index } };
 }
 
-export function finishRecheck(state: LearnerState, results: ItemResult[], at: number): LearnerState {
+export function finishRecheck(state: TopicLearner, results: ItemResult[], at: number): TopicLearner {
   const r = state.recheck;
   if (!r) return state;
   const attempt: AttemptRecord = {
@@ -422,7 +485,7 @@ export function finishRecheck(state: LearnerState, results: ItemResult[], at: nu
   };
 }
 
-export function cancelRecheck(state: LearnerState): LearnerState {
+export function cancelRecheck(state: TopicLearner): TopicLearner {
   return { ...state, recheck: null };
 }
 
@@ -434,19 +497,19 @@ export function setSettings(state: LearnerState, settings: Partial<LearnerSettin
   return { ...state, settings: { ...state.settings, ...settings } };
 }
 
-export function startPlacement(state: LearnerState, order: string[]): LearnerState {
+export function startPlacement(state: TopicLearner, order: string[]): TopicLearner {
   return {
     ...state,
     placement: { status: "in-progress", order, index: 0, correct: [], wrong: [], placedOut: [] },
   };
 }
 
-export function skipPlacement(state: LearnerState): LearnerState {
+export function skipPlacement(state: TopicLearner): TopicLearner {
   return { ...state, placement: { ...state.placement, status: "skipped" } };
 }
 
 /** Records one placement answer. Placement answers are kept as evidence but never count towards mastery. */
-export function answerPlacement(state: LearnerState, result: ItemResult): LearnerState {
+export function answerPlacement(state: TopicLearner, result: ItemResult): TopicLearner {
   const p = state.placement;
   if (p.status !== "in-progress" || hasResult(state, result.id)) return state;
   const id = result.questionId;
@@ -462,9 +525,9 @@ export function answerPlacement(state: LearnerState, result: ItemResult): Learne
 }
 
 /** Finishes placement: lessons the learner showed they know are marked as done. */
-export function finishPlacement(state: LearnerState, placedOut: string[], at: number): LearnerState {
+export function finishPlacement(state: TopicLearner, placedOut: string[], at: number): TopicLearner {
   if (state.placement.status !== "in-progress") return state;
-  let next: LearnerState = state;
+  let next: TopicLearner = state;
   for (const lessonId of placedOut) {
     const current = lesson(next, lessonId);
     next = {

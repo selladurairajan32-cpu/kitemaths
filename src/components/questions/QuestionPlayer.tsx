@@ -13,13 +13,8 @@ import type { ItemResult, ResultContext } from "@/engine/types";
 import { speak } from "@/lib/speech";
 import { playSound } from "@/lib/sound";
 import { getLearner } from "@/lib/store";
-import { followUpFor } from "@/topics/fractions";
-import { answerText, evaluate, inputProblem, isResponseComplete } from "@/topics/fractions/evaluate";
-import { misconceptionById } from "@/topics/fractions/misconceptions";
-import { questionById } from "@/topics/fractions/questions";
-import type { FractionQuestion, Response } from "@/topics/fractions/types";
-import { QuestionInput } from "./QuestionInput";
-import { RemedyVisual } from "./RemedyVisual";
+import { useTopic } from "@/topics/context";
+import type { AnswerResponse, Question } from "@/topics/types";
 
 export type ResultDraft = Omit<ItemResult, "at">;
 
@@ -91,7 +86,7 @@ function FeedbackCard({
   );
 }
 
-function QuestionPrompt({ q, focusOnMount = false, autoRead = false }: { q: FractionQuestion; focusOnMount?: boolean; autoRead?: boolean }) {
+function QuestionPrompt({ q, focusOnMount = false, autoRead = false }: { q: Question; focusOnMount?: boolean; autoRead?: boolean }) {
   const ref = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     if (focusOnMount) ref.current?.focus();
@@ -114,11 +109,13 @@ function FollowUp({
   orderKey,
   onSubmit,
 }: {
-  question: FractionQuestion;
+  question: Question;
   orderKey?: string;
   onSubmit: (correct: boolean) => void;
 }) {
-  const [response, setResponse] = useState<Response | null>(null);
+  const { questions: kit } = useTopic();
+  const { Input: QuestionInput, evaluate, inputProblem, isComplete: isResponseComplete } = kit;
+  const [response, setResponse] = useState<AnswerResponse | null>(null);
   const [problem, setProblem] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const submit = (e: FormEvent) => {
@@ -164,7 +161,7 @@ export function QuestionPlayer({
   orderKey,
   autoFocus = false,
 }: {
-  question: FractionQuestion;
+  question: Question;
   context: ResultContext;
   usedFollowUps?: string[];
   onComplete: (result: ResultDraft) => void;
@@ -174,7 +171,11 @@ export function QuestionPlayer({
   orderKey?: string;
   autoFocus?: boolean;
 }) {
-  const [response, setResponse] = useState<Response | null>(null);
+  const topic = useTopic();
+  const { Input: QuestionInput, evaluate, inputProblem, isComplete: isResponseComplete, answerText } = topic.questions;
+  const { followUpFor, questionById, misconceptionById } = topic;
+  const Remedy = topic.ui.Remedy;
+  const [response, setResponse] = useState<AnswerResponse | null>(null);
   const [problem, setProblem] = useState<string | null>(null);
   const [state, dispatch] = useReducer(
     (s: RecoveryState, e: Parameters<typeof recoveryReducer>[1]) =>
@@ -333,7 +334,7 @@ export function QuestionPlayer({
                   </li>
                 ))}
               </ul>
-              <RemedyVisual misconception={suspected[0]!.id} />
+              {Remedy && <Remedy misconception={suspected[0]!.id} />}
               <p className="text-sm text-muted">One answer can&apos;t tell us for sure what you were thinking — a quick check will help.</p>
               <Button onClick={() => (followUp ? dispatch({ type: "continue" }) : backToQuestion())}>
                 {followUp ? "Try a quick check" : "Try the question again"} <ArrowRightIcon size={17} />

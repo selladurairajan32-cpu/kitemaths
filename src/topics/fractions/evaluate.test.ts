@@ -52,7 +52,7 @@ describe("misconception diagnosis", () => {
 
 describe("question validation", () => {
   it("validates choose-fraction answers with tagged distractors", () => {
-    const q = questionById("nm-1");
+    const q = questionById("fractions.nm-1");
     expect(evaluate(q, { kind: "choose-fraction", choice: frac(1, 4) })).toEqual({ correct: true, misconceptions: [] });
     expect(evaluate(q, { kind: "choose-fraction", choice: frac(4, 1) }).misconceptions).toEqual([M.SWAP]);
     expect(evaluate(q, { kind: "choose-fraction", choice: frac(1, 3) }).misconceptions).toContain(M.PART_PART);
@@ -60,34 +60,34 @@ describe("question validation", () => {
   });
 
   it("accepts equivalent written fractions and explains why", () => {
-    const q = questionById("nm-4");
+    const q = questionById("fractions.nm-4");
     expect(q.kind).toBe("choose-fraction");
-    const w = questionById("nm-5");
+    const w = questionById("fractions.nm-5");
     const exact = evaluate(w, { kind: "write-fraction", value: frac(5, 6) });
     expect(exact.correct).toBe(true);
     expect(exact.feedback).toBeUndefined();
-    const nm8 = questionById("nm-8");
+    const nm8 = questionById("fractions.nm-8");
     expect(evaluate(nm8, { kind: "write-fraction", value: frac(7, 10) }).correct).toBe(true);
     expect(evaluate(nm8, { kind: "write-fraction", value: frac(3, 10) }).correct).toBe(false);
-    const half = evaluate(questionById("as-2"), { kind: "write-fraction", value: frac(4, 10) });
+    const half = evaluate(questionById("fractions.as-2"), { kind: "write-fraction", value: frac(4, 10) });
     expect(half.correct).toBe(true);
     expect(half.feedback).toMatch(/equivalent/);
   });
 
   it("treats a zero denominator as an input problem, not a misconception", () => {
-    const q = questionById("nm-5");
+    const q = questionById("fractions.nm-5");
     expect(inputProblem(q, { kind: "write-fraction", value: frac(5, 0) })).toMatch(/can't be 0/);
     expect(inputProblem(q, { kind: "write-fraction", value: frac(5, 6) })).toBeNull();
     expect(evaluate(q, { kind: "write-fraction", value: frac(5, 0) }).misconceptions).toEqual([]);
   });
 
   it("accepts whole and zero fractions where they are the true value", () => {
-    const shadeAll = { ...questionById("rp-1"), id: "tmp", target: frac(3, 3) } as ReturnType<typeof questionById>;
+    const shadeAll = { ...questionById("fractions.rp-1"), id: "tmp", target: frac(3, 3) } as ReturnType<typeof questionById>;
     expect(evaluate(shadeAll, { kind: "shade", shaded: [0, 1, 2] }).correct).toBe(true);
   });
 
   it("validates built explanations slot by slot and links wrong choices to misconceptions", () => {
-    const q = questionById("ls-reason-1");
+    const q = questionById("fractions.ls-reason-1");
     const right = { verdict: "wrong", total: "8", shaded: "3", fraction: "3/8" };
     expect(evaluate(q, { kind: "explain-frame", slots: right }).correct).toBe(true);
     const pp = evaluate(q, { kind: "explain-frame", slots: { ...right, total: "5", fraction: "3/5" } });
@@ -96,14 +96,14 @@ describe("question validation", () => {
   });
 
   it("checks counterexamples mathematically, with guidance for near misses", () => {
-    const q = questionById("ls-reason-2");
+    const q = questionById("fractions.ls-reason-2");
     expect(evaluate(q, { kind: "counterexample", a: frac(1, 3), b: frac(3, 4) }).correct).toBe(true);
     expect(evaluate(q, { kind: "counterexample", a: frac(1, 2), b: frac(2, 4) }).correct).toBe(true);
     const agrees = evaluate(q, { kind: "counterexample", a: frac(1, 3), b: frac(1, 5) });
     expect(agrees.correct).toBe(false);
     expect(agrees.feedback).toMatch(/agrees with the claim/);
     expect(evaluate(q, { kind: "counterexample", a: frac(1, 5), b: frac(4, 5) }).feedback).toMatch(/bigger denominator/);
-    const kim = questionById("rs-8");
+    const kim = questionById("fractions.rs-8");
     expect(evaluate(kim, { kind: "counterexample", a: frac(1, 2), b: frac(2, 8) }).correct).toBe(true);
     expect(evaluate(kim, { kind: "counterexample", a: frac(1, 2), b: frac(2, 3) }).correct).toBe(false);
   });
@@ -114,28 +114,28 @@ describe("question validation", () => {
   });
 
   it("handles two-step word problems with traps for each single step", () => {
-    const q = questionById("ls-amounts-4");
+    const q = questionById("fractions.ls-amounts-4");
     expect(evaluate(q, { kind: "number", value: 25 }).correct).toBe(true);
     expect(evaluate(q, { kind: "number", value: 15 }).feedback).toMatch(/only the brown/);
   });
 
   it("accepts any shading of the right amount, including equivalent amounts", () => {
-    const q = questionById("rp-5"); // 1/2 of 8 parts
+    const q = questionById("fractions.rp-5"); // 1/2 of 8 parts
     expect(evaluate(q, { kind: "shade", shaded: [0, 2, 5, 7] }).correct).toBe(true);
     expect(evaluate(q, { kind: "shade", shaded: [0] }).correct).toBe(false);
-    const q2 = questionById("rp-2"); // 3/4 of a circle of 4
+    const q2 = questionById("fractions.rp-2"); // 3/4 of a circle of 4
     expect(evaluate(q2, { kind: "shade", shaded: [0, 1, 2, 3] }).misconceptions).toEqual([M.SWAP]);
   });
 
   it("flags unequal shapes chosen as equal parts", () => {
-    const q = questionById("ep-1");
+    const q = questionById("fractions.ep-1");
     expect(evaluate(q, { kind: "equal-parts", selected: ["a", "c"] }).correct).toBe(true);
     expect(evaluate(q, { kind: "equal-parts", selected: ["a", "b", "c"] }).misconceptions).toEqual([M.UNEQUAL]);
     expect(evaluate(q, { kind: "equal-parts", selected: ["a"] })).toEqual({ correct: false, misconceptions: [] });
   });
 
   it("validates matching row by row", () => {
-    const q = questionById("nm-6");
+    const q = questionById("fractions.nm-6");
     const right = { a: frac(1, 4), b: frac(2, 3), c: frac(3, 5) };
     expect(evaluate(q, { kind: "match", pairs: right }).correct).toBe(true);
     const wrong = evaluate(q, { kind: "match", pairs: { ...right, b: frac(3, 5), c: frac(2, 3) } });
@@ -143,13 +143,13 @@ describe("question validation", () => {
   });
 
   it("validates number line placement by value, not by position label", () => {
-    const q = questionById("nl-5"); // 1/2 on eighths
+    const q = questionById("fractions.nl-5"); // 1/2 on eighths
     expect(evaluate(q, { kind: "number-line-place", index: 4 }).correct).toBe(true);
     expect(evaluate(q, { kind: "number-line-place", index: 1 }).correct).toBe(false);
   });
 
   it("uses question-specific traps for word problems", () => {
-    const q = questionById("fo-7");
+    const q = questionById("fractions.fo-7");
     const e = evaluate(q, { kind: "number", value: 12 });
     expect(e.correct).toBe(false);
     expect(e.misconceptions).toEqual([]);
@@ -158,19 +158,19 @@ describe("question validation", () => {
   });
 
   it("diagnoses fraction-of answers", () => {
-    const q = questionById("fo-4");
+    const q = questionById("fractions.fo-4");
     expect(evaluate(q, { kind: "fraction-of", value: 9 }).correct).toBe(true);
     expect(evaluate(q, { kind: "fraction-of", value: 3 }).misconceptions).toEqual([M.UNIT_ONLY]);
   });
 
   it("validates comparison symbols", () => {
-    const q = questionById("cp-3");
+    const q = questionById("fractions.cp-3");
     expect(evaluate(q, { kind: "compare", symbol: ">" }).correct).toBe(true);
     expect(evaluate(q, { kind: "compare", symbol: "<" }).misconceptions).toEqual([M.BIGGER_DEN]);
   });
 
   it("refuses a response of the wrong kind", () => {
-    expect(() => evaluate(questionById("cp-3"), { kind: "number", value: 1 })).toThrow();
+    expect(() => evaluate(questionById("fractions.cp-3"), { kind: "number", value: 1 })).toThrow();
   });
 });
 

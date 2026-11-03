@@ -2,11 +2,11 @@
 
 import { motion } from "motion/react";
 import { useState } from "react";
-import { compareSymbol, toWords, type Fraction } from "@/topics/fractions/math";
-import type { VisualSpec } from "@/topics/fractions/types";
-import { FractionNotation } from "./FractionNotation";
+import { compareSymbol, toWords, type Fraction } from "../math";
+import type { VisualSpec } from "../types";
+import { FractionNotation } from "@/components/math/FractionNotation";
 import { FractionShape } from "./FractionShape";
-import { NumberLine } from "./NumberLine";
+import { NumberLine } from "@/components/math/NumberLine";
 
 const range = (n: number) => Array.from({ length: n }, (_, i) => i);
 

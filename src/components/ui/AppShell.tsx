@@ -5,9 +5,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { Hud } from "@/components/kid/Hud";
-import { routes } from "@/lib/routes";
-import { updateLearner, useHydrated, useLearner } from "@/lib/store";
+import { routes, topicRoutes } from "@/lib/routes";
+import { updateLearner, updateTopic, useHydrated, useLearner } from "@/lib/store";
 import { completePracticeSession, setSettings } from "@/engine/progress";
+import { activeTopic } from "@/topics/recommend";
 import { BeakerIcon, CloseIcon, HomeIcon, MapIcon, ParentIcon, PracticeIcon, ResultsIcon, SoundIcon, TrophyIcon } from "./Icons";
 
 const KID_NAV = [
@@ -24,19 +25,32 @@ const PARENT_NAV = [
   { href: routes.results(), label: "Full report" },
 ];
 
+/** "/t/fractions/practice/compare" → { topicId: "fractions", section: "practice" }. */
+export function topicPath(pathname: string): { topicId: string; section: string } | null {
+  const m = /^\/t\/([^/]+)(?:\/([^/]+))?/.exec(pathname);
+  return m ? { topicId: m[1], section: m[2] ?? "" } : null;
+}
+
 function isActive(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
-  if (href === "/journey") return pathname.startsWith("/journey") || pathname.startsWith("/lesson");
+  const tp = topicPath(pathname);
+  if (tp) {
+    if (href === "/practice") return tp.section === "practice";
+    if (href === "/lab") return tp.section === "lab";
+    if (href === "/journey") return tp.section !== "practice" && tp.section !== "lab";
+  }
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 export type ShellMode = "kid" | "focus" | "parent";
 
 /** Which chrome a route gets. Focus mode hides navigation so activities fill a phone screen. */
-export function shellMode(pathname: string, practiceActive: boolean): ShellMode {
+export function shellMode(pathname: string, practiceActive: (topicId: string) => boolean): ShellMode {
   if (pathname.startsWith("/parent") || pathname.startsWith("/results")) return "parent";
-  if (pathname.startsWith("/lesson") || pathname.startsWith("/assessment") || pathname.startsWith("/start")) return "focus";
-  if (pathname.startsWith("/practice") && practiceActive) return "focus";
+  const tp = topicPath(pathname);
+  if (!tp) return "kid";
+  if (["lesson", "check", "recheck", "start"].includes(tp.section)) return "focus";
+  if (tp.section === "practice" && practiceActive(tp.topicId)) return "focus";
   return "kid";
 }
 
@@ -78,7 +92,12 @@ function SoundToggle() {
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const learner = useLearner();
-  const mode = shellMode(pathname, learner.practice.active);
+  const mode = shellMode(pathname, (id) => !!learner.topics[id]?.practice.active);
+  const tp = topicPath(pathname);
+  const inPractice = tp?.section === "practice";
+  const navTopic = topicRoutes(tp?.topicId ?? activeTopic(learner).id);
+  /** Practice and Lab open the island the learner is in (or their active one). */
+  const navHref = (href: string) => (href === "/practice" ? navTopic.practice() : href === "/lab" ? navTopic.lab() : href);
 
   return (
     <MotionConfig reducedMotion="user">
@@ -93,11 +112,11 @@ export function AppShell({ children }: { children: ReactNode }) {
         <header className="sticky top-0 z-40 border-b-2 border-line/70 bg-paper/90 backdrop-blur-md">
           <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-3 sm:px-6">
             <Link
-              href={pathname.startsWith("/practice") ? routes.practice() : routes.journey()}
+              href={tp ? (inPractice ? topicRoutes(tp.topicId).practice() : topicRoutes(tp.topicId).island()) : routes.journey()}
               onClick={(e) => {
-                if (pathname.startsWith("/practice")) {
+                if (tp && inPractice) {
                   e.preventDefault();
-                  updateLearner(completePracticeSession);
+                  updateTopic(tp.topicId, completePracticeSession);
                 }
               }}
               className="grid size-11 place-items-center rounded-full text-muted hover:bg-sunk hover:text-ink"
@@ -127,7 +146,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   return (
                     <li key={href}>
                       <Link
-                        href={href}
+                        href={navHref(href)}
                         aria-current={active ? "page" : undefined}
                         className={`flex h-11 items-center gap-2 rounded-2xl px-3.5 text-[0.95rem] font-semibold transition-colors ${
                           active ? "bg-surface text-ink shadow-[0_3px_0_var(--color-line)] ring-2 ring-line" : "text-ink-2 hover:bg-surface/70"
@@ -172,7 +191,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   return (
                     <li key={href}>
                       <Link
-                        href={href}
+                        href={navHref(href)}
                         aria-current={active ? "page" : undefined}
                         className={`flex h-10 items-center whitespace-nowrap rounded-xl px-3 text-sm font-medium ${active ? "bg-ink text-white" : "text-ink-2 hover:bg-sunk"}`}
                       >
@@ -210,7 +229,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               return (
                 <li key={href}>
                   <Link
-                    href={href}
+                    href={navHref(href)}
                     aria-current={active ? "page" : undefined}
                     className={`flex h-16 flex-col items-center justify-center gap-1 text-[0.72rem] font-semibold ${active ? "text-ink" : "text-muted"}`}
                   >

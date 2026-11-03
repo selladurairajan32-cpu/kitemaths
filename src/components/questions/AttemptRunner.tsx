@@ -8,10 +8,8 @@ import { Button } from "@/components/ui/Button";
 import { ArrowLeftIcon, ArrowRightIcon } from "@/components/ui/Icons";
 import { ProgressBar } from "@/components/ui/Progress";
 import type { Evaluation } from "@/engine/types";
-import { evaluate, inputProblem, isResponseComplete } from "@/topics/fractions/evaluate";
-import { questionById } from "@/topics/fractions/questions";
-import type { Response } from "@/topics/fractions/types";
-import { QuestionInput } from "./QuestionInput";
+import { useTopic } from "@/topics/context";
+import type { AnswerResponse as Response } from "@/topics/types";
 
 function AttemptQuestion({
   id,
@@ -34,7 +32,9 @@ function AttemptQuestion({
   onNavigate: (i: number) => void;
   onReview: () => void;
 }) {
-  const q = questionById(id);
+  const topic = useTopic();
+  const { Input: QuestionInput, evaluate, inputProblem, isComplete: isResponseComplete } = topic.questions;
+  const q = topic.questionById(id);
   const [response, setResponse] = useState<Response | null>(saved);
   const [problem, setProblem] = useState<string | null>(null);
   const heading = useRef<HTMLHeadingElement>(null);
