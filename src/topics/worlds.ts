@@ -90,9 +90,9 @@ export const WORLDS: World[] = [
     field: "#13203a",
     text: "white",
     islands: [
-      { title: "Ratio and algebra", icon: "ratio" },
-      { title: "Problem solving", icon: "bulb" },
-      { title: "Mock exams", icon: "exam" },
+      { title: "Ratio and algebra", icon: "ratio", topicId: "ratio-algebra" },
+      { title: "Problem solving", icon: "bulb", topicId: "problem-solving" },
+      { title: "Mock exams", icon: "exam", topicId: "mock-exams" },
     ],
   },
 ];

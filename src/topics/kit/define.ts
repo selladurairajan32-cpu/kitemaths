@@ -35,8 +35,15 @@ const PHASES: Record<Phase, string> = {
   Master: "Show what you know on your own, and fix anything that needs another look.",
 };
 
+/** Every kit island's question makers, so mixed islands (like mock exams) can borrow them. */
+const REGISTRY = new Map<string, Template[]>();
+export function templatesOf(topicId: string): Template[] {
+  return REGISTRY.get(topicId) ?? [];
+}
+
 export function defineTopic(spec: TopicSpec): TopicModule<KitQuestion> {
   const templates = new Map<string, Template>(spec.templates.map((t) => [t.key, t]));
+  REGISTRY.set(spec.id, spec.templates);
 
   function make(id: string): KitQuestion | null {
     const m = ID.exec(id);

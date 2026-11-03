@@ -5,11 +5,14 @@ import { chartsData } from "./charts-data";
 import { coordinates } from "./coordinates";
 import { decimals } from "./decimals";
 import { fractions2 } from "./fractions-2";
+import { mockExams } from "./mock-exams";
 import { multiplyDivide } from "./multiply-divide";
 import { money } from "./money";
 import { negative } from "./negative";
 import { percentages } from "./percentages";
 import { placeValue } from "./place-value";
+import { problemSolving } from "./problem-solving";
+import { ratioAlgebra } from "./ratio-algebra";
 import { rounding } from "./rounding";
 import { shapesAngles } from "./shapes-angles";
 import { time } from "./time";
@@ -38,6 +41,9 @@ export const TOPICS: TopicModule[] = [
   shapesAngles as unknown as TopicModule,
   coordinates as unknown as TopicModule,
   chartsData as unknown as TopicModule,
+  ratioAlgebra as unknown as TopicModule,
+  problemSolving as unknown as TopicModule,
+  mockExams as unknown as TopicModule,
 ];
 
 export const DEFAULT_TOPIC_ID = TOPICS[0].id;
