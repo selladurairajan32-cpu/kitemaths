@@ -28,6 +28,8 @@ export type KitVisual =
       jumps?: { from: number; to: number; label?: string }[];
       /** Show a "?" over this value. */
       unknown?: number;
+      /** Write these labels (like times: "2:45") instead of the numbers. */
+      labels?: { value: number; text: string }[];
     }
   /** An array of dots in rows and columns. */
   | { kind: "array"; rows: number; cols: number }
@@ -44,7 +46,18 @@ export type KitVisual =
   /** Fraction pictures: one or more wholes, each split into equal parts, some shaded. */
   | { kind: "fraction"; parts: number; shaded: number; wholes?: number; shape?: "bar" | "circle"; label?: string }
   /** A 100 square (10 × 10) with some squares shaded: tenths, hundredths and per cent. */
-  | { kind: "grid100"; shaded: number };
+  | { kind: "grid100"; shaded: number }
+  /** An analogue clock. Hours may be 0–23; the face shows them on 12. `digital` adds the time in digits. */
+  | { kind: "clock"; hours: number; minutes: number; digital?: boolean }
+  /** Coins and notes, each in pence: 1, 2, 5, 10, 20, 50, 100, 200 are coins; 500, 1000, 2000 are notes. */
+  | { kind: "coins"; pence: number[] }
+  /**
+   * A rectangle w × h, or an L-shape with a cut.w × cut.h corner taken from the top right.
+   * `grid` draws the unit squares; `labels` writes side lengths (L-shapes also have innerV and innerH).
+   */
+  | { kind: "rect"; w: number; h: number; cut?: { w: number; h: number }; grid?: boolean; labels?: Partial<Record<RectSide, string>> };
+
+export type RectSide = "top" | "right" | "bottom" | "left" | "innerV" | "innerH";
 
 export interface NumericTrap {
   value: number;

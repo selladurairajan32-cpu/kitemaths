@@ -66,9 +66,9 @@ export const WORLDS: World[] = [
     field: "#fff4d4",
     text: "ink",
     islands: [
-      { title: "Money", icon: "coin" },
-      { title: "Time", icon: "clock" },
-      { title: "Area and perimeter", icon: "area" },
+      { title: "Money", icon: "coin", topicId: "money" },
+      { title: "Time", icon: "clock", topicId: "time" },
+      { title: "Area and perimeter", icon: "area", topicId: "area-perimeter" },
     ],
   },
   {

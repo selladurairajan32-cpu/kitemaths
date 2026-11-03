@@ -1,12 +1,15 @@
 import { addSubtract } from "./add-subtract";
+import { areaPerimeter } from "./area-perimeter";
 import { fractions } from "./fractions/module";
 import { decimals } from "./decimals";
 import { fractions2 } from "./fractions-2";
 import { multiplyDivide } from "./multiply-divide";
+import { money } from "./money";
 import { negative } from "./negative";
 import { percentages } from "./percentages";
 import { placeValue } from "./place-value";
 import { rounding } from "./rounding";
+import { time } from "./time";
 import { timesTables } from "./times-tables";
 import type { Question, TopicModule } from "./types";
 
@@ -26,6 +29,9 @@ export const TOPICS: TopicModule[] = [
   fractions2 as unknown as TopicModule,
   decimals as unknown as TopicModule,
   percentages as unknown as TopicModule,
+  money as unknown as TopicModule,
+  time as unknown as TopicModule,
+  areaPerimeter as unknown as TopicModule,
 ];
 
 export const DEFAULT_TOPIC_ID = TOPICS[0].id;

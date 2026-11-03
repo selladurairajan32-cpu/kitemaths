@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { num } from "./evaluate";
-import type { KitVisual, PlaceColumn } from "./types";
+import type { KitVisual, PlaceColumn, RectSide } from "./types";
 
 /** The kit's maths pictures, drawn for the Crystal look: ink outlines, pastel fills, big readable labels. */
 
@@ -115,68 +115,79 @@ function Blocks({ v }: { v: Extract<KitVisual, { kind: "blocks" }> }) {
   );
 }
 
+/** A number line, drawn twice: wide for bigger screens, and narrower with bigger text for phones. */
 function NumberLineVisual({ v }: { v: Extract<KitVisual, { kind: "line" }> }) {
-  const W = 640;
-  const pad = 30;
+  return (
+    <Frame label={`Number line from ${v.labels?.[0]?.text ?? num(v.min)} to ${v.labels?.[v.labels.length - 1]?.text ?? num(v.max)}`}>
+      <LineSvg v={v} W={640} font={16} className="hidden w-full max-w-2xl sm:block" />
+      <LineSvg v={v} W={340} font={19} className="w-full sm:hidden" />
+    </Frame>
+  );
+}
+
+function LineSvg({ v, W, font, className }: { v: Extract<KitVisual, { kind: "line" }>; W: number; font: number; className: string }) {
+  const pad = W > 400 ? 30 : 22;
   const y = 70;
   const count = Math.round((v.max - v.min) / v.step);
   const x = (value: number) => pad + ((value - v.min) / (v.max - v.min)) * (W - pad * 2);
-  const every = v.labelEvery ?? (count > 12 ? Math.ceil(count / 10) : 1);
+  const base = v.labelEvery ?? (count > 12 ? Math.ceil(count / 10) : 1);
+  // On the narrow line, keep labels at least ~44 units apart.
+  const gap = (W - pad * 2) / count;
+  const every = base * Math.max(1, Math.ceil(44 / (gap * base)));
   const ticks = Array.from({ length: count + 1 }, (_, i) => Math.round((v.min + i * v.step) * 1e6) / 1e6);
   // Label round values (multiples of step × every, counted from zero), wherever the line starts.
-  const labelled = (t: number) => Math.round(t / v.step) % every === 0 || t === v.min || t === v.max;
+  const labelled = (t: number) => (v.labels ? v.labels.some((l) => Math.abs(l.value - t) < 1e-9) : Math.round(t / v.step) % every === 0 || t === v.min || t === v.max);
+  const text = (t: number) => v.labels?.find((l) => Math.abs(l.value - t) < 1e-9)?.text ?? num(t);
   return (
-    <Frame label={`Number line from ${num(v.min)} to ${num(v.max)}`}>
-      <svg viewBox={`0 0 ${W} 112`} className="h-auto w-full max-w-2xl" aria-hidden>
-        {(v.jumps ?? []).map((j, i) => {
-          const a = x(j.from);
-          const b = x(j.to);
-          const mid = (a + b) / 2;
-          const h = Math.min(42, Math.max(18, Math.abs(b - a) / 2));
-          return (
-            <g key={i}>
-              <path d={`M ${a} ${y - 4} Q ${mid} ${y - 4 - h * 1.6} ${b} ${y - 4}`} fill="none" stroke={BRAND} strokeWidth="2.5" />
-              <path d={`M ${b} ${y - 4} l ${a < b ? -7 : 7} -5 M ${b} ${y - 4} l ${a < b ? -2 : 2} -8`} stroke={BRAND} strokeWidth="2.5" strokeLinecap="round" fill="none" />
-              {j.label && (
-                <text x={mid} y={y - 10 - h} textAnchor="middle" fontSize="15" fontWeight="800" fill={BRAND}>
-                  {j.label}
-                </text>
-              )}
-            </g>
-          );
-        })}
-        <line x1={pad - 10} y1={y} x2={W - pad + 10} y2={y} stroke={INK} strokeWidth="3" strokeLinecap="round" />
-        {ticks.map((t) => (
-          <g key={t}>
-            <line x1={x(t)} y1={y - (labelled(t) ? 10 : 6)} x2={x(t)} y2={y + (labelled(t) ? 10 : 6)} stroke={INK} strokeWidth={labelled(t) ? 2.5 : 1.5} />
-            {labelled(t) && (
-              <text x={x(t)} y={y + 30} textAnchor="middle" fontSize="16" fontWeight="700" fill={INK}>
-                {num(t)}
-              </text>
-            )}
-          </g>
-        ))}
-        {(v.points ?? []).map((p, i) => (
+    <svg viewBox={`0 0 ${W} 116`} className={`h-auto ${className}`} aria-hidden>
+      {(v.jumps ?? []).map((j, i) => {
+        const a = x(j.from);
+        const b = x(j.to);
+        const mid = (a + b) / 2;
+        const h = Math.min(42, Math.max(18, Math.abs(b - a) / 2));
+        return (
           <g key={i}>
-            <circle cx={x(p.value)} cy={y} r="8" fill={TONE[p.tone ?? "num"]} stroke="#fff" strokeWidth="2.5" />
-            {p.label && (
-              <text x={x(p.value)} y={y - 18} textAnchor="middle" fontSize="16" fontWeight="800" fill={TONE[p.tone ?? "num"]}>
-                {p.label}
+            <path d={`M ${a} ${y - 4} Q ${mid} ${y - 4 - h * 1.6} ${b} ${y - 4}`} fill="none" stroke={BRAND} strokeWidth="2.5" />
+            <path d={`M ${b} ${y - 4} l ${a < b ? -7 : 7} -5 M ${b} ${y - 4} l ${a < b ? -2 : 2} -8`} stroke={BRAND} strokeWidth="2.5" strokeLinecap="round" fill="none" />
+            {j.label && (
+              <text x={mid} y={y - 10 - h} textAnchor="middle" fontSize={font - 1} fontWeight="800" fill={BRAND}>
+                {j.label}
               </text>
             )}
           </g>
-        ))}
-        {v.unknown !== undefined && (
-          <g>
-            <line x1={x(v.unknown)} y1={y - 26} x2={x(v.unknown)} y2={y - 8} stroke={CORAL} strokeWidth="3" />
-            <circle cx={x(v.unknown)} cy={y - 40} r="15" fill={CORAL} />
-            <text x={x(v.unknown)} y={y - 34} textAnchor="middle" fontSize="18" fontWeight="800" fill="#fff">
-              ?
+        );
+      })}
+      <line x1={pad - 10} y1={y} x2={W - pad + 10} y2={y} stroke={INK} strokeWidth="3" strokeLinecap="round" />
+      {ticks.map((t) => (
+        <g key={t}>
+          <line x1={x(t)} y1={y - (labelled(t) ? 10 : 6)} x2={x(t)} y2={y + (labelled(t) ? 10 : 6)} stroke={INK} strokeWidth={labelled(t) ? 2.5 : 1.5} />
+          {labelled(t) && (
+            <text x={x(t)} y={y + 30} textAnchor="middle" fontSize={font} fontWeight="700" fill={INK}>
+              {text(t)}
             </text>
-          </g>
-        )}
-      </svg>
-    </Frame>
+          )}
+        </g>
+      ))}
+      {(v.points ?? []).map((p, i) => (
+        <g key={i}>
+          <circle cx={x(p.value)} cy={y} r="8" fill={TONE[p.tone ?? "num"]} stroke="#fff" strokeWidth="2.5" />
+          {p.label && (
+            <text x={x(p.value)} y={y - 18} textAnchor="middle" fontSize={font} fontWeight="800" fill={TONE[p.tone ?? "num"]}>
+              {p.label}
+            </text>
+          )}
+        </g>
+      ))}
+      {v.unknown !== undefined && (
+        <g>
+          <line x1={x(v.unknown)} y1={y - 26} x2={x(v.unknown)} y2={y - 8} stroke={CORAL} strokeWidth="3" />
+          <circle cx={x(v.unknown)} cy={y - 40} r="15" fill={CORAL} />
+          <text x={x(v.unknown)} y={y - 34} textAnchor="middle" fontSize="18" fontWeight="800" fill="#fff">
+            ?
+          </text>
+        </g>
+      )}
+    </svg>
   );
 }
 
@@ -378,6 +389,144 @@ function HundredSquare({ v }: { v: Extract<KitVisual, { kind: "grid100" }> }) {
   );
 }
 
+function ClockFace({ v }: { v: Extract<KitVisual, { kind: "clock" }> }) {
+  const h12 = v.hours % 12;
+  const hourAngle = (h12 + v.minutes / 60) * 30;
+  const minuteAngle = v.minutes * 6;
+  const at = (deg: number, r: number) => [Math.sin((deg * Math.PI) / 180) * r, -Math.cos((deg * Math.PI) / 180) * r] as const;
+  // Hands stop short of the numbers so every number stays readable.
+  const [hx, hy] = at(hourAngle, 36);
+  const [mx, my] = at(minuteAngle, 53);
+  const digits = `${v.hours}:${String(v.minutes).padStart(2, "0")}`;
+  return (
+    <Frame label={`A clock showing ${h12 === 0 ? 12 : h12}:${String(v.minutes).padStart(2, "0")}`}>
+      <svg viewBox="-110 -110 220 220" className="h-auto w-full max-w-[13rem]" aria-hidden>
+        <circle r="102" fill="#fff" stroke={INK} strokeWidth="5" />
+        {Array.from({ length: 60 }, (_, i) => {
+          const big = i % 5 === 0;
+          const [x1, y1] = at(i * 6, big ? 84 : 90);
+          const [x2, y2] = at(i * 6, 96);
+          return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={INK} strokeWidth={big ? 3 : 1.4} strokeOpacity={big ? 1 : 0.6} />;
+        })}
+        {Array.from({ length: 12 }, (_, i) => {
+          const [x, y] = at((i + 1) * 30, 69);
+          return (
+            <text key={i} x={x} y={y + 7} textAnchor="middle" fontSize="20" fontWeight="800" fill={INK}>
+              {i + 1}
+            </text>
+          );
+        })}
+        <line x1="0" y1="0" x2={hx} y2={hy} stroke={INK} strokeWidth="9" strokeLinecap="round" />
+        <line x1="0" y1="0" x2={mx} y2={my} stroke={BRAND} strokeWidth="6" strokeLinecap="round" />
+        <circle r="8" fill={CORAL} stroke="#fff" strokeWidth="2.5" />
+      </svg>
+      {v.digital && <figcaption className="mt-2 rounded-[12px] bg-ink px-4 py-1 font-mono text-2xl font-bold tracking-wider text-white tabular-nums">{digits}</figcaption>}
+    </Frame>
+  );
+}
+
+const COIN: Record<number, { label: string; size: number; sides: number; fill: string; rim?: string }> = {
+  1: { label: "1p", size: 46, sides: 0, fill: "#e0a172" },
+  2: { label: "2p", size: 56, sides: 0, fill: "#e0a172" },
+  5: { label: "5p", size: 42, sides: 0, fill: "#d9dfea" },
+  10: { label: "10p", size: 54, sides: 0, fill: "#d9dfea" },
+  20: { label: "20p", size: 50, sides: 7, fill: "#d9dfea" },
+  50: { label: "50p", size: 60, sides: 7, fill: "#d9dfea" },
+  100: { label: "£1", size: 56, sides: 12, fill: "#f5cf5a", rim: "#d9dfea" },
+  200: { label: "£2", size: 62, sides: 0, fill: "#d9dfea", rim: "#f5cf5a" },
+};
+const NOTE: Record<number, { label: string; fill: string }> = { 500: { label: "£5", fill: "#9fdccb" }, 1000: { label: "£10", fill: "#f6b98a" }, 2000: { label: "£20", fill: "#c7b5f0" } };
+
+function polygon(sides: number, r: number): string {
+  return Array.from({ length: sides }, (_, i) => {
+    const a = (i / sides) * Math.PI * 2 - Math.PI / 2;
+    return `${(r * Math.cos(a)).toFixed(2)},${(r * Math.sin(a)).toFixed(2)}`;
+  }).join(" ");
+}
+
+function CoinsVisual({ v }: { v: Extract<KitVisual, { kind: "coins" }> }) {
+  const names = v.pence.map((p) => COIN[p]?.label ?? NOTE[p]?.label ?? `${p}p`);
+  return (
+    <Frame label={`Money: ${names.join(", ")}`}>
+      <ul className="m-0 flex list-none flex-wrap items-center justify-center gap-3 p-0" aria-hidden>
+        {v.pence.map((p, i) => {
+          const note = NOTE[p];
+          if (note)
+            return (
+              <li key={i}>
+                <svg width="118" height="62" viewBox="0 0 118 62">
+                  <rect x="2" y="2" width="114" height="58" rx="8" fill={note.fill} stroke={INK} strokeWidth="2.5" />
+                  <rect x="9" y="9" width="100" height="44" rx="5" fill="none" stroke={INK} strokeOpacity="0.35" strokeWidth="1.5" />
+                  <text x="59" y="40" textAnchor="middle" fontSize="22" fontWeight="900" fill={INK}>
+                    {note.label}
+                  </text>
+                </svg>
+              </li>
+            );
+          const c = COIN[p];
+          const r = c.size / 2 - 2;
+          return (
+            <li key={i}>
+              <svg width={c.size} height={c.size} viewBox={`${-c.size / 2} ${-c.size / 2} ${c.size} ${c.size}`}>
+                {c.sides ? <polygon points={polygon(c.sides, r)} fill={c.rim ?? c.fill} stroke={INK} strokeWidth="2.5" strokeLinejoin="round" /> : <circle r={r} fill={c.rim ?? c.fill} stroke={INK} strokeWidth="2.5" />}
+                {c.rim && <circle r={r * 0.68} fill={c.fill} stroke={INK} strokeOpacity="0.4" strokeWidth="1.5" />}
+                <text y={c.size > 50 ? 7 : 6} textAnchor="middle" fontSize={c.size > 50 ? 18 : 15} fontWeight="900" fill={INK}>
+                  {c.label}
+                </text>
+              </svg>
+            </li>
+          );
+        })}
+      </ul>
+    </Frame>
+  );
+}
+
+function RectVisual({ v }: { v: Extract<KitVisual, { kind: "rect" }> }) {
+  const s = Math.min(30, 240 / v.w, 160 / v.h);
+  // Room at the sides for labels like "12 cm".
+  const padX = 62;
+  const padY = 40;
+  const W = v.w * s + padX * 2;
+  const H = v.h * s + padY * 2;
+  const X = (u: number) => padX + u * s;
+  const Y = (u: number) => padY + u * s;
+  const cut = v.cut;
+  const pts = cut
+    ? [[0, 0], [v.w - cut.w, 0], [v.w - cut.w, cut.h], [v.w, cut.h], [v.w, v.h], [0, v.h]]
+    : [[0, 0], [v.w, 0], [v.w, v.h], [0, v.h]];
+  const inside = (i: number, j: number) => !cut || !(i >= v.w - cut.w && j < cut.h);
+  const L = v.labels ?? {};
+  const place: Record<RectSide, { x: number; y: number; anchor: "start" | "middle" | "end" }> = {
+    top: { x: X((v.w - (cut?.w ?? 0)) / 2), y: Y(0) - 12, anchor: "middle" },
+    bottom: { x: X(v.w / 2), y: Y(v.h) + 28, anchor: "middle" },
+    left: { x: X(0) - 10, y: Y(v.h / 2) + 6, anchor: "end" },
+    right: { x: X(v.w) + 10, y: Y(((cut?.h ?? 0) + v.h) / 2) + 6, anchor: "start" },
+    innerV: { x: X(v.w - (cut?.w ?? 0)) + 8, y: Y((cut?.h ?? 0) / 2) + 6, anchor: "start" },
+    // Below the inner edge, inside the shape, so it never meets the innerV label.
+    innerH: { x: X(v.w - (cut?.w ?? 0) / 2), y: Y(cut?.h ?? 0) + 25, anchor: "middle" },
+  };
+  return (
+    <Frame label={`A ${cut ? "shape made of rectangles" : "rectangle"}${Object.values(L).length ? ` with sides ${Object.values(L).join(", ")}` : ""}`}>
+      <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" style={{ maxWidth: `${Math.round(W * 1.1)}px` }} aria-hidden>
+        <polygon points={pts.map(([a, b]) => `${X(a)},${Y(b)}`).join(" ")} fill="#dbe6ff" />
+        {v.grid &&
+          Array.from({ length: v.w * v.h }, (_, k) => {
+            const i = k % v.w;
+            const j = Math.floor(k / v.w);
+            return inside(i, j) ? <rect key={k} x={X(i)} y={Y(j)} width={s} height={s} fill="none" stroke={INK} strokeOpacity="0.4" strokeWidth="1.2" /> : null;
+          })}
+        <polygon points={pts.map(([a, b]) => `${X(a)},${Y(b)}`).join(" ")} fill="none" stroke={INK} strokeWidth="3.5" strokeLinejoin="round" />
+        {(Object.keys(L) as RectSide[]).map((side) => (
+          <text key={side} x={place[side].x} y={place[side].y} textAnchor={place[side].anchor} fontSize="20" fontWeight="800" fill={L[side] === "?" ? CORAL : INK}>
+            {L[side]}
+          </text>
+        ))}
+      </svg>
+    </Frame>
+  );
+}
+
 export function MathVisual({ spec }: { spec: unknown }) {
   const v = spec as KitVisual;
   switch (v.kind) {
@@ -403,6 +552,12 @@ export function MathVisual({ spec }: { spec: unknown }) {
       return <FractionPicture v={v} />;
     case "grid100":
       return <HundredSquare v={v} />;
+    case "clock":
+      return <ClockFace v={v} />;
+    case "coins":
+      return <CoinsVisual v={v} />;
+    case "rect":
+      return <RectVisual v={v} />;
     default:
       return null;
   }
