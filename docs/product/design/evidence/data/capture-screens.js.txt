@@ -1,0 +1,55 @@
+// Usage: node uxshots.js <outDir> [port]. Captures existing screens for the no-visible-change proof (UX-002, D-013).
+const { chromium } = require('playwright');
+const fs = require('fs');
+const OUT = process.argv[2]; const BASE = 'http://localhost:' + (process.argv[3] || '3123');
+fs.mkdirSync(OUT, { recursive: true });
+const PAGES = [
+  ['home', '/'], ['map', '/journey'], ['island', '/t/fractions'], ['start', '/t/fractions/start'],
+  ['explain', '/t/fractions/lesson/comparing/1'], ['practice', '/t/fractions/practice'], ['lab', '/t/fractions/lab'],
+  ['challenge', '/t/fractions/check'], ['kit-island', '/t/place-value'], ['kit-lesson', '/t/place-value/lesson/digits/1'],
+  ['badges', '/badges'],
+];
+(async () => {
+  const b = await chromium.launch();
+  const errs = [];
+  for (const [vw, w, h] of [['desk', 1280, 900], ['phone', 390, 844]]) {
+    const ctx = await b.newContext({ viewport: { width: w, height: h }, reducedMotion: 'reduce', deviceScaleFactor: 1 });
+    const p = await ctx.newPage();
+    p.on('pageerror', (e) => errs.push(`${vw} pageerror ${e.message}`));
+    p.on('console', (m) => m.type() === 'error' && errs.push(`${vw}: ${m.text()}`));
+    const shot = async (n) => { await p.waitForTimeout(1200); await p.screenshot({ path: `${OUT}/${vw}-${n}.png`, fullPage: true }); };
+    for (const [n, u] of PAGES) { await p.goto(BASE + u, { waitUntil: 'networkidle' }); await shot(n); }
+    // Later lesson steps open once earlier ones are reached: record progress, then visit them.
+    await p.goto(BASE + '/t/fractions/lesson/comparing/1', { waitUntil: 'networkidle' }); await p.waitForTimeout(600);
+    await p.getByRole('button', { name: /^Continue/ }).click(); await p.waitForTimeout(600);
+    const seeded = await p.evaluate(() => {
+      const s = JSON.parse(localStorage.getItem('kite-maths:v2') || 'null');
+      if (!s) return false;
+      s.topics.fractions.lessons.comparing = { step: 0, furthestStep: 5, completed: false };
+      localStorage.setItem('kite-maths:v2', JSON.stringify(s)); return true;
+    });
+    if (!seeded) errs.push(vw + ': could not seed');
+    for (const [n, i] of [['lab-step', 3], ['worked-full', 4], ['worked-faded', 5], ['check', 6]]) {
+      await p.goto(BASE + '/t/fractions/lesson/comparing/' + i, { waitUntil: 'networkidle' }); await shot(n);
+    }
+    // The check step's hint, then a wrong answer (1/5 > 1/3) and its feedback.
+    const hint = p.getByRole('button', { name: /^Hint/ });
+    if (await hint.count()) { await hint.first().click(); await shot('check-hint'); } else errs.push(vw + ': no hint');
+    const wrong = p.getByText(/greater/);
+    if (await wrong.count()) await wrong.first().click();
+    const check = p.getByRole('button', { name: 'Check' });
+    if (await check.isEnabled()) { await check.click(); await shot('check-feedback'); } else errs.push(vw + ': could not answer');
+    // Grown-ups area behind the gate.
+    await p.goto(BASE + '/parent', { waitUntil: 'networkidle' }); await p.waitForTimeout(600);
+    const gate = p.locator('input[aria-label*="times"]');
+    if (await gate.count()) {
+      const m = /(\d+) times (\d+)/.exec(await gate.getAttribute('aria-label'));
+      await gate.fill(String(+m[1] * +m[2])); await p.getByRole('button', { name: 'Continue' }).click(); await shot('grown-ups');
+      await p.goto(BASE + '/results', { waitUntil: 'networkidle' }); await shot('results');
+    } else errs.push(vw + ': no gate');
+    await ctx.close();
+  }
+  fs.writeFileSync(`${OUT}/errors.json`, JSON.stringify(errs, null, 1));
+  console.log('shots', fs.readdirSync(OUT).filter((f) => f.endsWith('.png')).length, 'errors', errs.length, errs.slice(0, 5));
+  await b.close();
+})();

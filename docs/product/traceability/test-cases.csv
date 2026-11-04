@@ -33,15 +33,32 @@ TC-CUR-004.1.1,CUR-004,AC1,content,automated,partial,src/topics/fractions/conten
 TC-CUR-004.2.1,CUR-004,AC2,content-review,manual,planned,,Independent educational review of the content
 TC-UX-001.1.1,UX-001,AC1,document-review,manual,accepted,,benchmark/UX-001-competitor-benchmark.md §5–§8 — accepted 4 Nov 2026 (D-011)
 TC-UX-001.2.1,UX-001,AC2,document-review,manual,accepted,,Benchmark claims cite evidence IDs; §1 states no superiority claim — accepted 4 Nov 2026 (D-011)
-TC-UX-002.1.1,UX-002,AC1,document-review,manual,planned,,
-TC-UX-002.1.2,UX-002,AC1,unit,automated,partial,src/design.test.ts::keeps violet and gradients out of the stylesheet,Palette rules only
-TC-UX-002.2.1,UX-002,AC2,unit,automated,partial,src/design.test.ts::names only paper icons that exist,Icon rules
-TC-UX-002.2.2,UX-002,AC2,unit,automated,partial,src/design.test.ts::has a 3D picture file for every picture name,
-TC-UX-003.1.1,UX-003,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
-TC-UX-003.2.1,UX-003,AC2,unit,automated,partial,src/design.test.ts::uses no emoji anywhere in the app,"Pictures are drawn, not font glyphs"
-TC-UX-003.3.1,UX-003,AC3,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
-TC-UX-004.1.1,UX-004,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
-TC-UX-004.2.1,UX-004,AC2,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-UX-002.1.1,UX-002,AC1,document-review,manual,review-pending,,"UX-002 §2: colour, typography, spacing, widths, borders, radii, elevation, icons, focus, disabled, validation and interaction feedback"
+TC-UX-002.1.2,UX-002,AC1,unit,automated,passing,src/design-tokens.test.ts::defines every token the design specs name,The three design specs and globals.css stay in step
+TC-UX-002.1.3,UX-002,AC1,unit,automated,passing,src/design-tokens.test.ts::keeps state colours readable and the focus ring visible,
+TC-UX-002.1.4,UX-002,AC1,unit,automated,passing,"src/design-tokens.test.ts::adds no violet token (D-013: the undefined violet classes are fixed in R1, DEF-009)",
+TC-UX-002.1.5,UX-002,AC1,unit,automated,passing,src/design.test.ts::keeps violet and gradients out of the stylesheet,Palette rule
+TC-UX-002.1.6,UX-002,AC1,visual-a11y-qa,manual,review-pending,,Specimen /design-specimen at 390px and 1280px: docs/product/design/evidence/screens/
+TC-UX-002.2.1,UX-002,AC2,unit,automated,passing,src/design-tokens.test.ts::does not let one-off text sizes or hex colours grow (ratchet),"Baselines on 4 Nov: 224 one-off text sizes, 15 .tsx files with hex (RC-006)"
+TC-UX-002.2.2,UX-002,AC2,unit,automated,passing,src/design.test.ts::names only paper icons that exist,Icons come from one registry
+TC-UX-002.2.3,UX-002,AC2,unit,automated,passing,src/design.test.ts::has a 3D picture file for every picture name,
+TC-UX-002.2.4,UX-002,AC2,visual-a11y-qa,manual,review-pending,,"No visible change (D-013): 38 screens before and after the tokens, 0 differing pixels (evidence/data/pixdiff-before-after.txt)"
+TC-UX-002.2.5,UX-002,AC2,unit,planned,planned,,R1: lower the ratchet baselines as screens move to tokens (UX-002 §5)
+TC-UX-003.1.1,UX-003,AC1,document-review,manual,review-pending,,"UX-003 §1–§5: family, weights, scale, hierarchy by role, line length and line height"
+TC-UX-003.1.2,UX-003,AC1,unit,automated,passing,"src/design-tokens.test.ts::gives every type role a size and line height, none below 15px",
+TC-UX-003.2.1,UX-003,AC2,document-review,manual,review-pending,,"UX-003 §6: fractions, superscripts, symbols, numbers and long calculations"
+TC-UX-003.2.2,UX-003,AC2,unit,automated,passing,"src/design-tokens.test.ts::keeps every content type readable: ink on its background at least 7:1, fraction digits at least 4:1",Fraction digits on every panel
+TC-UX-003.2.3,UX-003,AC2,unit,automated,passing,src/design.test.ts::uses no emoji anywhere in the app: pictures are drawn paper icons,"Pictures are drawn, not font glyphs"
+TC-UX-003.2.4,UX-003,AC2,visual-a11y-qa,manual,review-pending,,"Specimen maths section at 390px and 1280px, and at 200% text (evidence/)"
+TC-UX-003.3.1,UX-003,AC3,visual-a11y-qa,manual,failing,,Text-scaling check 4 Nov (UX-003 §7): browser zoom passes; 200% text and 320px reflow fail on existing screens (DEF-018 to DEF-021)
+TC-UX-003.3.2,UX-003,AC3,document-review,manual,review-pending,,"UX-003 §7: method, results and rules that prevent the failures"
+TC-UX-003.3.3,UX-003,AC3,e2e,planned,planned,,"R1: automate the scaling check at 320px and at 200% text (UX-008, QA-005)"
+TC-UX-004.1.1,UX-004,AC1,document-review,manual,review-pending,,"UX-004 §1–§3: ten content types with colour, icon, label and shape; the prompt; today and gaps"
+TC-UX-004.1.2,UX-004,AC1,unit,automated,passing,"src/design-tokens.test.ts::keeps every content type readable: ink on its background at least 7:1, fraction digits at least 4:1",
+TC-UX-004.1.3,UX-004,AC1,visual-a11y-qa,manual,review-pending,,Specimen content types in colour and greyscale (evidence/screens/)
+TC-UX-004.2.1,UX-004,AC2,document-review,manual,review-pending,,"UX-004 §4: one task, one primary action, blocked actions explained, feedback carries the next action"
+TC-UX-004.2.2,UX-004,AC2,component,planned,planned,,R1: each screen state has exactly one primary button (QA-002)
+TC-UX-004.2.3,UX-004,AC2,visual-a11y-qa,planned,planned,,R1: 5-second test with children on the migrated question and lesson screens
 TC-UX-005.1.1,UX-005,AC1,e2e,manual,partial,,Production click-through 3 Nov at 390/1280px (GOV-001 §9); not automated
 TC-UX-005.2.1,UX-005,AC2,visual-a11y-qa,manual,planned,,"Manual check at 320, 390, 768 and 1280px with keyboard, screen reader spot-check and reduced motion"
 TC-UX-005.3.1,UX-005,AC3,e2e,manual,failing,,DEF-005: Lab tab is a placeholder on 18 islands

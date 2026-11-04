@@ -1,0 +1,18 @@
+const { chromium } = require('playwright');
+const OUT = process.argv[2];
+(async () => {
+  const b = await chromium.launch(); const errs = [];
+  for (const [vw, w, h] of [['desktop', 1280, 900], ['phone', 390, 844]]) {
+    const ctx = await b.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 2, reducedMotion: 'reduce' });
+    const p = await ctx.newPage();
+    p.on('pageerror', (e) => errs.push(vw + ' ' + e.message)); p.on('console', (m) => m.type() === 'error' && errs.push(vw + ': ' + m.text()));
+    const r = await p.goto('http://localhost:3123/design-specimen', { waitUntil: 'networkidle' }); await p.waitForTimeout(800);
+    const info = await p.evaluate(() => ({ robots: document.querySelector('meta[name=robots]')?.content, overflow: document.documentElement.scrollWidth - innerWidth }));
+    console.log(vw, r.status(), JSON.stringify(info));
+    await p.screenshot({ path: `${OUT}/specimen-${vw}.png`, fullPage: true });
+    await p.addStyleTag({ content: '.sticky, header { position: static !important; } .fixed { display: none !important; }' });
+    for (const id of ['content', 'states', 'maths', 'type']) await p.locator('#' + id).locator('..').screenshot({ path: `${OUT}/specimen-${vw}-${id}.png` });
+    await ctx.close();
+  }
+  console.log('errors', errs); await b.close();
+})();
