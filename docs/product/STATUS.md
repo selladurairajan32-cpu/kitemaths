@@ -5,7 +5,7 @@ acceptance criteria are in [`backlog.md`](backlog.md); how statuses work is expl
 [`README.md`](README.md#status-definitions). `src/traceability.test.ts` checks that every backlog item
 is listed here exactly once with valid values (RC-003).
 
-**Last updated:** 4 November 2026: GOV-002, GOV-003 and UX-001 accepted (D-011); sprint step 2 authorised (D-012).
+**Last updated:** 4 November 2026: sprint step 2 delivered for review. CUR-002, CUR-003, UX-002, UX-003, UX-004 and ARCH-001 are READY FOR QA ([status report](reports/R0-step2-status-report.md)). Earlier the same day: GOV-002, GOV-003 and UX-001 accepted (D-011); step 2 authorised (D-012).
 
 ## Read this first: implemented is not accepted
 
@@ -22,9 +22,11 @@ Each item has two separate statuses (D-009).
 
 ## Summary
 
-**QA status:** SPECIFIED: 93, ACCEPTED: 4.
+**QA status:** SPECIFIED: 87, READY FOR QA: 6, ACCEPTED: 4.
 
 - **Four** items are ACCEPTED: GOV-001 (D-005), and GOV-002, GOV-003 and UX-001 (D-011).
+- **Six** items are READY FOR QA, waiting for Product Owner and educational QA review: CUR-002, CUR-003, UX-002, UX-003,
+  UX-004 and ARCH-001 (sprint step 2, D-012).
 - Every other item is SPECIFIED: it has acceptance criteria in backlog v1.0 but hasn't been refined to
   the Definition of Ready (D-009).
 
@@ -33,7 +35,7 @@ Each item has two separate statuses (D-009).
 | Epic | Items | Implemented | Partial | Not implemented |
 |---|---:|---:|---:|---:|
 | GOV | 4 | 3 | 1 | 0 |
-| CUR | 4 | 0 | 3 | 1 |
+| CUR | 4 | 0 | 4 | 0 |
 | UX | 8 | 1 | 7 | 0 |
 | ARCH | 5 | 1 | 4 | 0 |
 | FR | 11 | 7 | 4 | 0 |
@@ -46,7 +48,7 @@ Each item has two separate statuses (D-009).
 | EXAM | 6 | 0 | 2 | 4 |
 | PARENT | 3 | 0 | 2 | 1 |
 | QA | 7 | 0 | 4 | 3 |
-| **Total** | **97** | **25** | **50** | **22** |
+| **Total** | **97** | **25** | **51** | **21** |
 
 The 18 non-Fractions islands are live as **unaccepted previews** (D-001). Their content appears below
 only where it is evidence for a backlog item: Times Tables, Mental Maths, 11+ and Parent.
@@ -67,8 +69,8 @@ only where it is evidence for a backlog item: Times Tables, Mental Maths, 11+ an
 | ID | Title | Pri | Rel | QA status | Implementation | Evidence and notes |
 |---|---|---|---|---|---|---|
 | CUR-001 | Build the Year 3–6 curriculum map | P0 | R0 | SPECIFIED | Partial | Worlds/islands with `years` in `src/topics/worlds.ts` and each island; no objective-level map, prerequisites or DfE source check. |
-| CUR-002 | Define the learning progression model | P0 | R0 | SPECIFIED | Not implemented | No prerequisite graph; `recommendNext` is linear (`src/engine/journey.ts`). |
-| CUR-003 | Create the instructional lesson template | P0 | R0 | SPECIFIED | Partial | `src/lessons/types.ts` (explain, worked full/faded, check, lab); no prerequisites, reflection or mastery-check step. |
+| CUR-002 | Define the learning progression model | P0 | R0 | READY FOR QA | Partial | Delivered 4 Nov: [progression model](curriculum/CUR-002-progression-model.md); prerequisite graph as validated data (`src/curriculum/prerequisites.ts`, 6 tests). **Not yet used by the app** (D-012): `recommendNext` is still linear and lessons still complete on traversal (R1). |
+| CUR-003 | Create the instructional lesson template | P0 | R0 | READY FOR QA | Partial | Delivered 4 Nov: [lesson template](curriculum/CUR-003-lesson-template.md) with conformance review of the 8 Fractions lessons. Proposed schema additions (prerequisite check, reflection, mastery check, next step) are R1 (RC-005); `src/lessons/types.ts` unchanged. |
 | CUR-004 | Review all Fractions content for mathematical validity | P1 | R1 | SPECIFIED | Partial | Automated maths-correctness checks (`content.test.ts`); no independent educational review. |
 
 ### UX — Design system and experience
@@ -76,9 +78,9 @@ only where it is evidence for a backlog item: Times Tables, Mental Maths, 11+ an
 | ID | Title | Pri | Rel | QA status | Implementation | Evidence and notes |
 |---|---|---|---|---|---|---|
 | UX-001 | Competitor UX benchmark | P0 | R0 | ACCEPTED (D-011) | Implemented | Delivered 3 Nov: [benchmark](benchmark/UX-001-competitor-benchmark.md). |
-| UX-002 | Create the visual design system | P0 | R0 | SPECIFIED | Partial | Colour/radius/shadow tokens in `src/app/globals.css`; no spacing or state tokens; undefined violet classes (DEF-009). |
-| UX-003 | Define typography and mathematical readability | P0 | R0 | SPECIFIED | Partial | Nunito + size table in `docs/DESIGN.md`; sizes not tokenised; text below 15px (DEF-010). |
-| UX-004 | Establish content differentiation rules | P0 | R0 | SPECIFIED | Partial | Prompt/teaching/feedback distinct; hint, tip and input problem share one treatment (audit §5). |
+| UX-002 | Create the visual design system | P0 | R0 | READY FOR QA | Partial | Delivered 4 Nov: [design tokens](design/UX-002-design-tokens.md); new tokens in `src/app/globals.css`; `src/design-tokens.test.ts` (7 tests, incl. a ratchet); specimen `/design-specimen` (hidden in production). Screens not yet migrated (R1, RC-006); DEF-009 open. |
+| UX-003 | Define typography and mathematical readability | P0 | R0 | READY FOR QA | Partial | Delivered 4 Nov: [typography](design/UX-003-typography.md); type-scale tokens. Text-scaling check: existing screens fail at 200% text and 320px (DEF-018 to DEF-021, AC3 test case `failing`); DEF-010 open. |
+| UX-004 | Establish content differentiation rules | P0 | R0 | READY FOR QA | Partial | Delivered 4 Nov: [content types](design/UX-004-content-differentiation.md); ten content-type token sets shown on the specimen. Screens still share one treatment for hint, tip, notice and retry (R1). |
 | UX-005 | Build responsive application shell and navigation | P1 | R1 | SPECIFIED | Partial | Shell and navigation work on phone/desktop; Lab tab is a placeholder on 18 islands (DEF-005). |
 | UX-006 | Motion and interaction language | P1 | R1 | SPECIFIED | Partial | Reduced motion respected (`MotionConfig`, CSS); some decorative motion; no documented timing/easing. |
 | UX-007 | Accessibility baseline | P1 | R1 | SPECIFIED | Partial | Skip link, focus ring, labels, read-aloud; number boxes lose focus ring (DEF-015); no audit. |
@@ -88,7 +90,7 @@ only where it is evidence for a backlog item: Times Tables, Mental Maths, 11+ an
 
 | ID | Title | Pri | Rel | QA status | Implementation | Evidence and notes |
 |---|---|---|---|---|---|---|
-| ARCH-001 | Define modular learning architecture | P0 | R0 | SPECIFIED | Partial | Pure engine + maths; React types in content contract (`src/topics/types.ts`, `kit/define.ts`). |
+| ARCH-001 | Define modular learning architecture | P0 | R0 | READY FOR QA | Partial | Delivered 4 Nov: [architecture](architecture/ARCH-001-architecture.md); layer rules enforced by `src/architecture.test.ts` (A1–A6). Known coupling K-1 to K-5 is R1 work (React types in the content contract, logic in screens). |
 | ARCH-002 | Define a typed question schema | P0 | R0 | SPECIFIED | Partial | Typed schemas exist; no runtime validation; no year/scoring/hint-ladder fields. |
 | ARCH-003 | Build pure mathematical logic modules | P0 | R0 | SPECIFIED | Partial | `src/maths/fraction.ts` pure + tested; no fraction operations; inline maths in kit islands. |
 | ARCH-004 | Implement prototype progress persistence | P1 | R1 | SPECIFIED | Implemented | localStorage `kite-maths:v2`, versioned, v1 migration, corrupt-data backup (`src/lib/store.ts`). Store itself untested. |
@@ -235,5 +237,10 @@ The provisional defect list is in [GOV-001 audit §12](GOV-001-repository-audit.
 | DEF-015 | Medium | UX-007: focus visibility |
 | DEF-008, DEF-014, DEF-016 | Low | Copy, redirects, public preview pages |
 | DEF-017 | Low | README part fixed under GOV-002 (CH-005); site metadata in `src/app/layout.tsx` still open (code change, R1) |
+| DEF-018 | Medium | UX-003 AC3, UX-005, UX-007: app header overflows at 320px and at 200% text |
+| DEF-019 | Medium | UX-003 AC3, FR-001: island lesson descriptions clamped to two lines |
+| DEF-020 | Medium | UX-003 AC3, PARENT: grown-ups cards overflow on phone at 200% text |
+| DEF-021 | Low | UX-003 AC3: lesson title truncated at 200% text |
 
-These move into the formal register when QA-004 is authorised.
+DEF-018 to DEF-021 were found by the step 2 text-scaling check and are described in
+[UX-003 §7](design/UX-003-typography.md#7-text-scaling-ac3). These move into the formal register when QA-004 is authorised.
