@@ -3,7 +3,7 @@ TC-GOV-001.1.1,GOV-001,AC1,document-review,manual,accepted,,Accepted by PO on 3 
 TC-GOV-001.2.1,GOV-001,AC2,document-review,manual,accepted,,Audit §2 and §14: existing framework kept (D-005)
 TC-GOV-001.3.1,GOV-001,AC3,document-review,manual,accepted,,`git diff` of the GOV-001 commit adds one doc file only (D-005)
 TC-GOV-001.4.1,GOV-001,AC4,document-review,manual,accepted,,"No deploy since backlog receipt (D-002, D-005)"
-TC-GOV-002.1.1,GOV-002,AC1,document-review,manual,review-pending,,"docs/product/README.md, backlog.md, STATUS.md, DECISIONS.md"
+TC-GOV-002.1.1,GOV-002,AC1,document-review,manual,accepted,,"docs/product/README.md, backlog.md, STATUS.md, DECISIONS.md — accepted 4 Nov 2026 (D-011)"
 TC-GOV-002.2.1,GOV-002,AC2,unit,automated,passing,src/traceability.test.ts::lists every backlog item exactly once in the status register,Checker keeps status and backlog consistent (RC-003)
 TC-GOV-002.2.2,GOV-002,AC2,unit,automated,passing,src/traceability.test.ts::only marks an item ACCEPTED when a recorded decision says so,
 TC-GOV-003.1.1,GOV-003,AC1,unit,automated,passing,src/traceability.test.ts::gives every P0/P1 acceptance criterion at least one test case,RC-001
@@ -21,8 +21,8 @@ TC-CUR-002.3.1,CUR-002,AC3,document-review,manual,planned,,Product Owner / educa
 TC-CUR-003.1.1,CUR-003,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
 TC-CUR-004.1.1,CUR-004,AC1,content,automated,partial,src/topics/fractions/content.test.ts::gives every question a mathematically correct answer,Automated maths check only; independent review pending
 TC-CUR-004.2.1,CUR-004,AC2,content-review,manual,planned,,Independent educational review of the content
-TC-UX-001.1.1,UX-001,AC1,document-review,manual,review-pending,,benchmark/UX-001-competitor-benchmark.md §5–§8
-TC-UX-001.2.1,UX-001,AC2,document-review,manual,review-pending,,Benchmark claims cite evidence IDs; §1 states no superiority claim
+TC-UX-001.1.1,UX-001,AC1,document-review,manual,accepted,,benchmark/UX-001-competitor-benchmark.md §5–§8 — accepted 4 Nov 2026 (D-011)
+TC-UX-001.2.1,UX-001,AC2,document-review,manual,accepted,,Benchmark claims cite evidence IDs; §1 states no superiority claim — accepted 4 Nov 2026 (D-011)
 TC-UX-002.1.1,UX-002,AC1,document-review,manual,planned,,
 TC-UX-002.1.2,UX-002,AC1,unit,automated,partial,src/design.test.ts::keeps violet and gradients out of the stylesheet,Palette rules only
 TC-UX-002.2.1,UX-002,AC2,unit,automated,partial,src/design.test.ts::names only paper icons that exist,Icon rules

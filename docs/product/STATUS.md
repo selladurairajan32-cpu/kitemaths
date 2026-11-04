@@ -5,7 +5,7 @@ acceptance criteria are in [`backlog.md`](backlog.md); how statuses work is expl
 [`README.md`](README.md#status-definitions). `src/traceability.test.ts` checks that every backlog item
 is listed here exactly once with valid values (RC-003).
 
-**Last updated:** 3 November 2026, after delivering GOV-002, GOV-003 and UX-001 for review.
+**Last updated:** 4 November 2026: GOV-002, GOV-003 and UX-001 accepted (D-011); sprint step 2 authorised (D-012).
 
 ## Read this first: implemented is not accepted
 
@@ -22,10 +22,9 @@ Each item has two separate statuses (D-009).
 
 ## Summary
 
-**QA status:** SPECIFIED: 93, READY FOR QA: 3, ACCEPTED: 1.
+**QA status:** SPECIFIED: 93, ACCEPTED: 4.
 
-- Exactly **one** item is ACCEPTED: GOV-001.
-- Three are READY FOR QA, delivered on 3 Nov: GOV-002, GOV-003 and UX-001.
+- **Four** items are ACCEPTED: GOV-001 (D-005), and GOV-002, GOV-003 and UX-001 (D-011).
 - Every other item is SPECIFIED: it has acceptance criteria in backlog v1.0 but hasn't been refined to
   the Definition of Ready (D-009).
 
@@ -59,8 +58,8 @@ only where it is evidence for a backlog item: Times Tables, Mental Maths, 11+ an
 | ID | Title | Pri | Rel | QA status | Implementation | Evidence and notes |
 |---|---|---|---|---|---|---|
 | GOV-001 | Inspect the existing repository | P0 | R0 | ACCEPTED (D-005) | Implemented | Delivered: [GOV-001 audit](GOV-001-repository-audit.md). |
-| GOV-002 | Establish the product source of truth | P0 | R0 | READY FOR QA | Implemented | Delivered 3 Nov: `docs/product/` source-of-truth set (this file, README, DECISIONS, backlog v1.0). |
-| GOV-003 | Create requirements traceability | P0 | R0 | READY FOR QA | Implemented | Delivered 3 Nov: `traceability/` CSVs + `src/traceability.test.ts` checker. |
+| GOV-002 | Establish the product source of truth | P0 | R0 | ACCEPTED (D-011) | Implemented | Delivered 3 Nov: `docs/product/` source-of-truth set (this file, README, DECISIONS, backlog v1.0). |
+| GOV-003 | Create requirements traceability | P0 | R0 | ACCEPTED (D-011) | Implemented | Delivered 3 Nov: `traceability/` CSVs + `src/traceability.test.ts` checker. |
 | GOV-004 | Define change-control rules | P0 | R0 | SPECIFIED | Partial | Decision log exists ([DECISIONS.md](DECISIONS.md)); change-control *rules* not yet defined. |
 
 ### CUR — Curriculum and instructional design
@@ -76,7 +75,7 @@ only where it is evidence for a backlog item: Times Tables, Mental Maths, 11+ an
 
 | ID | Title | Pri | Rel | QA status | Implementation | Evidence and notes |
 |---|---|---|---|---|---|---|
-| UX-001 | Competitor UX benchmark | P0 | R0 | READY FOR QA | Implemented | Delivered 3 Nov: [benchmark](benchmark/UX-001-competitor-benchmark.md). |
+| UX-001 | Competitor UX benchmark | P0 | R0 | ACCEPTED (D-011) | Implemented | Delivered 3 Nov: [benchmark](benchmark/UX-001-competitor-benchmark.md). |
 | UX-002 | Create the visual design system | P0 | R0 | SPECIFIED | Partial | Colour/radius/shadow tokens in `src/app/globals.css`; no spacing or state tokens; undefined violet classes (DEF-009). |
 | UX-003 | Define typography and mathematical readability | P0 | R0 | SPECIFIED | Partial | Nunito + size table in `docs/DESIGN.md`; sizes not tokenised; text below 15px (DEF-010). |
 | UX-004 | Establish content differentiation rules | P0 | R0 | SPECIFIED | Partial | Prompt/teaching/feedback distinct; hint, tip and input problem share one treatment (audit §5). |
