@@ -21,7 +21,7 @@ module can run in a unit test or on a server without a page.
 
 | Concern | Responsibility | Where it lives | Pure? | Rule enforced by |
 |---|---|---|---|---|
-| **Presentation** | Screens, navigation, layout, input controls, pictures | `src/app/**` (routes), `src/components/**`, `src/topics/*/ui/*`, `src/topics/kit/*.tsx` | No (UI) | — |
+| **Presentation** | Screens, navigation, layout, input controls, pictures | `src/app/**` (routes), `src/components/**`, `src/topics/*/ui/*`, `src/topics/kit/*.tsx`, `src/topics/{ActiveTopic,context}.tsx`, and `src/topics/fractions/module.tsx` (the composition root that binds Fractions content to its UI) | No (UI) | — |
 | **Lesson content** | Lessons, steps, objectives, phases | `src/lessons/types.ts` (the schema), `src/topics/fractions/lessons.ts`, the `lessons` array in each `src/topics/<island>/index.ts` | Yes | `architecture.test.ts`, rules A3 and A4 |
 | **Question definitions** | Questions, generators, options and traps, misconception tags, assessment forms | `src/topics/fractions/{questions,generate,misconceptions,placement}.ts`, kit `templates` in each island | Yes for Fractions; kit islands ⚠ (§4) | A3, plus allowlist A6 |
 | **Mathematical logic** | Exact fraction arithmetic, equivalence, comparison, partitions | `src/maths/fraction.ts` (re-exported by `src/topics/fractions/math.ts`) | Yes | A2 |
@@ -75,16 +75,47 @@ flowchart TD
   maths -.never.-> UI
 ```
 
-The rules below are **checked automatically** by `src/architecture.test.ts`, which runs with `npm test` and in CI:
+The rules below are **checked automatically** by `src/architecture.test.ts`, which runs with `npm test`. The project's CI
+workflow runs on pull requests and on pushes to `main`. It has not run on the development branch (D-014).
+
+**How the check works** (rebuilt on 5 Nov after the independent review found false negatives, DEF-023):
+- **Real parsing.** `src/architecture/analyse.ts` parses code with the TypeScript compiler, so comments and strings are
+  never treated as code.
+- **Real resolution.** It resolves every dependency with the project's own `tsconfig` module resolution: relative paths,
+  `../` traversal and the `@/` alias.
+- **Every import form.** It covers:
+  - static imports, including side-effect and type-only imports;
+  - `export … from`;
+  - `import x = require()`;
+  - `import()`, including in type positions;
+  - `require()`.
+- **No unchecked names.** An unresolved relative or `@/` import fails. So does an `import()` or `require()` whose
+  module name isn't a literal, because a static check can't follow it.
+- **Browser and network globals.** It finds uses of an explicit list of prohibited globals: `window`, `document`,
+  `localStorage`, `sessionStorage`, `navigator`, `indexedDB`, `fetch`, `XMLHttpRequest`, `matchMedia`,
+  `requestAnimationFrame`, `location` and `history`.
+  - These are caught directly and through `globalThis`, `window` or `self`, including `globalThis["…"]` and computed
+    `globalThis[name]`.
+  - The type checker resolves each name in its own scope. A local variable called `document` is not a global use,
+    but a real global use elsewhere in the same file is.
+  - A name counts as global when it is declared outside the project's own source. That covers DOM typings and Node
+    typings (Node's `fetch`).
+  - Standard APIs such as `Math` and `Number` are never on the list.
+- **`.tsx` files are checked too.** In a pure layer they fail only for a forbidden dependency or behaviour, not for their
+  extension.
+- **Fixtures prove it works.** `src/architecture/fixtures/` holds 15 bad fixtures that must each fail for the expected
+  reason, and 5 good fixtures that must pass. The good ones cover comments, strings, property names, local names and a
+  pure `.tsx` file.
 
 | Rule | Statement |
 |---|---|
-| **A1** | `src/engine/*.ts` (not tests) imports only other engine files. Nothing from topics, lib, components, app, React or Next. |
-| **A2** | `src/maths/*.ts` imports nothing outside `src/maths`. |
-| **A3** | Fractions content and logic files (`src/topics/fractions/*.ts`, not `.tsx`, not tests) import no React, Next, components or app code. |
-| **A4** | `src/lessons/*.ts` imports no React, Next, components or app code. |
-| **A5** | `src/curriculum/*.ts` (not tests) imports no React, Next, components or app code. |
-| **A6** | Among the `.ts` (non-`.tsx`) files under `src/topics`, **only an explicit allowlist** may import UI types. Today it has 4 files (§4). A new UI import fails the test; removing one means shrinking the list. It's a ratchet. |
+| **A1** | Engine files (`src/engine/**`, `.ts` and `.tsx`, not tests) depend only on other engine files: no packages, topics, lib, components or app. They use no prohibited global. |
+| **A2** | Maths files (`src/maths/**`) depend only on other maths files, and use no prohibited global. |
+| **A3** | Fractions content, marking and diagnosis (`src/topics/fractions/**` except `ui/` and the composition root `module.tsx`) depend on no React, Next, motion, components, app or other presentation file, and use no prohibited global. |
+| **A4** | The lesson schema (`src/lessons/**`): the same as A3. |
+| **A5** | Curriculum data (`src/curriculum/**`): the same as A3. |
+| **A6** | Among the other topic files (`src/topics/**` that are not presentation or Fractions content), **only an explicit allowlist** may depend on UI. It has 4 documented files (§4, K-1 and K-2), plus 2 couplings the rebuilt check discovered on 5 Nov (K-6, K-7). The list may only shrink. |
+| **A7** | The question schema (`src/questions/**`, ARCH-002): the same as A3. |
 
 Tests are allowed to import across layers: `engine.test.ts` uses Fractions content as fixtures.
 
@@ -134,6 +165,8 @@ rule A6 or noted here.
 | K-3 | Assessment logic in screens | `independentResults()` in `src/components/screens/AssessmentScreen.tsx`, `recheckPlan()` in `RecheckScreen.tsx` | Assessment rules aren't unit-tested in isolation | Move both into `src/engine/` with tests (MAST-002, MAST-005). |
 | K-4 | Kit islands repeat maths inline | for example `gcd` in `fractions-2` and `ratio-algebra` | Maths truth is duplicated | Grow `src/maths/` (ARCH-003, sprint step 3) and import it. |
 | K-5 | Lesson completion is decided in the player | `LessonPlayer.tsx` calls `completeLesson` at the last step | Completion isn't evidence-based (CUR-002) | Completion becomes a pure engine rule using CUR-002's evidence rules. The player only reports events. |
+| K-6 | The topic registry depends on UI | `src/topics/index.ts` imports `fractions/module.tsx` to register the Fractions module | Code that only needs content (tests, engine tools) still loads UI modules | Split the registry into a pure content registry and a UI binding. Found by the rebuilt guard on 5 Nov (DEF-023). |
+| K-7 | Place-value digit maths lives in a UI file | `src/topics/place-value/index.ts` imports `PLACE` and `digitIn` from `kit/visuals.tsx` | Maths truth sits in a picture component | Move the digit maths to `src/maths` (ARCH-003, sprint step 3). Found by the rebuilt guard on 5 Nov (DEF-023). |
 
 ## 5. Persistence and versioning
 

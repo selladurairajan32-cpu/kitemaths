@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Third-party design skill (scripts and assets for the coding assistant), not app code.
     ".claude/**",
+    // Deliberately broken code that the architecture test (ARCH-001) must reject.
+    "src/architecture/fixtures/**",
   ]),
 ]);
 
