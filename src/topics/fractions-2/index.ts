@@ -1,5 +1,6 @@
 import { defineTopic, genFor, int, pick } from "@/topics/kit/define";
 import type { ChooseOption, Template } from "@/topics/kit/types";
+import { gcd, toMixed } from "@/maths/fraction";
 
 /** Fractions 2: simplest form, mixed numbers, adding and subtracting, related denominators, multiplying by a whole. */
 
@@ -15,15 +16,13 @@ const M = {
   timesBoth: `${T}.times-both`,
 };
 
-const gcd = (a: number, b: number): number => (b ? gcd(b, a % b) : Math.abs(a));
 const f = (n: number, d: number) => `{${n}/${d}}`;
-/** A fraction in its simplest form, written as a mixed number when it is more than one. */
+/** A fraction in its simplest form, written as a mixed number when it is more than one (maths: toMixed). */
 function best(n: number, d: number): string {
-  const g = gcd(n, d);
-  const [a, b] = [n / g, d / g];
-  if (b === 1) return `${a}`;
-  if (a > b) return `${Math.floor(a / b)} ${f(a % b, b)}`;
-  return f(a, b);
+  const m = toMixed({ n, d });
+  if (m.n === 0) return `${m.whole}`;
+  if (m.whole > 0) return `${m.whole} ${f(m.n, m.d)}`;
+  return f(m.n, m.d);
 }
 const PART: Record<number, string> = { 2: "halves", 3: "thirds", 4: "quarters", 5: "fifths", 6: "sixths", 7: "sevenths", 8: "eighths", 9: "ninths", 10: "tenths", 12: "twelfths", 15: "fifteenths", 16: "sixteenths", 20: "twentieths" };
 

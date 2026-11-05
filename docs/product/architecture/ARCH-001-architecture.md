@@ -114,7 +114,7 @@ workflow runs on pull requests and on pushes to `main`. It has not run on the de
 | **A3** | Fractions content, marking and diagnosis (`src/topics/fractions/**` except `ui/` and the composition root `module.tsx`) depend on no React, Next, motion, components, app or other presentation file, and use no prohibited global. |
 | **A4** | The lesson schema (`src/lessons/**`): the same as A3. |
 | **A5** | Curriculum data (`src/curriculum/**`): the same as A3. |
-| **A6** | Among the other topic files (`src/topics/**` that are not presentation or Fractions content), **only an explicit allowlist** may depend on UI. It has 4 documented files (§4, K-1 and K-2), plus 2 couplings the rebuilt check discovered on 5 Nov (K-6, K-7). The list may only shrink. |
+| **A6** | Among the other topic files (`src/topics/**` that are not presentation or Fractions content), **only an explicit allowlist** may depend on UI. It has 4 documented files (§4, K-1 and K-2), plus 1 coupling the rebuilt check discovered on 5 Nov (K-6; K-7 is fixed). The list may only shrink. |
 | **A7** | The question schema (`src/questions/**`, ARCH-002): the same as A3. |
 
 Tests are allowed to import across layers: `engine.test.ts` uses Fractions content as fixtures.
@@ -166,7 +166,7 @@ rule A6 or noted here.
 | K-4 | Kit islands repeat maths inline | for example `gcd` in `fractions-2` and `ratio-algebra` | Maths truth is duplicated | Grow `src/maths/` (ARCH-003, sprint step 3) and import it. |
 | K-5 | Lesson completion is decided in the player | `LessonPlayer.tsx` calls `completeLesson` at the last step | Completion isn't evidence-based (CUR-002) | Completion becomes a pure engine rule using CUR-002's evidence rules. The player only reports events. |
 | K-6 | The topic registry depends on UI | `src/topics/index.ts` imports `fractions/module.tsx` to register the Fractions module | Code that only needs content (tests, engine tools) still loads UI modules | Split the registry into a pure content registry and a UI binding. Found by the rebuilt guard on 5 Nov (DEF-023). |
-| K-7 | Place-value digit maths lives in a UI file | `src/topics/place-value/index.ts` imports `PLACE` and `digitIn` from `kit/visuals.tsx` | Maths truth sits in a picture component | Move the digit maths to `src/maths` (ARCH-003, sprint step 3). Found by the rebuilt guard on 5 Nov (DEF-023). |
+| K-7 | Place-value digit maths lives in a UI file | `src/topics/place-value/index.ts` imports `PLACE` and `digitIn` from `kit/visuals.tsx` | Maths truth sits in a picture component | **Fixed 5 Nov (ARCH-003, step 3):** the digit maths moved to `src/maths/place-value.ts`, and A6's list shrank. Found by the rebuilt guard (DEF-023). |
 
 ## 5. Persistence and versioning
 

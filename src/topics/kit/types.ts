@@ -7,8 +7,9 @@ import type { IconName } from "@/components/paper/PaperIcon";
  * Two answer kinds (choose one option, type a number) and a shared set of maths pictures.
  */
 
-/** Place-value column names, biggest first. */
-export type PlaceColumn = "M" | "HTh" | "TTh" | "Th" | "H" | "T" | "O" | "t" | "h";
+/** Place-value column names, biggest first (defined with the place-value maths, ARCH-003). */
+export type { PlaceColumn } from "@/maths/place-value";
+import type { PlaceColumn } from "@/maths/place-value";
 
 /** The kit's maths pictures. Every one is drawn, labelled and readable without colour. */
 export type KitVisual =

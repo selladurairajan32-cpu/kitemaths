@@ -23,7 +23,7 @@ const UI_TYPE_ALLOWLIST = ["src/topics/kit/define.ts", "src/topics/kit/types.ts"
  */
 const DISCOVERED_COUPLINGS = [
   "src/topics/index.ts", // K-6: the topic registry imports the Fractions composition root (fractions/module.tsx)
-  "src/topics/place-value/index.ts", // K-7: place-value digit maths is imported from a UI file (kit/visuals.tsx)
+  // K-7 (place-value digit maths in a UI file) was removed by ARCH-003 on 5 Nov: the maths is in src/maths/place-value.ts.
 ];
 
 type Layer = "engine" | "maths" | "lessons" | "curriculum" | "questions" | "fractions-content" | "topics-contract" | "presentation" | "lib" | "other";
