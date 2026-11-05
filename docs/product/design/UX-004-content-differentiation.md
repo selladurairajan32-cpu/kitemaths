@@ -3,8 +3,8 @@
 | | |
 |---|---|
 | **Backlog item** | UX-004: establish content differentiation rules (P0, R0) |
-| **Status** | READY FOR QA, waiting for Product Owner and educational QA review |
-| **Date** | 4 November 2026 |
+| **Status** | QA FAILED at `6050e3c` (D-014); corrected on 5 Nov and returned for independent retest (D-022) |
+| **Date** | 4 November 2026; corrected 5 November 2026 ([correction report](../reports/R0-step2-correction-report.md)) |
 | **Acceptance criteria** | <ol><li>Teaching, examples, rules, question prompts, hints, feedback, misconceptions, worked solutions and challenge content have clearly distinguishable visual treatments.</li><li>The child can identify the task and next action immediately.</li></ol> |
 | **Deliverables** | <ul><li>This specification.</li><li>The content-type tokens in `src/app/globals.css`.</li><li>The contrast checks in `src/design-tokens.test.ts`.</li><li>The treatments rendered on `/design-specimen`, with screenshots in [`evidence/`](evidence/).</li></ul> |
 | **Scope (D-012, D-013)** | Specified, tokenised and shown on the specimen now. Screens adopt the treatments in R1 (§4). |

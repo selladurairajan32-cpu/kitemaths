@@ -3,8 +3,8 @@
 | | |
 |---|---|
 | **Backlog item** | CUR-003: create the instructional lesson template (P0, R0) |
-| **Status** | READY FOR QA, waiting for Product Owner and educational QA review |
-| **Date** | 4 November 2026 |
+| **Status** | QA FAILED at `6050e3c` (D-014); corrected on 5 Nov and returned for independent retest (D-022) |
+| **Date** | 4 November 2026; corrected 5 November 2026 ([correction report](../reports/R0-step2-correction-report.md)) |
 | **Acceptance criterion** | A reusable template supports objective, prerequisite check, explanation, representation, worked example, guided activity, independent practice, reflection, mastery check and next step. |
 | **Scope (D-012, RC-005)** | <ul><li>**Defined now:** the template, its rules, and the schema that supports all ten elements.</li><li>**R1:** the schema change in `src/lessons/types.ts` and player support for the three new step types, because those need UI work.</li><li>Today's lessons are checked against the template below.</li></ul> |
 
@@ -17,14 +17,14 @@ A lesson teaches **one skill** (today's model: `Skill.lessonId`, one to one). It
 | # | Element | Purpose | Required? | Today's schema (`src/lessons/types.ts`) | Proposed (R1) |
 |---|---|---|---|---|---|
 | 1 | **Objective** | Says in child language what they'll be able to do | Required | `objectives: string[]` (every lesson has them) | Unchanged. Also add `skills: SkillId[]` so a lesson can name the skills it teaches. |
-| 2 | **Prerequisite check** | 1–2 quick questions on the prerequisite skills (CUR-002 graph). A miss offers "best after" help; it never blocks. | Required when the lesson has prerequisites | **Gap.** Only the island-level warm-up (`PlacementKit`) exists. | Step type `prereq-check` `{ questionIds }`. Skipped when prerequisites are already secure. |
+| 2 | **Prerequisite check** | 1–2 quick questions on the prerequisite skills (CUR-002 graph). A miss offers "best after" help; it never blocks. A question **before teaching** is allowed only as an explicitly labelled, **optional prior-knowledge check**, with no penalty and no effect on progression (Q-2, D-016). | Required when the lesson has prerequisites | **Gap.** Only the island-level warm-up (`PlacementKit`) exists. | Step type `prereq-check` `{ questionIds, optional: true }`. Skipped when prerequisites are already satisfied. Not recorded as lesson evidence. |
 | 3 | **Explanation** | Teaches the idea in short, plain sentences | Required | `explain` step: `title`, `body[]`, `tip?` | Unchanged. `tip` becomes a distinct content type (UX-004). |
 | 4 | **Representation** | A concrete or pictorial model **before** any symbol-only work (CPA, CUR-002 §6) | Required, before the first independent question | `explain.visual`, `worked.visual`, `lab` steps | Unchanged. Enforced by a test for Fractions. |
-| 5 | **Worked example** | Teacher models the whole method ("Watch me") | Required for procedural skills; optional for purely conceptual ones | `worked` step with `support: "full"` | Unchanged |
+| 5 | **Worked example** | Teacher models the whole method. Labelled "Worked example" or "Watch how" (D-020). | Required for procedural skills; optional for purely conceptual ones | `worked` step with `support: "full"` | Unchanged |
 | 6 | **Guided activity** | The child does part, with support that fades ("Let's do it together"; lab challenges) | Required | `worked` with `support: "faded"` and `blank`s; `lab` steps | Unchanged. Fading rules in §2. |
-| 7 | **Independent practice** | New examples, no scaffolding, marked by the engine | Required: at least 2 items | `check` steps (`questionId`) in the lesson, plus the island's practice sessions | Unchanged. Items must be *new*, not the worked example again (MIS-005). |
-| 8 | **Reflection** | The child notices or explains something: "What changed? Why?" Sentence frames, not free writing. | Required (short) | **Gap.** One Fractions explain step plays this role. | Step type `reflect` `{ prompt, frames?: string[] }`. Not marked; recorded as completed. |
-| 9 | **Mastery check** | Evidence that the lesson's skill is in place: lesson checks answered without a reveal (CUR-002 §4), and later the island's independent check | Required | **Gap at lesson level.** The island-level big challenge exists (`AssessmentKit`). | Step type `mastery-check` `{ questionIds }` (independent, no hints, recorded as `lesson` evidence), *or* a rule that counts the lesson's last checks as the mastery evidence. Educational QA to choose (Q-1). |
+| 7 | **Independent practice** | **Fresh** examples, no scaffolding, marked by the engine. The first attempt with no hint is the independent evidence (CUR-002 §4.1). | Required: at least 2 items | `check` steps (`questionId`) in the lesson, plus the island's practice sessions | Unchanged. Items must be genuinely different from the worked example, not just carry a new id (rule 4, MIS-005). |
+| 8 | **Reflection** | One brief chance to notice or explain: "What changed? Why?" It can be a sentence frame, a choice or a spoken reflection. **Typed prose is never required, and reflection is never a mastery gate** (Q-3, D-017). A fuller reflection comes at the end of a lesson group. | Required (brief) | **Gap.** One Fractions explain step plays this role. | Step type `reflect` `{ prompt, mode: "frame" \| "choice" \| "spoken", frames?: string[] }`. Not marked; recorded as activity only. |
+| 9 | **Mastery check** | **Lesson evidence** under one independence contract (CUR-002 §4.2): first attempt, no hint, not a revealed item, fresh examples. In a short single-skill lesson, the final independent questions provide it. When several skills need evidence, a separate `mastery-check` step does (Q-1, D-015). **Neither awards skill mastery**, which needs the further evidence MAST-001 defines. | Required | **Gap at lesson level.** The island-level big challenge exists (`AssessmentKit`). | Step type `mastery-check` `{ questionIds }`, with at least one question per skill. The evidence rules are the same as for final questions. |
 | 10 | **Next step** | Tells the child what comes next and why: the next lesson, practice first, or "best after" | Required | **Gap at lesson level.** `recommendNext` (`src/engine/journey.ts`) decides island-wide. | Lesson field `nextStep?: { lessonId \| "practice" }` as a hint. The engine still decides, using the CUR-002 rules. |
 
 ### Proposed schema (R1, additive: existing lessons stay valid)
@@ -47,16 +47,17 @@ export interface Lesson<V = unknown, L = unknown> {
 
 export type LessonStep<V = unknown, L = unknown> =
   | /* existing: explain, worked, check, lab */ ...
-  | { type: "prereq-check"; title: string; questionIds: string[] }      // element 2
-  | { type: "reflect"; title: string; prompt: string; frames?: string[] } // element 8
-  | { type: "mastery-check"; title: string; questionIds: string[] };     // element 9
+  | { type: "prereq-check"; title: string; questionIds: string[]; optional: true } // element 2: never evidence
+  | { type: "reflect"; title: string; prompt: string; mode: "frame" | "choice" | "spoken"; frames?: string[] } // element 8
+  | { type: "mastery-check"; title: string; questionIds: string[] };                // element 9: lesson evidence only
 ```
 
 **R1 must do all of these together, so the app never meets a step it can't render:**
 - add the three step types to `LessonPlayer` and the step-gating rules;
 - update `content.test.ts` (lesson integrity) and `kit/define.ts`;
 - add template-conformance tests;
-- make the CUR-002 evidence rules count `mastery-check` results.
+- make the CUR-002 evidence rules count `mastery-check` and final-question results the same way (CUR-002 §4.2);
+- build the bounded freshness rule (§2, rule 4) with its verification cases.
 
 ## 2. Rules for writing a lesson
 
@@ -71,8 +72,29 @@ export type LessonStep<V = unknown, L = unknown> =
    - at most 3 short paragraphs;
    - key words in **bold** (rule and key-fact styling in UX-004);
    - the picture referred to in the text.
-4. **New examples for independent work:** check and mastery questions must not repeat the worked example's numbers or
-   picture. Generated items (`g:` ids) satisfy this.
+4. **Fresh examples for independent work** (DEF-026; implementation and tests in R1, under CUR-003 and MIS-005).
+   - **A new question id is not a new example.** Generated `g:` ids only identify a template, difficulty and seed. Two
+     ids can produce the same numbers and picture as the worked example, so the id alone guarantees nothing.
+   - **What "different" means:** an independent item must differ from every example the lesson demonstrated in its
+     **surface signature**: the operands (for example 3/4 and 12), the model (bar, circle, number line, counters) and
+     the partition (5 equal parts). It may share the skill and the method; that's the point.
+   - **Where freshness is required:** check, mastery-check and prerequisite-check items, and practice items marked as
+     transfer items (CUR-002 §4.1). Guided steps may reuse the demonstrated numbers on purpose.
+   - **How a generator finds a fresh item** (deterministic and bounded):
+     1. Generate from the requested template with the item's seed.
+     2. If the signature matches a demonstrated example, re-seed deterministically: `seed + 1`, `seed + 2` … up to **K**
+        tries. K is a named constant set when this is built; 8 is proposed.
+     3. If still no fresh item, try the island's **other templates with the same skill, difficulty and interaction**,
+        in a fixed order, each with up to K re-seeds.
+     4. If all are exhausted, stop with an explicit **`FreshnessExhausted` authoring error** that names the lesson,
+        skill and template. Never loop without limit, and never silently reuse the demonstrated example.
+   - **Verification cases (R1 tests):**
+     - the same inputs always give the same item (determinism);
+     - no independent item's signature equals a demonstrated example's, across many seeds for every lesson;
+     - a collision is resolved by re-seeding;
+     - a template that can only produce the demonstrated example falls back to another template;
+     - when no template can produce a fresh item, `FreshnessExhausted` is raised and no item is returned;
+     - re-seeding never changes the skill, difficulty or interaction.
 5. **Read-aloud friendly:**
    - every step's text must make sense spoken (`src/lib/speech.ts`);
    - fractions are written `{n/d}`, so speech reads "three fifths".
@@ -107,7 +129,7 @@ and next step can't be present yet: they're schema gaps (§1), not authoring mis
 **Findings for R1 authoring** (also listed in CUR-002 §6):
 - `wholes` has no worked or guided step. Add a "Watch me: is it fair?" worked step and a guided one.
 - `number-line` and `reasoning` have no guided (faded) step before their independent checks.
-- `naming` asks a check question before its worked examples. Reorder unless educational QA prefers an early check (Q-2).
+- `naming` asks a check question before its worked examples. **Move it after the worked example in R1** (Q-2, D-016). It may stay early only as a labelled, optional prior-knowledge check with no consequence.
 - `lab` has no independent check in the lesson. That's acceptable under the lab profile, but its evidence isn't recorded
   today (CUR-002 §4).
 - No lesson has a prerequisite check, reflection, mastery check or next step (schema gaps).
@@ -128,10 +150,12 @@ and next step can't be present yet: they're schema gaps (§1), not authoring mis
 These numbers matter for R4. They are not part of R1 acceptance. 63 of the 85 preview lessons have no full worked
 example, and 16 have no picture before their first check.
 
-## 4. Questions for educational QA
+## 4. Decisions (5 Nov)
 
-| ID | Question | Recommendation |
+The questions raised on 4 Nov were decided by the Product Owner on 5 Nov.
+
+| ID | Decision | Record |
 |---|---|---|
-| Q-1 | Lesson mastery: a separate `mastery-check` step, or count the lesson's last independent checks? | Count the last checks for short lessons. Use a `mastery-check` step when the lesson has more than one skill. |
-| Q-2 | `naming`: keep the early check (a quick "notice" question) or move it after the worked examples? | Move it after, to follow rule 1. |
-| Q-3 | Reflection: mandatory in every lesson, or only at the end of each cluster of lessons? | Every lesson, very short: one sentence frame. |
+| Q-1 | Short single-skill lessons use their final independent questions. A separate mastery-check step is used when several skills need evidence. Both follow the same independence contract, and neither awards skill mastery. | D-015 |
+| Q-2 | `naming`: move the early question after the worked example in R1. A question before teaching is acceptable only as a labelled, optional prior-knowledge check with no penalty or progression effect. | D-016 |
+| Q-3 | One brief reflection per lesson: a sentence frame, a choice or spoken. No typed prose and no mastery gate. A fuller reflection at the end of a lesson group. | D-017 |

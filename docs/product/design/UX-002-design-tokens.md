@@ -3,8 +3,8 @@
 | | |
 |---|---|
 | **Backlog item** | UX-002: create the visual design system (P0, R0) |
-| **Status** | READY FOR QA, waiting for Product Owner review |
-| **Date** | 4 November 2026 |
+| **Status** | QA FAILED at `6050e3c` (D-014); corrected on 5 Nov and returned for independent retest (D-022) |
+| **Date** | 4 November 2026; corrected 5 November 2026 ([correction report](../reports/R0-step2-correction-report.md)) |
 | **Acceptance criteria** | <ol><li>Design tokens define colour, typography, spacing, layout widths, borders, elevation, radii, icon rules, focus states, disabled states, validation states and interaction feedback.</li><li>Styles are implemented as reusable tokens rather than isolated values.</li></ol> |
 | **Deliverables** | <ul><li>This specification.</li><li>The tokens in `src/app/globals.css` (`@theme static`).</li><li>The checks in `src/design-tokens.test.ts`.</li><li>The internal specimen page `/design-specimen` (not served in production) and its screenshots in [`evidence/`](evidence/).</li></ul> |
 | **Scope (D-012, D-013, RC-006)** | <ul><li>**Now:** tokens are defined and checked; **no existing screen changes** (proved by a before/after pixel comparison).</li><li>**R1:** screens move from one-off values to the tokens (§5).</li><li>No `violet` token is added. The undefined violet classes (DEF-009) are fixed in R1.</li></ul> |

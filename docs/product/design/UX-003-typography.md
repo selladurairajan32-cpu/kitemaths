@@ -3,8 +3,8 @@
 | | |
 |---|---|
 | **Backlog item** | UX-003: define typography and mathematical readability (P0, R0) |
-| **Status** | READY FOR QA, waiting for Product Owner and educational QA review |
-| **Date** | 4 November 2026 |
+| **Status** | **QA FAILED** (D-014, D-021): AC3 is not met by today's screens (DEF-018 to DEF-021). The contrast findings (DEF-022) are corrected. The specification is returned for review separately from acceptance of the item. |
+| **Date** | 4 November 2026; corrected 5 November 2026 ([correction report](../reports/R0-step2-correction-report.md)) |
 | **Acceptance criteria** | <ol><li>Font family, type scale, line length, line height, weights and hierarchy are specified for headings, explanations, labels, question text, hints, results and maths notation.</li><li>Fractions, superscripts, symbols and long calculations remain legible at all supported sizes.</li><li>Text scaling does not break layouts.</li></ol> |
 | **Deliverables** | <ul><li>This specification.</li><li>The type tokens in `src/app/globals.css`.</li><li>The checks in `src/design-tokens.test.ts`.</li><li>The specimen `/design-specimen` and its screenshots in [`evidence/`](evidence/).</li><li>The text-scaling check results (§7).</li></ul> |
 | **Scope (D-012, D-013)** | Specified and tokenised now. Screens adopt the tokens in R1 (UX-002 §5). |
@@ -149,7 +149,7 @@ changes screens):
     `repeat(auto-fit, minmax(8rem, 1fr))`, because media queries don't respond to the browser's text-size setting.
 - Existing screens don't meet AC3 yet. AC3 is met when DEF-018 to DEF-021 are fixed in R1 and this check passes as an
   automated test (planned: UX-008 / QA-005).
-- Recommendation for the Product Owner: accept the specification now; track AC3 compliance through those defects.
+- **Decision (Q-7, D-021):** UX-003 stays QA FAILED while AC3 is unmet. DEF-018 to DEF-021 are fixed and retested early in R1. A linked defect does not turn the failed criterion into a pass. Approval of this specification is recorded separately from acceptance of the item.
 
 ## 8. Specimen
 
