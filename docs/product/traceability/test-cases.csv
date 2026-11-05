@@ -94,10 +94,16 @@ TC-ARCH-001.2.2,ARCH-001,AC2,unit,automated,passing,"src/topics/registry.test.ts
 TC-ARCH-001.2.3,ARCH-001,AC2,unit,automated,passing,src/topics/registry.test.ts::gets adaptive practice from its own pool,
 TC-ARCH-001.2.4,ARCH-001,AC2,unit,automated,passing,"src/topics/registry.test.ts::namespaces every skill, question and misconception by its topic",
 TC-ARCH-001.2.5,ARCH-001,AC2,content,automated,partial,src/topics/kit/kit.test.ts::makes plenty of fresh questions for every skill,18 kit islands added through the same contract
-TC-ARCH-002.1.1,ARCH-002,AC1,content,automated,partial,src/topics/fractions/content.test.ts::has unique ids and known skills,Types cover most fields; year and scoring metadata missing
-TC-ARCH-002.1.2,ARCH-002,AC1,unit,automated,partial,"src/topics/registry.test.ts::resolves every question a lesson, misconception or placement refers to",
-TC-ARCH-002.2.1,ARCH-002,AC2,content,automated,partial,src/topics/kit/kit.test.ts::makes well-formed questions that mark their own answer right and every trap wrong,Test-time only; no runtime rejection (R-4)
-TC-ARCH-002.2.2,ARCH-002,AC2,content,automated,partial,src/topics/fractions/content.test.ts::gives every question a mathematically correct answer,
+TC-ARCH-002.1.1,ARCH-002,AC1,document-review,manual,review-pending,,"ARCH-002 spec §2–§3: every backlog field, interaction-specific answers, distractors, validation and scoring"
+TC-ARCH-002.1.2,ARCH-002,AC1,unit,automated,passing,"src/questions/questions.test.ts::has a valid fixture for every interaction, and each one validates",12 interactions
+TC-ARCH-002.1.3,ARCH-002,AC1,unit,automated,passing,src/questions/questions.test.ts::survives a JSON round trip: definitions are plain data,
+TC-ARCH-002.1.4,ARCH-002,AC1,unit,automated,passing,src/questions/questions.test.ts::validates every existing Fractions question through the adapter,Compatibility
+TC-ARCH-002.1.5,ARCH-002,AC1,unit,automated,passing,"src/questions/questions.test.ts::validates every kit island's questions through the adapter, across seeds; the only failures are the known duplicate traps (DEF-028)",Compatibility; DEF-028 tracked
+TC-ARCH-002.1.6,ARCH-002,AC1,unit,automated,passing,"src/questions/questions.test.ts::never invents a year mapping: the caller's level is used, and unverified is explicit",
+TC-ARCH-002.1.7,ARCH-002,AC1,unit,automated,passing,src/architecture.test.ts::A7: keeps the question schema free of UI code and browser access,UI-independent
+TC-ARCH-002.2.1,ARCH-002,AC2,unit,automated,passing,"src/questions/questions.test.ts::rejects invalid definitions for every interaction, naming the field at fault","At least 2 invalid fixtures per interaction, each with its error path"
+TC-ARCH-002.2.2,ARCH-002,AC2,unit,automated,passing,"src/questions/questions.test.ts::rejects bad common fields: id, level, difficulty, hints, scoring and unknown interactions",
+TC-ARCH-002.2.3,ARCH-002,AC2,content,automated,partial,src/topics/kit/kit.test.ts::makes well-formed questions that mark their own answer right and every trap wrong,Existing content check; runtime validation now in src/questions/validate.ts (not yet used by the app)
 TC-ARCH-003.1.1,ARCH-003,AC1,document-review,manual,review-pending,,"ARCH-003 spec: number domain, mixed numbers, divmod, partitions, kept behaviour, what moved"
 TC-ARCH-003.1.2,ARCH-003,AC1,unit,automated,passing,src/architecture.test.ts::A2: keeps mathematical logic self-contained,Maths files depend only on maths and use no browser or network globals
 TC-ARCH-003.1.3,ARCH-003,AC1,unit,automated,passing,"src/maths/maths.test.ts::adds, subtracts, multiplies and divides exactly, in simplest form (hand-worked table)",
