@@ -85,28 +85,28 @@ const CONTENT: { type: string; use: string; render: ReactNode }[] = [
           <FlagIcon /> Key fact
         </p>
         <p className="mt-1 text-body font-semibold">
-          <RichText text="Same numerator? The fraction with the **smaller denominator** is bigger: {1/3} > {1/5}." />
+          <RichText tint text="When two fractions have the same numerator (not zero) and the wholes are the same size, the fraction with the **smaller denominator** is bigger: {1/3} > {1/5}." />
         </p>
       </div>
     ),
   },
   {
     type: "example",
-    use: "A worked example the teacher models. Tab label, numbered steps, edge border.",
+    use: "A worked example the teacher models. “Worked example” tab label, numbered steps, edge border.",
     render: (
       <div className="max-w-reading overflow-hidden rounded-panel border-2 border-example-edge bg-example-soft">
-        <p className="flex items-center gap-2 bg-example-edge px-4 py-1.5 text-label font-extrabold text-white">
-          <StudioIcon /> Watch me
+        <p className="flex items-center gap-2 bg-example-strong px-4 py-1.5 text-label font-extrabold text-on-strong">
+          <StudioIcon /> Worked example
         </p>
         <ol className="space-y-2 px-5 py-4 text-body text-example-ink">
           <li>
-            <span className="font-extrabold">1.</span> <RichText text="Find {3/4} of 12." />
+            <span className="font-extrabold">1.</span> <RichText tint text="Find {3/4} of 12." />
           </li>
           <li>
             <span className="font-extrabold">2.</span> 12 ÷ 4 = 3, so one quarter is 3.
           </li>
           <li>
-            <span className="font-extrabold">3.</span> 3 × 3 = 9, so <RichText text="{3/4} of 12 is **9**." />
+            <span className="font-extrabold">3.</span> 3 × 3 = 9, so <RichText tint text="{3/4} of 12 is **9**." />
           </li>
         </ol>
       </div>
@@ -154,7 +154,7 @@ const CONTENT: { type: string; use: string; render: ReactNode }[] = [
           <SearchIcon /> Look closer
         </p>
         <p className="mt-1 text-body">
-          <RichText text="You might be thinking a bigger denominator means a bigger fraction. More parts means **smaller** parts: {1/8} < {1/3}." />
+          <RichText tint text="You might be thinking a bigger denominator means a bigger fraction. When the same-sized whole is split into more equal parts, each part is **smaller**: {1/8} < {1/3}." />
         </p>
       </div>
     ),
@@ -164,13 +164,13 @@ const CONTENT: { type: string; use: string; render: ReactNode }[] = [
     use: "Feedback for a correct answer. Round tick badge, “Correct!” headline.",
     render: (
       <div className="flex max-w-reading items-start gap-4 rounded-panel border-2 border-success-edge bg-success-soft px-5 py-4 text-success-ink">
-        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-success-edge text-white">
+        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-success-edge text-on-strong">
           <CheckIcon strokeWidth={3} />
         </span>
         <div className="min-w-0">
           <p className="text-title font-extrabold">Correct!</p>
           <p className="text-body">
-            <RichText text="{1/5} is less than {1/3}: fifths are smaller pieces." />
+            <RichText tint text="{1/5} is less than {1/3}: with the same-sized whole, fifths are smaller pieces than thirds." />
           </p>
         </div>
       </div>
@@ -181,7 +181,7 @@ const CONTENT: { type: string; use: string; render: ReactNode }[] = [
     use: "Feedback for an answer that isn’t right yet. Round try-again badge, “Not yet” headline. Never red.",
     render: (
       <div className="flex max-w-reading items-start gap-4 rounded-panel border-2 border-retry-edge bg-retry-soft px-5 py-4 text-retry-ink">
-        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-retry-edge text-white">
+        <span className="grid size-10 shrink-0 place-items-center rounded-full bg-retry-edge text-on-strong">
           <RefreshIcon strokeWidth={2.4} />
         </span>
         <div className="min-w-0">
@@ -193,14 +193,14 @@ const CONTENT: { type: string; use: string; render: ReactNode }[] = [
   },
   {
     type: "challenge",
-    use: "A stretch question, clearly optional. Star icon, “Challenge” ribbon, double border.",
+    use: "A stretch question, clearly optional. Star icon, “Optional challenge” ribbon, double border.",
     render: (
       <div className="relative max-w-reading rounded-panel border-4 border-double border-challenge-edge bg-challenge-soft px-5 pb-4 pt-7 text-challenge-ink">
-        <p className="absolute -top-3 left-4 flex items-center gap-1.5 rounded-full bg-challenge-edge px-3 py-0.5 text-label font-extrabold text-white">
-          <StarIcon size={16} /> Challenge
+        <p className="absolute -top-3 left-4 flex items-center gap-1.5 rounded-full bg-challenge-strong px-3 py-0.5 text-label font-extrabold text-on-strong">
+          <StarIcon size={16} /> Optional challenge
         </p>
         <p className="text-body">
-          <RichText text="Find a fraction between {1/3} and {1/2}. How do you know it’s between them?" />
+          <RichText tint text="Find a fraction between {1/3} and {1/2}. How do you know it’s between them?" />
         </p>
       </div>
     ),
@@ -243,7 +243,8 @@ export default function DesignSpecimenPage() {
                 </p>
               </div>
               <p className={`${t.className} min-w-0 text-ink`}>
-                <RichText text={SAMPLE} />
+                {/* UX-003 §6: label-size text uses the compact one-line fraction form. */}
+                <RichText compact={t.token === "label"} text={SAMPLE} />
               </p>
             </li>
           ))}
@@ -273,7 +274,7 @@ export default function DesignSpecimenPage() {
             label="Correct"
             className="border-correct-edge bg-correct-soft text-correct"
             badge={
-              <span className="absolute -right-2 -top-2 grid size-7 place-items-center rounded-full bg-correct text-white">
+              <span className="absolute -right-2 -top-2 grid size-7 place-items-center rounded-full bg-correct text-on-strong">
                 <CheckIcon size={15} strokeWidth={3} />
               </span>
             }
@@ -282,7 +283,7 @@ export default function DesignSpecimenPage() {
             label="Incorrect"
             className="border-incorrect-edge bg-incorrect-soft text-incorrect"
             badge={
-              <span className="absolute -right-2 -top-2 grid size-7 place-items-center rounded-full bg-incorrect text-white">
+              <span className="absolute -right-2 -top-2 grid size-7 place-items-center rounded-full bg-incorrect text-on-strong">
                 <CloseIcon size={15} strokeWidth={3} />
               </span>
             }

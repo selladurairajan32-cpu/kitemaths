@@ -39,6 +39,7 @@ export function FractionNotation({
   size = "md",
   animate = false,
   muted = false,
+  tint = false,
   className = "",
 }: {
   n: number | string;
@@ -46,6 +47,11 @@ export function FractionNotation({
   size?: Size;
   animate?: boolean;
   muted?: boolean;
+  /**
+   * On a tinted content panel (UX-004), use the darker denominator blue so small digits keep at
+   * least 4.5:1 contrast (DEF-022). Off by default, so existing screens are unchanged.
+   */
+  tint?: boolean;
   className?: string;
 }) {
   const s = SIZE[size];
@@ -54,7 +60,7 @@ export function FractionNotation({
       ? toWords({ n, d })
       : `${n} over ${d}`;
   const numColor = muted ? "text-ink-2" : "text-num-strong";
-  const denColor = muted ? "text-ink-2" : "text-den";
+  const denColor = muted ? "text-ink-2" : tint ? "text-den-strong" : "text-den";
   return (
     <span
       className={`inline-flex flex-col items-center align-middle font-semibold tabular-nums ${s.gap} ${s.pad} ${className}`}

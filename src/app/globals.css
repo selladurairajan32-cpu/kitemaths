@@ -157,6 +157,14 @@
   --color-challenge-soft: #fffbeb;
   --color-challenge-edge: #d99a00;
   --color-challenge-ink: #1b2559;
+
+  /*
+   * Solid label backgrounds for white text (DEF-022, 5 Nov): the edge colours are too light for 15px white
+   * labels, so headers and ribbons use these. White on each is at least 7:1.
+   */
+  --color-on-strong: #ffffff;
+  --color-example-strong: #0a5c53;
+  --color-challenge-strong: #7a4f00;
 }
 
 @layer base {

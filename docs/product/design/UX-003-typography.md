@@ -91,7 +91,7 @@ Each token sets size and line height together. Tailwind utility: `text-<role>`.
 | **Fractions on their own** | One of four sizes: `sm` (16px), `md` (24px), `lg` (36px) or `xl` (60px) | `FractionNotation size=…` |
 | **Fractions in tight one-line places** (option labels, step lists, chips) | Compact form `3/8`, with the same two colours and the digits at the text's full size | `RichText compact` |
 | **Smallest fraction digits** | Inline fractions only in body-size text or larger. At 18px they're about 16.6px; at label size they'd be 13.8px, so label text uses the compact form. | Rule for R1 authoring and review |
-| **Fraction digits on coloured panels** | At least 4:1 contrast on every content-type background (checked by `src/design-tokens.test.ts`) | Tokens |
+| **Fraction digits on coloured panels** | At least 4.5:1 at their rendered size: inline digits are 16.56px and `sm` digits 16px, so both count as normal text. Large sizes (`md` and up, 24px or more) need 3:1. On tinted panels the denominator uses `--color-den-strong`. Every pairing is listed in UX-004 §2.3 and checked by `src/design-tokens.test.ts` (DEF-022). | `tint` on `RichText` / `FractionNotation` |
 | **Operators** | True minus `−` (U+2212), never a hyphen; `×` and `÷`, never `x`, `*` or `/`. A space either side of `=`, `<`, `>`, `+`, `−`, `×` and `÷`. | Content convention; `num()` in `src/topics/kit/evaluate.ts` already writes `−5` |
 | **Numbers** | UK style: `12,345`, `0.75`, `£3.50`. Tabular figures. | `num()` (`toLocaleString("en-GB")`) in `kit/evaluate.ts` |
 | **Superscripts** (squares, powers) | Never below 15px: `text-label` inside body text. Never use Unicode superscript characters (²), which render too small in Nunito. | `<sup className="text-label">` |

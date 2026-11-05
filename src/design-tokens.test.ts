@@ -41,9 +41,25 @@ const TYPE_SCALE = ["display-1", "display-2", "heading-1", "heading-2", "prompt"
 const CONTENT_TYPES = ["teach", "rule", "example", "hint", "tip", "notice", "misconception", "success", "retry", "challenge"];
 const DESIGN_DOCS = ["UX-002-design-tokens.md", "UX-003-typography.md", "UX-004-content-differentiation.md"];
 
+interface Pairing { fg: string; bg: string; use: string; px: number; weight: number; kind: "text" | "graphic"; minimum: number; target: number | null; shown: number }
+/** The supported pairings table in UX-004 §2.3. */
+function pairings(): Pairing[] {
+  const doc = readFileSync(join(ROOT, "docs/product/design/UX-004-content-differentiation.md"), "utf8");
+  const section = doc.slice(doc.indexOf("### 2.3 Supported colour pairings"), doc.indexOf("## 3. "));
+  return [...section.matchAll(/^\| `--([a-z0-9-]+)` \| `--([a-z0-9-]+)` \| ([^|]+) \| ([\d.]+) \| (\d+) \| (text|graphic) \| ([\d.]+):1 \| (?:([\d.]+):1|—) \| ([\d.]+):1 \|$/gm)].map((m) => ({
+    fg: m[1], bg: m[2], use: m[3].trim(), px: Number(m[4]), weight: Number(m[5]), kind: m[6] as Pairing["kind"],
+    minimum: Number(m[7]), target: m[8] ? Number(m[8]) : null, shown: Number(m[9]),
+  }));
+}
+
 /** Baselines measured on 4 Nov 2026 (R0 step 2). These may only go down as screens move to tokens in R1. */
 const ARBITRARY_TEXT_SIZE_BASELINE = 224;
 const TSX_FILES_WITH_HEX_BASELINE = 15;
+/**
+ * Added 5 Nov (independent review): counting files alone let more hex values be added inside files that
+ * already had one. Limit that remains: a count can't stop one value being swapped for another.
+ */
+const HEX_OCCURRENCE_BASELINE = 101;
 
 describe("design tokens (UX-002, UX-003, UX-004)", () => {
   it("defines every token the design specs name", () => {
@@ -65,14 +81,48 @@ describe("design tokens (UX-002, UX-003, UX-004)", () => {
     }
   });
 
-  it("keeps every content type readable: ink on its background at least 7:1, fraction digits at least 4:1", () => {
-    for (const t of CONTENT_TYPES) {
-      const soft = hex(`color-${t}-soft`);
-      hex(`color-${t}-edge`);
-      expect(contrast(hex(`color-${t}-ink`), soft), `${t} ink`).toBeGreaterThanOrEqual(7);
-      expect(contrast(hex("color-num-strong"), soft), `${t} numerator`).toBeGreaterThanOrEqual(4);
-      expect(contrast(hex("color-den"), soft), `${t} denominator`).toBeGreaterThanOrEqual(4);
+  it("meets the contrast minimum for every supported pairing at its real size and weight, without rounding", () => {
+    const rows = pairings();
+    expect(rows.length).toBeGreaterThan(40);
+    const problems: string[] = [];
+    for (const r of rows) {
+      const ratio = contrast(hex(r.fg), hex(r.bg));
+      const large = r.px >= 24 || (r.px >= 18.67 && r.weight >= 700);
+      const derived = r.kind === "graphic" || large ? 3 : 4.5;
+      if (r.minimum !== derived) problems.push(`${r.use}: minimum says ${r.minimum}:1 but ${r.px}px / ${r.weight} ${r.kind} needs ${derived}:1`);
+      if (ratio < r.minimum) problems.push(`${r.use}: ${ratio} < ${r.minimum}`);
+      if (r.target !== null && ratio < r.target) problems.push(`${r.use}: ${ratio} misses the ${r.target}:1 target`);
+      // The ratio shown in the spec is cut to two decimals, never rounded up (a 4.496 must not read 4.50).
+      if (r.shown !== Math.floor(ratio * 100) / 100) problems.push(`${r.use}: spec shows ${r.shown}, computed ${ratio}`);
     }
+    expect(problems).toEqual([]);
+  });
+
+  it("keeps content ink on every content-type background at the 7:1 product target, with labels on dark backgrounds", () => {
+    const rows = pairings();
+    for (const t of CONTENT_TYPES) {
+      hex(`color-${t}-edge`);
+      const ink = rows.find((r) => r.fg === `color-${t}-ink` && r.bg === `color-${t}-soft`);
+      expect(ink?.target, `${t} ink row`).toBe(7);
+      // Fraction digits on every tinted panel: numerator and the darker denominator, at the inline size.
+      for (const fg of ["color-num-strong", "color-den-strong"]) expect(rows.some((r) => r.fg === fg && r.bg === `color-${t}-soft`), `${t} ${fg}`).toBe(true);
+    }
+    // White text never sits on a light edge colour; it uses the -strong label backgrounds (DEF-022).
+    expect(rows.filter((r) => r.fg === "color-on-strong" && r.kind === "text").map((r) => r.bg).sort()).toEqual(["color-challenge-strong", "color-example-strong"]);
+    expect(rows.some((r) => r.kind === "text" && r.bg.endsWith("-edge"))).toBe(false);
+  });
+
+  it("checks fraction digits at the sizes FractionNotation actually renders", () => {
+    const src = readFileSync(join(ROOT, "src/components/math/FractionNotation.tsx"), "utf8");
+    const body = parseFloat(tokens.get("text-body")!) * 16;
+    const inlineEm = Number(/inline:\s*\{\s*text:\s*"text-\[([\d.]+)em\]/.exec(src)![1]);
+    const TAILWIND_PX: Record<string, number> = { "text-base": 16, "text-2xl": 24, "text-4xl": 36, "text-6xl": 60 };
+    const sizes: Record<string, number> = { inline: Math.round(inlineEm * body * 100) / 100 };
+    for (const s of ["sm", "md", "lg", "xl"]) sizes[s] = TAILWIND_PX[new RegExp(`${s}:\\s*\\{\\s*text:\\s*"(text-[a-z0-9]+)`).exec(src)![1]];
+    expect(sizes).toEqual({ inline: 16.56, sm: 16, md: 24, lg: 36, xl: 60 });
+    const digitRows = pairings().filter((r) => /fraction digits \((inline|sm|md|lg|xl)\)/.test(r.use));
+    expect(digitRows.length).toBeGreaterThan(20);
+    for (const r of digitRows) expect(r.px, r.use).toBe(sizes[/\((\w+)\)/.exec(r.use)![1]]);
   });
 
   it("keeps state colours readable and the focus ring visible", () => {
@@ -89,12 +139,14 @@ describe("design tokens (UX-002, UX-003, UX-004)", () => {
   });
 
   it("does not let one-off text sizes or hex colours grow (ratchet)", () => {
-    const tsx = files("src", (n) => n.endsWith(".tsx"));
+    const tsx = files("src", (n) => n.endsWith(".tsx")).filter((f) => !f.startsWith("src/architecture/fixtures/"));
     const sources = tsx.map((f) => readFileSync(join(ROOT, f), "utf8"));
     const arbitrarySizes = sources.reduce((n, s) => n + (s.match(/\btext-\[[\d.]+(rem|px|em)\]/g)?.length ?? 0), 0);
     const withHex = sources.filter((s) => /#[0-9a-fA-F]{3,8}\b/.test(s)).length;
+    const hexValues = sources.reduce((n, s) => n + (s.match(/#[0-9a-fA-F]{3,8}\b/g)?.length ?? 0), 0);
     expect(arbitrarySizes).toBeLessThanOrEqual(ARBITRARY_TEXT_SIZE_BASELINE);
     expect(withHex).toBeLessThanOrEqual(TSX_FILES_WITH_HEX_BASELINE);
+    expect(hexValues).toBeLessThanOrEqual(HEX_OCCURRENCE_BASELINE);
   });
 
   it("keeps the design specimen out of production and search engines", () => {

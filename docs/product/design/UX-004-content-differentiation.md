@@ -21,9 +21,17 @@
 
    In greyscale, or for a child with a colour-vision difference, the icon, label and shape still tell the types apart.
 2. **Readable on every background.**
-   - Each type's ink on its background is at least **7:1**.
-   - Fraction digits (coral numerator, blue denominator) are at least **4:1** on every type's background.
-   - `src/design-tokens.test.ts` checks both.
+   - Every supported text and graphic pairing meets the WCAG minimum for its **actual size and weight**:
+     - 4.5:1 for normal text;
+     - 3:1 for large text (at least 24px, or at least 18.67px at weight 700 or above) and for graphics such as badge
+       icons.
+     Labels are 15px, so they need 4.5:1. Fraction digits use their real rendered size (inline digits are
+     0.92 × 18px = 16.56px), so they need 4.5:1 too.
+   - On top of that minimum, each type's ink on its background meets the product **target of 7:1**.
+   - White label text sits on the dark `-strong` backgrounds, not on the light `-edge` colours.
+   - Fraction digits on a tinted panel use the darker denominator blue (`tint` on `RichText` and `FractionNotation`).
+   - §2.3 lists every supported pairing. `src/design-tokens.test.ts` recomputes each ratio from `globals.css`, with no
+     rounding (DEF-022).
 3. **Fraction colours are reserved for maths.**
    - No content type uses coral (`--color-num`) or the fraction blue (`--color-den`) as its background.
    - That would hide fraction digits and blur the meaning of the colours.
@@ -50,7 +58,7 @@ distinguished by typography rather than a panel.
 | Hints | `hint`, and `tip` for Kip's lesson tips |
 | Feedback | `success`, `retry`, and `notice` for answer-format messages |
 | Misconceptions | `misconception` |
-| Worked solutions | `example`, labelled "Here's how" |
+| Worked solutions | `example`, labelled "Worked example" or "Watch how" |
 | Challenge content | `challenge` |
 
 ### 2.1 Treatments
@@ -58,20 +66,29 @@ distinguished by typography rather than a panel.
 Tokens: `--color-<type>-soft` (background), `--color-<type>-edge` (border or accent), `--color-<type>-ink` (label, icon
 and text).
 
-| Type | Purpose | Colour | Icon | Label | Shape | Ink / background |
-|---|---|---|---|---|---|---:|
-| `teach` | The explanation | `--color-teach-soft` (the white card), `--color-teach-ink` | none | none | Plain reading text: no panel | 14.4:1 |
-| `rule` | A key fact or definition to remember | `--color-rule-soft`, `--color-rule-edge`, `--color-rule-ink` | Flag | "Key fact" | 6px left bar | 7.6:1 |
-| `example` | A worked example or worked solution | `--color-example-soft`, `--color-example-edge`, `--color-example-ink` | Studio (board) | "Watch me" / "Let's do it together" / "Here's how" | Tab label on top; numbered steps; 2px border | 8.1:1 |
-| `hint` | Help the child asked for | `--color-hint-soft`, `--color-hint-ink` | Bulb | "Hint" | Soft panel, no border | 8.1:1 |
-| `tip` | Kip's friendly tip in a lesson | `--color-tip-soft`, `--color-tip-edge`, `--color-tip-ink` | Kite (Kip) | "Kip's tip" | Speech bubble (one square corner) | 7.1:1 |
-| `notice` | A message about the answer's form, such as "Type a whole number" | `--color-notice-soft`, `--color-notice-edge`, `--color-notice-ink` | Info | (the message itself) | Small bar, thin border, control radius | 12.8:1 |
-| `misconception` | Names a likely misunderstanding, kindly | `--color-misconception-soft`, `--color-misconception-edge`, `--color-misconception-ink` | Magnifier | "Look closer" | 2px dashed border | 7.9:1 |
-| `success` | A right answer | `--color-success-soft`, `--color-success-edge`, `--color-success-ink` | Tick in a round badge | "Correct!" | 2px border; round badge | 7.3:1 |
-| `retry` | An answer that isn't right yet | `--color-retry-soft`, `--color-retry-edge`, `--color-retry-ink` | Try-again arrow in a round badge | "Not yet" | 2px border; round badge | 7.8:1 |
-| `challenge` | An optional stretch question | `--color-challenge-soft`, `--color-challenge-edge`, `--color-challenge-ink` | Star | "Challenge" | Double border with a ribbon label | 13.9:1 |
+| Type | Purpose | Colour | Icon | Label | Shape |
+|---|---|---|---|---|---|
+| `teach` | The explanation | `--color-teach-soft` (the white card), `--color-teach-ink` | none | none | Plain reading text: no panel |
+| `rule` | A key fact or definition to remember | `--color-rule-soft`, `--color-rule-edge`, `--color-rule-ink` | Flag | "Key fact" | 6px left bar |
+| `example` | A worked example or worked solution | `--color-example-soft`, `--color-example-edge`, `--color-example-ink` | Studio (board) | "Worked example" (or "Watch how"); "Let's do it together" for a guided example | Tab label on a solid `--color-example-strong` background; numbered steps; 2px border |
+| `hint` | Help the child asked for | `--color-hint-soft`, `--color-hint-ink` | Bulb | "Hint" | Soft panel, no border |
+| `tip` | Kip's friendly tip in a lesson | `--color-tip-soft`, `--color-tip-edge`, `--color-tip-ink` | Kite (Kip) | "Kip's tip" | Speech bubble (one square corner) |
+| `notice` | A message about the answer's form, such as "Type a whole number" | `--color-notice-soft`, `--color-notice-edge`, `--color-notice-ink` | Info | (the message itself) | Small bar, thin border, control radius |
+| `misconception` | Names a likely misunderstanding, kindly | `--color-misconception-soft`, `--color-misconception-edge`, `--color-misconception-ink` | Magnifier | "Look closer" | 2px dashed border |
+| `success` | A right answer | `--color-success-soft`, `--color-success-edge`, `--color-success-ink` | Tick in a round badge | "Correct!" | 2px border; round badge |
+| `retry` | An answer that isn't right yet | `--color-retry-soft`, `--color-retry-edge`, `--color-retry-ink` | Try-again arrow in a round badge | "Not yet" | 2px border; round badge |
+| `challenge` | An optional stretch question | `--color-challenge-soft`, `--color-challenge-edge`, `--color-challenge-ink`; ribbon `--color-challenge-strong` | Star | "Optional challenge" | Double border with a ribbon label |
 
 Every treatment is rendered on `/design-specimen` (screenshots: [`evidence/`](evidence/)).
+
+**Wording on the specimen (D-020):**
+- Comparison rules state their mathematical domain: "When two fractions have the same numerator (not zero) and the
+  wholes are the same size, the fraction with the smaller denominator is bigger."
+- Misconception feedback says "When the same-sized whole is split into more equal parts, each part is smaller."
+- Success feedback for a comparison names the same-sized whole.
+
+The specimen shows the visual treatment. It does **not** show that children can use it. Lesson usability testing with
+children is R1 (§4).
 
 ### 2.2 The question prompt
 
@@ -82,6 +99,72 @@ The prompt is the task. It is distinguished by **position and size**, not by a p
 - the read-aloud button sits next to it.
 
 Panels (hint, notice, feedback) only ever appear **below** the prompt and the answer area.
+
+### 2.3 Supported colour pairings
+
+Every foreground and background combination the content types, states and the specimen use. `src/design-tokens.test.ts`
+reads this table and does four things:
+- recomputes each ratio from the token values;
+- checks that the **Minimum** column follows from the size, weight and kind (it isn't typed in by hand);
+- checks each ratio meets its minimum and, where one is given, its **Target**;
+- checks that the **Ratio** shown is the computed value cut to two decimals, never rounded up.
+
+Minimum is the accessibility requirement. Target is the stronger product goal.
+
+| Foreground | Background | Use | Size (px) | Weight | Kind | Minimum | Target | Ratio |
+|---|---|---|---:|---:|---|---:|---:|---:|
+| `--color-teach-ink` | `--color-teach-soft` | teach: label and text | 15 | 500 | text | 4.5:1 | 7:1 | 14.42:1 |
+| `--color-rule-ink` | `--color-rule-soft` | rule: label and text | 15 | 500 | text | 4.5:1 | 7:1 | 7.61:1 |
+| `--color-example-ink` | `--color-example-soft` | example: label and text | 15 | 500 | text | 4.5:1 | 7:1 | 8.11:1 |
+| `--color-hint-ink` | `--color-hint-soft` | hint: label and text | 15 | 500 | text | 4.5:1 | 7:1 | 8.12:1 |
+| `--color-tip-ink` | `--color-tip-soft` | tip: label and text | 15 | 500 | text | 4.5:1 | 7:1 | 7.06:1 |
+| `--color-notice-ink` | `--color-notice-soft` | notice: label and text | 15 | 500 | text | 4.5:1 | 7:1 | 12.83:1 |
+| `--color-misconception-ink` | `--color-misconception-soft` | misconception: label and text | 15 | 500 | text | 4.5:1 | 7:1 | 7.85:1 |
+| `--color-success-ink` | `--color-success-soft` | success: label and text | 15 | 500 | text | 4.5:1 | 7:1 | 7.26:1 |
+| `--color-retry-ink` | `--color-retry-soft` | retry: label and text | 15 | 500 | text | 4.5:1 | 7:1 | 7.83:1 |
+| `--color-challenge-ink` | `--color-challenge-soft` | challenge: label and text | 15 | 500 | text | 4.5:1 | 7:1 | 13.91:1 |
+| `--color-on-strong` | `--color-example-strong` | example: tab label | 15 | 800 | text | 4.5:1 | — | 7.86:1 |
+| `--color-on-strong` | `--color-challenge-strong` | challenge: ribbon label | 15 | 800 | text | 4.5:1 | — | 7.12:1 |
+| `--color-num-strong` | `--color-teach-soft` | teach: fraction digits (inline), numerator | 16.56 | 600 | text | 4.5:1 | — | 6.77:1 |
+| `--color-den-strong` | `--color-teach-soft` | teach: fraction digits (inline), denominator with tint | 16.56 | 600 | text | 4.5:1 | — | 6.89:1 |
+| `--color-num-strong` | `--color-rule-soft` | rule: fraction digits (inline), numerator | 16.56 | 600 | text | 4.5:1 | — | 5.91:1 |
+| `--color-den-strong` | `--color-rule-soft` | rule: fraction digits (inline), denominator with tint | 16.56 | 600 | text | 4.5:1 | — | 6.02:1 |
+| `--color-num-strong` | `--color-example-soft` | example: fraction digits (inline), numerator | 16.56 | 600 | text | 4.5:1 | — | 6.05:1 |
+| `--color-den-strong` | `--color-example-soft` | example: fraction digits (inline), denominator with tint | 16.56 | 600 | text | 4.5:1 | — | 6.16:1 |
+| `--color-num-strong` | `--color-hint-soft` | hint: fraction digits (inline), numerator | 16.56 | 600 | text | 4.5:1 | — | 6.18:1 |
+| `--color-den-strong` | `--color-hint-soft` | hint: fraction digits (inline), denominator with tint | 16.56 | 600 | text | 4.5:1 | — | 6.29:1 |
+| `--color-num-strong` | `--color-tip-soft` | tip: fraction digits (inline), numerator | 16.56 | 600 | text | 4.5:1 | — | 5.82:1 |
+| `--color-den-strong` | `--color-tip-soft` | tip: fraction digits (inline), denominator with tint | 16.56 | 600 | text | 4.5:1 | — | 5.93:1 |
+| `--color-num-strong` | `--color-notice-soft` | notice: fraction digits (inline), numerator | 16.56 | 600 | text | 4.5:1 | — | 6.02:1 |
+| `--color-den-strong` | `--color-notice-soft` | notice: fraction digits (inline), denominator with tint | 16.56 | 600 | text | 4.5:1 | — | 6.13:1 |
+| `--color-num-strong` | `--color-misconception-soft` | misconception: fraction digits (inline), numerator | 16.56 | 600 | text | 4.5:1 | — | 6.07:1 |
+| `--color-den-strong` | `--color-misconception-soft` | misconception: fraction digits (inline), denominator with tint | 16.56 | 600 | text | 4.5:1 | — | 6.18:1 |
+| `--color-num-strong` | `--color-success-soft` | success: fraction digits (inline), numerator | 16.56 | 600 | text | 4.5:1 | — | 6.10:1 |
+| `--color-den-strong` | `--color-success-soft` | success: fraction digits (inline), denominator with tint | 16.56 | 600 | text | 4.5:1 | — | 6.21:1 |
+| `--color-num-strong` | `--color-retry-soft` | retry: fraction digits (inline), numerator | 16.56 | 600 | text | 4.5:1 | — | 5.82:1 |
+| `--color-den-strong` | `--color-retry-soft` | retry: fraction digits (inline), denominator with tint | 16.56 | 600 | text | 4.5:1 | — | 5.93:1 |
+| `--color-num-strong` | `--color-challenge-soft` | challenge: fraction digits (inline), numerator | 16.56 | 600 | text | 4.5:1 | — | 6.53:1 |
+| `--color-den-strong` | `--color-challenge-soft` | challenge: fraction digits (inline), denominator with tint | 16.56 | 600 | text | 4.5:1 | — | 6.65:1 |
+| `--color-num-strong` | `--color-surface` | card: fraction digits (inline), numerator | 16.56 | 600 | text | 4.5:1 | — | 6.77:1 |
+| `--color-den` | `--color-surface` | card: fraction digits (inline), denominator | 16.56 | 600 | text | 4.5:1 | — | 4.78:1 |
+| `--color-den` | `--color-surface` | card: fraction digits (sm), denominator | 16 | 600 | text | 4.5:1 | — | 4.78:1 |
+| `--color-den` | `--color-surface` | card: fraction digits (md), denominator | 24 | 600 | text | 3:1 | — | 4.78:1 |
+| `--color-den-strong` | `--color-surface` | card: compact fraction digits (label), denominator | 15 | 600 | text | 4.5:1 | — | 6.89:1 |
+| `--color-num-strong` | `--color-surface` | card: compact fraction digits (label), numerator | 15 | 600 | text | 4.5:1 | — | 6.77:1 |
+| `--color-on-strong` | `--color-success-edge` | success: tick badge icon | 40 | 800 | graphic | 3:1 | — | 3.16:1 |
+| `--color-on-strong` | `--color-retry-edge` | retry: try-again badge icon | 40 | 800 | graphic | 3:1 | — | 3.45:1 |
+| `--color-on-strong` | `--color-correct` | correct: tick badge icon | 28 | 800 | graphic | 3:1 | — | 5.35:1 |
+| `--color-on-strong` | `--color-incorrect` | incorrect: cross badge icon | 28 | 800 | graphic | 3:1 | — | 6.77:1 |
+| `--color-correct` | `--color-correct-soft` | correct: tile label | 15 | 500 | text | 4.5:1 | — | 4.82:1 |
+| `--color-incorrect` | `--color-incorrect-soft` | incorrect: tile label | 15 | 500 | text | 4.5:1 | — | 5.61:1 |
+| `--color-selected` | `--color-selected-soft` | selected: tile label | 15 | 500 | text | 4.5:1 | — | 12.60:1 |
+| `--color-disabled-ink` | `--color-disabled-soft` | disabled: tile and button label | 15 | 500 | text | 4.5:1 | — | 4.98:1 |
+| `--color-ink` | `--color-surface` | card: headings and prompt | 18 | 500 | text | 4.5:1 | 7:1 | 14.42:1 |
+| `--color-ink-2` | `--color-surface` | card: reading text | 18 | 500 | text | 4.5:1 | 7:1 | 7.33:1 |
+| `--color-muted` | `--color-surface` | card: labels and meta | 15 | 600 | text | 4.5:1 | — | 5.60:1 |
+| `--color-on-brand` | `--color-brand` | primary button label | 20 | 800 | text | 3:1 | — | 5.16:1 |
+| `--color-focus` | `--color-surface` | focus ring on a card | 3 | 0 | graphic | 3:1 | — | 5.16:1 |
+| `--color-focus` | `--color-paper` | focus ring on the page | 3 | 0 | graphic | 3:1 | — | 4.86:1 |
 
 ## 3. Today, and the gaps (4 Nov)
 

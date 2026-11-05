@@ -53,6 +53,23 @@ Related specifications: [UX-003 typography](UX-003-typography.md) and [UX-004 co
 | `--color-correct` / `--color-correct-edge` / `--color-correct-soft` | #167a4b / #22a565 / #e3f8ee | A right answer, marked |
 | `--color-incorrect` / `--color-incorrect-edge` / `--color-incorrect-soft` | #a3361a / #f4623a / #fde5dc | A wrong answer, marked. Always shown with a cross badge and a text label, never by colour alone. |
 
+**Label backgrounds for white text (added 5 Nov, DEF-022):**
+
+| Token | Value | Use |
+|---|---|---|
+| `--color-on-strong` | #ffffff | Text and icons on a solid label or badge background |
+| `--color-example-strong` | #0a5c53 | "Worked example" tab (white text 7.86:1) |
+| `--color-challenge-strong` | #7a4f00 | "Optional challenge" ribbon (white text 7.12:1) |
+
+The `-edge` colours are for borders and accents only, never behind text.
+
+**Contrast rule:**
+- Every supported text and graphic pairing meets the WCAG minimum **for its actual size and weight**: 4.5:1 for normal
+  text, 3:1 for large text and graphics.
+- Content ink also meets the product target of 7:1.
+- The full list is in [UX-004 §2.3](UX-004-content-differentiation.md#23-supported-colour-pairings), and
+  `src/design-tokens.test.ts` checks every row.
+
 **Content-type colours (new):** ten types × background, edge and ink, for example `--color-hint-soft`,
 `--color-hint-edge` and `--color-hint-ink`. They are listed and justified in [UX-004 §2](UX-004-content-differentiation.md#2-the-content-types-ac1).
 
@@ -182,8 +199,15 @@ Motion timing and easing belong to UX-006 (R1). Reduced motion is always respect
 - the content types meet the contrast rules;
 - the state colours are readable;
 - no violet token is added;
-- **a ratchet** on one-off values (the baseline on 4 Nov): **224** one-off `text-[…]` sizes in `.tsx` files, and **15**
-  `.tsx` files containing hex colours. Neither may grow. R1 lowers both baselines as screens move to tokens.
+- **a ratchet** on one-off values. Baselines: **224** one-off `text-[…]` sizes in `.tsx` files (4 Nov), **15** `.tsx`
+  files containing hex colours (4 Nov), and **101** hex colour values in total (added 5 Nov). None may grow. R1 lowers the
+  baselines as screens move to tokens.
+  - **Limits of the ratchet** (independent review, 5 Nov). A count only stops the *number* of one-off values growing:
+    - it can't stop one hex value or size being swapped for a different one;
+    - before 5 Nov, counting *files* let new hex values be added inside files that already had one. The occurrence
+      count closes that gap.
+  - Review of changed lines is still needed. Full prevention comes when the R1 migration removes one-off values from
+    screens, and a rule then forbids them outright.
 
 **Not yet true, and why.**
 - Existing screens still use one-off values.
