@@ -45,7 +45,7 @@ On 3 Nov the checker was deliberately broken twice to show it fails: once with a
 to a test that doesn't exist, and once with a P1 criterion left without a test case. Both times the
 right check went red (see the status report).
 
-## Coverage on 5 November 2026 (after the step-2 corrections)
+## Coverage on 5 November 2026 (after sprint step 3)
 
 Each criterion is counted once, by the strongest evidence any of its test cases has.
 
@@ -54,7 +54,7 @@ Each criterion is counted once, by the strongest evidence any of its test cases 
 | GOV | 4 | 10 | 13 | 6 | 5 | 3 | 0 | 0 | 0 | 2 |
 | CUR | 4 | 9 | 23 | 8 | 0 | 3 | 1 | 1 | 0 | 4 |
 | UX | 8 | 22 | 44 | 14 | 2 | 5 | 2 | 2 | 1 | 10 |
-| ARCH | 5 | 14 | 33 | 29 | 0 | 6 | 0 | 6 | 0 | 2 |
+| ARCH | 5 | 14 | 52 | 44 | 0 | 11 | 0 | 1 | 0 | 2 |
 | FR | 11 | 34 | 43 | 28 | 0 | 5 | 0 | 14 | 1 | 14 |
 | LAB | 7 | 25 | 25 | 4 | 0 | 2 | 0 | 2 | 0 | 21 |
 | PRACT | 8 | 25 | 34 | 24 | 0 | 9 | 0 | 6 | 0 | 10 |
@@ -64,8 +64,8 @@ Each criterion is counted once, by the strongest evidence any of its test cases 
 | MM | 12 | 28 | 28 | 0 | 0 | 0 | 0 | 0 | 0 | 28 |
 | EXAM | 6 | 16 | 16 | 1 | 0 | 0 | 0 | 1 | 0 | 15 |
 | PARENT | 3 | 7 | 7 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
-| QA | 7 | 15 | 19 | 6 | 0 | 1 | 0 | 3 | 0 | 11 |
-| **Total** | **97** | **270** | **366** | **161** | **7** | **44** | **3** | **50** | **2** | **164** |
+| QA | 7 | 15 | 37 | 24 | 0 | 3 | 0 | 1 | 0 | 11 |
+| **Total** | **97** | **270** | **403** | **194** | **7** | **51** | **3** | **43** | **2** | **164** |
 
 **How to read this:**
 - Fractions logic (FR, PRACT, MIS, MAST) already has substantial automated evidence. Its **planned**
@@ -77,6 +77,7 @@ Each criterion is counted once, by the strongest evidence any of its test cases 
   pass; the rest are document and visual reviews waiting for the Product Owner, and planned R1 checks.
 - The step-2 corrections (5 Nov) added 10 more: ARCH-001 fixture tests, contrast checks at real sizes, and planned R1
   tests for the evidence, lab-path and fresh-example rules.
+- Sprint step 3 (5 Nov) added test cases for ARCH-002, ARCH-003 and QA-001, pointing at three new test files.
 - "Accepted" counts the 7 criteria of the four accepted items.
 - A criterion is counted under its strongest case, so UX-003 AC3 appears as "review pending" (its specification) even
   though its scaling check is `failing`. The failing cases are listed below.
@@ -93,12 +94,15 @@ Each criterion is counted once, by the strongest evidence any of its test cases 
 | `src/architecture.test.ts` | 10 | ARCH-001 |
 | `src/curriculum/prerequisites.test.ts` | 6 | CUR-002, CUR-003 |
 | `src/design-tokens.test.ts` | 9 | UX-002, UX-003, UX-004 |
+| `src/maths/maths.test.ts` | 14 | ARCH-003, QA-001 |
+| `src/questions/questions.test.ts` | 7 | ARCH-002 |
 | `src/design.test.ts` | 5 | UX-002, UX-003 |
 | `src/engine/engine.test.ts` | 34 | ARCH-004, ARCH-005, FR-010, FR-011, MAST-001, MAST-002, MAST-003, MAST-004, MAST-005, MIS-003, MIS-004, MIS-005, PRACT-001, PRACT-007, PRACT-008 |
 | `src/engine/rewards.test.ts` | 10 | FR-001, MAST-003 |
 | `src/lib/migrate.test.ts` | 6 | ARCH-004, MAST-005, PRACT-001, QA-001 |
 | `src/topics/fractions/content.test.ts` | 14 | ARCH-002, CUR-004, FR-004, FR-010, MAST-002, MIS-001, PRACT-001, PRACT-006, PRACT-007 |
 | `src/topics/fractions/evaluate.test.ts` | 25 | ARCH-003, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-008, LAB-005, MIS-001, MIS-002, PRACT-001, PRACT-002, PRACT-003, PRACT-004, PRACT-005, PRACT-006, QA-001 |
+| `src/topics/fractions/representations.test.ts` | 11 | ARCH-003, QA-001 |
 | `src/topics/fractions/math.test.ts` | 9 | ARCH-003, FR-002, FR-005, FR-006, FR-008, LAB-002, LAB-004, LAB-005, PRACT-005, PRACT-006, QA-001 |
 | `src/topics/kit/kit.test.ts` | 72 | ARCH-001, ARCH-002, EXAM-005, PRACT-002, TT-003, TT-008 |
 | `src/topics/registry.test.ts` | 6 | ARCH-001, ARCH-002 |

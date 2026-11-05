@@ -59,4 +59,12 @@ possible screen, state or behaviour is unchanged.
 - **Text scaling:** unchanged from 4 Nov, because existing screens were not changed. DEF-018 to DEF-021 remain.
 - **Production build** (`VERCEL_ENV=production`): `/design-specimen` returns 404 with `noindex`, and `/` returns 200.
 
-Step-3 results are in `results/step3/`.
+`results/step3/` holds the runs on 5 Nov 2026 for sprint step 3. Baseline `6050e3c`, head `d100ff1`:
+- **Generated questions:** 51,098 (every practice and assessment question, and every kit template × difficulty × 150
+  seeds, with answer texts); none differ.
+- **Positive control:** a deliberate one-character change to `best()` in fractions-2 produced 18 differing questions, and
+  was reverted.
+- **Pixel comparison:** 38 screens and states; no differences in the tested screens and states. This includes the
+  place-value island and lesson, which use the moved digit maths.
+- **Specimen audit:** 270 elements checked, 0 below the minimum.
+- **Production build:** `/design-specimen` returns 404.

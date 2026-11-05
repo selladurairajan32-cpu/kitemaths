@@ -5,7 +5,7 @@ acceptance criteria are in [`backlog.md`](backlog.md); how statuses work is expl
 [`README.md`](README.md#status-definitions). `src/traceability.test.ts` checks that every backlog item
 is listed here exactly once with valid values (RC-003).
 
-**Last updated:** 5 November 2026: step-2 corrections delivered ([correction report](reports/R0-step2-correction-report.md)). Five items are READY FOR QA again (D-022); UX-003 stays QA FAILED (D-021). Earlier the same day: the independent review set six items to QA FAILED (D-014), and Q-1 to Q-7 were decided (D-015 to D-021). 4 November: sprint step 2 delivered for review. CUR-002, CUR-003, UX-002, UX-003, UX-004 and ARCH-001 are READY FOR QA ([status report](reports/R0-step2-status-report.md)). Earlier the same day: GOV-002, GOV-003 and UX-001 accepted (D-011); step 2 authorised (D-012).
+**Last updated:** 5 November 2026: sprint step 3 delivered (ARCH-002, ARCH-003, QA-001 READY FOR QA, [step-3 report](reports/R0-step3-status-report.md)). Before that, the same day: step-2 corrections delivered ([correction report](reports/R0-step2-correction-report.md)). Five items are READY FOR QA again (D-022); UX-003 stays QA FAILED (D-021). Earlier the same day: the independent review set six items to QA FAILED (D-014), and Q-1 to Q-7 were decided (D-015 to D-021). 4 November: sprint step 2 delivered for review. CUR-002, CUR-003, UX-002, UX-003, UX-004 and ARCH-001 are READY FOR QA ([status report](reports/R0-step2-status-report.md)). Earlier the same day: GOV-002, GOV-003 and UX-001 accepted (D-011); step 2 authorised (D-012).
 
 ## Read this first: implemented is not accepted
 
@@ -22,12 +22,13 @@ Each item has two separate statuses (D-009).
 
 ## Summary
 
-**QA status:** SPECIFIED: 87, READY FOR QA: 5, QA FAILED: 1, ACCEPTED: 4.
+**QA status:** SPECIFIED: 84, READY FOR QA: 8, QA FAILED: 1, ACCEPTED: 4.
 
 - **Four** items are ACCEPTED: GOV-001 (D-005), and GOV-002, GOV-003 and UX-001 (D-011).
 - **Five** items were corrected after the independent review (D-014) and are READY FOR QA again (D-022): ARCH-001,
   CUR-002, CUR-003, UX-002 and UX-004.
 - **UX-003 stays QA FAILED** while AC3 is unmet (D-021).
+- **Sprint step 3** (ARCH-002, ARCH-003, QA-001) is delivered and READY FOR QA ([step-3 report](reports/R0-step3-status-report.md)).
 - Every other item is SPECIFIED: it has acceptance criteria in backlog v1.0 but hasn't been refined to
   the Definition of Ready (D-009).
 
@@ -48,8 +49,8 @@ Each item has two separate statuses (D-009).
 | MM | 12 | 0 | 4 | 8 |
 | EXAM | 6 | 0 | 2 | 4 |
 | PARENT | 3 | 0 | 2 | 1 |
-| QA | 7 | 0 | 4 | 3 |
-| **Total** | **97** | **25** | **51** | **21** |
+| QA | 7 | 1 | 3 | 3 |
+| **Total** | **97** | **26** | **50** | **21** |
 
 The 18 non-Fractions islands are live as **unaccepted previews** (D-001). Their content appears below
 only where it is evidence for a backlog item: Times Tables, Mental Maths, 11+ and Parent.
@@ -92,8 +93,8 @@ only where it is evidence for a backlog item: Times Tables, Mental Maths, 11+ an
 | ID | Title | Pri | Rel | QA status | Implementation | Evidence and notes |
 |---|---|---|---|---|---|---|
 | ARCH-001 | Define modular learning architecture | P0 | R0 | READY FOR QA (D-022) | Partial | QA FAILED at `6050e3c` (D-014); corrected 5 Nov. [Architecture](architecture/ARCH-001-architecture.md). The guard is rebuilt on the TypeScript compiler (`src/architecture/analyse.ts`). 15 bad and 5 good fixtures; the reviewer's probe fails (DEF-023). Couplings K-1 to K-7 stay for R1; K-6 and K-7 were found by the new guard. |
-| ARCH-002 | Define a typed question schema | P0 | R0 | SPECIFIED | Partial | Typed schemas exist; no runtime validation; no year/scoring/hint-ladder fields. |
-| ARCH-003 | Build pure mathematical logic modules | P0 | R0 | SPECIFIED | Partial | `src/maths/fraction.ts` pure + tested; no fraction operations; inline maths in kit islands. |
+| ARCH-002 | Define a typed question schema | P0 | R0 | READY FOR QA | Partial | Delivered 5 Nov (step 3): [question schema](architecture/ARCH-002-question-schema.md): `src/questions/` schema, runtime validator and adapters for 12 interactions. Valid and invalid fixtures for each; all existing Fractions and kit questions validate apart from DEF-028. **Not yet used by the app.** |
+| ARCH-003 | Build pure mathematical logic modules | P0 | R0 | READY FOR QA | Partial | Delivered 5 Nov (step 3): [pure maths](architecture/ARCH-003-maths.md): checked fraction arithmetic, mixed numbers, partitions, integers, place value. Duplicates replaced; 51,098 generated questions identical before and after. K-7 fixed. Existing unchecked functions keep their behaviour (DEF-027). |
 | ARCH-004 | Implement prototype progress persistence | P1 | R1 | SPECIFIED | Implemented | localStorage `kite-maths:v2`, versioned, v1 migration, corrupt-data backup (`src/lib/store.ts`). Store itself untested. |
 | ARCH-005 | Build a reusable event and attempt model | P1 | R1 | SPECIFIED | Partial | `ItemResult` records attempts, hints, first try, time; no response or duration. |
 
@@ -215,7 +216,7 @@ only where it is evidence for a backlog item: Times Tables, Mental Maths, 11+ an
 
 | ID | Title | Pri | Rel | QA status | Implementation | Evidence and notes |
 |---|---|---|---|---|---|---|
-| QA-001 | Build mathematical unit-test suite | P0 | R0/R1 | SPECIFIED | Partial | 9 fraction-maths tests (`src/topics/fractions/math.test.ts`); no operations, few invalid-input cases. |
+| QA-001 | Build mathematical unit-test suite | P0 | R0/R1 | READY FOR QA | Implemented | Delivered 5 Nov (step 3): `src/maths/maths.test.ts` (hand-worked tables, boundaries, invalid inputs, overflow, BigInt oracle) and `src/topics/fractions/representations.test.ts` (pictures agree with answers, per interaction). |
 | QA-002 | Build component and integration tests | P1 | R1 | SPECIFIED | Not implemented | No component or integration tests (`vitest` runs `.ts` only). |
 | QA-003 | Build end-to-end learning journey tests | P1 | R1 | SPECIFIED | Not implemented | No end-to-end journey test in the repo. |
 | QA-004 | Create defect register and triage rules | P0 | R0 | SPECIFIED | Partial | Provisional defect list DEF-001…017 in the GOV-001 audit §12. |
@@ -247,6 +248,8 @@ The provisional defect list is in [GOV-001 audit §12](GOV-001-repository-audit.
 | DEF-024 | High | CUR-002, CUR-003: answers given after hints or retries counted as lesson evidence; mastery and placement precedence unclear (D-014). **Corrected 5 Nov; awaiting independent retest.** |
 | DEF-025 | Medium | CUR-002: the lab needs practice evidence, but the recommendation rules never route to that practice (D-014). **Corrected 5 Nov; awaiting independent retest.** |
 | DEF-026 | Medium | CUR-003: claimed that generated `g:` ids guarantee examples different from the worked example (D-014). **Corrected 5 Nov; awaiting independent retest.** |
+| DEF-027 | Low | ARCH-003: the existing unchecked fraction functions give silent wrong results outside their domain: `simplify(0/0)` → 0/1, `gcd(1.5, 0.5)` → 0.5, `compare` returns `=` for fractions beyond the safe range, `partName(13)` → "13ths". Not reachable with today's content. Fix in R1 by routing through the checked functions. |
+| DEF-028 | Low | ARCH-002: 14 kit templates on preview islands sometimes give two traps the same value, so the second trap's feedback can never show (152 of about 50,900 generated questions, seeds 0–149). Found by the schema validator. |
 
 DEF-022 to DEF-026 come from the independent review of 5 Nov (D-014). DEF-018 to DEF-021 were found by the step 2 text-scaling check and are described in
 [UX-003 §7](design/UX-003-typography.md#7-text-scaling-ac3). These move into the formal register when QA-004 is authorised.
