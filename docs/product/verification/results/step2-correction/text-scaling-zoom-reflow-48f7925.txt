@@ -1,0 +1,16 @@
+zoom200-of-1280 home overflowX 0 clipped 0
+zoom200-of-1280 map overflowX 0 clipped 0
+zoom200-of-1280 island overflowX 0 clipped 4
+zoom200-of-1280 lesson overflowX 0 clipped 0
+zoom200-of-1280 question overflowX 0 clipped 0
+zoom200-of-1280 practice overflowX 0 clipped 0
+zoom200-of-1280 grown-ups overflowX 0 clipped 0
+zoom200-of-1280 specimen overflowX 0 clipped 0
+reflow-320 home overflowX 25 clipped 0
+reflow-320 map overflowX 25 clipped 0
+reflow-320 island overflowX 25 clipped 10
+reflow-320 lesson overflowX 0 clipped 0
+reflow-320 question overflowX 0 clipped 0
+reflow-320 practice overflowX 25 clipped 0
+reflow-320 grown-ups overflowX 0 clipped 0
+reflow-320 specimen overflowX 25 clipped 0
