@@ -7,7 +7,7 @@
  * a definition whose answer is wrong for its own numbers or picture is rejected. Pure: no UI, no I/O.
  */
 import { checkedMultiply } from "@/maths/integer";
-import { fitsDecimals, numericMatches } from "./compare";
+import { fitsDecimals, numericMatches, roundDomainError } from "./compare";
 import { COUNTEREXAMPLE_PREDICATES, INTERACTIONS, type Interaction, type NumericComparison, type QuestionDefinition } from "./schema";
 
 export interface ValidationError {
@@ -265,6 +265,10 @@ export function validateQuestion(x: unknown): ValidationResult {
           c.extra(cmp, ["kind", "absolute"], "validation.comparison.");
           if (typeof cmp.absolute !== "number" || !(cmp.absolute > 0) || !Number.isFinite(cmp.absolute)) c.fail("validation.comparison.absolute", "must be a positive number");
         }
+        if (isObj(cmp) && cmp.kind === "round" && Number.isSafeInteger(cmp.places) && typeof x.answer === "number") {
+          const problem = roundDomainError(cmp.places as number, x.answer);
+          if (problem) c.fail("answer", problem);
+        }
         if (c.int(v.maxDecimals, "validation.maxDecimals", 0, 6) && typeof x.answer === "number" && Number.isFinite(x.answer)) {
           if (!fitsDecimals(x.answer, v.maxDecimals as number)) c.fail("answer", `has more than ${v.maxDecimals} decimal places, so it couldn't be typed`);
         }
@@ -290,8 +294,17 @@ export function validateQuestion(x: unknown): ValidationResult {
             values.push(ok ? (t.value as number) : null);
             if (!ok || typeof x.answer !== "number" || !Number.isFinite(x.answer)) return;
             const v = t.value as number;
+            // A value outside the comparison's supported domain is rejected, never compared: a lossy comparison could
+            // equate distinct values (DEF-037).
+            const inDomain = (n: number, p: string) => {
+              const problem = cmp && cmp.kind === "round" ? roundDomainError(cmp.places, n) : null;
+              if (problem) c.fail(p, problem);
+              return !problem;
+            };
+            const answerOk = !cmp || cmp.kind !== "round" || roundDomainError(cmp.places, x.answer) === null;
+            const trapOk = inDomain(v, `${path}.value`);
             if (v === x.answer) c.fail(`${path}.value`, "equals the correct answer");
-            else if (cmp && numericMatches(cmp, x.answer, v)) c.fail(`${path}.value`, `would be marked correct by the declared comparison (${describe(cmp)}), so it can't be a trap`);
+            else if (cmp && answerOk && trapOk && numericMatches(cmp, x.answer, v)) c.fail(`${path}.value`, `would be marked correct by the declared comparison (${describe(cmp)}), so it can't be a trap`);
             for (let j = 0; j < i; j++) {
               const earlier = values[j];
               if (earlier === null) continue;
@@ -299,7 +312,7 @@ export function validateQuestion(x: unknown): ValidationResult {
                 c.fail(`${path}.value`, "repeats another trap"); // the generator defect DEF-028 has exactly this message
                 break;
               }
-              if (cmp && numericMatches(cmp, earlier, v)) {
+              if (cmp && trapOk && (cmp.kind !== "round" || roundDomainError(cmp.places, earlier) === null) && numericMatches(cmp, earlier, v)) {
                 c.fail(`${path}.value`, `matches traps[${j}] under the declared comparison (${describe(cmp)}), so its feedback could never show`);
                 break;
               }

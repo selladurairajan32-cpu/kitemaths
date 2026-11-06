@@ -66,13 +66,15 @@ The validator uses it for **every** answer and trap check, so there is a single 
 | Comparison | Rule |
 |---|---|
 | `exact` | `value === answer` |
-| `round` to *places* | Both numbers are scaled by 10^places and rounded **half away from zero**, then compared. So −2.5 rounds to −3, 2.5 to 3, and −0.25 at one place to −0.3. Negative zero equals zero. The scaling uses the stored binary double: a decimal tie that isn't exactly representable follows the double (1.005 at two places scales to 100.49999999999999 and rounds to 100). |
+| `round` to *places* | **Supported only where scaling is exact:** `|value × 10^places| ≤ MAX_SAFE_INTEGER` (9,007,199,254,740,991). Beyond that, scaling loses precision (MAX_SAFE_INTEGER and MAX_SAFE_INTEGER − 1 scale to the same double at one place) or overflows to Infinity (1e308 and 1.1e308), and rounding would silently equate distinct values (DEF-037). `roundDomainError` reports such a number, `numericMatches` throws a `RangeError` for it instead of returning a boolean, and the validator rejects the answer or trap with the path and the reason. Inside the domain, both numbers are scaled by 10^places and rounded **half away from zero**, then compared. So −2.5 rounds to −3, 2.5 to 3, and −0.25 at one place to −0.3. Negative zero equals zero. The scaling uses the stored binary double: a decimal tie that isn't exactly representable follows the double (1.005 at two places scales to 100.49999999999999 and rounds to 100). |
 | `tolerance` of *absolute* | `|value − answer| ≤ absolute`: **inclusive**, with **no extra allowance**. The subtraction is ordinary double arithmetic, so the boundary is exact where the values are exactly representable (|10 − 9.5| = 0.5 matches a tolerance of 0.5) and follows the doubles otherwise. |
 
 **Consequences for traps** (`number-entry`):
 - a trap the declared comparison would mark correct is rejected;
 - two traps that match each other under the comparison are rejected, because the later one's feedback could never show;
 - exactly equal trap values keep the message "repeats another trap". That is the generator defect DEF-028.
+
+`tolerance` needs only finite numbers: a difference that overflows is not a match, and distinct values are never equated. `exact` has no restriction.
 
 Whether a typed answer fits `maxDecimals` is checked exactly: the value must equal itself written to that many places
 (`Number(value.toFixed(maxDecimals)) === value`). No tolerance is used.

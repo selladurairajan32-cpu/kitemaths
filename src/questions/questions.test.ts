@@ -4,7 +4,7 @@ import { genId, templatesOf } from "@/topics/kit/define";
 import { FOLLOWUP_QUESTIONS, LESSON_QUESTIONS, PRACTICE_QUESTIONS } from "@/topics/fractions/questions";
 import type { FractionQuestion } from "@/topics/fractions/types";
 import { fromFractionQuestion, fromKitQuestion, type KitQuestionLike } from "./adapt";
-import { fitsDecimals, numericMatches, roundHalfAwayFromZero } from "./compare";
+import { fitsDecimals, numericMatches, roundDomainError, roundHalfAwayFromZero } from "./compare";
 import { INTERACTIONS, type Interaction, type NumericComparison } from "./schema";
 import { validateQuestion } from "./validate";
 
@@ -338,5 +338,88 @@ describe("model consistency says only what the definition states (ARCH-002, DEF-
       expect(errorsOf(d), q.id).toEqual([]);
     }
     expect([...asked].sort()).toEqual(expect.arrayContaining(["shaded"]));
+  });
+});
+
+describe("rounding is only applied where scaling is exact (DEF-037)", () => {
+  const MAX = Number.MAX_SAFE_INTEGER;
+  const round1: NumericComparison = { kind: "round", places: 1 };
+  const numberEntry = (answer: number, comparison: NumericComparison, trap: number, maxDecimals = 6) => ({
+    ...VALID["number-entry"],
+    answer,
+    validation: { comparison, maxDecimals, allowNegative: true },
+    traps: [{ value: trap }],
+    misconceptions: [],
+  });
+
+  it("never equates distinct values because scaling loses precision: QA's example throws instead of returning true", () => {
+    expect(() => numericMatches(round1, MAX, MAX - 1)).toThrow(RangeError);
+    expect(() => numericMatches(round1, -MAX, -(MAX - 1))).toThrow(RangeError); // the negative counterpart
+    expect(() => numericMatches(round1, MAX - 1, MAX)).toThrow(RangeError);
+  });
+
+  it("never equates values because scaling overflows to Infinity: QA's 1e308 example throws instead of returning true", () => {
+    expect(() => numericMatches(round1, 1e308, 1.1e308)).toThrow(/outside the supported range/);
+    expect(() => numericMatches(round1, -1e308, -1.1e308)).toThrow(RangeError);
+    expect(() => numericMatches({ kind: "round", places: 0 }, Infinity, 5)).toThrow(RangeError);
+  });
+
+  it("defines the domain exactly: |value × 10^places| must not exceed MAX_SAFE_INTEGER", () => {
+    expect(roundDomainError(1, 900719925474099.1)).toBeNull(); // × 10 = 9007199254740991, the last safe value
+    expect(roundDomainError(1, -900719925474099.1)).toBeNull();
+    expect(roundDomainError(1, 900719925474099.2)).toMatch(/outside the supported range/); // × 10 = 9007199254740992
+    expect(roundDomainError(0, MAX)).toBeNull();
+    expect(roundDomainError(0, MAX + 1)).not.toBeNull();
+    expect(roundDomainError(1, NaN)).not.toBeNull();
+    expect(roundDomainError(1, Infinity)).not.toBeNull();
+  });
+
+  it("still compares correctly at the edge of the domain and for ordinary values", () => {
+    // At places 0 the whole safe range is in domain, and distinct safe integers stay distinct.
+    const zero: NumericComparison = { kind: "round", places: 0 };
+    expect(numericMatches(zero, MAX, MAX - 1)).toBe(false);
+    expect(numericMatches(zero, -MAX, -(MAX - 1))).toBe(false);
+    expect(numericMatches(zero, MAX, MAX)).toBe(true);
+    // Last in-domain value at one place: distinct neighbours are distinct.
+    expect(numericMatches(round1, 900719925474099.1, 900719925474099.0)).toBe(false);
+    // Ordinary rounding, positive and negative.
+    expect(numericMatches(round1, 2.5, 2.51)).toBe(true);
+    expect(numericMatches(round1, 2.5, 2.56)).toBe(false);
+    expect(numericMatches(round1, -2.5, -2.51)).toBe(true);
+    expect(numericMatches(round1, -2.5, -2.56)).toBe(false);
+    expect(numericMatches({ kind: "round", places: 0 }, -2.5, -3)).toBe(true);
+  });
+
+  it("keeps the approved no-epsilon contract: tolerance and exact are unchanged and unrestricted by the rounding domain", () => {
+    expect(numericMatches({ kind: "tolerance", absolute: 0.5 }, 10, 9.5)).toBe(true);
+    expect(numericMatches({ kind: "tolerance", absolute: 1e-12 }, 0, 2e-12)).toBe(false);
+    expect(numericMatches({ kind: "tolerance", absolute: 0.5 }, MAX, MAX - 1)).toBe(false); // distinct, as they are
+    expect(numericMatches({ kind: "tolerance", absolute: 0.5 }, 1e308, -1e308)).toBe(false); // the difference overflows: not a match
+    expect(numericMatches({ kind: "exact" }, MAX, MAX - 1)).toBe(false);
+  });
+
+  it("the validator rejects an answer or trap outside the rounding domain, with exact paths, and does not mark distinct values correct", () => {
+    const cases: [string, Record<string, unknown>, RegExp][] = [
+      ["answer MAX, trap MAX−1 (QA)", numberEntry(MAX, round1, MAX - 1), /^answer$/],
+      ["answer −MAX, trap −(MAX−1) (negative counterpart)", numberEntry(-MAX, round1, -(MAX - 1)), /^answer$/],
+      ["answer 1e308, trap 1.1e308 (QA)", numberEntry(1e308, round1, 1.1e308), /^answer$/],
+      ["ordinary answer, trap outside the domain", numberEntry(2.5, round1, 1e308), /^traps\[0\]\.value$/],
+      ["ordinary answer, negative trap outside the domain", numberEntry(2.5, round1, -1e308), /^traps\[0\]\.value$/],
+    ];
+    for (const [what, q, path] of cases) {
+      const errors = errorsOf(q);
+      expect(errors.some((e) => path.test(e.path) && /outside the supported range/.test(e.message)), `${what}: ${JSON.stringify(errors)}`).toBe(true);
+      // The out-of-domain value is never reported as "marked correct" because a lossy comparison said so.
+      expect(errors.some((e) => /would be marked correct/.test(e.message)), what).toBe(false);
+    }
+  });
+
+  it("the validator accepts distinct values inside the domain, and still rejects genuine rounding collisions", () => {
+    expect(errorsOf(numberEntry(MAX, { kind: "round", places: 0 }, MAX - 1, 0))).toEqual([]);
+    expect(errorsOf(numberEntry(-MAX, { kind: "round", places: 0 }, -(MAX - 1), 0))).toEqual([]);
+    expect(errorsOf(numberEntry(2.5, round1, 2.56))).toEqual([]);
+    expect(errorsOf(numberEntry(-2.5, round1, -2.56))).toEqual([]);
+    expect(errorsOf(numberEntry(2.5, round1, 2.51)).some((e) => e.path === "traps[0].value" && /would be marked correct/.test(e.message))).toBe(true);
+    expect(errorsOf(numberEntry(-2.5, round1, -2.51)).some((e) => e.path === "traps[0].value" && /would be marked correct/.test(e.message))).toBe(true);
   });
 });
