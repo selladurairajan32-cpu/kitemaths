@@ -82,8 +82,10 @@ and text).
 Every treatment is rendered on `/design-specimen` (screenshots: [`evidence/`](evidence/)).
 
 **Wording on the specimen (D-020):**
-- Comparison rules state their mathematical domain: "When two fractions have the same numerator (not zero) and the
-  wholes are the same size, the fraction with the smaller denominator is bigger."
+- Comparison rules state their mathematical domain: "When two fractions have the same positive numerator and positive
+  denominators, and the wholes are the same size, the fraction with the smaller denominator is bigger." The domain must
+  say *positive*: "not zero" also allows negative numerators, for which the ordering reverses (DEF-036). The rule is for
+  comparing parts of same-sized wholes; zero numerators (all equal to 0) and negative values are outside it.
 - Misconception feedback says "When the same-sized whole is split into more equal parts, each part is smaller."
 - Success feedback for a comparison names the same-sized whole.
 

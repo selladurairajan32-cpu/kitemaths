@@ -34,7 +34,7 @@
 | Q-3 | One brief reflection per lesson (a frame, a choice or spoken). No typed prose, never a mastery gate. A fuller reflection at the end of a group. | CUR-003 element 8 and the schema |
 | Q-4 | Keep `number-line` after the Explore lessons and `reasoning` after `amounts`. **Checked against the content:** `number-line` uses only lessons 1–2; `reasoning` uses lessons 2, 4 and 5 and not `amounts`. | CUR-002 §6 |
 | Q-5 | "Best after" for fractions of quantities only. Support is given in the lesson, and children are never sent to an activity that doesn't exist yet. Foundational Fractions never depends on the whole Times tables island. | CUR-002 §2.2 |
-| Q-6 | Direction approved; contrast corrected. "Optional challenge"; "Worked example". The comparison rule is restricted to a non-zero numerator and same-sized wholes. Agreed misconception wording. | UX-004 §2, the specimen |
+| Q-6 | Direction approved; contrast corrected. "Optional challenge"; "Worked example". The comparison rule was first restricted to a "non-zero" numerator and same-sized wholes. **Corrected 6 Nov (DEF-036):** "non-zero" also allows negative numerators, so the rule now says same positive numerator, positive denominators and same-sized wholes. Agreed misconception wording. | UX-004 §2, the specimen |
 | Q-7 | UX-003 stays QA FAILED while AC3 is unmet. Approval of the specification is separate from acceptance of the item. | UX-003 header and §7, `STATUS.md` |
 
 ## 3. Status after correction

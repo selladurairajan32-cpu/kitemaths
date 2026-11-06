@@ -149,6 +149,17 @@ describe("design tokens (UX-002, UX-003, UX-004)", () => {
     expect(hexValues).toBeLessThanOrEqual(HEX_OCCURRENCE_BASELINE);
   });
 
+  it("states the comparison rule's domain: same positive numerator, positive denominators, same-sized wholes (DEF-036)", () => {
+    const page = readFileSync(join(ROOT, "src/app/design-specimen/page.tsx"), "utf8");
+    const doc = readFileSync(join(ROOT, "docs/product/design/UX-004-content-differentiation.md"), "utf8");
+    expect(page).toContain("same **positive numerator** and **positive denominators**");
+    expect(page).toContain("the wholes are the same size");
+    // "not zero" would allow negative numerators, for which the ordering can reverse.
+    expect(page).not.toContain("not zero");
+    expect(doc).toContain("same positive numerator and positive");
+    expect(doc.replace(/\s+/g, " ")).toContain("same positive numerator and positive denominators, and the wholes are the same size");
+  });
+
   it("keeps the design specimen out of production and search engines", () => {
     const page = readFileSync(join(ROOT, "src/app/design-specimen/page.tsx"), "utf8");
     expect(page).toMatch(/process\.env\.VERCEL_ENV === "production"\) notFound\(\)/);

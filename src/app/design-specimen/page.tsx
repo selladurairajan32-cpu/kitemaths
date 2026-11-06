@@ -85,7 +85,7 @@ const CONTENT: { type: string; use: string; render: ReactNode }[] = [
           <FlagIcon /> Key fact
         </p>
         <p className="mt-1 text-body font-semibold">
-          <RichText tint text="When two fractions have the same numerator (not zero) and the wholes are the same size, the fraction with the **smaller denominator** is bigger: {1/3} > {1/5}." />
+          <RichText tint text="When two fractions have the same **positive numerator** and **positive denominators**, and the wholes are the same size, the fraction with the **smaller denominator** is bigger: {1/3} > {1/5}." />
         </p>
       </div>
     ),

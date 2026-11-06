@@ -63,6 +63,7 @@ TC-UX-004.1.1,UX-004,AC1,document-review,manual,review-pending,,"UX-004 §1–§
 TC-UX-004.1.2,UX-004,AC1,unit,automated,passing,"src/design-tokens.test.ts::keeps content ink on every content-type background at the 7:1 product target, with labels on dark backgrounds",
 TC-UX-004.1.3,UX-004,AC1,unit,automated,passing,"src/design-tokens.test.ts::meets the contrast minimum for every supported pairing at its real size and weight, without rounding",
 TC-UX-004.1.4,UX-004,AC1,visual-a11y-qa,manual,review-pending,,"Specimen content types in colour and greyscale, with the browser contrast audit (docs/product/verification/)"
+TC-UX-004.1.5,UX-004,AC1,unit,automated,passing,"src/design-tokens.test.ts::states the comparison rule's domain: same positive numerator, positive denominators, same-sized wholes (DEF-036)",DEF-036 regression
 TC-UX-004.2.1,UX-004,AC2,document-review,manual,review-pending,,"UX-004 §4: one task, one primary action, blocked actions explained, feedback carries the next action"
 TC-UX-004.2.2,UX-004,AC2,component,planned,planned,,R1: each screen state has exactly one primary button (QA-002)
 TC-UX-004.2.3,UX-004,AC2,visual-a11y-qa,planned,planned,,R1: 5-second test with children on the migrated question and lesson screens
