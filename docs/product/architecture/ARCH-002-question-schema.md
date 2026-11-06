@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Backlog item** | ARCH-002: define a typed question schema (P0, R0) |
-| **Status** | READY FOR QA (D-023): failed the 6 Nov review (DEF-032 to DEF-035); corrected 6 Nov, awaiting independent retest. |
+| **Status** | READY FOR QA (D-024): failed the retest of `702743a` (DEF-037, DEF-038); corrected 6 Nov, awaiting independent retest. Not self-accepted. |
 | **Date** | 5 November 2026 (sprint step 3) |
 | **Acceptance criteria** | <ol><li>Questions can declare skill, year/level, difficulty, prompt, interaction type, correct answer, distractors, validation, explanation, hints, misconception tags and scoring metadata.</li><li>Invalid definitions fail validation.</li></ol> |
 | **Code** | <ul><li>`src/questions/schema.ts`: the types.</li><li>`src/questions/validate.ts`: runtime validation.</li><li>`src/questions/adapt.ts`: adapters for existing data.</li><li>`src/questions/questions.test.ts`: fixtures and compatibility tests.</li></ul> |
