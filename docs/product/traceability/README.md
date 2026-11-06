@@ -93,6 +93,7 @@ Each criterion is counted once, by the strongest evidence any of its test cases 
 |---|---:|---|
 | `src/architecture.test.ts` | 11 | ARCH-001 |
 | `src/curriculum/prerequisites.test.ts` | 6 | CUR-002, CUR-003 |
+| `src/curriculum/map.test.ts` | 10 | CUR-001 |
 | `src/design-tokens.test.ts` | 10 | UX-002, UX-003, UX-004 |
 | `src/maths/maths.test.ts` | 20 | ARCH-003, QA-001 |
 | `src/questions/questions.test.ts` | 28 | ARCH-002 |

@@ -1,0 +1,1462 @@
+[
+ {
+  "id": "fractions",
+  "title": "Fractions foundations",
+  "world": "fdp",
+  "years": [
+   3,
+   4,
+   5
+  ],
+  "skills": [
+   {
+    "id": "fractions.equal-parts",
+    "title": "Wholes and equal parts",
+    "description": "Knows a fraction needs a whole split into equal parts."
+   },
+   {
+    "id": "fractions.name",
+    "title": "Reading fractions",
+    "description": "Names the fraction shown by a diagram, using numerator and denominator."
+   },
+   {
+    "id": "fractions.represent",
+    "title": "Showing fractions",
+    "description": "Shades or builds a diagram to show a given fraction."
+   },
+   {
+    "id": "fractions.compare",
+    "title": "Comparing fractions",
+    "description": "Decides which of two fractions of the same whole is bigger."
+   },
+   {
+    "id": "fractions.equivalent",
+    "title": "Equivalent fractions",
+    "description": "Finds fractions that show the same amount."
+   },
+   {
+    "id": "fractions.number-line",
+    "title": "Fractions on a number line",
+    "description": "Places and reads fractions on a number line from 0 to 1."
+   },
+   {
+    "id": "fractions.fraction-of",
+    "title": "Fractions of amounts",
+    "description": "Finds a fraction of a number or quantity, including word problems."
+   },
+   {
+    "id": "fractions.reasoning",
+    "title": "Explaining and spotting mistakes",
+    "description": "Judges claims, builds explanations with sentence frames and finds counterexamples."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "wholes",
+    "title": "Wholes and equal parts",
+    "objectives": [
+     "Explain what a whole is",
+     "Recognise equal and unequal parts"
+    ]
+   },
+   {
+    "id": "naming",
+    "title": "Numerator and denominator",
+    "objectives": [
+     "Name the numerator and denominator",
+     "Write the fraction a diagram shows"
+    ]
+   },
+   {
+    "id": "lab",
+    "title": "The Fraction Lab",
+    "objectives": [
+     "Build fractions with different shapes",
+     "Notice that fractions can be made in different ways"
+    ]
+   },
+   {
+    "id": "comparing",
+    "title": "Comparing fractions",
+    "objectives": [
+     "Compare fractions of the same whole with the same denominator",
+     "Explain why, with the same numerator, a bigger denominator gives a smaller fraction"
+    ]
+   },
+   {
+    "id": "equivalent",
+    "title": "Equivalent fractions",
+    "objectives": [
+     "See that different fractions can be equal",
+     "Find equivalent fractions by multiplying"
+    ]
+   },
+   {
+    "id": "number-line",
+    "title": "Fractions on a number line",
+    "objectives": [
+     "Count gaps, not marks",
+     "Place and read fractions between 0 and 1"
+    ]
+   },
+   {
+    "id": "amounts",
+    "title": "Fractions of amounts",
+    "objectives": [
+     "Find a unit fraction of an amount",
+     "Find a non-unit fraction of an amount",
+     "Solve two-step problems where each fraction is of the same whole"
+    ]
+   },
+   {
+    "id": "reasoning",
+    "title": "Explaining your thinking",
+    "objectives": [
+     "Build an explanation: say if a claim is right, give evidence, and conclude",
+     "Use a counterexample to show a claim is not always true"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "place-value",
+  "title": "Place value",
+  "world": "number",
+  "years": [
+   3,
+   4,
+   5,
+   6
+  ],
+  "skills": [
+   {
+    "id": "place-value.digit-value",
+    "title": "What a digit is worth",
+    "description": "Say the value of any digit in a number up to a million."
+   },
+   {
+    "id": "place-value.read-write",
+    "title": "Numbers in words and digits",
+    "description": "Read and write numbers in words and digits, with zeros in the right places."
+   },
+   {
+    "id": "place-value.partition",
+    "title": "Partitioning",
+    "description": "Split numbers into thousands, hundreds, tens and ones, and put them back together."
+   },
+   {
+    "id": "place-value.compare-order",
+    "title": "Comparing and ordering",
+    "description": "Use <, > and = and put numbers in order."
+   },
+   {
+    "id": "place-value.more-less",
+    "title": "10, 100 and 1,000 more or less",
+    "description": "Find 10, 100, 1,000 or 10,000 more or less than a number."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "digits",
+    "title": "What is a digit worth?",
+    "objectives": [
+     "Say what each digit in a number is worth",
+     "Use hundreds, tens and ones to build a number"
+    ]
+   },
+   {
+    "id": "read-write",
+    "title": "Big numbers in words",
+    "objectives": [
+     "Read and write numbers up to a million",
+     "Use 0 to hold an empty place"
+    ]
+   },
+   {
+    "id": "partition",
+    "title": "Break numbers apart",
+    "objectives": [
+     "Partition a number into thousands, hundreds, tens and ones",
+     "Rebuild a number from its parts"
+    ]
+   },
+   {
+    "id": "compare",
+    "title": "Which is bigger?",
+    "objectives": [
+     "Compare numbers with <, > and =",
+     "Order a set of numbers"
+    ]
+   },
+   {
+    "id": "more-less",
+    "title": "10, 100 and 1,000 more or less",
+    "objectives": [
+     "Find 10, 100 or 1,000 more or less than a number",
+     "Handle a 9 that rolls over"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "rounding",
+  "title": "Rounding and estimating",
+  "world": "number",
+  "years": [
+   3,
+   4,
+   5,
+   6
+  ],
+  "skills": [
+   {
+    "id": "rounding.nearest-10",
+    "title": "Round to the nearest 10",
+    "description": "Round any number to the nearest ten, including halfway numbers."
+   },
+   {
+    "id": "rounding.nearest-100-1000",
+    "title": "Round to 100 and 1,000",
+    "description": "Round to the nearest hundred or thousand, even when a 9 rolls over."
+   },
+   {
+    "id": "rounding.big-numbers",
+    "title": "Round big numbers",
+    "description": "Round numbers up to a million to the nearest 1,000, 10,000 or 100,000."
+   },
+   {
+    "id": "rounding.estimate",
+    "title": "Estimate answers",
+    "description": "Round first to estimate, and check if an answer is sensible."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "ten",
+    "title": "Nearest ten",
+    "objectives": [
+     "Round a number to the nearest 10",
+     "Round halfway numbers up"
+    ]
+   },
+   {
+    "id": "hundred",
+    "title": "Nearest 100 and 1,000",
+    "objectives": [
+     "Round to the nearest 100 and 1,000",
+     "Handle a 9 that rolls over"
+    ]
+   },
+   {
+    "id": "big",
+    "title": "Rounding big numbers",
+    "objectives": [
+     "Round numbers up to a million",
+     "Choose the right digit to look at"
+    ]
+   },
+   {
+    "id": "estimate",
+    "title": "Estimate first",
+    "objectives": [
+     "Estimate sums, differences and products",
+     "Spot answers that can't be right"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "negative",
+  "title": "Negative numbers",
+  "world": "number",
+  "years": [
+   4,
+   5,
+   6
+  ],
+  "skills": [
+   {
+    "id": "negative.read",
+    "title": "Reading below zero",
+    "description": "Read negative numbers on thermometers and number lines."
+   },
+   {
+    "id": "negative.order",
+    "title": "Comparing negatives",
+    "description": "Compare and order numbers that are below zero."
+   },
+   {
+    "id": "negative.count-through-zero",
+    "title": "Counting through zero",
+    "description": "Count on and back through zero, like temperatures rising and falling."
+   },
+   {
+    "id": "negative.difference",
+    "title": "Differences across zero",
+    "description": "Find the difference between a negative and a positive number."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "below-zero",
+    "title": "Below zero",
+    "objectives": [
+     "Read negative numbers on a thermometer",
+     "Find negative numbers on a number line"
+    ]
+   },
+   {
+    "id": "order",
+    "title": "Which is colder?",
+    "objectives": [
+     "Compare negative numbers",
+     "Order temperatures from coldest to warmest"
+    ]
+   },
+   {
+    "id": "count",
+    "title": "Counting through zero",
+    "objectives": [
+     "Count back through zero",
+     "Count on from a negative number"
+    ]
+   },
+   {
+    "id": "difference",
+    "title": "How much warmer?",
+    "objectives": [
+     "Find the difference between a negative and a positive temperature"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "add-subtract",
+  "title": "Add and subtract",
+  "world": "calc",
+  "years": [
+   3,
+   4,
+   5,
+   6
+  ],
+  "skills": [
+   {
+    "id": "add-subtract.mental",
+    "title": "Mental adding and subtracting",
+    "description": "Number bonds to 100 and 1,000, and adding near multiples like 29 or 199."
+   },
+   {
+    "id": "add-subtract.column-add",
+    "title": "Column addition",
+    "description": "Add numbers up to 4 digits in columns, carrying when a column makes 10 or more."
+   },
+   {
+    "id": "add-subtract.column-sub",
+    "title": "Column subtraction",
+    "description": "Subtract in columns, exchanging when the top digit is smaller, even across zeros."
+   },
+   {
+    "id": "add-subtract.inverse",
+    "title": "Missing numbers and checking",
+    "description": "Use the inverse to find missing numbers and check answers."
+   },
+   {
+    "id": "add-subtract.problems",
+    "title": "Word problems",
+    "description": "Choose the right operation and use a bar model for one- and two-step problems."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "mental",
+    "title": "Quick sums in your head",
+    "objectives": [
+     "Know number bonds to 100 and 1,000",
+     "Add and subtract near multiples by adjusting"
+    ]
+   },
+   {
+    "id": "column-add",
+    "title": "Column addition",
+    "objectives": [
+     "Add numbers in columns",
+     "Carry when a column makes 10 or more"
+    ]
+   },
+   {
+    "id": "column-sub",
+    "title": "Column subtraction",
+    "objectives": [
+     "Subtract in columns with exchanging",
+     "Exchange across zeros"
+    ]
+   },
+   {
+    "id": "missing",
+    "title": "Missing numbers",
+    "objectives": [
+     "Find missing numbers using the inverse",
+     "Check a subtraction with an addition"
+    ]
+   },
+   {
+    "id": "problems",
+    "title": "Word problems",
+    "objectives": [
+     "Pick the right operation",
+     "Solve two-step problems with a bar model"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "times-tables",
+  "title": "Times tables",
+  "world": "calc",
+  "years": [
+   2,
+   3,
+   4
+  ],
+  "skills": [
+   {
+    "id": "times-tables.two-five-ten",
+    "title": "2, 5 and 10 times tables",
+    "description": "Know the 2, 5 and 10 times tables and see them as arrays."
+   },
+   {
+    "id": "times-tables.three-four-eight",
+    "title": "3, 4 and 8 times tables",
+    "description": "Know the 3s, and get the 4s and 8s by doubling."
+   },
+   {
+    "id": "times-tables.six-seven-nine",
+    "title": "6, 7 and 9 times tables",
+    "description": "Know the 6s, 7s and 9s, with tricks for the hard ones."
+   },
+   {
+    "id": "times-tables.eleven-twelve",
+    "title": "11 and 12 times tables",
+    "description": "Know the 11s and 12s using patterns and partitioning."
+   },
+   {
+    "id": "times-tables.division-facts",
+    "title": "Division facts",
+    "description": "Use times tables to divide, and see fact families."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "two-five-ten",
+    "title": "2s, 5s and 10s",
+    "objectives": [
+     "Know the 2, 5 and 10 times tables",
+     "See multiplication as equal rows"
+    ]
+   },
+   {
+    "id": "three-four-eight",
+    "title": "3s, 4s and 8s",
+    "objectives": [
+     "Know the 3, 4 and 8 times tables",
+     "Double to get the 4s and 8s"
+    ]
+   },
+   {
+    "id": "six-seven-nine",
+    "title": "6s, 7s and 9s",
+    "objectives": [
+     "Know the 6, 7 and 9 times tables",
+     "Use a fact you know to find one you don't"
+    ]
+   },
+   {
+    "id": "eleven-twelve",
+    "title": "11s and 12s",
+    "objectives": [
+     "Know the 11 and 12 times tables",
+     "Partition to multiply by 12"
+    ]
+   },
+   {
+    "id": "division-facts",
+    "title": "Division facts",
+    "objectives": [
+     "Divide using times tables",
+     "Write the fact family for a multiplication"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "multiply-divide",
+  "title": "Multiply and divide",
+  "world": "calc",
+  "years": [
+   4,
+   5,
+   6
+  ],
+  "skills": [
+   {
+    "id": "multiply-divide.ten-hundred",
+    "title": "× and ÷ by 10, 100, 1,000",
+    "description": "Move digits left to multiply and right to divide by 10, 100 and 1,000."
+   },
+   {
+    "id": "multiply-divide.short-mult",
+    "title": "Short multiplication",
+    "description": "Multiply numbers up to 4 digits by a single digit."
+   },
+   {
+    "id": "multiply-divide.long-mult",
+    "title": "Long multiplication",
+    "description": "Multiply by a 2-digit number by splitting it into tens and ones."
+   },
+   {
+    "id": "multiply-divide.division",
+    "title": "Division and remainders",
+    "description": "Divide by a single digit, and decide what to do with a remainder."
+   },
+   {
+    "id": "multiply-divide.factors",
+    "title": "Factors and multiples",
+    "description": "Find factors and multiples, and count the factors of a number."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "ten-hundred",
+    "title": "× and ÷ by 10, 100 and 1,000",
+    "objectives": [
+     "Multiply and divide by 10, 100 and 1,000"
+    ]
+   },
+   {
+    "id": "short",
+    "title": "Short multiplication",
+    "objectives": [
+     "Multiply by partitioning",
+     "Use short multiplication with carrying"
+    ]
+   },
+   {
+    "id": "long",
+    "title": "Long multiplication",
+    "objectives": [
+     "Multiply by a 2-digit number"
+    ]
+   },
+   {
+    "id": "divide",
+    "title": "Division and remainders",
+    "objectives": [
+     "Divide by a single digit",
+     "Interpret remainders in a problem"
+    ]
+   },
+   {
+    "id": "factors",
+    "title": "Factors and multiples",
+    "objectives": [
+     "Find the factors of a number",
+     "Recognise multiples"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "fractions-2",
+  "title": "Fractions 2",
+  "world": "fdp",
+  "years": [
+   4,
+   5,
+   6
+  ],
+  "skills": [
+   {
+    "id": "fractions-2.simplify",
+    "title": "Equivalent and simplest form",
+    "description": "Make equivalent fractions and simplify to the simplest form."
+   },
+   {
+    "id": "fractions-2.mixed-numbers",
+    "title": "Mixed numbers",
+    "description": "Change between mixed numbers and improper fractions."
+   },
+   {
+    "id": "fractions-2.add-same",
+    "title": "Add and subtract (same denominator)",
+    "description": "Add and subtract fractions with the same denominator, including from 1."
+   },
+   {
+    "id": "fractions-2.add-related",
+    "title": "Add with related denominators",
+    "description": "Add fractions when one denominator is a multiple of the other."
+   },
+   {
+    "id": "fractions-2.multiply",
+    "title": "Multiply fractions",
+    "description": "Multiply a fraction by a whole number and find fractions of amounts."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "simplify",
+    "title": "Simplest form",
+    "objectives": [
+     "Make equivalent fractions",
+     "Write a fraction in its simplest form"
+    ]
+   },
+   {
+    "id": "mixed",
+    "title": "Mixed numbers",
+    "objectives": [
+     "Change an improper fraction into a mixed number",
+     "Change a mixed number into an improper fraction"
+    ]
+   },
+   {
+    "id": "add-same",
+    "title": "Adding same-size parts",
+    "objectives": [
+     "Add and subtract fractions with the same denominator",
+     "Subtract a fraction from 1"
+    ]
+   },
+   {
+    "id": "add-related",
+    "title": "Different-size parts",
+    "objectives": [
+     "Add fractions where one denominator is a multiple of the other"
+    ]
+   },
+   {
+    "id": "multiply",
+    "title": "Multiplying fractions",
+    "objectives": [
+     "Multiply a fraction by a whole number",
+     "Find a fraction of an amount"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "decimals",
+  "title": "Decimals",
+  "world": "fdp",
+  "years": [
+   4,
+   5,
+   6
+  ],
+  "skills": [
+   {
+    "id": "decimals.tenths-hundredths",
+    "title": "Tenths and hundredths",
+    "description": "Know what each digit after the decimal point is worth."
+   },
+   {
+    "id": "decimals.as-fractions",
+    "title": "Decimals and fractions",
+    "description": "Write tenths and hundredths as decimals, and decimals as fractions."
+   },
+   {
+    "id": "decimals.compare-round",
+    "title": "Compare and round",
+    "description": "Compare and order decimals, and round to the nearest whole or one decimal place."
+   },
+   {
+    "id": "decimals.add-subtract",
+    "title": "Add and subtract decimals",
+    "description": "Add and subtract decimals by lining up the decimal points, including money."
+   },
+   {
+    "id": "decimals.times-ten",
+    "title": "× and ÷ by 10 and 100",
+    "description": "Multiply and divide decimals by 10 and 100."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "tenths",
+    "title": "Tenths and hundredths",
+    "objectives": [
+     "Read tenths and hundredths",
+     "Say what each decimal digit is worth"
+    ]
+   },
+   {
+    "id": "fractions",
+    "title": "Decimals are fractions",
+    "objectives": [
+     "Write decimals as fractions",
+     "Know 0.5, 0.25 and 0.75 by heart"
+    ]
+   },
+   {
+    "id": "compare",
+    "title": "Compare and round",
+    "objectives": [
+     "Compare and order decimals",
+     "Round decimals"
+    ]
+   },
+   {
+    "id": "add-sub",
+    "title": "Adding decimals",
+    "objectives": [
+     "Add and subtract decimals",
+     "Add amounts of money"
+    ]
+   },
+   {
+    "id": "times-ten",
+    "title": "× and ÷ by 10 and 100",
+    "objectives": [
+     "Multiply and divide decimals by 10 and 100"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "percentages",
+  "title": "Percentages",
+  "world": "fdp",
+  "years": [
+   5,
+   6
+  ],
+  "skills": [
+   {
+    "id": "percentages.meaning",
+    "title": "What a percent is",
+    "description": "Know that per cent means out of 100, and that the whole is 100%."
+   },
+   {
+    "id": "percentages.convert",
+    "title": "Percentages, fractions and decimals",
+    "description": "Change between percentages, fractions and decimals."
+   },
+   {
+    "id": "percentages.of-amounts",
+    "title": "Percentages of amounts",
+    "description": "Find 50%, 25%, 10%, 5% and other percentages of an amount."
+   },
+   {
+    "id": "percentages.problems",
+    "title": "Percentage problems",
+    "description": "Solve sales, price rises and 'the rest' problems, and compare amounts."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "meaning",
+    "title": "What is a percent?",
+    "objectives": [
+     "Know that per cent means out of 100",
+     "Know that the whole is 100%"
+    ]
+   },
+   {
+    "id": "convert",
+    "title": "Percent, fraction, decimal",
+    "objectives": [
+     "Write percentages as fractions and decimals",
+     "Know the common ones by heart"
+    ]
+   },
+   {
+    "id": "amounts",
+    "title": "Percentages of amounts",
+    "objectives": [
+     "Find 50%, 25% and 10% of an amount",
+     "Build other percentages from 10% and 5%"
+    ]
+   },
+   {
+    "id": "problems",
+    "title": "Sales and problems",
+    "objectives": [
+     "Work out sale prices",
+     "Find the rest of a whole"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "money",
+  "title": "Money",
+  "world": "measure",
+  "years": [
+   3,
+   4,
+   5,
+   6
+  ],
+  "skills": [
+   {
+    "id": "money.coins",
+    "title": "Coins and notes",
+    "description": "Count coins and notes to find a total."
+   },
+   {
+    "id": "money.pounds-pence",
+    "title": "Pounds and pence",
+    "description": "Change between pounds and pence, including amounts like £4.05."
+   },
+   {
+    "id": "money.totals",
+    "title": "Adding up",
+    "description": "Add prices to find a total."
+   },
+   {
+    "id": "money.change",
+    "title": "Giving change",
+    "description": "Work out change by counting up or taking away."
+   },
+   {
+    "id": "money.problems",
+    "title": "Money problems",
+    "description": "Multiply and share money, and find the better value."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "coins",
+    "title": "Coins and notes",
+    "objectives": [
+     "Know our coins and notes",
+     "Count a set of coins"
+    ]
+   },
+   {
+    "id": "pounds-pence",
+    "title": "Pounds and pence",
+    "objectives": [
+     "Change pounds to pence and back",
+     "Use a zero to hold a place"
+    ]
+   },
+   {
+    "id": "totals",
+    "title": "Adding up a bill",
+    "objectives": [
+     "Add two or three prices"
+    ]
+   },
+   {
+    "id": "change",
+    "title": "Giving change",
+    "objectives": [
+     "Work out change by counting up"
+    ]
+   },
+   {
+    "id": "problems",
+    "title": "Money problems",
+    "objectives": [
+     "Multiply and share money",
+     "Find the better value"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "time",
+  "title": "Time",
+  "world": "measure",
+  "years": [
+   3,
+   4,
+   5,
+   6
+  ],
+  "skills": [
+   {
+    "id": "time.read-clock",
+    "title": "Read the clock",
+    "description": "Tell the time on a clock to the nearest minute."
+   },
+   {
+    "id": "time.24-hour",
+    "title": "12- and 24-hour time",
+    "description": "Change between am/pm and 24-hour times."
+   },
+   {
+    "id": "time.units",
+    "title": "Units of time",
+    "description": "Change between seconds, minutes, hours, days and weeks."
+   },
+   {
+    "id": "time.durations",
+    "title": "How long?",
+    "description": "Work out how long something takes, and when it ends."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "read",
+    "title": "Read the clock",
+    "objectives": [
+     "Read o'clock, half past and quarter times",
+     "Read times to 5 minutes and to the minute"
+    ]
+   },
+   {
+    "id": "24-hour",
+    "title": "24-hour time",
+    "objectives": [
+     "Change am and pm times to 24-hour time",
+     "Change 24-hour times back"
+    ]
+   },
+   {
+    "id": "units",
+    "title": "Units of time",
+    "objectives": [
+     "Know the units of time",
+     "Change between units"
+    ]
+   },
+   {
+    "id": "durations",
+    "title": "How long?",
+    "objectives": [
+     "Find how long something takes",
+     "Find when something ends"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "area-perimeter",
+  "title": "Area and perimeter",
+  "world": "measure",
+  "years": [
+   3,
+   4,
+   5,
+   6
+  ],
+  "skills": [
+   {
+    "id": "area-perimeter.perimeter",
+    "title": "Perimeter",
+    "description": "Find the distance all the way round a rectangle or an L-shape."
+   },
+   {
+    "id": "area-perimeter.area-counting",
+    "title": "Area by counting",
+    "description": "Count squares to find area, in cm²."
+   },
+   {
+    "id": "area-perimeter.area-rectangles",
+    "title": "Area of rectangles",
+    "description": "Find area by multiplying length × width."
+   },
+   {
+    "id": "area-perimeter.compound",
+    "title": "L-shapes",
+    "description": "Split shapes into rectangles to find their area."
+   },
+   {
+    "id": "area-perimeter.missing-sides",
+    "title": "Missing sides",
+    "description": "Find a missing side from the area or perimeter."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "perimeter",
+    "title": "Perimeter",
+    "objectives": [
+     "Know what perimeter means",
+     "Find the perimeter of rectangles"
+    ]
+   },
+   {
+    "id": "area",
+    "title": "Area: squares inside",
+    "objectives": [
+     "Know what area means",
+     "Find area by counting squares"
+    ]
+   },
+   {
+    "id": "rectangles",
+    "title": "Area of rectangles",
+    "objectives": [
+     "Use length × width to find area"
+    ]
+   },
+   {
+    "id": "compound",
+    "title": "L-shapes",
+    "objectives": [
+     "Find the area of shapes made of rectangles"
+    ]
+   },
+   {
+    "id": "missing",
+    "title": "Missing sides",
+    "objectives": [
+     "Find a missing side from the perimeter",
+     "Find a missing side from the area"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "shapes-angles",
+  "title": "Shapes and angles",
+  "world": "shape",
+  "years": [
+   3,
+   4,
+   5,
+   6
+  ],
+  "skills": [
+   {
+    "id": "shapes-angles.shapes",
+    "title": "2D and 3D shapes",
+    "description": "Name shapes and count their sides, faces, edges and vertices."
+   },
+   {
+    "id": "shapes-angles.angle-types",
+    "title": "Types of angle",
+    "description": "Sort angles into acute, right, obtuse and reflex."
+   },
+   {
+    "id": "shapes-angles.turns",
+    "title": "Turns and degrees",
+    "description": "Use quarter, half and full turns, degrees and compass directions."
+   },
+   {
+    "id": "shapes-angles.angle-facts",
+    "title": "Angle facts",
+    "description": "Find missing angles on a line, around a point and in a triangle."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "shapes",
+    "title": "2D and 3D shapes",
+    "objectives": [
+     "Name 2D shapes from their properties",
+     "Count faces, edges and vertices of 3D shapes"
+    ]
+   },
+   {
+    "id": "angle-types",
+    "title": "Types of angle",
+    "objectives": [
+     "Know acute, right, obtuse and reflex angles"
+    ]
+   },
+   {
+    "id": "turns",
+    "title": "Turns and degrees",
+    "objectives": [
+     "Know quarter, half and full turns in degrees",
+     "Turn clockwise and anticlockwise on a compass"
+    ]
+   },
+   {
+    "id": "facts",
+    "title": "Angle facts",
+    "objectives": [
+     "Find missing angles on a straight line and around a point",
+     "Find missing angles in a triangle"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "coordinates",
+  "title": "Coordinates",
+  "world": "shape",
+  "years": [
+   4,
+   5,
+   6
+  ],
+  "skills": [
+   {
+    "id": "coordinates.read",
+    "title": "Reading coordinates",
+    "description": "Read the coordinates of a point: x first, then y."
+   },
+   {
+    "id": "coordinates.plot",
+    "title": "Plotting points",
+    "description": "Find where a point goes on a grid."
+   },
+   {
+    "id": "coordinates.shapes",
+    "title": "Shapes on a grid",
+    "description": "Find the missing corner of a rectangle or square."
+   },
+   {
+    "id": "coordinates.translate",
+    "title": "Translations",
+    "description": "Move a point left, right, up and down."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "read",
+    "title": "Reading coordinates",
+    "objectives": [
+     "Read coordinates in the first quadrant",
+     "Read coordinates with negative numbers"
+    ]
+   },
+   {
+    "id": "plot",
+    "title": "Plotting points",
+    "objectives": [
+     "Find the point with given coordinates"
+    ]
+   },
+   {
+    "id": "shapes",
+    "title": "Shapes on a grid",
+    "objectives": [
+     "Find the missing corner of a rectangle or square"
+    ]
+   },
+   {
+    "id": "translate",
+    "title": "Translations",
+    "objectives": [
+     "Translate a point on a grid"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "charts-data",
+  "title": "Charts and data",
+  "world": "shape",
+  "years": [
+   3,
+   4,
+   5,
+   6
+  ],
+  "skills": [
+   {
+    "id": "charts-data.pictograms",
+    "title": "Pictograms",
+    "description": "Read pictograms using the key, including half pictures."
+   },
+   {
+    "id": "charts-data.bar-charts",
+    "title": "Bar charts",
+    "description": "Read bar charts with different scales, and compare bars."
+   },
+   {
+    "id": "charts-data.tables",
+    "title": "Tables and timetables",
+    "description": "Find information in tables and bus timetables."
+   },
+   {
+    "id": "charts-data.line-graphs",
+    "title": "Line graphs",
+    "description": "Read line graphs and find how much something changed."
+   },
+   {
+    "id": "charts-data.mean",
+    "title": "The mean",
+    "description": "Find the mean (average) of a set of numbers."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "pictograms",
+    "title": "Pictograms",
+    "objectives": [
+     "Read a pictogram using its key",
+     "Read half pictures"
+    ]
+   },
+   {
+    "id": "bar-charts",
+    "title": "Bar charts",
+    "objectives": [
+     "Read bar charts with scales in 2s, 5s and 10s",
+     "Compare two bars"
+    ]
+   },
+   {
+    "id": "tables",
+    "title": "Tables and timetables",
+    "objectives": [
+     "Read a two-way table",
+     "Read a bus timetable"
+    ]
+   },
+   {
+    "id": "line-graphs",
+    "title": "Line graphs",
+    "objectives": [
+     "Read values from a line graph",
+     "Find how much something changed"
+    ]
+   },
+   {
+    "id": "mean",
+    "title": "The mean",
+    "objectives": [
+     "Find the mean of a set of numbers",
+     "Find a missing number from the mean"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "ratio-algebra",
+  "title": "Ratio and algebra",
+  "world": "summit",
+  "years": [
+   5,
+   6
+  ],
+  "skills": [
+   {
+    "id": "ratio-algebra.ratio",
+    "title": "Ratio",
+    "description": "Use ratios, share in a ratio and simplify ratios."
+   },
+   {
+    "id": "ratio-algebra.scaling",
+    "title": "Scaling",
+    "description": "Scale recipes up and down."
+   },
+   {
+    "id": "ratio-algebra.equations",
+    "title": "Missing numbers",
+    "description": "Find missing numbers and solve simple equations."
+   },
+   {
+    "id": "ratio-algebra.formulas",
+    "title": "Formulas",
+    "description": "Put numbers into formulas like 3a + 2."
+   },
+   {
+    "id": "ratio-algebra.sequences",
+    "title": "Sequences",
+    "description": "Continue sequences and find any term."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "ratio",
+    "title": "Ratio",
+    "objectives": [
+     "Understand 'for every'",
+     "Share an amount in a ratio"
+    ]
+   },
+   {
+    "id": "scaling",
+    "title": "Scaling recipes",
+    "objectives": [
+     "Scale amounts up and down"
+    ]
+   },
+   {
+    "id": "equations",
+    "title": "Missing numbers",
+    "objectives": [
+     "Find missing numbers",
+     "Solve two-step equations"
+    ]
+   },
+   {
+    "id": "formulas",
+    "title": "Formulas",
+    "objectives": [
+     "Substitute numbers into formulas"
+    ]
+   },
+   {
+    "id": "sequences",
+    "title": "Sequences",
+    "objectives": [
+     "Continue a sequence",
+     "Find the nth term"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "problem-solving",
+  "title": "Problem solving",
+  "world": "summit",
+  "years": [
+   5,
+   6
+  ],
+  "skills": [
+   {
+    "id": "problem-solving.two-step",
+    "title": "Two-step problems",
+    "description": "Solve problems with more than one step, including money and measures."
+   },
+   {
+    "id": "problem-solving.backwards",
+    "title": "Working backwards",
+    "description": "Undo each step to find the starting number."
+   },
+   {
+    "id": "problem-solving.sum-difference",
+    "title": "Bar model puzzles",
+    "description": "Use a bar model for sum, difference and 'times as many' problems."
+   },
+   {
+    "id": "problem-solving.counting",
+    "title": "Counting choices",
+    "description": "Count combinations like outfits, meals and handshakes."
+   },
+   {
+    "id": "problem-solving.fractions-in-context",
+    "title": "Fractions in real life",
+    "description": "Use fractions of amounts, the rest, and work backwards from a fraction."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "steps",
+    "title": "Two-step problems",
+    "objectives": [
+     "Plan and solve problems with two steps"
+    ]
+   },
+   {
+    "id": "backwards",
+    "title": "Working backwards",
+    "objectives": [
+     "Find a starting number by working backwards"
+    ]
+   },
+   {
+    "id": "bar-models",
+    "title": "Bar model puzzles",
+    "objectives": [
+     "Solve sum and difference problems",
+     "Solve 'times as many' problems"
+    ]
+   },
+   {
+    "id": "counting",
+    "title": "Counting choices",
+    "objectives": [
+     "Count combinations",
+     "Avoid counting things twice"
+    ]
+   },
+   {
+    "id": "fractions",
+    "title": "Fractions in real life",
+    "objectives": [
+     "Find a fraction of an amount in a story",
+     "Work backwards from a fraction"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "mock-exams",
+  "title": "Mock exams",
+  "world": "summit",
+  "years": [
+   5,
+   6
+  ],
+  "skills": [
+   {
+    "id": "mock-exams.number",
+    "title": "Number",
+    "description": "Place value, rounding and negative numbers, 11+ style."
+   },
+   {
+    "id": "mock-exams.calculation",
+    "title": "Calculation",
+    "description": "Adding, subtracting, multiplying and dividing, 11+ style."
+   },
+   {
+    "id": "mock-exams.fdp",
+    "title": "Fractions, decimals and %",
+    "description": "Fractions, decimals and percentages, 11+ style."
+   },
+   {
+    "id": "mock-exams.measures",
+    "title": "Measures",
+    "description": "Money, time, area and perimeter, 11+ style."
+   },
+   {
+    "id": "mock-exams.shape-data",
+    "title": "Shape and data",
+    "description": "Shapes, angles, coordinates, charts and tables, 11+ style."
+   },
+   {
+    "id": "mock-exams.reasoning",
+    "title": "Reasoning",
+    "description": "Ratio, algebra and multi-step problems, 11+ style."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "read",
+    "title": "Read it twice",
+    "objectives": [
+     "Spot the key words in a question",
+     "Answer the question that's asked"
+    ]
+   },
+   {
+    "id": "estimate",
+    "title": "Estimate first",
+    "objectives": [
+     "Estimate before you calculate",
+     "Use the estimate to check"
+    ]
+   },
+   {
+    "id": "units",
+    "title": "Units and answers",
+    "objectives": [
+     "Use matching units",
+     "Give the answer in the unit asked for"
+    ]
+   },
+   {
+    "id": "same-amount",
+    "title": "Same amount, three ways",
+    "objectives": [
+     "Switch between fractions, decimals and percentages"
+    ]
+   },
+   {
+    "id": "diagrams",
+    "title": "Use the picture",
+    "objectives": [
+     "Read charts, grids and diagrams carefully"
+    ]
+   },
+   {
+    "id": "reasoning",
+    "title": "Show your thinking",
+    "objectives": [
+     "Use bar models and working backwards in tricky problems"
+    ]
+   }
+  ]
+ }
+]
