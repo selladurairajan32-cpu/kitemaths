@@ -80,3 +80,8 @@ each entry names who decided.
 | CH-021 | 5 Nov 2026 | `src/questions/*`, `ARCH-002-question-schema.md` | Typed question schema, validator and adapters. DEF-028 recorded. | ARCH-002 |
 | CH-022 | 5 Nov 2026 | `STATUS.md`, `traceability/*`, `verification/results/step3/*`, `reports/R0-step3-status-report.md` | ARCH-002, ARCH-003 and QA-001 set to READY FOR QA; coverage regenerated; step-3 report. | D-012 |
 | CH-023 | 6 Nov 2026 | `STATUS.md`, `DECISIONS.md`, `traceability/test-cases.csv` | The review of `0b45d12` is recorded (D-023): scoped acceptances, QA FAILED items, DEF-029 to DEF-036. | D-023 |
+| CH-024 | 6 Nov 2026 | `src/maths/integer.ts`, `src/maths/maths.test.ts`, `ARCH-003-maths.md` | Exact Euclidean `divmod`; BigInt-oracle regression tests. | DEF-029 |
+| CH-025 | 6 Nov 2026 | `src/architecture/analyse.ts`, `src/architecture.test.ts`, `src/architecture/fixtures/*`, `ARCH-001-architecture.md` | Global-object escape detection, layer matrix, transitive check, new fixtures. | DEF-030, DEF-031 |
+| CH-026 | 6 Nov 2026 | `src/questions/{compare,validate,schema,adapt}.ts`, `questions.test.ts`, `ARCH-002-question-schema.md` | Nested trap fields, one numeric comparison contract, duplicate fraction traps, `ask` for model consistency; DEF-028 exception narrowed. | DEF-032 to DEF-035 |
+| CH-027 | 6 Nov 2026 | `src/app/design-specimen/page.tsx`, `UX-004-content-differentiation.md`, `R0-step2-correction-report.md`, `src/design-tokens.test.ts` | Comparison rule states positive numerators. Specimen evidence regenerated. | DEF-036 |
+| CH-028 | 6 Nov 2026 | `STATUS.md`, `traceability/*`, `verification/*`, `reports/R0-review2-correction-report.md`, document status headers | Five items back to READY FOR QA (D-022, D-023); results and report. | D-023 |

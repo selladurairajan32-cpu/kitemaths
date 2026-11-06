@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Backlog item** | CUR-002: define the learning progression model (P0, R0) |
-| **Status** | QA FAILED at `6050e3c` (D-014); corrected on 5 Nov and returned for independent retest (D-022) |
+| **Status** | **ACCEPTED (D-023)** for its R0 specification scope. Implementation (evidence rules, recommendations) is R1. |
 | **Date** | 4 November 2026; corrected 5 November 2026 ([correction report](../reports/R0-step2-correction-report.md)) |
 | **Acceptance criteria** | <ol><li>Prerequisites form an explicit dependency graph.</li><li>Lessons progress from concrete or visual to abstract where appropriate.</li><li>Students are not advanced solely because they have clicked through a lesson.</li></ol> |
 | **Deliverables** | <ul><li>This model.</li><li>The graph as validated data in `src/curriculum/prerequisites.ts`.</li><li>Checks in `src/curriculum/prerequisites.test.ts`.</li></ul> |

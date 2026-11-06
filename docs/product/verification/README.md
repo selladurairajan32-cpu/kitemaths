@@ -68,3 +68,20 @@ possible screen, state or behaviour is unchanged.
   place-value island and lesson, which use the moved digit maths.
 - **Specimen audit:** 270 elements checked, 0 below the minimum.
 - **Production build:** `/design-specimen` returns 404.
+
+`results/review2/` holds the runs on 6 Nov 2026 for review 2. Baseline `6050e3c` (a fresh worktree and `npm ci`), head
+`d8ae9c0` (the final code commit):
+- **The 38 unchanged child-facing screens and states** are compared against the baseline. The design specimen is **not**
+  among them.
+  - Run 1 showed 24 differing pixels in one screen, `desk-challenge`, in the header strip (x 1057–1191, y 14–20).
+  - Two captures of the **baseline build alone** also differed by the same 24 pixels, so this is run-to-run noise.
+  - Run 2, a fresh paired capture of both builds, showed **no differences in the tested screens and states**. Both runs
+    are kept in `results/review2/`. No baseline screenshot was replaced to obtain a pass.
+  - This does not prove that every possible screen or state is unchanged.
+- **The specimen** changed on purpose (wording, DEF-036). Its evidence is regenerated separately
+  (`design/evidence/screens/`) and is **not** part of any zero-difference claim. Its audit: 272 elements checked, 0 below
+  the contrast minimum, no content overflow under 5 conditions; page overflow at 200% text and 320px comes from the
+  shared header (DEF-018).
+- **Generated questions:** 51,098 questions identical between `6050e3c` and `d8ae9c0` (the `divmod` change has no
+  production caller).
+- **Production build:** `/design-specimen` returns 404 with `noindex`; `/` returns 200.

@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Backlog item** | ARCH-001: define the modular learning architecture (P0, R0) |
-| **Status** | QA FAILED at `6050e3c` (D-014); corrected on 5 Nov and returned for independent retest (D-022) |
+| **Status** | READY FOR QA (D-023): failed the 6 Nov review (DEF-030, DEF-031); corrected 6 Nov, awaiting independent retest. |
 | **Date** | 4 November 2026; corrected 5 November 2026 ([correction report](../reports/R0-step2-correction-report.md)) |
 | **Code described** | Branch `claude/pensive-pasteur-bs5979`; app code identical to `main` at `bbf210a` |
 | **Acceptance criteria** | <ol><li>Presentation, lesson content, question definitions, mathematical logic, validation, progress, assessment and feedback are separated.</li><li>The architecture supports adding Tables and Mental Maths without rewriting the Fractions engine.</li></ol> |

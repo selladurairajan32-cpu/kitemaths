@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Backlog item** | ARCH-003: build pure mathematical logic modules (P0, R0). Tested by QA-001. |
-| **Status** | READY FOR QA. Waiting for independent QA; not self-accepted. |
+| **Status** | READY FOR QA (D-023): failed the 6 Nov review (DEF-029); corrected 6 Nov, awaiting independent retest. |
 | **Date** | 5 November 2026 (sprint step 3, authorised by D-012 and the PO on 5 Nov) |
 | **Acceptance criteria** | <ol><li>Core calculations and validators are pure functions independent of UI.</li><li>Edge cases are covered by unit tests.</li><li>UI never becomes the source of mathematical truth.</li></ol> |
 | **Modules** | <ul><li>`src/maths/fraction.ts`: fractions; existing functions plus checked arithmetic, mixed numbers and partitions.</li><li>`src/maths/integer.ts`: checked integer helpers, factors, divmod, lcm.</li><li>`src/maths/place-value.ts`: place values and digits, moved out of a UI file (K-7).</li></ul> |

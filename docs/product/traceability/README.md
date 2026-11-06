@@ -45,16 +45,16 @@ On 3 Nov the checker was deliberately broken twice to show it fails: once with a
 to a test that doesn't exist, and once with a P1 criterion left without a test case. Both times the
 right check went red (see the status report).
 
-## Coverage on 5 November 2026 (after sprint step 3)
+## Coverage on 6 November 2026 (after the review-2 corrections)
 
 Each criterion is counted once, by the strongest evidence any of its test cases has.
 
 | Epic | Items | Criteria | Test cases | Automated | Accepted | Passing | Review pending | Partial | Failing | Planned |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | GOV | 4 | 10 | 13 | 6 | 5 | 3 | 0 | 0 | 0 | 2 |
-| CUR | 4 | 9 | 23 | 8 | 0 | 3 | 1 | 1 | 0 | 4 |
-| UX | 8 | 22 | 44 | 14 | 2 | 5 | 2 | 2 | 1 | 10 |
-| ARCH | 5 | 14 | 52 | 44 | 0 | 11 | 0 | 1 | 0 | 2 |
+| CUR | 4 | 9 | 23 | 8 | 4 | 0 | 0 | 1 | 0 | 4 |
+| UX | 8 | 22 | 45 | 15 | 3 | 4 | 2 | 2 | 1 | 10 |
+| ARCH | 5 | 14 | 63 | 55 | 0 | 11 | 0 | 1 | 0 | 2 |
 | FR | 11 | 34 | 43 | 28 | 0 | 5 | 0 | 14 | 1 | 14 |
 | LAB | 7 | 25 | 25 | 4 | 0 | 2 | 0 | 2 | 0 | 21 |
 | PRACT | 8 | 25 | 34 | 24 | 0 | 9 | 0 | 6 | 0 | 10 |
@@ -64,8 +64,8 @@ Each criterion is counted once, by the strongest evidence any of its test cases 
 | MM | 12 | 28 | 28 | 0 | 0 | 0 | 0 | 0 | 0 | 28 |
 | EXAM | 6 | 16 | 16 | 1 | 0 | 0 | 0 | 1 | 0 | 15 |
 | PARENT | 3 | 7 | 7 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
-| QA | 7 | 15 | 37 | 24 | 0 | 3 | 0 | 1 | 0 | 11 |
-| **Total** | **97** | **270** | **403** | **194** | **7** | **51** | **3** | **43** | **2** | **164** |
+| QA | 7 | 15 | 41 | 28 | 0 | 3 | 0 | 1 | 0 | 11 |
+| **Total** | **97** | **270** | **419** | **210** | **12** | **47** | **2** | **43** | **2** | **164** |
 
 **How to read this:**
 - Fractions logic (FR, PRACT, MIS, MAST) already has substantial automated evidence. Its **planned**
@@ -91,11 +91,11 @@ Each criterion is counted once, by the strongest evidence any of its test cases 
 
 | Test file | Tests | Requirements it gives evidence for |
 |---|---:|---|
-| `src/architecture.test.ts` | 10 | ARCH-001 |
+| `src/architecture.test.ts` | 11 | ARCH-001 |
 | `src/curriculum/prerequisites.test.ts` | 6 | CUR-002, CUR-003 |
-| `src/design-tokens.test.ts` | 9 | UX-002, UX-003, UX-004 |
-| `src/maths/maths.test.ts` | 14 | ARCH-003, QA-001 |
-| `src/questions/questions.test.ts` | 7 | ARCH-002 |
+| `src/design-tokens.test.ts` | 10 | UX-002, UX-003, UX-004 |
+| `src/maths/maths.test.ts` | 20 | ARCH-003, QA-001 |
+| `src/questions/questions.test.ts` | 17 | ARCH-002 |
 | `src/design.test.ts` | 5 | UX-002, UX-003 |
 | `src/engine/engine.test.ts` | 34 | ARCH-004, ARCH-005, FR-010, FR-011, MAST-001, MAST-002, MAST-003, MAST-004, MAST-005, MIS-003, MIS-004, MIS-005, PRACT-001, PRACT-007, PRACT-008 |
 | `src/engine/rewards.test.ts` | 10 | FR-001, MAST-003 |

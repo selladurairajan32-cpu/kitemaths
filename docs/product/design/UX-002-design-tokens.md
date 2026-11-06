@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Backlog item** | UX-002: create the visual design system (P0, R0) |
-| **Status** | QA FAILED at `6050e3c` (D-014); corrected on 5 Nov and returned for independent retest (D-022) |
+| **Status** | **ACCEPTED (D-023) for R0 token and specification scope only.** Screen migration (AC2) and DEF-009 stay open for R1. This does not mean existing screens meet all UX-002 requirements. |
 | **Date** | 4 November 2026; corrected 5 November 2026 ([correction report](../reports/R0-step2-correction-report.md)) |
 | **Acceptance criteria** | <ol><li>Design tokens define colour, typography, spacing, layout widths, borders, elevation, radii, icon rules, focus states, disabled states, validation states and interaction feedback.</li><li>Styles are implemented as reusable tokens rather than isolated values.</li></ol> |
 | **Deliverables** | <ul><li>This specification.</li><li>The tokens in `src/app/globals.css` (`@theme static`).</li><li>The checks in `src/design-tokens.test.ts`.</li><li>The internal specimen page `/design-specimen` (not served in production) and its screenshots in [`evidence/`](evidence/).</li></ul> |

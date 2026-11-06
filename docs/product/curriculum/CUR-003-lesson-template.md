@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Backlog item** | CUR-003: create the instructional lesson template (P0, R0) |
-| **Status** | QA FAILED at `6050e3c` (D-014); corrected on 5 Nov and returned for independent retest (D-022) |
+| **Status** | **ACCEPTED (D-023)** for its R0 specification scope. Schema additions and the fresh-example rule are R1. |
 | **Date** | 4 November 2026; corrected 5 November 2026 ([correction report](../reports/R0-step2-correction-report.md)) |
 | **Acceptance criterion** | A reusable template supports objective, prerequisite check, explanation, representation, worked example, guided activity, independent practice, reflection, mastery check and next step. |
 | **Scope (D-012, RC-005)** | <ul><li>**Defined now:** the template, its rules, and the schema that supports all ten elements.</li><li>**R1:** the schema change in `src/lessons/types.ts` and player support for the three new step types, because those need UI work.</li><li>Today's lessons are checked against the template below.</li></ul> |
