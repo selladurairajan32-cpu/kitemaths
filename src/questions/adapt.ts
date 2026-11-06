@@ -158,7 +158,9 @@ export function fromKitQuestion(q: KitQuestionLike, meta: AdaptMeta): QuestionDe
     ...common(q, meta, tags(q.traps), model),
     interaction: "number-entry" as const,
     answer: q.answer,
-    // Today's kit marking (kit/evaluate.ts `same`) treats answers equal when they agree to 3 decimal places.
+    // Declared as round to 3 places. This is NOT the kit's rule (DEF-038): kit/evaluate.ts `same` rounds halves toward +Infinity
+    // and has a 1e-9 allowance, so it differs for negative ties and near-boundary values. See ARCH-002 §4. Resolving it is an
+    // R1 integration prerequisite; current app behaviour is unchanged.
     validation: { comparison: { kind: "round" as const, places: 3 }, maxDecimals: q.decimals ?? 0, allowNegative: q.negative ?? false },
     unit: q.unit,
     traps: traps?.length ? traps : undefined,

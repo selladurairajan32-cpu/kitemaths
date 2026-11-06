@@ -115,10 +115,29 @@ answer means**. It never chooses whichever reading makes the answer pass.
 ## 4. Compatibility with existing data
 
 `fromFractionQuestion(q, meta)` and `fromKitQuestion(q, meta)` convert today's questions without changing them. The
-caller supplies `meta.level`. They describe today's marking faithfully:
+caller supplies `meta.level`. They carry today's data across unchanged, but they do **not** reproduce all of today's
+marking exactly (DEF-038):
 - Fractions `write-fraction` and `shade` accept equivalent answers;
 - Fractions `number` compares exactly;
-- kit `number` treats answers as equal to 3 decimal places (`round`, 3), as `kit/evaluate.ts` does.
+- Fractions `write-fraction` and `shade` accept equivalent answers, and Fractions `number` compares exactly: these match.
+- kit `number` is declared as `round` to 3 places. **That is not the kit's rule.** The kit's `same()` in
+  `kit/evaluate.ts` is `|a − b| < 1e-9 || Math.round(a × 1000) === Math.round(b × 1000)`. It differs from the new contract
+  in two known ways:
+  1. **Negative ties.** `Math.round` rounds halves toward +∞, the contract rounds half away from zero. Answer −5 with
+     response −5.0005: the kit marks it correct, the new comparator does not.
+  2. **The 1e-9 allowance.** The kit accepts values that straddle a rounding boundary by less than 1e-9 (0.0004999999995
+     and 0.0005000000001 are the same answer to the kit). The new contract has no allowance, by decision.
+
+  A differential test (`questions.test.ts`, "adapters do NOT reproduce existing kit marking exactly") pins both
+  differences, shows every disagreement on a 10,000-pair sweep is explained by them, and shows the two agree on ordinary
+  values.
+
+  **Current app behaviour is unchanged:** the app still marks with `same()`. The schema is not used for marking.
+
+  **R1 integration prerequisite.** Before any question is marked through the schema, the difference must be resolved,
+  by a reviewed decision: either move kit marking to the new contract (a behaviour change for negative ties and
+  near-boundary values, with its own acceptance check), or add an explicit legacy comparison kind that reproduces
+  `same()` exactly. No hidden epsilon is added to the new contract either way.
 
 **Results on 5 Nov** (`questions.test.ts`):
 - **Fractions:** every practice, lesson, follow-up and assessment question converts and validates.
@@ -139,4 +158,5 @@ caller supplies `meta.level`. They describe today's marking faithfully:
 
 - Using definitions in the app (loading, authoring, or marking through the schema).
 - Fixing DEF-028 in the generators.
+- Marking through the schema, until the kit-marking difference above (DEF-038) is resolved.
 - Year mappings: CUR-001.
