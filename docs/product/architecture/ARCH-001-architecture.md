@@ -101,10 +101,34 @@ workflow runs on pull requests and on pushes to `main`. It has not run on the de
   - A name counts as global when it is declared outside the project's own source. That covers DOM typings and Node
     typings (Node's `fetch`).
   - Standard APIs such as `Math` and `Number` are never on the list.
+- **The global object escaping (DEF-030).** `globalThis` and `self` may only appear as the object of a property or
+  element access. Destructuring (`const { localStorage: store } = globalThis`), aliases (`const g = globalThis`),
+  arguments (`Reflect.get(globalThis, name)`) and spreads hide which capability is used, so they fail. The message names
+  the captured capability when the pattern lists it. A local variable or parameter that shadows the name is not the
+  global object, and destructuring `document` from an ordinary object is fine. `typeof globalThis` in a type is not a use.
+- **A dependency matrix (DEF-031).** Each protected layer may import only the layers in its row. The **type-only column
+  lists additional layers** allowed as types only. A type-only import may go to the runtime column ∪ the type-only column,
+  so a same-layer type import is always allowed wherever a same-layer import is.
+
+  | Layer | Runtime imports | Additional type-only imports |
+  |---|---|---|
+  | engine | engine | none |
+  | maths | maths | none |
+  | lessons | lessons | engine |
+  | curriculum | curriculum | engine, lessons |
+  | questions | questions, maths | engine, lessons, fractions-content |
+  | fractions-content | fractions-content, engine, maths | lessons |
+
+  Packages: UI packages are never allowed; engine and maths take no packages.
+- **A transitive check (DEF-031).** From each protected file it follows runtime imports (type-only edges have no runtime
+  effect). It fails if any file it reaches imports UI at runtime, uses a prohibited global, or has an unresolved or
+  non-literal import, and it prints the chain (for example `questions/x.ts → lib/store.ts → react`). The start file's own
+  problems are reported by the direct rules, so the closure finds what an intermediate module hides.
 - **`.tsx` files are checked too.** In a pure layer they fail only for a forbidden dependency or behaviour, not for their
   extension.
-- **Fixtures prove it works.** `src/architecture/fixtures/` holds 15 bad fixtures that must each fail for the expected
-  reason, and 5 good fixtures that must pass. The good ones cover comments, strings, property names, local names and a
+- **Fixtures prove it works.** `src/architecture/fixtures/` holds 22 bad fixtures that must each fail for the expected
+  reason, and 11 good fixtures that must pass. A dedicated test shows the transitive check alone detects a violation
+  hidden behind a helper: no direct rule is broken and the helper isn't scanned on its own. The good ones cover comments, strings, property names, local names and a
   pure `.tsx` file.
 
 | Rule | Statement |
@@ -116,6 +140,9 @@ workflow runs on pull requests and on pushes to `main`. It has not run on the de
 | **A5** | Curriculum data (`src/curriculum/**`): the same as A3. |
 | **A6** | Among the other topic files (`src/topics/**` that are not presentation or Fractions content), **only an explicit allowlist** may depend on UI. It has 4 documented files (§4, K-1 and K-2), plus 1 coupling the rebuilt check discovered on 5 Nov (K-6; K-7 is fixed). The list may only shrink. |
 | **A7** | The question schema (`src/questions/**`, ARCH-002): the same as A3. |
+
+**Known limit.** The checks are static. Access that no static analysis can follow (for example `eval`, `Function`, or a
+capability reached through a value the type checker can't resolve) is not detected.
 
 Tests are allowed to import across layers: `engine.test.ts` uses Fractions content as fixtures.
 

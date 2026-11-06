@@ -1,15 +1,17 @@
 import { existsSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { beforeAll, describe, expect, it } from "vitest";
-import { analyse, projectOptions, type Analysis, type Dependency, type Problem } from "./architecture/analyse";
+import { analyse, projectOptions, transitiveViolations, type Analysis, type Dependency, type Problem } from "./architecture/analyse";
 
 /**
  * ARCH-001: keeps the learning architecture modular (docs/product/architecture/ARCH-001-architecture.md §1–§4).
  *
  * Every rule works on parsed code (src/architecture/analyse.ts): real module resolution, all import
- * forms, and scope-aware detection of browser and network globals. `.ts` and `.tsx` files are both
- * checked; a `.tsx` file fails only if it has a forbidden dependency or behaviour. Fixtures in
- * src/architecture/fixtures prove the guard rejects bad code and accepts good code.
+ * forms, scope-aware detection of browser and network globals (including the global object escaping,
+ * as in `const { localStorage } = globalThis`), a per-layer dependency matrix, and a transitive check that
+ * follows runtime imports so an intermediate module can't hide UI or browser access. `.ts` and `.tsx`
+ * files are both checked; a `.tsx` file fails only if it has a forbidden dependency or behaviour.
+ * Fixtures in src/architecture/fixtures prove the guard rejects bad code and accepts good code.
  */
 
 const ROOT = process.cwd();
@@ -27,15 +29,33 @@ const DISCOVERED_COUPLINGS = [
 ];
 
 type Layer = "engine" | "maths" | "lessons" | "curriculum" | "questions" | "fractions-content" | "topics-contract" | "presentation" | "lib" | "other";
-/** Layers that may depend only on themselves. */
-const SELF_ONLY: Layer[] = ["engine", "maths"];
-/** Layers that may not depend on UI. */
-const NO_UI: Layer[] = ["lessons", "curriculum", "questions", "fractions-content"];
-const PURE: Layer[] = [...SELF_ONLY, ...NO_UI];
+type Protected = "engine" | "maths" | "lessons" | "curriculum" | "questions" | "fractions-content";
+
+/**
+ * The dependency matrix (ARCH-001 §2). Per protected layer, per import edge:
+ *  - `runtime`: the layers it may import, with a runtime effect. Its own layer is always in the list, so a
+ *    same-layer import is allowed whether or not it is type-only.
+ *  - `typeOnly`: layers it may import **in addition**, and only as types (`import type`, or only inline `type`
+ *    specifiers). A type-only import may therefore go to `runtime` ∪ `typeOnly`.
+ * Packages are not layers: UI packages are never allowed, and engine and maths take no packages at all.
+ */
+const MATRIX: Record<Protected, { runtime: Layer[]; typeOnly: Layer[]; packages: boolean }> = {
+  engine: { runtime: ["engine"], typeOnly: [], packages: false },
+  maths: { runtime: ["maths"], typeOnly: [], packages: false },
+  lessons: { runtime: ["lessons"], typeOnly: ["engine"], packages: true },
+  curriculum: { runtime: ["curriculum"], typeOnly: ["engine", "lessons"], packages: true },
+  questions: { runtime: ["questions", "maths"], typeOnly: ["engine", "lessons", "fractions-content"], packages: true },
+  "fractions-content": { runtime: ["fractions-content", "engine", "maths"], typeOnly: ["lessons"], packages: true },
+};
+const isProtected = (l: Layer): l is Protected => l in MATRIX;
 
 function layerOf(file: string): Layer {
   const rel = relative(ROOT, file).split("\\").join("/");
-  if (rel.startsWith("src/architecture/fixtures/")) return "engine"; // fixtures are checked as engine code
+  if (rel.startsWith("src/architecture/fixtures/")) {
+    // Fixtures are checked as engine code, unless a folder named as-<layer> says otherwise.
+    const as = /\/as-([a-z-]+)\//.exec(rel)?.[1];
+    return (as as Layer | undefined) ?? "engine";
+  }
   if (rel.startsWith("src/engine/")) return "engine";
   if (rel.startsWith("src/maths/")) return "maths";
   if (rel.startsWith("src/lessons/")) return "lessons";
@@ -60,27 +80,41 @@ function sourceFiles(dir: string): string[] {
   });
 }
 
-const isUi = (d: Dependency) => (d.packageName !== null && UI_PACKAGES.has(d.packageName)) || (d.resolved !== null && layerOf(d.resolved) === "presentation");
+const isUiPackage = (name: string) => UI_PACKAGES.has(name);
+const isUi = (d: Dependency) => (d.packageName !== null && isUiPackage(d.packageName)) || (d.resolved !== null && layerOf(d.resolved) === "presentation");
 
-/** Every way a file breaks the rules of its layer, as readable strings. */
-function violations(a: Analysis, files: string[]): string[] {
+/** Direct rules: every import edge against the matrix, plus prohibited globals and unchecked imports in the file itself. */
+function directViolations(a: Analysis, files: string[]): string[] {
   const out: string[] = [];
   const own = new Set(files);
   for (const d of a.dependencies.filter((x) => own.has(x.file))) {
     const layer = layerOf(join(ROOT, d.file));
+    if (!isProtected(layer)) continue;
+    const rule = MATRIX[layer];
     const where = `${d.file}:${d.line} ${d.via} "${d.specifier}"`;
-    if (SELF_ONLY.includes(layer)) {
-      const target = d.resolved && !d.resolved.includes("/node_modules/") ? layerOf(d.resolved) : null;
-      if (target !== layer) out.push(`${where}: ${layer} may only depend on ${layer}`);
-    } else if (NO_UI.includes(layer) && isUi(d)) {
-      out.push(`${where}: ${layer} may not depend on UI`);
+    const project = d.resolved && !d.resolved.includes("/node_modules/");
+    if (!project) {
+      if (d.packageName !== null && isUiPackage(d.packageName)) out.push(`${where}: ${layer} may not depend on UI`);
+      else if (!rule.packages) out.push(`${where}: ${layer} may only depend on ${layer}`);
+      continue;
+    }
+    const target = layerOf(d.resolved!);
+    const allowed = d.typeOnly ? [...rule.runtime, ...rule.typeOnly] : rule.runtime;
+    if (!allowed.includes(target)) {
+      const only = rule.runtime.length === 1 && !rule.typeOnly.length;
+      out.push(`${where}: ${only ? `${layer} may only depend on ${layer}` : `${layer} may not depend on ${target}${d.typeOnly ? "" : " at runtime"} (allowed: ${allowed.join(", ")})`}`);
     }
   }
-  for (const p of a.problems.filter((x: Problem) => own.has(x.file) && PURE.includes(layerOf(join(ROOT, x.file))))) {
+  for (const p of a.problems.filter((x: Problem) => own.has(x.file) && isProtected(layerOf(join(ROOT, x.file))))) {
     out.push(`${p.file}:${p.line} ${p.kind}: ${p.detail}`);
   }
   return out;
 }
+
+/** Transitive rule: nothing reachable through runtime imports may use UI or a prohibited global (DEF-031). */
+const closureViolations = (a: Analysis, files: string[]) => transitiveViolations(a, files, isUiPackage);
+/** Everything wrong with these files, directly or through what they import. */
+const violations = (a: Analysis, files: string[]) => [...directViolations(a, files), ...closureViolations(a, files)];
 
 const PROTECTED = {
   engine: sourceFiles("src/engine"),
@@ -93,15 +127,15 @@ const PROTECTED = {
 const CONTRACT = sourceFiles("src/topics").filter((f) => layerOf(join(ROOT, f)) === "topics-contract");
 const BAD = sourceFiles("src/architecture/fixtures/bad");
 const GOOD = sourceFiles("src/architecture/fixtures/good");
+const name = (f: string) => f.split("/").pop()!;
 
+/** One analysis of every non-test source file, so the transitive check can follow any import. */
 let project: Analysis;
-let fixtures: Analysis;
 
 describe("learning architecture (ARCH-001)", () => {
   beforeAll(() => {
-    project = analyse([...Object.values(PROTECTED).flat(), ...CONTRACT]);
-    fixtures = analyse([...BAD, ...GOOD]);
-  }, 120_000);
+    project = analyse(sourceFiles("src"));
+  }, 240_000);
 
   it("A1: keeps the engine pure, importing only other engine files", () => {
     expect(PROTECTED.engine.length).toBeGreaterThan(5);
@@ -132,6 +166,7 @@ describe("learning architecture (ARCH-001)", () => {
   });
 
   it("A7: keeps the question schema free of UI code and browser access", () => {
+    expect(PROTECTED.questions.length).toBeGreaterThan(2);
     expect(violations(project, PROTECTED.questions)).toEqual([]);
   });
 
@@ -152,24 +187,48 @@ describe("learning architecture (ARCH-001)", () => {
       "ui-component.tsx": /import "react"/,
       "browser-in-tsx.tsx": /prohibited-global: window/,
       "node-fetch.ts": /prohibited-global: fetch/,
+      // Review 2 (DEF-030, DEF-031):
+      "destructure-global.ts": /global-object-escape: globalThis escapes.*\(captures localStorage\)/,
+      "alias-global.ts": /global-object-escape: globalThis escapes/,
+      "reflect-global.ts": /global-object-escape: globalThis escapes/,
+      "shadow-param-plus-destructure.ts": /:7 global-object-escape: globalThis escapes.*\(captures sessionStorage\)/,
+      "indirect-via-helper.ts": /indirect-via-helper\.ts → src\/architecture\/fixtures\/support\/uses-window\.ts: prohibited-global at line 2: window/,
+      "import-lib-store.ts": /import "@\/lib\/store": questions may not depend on lib at runtime/,
+      "runtime-from-fractions.ts": /questions may not depend on fractions-content at runtime/,
     };
-    expect(BAD.map((f) => f.split("/").pop()).sort()).toEqual(Object.keys(expected).sort());
+    expect(BAD.map(name).sort()).toEqual(Object.keys(expected).sort());
     for (const f of BAD) {
-      const found = violations(fixtures, [f]);
-      const name = f.split("/").pop()!;
-      expect(found.some((v) => expected[name].test(v)), `${name}: ${JSON.stringify(found)}`).toBe(true);
+      const found = violations(project, [f]);
+      expect(found.some((v) => expected[name(f)].test(v)), `${name(f)}: ${JSON.stringify(found)}`).toBe(true);
     }
-    // The reviewer's probe fails for all three of its faults.
-    const probe = violations(fixtures, BAD.filter((f) => f.endsWith("reviewer-probe.ts")));
+    // The reviewer's first probe fails for all three of its faults.
+    const probe = violations(project, BAD.filter((f) => f.endsWith("reviewer-probe.ts")));
     expect(probe.some((v) => /import "@\/components/.test(v))).toBe(true);
     expect(probe.some((v) => /dynamic-import "react"/.test(v))).toBe(true);
     // A shadowed local `document` (line 3–4) is not reported; only the real global use (line 7) is.
-    expect(violations(fixtures, BAD.filter((f) => f.endsWith("shadowed-plus-global.ts"))).filter((v) => /prohibited-global/.test(v))).toHaveLength(1);
+    expect(violations(project, BAD.filter((f) => f.endsWith("shadowed-plus-global.ts"))).filter((v) => /prohibited-global/.test(v))).toHaveLength(1);
+    // The shadowing parameter (lines 2–3) is not reported; only the real destructure (line 7) is.
+    expect(violations(project, BAD.filter((f) => f.endsWith("shadow-param-plus-destructure.ts"))).filter((v) => /global-object-escape/.test(v))).toHaveLength(1);
   });
 
-  it("guard: accepts good fixtures: comments, strings, property names, local names and pure .tsx", () => {
-    expect(GOOD.length).toBeGreaterThanOrEqual(5);
-    expect(violations(fixtures, GOOD)).toEqual([]);
+  it("guard: the transitive check alone detects a violation hidden behind an intermediate module", () => {
+    const hidden = BAD.filter((f) => f.endsWith("indirect-via-helper.ts"));
+    expect(hidden).toHaveLength(1);
+    // No direct rule is broken: the import is same-layer and the file itself does nothing forbidden...
+    expect(directViolations(project, hidden)).toEqual([]);
+    // ...and the helper is not scanned on its own, so only following the import reveals the problem.
+    expect(closureViolations(project, hidden).some((v) => /support\/uses-window\.ts: prohibited-global at line 2: window/.test(v))).toBe(true);
+    // The same holds for the reviewer's second probe: lib/store.ts reaches React and window.localStorage.
+    const storeProbe = BAD.filter((f) => f.endsWith("import-lib-store.ts"));
+    const chain = closureViolations(project, storeProbe);
+    expect(chain.some((v) => /import-lib-store\.ts → src\/lib\/store\.ts → react: reaches UI at runtime/.test(v)), JSON.stringify(chain)).toBe(true);
+    expect(chain.some((v) => /src\/lib\/store\.ts: prohibited-global.*window/.test(v))).toBe(true);
+  });
+
+  it("guard: accepts good fixtures: comments, strings, property names, local names, same-layer and allowed type-only imports, pure .tsx", () => {
+    expect(GOOD.length).toBeGreaterThanOrEqual(10);
+    expect(GOOD.map(name)).toEqual(expect.arrayContaining(["local-globalthis-param.ts", "destructure-nonglobal.ts", "typeof-globalthis.ts", "type-only-engine.ts", "type-only-same-layer.ts", "type-from-fractions.ts"]));
+    expect(violations(project, GOOD)).toEqual([]);
   });
 
   it("guard: finds Node-typed fetch even without the DOM library", () => {

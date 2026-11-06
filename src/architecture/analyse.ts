@@ -16,7 +16,15 @@ import ts from "typescript";
  *    shadows `document` is not a global use, while a real global use elsewhere in the same file is.
  *    A name counts as global when its declaration is not in the project's own source: DOM lib
  *    typings, Node typings (`fetch`) or any other typings. Standard APIs such as `Math` are never
- *    on the list.
+ *    on the list;
+ *  - reports the global object itself escaping (DEF-030): `globalThis` or `self` used as anything other than the
+ *    object of a property or element access. Destructuring (`const { localStorage } = globalThis`), aliases
+ *    (`const g = globalThis`), arguments (`Reflect.get(globalThis, …)`) and spreads hide which capability is used,
+ *    so they are rejected. A local variable or parameter that shadows the name is not the global object;
+ *  - marks each dependency as type-only when every imported name is type-only (`import type`, or only inline
+ *    `type` specifiers), because a type-only edge has no runtime effect;
+ *  - `transitiveViolations` walks runtime (non-type-only) edges from a file and reports any file it reaches that
+ *    imports UI at runtime or uses a prohibited global, with the chain (DEF-031).
  */
 
 /** Global capabilities pure layers may not use (ARCH-001 §1: no browser APIs, no I/O). */
@@ -53,7 +61,7 @@ export interface Dependency {
 export interface Problem {
   file: string;
   line: number;
-  kind: "unresolved" | "non-literal" | "prohibited-global";
+  kind: "unresolved" | "non-literal" | "prohibited-global" | "global-object-escape";
   detail: string;
 }
 
@@ -148,9 +156,13 @@ export function analyse(files: string[], options: ts.CompilerOptions = projectOp
 
     const visit = (node: ts.Node): void => {
       if (ts.isImportDeclaration(node)) {
-        addDependency(node, node.moduleSpecifier, "import", !!node.importClause?.isTypeOnly);
+        const clause = node.importClause;
+        const named = clause?.namedBindings && ts.isNamedImports(clause.namedBindings) ? clause.namedBindings.elements : undefined;
+        const typeOnly = !!clause && (clause.isTypeOnly || (!clause.name && !!named && named.length > 0 && named.every((e) => e.isTypeOnly)));
+        addDependency(node, node.moduleSpecifier, "import", typeOnly);
       } else if (ts.isExportDeclaration(node) && node.moduleSpecifier) {
-        addDependency(node, node.moduleSpecifier, "export", node.isTypeOnly);
+        const named = node.exportClause && ts.isNamedExports(node.exportClause) ? node.exportClause.elements : undefined;
+        addDependency(node, node.moduleSpecifier, "export", node.isTypeOnly || (!!named && named.length > 0 && named.every((e) => e.isTypeOnly)));
       } else if (ts.isImportEqualsDeclaration(node) && ts.isExternalModuleReference(node.moduleReference)) {
         addDependency(node, node.moduleReference.expression, "import-equals", node.isTypeOnly);
       } else if (ts.isImportTypeNode(node) && ts.isLiteralTypeNode(node.argument)) {
@@ -179,6 +191,34 @@ export function analyse(files: string[], options: ts.CompilerOptions = projectOp
         }
       }
 
+      // The global object escaping: globalThis / self as anything but the object of a member access (DEF-030).
+      if (ts.isIdentifier(node) && (node.text === "globalThis" || node.text === "self") && !isNameOnly(node) && !ts.findAncestor(node, ts.isTypeNode)) {
+        const symbol = checker.getSymbolAtLocation(node);
+        const isGlobalObject = !symbol?.declarations?.length || symbol.declarations.every((d) => !isProjectSource(d.getSourceFile().fileName));
+        if (isGlobalObject) {
+          let top: ts.Node = node;
+          while (top.parent && (ts.isParenthesizedExpression(top.parent) || ts.isAsExpression(top.parent) || ts.isTypeAssertionExpression(top.parent) || ts.isNonNullExpression(top.parent) || ts.isSatisfiesExpression(top.parent)) && top.parent.expression === top) top = top.parent;
+          const parent = top.parent;
+          const isMemberObject = parent && (ts.isPropertyAccessExpression(parent) || ts.isElementAccessExpression(parent)) && parent.expression === top;
+          if (!isMemberObject) {
+            const names: string[] = [];
+            const pattern = ts.isVariableDeclaration(parent) && parent.initializer === top ? parent.name : ts.isParameter(parent) && parent.initializer === top ? parent.name : undefined;
+            if (pattern && ts.isObjectBindingPattern(pattern)) {
+              for (const el of pattern.elements) {
+                const key = el.propertyName ?? el.name;
+                names.push(ts.isIdentifier(key) || ts.isStringLiteral(key) ? key.text : "[computed]");
+              }
+            }
+            problems.push({
+              file,
+              line: lineOf(node),
+              kind: "global-object-escape",
+              detail: `${node.text} escapes: destructured, aliased or passed on, so which capability is used can't be checked${names.length ? ` (captures ${names.join(", ")})` : ""}`,
+            });
+          }
+        }
+      }
+
       if (ts.isIdentifier(node) && !isNameOnly(node) && isProhibitedGlobal(node)) {
         problems.push({ file, line: lineOf(node), kind: "prohibited-global", detail: node.text });
       }
@@ -187,4 +227,37 @@ export function analyse(files: string[], options: ts.CompilerOptions = projectOp
     visit(sf);
   }
   return { dependencies, problems };
+}
+
+/**
+ * Walks runtime (non-type-only) project dependencies from each start file and reports every file it reaches that
+ * imports UI at runtime, uses a prohibited global, or has an unresolved or non-literal import. The start file itself is
+ * not reported (its own violations are the direct rules' job), so this finds problems hidden behind an intermediate
+ * module (DEF-031). `analysis` must include every file that can be reached.
+ */
+export function transitiveViolations(analysis: Analysis, starts: string[], isUiPackage: (name: string) => boolean): string[] {
+  const norm = (abs: string) => relative(ROOT, abs).split("\\").join("/");
+  const edges = new Map<string, Dependency[]>();
+  for (const d of analysis.dependencies) edges.set(d.file, [...(edges.get(d.file) ?? []), d]);
+  const problems = new Map<string, Problem[]>();
+  for (const p of analysis.problems) problems.set(p.file, [...(problems.get(p.file) ?? []), p]);
+  const out: string[] = [];
+  for (const start of starts) {
+    const seen = new Set<string>([start]);
+    /** `path` is the chain of files from `start` to `file`, inclusive. */
+    const visit = (file: string, path: string[]) => {
+      for (const d of edges.get(file) ?? []) {
+        if (d.typeOnly) continue;
+        if (file !== start && d.packageName !== null && isUiPackage(d.packageName)) out.push(`${path.join(" → ")} → ${d.specifier}: reaches UI at runtime`);
+        const target = d.resolved && !d.resolved.includes("/node_modules/") ? norm(d.resolved) : null;
+        if (target && !seen.has(target)) {
+          seen.add(target);
+          for (const p of problems.get(target) ?? []) out.push(`${[...path, target].join(" → ")}: ${p.kind} at line ${p.line}: ${p.detail}`);
+          visit(target, [...path, target]);
+        }
+      }
+    };
+    visit(start, [start]);
+  }
+  return out;
 }
