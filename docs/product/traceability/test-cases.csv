@@ -117,6 +117,8 @@ TC-ARCH-003.2.4,ARCH-003,AC2,unit,automated,passing,src/maths/maths.test.ts::rej
 TC-ARCH-003.2.5,ARCH-003,AC2,unit,automated,passing,"src/maths/maths.test.ts::gives no fraction for unequal parts, and rejects invalid partitions",
 TC-ARCH-003.2.6,ARCH-003,AC2,unit,automated,passing,src/topics/fractions/evaluate.test.ts::treats a zero denominator as an input problem,Existing
 TC-ARCH-003.2.7,ARCH-003,AC2,unit,planned,planned,,"R1 (DEF-027): existing unchecked functions route through the checked versions; out-of-domain inputs (0/0, non-integers, overflowing compare) are rejected"
+TC-ARCH-003.2.8,ARCH-003,AC2,unit,automated,passing,"src/maths/maths.test.ts::matches a BigInt oracle for every pair of safe-integer extremes, both divisor signs, zero and negative dividends",DEF-029 regression
+TC-ARCH-003.2.9,ARCH-003,AC2,unit,automated,passing,"src/maths/maths.test.ts::returns the reproduced case exactly: divmod(2, MAX) = { q: 0, r: 2 }",DEF-029 regression
 TC-ARCH-003.3.1,ARCH-003,AC3,content,automated,passing,src/topics/fractions/representations.test.ts::name the fraction: the shaded (or unshaded) count over the parts of an equal-part picture is the answer,Pictures and answers agree; marking checked against hand rules
 TC-ARCH-003.3.2,ARCH-003,AC3,content,automated,passing,"src/topics/fractions/representations.test.ts::number line: the target sits on a tick of the scale, and only that tick is right",
 TC-ARCH-003.3.3,ARCH-003,AC3,unit,automated,passing,src/architecture.test.ts::A6: lets only the known content-contract files import UI types,K-7 fixed: place-value maths no longer comes from a UI file
@@ -382,6 +384,8 @@ TC-QA-001.1.14,QA-001,AC1,content,automated,passing,"src/topics/fractions/repres
 TC-QA-001.1.15,QA-001,AC1,content,automated,passing,"src/topics/fractions/representations.test.ts::equal parts: the answer is exactly the pictures whose parts are equal, and picking an unequal one is rejected",Unequal parts
 TC-QA-001.1.16,QA-001,AC1,content,automated,passing,src/topics/fractions/representations.test.ts::covers every Fractions interaction that has a picture or a numeric model,
 TC-QA-001.1.17,QA-001,AC1,unit,automated,passing,src/topics/fractions/math.test.ts::computes greatest common divisors,Existing
+TC-QA-001.1.18,QA-001,AC1,unit,automated,passing,"src/maths/maths.test.ts::matches the oracle on 3,000 seeded cases across the whole safe range","Independent BigInt oracle, whole safe range"
+TC-QA-001.1.19,QA-001,AC1,unit,automated,passing,"src/maths/maths.test.ts::gcd, lcm and the checked add and multiply are exact or throw, never imprecise",Extremes against BigInt
 TC-QA-001.2.1,QA-001,AC2,unit,automated,passing,"src/maths/maths.test.ts::rejects zero or negative denominators, non-integers, NaN and Infinity",
 TC-QA-001.2.2,QA-001,AC2,unit,automated,passing,src/maths/maths.test.ts::refuses division by zero,
 TC-QA-001.2.3,QA-001,AC2,unit,automated,passing,src/maths/maths.test.ts::throws on overflow instead of returning an imprecise answer,Includes a case just below 2^53 that must stay exact
@@ -389,6 +393,8 @@ TC-QA-001.2.4,QA-001,AC2,unit,automated,passing,src/maths/maths.test.ts::rejects
 TC-QA-001.2.5,QA-001,AC2,unit,automated,passing,"src/maths/maths.test.ts::gives no fraction for unequal parts, and rejects invalid partitions",
 TC-QA-001.2.6,QA-001,AC2,unit,automated,passing,src/topics/fractions/evaluate.test.ts::treats a zero denominator as an input problem,Existing
 TC-QA-001.2.7,QA-001,AC2,unit,automated,passing,src/lib/migrate.test.ts::ignores anything that isn't a version-1 save,Existing
+TC-QA-001.2.8,QA-001,AC2,unit,automated,passing,"src/maths/maths.test.ts::matches a BigInt oracle for every pair of safe-integer extremes, both divisor signs, zero and negative dividends",DEF-029 regression
+TC-QA-001.2.9,QA-001,AC2,unit,automated,passing,"src/maths/maths.test.ts::returns the reproduced case exactly: divmod(2, MAX) = { q: 0, r: 2 }",DEF-029 regression
 TC-QA-002.1.1,QA-002,AC1,unit,planned,planned,,Unit/content test asserting the rule
 TC-QA-002.2.1,QA-002,AC2,unit,planned,planned,,Unit/content test asserting the rule
 TC-QA-003.1.1,QA-003,AC1,e2e,planned,planned,,Playwright journey test asserting the behaviour

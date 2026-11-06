@@ -51,6 +51,10 @@ A mixed number is `{ sign, whole, n, d }`, and **the sign is authoritative**:
 - `a = q·b + r`;
 - `0 ≤ r < |b|`.
 
+**Implementation** (DEF-029): the quotient is built from `a % b`, which is exact in JS, so every intermediate value stays
+safe. An earlier form, `((a % |b|) + |b|) % |b|`, gave `divmod(2, MAX_SAFE_INTEGER)` = `{ q: 1.1e-16, r: 1 }`. Negative
+zero is normalised to 0. Tests compare against an independent BigInt oracle for every pair of safe-integer extremes.
+
 So the remainder is never negative:
 - `divmod(-7, 2) = { q: -4, r: 1 }`;
 - `divmod(7, -2) = { q: -3, r: 1 }`.

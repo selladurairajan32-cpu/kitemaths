@@ -74,12 +74,23 @@ export function factors(n: number): number[] {
 /**
  * Euclidean division: a = q·b + r with 0 ≤ r < |b|, so the remainder is never negative.
  * divmod(-7, 2) = { q: -4, r: 1 }; divmod(7, -2) = { q: -3, r: 1 }. RangeError if b is 0.
+ *
+ * Exact for every pair of safe integers (DEF-029). Every intermediate value stays inside the safe range:
+ *  - r0 = a % b is exact in JS and takes the sign of a, so |r0| < |b|;
+ *  - a − r0 is an exact multiple of b with |a − r0| ≤ |a|, so (a − r0) / b is an exact integer q0;
+ *  - if r0 < 0 then |b| ≥ 2, and r = r0 + |b| and q = q0 − sign(b) are both small enough to stay safe.
+ * Negative zero is normalised to 0.
  */
 export function divmod(a: number, b: number): { q: number; r: number } {
   assertSafeInteger(a, "a");
   assertSafeInteger(b, "b");
   if (b === 0) throw new RangeError("division by zero");
-  const m = Math.abs(b);
-  const r = ((a % m) + m) % m;
-  return { q: (a - r) / b, r };
+  const r0 = a % b;
+  let q = (a - r0) / b;
+  let r = r0;
+  if (r0 < 0) {
+    r = r0 + Math.abs(b);
+    q = q - Math.sign(b);
+  }
+  return { q: q === 0 ? 0 : q, r: r === 0 ? 0 : r };
 }

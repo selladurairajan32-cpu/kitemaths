@@ -18,7 +18,7 @@ import {
   type Fraction,
   type MixedNumber,
 } from "./fraction";
-import { checkedAdd, checkedMultiply, divmod, factors, isFactor, lcm } from "./integer";
+import { checkedAdd, checkedMultiply, divmod, factors, gcdOf, isFactor, lcm } from "./integer";
 import { PLACE, digitIn } from "./place-value";
 
 /**
@@ -214,6 +214,97 @@ describe("integers (ARCH-003 §1, §3)", () => {
     expect(digitIn(3.47, "t")).toBe(4);
     expect(digitIn(3.47, "h")).toBe(7);
     expect(digitIn(-305, "T")).toBe(0);
+  });
+});
+
+/** Independent exact Euclidean division in BigInt: a = q·b + r with 0 ≤ r < |b|. Written here, not taken from the module. */
+function euclid(a: number, b: number): { q: bigint; r: bigint } {
+  const [A, B] = [BigInt(a), BigInt(b)];
+  const m = B < B0 ? -B : B;
+  let r = A % m;
+  if (r < B0) r += m;
+  return { q: (A - r) / B, r };
+}
+const EXTREMES = [0, 1, -1, 2, -2, 3, -3, 7, -7, MAX - 1, -(MAX - 1), MAX, -MAX, 2 ** 52, -(2 ** 52), 2 ** 52 + 1];
+
+describe("divmod is exact across the safe range (DEF-029, ARCH-003 §3)", () => {
+  it("returns the reproduced case exactly: divmod(2, MAX) = { q: 0, r: 2 }", () => {
+    expect(divmod(2, MAX)).toEqual({ q: 0, r: 2 });
+    expect(divmod(-2, MAX)).toEqual({ q: -1, r: MAX - 2 });
+    expect(divmod(2, -MAX)).toEqual({ q: 0, r: 2 });
+  });
+
+  it("matches a BigInt oracle for every pair of safe-integer extremes, both divisor signs, zero and negative dividends", () => {
+    for (const a of EXTREMES) {
+      for (const b of EXTREMES.filter((x) => x !== 0)) {
+        const want = euclid(a, b);
+        const got = divmod(a, b);
+        expect({ q: BigInt(got.q), r: BigInt(got.r) }, `divmod(${a}, ${b})`).toEqual(want);
+        expect(Number.isSafeInteger(got.q) && Number.isSafeInteger(got.r), `${a}, ${b}: safe results`).toBe(true);
+        expect(Object.is(got.q, -0) || Object.is(got.r, -0), `${a}, ${b}: no negative zero`).toBe(false);
+        // The definition, in BigInt: a = q·b + r and 0 ≤ r < |b|.
+        expect(BigInt(got.q) * BigInt(b) + BigInt(got.r)).toBe(BigInt(a));
+        expect(BigInt(got.r) >= B0 && BigInt(got.r) < (BigInt(b) < B0 ? -BigInt(b) : BigInt(b))).toBe(true);
+      }
+    }
+  });
+
+  it("handles divisors larger than the dividend (hand-worked) and zero dividends", () => {
+    expect(divmod(5, 9)).toEqual({ q: 0, r: 5 });
+    expect(divmod(-5, 9)).toEqual({ q: -1, r: 4 });
+    expect(divmod(5, -9)).toEqual({ q: 0, r: 5 });
+    expect(divmod(-5, -9)).toEqual({ q: 1, r: 4 });
+    expect(divmod(0, 7)).toEqual({ q: 0, r: 0 });
+    expect(divmod(0, -7)).toEqual({ q: 0, r: 0 });
+  });
+
+  it("matches the oracle on 3,000 seeded cases across the whole safe range", () => {
+    let s = 20261106;
+    const next = () => (s = (Math.imul(s, 1664525) + 1013904223) >>> 0) / 2 ** 32;
+    const big = () => Math.floor((next() * 2 - 1) * MAX);
+    for (let i = 0; i < 3000; i++) {
+      const a = i % 3 === 0 ? big() : Math.floor((next() * 2 - 1) * 1000);
+      let b = i % 2 === 0 ? big() : Math.floor((next() * 2 - 1) * 50);
+      if (b === 0) b = 1;
+      const want = euclid(a, b);
+      const got = divmod(a, b);
+      expect({ q: BigInt(got.q), r: BigInt(got.r) }, `divmod(${a}, ${b})`).toEqual(want);
+    }
+  });
+});
+
+describe("other integer functions at the extremes, against BigInt (DEF-029 review)", () => {
+  const big = (n: number) => BigInt(n);
+  const bgcd = (a: bigint, b: bigint): bigint => {
+    a = a < B0 ? -a : a;
+    b = b < B0 ? -b : b;
+    while (b !== B0) [a, b] = [b, a % b];
+    return a;
+  };
+  it("gcd, lcm and the checked add and multiply are exact or throw, never imprecise", () => {
+    const vals = [0, 1, -1, 2, 6, 9007199136250221, MAX, -MAX, MAX - 1, 94906267, 94906263, 3 ** 33];
+    const limit = BigInt(MAX);
+    for (const a of vals) {
+      for (const b of vals) {
+        expect(BigInt(gcdOf(a, b)), `gcd(${a}, ${b})`).toBe(bgcd(big(a), big(b)));
+        const l = a === 0 || b === 0 ? B0 : (big(a) < B0 ? -big(a) : big(a)) / bgcd(big(a), big(b)) * (big(b) < B0 ? -big(b) : big(b));
+        if (l <= limit) expect(BigInt(lcm(a, b)), `lcm(${a}, ${b})`).toBe(l);
+        else expect(() => lcm(a, b), `lcm(${a}, ${b}) overflows`).toThrow(/overflows/);
+        const p = big(a) * big(b);
+        if (p <= limit && p >= -limit) expect(BigInt(checkedMultiply(a, b))).toBe(p);
+        else expect(() => checkedMultiply(a, b)).toThrow(/overflows/);
+        const sum = big(a) + big(b);
+        if (sum <= limit && sum >= -limit) expect(BigInt(checkedAdd(a, b))).toBe(sum);
+        else expect(() => checkedAdd(a, b)).toThrow(/overflows/);
+      }
+    }
+  });
+
+  it("converts the largest fractions to mixed numbers exactly", () => {
+    expect(toMixed(F(MAX, 2))).toEqual({ sign: 1, whole: (MAX - 1) / 2, n: 1, d: 2 });
+    expect(toMixed(F(-MAX, 2))).toEqual({ sign: -1, whole: (MAX - 1) / 2, n: 1, d: 2 });
+    expect(toMixed(F(-MAX, 1))).toEqual({ sign: -1, whole: MAX, n: 0, d: 1 });
+    expect(fromMixed({ sign: -1, whole: (MAX - 1) / 2, n: 1, d: 2 })).toEqual(F(-MAX, 2));
   });
 });
 
