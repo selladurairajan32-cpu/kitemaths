@@ -35,13 +35,19 @@ only accepted items may have `accepted` cases. Update `test-cases.csv` in the sa
 
 ## State (6 Nov 2026)
 
-- ACCEPTED: GOV-001/002/003, UX-001, CUR-002, CUR-003, UX-002 (R0 token and spec scope only), ARCH-001, ARCH-003,
-  QA-001, UX-004 (R0 spec and specimen scope).
-- READY FOR QA: ARCH-002 (awaiting independent retest of DEF-037/038).
-- QA FAILED: UX-003 (AC3 text scaling; DEF-018 to DEF-021 are R1).
-- Open R1 prerequisites: DEF-009, DEF-010, DEF-027, DEF-028; couplings K-1 to K-6 (ARCH-001 §4); FR-011 AC3 (lessons
-  complete on traversal); kit marking vs the new comparison contract (DEF-038) must be resolved before marking through
-  the question schema.
+`docs/product/STATUS.md` is the authoritative status register; check it for current statuses and counts rather than
+relying on this summary. Last recorded decision: D-025.
+
+- **Accepted** (each for the scope recorded in `STATUS.md`): GOV-001/002/003, UX-001, CUR-002, CUR-003, UX-002 (R0 token
+  and spec scope only), ARCH-001, UX-004 (R0 spec and specimen scope), and the three step-3 items ARCH-002, ARCH-003 and
+  QA-001 (delivered R0 scope).
+- **QA FAILED:** UX-003 only (AC3 text scaling; DEF-018 to DEF-021 are R1).
+- **Open R1 obligations (all preserved):** DEF-009, DEF-010, DEF-027, DEF-028; couplings K-1 to K-6 (ARCH-001 §4);
+  FR-011 AC3 (lessons complete on traversal); wiring the specs into the app.
+- **DEF-038 is NOT fixed:** the kit's `same()` and the new comparison contract still differ. It is an open R1 integration
+  prerequisite (`TC-ARCH-002.1.13`): resolve it before any marking goes through the question schema.
+- **Evidence limits:** browser checks, production exclusion and the generated-question comparison are developer evidence
+  from 6 Nov, not independently reproduced; no hosted CI run exists for this branch.
 
 ## Code layout and guarded rules
 
