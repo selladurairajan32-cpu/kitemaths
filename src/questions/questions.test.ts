@@ -4,7 +4,8 @@ import { genId, templatesOf } from "@/topics/kit/define";
 import { FOLLOWUP_QUESTIONS, LESSON_QUESTIONS, PRACTICE_QUESTIONS } from "@/topics/fractions/questions";
 import type { FractionQuestion } from "@/topics/fractions/types";
 import { fromFractionQuestion, fromKitQuestion, type KitQuestionLike } from "./adapt";
-import { INTERACTIONS, type Interaction } from "./schema";
+import { fitsDecimals, numericMatches, roundHalfAwayFromZero } from "./compare";
+import { INTERACTIONS, type Interaction, type NumericComparison } from "./schema";
 import { validateQuestion } from "./validate";
 
 /**
@@ -30,7 +31,7 @@ const VALID: Record<Interaction, Record<string, unknown>> = {
   "choose-one": { ...base, misconceptions: ["fractions.bigger-denominator"], interaction: "choose-one", options: [opt("a", "{1/5}"), opt("b", "{1/3}", { misconception: "fractions.bigger-denominator" })], correctId: "a" },
   "multi-select": { ...base, interaction: "multi-select", options: [opt("p1", "Picture 1"), opt("p2", "Picture 2"), opt("p3", "Picture 3")], correctIds: ["p1", "p3"], scoring: { marks: 2, partialCredit: "per-part" } },
   "number-entry": { ...base, interaction: "number-entry", answer: 2.5, validation: { comparison: { kind: "round", places: 3 }, maxDecimals: 1, allowNegative: false }, unit: "cm", traps: [{ value: 25, misconception: "decimals.place", feedback: "Check the point." }], misconceptions: ["decimals.place"] },
-  "fraction-entry": { ...base, interaction: "fraction-entry", answer: { n: 3, d: 4 }, validation: { acceptEquivalent: true }, traps: [{ value: { n: 4, d: 3 } }], model: { kind: "partition", shape: "bar", parts: 4, shaded: [0, 1, 2] } },
+  "fraction-entry": { ...base, interaction: "fraction-entry", answer: { n: 3, d: 4 }, validation: { acceptEquivalent: true }, ask: "shaded", traps: [{ value: { n: 4, d: 3 } }], model: { kind: "partition", shape: "bar", parts: 4, shaded: [0, 1, 2] } },
   compare: { ...base, interaction: "compare", left: { n: 1, d: 5 }, right: { n: 1, d: 3 }, answer: "<" },
   shade: { ...base, interaction: "shade", target: { n: 2, d: 3 }, validation: { acceptEquivalent: true }, model: { kind: "partition", shape: "circle", parts: 6 } },
   "number-line-place": { ...base, interaction: "number-line-place", intervals: 8, target: { n: 3, d: 4 } },
@@ -62,12 +63,33 @@ const INVALID: Record<Interaction, [string, (q: Record<string, unknown>) => Reco
     ["trap equals the answer", (q) => ({ ...q, traps: [{ value: 2.5 }] }), /^traps\[0\]\.value$/],
     ["unknown comparison", (q) => ({ ...q, validation: { comparison: { kind: "close" }, maxDecimals: 1, allowNegative: false } }), /^validation\.comparison$/],
     ["options don't belong to number entry", (q) => ({ ...q, options: [opt("a", "1"), opt("b", "2")] }), /^options$/],
+    // Review 2 (DEF-032, DEF-033): QA's cases verbatim, then the adjacent ones.
+    ["trap feedback is not a string (QA a)", (q) => ({ ...q, traps: [{ value: 25, feedback: 123 }] }), /^traps\[0\]\.feedback$/],
+    ["trap misconception is an object (QA a)", (q) => ({ ...q, traps: [{ value: 25, misconception: { bad: true } }] }), /^traps\[0\]\.misconception$/],
+    ["trap is not an object", (q) => ({ ...q, traps: ["25"] }), /^traps\[0\]$/],
+    ["trap the tolerance would mark correct (QA b: 9.5 for 10 ± 1)", (q) => ({ ...q, answer: 10, validation: { comparison: { kind: "tolerance", absolute: 1 }, maxDecimals: 1, allowNegative: false }, traps: [{ value: 9.5 }], misconceptions: [] }), /^traps\[0\]\.value$/],
+    ["trap exactly on the tolerance boundary is marked correct", (q) => ({ ...q, answer: 10, validation: { comparison: { kind: "tolerance", absolute: 0.5 }, maxDecimals: 1, allowNegative: false }, traps: [{ value: 9.5 }], misconceptions: [] }), /^traps\[0\]\.value$/],
+    ["trap the rounding would mark correct (QA c: 2.51 for 2.5 at 1 place)", (q) => ({ ...q, answer: 2.5, validation: { comparison: { kind: "round", places: 1 }, maxDecimals: 2, allowNegative: false }, traps: [{ value: 2.51 }], misconceptions: [] }), /^traps\[0\]\.value$/],
+    ["negative trap the rounding would mark correct (−3 for −2.5 at 0 places)", (q) => ({ ...q, answer: -2.5, validation: { comparison: { kind: "round", places: 0 }, maxDecimals: 1, allowNegative: true }, traps: [{ value: -3 }], misconceptions: [] }), /^traps\[0\]\.value$/],
+    ["two traps overlap under the declared comparison", (q) => ({ ...q, validation: { comparison: { kind: "round", places: 3 }, maxDecimals: 4, allowNegative: false }, traps: [{ value: 30 }, { value: 30.0004 }], misconceptions: [] }), /^traps\[1\]\.value$/],
+    ["two traps are exactly equal", (q) => ({ ...q, traps: [{ value: 30 }, { value: 30 }], misconceptions: [] }), /^traps\[1\]\.value$/],
   ],
   "fraction-entry": [
     ["zero denominator", (q) => ({ ...q, answer: { n: 3, d: 0 } }), /^answer\.d$/],
     ["non-integer numerator", (q) => ({ ...q, answer: { n: 1.5, d: 4 } }), /^answer\.n$/],
     ["equivalent trap would be marked right", (q) => ({ ...q, traps: [{ value: { n: 6, d: 8 } }] }), /^traps\[0\]\.value$/],
     ["missing acceptEquivalent", (q) => ({ ...q, validation: {} }), /^validation\.acceptEquivalent$/],
+    // Review 2 (DEF-032, DEF-034, DEF-035)
+    ["trap feedback is not a string", (q) => ({ ...q, traps: [{ value: { n: 4, d: 3 }, feedback: 5 }] }), /^traps\[0\]\.feedback$/],
+    ["duplicate traps (QA d: 1/3 twice)", (q) => ({ ...q, answer: { n: 1, d: 2 }, traps: [{ value: { n: 1, d: 3 } }, { value: { n: 1, d: 3 } }], model: undefined, ask: undefined }), /^traps\[1\]\.value$/],
+    ["equivalent traps while equivalent answers are accepted (1/3 and 2/6)", (q) => ({ ...q, answer: { n: 1, d: 2 }, traps: [{ value: { n: 1, d: 3 } }, { value: { n: 2, d: 6 } }], model: undefined, ask: undefined }), /^traps\[1\]\.value$/],
+    ["answer disagrees with the shaded part of the model", (q) => ({ ...q, answer: { n: 1, d: 4 } }), /^answer$/],
+    ["answer disagrees with the unshaded part of the model", (q) => ({ ...q, ask: "unshaded" }), /^answer$/],
+    ["ask given without a model with shaded parts", (q) => ({ ...q, model: undefined }), /^ask$/],
+    ["ask marked on a partition", (q) => ({ ...q, ask: "marked" }), /^ask$/],
+    ["ask marked disagrees with the marked point", (q) => ({ ...q, ask: "marked", answer: { n: 1, d: 2 }, model: { kind: "number-line", min: 0, max: 1, intervals: 8, point: 3 } }), /^answer$/],
+    ["ask on a model with unequal parts", (q) => ({ ...q, model: { kind: "partition", shape: "bar", parts: 4, sizes: [1, 1, 2, 1], shaded: [0, 1, 2] } }), /^model\.sizes$/],
+    ["unknown ask", (q) => ({ ...q, ask: "half" }), /^ask$/],
   ],
   compare: [
     ["wrong sign for the numbers", (q) => ({ ...q, answer: ">" }), /^answer$/],
@@ -81,10 +103,15 @@ const INVALID: Record<Interaction, [string, (q: Record<string, unknown>) => Reco
   "number-line-place": [
     ["target between ticks", (q) => ({ ...q, intervals: 5 }), /^target$/],
     ["target beyond 1", (q) => ({ ...q, target: { n: 5, d: 4 } }), /^target$/],
+    // Review 2 (DEF-035): QA's case, verbatim: 8 gaps, target 3/8, model with 4 gaps.
+    ["model has a different number of gaps (QA e)", (q) => ({ ...q, intervals: 8, target: { n: 3, d: 8 }, model: { kind: "number-line", min: 0, max: 1, intervals: 4 } }), /^model\.intervals$/],
+    ["target is not on the model's ticks (QA e)", (q) => ({ ...q, intervals: 8, target: { n: 3, d: 8 }, model: { kind: "number-line", min: 0, max: 1, intervals: 4 } }), /^target$/],
+    ["model is not a number line", (q) => ({ ...q, model: { kind: "partition", shape: "bar", parts: 8 } }), /^model$/],
   ],
   match: [
     ["pair to an unknown choice", (q) => ({ ...q, pairs: { r1: "c3", r2: "c9" } }), /^pairs\.r2$/],
     ["row without a pair", (q) => ({ ...q, pairs: { r1: "c3" } }), /^pairs\.r2$/],
+    ["two choices with the same text", (q) => ({ ...q, choices: [{ id: "c1", text: "{1/2}" }, { id: "c2", text: "{1/2}" }, { id: "c3", text: "{3/4}" }] }), /^choices\[1\]\.text$/],
     ["pair for an unknown row", (q) => ({ ...q, pairs: { r1: "c3", r2: "c1", r3: "c2" } }), /^pairs\.r3$/],
   ],
   "missing-number": [
@@ -94,6 +121,9 @@ const INVALID: Record<Interaction, [string, (q: Record<string, unknown>) => Reco
   "fraction-of": [
     ["answer wrong for the numbers", (q) => ({ ...q, answer: 8 }), /^answer$/],
     ["not a whole number of the amount", (q) => ({ ...q, amount: 10, answer: 7 }), /^fraction$/],
+    ["duplicate traps", (q) => ({ ...q, traps: [{ value: 3 }, { value: 3 }] }), /^traps\[1\]\.value$/],
+    ["trap feedback is not a string", (q) => ({ ...q, traps: [{ value: 3, feedback: ["no"] }] }), /^traps\[0\]\.feedback$/],
+    ["trap equals the answer", (q) => ({ ...q, traps: [{ value: 9 }] }), /^traps\[0\]\.value$/],
   ],
   "explain-frame": [
     ["answer not one of the slot's options", (q) => ({ ...q, frame: ["Sam is", { slot: "decide", options: [opt("right", "right"), opt("wrong", "wrong")], answerId: "maybe" }] }), /^frame\[1\]\.answerId$/],
@@ -180,11 +210,13 @@ describe("question schema (ARCH-002)", () => {
       for (const tpl of templatesOf(t.id)) for (const d of tpl.difficulties) for (let s = 0; s < 20; s++) qs.push(t.questionById(genId(t.id, tpl.key, d, s)));
       for (const q of qs) {
         n++;
-        const r = validateQuestion(fromKitQuestion(q as unknown as KitQuestionLike, { level: "unverified" }));
+        const adapted = fromKitQuestion(q as unknown as KitQuestionLike, { level: "unverified" });
+        const r = validateQuestion(adapted);
         if (r.ok) continue;
         // DEF-028: some generators emit two traps with the same value, so the second trap's feedback is unreachable.
         // The schema rightly rejects that; it is recorded as a content defect on the preview islands, not hidden.
-        const other = r.errors.filter((e) => !(/^traps\[\d+\]\.value$/.test(e.path) && e.message === "repeats another trap"));
+        // The exception is exactly this: a number-entry question, the trap-value path, and this message. Nothing else.
+        const other = r.errors.filter((e) => !(adapted.interaction === "number-entry" && /^traps\[\d+\]\.value$/.test(e.path) && e.message === "repeats another trap"));
         if (other.length) problems.push(`${q.id}: ${JSON.stringify(other)}`);
         else duplicateTraps.add(q.id.split(":")[1]);
       }
@@ -200,5 +232,111 @@ describe("question schema (ARCH-002)", () => {
     const q = PRACTICE_QUESTIONS[0];
     expect(fromFractionQuestion(q, { level: "unverified" }).level).toBe("unverified");
     expect(fromFractionQuestion(q, { level: { years: [3, 4] } }).level).toEqual({ years: [3, 4] });
+  });
+});
+
+describe("numeric comparison contract (ARCH-002 §3): one rule for answers and traps, no hidden allowance", () => {
+  const tol = (absolute: number): NumericComparison => ({ kind: "tolerance", absolute });
+  const round = (places: number): NumericComparison => ({ kind: "round", places });
+
+  it("tolerance is inclusive: exactly at the boundary matches, just inside matches, just outside does not", () => {
+    // 10 ± 0.5: 9.5 and 10.5 are exactly representable, so the boundary is exact.
+    expect(numericMatches(tol(0.5), 10, 9.5)).toBe(true); // exactly at
+    expect(numericMatches(tol(0.5), 10, 10.5)).toBe(true);
+    expect(numericMatches(tol(0.5), 10, 9.5000001)).toBe(true); // just inside
+    expect(numericMatches(tol(0.5), 10, 9.4999999)).toBe(false); // just outside
+    expect(numericMatches(tol(0.5), 10, 10.5000001)).toBe(false);
+  });
+
+  it("adds no fixed allowance: very small tolerances keep their stated boundary", () => {
+    // Answer 0 keeps the arithmetic exact. With a hidden 1e-9 allowance, 2e-12 would wrongly match a 1e-12 tolerance.
+    expect(numericMatches(tol(1e-12), 0, 1e-12)).toBe(true); // exactly at
+    expect(numericMatches(tol(1e-12), 0, 0.5e-12)).toBe(true); // inside
+    expect(numericMatches(tol(1e-12), 0, 2e-12)).toBe(false); // outside
+    expect(numericMatches(tol(1e-12), 0, -1e-12)).toBe(true);
+    expect(numericMatches(tol(1e-12), 0, -2e-12)).toBe(false);
+  });
+
+  it("exact means identical", () => {
+    expect(numericMatches({ kind: "exact" }, 2.5, 2.5)).toBe(true);
+    expect(numericMatches({ kind: "exact" }, 2.5, 2.5000000001)).toBe(false);
+    expect(numericMatches({ kind: "exact" }, 0, -0)).toBe(true);
+  });
+
+  it("rounds half away from zero, including negative values (hand-worked)", () => {
+    expect([2.5, -2.5, 0.5, -0.5, 1.4, -1.4, 0, -0].map(roundHalfAwayFromZero)).toEqual([3, -3, 1, -1, 1, -1, 0, 0]);
+    expect(Object.is(roundHalfAwayFromZero(-0.2), 0)).toBe(true); // never negative zero
+    expect(numericMatches(round(0), 2.5, 3)).toBe(true);
+    expect(numericMatches(round(0), 2.5, 2)).toBe(false);
+    expect(numericMatches(round(0), -2.5, -3)).toBe(true); // −2.5 rounds to −3, not −2
+    expect(numericMatches(round(0), -2.5, -2)).toBe(false);
+    expect(numericMatches(round(1), 2.5, 2.51)).toBe(true);
+    expect(numericMatches(round(1), 2.5, 2.56)).toBe(false); // 2.56 → 2.6
+    expect(numericMatches(round(1), -0.25, -0.3)).toBe(true); // −0.25 → −0.3
+    expect(numericMatches(round(1), -0.25, -0.2)).toBe(false);
+    expect(numericMatches(round(2), 1.005, 1.0)).toBe(true); // the double 1.005 is 1.00499999999999989…, so it rounds to 1.00
+  });
+
+  it("checks typeable decimals exactly", () => {
+    expect(fitsDecimals(2.5, 1)).toBe(true);
+    expect(fitsDecimals(2.55, 1)).toBe(false);
+    expect(fitsDecimals(-0.25, 2)).toBe(true);
+    expect(fitsDecimals(0.1 + 0.2, 1)).toBe(false); // 0.30000000000000004 can't be typed
+    expect(fitsDecimals(12, 0)).toBe(true);
+  });
+
+  it("is used consistently: the validator judges traps by the same function as answers", () => {
+    const q = (comparison: NumericComparison, trap: number) => ({ ...VALID["number-entry"], answer: 10, validation: { comparison, maxDecimals: 6, allowNegative: false }, traps: [{ value: trap }], misconceptions: [] });
+    for (const [cmp, trap] of [[tol(0.5), 9.5], [tol(0.5), 9.5000001], [round(0), 10.4], [{ kind: "exact" } as NumericComparison, 10]] as const) {
+      expect(numericMatches(cmp, 10, trap)).toBe(true);
+      expect(errorsOf(q(cmp, trap)).some((e) => e.path === "traps[0].value"), `${cmp.kind} ${trap}`).toBe(true);
+    }
+    for (const [cmp, trap] of [[tol(0.5), 9.4999999], [round(0), 10.6], [{ kind: "exact" } as NumericComparison, 10.0000001]] as const) {
+      expect(numericMatches(cmp, 10, trap)).toBe(false);
+      expect(errorsOf(q(cmp, trap)), `${cmp.kind} ${trap}`).toEqual([]);
+    }
+  });
+});
+
+describe("model consistency says only what the definition states (ARCH-002, DEF-035)", () => {
+  /** A fraction-entry definition with these changes; `undefined` removes a field (definitions are JSON, so no undefined values). */
+  const entry = (extra: Record<string, unknown>) => {
+    const q: Record<string, unknown> = { ...VALID["fraction-entry"], ...extra };
+    delete q.traps;
+    for (const [k, v] of Object.entries(q)) if (v === undefined) delete q[k];
+    return q;
+  };
+  const bar = (shaded: number[]) => ({ kind: "partition", shape: "bar", parts: 4, shaded });
+
+  it("accepts the answer for each explicitly asked quantity", () => {
+    expect(errorsOf(entry({ ask: "shaded", model: bar([0, 1, 2]), answer: { n: 3, d: 4 } }))).toEqual([]);
+    expect(errorsOf(entry({ ask: "unshaded", model: bar([0, 1, 2]), answer: { n: 1, d: 4 } }))).toEqual([]);
+    expect(errorsOf(entry({ ask: "shaded", model: bar([0, 1, 2]), answer: { n: 6, d: 8 } }))).toEqual([]); // equivalent value
+    expect(errorsOf(entry({ ask: "marked", model: { kind: "number-line", min: 0, max: 1, intervals: 8, point: 3 }, answer: { n: 3, d: 8 } }))).toEqual([]);
+  });
+
+  it("does not guess when `ask` is absent: the answer is simply not checked against the model (recorded limitation)", () => {
+    // 1/4 is the unshaded part of this model, but nothing says that is what is asked, so the validator makes no claim.
+    const q = entry({ ask: undefined, model: bar([0, 1, 2]), answer: { n: 1, d: 4 } });
+    expect(errorsOf(q)).toEqual([]);
+    // The same answer fails as soon as the definition says "shaded": the meaning is explicit, never chosen to make it pass.
+    expect(errorsOf({ ...q, ask: "shaded" }).some((e) => e.path === "answer")).toBe(true);
+  });
+
+  it("allows scaffolding: a pre-shaded model for shade and a pre-marked number line for placement", () => {
+    expect(errorsOf({ ...VALID.shade, model: { kind: "partition", shape: "circle", parts: 6, shaded: [0] } })).toEqual([]);
+    expect(errorsOf({ ...VALID["number-line-place"], intervals: 8, target: { n: 3, d: 4 }, model: { kind: "number-line", min: 0, max: 1, intervals: 8, point: 2 } })).toEqual([]);
+    expect(errorsOf({ ...VALID["number-line-place"], model: { kind: "number-line", min: 0, max: 1, intervals: 8 } })).toEqual([]);
+  });
+
+  it("adapters set `ask` from the existing data's meaning, and the existing write-fraction questions agree with it", () => {
+    const asked = new Set<string>();
+    for (const q of [...PRACTICE_QUESTIONS, ...LESSON_QUESTIONS, ...FOLLOWUP_QUESTIONS].filter((q) => q.kind === "write-fraction")) {
+      const d = fromFractionQuestion(q, { level: "unverified" });
+      expect(d.interaction).toBe("fraction-entry");
+      if (d.interaction === "fraction-entry") asked.add(d.ask ?? "none");
+      expect(errorsOf(d), q.id).toEqual([]);
+    }
+    expect([...asked].sort()).toEqual(expect.arrayContaining(["shaded"]));
   });
 });

@@ -65,7 +65,15 @@ export function fromFractionQuestion(q: FractionQuestion, meta: AdaptMeta): Ques
     }
     case "write-fraction":
       // Today's marking accepts equivalent fractions here (evaluate.ts: isCorrectFraction(…, true)).
-      return { ...common(q, meta, [], modelOf(q.diagram)), interaction: "fraction-entry", answer: { n: q.answer.n, d: q.answer.d }, validation: { acceptEquivalent: true } };
+      // `ask` comes from the existing data's own meaning (evaluate.ts countedParts): a number line asks for the marked
+      // point; a partition asks for the shaded parts unless the question says "unshaded". Nothing is inferred from the answer.
+      return {
+        ...common(q, meta, [], modelOf(q.diagram)),
+        interaction: "fraction-entry",
+        answer: { n: q.answer.n, d: q.answer.d },
+        validation: { acceptEquivalent: true },
+        ask: q.diagram.shape === "line" ? "marked" : (q.ask ?? "shaded"),
+      };
     case "choose":
       return {
         ...common(q, meta, tags(q.options), q.diagram ? modelOf(q.diagram) : undefined),

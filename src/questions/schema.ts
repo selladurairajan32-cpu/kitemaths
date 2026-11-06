@@ -109,7 +109,19 @@ export type QuestionDefinition = Common &
         traps?: NumericTrap[];
       }
     /** Fractions are compared exactly; `acceptEquivalent` says whether 2/4 counts for 1/2. */
-    | { interaction: "fraction-entry"; answer: FractionValue; validation: { acceptEquivalent: boolean }; traps?: FractionTrap[] }
+    | {
+        interaction: "fraction-entry";
+        answer: FractionValue;
+        validation: { acceptEquivalent: boolean };
+        /**
+         * Which quantity of the model the answer names. Set it when the model carries the meaning: "shaded" or
+         * "unshaded" for a partition, "marked" for the point on a number line. When it is set, the validator checks the
+         * answer against that quantity. When it is absent the answer is not checked against the model, because the
+         * validator never guesses which quantity was meant.
+         */
+        ask?: "shaded" | "unshaded" | "marked";
+        traps?: FractionTrap[];
+      }
     | { interaction: "compare"; left: FractionValue; right: FractionValue; answer: "<" | "=" | ">" }
     | { interaction: "shade"; target: FractionValue; validation: { acceptEquivalent: boolean } }
     /** The child places `target` on a 0–1 line with `intervals` equal gaps; the right tick is target × intervals. */
