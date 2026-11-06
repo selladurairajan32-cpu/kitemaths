@@ -27,7 +27,7 @@ breaking changes, so read the relevant guide in `node_modules/next/dist/docs/` b
 | `DECISIONS.md` | D- decisions, RC- requirement clarifications, CH- change history |
 | `traceability/` | `requirements.csv`, `test-cases.csv`, README with coverage; checked by `src/traceability.test.ts` |
 | `architecture/`, `curriculum/`, `design/` | ARCH-001/002/003, CUR-002/003, UX-002/003/004 specifications |
-| `reports/` | Status and correction reports per round |
+| `reports/` | Status and correction reports per round, `R0-readiness-report.md`, `R0-step4-handoff.md` |
 | `verification/` | Reproducible browser and comparison scripts, with results |
 
 Test-case rule: every test file must be referenced by a test case; automated references must exist (`file::title`);
@@ -36,11 +36,14 @@ only accepted items may have `accepted` cases. Update `test-cases.csv` in the sa
 ## State (6 Nov 2026)
 
 `docs/product/STATUS.md` is the authoritative status register; check it for current statuses and counts rather than
-relying on this summary. Last recorded decision: D-025.
+relying on this summary. Last recorded decision: D-025 (clarifications to RC-007).
 
 - **Accepted** (each for the scope recorded in `STATUS.md`): GOV-001/002/003, UX-001, CUR-002, CUR-003, UX-002 (R0 token
   and spec scope only), ARCH-001, UX-004 (R0 spec and specimen scope), and the three step-3 items ARCH-002, ARCH-003 and
   QA-001 (delivered R0 scope).
+- **READY FOR QA (6 Nov, not accepted):** GOV-004 (`GOV-004-change-control.md`), CUR-001 (`curriculum/CUR-001-curriculum-map.md`, data in
+  `curriculum-map.csv`, RC-007) and QA-004 (`QA-004-defect-register.md`; the register is `traceability/defects.csv`, 38
+  defects; STATUS has only an index). Step-4 proposal: `reports/R0-step4-handoff.md` (not authorised).
 - **QA FAILED:** UX-003 only (AC3 text scaling; DEF-018 to DEF-021 are R1).
 - **Open R1 obligations (all preserved):** DEF-009, DEF-010, DEF-027, DEF-028; couplings K-1 to K-6 (ARCH-001 §4);
   FR-011 AC3 (lessons complete on traversal); wiring the specs into the app.
