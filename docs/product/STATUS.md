@@ -5,7 +5,7 @@ acceptance criteria are in [`backlog.md`](backlog.md); how statuses work is expl
 [`README.md`](README.md#status-definitions). `src/traceability.test.ts` checks that every backlog item
 is listed here exactly once with valid values (RC-003).
 
-**Last updated:** 6 November 2026: QA decision on `112eeb3` recorded (D-025): ARCH-002 accepted for R0 scope, DEF-037 closed, DEF-038 documentation verified with the behaviour still open for R1. Earlier the same day: retest of `702743a` recorded (D-024): DEF-029 to DEF-036 closed; ARCH-001, ARCH-003, QA-001 and UX-004 accepted for their scopes; ARCH-002 QA FAILED (DEF-037, DEF-038), then corrected and READY FOR QA ([report](reports/R0-review3-correction-report.md)). Earlier the same day: independent review of `0b45d12` recorded (D-023): CUR-002 and CUR-003 accepted for R0 specification scope, UX-002 accepted for R0 token and specification scope only. ARCH-001, ARCH-002, ARCH-003, QA-001 and UX-004 corrected and READY FOR QA ([correction report](reports/R0-review2-correction-report.md)). Earlier, 5 November: sprint step 3 delivered (ARCH-002, ARCH-003, QA-001 READY FOR QA, [step-3 report](reports/R0-step3-status-report.md)). Before that, the same day: step-2 corrections delivered ([correction report](reports/R0-step2-correction-report.md)). Five items are READY FOR QA again (D-022); UX-003 stays QA FAILED (D-021). Earlier the same day: the independent review set six items to QA FAILED (D-014), and Q-1 to Q-7 were decided (D-015 to D-021). 4 November: sprint step 2 delivered for review. CUR-002, CUR-003, UX-002, UX-003, UX-004 and ARCH-001 are READY FOR QA ([status report](reports/R0-step2-status-report.md)). Earlier the same day: GOV-002, GOV-003 and UX-001 accepted (D-011); step 2 authorised (D-012).
+**Last updated:** 6 November 2026: GOV-004, CUR-001 and QA-004 delivered and READY FOR QA, with the step-4 handoff and the [R0 readiness report](reports/R0-readiness-report.md). Earlier the same day: QA decision on `112eeb3` recorded (D-025): ARCH-002 accepted for R0 scope, DEF-037 closed, DEF-038 documentation verified with the behaviour still open for R1. Earlier the same day: retest of `702743a` recorded (D-024): DEF-029 to DEF-036 closed; ARCH-001, ARCH-003, QA-001 and UX-004 accepted for their scopes; ARCH-002 QA FAILED (DEF-037, DEF-038), then corrected and READY FOR QA ([report](reports/R0-review3-correction-report.md)). Earlier the same day: independent review of `0b45d12` recorded (D-023): CUR-002 and CUR-003 accepted for R0 specification scope, UX-002 accepted for R0 token and specification scope only. ARCH-001, ARCH-002, ARCH-003, QA-001 and UX-004 corrected and READY FOR QA ([correction report](reports/R0-review2-correction-report.md)). Earlier, 5 November: sprint step 3 delivered (ARCH-002, ARCH-003, QA-001 READY FOR QA, [step-3 report](reports/R0-step3-status-report.md)). Before that, the same day: step-2 corrections delivered ([correction report](reports/R0-step2-correction-report.md)). Five items are READY FOR QA again (D-022); UX-003 stays QA FAILED (D-021). Earlier the same day: the independent review set six items to QA FAILED (D-014), and Q-1 to Q-7 were decided (D-015 to D-021). 4 November: sprint step 2 delivered for review. CUR-002, CUR-003, UX-002, UX-003, UX-004 and ARCH-001 are READY FOR QA ([status report](reports/R0-step2-status-report.md)). Earlier the same day: GOV-002, GOV-003 and UX-001 accepted (D-011); step 2 authorised (D-012).
 
 ## Read this first: implemented is not accepted
 
@@ -65,7 +65,7 @@ only where it is evidence for a backlog item: Times Tables, Mental Maths, 11+ an
 | GOV-001 | Inspect the existing repository | P0 | R0 | ACCEPTED (D-005) | Implemented | Delivered: [GOV-001 audit](GOV-001-repository-audit.md). |
 | GOV-002 | Establish the product source of truth | P0 | R0 | ACCEPTED (D-011) | Implemented | Delivered 3 Nov: `docs/product/` source-of-truth set (this file, README, DECISIONS, backlog v1.0). |
 | GOV-003 | Create requirements traceability | P0 | R0 | ACCEPTED (D-011) | Implemented | Delivered 3 Nov: `traceability/` CSVs + `src/traceability.test.ts` checker. |
-| GOV-004 | Define change-control rules | P0 | R0 | SPECIFIED | Partial | Decision log exists ([DECISIONS.md](DECISIONS.md)); change-control *rules* not yet defined. |
+| GOV-004 | Define change-control rules | P0 | R0 | READY FOR QA | Partial | **Delivered 6 Nov, awaiting review; not self-accepted (D-022).** [Change-control rules](GOV-004-change-control.md): what is material, the reason/impact/owner/decision record, how records stay consistent, roles (only the Product Owner accepts), the no-silent-reinterpretation rule, and where deferrals and exceptions stay visible. Uses the existing decision log; no new register. Checked by `src/governance.test.ts`. |
 
 ### CUR — Curriculum and instructional design
 
@@ -220,47 +220,52 @@ only where it is evidence for a backlog item: Times Tables, Mental Maths, 11+ an
 | QA-001 | Build mathematical unit-test suite | P0 | R0/R1 | ACCEPTED (D-024) | Implemented | **Accepted for delivered R0 scope (D-024).** Regression tests for DEF-027 stay R1. **Review 2 corrected 6 Nov (DEF-029):** BigInt-oracle cases at the safe-integer extremes. Delivered 5 Nov (step 3): `src/maths/maths.test.ts` (hand-worked tables, boundaries, invalid inputs, overflow, BigInt oracle) and `src/topics/fractions/representations.test.ts` (pictures agree with answers, per interaction). |
 | QA-002 | Build component and integration tests | P1 | R1 | SPECIFIED | Not implemented | No component or integration tests (`vitest` runs `.ts` only). |
 | QA-003 | Build end-to-end learning journey tests | P1 | R1 | SPECIFIED | Not implemented | No end-to-end journey test in the repo. |
-| QA-004 | Create defect register and triage rules | P0 | R0 | SPECIFIED | Partial | Provisional defect list DEF-001…017 in the GOV-001 audit §12. |
+| QA-004 | Create defect register and triage rules | P0 | R0 | READY FOR QA | Partial | **Delivered 6 Nov, awaiting review; not self-accepted (D-022).** [Defect register and triage rules](QA-004-defect-register.md): all 38 defects in [`traceability/defects.csv`](traceability/defects.csv) with severity, priority, steps, expected/actual, evidence, tested commit, owner, fix and retest status, release impact and deferral; this file's index agrees with it (`src/defects.test.ts`). 9 closed on independent verification; 5 fixed with closure not confirmed (DEF-022 to DEF-026); no approved release deferral exists. DEF-001 to DEF-017 priorities were assigned in this round. |
 | QA-005 | Accessibility and responsive test pass | P1 | R1 | SPECIFIED | Partial | Ad hoc manual checks only. |
 | QA-006 | Regression test suite | P1 | R1 | SPECIFIED | Partial | CI runs tests/lint/types/build; no flow regression suite. |
 | QA-007 | Release acceptance report | P1 | R1 | SPECIFIED | Not implemented | No release acceptance report yet. |
 
-## Open defects affecting status
+## Defect index
 
-The provisional defect list is in [GOV-001 audit §12](GOV-001-repository-audit.md#12-defects-found-provisional).
+The defect register is [`traceability/defects.csv`](traceability/defects.csv), shown with the triage rules in [QA-004](QA-004-defect-register.md). This table is an index of it and must agree with it (`src/defects.test.ts`). Fix and retest detail is in the register, not here. An item's acceptance does not close a defect.
 
-| Defect | Severity | Affects |
-|---|---|---|
-| DEF-001 to DEF-004, DEF-006, DEF-007 | Medium/Low | Home screen (UX-005, MAST-003) |
-| DEF-005 | **High** | UX-005: placeholder destination |
-| DEF-009 | Medium | UX-002, UX-004: unstyled status chip and badge |
-| DEF-010 | Medium | UX-003: text below 15px |
-| DEF-011, DEF-013 | Medium | FR-001, FR-011, CUR-002 |
-| DEF-012 | Medium | MAST-003, PARENT-002 |
-| DEF-015 | Medium | UX-007: focus visibility |
-| DEF-008, DEF-014, DEF-016 | Low | Copy, redirects, public preview pages |
-| DEF-017 | Low | README part fixed under GOV-002 (CH-005); site metadata in `src/app/layout.tsx` still open (code change, R1) |
-| DEF-018 | Medium | UX-003 AC3, UX-005, UX-007: app header overflows at 320px and at 200% text |
-| DEF-019 | Medium | UX-003 AC3, FR-001: island lesson descriptions clamped to two lines |
-| DEF-020 | Medium | UX-003 AC3, PARENT: grown-ups cards overflow on phone at 200% text |
-| DEF-021 | Low | UX-003 AC3: lesson title truncated at 200% text |
-| DEF-022 | High | UX-002, UX-003, UX-004: label text and small fraction digits below 4.5:1 on the specimen; the contrast test accepted 4:1 (D-014). **Corrected 5 Nov; awaiting independent retest.** |
-| DEF-023 | High | ARCH-001: the architecture tests missed side-effect, dynamic and `require` imports, browser storage access and `.tsx` files (D-014). **Corrected 5 Nov; awaiting independent retest.** |
-| DEF-024 | High | CUR-002, CUR-003: answers given after hints or retries counted as lesson evidence; mastery and placement precedence unclear (D-014). **Corrected 5 Nov; awaiting independent retest.** |
-| DEF-025 | Medium | CUR-002: the lab needs practice evidence, but the recommendation rules never route to that practice (D-014). **Corrected 5 Nov; awaiting independent retest.** |
-| DEF-026 | Medium | CUR-003: claimed that generated `g:` ids guarantee examples different from the worked example (D-014). **Corrected 5 Nov; awaiting independent retest.** |
-| DEF-027 | Low | ARCH-003: the existing unchecked fraction functions give silent wrong results outside their domain: `simplify(0/0)` → 0/1, `gcd(1.5, 0.5)` → 0.5, `compare` returns `=` for fractions beyond the safe range, `partName(13)` → "13ths". Not reachable with today's content. Fix in R1 by routing through the checked functions. |
-| DEF-028 | Low | ARCH-002: 14 kit templates on preview islands sometimes give two traps the same value, so the second trap's feedback can never show (152 of about 50,900 generated questions, seeds 0–149). Found by the schema validator. |
-| DEF-029 | High | ARCH-003, QA-001: `divmod(2, MAX_SAFE_INTEGER)` returns `{ q: 1.1e-16, r: 1 }`; the remainder expression adds unsafe arithmetic (independently reproduced by QA on `0b45d12` (D-023)). **Closed 6 Nov: independently verified on `702743a` (D-024).** |
-| DEF-030 | High | ARCH-001: the guard misses browser capabilities destructured from `globalThis` (independently reproduced by QA on `0b45d12` (D-023)). **Closed 6 Nov: independently verified on `702743a` (D-024).** |
-| DEF-031 | High | ARCH-001: the guard misses an indirect UI or browser dependency, `import "@/lib/store"` from `src/questions` (independently reproduced by QA on `0b45d12` (D-023)). **Closed 6 Nov: independently verified on `702743a` (D-024).** |
-| DEF-032 | Medium | ARCH-002: the validator ignores nested trap field types (`feedback: 123`, an object `misconception`) (independently reproduced by QA on `0b45d12` (D-023)). **Closed 6 Nov: independently verified on `702743a` (D-024).** |
-| DEF-033 | Medium | ARCH-002: the validator accepts traps that the declared comparison (tolerance or rounding) would mark correct (independently reproduced by QA on `0b45d12` (D-023)). **Closed 6 Nov: independently verified on `702743a` (D-024).** |
-| DEF-034 | Medium | ARCH-002: the validator accepts duplicate fraction traps (independently reproduced by QA on `0b45d12` (D-023)). **Closed 6 Nov: independently verified on `702743a` (D-024).** |
-| DEF-035 | Medium | ARCH-002: the validator doesn't check consistency between interaction data and its model (independently reproduced by QA on `0b45d12` (D-023)). **Closed 6 Nov: independently verified on `702743a` (D-024).** |
-| DEF-036 | Low | UX-004: the specimen's comparison rule says "same numerator (not zero)", which includes negative numerators (independently reproduced by QA on `0b45d12` (D-023)). **Closed 6 Nov: independently verified on `702743a` (D-024).** |
-| DEF-037 | Medium | ARCH-002: the `round` comparison loses precision or overflows when scaling: `numericMatches(round 1, MAX_SAFE_INTEGER, MAX_SAFE_INTEGER − 1)` is true, and `1e308` equals `1.1e308` once both scale to Infinity; the validator then rejects a distinct trap (independently reproduced on `702743a`, D-024). **CLOSED 6 Nov: independently verified on `112eeb3` (D-025).** |
-| DEF-038 | Medium | ARCH-002: the claim that adapters faithfully reproduce existing marking is wrong. Existing kit `same()` and the new comparator differ (for example answer −5, response −5.0005: kit true, new false); resolving this is an R1 integration prerequisite (independently reproduced on `702743a`, D-024). **R0 documentation correction independently verified on `112eeb3` (D-025). The behavioural difference is NOT fixed and stays open as an R1 integration prerequisite (`TC-ARCH-002.1.13`).** |
-
-DEF-022 to DEF-026 come from the independent review of 5 Nov (D-014). DEF-018 to DEF-021 were found by the step 2 text-scaling check and are described in
-[UX-003 §7](design/UX-003-typography.md#7-text-scaling-ac3). These move into the formal register when QA-004 is authorised.
+| Defect | Severity | State | Affects |
+|---|---|---|---|
+| DEF-001 | Medium | Open | UX-005; MAST-003 |
+| DEF-002 | Medium | Open | UX-005; MAST-003 |
+| DEF-003 | Medium | Open | UX-005; MAST-003 |
+| DEF-004 | Medium | Open | UX-005; MAST-003 |
+| DEF-005 | High | Open | UX-005 AC3 |
+| DEF-006 | Low | Open | UX-005; MAST-003 |
+| DEF-007 | Low | Open | UX-005; MAST-003 |
+| DEF-008 | Low | Open | No specific acceptance criterion (copy accuracy) |
+| DEF-009 | Medium | Open | UX-002; UX-004 |
+| DEF-010 | Medium | Open | UX-003 |
+| DEF-011 | Medium | Open | FR-001; FR-011; CUR-002 |
+| DEF-012 | Medium | Open | MAST-003; PARENT-002 |
+| DEF-013 | Medium | Open | FR-011; CUR-002 |
+| DEF-014 | Low | Open | No specific acceptance criterion (redirects) |
+| DEF-015 | Medium | Open | UX-007 |
+| DEF-016 | Low | Open | No specific acceptance criterion (public preview pages) |
+| DEF-017 | Low | Partly fixed | GOV-002 |
+| DEF-018 | Medium | Open | UX-003 AC3; UX-005; UX-007 |
+| DEF-019 | Medium | Open | UX-003 AC3; FR-001 |
+| DEF-020 | Medium | Open | UX-003 AC3; PARENT |
+| DEF-021 | Low | Open | UX-003 AC3 |
+| DEF-022 | High | Fixed, closure not confirmed | UX-002; UX-003; UX-004 |
+| DEF-023 | High | Fixed, closure not confirmed | ARCH-001 |
+| DEF-024 | High | Fixed, closure not confirmed | CUR-002 AC3; CUR-003 |
+| DEF-025 | Medium | Fixed, closure not confirmed | CUR-002 |
+| DEF-026 | Medium | Fixed, closure not confirmed | CUR-003 |
+| DEF-027 | Low | Open | ARCH-003 |
+| DEF-028 | Low | Open | ARCH-002 |
+| DEF-029 | High | Closed (verified) | ARCH-003; QA-001 |
+| DEF-030 | High | Closed (verified) | ARCH-001 |
+| DEF-031 | High | Closed (verified) | ARCH-001 |
+| DEF-032 | Medium | Closed (verified) | ARCH-002 |
+| DEF-033 | Medium | Closed (verified) | ARCH-002 |
+| DEF-034 | Medium | Closed (verified) | ARCH-002 |
+| DEF-035 | Medium | Closed (verified) | ARCH-002 |
+| DEF-036 | Low | Closed (verified) | UX-004 |
+| DEF-037 | Medium | Closed (verified) | ARCH-002 |
+| DEF-038 | Medium | Partly fixed (behaviour open) | ARCH-002 |

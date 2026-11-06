@@ -45,14 +45,14 @@ On 3 Nov the checker was deliberately broken twice to show it fails: once with a
 to a test that doesn't exist, and once with a P1 criterion left without a test case. Both times the
 right check went red (see the status report).
 
-## Coverage on 6 November 2026 (after the QA decision on 112eeb3)
+## Coverage on 6 Nov 2026 (R0 readiness: CUR-001, GOV-004, QA-004)
 
 Each criterion is counted once, by the strongest evidence any of its test cases has.
 
 | Epic | Items | Criteria | Test cases | Automated | Accepted | Passing | Review pending | Partial | Failing | Planned |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| GOV | 4 | 10 | 13 | 6 | 5 | 3 | 0 | 0 | 0 | 2 |
-| CUR | 4 | 9 | 23 | 8 | 4 | 0 | 0 | 1 | 0 | 4 |
+| GOV | 4 | 10 | 18 | 11 | 5 | 5 | 0 | 0 | 0 | 0 |
+| CUR | 4 | 9 | 32 | 17 | 4 | 3 | 0 | 1 | 0 | 1 |
 | UX | 8 | 22 | 45 | 15 | 5 | 3 | 1 | 2 | 1 | 10 |
 | ARCH | 5 | 14 | 75 | 66 | 4 | 7 | 0 | 1 | 0 | 2 |
 | FR | 11 | 34 | 43 | 28 | 0 | 5 | 0 | 14 | 1 | 14 |
@@ -64,8 +64,8 @@ Each criterion is counted once, by the strongest evidence any of its test cases 
 | MM | 12 | 28 | 28 | 0 | 0 | 0 | 0 | 0 | 0 | 28 |
 | EXAM | 6 | 16 | 16 | 1 | 0 | 0 | 0 | 1 | 0 | 15 |
 | PARENT | 3 | 7 | 7 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
-| QA | 7 | 15 | 41 | 28 | 0 | 3 | 0 | 1 | 0 | 11 |
-| **Total** | **97** | **270** | **431** | **221** | **18** | **42** | **1** | **43** | **2** | **164** |
+| QA | 7 | 15 | 48 | 35 | 0 | 5 | 0 | 0 | 0 | 10 |
+| **Total** | **97** | **270** | **452** | **242** | **18** | **49** | **1** | **42** | **2** | **158** |
 
 **How to read this:**
 - Fractions logic (FR, PRACT, MIS, MAST) already has substantial automated evidence. Its **planned**
@@ -94,6 +94,8 @@ Each criterion is counted once, by the strongest evidence any of its test cases 
 | `src/architecture.test.ts` | 11 | ARCH-001 |
 | `src/curriculum/prerequisites.test.ts` | 6 | CUR-002, CUR-003 |
 | `src/curriculum/map.test.ts` | 10 | CUR-001 |
+| `src/defects.test.ts` | 9 | QA-004 |
+| `src/governance.test.ts` | 5 | GOV-004 |
 | `src/design-tokens.test.ts` | 10 | UX-002, UX-003, UX-004 |
 | `src/maths/maths.test.ts` | 20 | ARCH-003, QA-001 |
 | `src/questions/questions.test.ts` | 28 | ARCH-002 |

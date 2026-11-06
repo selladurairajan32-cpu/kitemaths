@@ -10,8 +10,13 @@ TC-GOV-003.1.1,GOV-003,AC1,unit,automated,passing,src/traceability.test.ts::give
 TC-GOV-003.1.2,GOV-003,AC1,unit,automated,passing,src/traceability.test.ts::lists every backlog item and acceptance criterion as a requirement,
 TC-GOV-003.2.1,GOV-003,AC2,unit,automated,passing,src/traceability.test.ts::points every automated test case at a test that exists,
 TC-GOV-003.2.2,GOV-003,AC2,unit,automated,passing,src/traceability.test.ts::traces every test file in the repository to at least one requirement,
-TC-GOV-004.1.1,GOV-004,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
-TC-GOV-004.2.1,GOV-004,AC2,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-GOV-004.1.1,GOV-004,AC1,unit,automated,passing,"src/governance.test.ts::defines the material kinds, the four required items, the roles and the no-silent-reinterpretation rule","Developer evidence: the document defines material changes and the reason, impact, owner and decision record."
+TC-GOV-004.1.2,GOV-004,AC1,unit,automated,passing,"src/governance.test.ts::numbers decisions, clarifications and changes in order, with no gaps and no repeats",
+TC-GOV-004.1.3,GOV-004,AC1,unit,automated,passing,"src/governance.test.ts::resolves every decision, clarification and change cited in the records",
+TC-GOV-004.1.4,GOV-004,AC1,unit,automated,passing,src/governance.test.ts::lets only a decision accept an item: every ACCEPTED status cites one that exists,
+TC-GOV-004.1.5,GOV-004,AC1,document-review,manual,review-pending,,"Product Owner review of docs/product/GOV-004-change-control.md §2, §3, §9."
+TC-GOV-004.2.1,GOV-004,AC2,unit,automated,passing,"src/governance.test.ts::defines the material kinds, the four required items, the roles and the no-silent-reinterpretation rule",Checks that §6 exists; whether the rules are adequate is a review matter.
+TC-GOV-004.2.2,GOV-004,AC2,document-review,manual,review-pending,,Product Owner review of GOV-004 §5 and §6.
 TC-CUR-001.1.1,CUR-001,AC1,unit,automated,passing,src/curriculum/map.test.ts::gives every objective all the required fields,"Developer evidence: 171 statutory objectives, each with year, strand, prerequisites, outcome, vocabulary, examples, proposed mastery evidence kind (no thresholds), source anchor and position."
 TC-CUR-001.1.2,CUR-001,AC1,unit,automated,passing,"src/curriculum/map.test.ts::has prerequisites that exist, are not from a later year, and form no cycle",
 TC-CUR-001.1.3,CUR-001,AC1,unit,automated,passing,"src/curriculum/map.test.ts::maps only to existing skills, keeps coverage consistent with the mapping, and covers every Fractions skill",
@@ -430,8 +435,15 @@ TC-QA-002.1.1,QA-002,AC1,unit,planned,planned,,Unit/content test asserting the r
 TC-QA-002.2.1,QA-002,AC2,unit,planned,planned,,Unit/content test asserting the rule
 TC-QA-003.1.1,QA-003,AC1,e2e,planned,planned,,Playwright journey test asserting the behaviour
 TC-QA-003.2.1,QA-003,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-QA-004.1.1,QA-004,AC1,document-review,manual,partial,,Provisional DEF list in GOV-001 §12
-TC-QA-004.2.1,QA-004,AC2,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-QA-004.1.1,QA-004,AC1,unit,automated,passing,"src/defects.test.ts::gives every defect all the required fields, with valid severity and priority (QA-004 AC1)",Developer evidence: 38 defects with every required field.
+TC-QA-004.1.2,QA-004,AC1,unit,automated,passing,"src/defects.test.ts::has one row per defect, numbered DEF-001 upwards with no gaps or repeats",
+TC-QA-004.1.3,QA-004,AC1,unit,automated,passing,src/defects.test.ts::closes a defect only on independent verification that cites a recorded decision (QA-004 rule 4),
+TC-QA-004.1.4,QA-004,AC1,unit,automated,passing,"src/defects.test.ts::keeps DEF-038 explicit: the documentation is verified, the behaviour is not fixed and is tracked for R1",
+TC-QA-004.1.5,QA-004,AC1,unit,automated,passing,"src/defects.test.ts::is mirrored by the STATUS.md index: same ids, severity, state and affected items",
+TC-QA-004.1.6,QA-004,AC1,unit,automated,passing,"src/defects.test.ts::is shown in the generated page with every defect, the rules and the state counts",
+TC-QA-004.1.7,QA-004,AC1,document-review,manual,review-pending,,Product Owner review of the register. DEF-001 to DEF-017 priorities and DEF-018 to DEF-038 fields were assigned in this round from the cited records.
+TC-QA-004.2.1,QA-004,AC2,unit,automated,passing,"src/defects.test.ts::blocks release on every open Critical or High defect, and invents no deferral approval (QA-004 AC2)",Developer evidence: records the rule; the open High defects are listed in QA-004 §3.
+TC-QA-004.2.2,QA-004,AC2,document-review,manual,review-pending,,Product Owner review of the triage rules (QA-004 §2).
 TC-QA-005.1.1,QA-005,AC1,visual-a11y-qa,manual,planned,,"Manual check at 320, 390, 768 and 1280px with keyboard, screen reader spot-check and reduced motion"
 TC-QA-005.2.1,QA-005,AC2,visual-a11y-qa,manual,planned,,"Manual check at 320, 390, 768 and 1280px with keyboard, screen reader spot-check and reduced motion"
 TC-QA-006.1.1,QA-006,AC1,unit,planned,planned,,Unit/content test asserting the rule
