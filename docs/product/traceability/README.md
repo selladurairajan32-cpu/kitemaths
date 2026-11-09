@@ -45,27 +45,27 @@ On 3 Nov the checker was deliberately broken twice to show it fails: once with a
 to a test that doesn't exist, and once with a P1 criterion left without a test case. Both times the
 right check went red (see the status report).
 
-## Coverage on 9 Nov 2026 (R1 step 4)
+## Coverage on 9 Nov 2026 (R1 steps 4 to 11)
 
 Each criterion is counted once, by the strongest evidence any of its test cases has.
 
 | Epic | Items | Criteria | Test cases | Automated | Accepted | Passing | Review pending | Partial | Failing | Planned |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | GOV | 4 | 10 | 18 | 11 | 5 | 5 | 0 | 0 | 0 | 0 |
-| CUR | 4 | 9 | 33 | 22 | 4 | 3 | 0 | 1 | 0 | 1 |
-| UX | 8 | 22 | 45 | 15 | 5 | 3 | 1 | 4 | 0 | 9 |
-| ARCH | 5 | 14 | 81 | 73 | 4 | 9 | 0 | 1 | 0 | 0 |
-| FR | 11 | 34 | 48 | 33 | 0 | 8 | 0 | 13 | 0 | 13 |
-| LAB | 7 | 25 | 25 | 4 | 0 | 2 | 0 | 2 | 0 | 21 |
-| PRACT | 8 | 25 | 34 | 24 | 0 | 9 | 0 | 6 | 0 | 10 |
-| MIS | 5 | 12 | 16 | 15 | 0 | 4 | 0 | 7 | 0 | 1 |
-| MAST | 5 | 16 | 29 | 25 | 0 | 7 | 0 | 5 | 0 | 4 |
+| CUR | 4 | 9 | 37 | 25 | 4 | 5 | 0 | 0 | 0 | 0 |
+| UX | 8 | 22 | 48 | 20 | 5 | 8 | 2 | 7 | 0 | 0 |
+| ARCH | 5 | 14 | 83 | 75 | 4 | 10 | 0 | 0 | 0 | 0 |
+| FR | 11 | 34 | 73 | 55 | 0 | 33 | 1 | 0 | 0 | 0 |
+| LAB | 7 | 25 | 35 | 31 | 0 | 23 | 0 | 1 | 0 | 1 |
+| PRACT | 8 | 25 | 45 | 40 | 0 | 25 | 0 | 0 | 0 | 0 |
+| MIS | 5 | 12 | 26 | 25 | 0 | 12 | 0 | 0 | 0 | 0 |
+| MAST | 5 | 16 | 33 | 30 | 0 | 14 | 2 | 0 | 0 | 0 |
 | TT | 12 | 37 | 37 | 2 | 0 | 0 | 0 | 2 | 0 | 35 |
 | MM | 12 | 28 | 28 | 0 | 0 | 0 | 0 | 0 | 0 | 28 |
 | EXAM | 6 | 16 | 16 | 1 | 0 | 0 | 0 | 1 | 0 | 15 |
 | PARENT | 3 | 7 | 7 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
-| QA | 7 | 15 | 48 | 35 | 0 | 5 | 0 | 0 | 0 | 10 |
-| **Total** | **97** | **270** | **465** | **260** | **18** | **55** | **1** | **42** | **0** | **154** |
+| QA | 7 | 15 | 52 | 41 | 0 | 7 | 0 | 6 | 0 | 2 |
+| **Total** | **97** | **270** | **538** | **356** | **18** | **142** | **5** | **17** | **0** | **88** |
 
 **How to read this:**
 - Fractions logic (FR, PRACT, MIS, MAST) already has substantial automated evidence. Its **planned**
@@ -98,13 +98,19 @@ Each criterion is counted once, by the strongest evidence any of its test cases 
 | `src/governance.test.ts` | 5 | GOV-004 |
 | `src/engine/evidence.test.ts` | 10 | FR-011, CUR-002 (R1 wiring) |
 | `src/lib/persist.test.ts` | 8 | ARCH-004, MAST-005 |
-| `src/topics/fractions/journey-content.test.ts` | 12 | FR-002 to FR-009 |
+| `src/topics/fractions/journey-content.test.ts` | 13 | FR-002 to FR-010 |
 | `src/topics/fractions/labState.test.ts` | 6 | LAB-001 to LAB-006 |
 | `src/topics/fractions/ui/FractionLab.test.tsx` | 7 | LAB-001 to LAB-007 (component, jsdom) |
-| `src/components/questions/QuestionPlayer.test.tsx` | 4 | PRACT-002 to PRACT-004, PRACT-008, MIS-004 (component, jsdom) |
+| `src/components/questions/QuestionPlayer.test.tsx` | 5 | PRACT-002 to PRACT-004, PRACT-008, MIS-004 (component, jsdom) |
 | `src/topics/fractions/practice-rules.test.ts` | 8 | PRACT-001 to PRACT-008 |
 | `src/topics/fractions/catalogue.test.ts` | 4 | MIS-001, MIS-002, MIS-003 |
-| `src/engine/recovery-transfer.test.ts` | 5 | MIS-003 to MIS-005 |
+| `src/engine/recovery-transfer.test.ts` | 7 | MIS-003 to MIS-005, FR-010 |
+| `src/components/lesson/LessonPlayer.test.tsx` | 1 | QA-002 (integration, jsdom) |
+| `src/components/screens/PlacementScreen.test.tsx` | 1 | FR-001 |
+| `src/components/screens/GrownUps.test.tsx` | 2 | MAST-003, MAST-005 |
+| `src/components/screens/ResultsScreen.test.tsx` | 2 | MAST-004, MAST-002 |
+| `src/topics/fractions/assessment.test.ts` | 3 | MAST-002 |
+| `src/topics/fractions/reviewPack.test.ts` | 1 | CUR-004 |
 | `src/design-tokens.test.ts` | 10 | UX-002, UX-003, UX-004 |
 | `src/maths/maths.test.ts` | 20 | ARCH-003, QA-001 |
 | `src/questions/questions.test.ts` | 28 | ARCH-002 |

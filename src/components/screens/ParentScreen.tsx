@@ -139,7 +139,7 @@ function ParentOverview() {
             <h2 id="skills-title" className="font-semibold">
               Skills in this module
             </h2>
-            <Link href={routes.results()} className="rounded text-[0.9375rem] font-medium text-den hover:underline">
+            <Link href={routes.results()} className="inline-flex min-h-11 items-center rounded text-[0.9375rem] font-medium text-den hover:underline">
               Full report
             </Link>
           </div>
@@ -279,9 +279,11 @@ function Toggle({ label, hint, on, onChange }: { label: string; hint: string; on
         aria-checked={on}
         aria-label={label}
         onClick={() => onChange(!on)}
-        className={`relative h-8 w-14 shrink-0 rounded-full transition-colors ${on ? "bg-ok-bright" : "bg-line-strong"}`}
+        className="relative h-11 w-14 shrink-0"
       >
-        <span className={`absolute top-1 size-6 rounded-full bg-white shadow transition-all ${on ? "left-7" : "left-1"}`} />
+        {/* A 44px-tall target around the 32px track (UX-007 AC2). */}
+        <span className={`absolute inset-x-0 top-1.5 h-8 rounded-full transition-colors ${on ? "bg-ok-bright" : "bg-line-strong"}`} />
+        <span className={`absolute top-2.5 size-6 rounded-full bg-white shadow transition-all ${on ? "left-7" : "left-1"}`} />
       </button>
     </div>
   );

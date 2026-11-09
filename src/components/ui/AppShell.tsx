@@ -59,7 +59,7 @@ export function shellMode(pathname: string, practiceActive: (topicId: string) =>
 /** The wordmark: the 3D kite and the name. */
 function Logo({ small = false }: { small?: boolean }) {
   return (
-    <Link href="/" className="flex items-center gap-2 rounded-full" aria-label="Kite Maths home">
+    <Link href="/" className="flex min-h-11 items-center gap-2 rounded-full" aria-label="Kite Maths home">
       <Pic name="kite" size={small ? 32 : 40} priority />
       <span className={`display whitespace-nowrap ${small ? "text-lg" : "text-[1.375rem]"} leading-none text-ink`}>Kite Maths</span>
     </Link>
@@ -77,7 +77,7 @@ function SoundToggle() {
       onClick={() => updateLearner((s) => setSettings(s, { sound: !on }))}
       aria-pressed={on}
       aria-label={on ? "Sound on. Turn sound off" : "Sound off. Turn sound on"}
-      className="grid size-10 place-items-center rounded-full text-ink-2 hover:bg-sunk"
+      className="grid size-11 place-items-center rounded-full text-ink-2 hover:bg-sunk"
     >
       <SoundIcon size={20} muted={!on} />
     </button>
@@ -165,7 +165,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Link
                 href={routes.parent()}
                 aria-label="Grown-ups"
-                className="ml-1 hidden h-10 items-center gap-1.5 whitespace-nowrap rounded-full px-3 text-[0.9375rem] font-semibold text-ink-2 hover:bg-sunk sm:flex"
+                className="ml-1 hidden min-h-11 min-w-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-3 text-[0.9375rem] font-semibold text-ink-2 hover:bg-sunk sm:flex"
               >
                 <ParentIcon size={18} /> <span className="hidden xl:inline">Grown-ups</span>
               </Link>
@@ -190,7 +190,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                       <Link
                         href={navHref(href)}
                         aria-current={active ? "page" : undefined}
-                        className={`flex min-h-10 items-center rounded-full px-4 text-[0.9375rem] ${active ? "bg-brand-soft font-bold text-brand-strong" : "font-semibold text-ink-2 hover:bg-sunk hover:text-ink"}`}
+                        className={`flex min-h-11 items-center rounded-full px-4 text-[0.9375rem] ${active ? "bg-brand-soft font-bold text-brand-strong" : "font-semibold text-ink-2 hover:bg-sunk hover:text-ink"}`}
                       >
                         {label}
                       </Link>
@@ -199,7 +199,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 })}
               </ul>
             </nav>
-            <Link href="/" className="flex h-10 items-center gap-1.5 rounded-full px-4 text-[0.9375rem] font-semibold text-ink-2 hover:bg-sunk">
+            <Link href="/" className="flex min-h-11 items-center gap-1.5 rounded-full px-4 text-[0.9375rem] font-semibold text-ink-2 hover:bg-sunk">
               <ArrowLeftIcon size={16} /> Child view
             </Link>
           </div>

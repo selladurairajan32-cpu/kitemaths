@@ -229,7 +229,8 @@ export function PracticeScreen({ focusSkill = null }: { focusSkill?: string | nu
   const usedFollowUps = learner.results.filter((r) => r.context === "followup").map((r) => r.questionId);
   const active = practice.active && !!current;
   const sameFocus = (practice.focusSkill ?? null) === (focusSkill ?? null);
-  const showSummary = !focusSkill && !practice.active && practice.startedAt !== null && practice.sessionResults > 0;
+  // DEF-039: a focused session (the practice FR-011 recommends) ends with its summary too, not the start screen.
+  const showSummary = !practice.active && practice.startedAt !== null && practice.sessionResults > 0 && (!focusSkill || practice.focusSkill === focusSkill);
 
   const onComplete = (r: ResultDraft) => {
     update((s) => (s.practice.current === r.questionId ? pickNext(topic, finishPracticeQuestion(s, { ...r, at: Date.now() })) : s));
@@ -247,7 +248,7 @@ export function PracticeScreen({ focusSkill = null }: { focusSkill?: string | nu
           </span>
           <div className="min-w-0 flex-1">
             <h1 id="practice-heading" className="flex items-center justify-between gap-2 text-[0.9375rem] font-semibold text-muted">
-              <span className="truncate">
+              <span className="min-w-0">
                 <span className="text-ink">{topic.skillById(current!.skill).title}</span>
                 <span className="sr-only">
                   {" "}
@@ -276,6 +277,7 @@ export function PracticeScreen({ focusSkill = null }: { focusSkill?: string | nu
                 context="practice"
                 index={done}
                 usedFollowUps={usedFollowUps}
+                autoHint={!skillMastery(current!.skill, learner.results).learningSecure}
                 orderKey={`practice:${practice.startedAt}`}
                 autoFocus={done > 0}
                 onComplete={onComplete}

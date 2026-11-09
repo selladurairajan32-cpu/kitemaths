@@ -1,0 +1,19 @@
+PASS dashboard loads with a next step 
+PASS warm-up opens from the dashboard 
+PASS a tagged mistake gets a hedged diagnosis, not the answer 
+PASS the child recovers and answers the original question 
+PASS a practice session can be completed 10 questions
+PASS the journey recorded lesson, follow-up, practice and assessment answers followup, lesson, practice, assessment
+PASS every recorded answer has a response and the attempt fields 
+PASS results show strengths and next steps 
+PASS /: no placeholder text 
+PASS /journey: no placeholder text 
+PASS /t/fractions: no placeholder text 
+PASS /t/fractions/practice: no placeholder text 
+PASS /t/fractions/lab: no placeholder text 
+PASS /t/fractions/check: no placeholder text 
+PASS /badges: no placeholder text 
+PASS /t/place-value: no placeholder text 
+PASS all 58 internal links on the main pages respond 
+PASS no page errors during the journey 
+18 passed, 0 failed

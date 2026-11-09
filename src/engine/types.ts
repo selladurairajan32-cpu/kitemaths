@@ -58,6 +58,10 @@ export interface ItemResult {
   attempts: number;
   hintsUsed: number;
   misconceptions: MisconceptionId[];
+  /** ARCH-005: the last answer the child submitted (the topic's own response object, JSON). Optional for older saves. */
+  response?: unknown;
+  /** ARCH-005: time from showing the question to finishing it, in milliseconds. Optional. */
+  durationMs?: number;
   /** For follow-up questions: the misconception the follow-up was checking. */
   targets?: MisconceptionId;
   at: number;

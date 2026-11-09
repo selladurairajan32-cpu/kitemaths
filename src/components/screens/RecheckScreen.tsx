@@ -44,7 +44,7 @@ export function RecheckScreen({ skill }: { skill: string }) {
         onIndex={(i) => updateLearner((s) => setRecheckIndex(s, i))}
         onFinish={() => {
           const at = Date.now();
-          updateLearner((s) => (s.recheck ? finishRecheck(s, independentResults(topic, s.recheck.order, s.recheck.evaluations, "recheck", at, `recheck:${s.recheck.seed}`), at) : s));
+          updateLearner((s) => (s.recheck ? finishRecheck(s, independentResults(topic, s.recheck.order, s.recheck.evaluations, "recheck", at, `recheck:${s.recheck.seed}`, s.recheck.responses), at) : s));
         }}
       />
     );

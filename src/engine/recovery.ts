@@ -38,6 +38,11 @@ export type RecoveryEvent =
 
 export interface RecoveryOptions {
   maxAttempts?: number;
+  /**
+   * FR-010: show the hint automatically after an unexplained wrong answer. Off once the child has shown the skill is
+   * secure, so support fades; the hint can always be requested.
+   */
+  autoHint?: boolean;
   followUpFor: (suspected: MisconceptionId[]) => string | null;
 }
 
@@ -86,6 +91,7 @@ export function recoveryReducer(state: RecoveryState, event: RecoveryEvent, opti
           followUpCorrect: null,
         };
       }
+      if (options.autoHint === false) return { ...base, stage: "answering", retrying: true };
       return {
         ...base,
         stage: "answering",

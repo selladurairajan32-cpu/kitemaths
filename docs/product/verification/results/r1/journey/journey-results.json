@@ -1,0 +1,92 @@
+[
+ {
+  "name": "dashboard loads with a next step",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "warm-up opens from the dashboard",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "a tagged mistake gets a hedged diagnosis, not the answer",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "the child recovers and answers the original question",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "a practice session can be completed",
+  "ok": true,
+  "detail": "10 questions"
+ },
+ {
+  "name": "the journey recorded lesson, follow-up, practice and assessment answers",
+  "ok": true,
+  "detail": "followup, lesson, practice, assessment"
+ },
+ {
+  "name": "every recorded answer has a response and the attempt fields",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "results show strengths and next steps",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "/: no placeholder text",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "/journey: no placeholder text",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "/t/fractions: no placeholder text",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "/t/fractions/practice: no placeholder text",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "/t/fractions/lab: no placeholder text",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "/t/fractions/check: no placeholder text",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "/badges: no placeholder text",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "/t/place-value: no placeholder text",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "all 58 internal links on the main pages respond",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "no page errors during the journey",
+  "ok": true,
+  "detail": ""
+ }
+]

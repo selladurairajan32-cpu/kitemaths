@@ -3,6 +3,7 @@ import { MISCONCEPTIONS, M } from "@/topics/fractions/misconceptions";
 import { PRACTICE_QUESTIONS } from "@/topics/fractions/questions";
 import { SKILL_ORDER } from "@/topics/fractions/skills";
 import { selectNextQuestion } from "./adaptive";
+import { initialRecovery, recoveryReducer } from "./recovery";
 import { misconceptionReports } from "./mastery";
 import type { ItemResult } from "./types";
 
@@ -60,5 +61,22 @@ describe("what counts as recovery (MIS-003, MIS-005)", () => {
     expect(misconceptionReports(twice, MISCONCEPTIONS)[0]).toMatchObject({ confidence: "likely", timesSeen: 2 });
     // The evidence is the stored answers themselves: each result keeps its misconception tags.
     expect(twice.every((r) => r.misconceptions.includes(M.SWAP))).toBe(true);
+  });
+});
+
+describe("fading hints (FR-010 AC2, AC3)", () => {
+  const wrong = { type: "submit" as const, evaluation: { correct: false, misconceptions: [] } };
+  const opts = (autoHint: boolean) => ({ followUpFor: () => null, autoHint, maxAttempts: 3 });
+
+  it("shows the hint after an unexplained mistake while the skill is still being learned", () => {
+    const s = recoveryReducer(initialRecovery, wrong, opts(true));
+    expect(s).toMatchObject({ stage: "answering", hintVisible: true, hintsUsed: 1 });
+  });
+
+  it("does not push a hint on a child who has shown the skill is secure, but still lets them ask", () => {
+    const s = recoveryReducer(initialRecovery, wrong, opts(false));
+    expect(s).toMatchObject({ stage: "answering", hintVisible: false, hintsUsed: 0, retrying: true });
+    const asked = recoveryReducer(s, { type: "request-hint" }, opts(false));
+    expect(asked).toMatchObject({ hintVisible: true, hintsUsed: 1 });
   });
 });

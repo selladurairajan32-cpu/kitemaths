@@ -135,7 +135,7 @@ export function SkyMapScreen() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-5">
-      <Link href={appRoutes.journey()} className="inline-flex items-center gap-1.5 rounded-full px-1 text-label font-semibold text-muted hover:text-ink">
+      <Link href={appRoutes.journey()} className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-1 text-label font-semibold text-muted hover:text-ink">
         <ArrowLeftIcon size={16} /> World map
       </Link>
       <ScreenHero
@@ -191,7 +191,7 @@ export function SkyMapScreen() {
                   {s.bestAfter && <p className="mt-1.5 rounded-[14px] bg-sun-soft px-3 py-1.5 text-label text-ink">{s.bestAfter}</p>}
                   <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1">
                     {s.extra && (
-                      <Link href={s.extra.href} className="text-label font-bold text-brand underline underline-offset-2">
+                      <Link href={s.extra.href} className="inline-flex min-h-11 items-center text-label font-bold text-brand underline underline-offset-2">
                         {s.extra.label}
                         <span className="sr-only">: {s.title}</span>
                       </Link>

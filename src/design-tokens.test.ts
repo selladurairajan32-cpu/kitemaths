@@ -160,6 +160,21 @@ describe("design tokens (UX-002, UX-003, UX-004)", () => {
     expect(doc.replace(/\s+/g, " ")).toContain("same positive numerator and positive denominators, and the wholes are the same size");
   });
 
+  it("uses only the documented motion timings and respects reduced motion (UX-006)", () => {
+    const allowed = new Set([0, 0.15, 0.18, 0.2, 0.22, 0.25, 0.35, 0.4, 0.6, 0.8, 1.1, 1.3, 5]);
+    const tsx = files("src", (n) => n.endsWith(".tsx")).filter((f) => !f.startsWith("src/architecture/fixtures/") && !/\.test\.tsx$/.test(f));
+    const used = tsx.flatMap((f) => [...readFileSync(join(ROOT, f), "utf8").matchAll(/duration: ([\d.]+)/g)].map((m) => ({ f, d: Number(m[1]) })));
+    expect(used.length).toBeGreaterThan(10);
+    expect(used.filter((u) => !allowed.has(u.d))).toEqual([]);
+    const shell = readFileSync(join(ROOT, "src/components/ui/AppShell.tsx"), "utf8");
+    expect(shell).toContain('<MotionConfig reducedMotion="user">');
+    expect(css).toMatch(/@media \(prefers-reduced-motion: reduce\)[\s\S]*?transition-duration: 0\.01ms !important/);
+    // Kip's idle sway is decoration: off unless a screen asks for it.
+    expect(readFileSync(join(ROOT, "src/components/kid/Kip.tsx"), "utf8")).toMatch(/float = false/);
+    const doc = readFileSync(join(ROOT, "docs/product/design/UX-006-motion.md"), "utf8");
+    expect(doc).toContain("| Ambient | 5 s |");
+  });
+
   it("keeps the design specimen out of production and search engines", () => {
     const page = readFileSync(join(ROOT, "src/app/design-specimen/page.tsx"), "utf8");
     expect(page).toMatch(/process\.env\.VERCEL_ENV === "production"\) notFound\(\)/);

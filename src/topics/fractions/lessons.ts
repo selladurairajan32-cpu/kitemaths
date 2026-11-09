@@ -460,6 +460,24 @@ export const LESSONS: Lesson[] = [
         ],
         conclusion: "The point shows {2/5}.",
       },
+      {
+        type: "worked",
+        title: "Let's do it together: read another point",
+        support: "faded",
+        problem: "What fraction is marked?",
+        visual: { type: "number-line", intervals: 6, point: 4 },
+        steps: [
+          {
+            text: "Count the gaps from 0 to 1.",
+            blank: { prompt: "Gaps from 0 to 1", answer: 6, hint: "Count the jumps, not the marks: there are 7 marks.", worked: "There are 6 gaps, so the denominator is 6.", traps: [{ value: 7, feedback: "That's the number of marks. Count the gaps between them." }] },
+          },
+          {
+            text: "Now count the jumps from 0 to the point.",
+            blank: { prompt: "Jumps to the point", answer: 4, hint: "Start at 0 and count each jump.", worked: "The point is 4 jumps along, so the numerator is 4." },
+          },
+        ],
+        conclusion: "The point shows {4/6}.",
+      },
       { type: "check", title: "Place a fraction", questionId: "fractions.ls-line-1" },
       { type: "check", title: "Read a fraction", questionId: "fractions.ls-line-2" },
     ],

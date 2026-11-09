@@ -49,7 +49,11 @@ TC-CUR-003.1.3,CUR-003,AC1,content-review,manual,review-pending,,CUR-003 §3: co
 TC-CUR-003.1.4,CUR-003,AC1,unit,planned,planned,,"R1 (RC-005): template-conformance tests once the schema adds prereq-check, reflect and mastery-check steps"
 TC-CUR-003.1.5,CUR-003,AC1,unit,planned,planned,,"R1 (CUR-003, MIS-005): fresh-example generation is deterministic, never matches a demonstrated example, falls back to same-skill templates, and raises FreshnessExhausted instead of looping or reusing"
 TC-CUR-004.1.1,CUR-004,AC1,content,automated,partial,src/topics/fractions/content.test.ts::gives every question a mathematically correct answer,Automated maths check only; independent review pending
-TC-CUR-004.2.1,CUR-004,AC2,content-review,manual,planned,,Independent educational review of the content
+TC-CUR-004.1.2,CUR-004,AC1,unit,automated,passing,src/topics/fractions/reviewPack.test.ts::lists every authored question once and matches the content,Review pack for the independent reviewer: docs/product/curriculum/CUR-004-review-pack.md
+TC-CUR-004.1.3,CUR-004,AC1,content-review,manual,planned,,The independent review itself has not been done.
+TC-CUR-004.2.1,CUR-004,AC2,unit,automated,passing,"src/topics/fractions/practice-rules.test.ts::makes every matching picture unambiguous: one picture per fraction, and each picture shows its own answer (PRACT-004 AC2)",
+TC-CUR-004.2.2,CUR-004,AC2,unit,automated,passing,src/topics/fractions/journey-content.test.ts::draws exactly the operation in the prompt: the picture and the symbols agree,
+TC-CUR-004.2.3,CUR-004,AC2,content-review,manual,planned,,Independent review for ambiguity (CUR-004).
 TC-UX-001.1.1,UX-001,AC1,document-review,manual,accepted,,benchmark/UX-001-competitor-benchmark.md §5–§8 — accepted 4 Nov 2026 (D-011)
 TC-UX-001.2.1,UX-001,AC2,document-review,manual,accepted,,Benchmark claims cite evidence IDs; §1 states no superiority claim — accepted 4 Nov 2026 (D-011)
 TC-UX-002.1.1,UX-002,AC1,document-review,manual,accepted,,"UX-002 §2: colour (incl. label backgrounds and the contrast rule), typography, spacing, widths, borders, radii, elevation, icons, focus, disabled, validation and interaction feedback — accepted 6 Nov 2026 for R0 scope (D-023)"
@@ -85,16 +89,19 @@ TC-UX-004.2.3,UX-004,AC2,visual-a11y-qa,planned,planned,,R1: 5-second test with 
 TC-UX-005.1.1,UX-005,AC1,e2e,manual,partial,,"Developer browser check 9 Nov (docs/product/verification/r1-step4-checks.cjs) at 390, 768 and 1280px: home, map, island journey, lesson and practice reached by clicking navigation; the report is reached from the grown-ups navigation. Not independently reproduced."
 TC-UX-005.2.1,UX-005,AC2,visual-a11y-qa,manual,partial,,"Developer screenshots at 390, 768 and 1280px and text scaling at 200% (r1-step4-checks.cjs, text-scaling.cjs). Keyboard, screen reader and child usability not checked."
 TC-UX-005.3.1,UX-005,AC3,e2e,manual,partial,,"DEF-005 fixed 9 Nov: islands without a lab have no Lab tab and /lab opens the island map; /practice, /lab and /start open the current island (DEF-014); the mock-ups are no longer public (DEF-016). Developer browser check (r1-step4-checks.cjs); awaiting independent retest."
-TC-UX-006.1.1,UX-006,AC1,visual-a11y-qa,manual,planned,,"Manual check at 320, 390, 768 and 1280px with keyboard, screen reader spot-check and reduced motion"
-TC-UX-006.2.1,UX-006,AC2,visual-a11y-qa,manual,planned,,"Manual check at 320, 390, 768 and 1280px with keyboard, screen reader spot-check and reduced motion"
-TC-UX-006.3.1,UX-006,AC3,visual-a11y-qa,manual,planned,,"Manual check at 320, 390, 768 and 1280px with keyboard, screen reader spot-check and reduced motion"
-TC-UX-006.4.1,UX-006,AC4,visual-a11y-qa,manual,planned,,"Manual check at 320, 390, 768 and 1280px with keyboard, screen reader spot-check and reduced motion"
-TC-UX-007.1.1,UX-007,AC1,visual-a11y-qa,manual,planned,,"Manual check at 320, 390, 768 and 1280px with keyboard, screen reader spot-check and reduced motion"
-TC-UX-007.2.1,UX-007,AC2,visual-a11y-qa,manual,planned,,"Manual check at 320, 390, 768 and 1280px with keyboard, screen reader spot-check and reduced motion"
-TC-UX-007.3.1,UX-007,AC3,visual-a11y-qa,manual,planned,,"Manual check at 320, 390, 768 and 1280px with keyboard, screen reader spot-check and reduced motion"
-TC-UX-008.1.1,UX-008,AC1,visual-a11y-qa,manual,partial,,3 Nov at 390 and 1280px only (GOV-001 §9)
-TC-UX-008.2.1,UX-008,AC2,visual-a11y-qa,manual,planned,,"Manual check at 320, 390, 768 and 1280px with keyboard, screen reader spot-check and reduced motion"
-TC-UX-008.3.1,UX-008,AC3,visual-a11y-qa,manual,planned,,"Manual check at 320, 390, 768 and 1280px with keyboard, screen reader spot-check and reduced motion"
+TC-UX-006.1.1,UX-006,AC1,unit,automated,passing,src/design-tokens.test.ts::uses only the documented motion timings and respects reduced motion (UX-006),docs/product/design/UX-006-motion.md
+TC-UX-006.2.1,UX-006,AC2,unit,automated,passing,src/design-tokens.test.ts::uses only the documented motion timings and respects reduced motion (UX-006),Each timing names what it communicates; Kip's decorative sway is off by default.
+TC-UX-006.2.2,UX-006,AC2,document-review,manual,review-pending,,Review of the motion table (UX-006 §1).
+TC-UX-006.3.1,UX-006,AC3,component,automated,passing,"src/components/questions/QuestionPlayer.test.tsx::single-answer choice: clear selected state, submit, and informative confirmation (PRACT-002 AC1, PRACT-008 AC1)",All component tests run with animations skipped and complete their flows.
+TC-UX-006.4.1,UX-006,AC4,unit,automated,passing,src/design-tokens.test.ts::uses only the documented motion timings and respects reduced motion (UX-006),
+TC-UX-006.4.2,UX-006,AC4,visual-a11y-qa,manual,partial,,"Reduced motion emulated in the quality pass: preference detected, transitions cut. Developer run 9 Nov (docs/product/verification/r1-quality-pass.cjs; results in verification/results/r1/quality-pass). Not independently reproduced."
+TC-UX-007.1.1,UX-007,AC1,visual-a11y-qa,manual,partial,,axe-core WCAG 2.1 A/AA on 11 screens at 375 and 1280px: 0 violations; keyboard walk: visible focus on every control; names and non-colour cues by component tests. Developer run 9 Nov (docs/product/verification/r1-quality-pass.cjs; results in verification/results/r1/quality-pass). Not independently reproduced.
+TC-UX-007.1.2,UX-007,AC1,component,automated,passing,src/topics/fractions/ui/FractionLab.test.tsx::gives every control an accessible name (LAB-007),
+TC-UX-007.2.1,UX-007,AC2,visual-a11y-qa,manual,partial,,Every tappable control is at least 44×44px on 11 screens at 5 widths. Developer run 9 Nov (docs/product/verification/r1-quality-pass.cjs; results in verification/results/r1/quality-pass). Not independently reproduced.
+TC-UX-007.3.1,UX-007,AC3,document-review,manual,review-pending,,Known limitations in docs/product/design/UX-007-accessibility-audit.md §2.
+TC-UX-008.1.1,UX-008,AC1,visual-a11y-qa,manual,partial,,"11 main screens at 320, 375, 430, 768 and 1280px. Developer run 9 Nov (docs/product/verification/r1-quality-pass.cjs; results in verification/results/r1/quality-pass). Not independently reproduced."
+TC-UX-008.2.1,UX-008,AC2,visual-a11y-qa,manual,partial,,"No sideways scroll, clipped text or overlapping controls at any tested width; 200% text and 320px reflow clean on child screens. Developer run 9 Nov (docs/product/verification/r1-quality-pass.cjs; results in verification/results/r1/quality-pass). Not independently reproduced."
+TC-UX-008.3.1,UX-008,AC3,visual-a11y-qa,manual,partial,,55 screenshots kept in docs/product/verification/results/r1/quality-pass/screens/.
 TC-ARCH-001.1.1,ARCH-001,AC1,document-review,manual,accepted,,"ARCH-001 §1–§4: layers, how the rebuilt check works, rules A1–A7, couplings K-1 to K-7 — accepted 6 Nov 2026 for R0 scope (D-024)"
 TC-ARCH-001.1.2,ARCH-001,AC1,unit,automated,passing,"src/architecture.test.ts::A1: keeps the engine pure, importing only other engine files","Rebuilt 5 Nov (DEF-023): parsed imports, real resolution, prohibited globals; the reviewer probe fails"
 TC-ARCH-001.1.3,ARCH-001,AC1,unit,automated,passing,src/architecture.test.ts::A2: keeps mathematical logic self-contained,
@@ -172,12 +179,15 @@ TC-ARCH-004.3.3,ARCH-004,AC3,unit,automated,passing,src/lib/persist.test.ts::kee
 TC-ARCH-004.3.4,ARCH-004,AC3,unit,automated,passing,src/lib/persist.test.ts::keeps an unreadable version-1 save untouched and starts fresh,
 TC-ARCH-004.3.5,ARCH-004,AC3,unit,automated,passing,src/engine/engine.test.ts::survives corrupt or outdated saved data,
 TC-ARCH-004.4.1,ARCH-004,AC4,unit,automated,passing,"src/lib/persist.test.ts::collects no personal data beyond an optional first name, year and avatar","The name is optional and blank by default; no account, e-mail or tracking id."
-TC-ARCH-005.1.1,ARCH-005,AC1,unit,automated,partial,src/engine/engine.test.ts::records a clean first-try success,No response or duration stored
-TC-ARCH-005.1.2,ARCH-005,AC1,unit,automated,partial,src/engine/engine.test.ts::counts a voluntary hint as support,
+TC-ARCH-005.1.1,ARCH-005,AC1,component,automated,passing,"src/components/questions/QuestionPlayer.test.tsx::records the question, skill, response, correctness, attempts, hints and duration (ARCH-005)",
+TC-ARCH-005.1.2,ARCH-005,AC1,unit,automated,partial,src/engine/engine.test.ts::records a clean first-try success,No response or duration stored
 TC-ARCH-005.2.1,ARCH-005,AC2,unit,automated,passing,"src/engine/engine.test.ts::diagnoses, explains, asks a follow-up, then lets the child retry without revealing",
+TC-ARCH-005.2.2,ARCH-005,AC2,component,automated,passing,"src/components/questions/QuestionPlayer.test.tsx::a tagged wrong answer gets a hedged diagnosis and a guided step before any reveal, and the retry is recorded (PRACT-008 AC2, AC3)",
 TC-ARCH-005.3.1,ARCH-005,AC3,unit,automated,passing,src/engine/engine.test.ts::reports one wrong answer as only a possible misconception,
+TC-ARCH-005.3.2,ARCH-005,AC3,unit,automated,passing,"src/engine/recovery-transfer.test.ts::labels one answer as possible, repeated ones as likely, and keeps the evidence (MIS-003)",
 TC-FR-001.1.1,FR-001,AC1,unit,automated,partial,"src/engine/rewards.test.ts::builds one real question per lesson, matching that lesson",
-TC-FR-001.2.1,FR-001,AC2,e2e,planned,planned,,Only 'Start from the beginning' exists (PlacementScreen.tsx:114)
+TC-FR-001.1.2,FR-001,AC1,document-review,manual,review-pending,,"The warm-up covers equal parts first, then naming, then each later lesson; it has no timer and stops after two misses. Review whether it feels low-pressure (CUR-004)."
+TC-FR-001.2.1,FR-001,AC2,component,automated,passing,"src/components/screens/PlacementScreen.test.tsx::suggests a start and offers the beginning too, without locking anything",
 TC-FR-001.3.1,FR-001,AC3,unit,automated,passing,"src/engine/rewards.test.ts::skips lessons answered correctly before the first gap, and stops after two misses in a row",
 TC-FR-001.3.2,FR-001,AC3,unit,automated,passing,src/engine/rewards.test.ts::marks placed-out lessons done without counting placement towards mastery,
 TC-FR-002.1.1,FR-002,AC1,unit,automated,passing,src/topics/fractions/evaluate.test.ts::flags unequal shapes chosen as equal parts,
@@ -234,10 +244,12 @@ TC-FR-009.1.2,FR-009,AC1,content-review,manual,planned,,Independent educational 
 TC-FR-009.2.1,FR-009,AC2,unit,automated,passing,"src/topics/fractions/journey-content.test.ts::keeps every result within one whole, with valid answers",
 TC-FR-009.3.1,FR-009,AC3,unit,automated,passing,src/topics/fractions/journey-content.test.ts::draws exactly the operation in the prompt: the picture and the symbols agree,
 TC-FR-009.3.2,FR-009,AC3,unit,automated,passing,src/topics/fractions/journey-content.test.ts::flags adding the denominators as a possible misconception,
-TC-FR-010.1.1,FR-010,AC1,content,automated,partial,src/topics/fractions/content.test.ts::follows the teaching sequence: explain before checking in every lesson,
-TC-FR-010.2.1,FR-010,AC2,unit,automated,partial,src/engine/engine.test.ts::shows a hint beside the still-editable question,"Single hint, no fading"
-TC-FR-010.2.2,FR-010,AC2,unit,automated,partial,src/engine/engine.test.ts::keeps the question editable when a hint is requested,
-TC-FR-010.3.1,FR-010,AC3,unit,automated,partial,src/engine/engine.test.ts::counts a voluntary hint as support,Hints are optional
+TC-FR-010.1.1,FR-010,AC1,unit,automated,passing,"src/topics/fractions/journey-content.test.ts::gives each core skill a worked example, a guided attempt, a hint and an independent question",Core skills per RC-010.
+TC-FR-010.2.1,FR-010,AC2,unit,automated,passing,src/engine/recovery-transfer.test.ts::shows the hint after an unexplained mistake while the skill is still being learned,
+TC-FR-010.2.2,FR-010,AC2,unit,automated,passing,"src/engine/recovery-transfer.test.ts::does not push a hint on a child who has shown the skill is secure, but still lets them ask",
+TC-FR-010.2.3,FR-010,AC2,unit,automated,partial,src/engine/engine.test.ts::keeps the question editable when a hint is requested,
+TC-FR-010.3.1,FR-010,AC3,unit,automated,passing,"src/engine/recovery-transfer.test.ts::does not push a hint on a child who has shown the skill is secure, but still lets them ask",
+TC-FR-010.3.2,FR-010,AC3,unit,automated,partial,src/engine/engine.test.ts::counts a voluntary hint as support,Hints are optional
 TC-FR-011.1.1,FR-011,AC1,unit,automated,passing,"src/engine/engine.test.ts::leads through lessons, then practice, then the mastery check",Next recommended activity from evidence.
 TC-FR-011.1.2,FR-011,AC1,unit,automated,passing,src/engine/evidence.test.ts::uses only a lesson's final checks as its evidence questions,
 TC-FR-011.1.3,FR-011,AC1,unit,automated,passing,src/engine/evidence.test.ts::shows started and unstarted lessons separately,Current status per lesson; the island map and journey detail show it with the skill outcome and prerequisites.
@@ -354,23 +366,27 @@ TC-MIS-005.3.1,MIS-005,AC3,unit,automated,passing,"src/engine/recovery-transfer.
 TC-MIS-005.3.2,MIS-005,AC3,unit,automated,passing,"src/engine/engine.test.ts::keeps the mastery phase unfinished while a skill needs review, and labels activity separately",
 TC-MAST-001.1.1,MAST-001,AC1,unit,automated,passing,src/engine/engine.test.ts::needs several strong recent results before a skill is secure,
 TC-MAST-001.1.2,MAST-001,AC1,unit,automated,passing,src/engine/engine.test.ts::awards mastery only for two or more independent items plus secure practice,
+TC-MAST-001.1.3,MAST-001,AC1,document-review,manual,failing,,Varied examples is not a coded criterion (MAST-001 §4); a Product Owner decision is needed. MAST-001 is BLOCKED.
 TC-MAST-001.2.1,MAST-001,AC2,unit,automated,passing,src/engine/engine.test.ts::does not award mastery from a single correct item,
+TC-MAST-001.2.2,MAST-001,AC2,unit,automated,passing,src/engine/engine.test.ts::awards mastery only for two or more independent items plus secure practice,
 TC-MAST-001.3.1,MAST-001,AC3,unit,automated,partial,"src/engine/engine.test.ts::uses the latest independent evidence, and practice cannot clear a needs-review",Thresholds are named constants; not yet documented for the PO
+TC-MAST-001.3.2,MAST-001,AC3,document-review,manual,review-pending,,Thresholds documented in docs/product/curriculum/MAST-001-mastery-model.md; adjustable named constants in src/engine/mastery.ts.
 TC-MAST-002.1.1,MAST-002,AC1,content,automated,passing,"src/topics/fractions/content.test.ts::each assessment form covers every skill at least twice and every area, without hints",
 TC-MAST-002.1.2,MAST-002,AC1,content,automated,passing,src/topics/fractions/content.test.ts::assessment forms are parallel,
-TC-MAST-002.2.1,MAST-002,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-MAST-002.1.3,MAST-002,AC1,unit,automated,passing,"src/topics/fractions/assessment.test.ts::samples conceptual, representational, comparison, equivalence, quantity and reasoning skills on both forms",
+TC-MAST-002.2.1,MAST-002,AC2,unit,automated,passing,"src/topics/fractions/assessment.test.ts::uses unfamiliar items: none is a practice, lesson or follow-up question, by id or by content",
 TC-MAST-002.3.1,MAST-002,AC3,content,automated,passing,"src/topics/fractions/content.test.ts::each assessment form covers every skill at least twice and every area, without hints",
-TC-MAST-002.4.1,MAST-002,AC4,unit,automated,partial,src/engine/engine.test.ts::uses the latest independent evidence,
-TC-MAST-003.1.1,MAST-003,AC1,unit,automated,partial,"src/engine/engine.test.ts::keeps the mastery phase unfinished while a skill needs review, and labels activity separately",
-TC-MAST-003.2.1,MAST-003,AC2,unit,automated,passing,src/engine/rewards.test.ts::awards badges from real progress,
-TC-MAST-003.2.2,MAST-003,AC2,unit,automated,passing,"src/engine/rewards.test.ts::adds lessons, lab challenges and checks, but not lessons skipped by placement",
-TC-MAST-003.3.1,MAST-003,AC3,unit,automated,partial,src/engine/rewards.test.ts::levels need a few more stars each time,
-TC-MAST-003.3.2,MAST-003,AC3,unit,automated,partial,"src/engine/rewards.test.ts::counts consecutive days, and keeps yesterday",
-TC-MAST-003.3.3,MAST-003,AC3,unit,automated,partial,src/engine/rewards.test.ts::counts today,
-TC-MAST-003.3.4,MAST-003,AC3,unit,automated,partial,src/engine/rewards.test.ts::rewards effort as well as accuracy,
-TC-MAST-004.1.1,MAST-004,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-MAST-004.2.1,MAST-004,AC2,unit,automated,partial,src/engine/engine.test.ts::reports one wrong answer as only a possible misconception,
-TC-MAST-004.3.1,MAST-004,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-MAST-002.3.2,MAST-002,AC3,unit,automated,passing,src/topics/fractions/assessment.test.ts::offers no hints during the check,
+TC-MAST-002.4.1,MAST-002,AC4,component,automated,passing,"src/components/screens/ResultsScreen.test.tsx::reports strengths, skills to develop, patterns of difficulty and next steps, by skill",
+TC-MAST-003.1.1,MAST-003,AC1,component,automated,passing,"src/components/screens/GrownUps.test.tsx::shows completed lessons, developing and mastered skills, and the next activity, all from recorded attempts",
+TC-MAST-003.2.1,MAST-003,AC2,component,automated,passing,"src/components/screens/GrownUps.test.tsx::shows completed lessons, developing and mastered skills, and the next activity, all from recorded attempts",
+TC-MAST-003.2.2,MAST-003,AC2,unit,automated,passing,src/engine/rewards.test.ts::awards badges from real progress,
+TC-MAST-003.2.3,MAST-003,AC2,unit,automated,passing,"src/engine/rewards.test.ts::adds lessons, lab challenges and checks, but not lessons skipped by placement",
+TC-MAST-003.3.1,MAST-003,AC3,component,automated,passing,"src/components/screens/GrownUps.test.tsx::shows completed lessons, developing and mastered skills, and the next activity, all from recorded attempts",The activity ring equals the engine's figure.
+TC-MAST-004.1.1,MAST-004,AC1,component,automated,passing,"src/components/screens/ResultsScreen.test.tsx::reports strengths, skills to develop, patterns of difficulty and next steps, by skill",
+TC-MAST-004.2.1,MAST-004,AC2,component,automated,passing,src/components/screens/ResultsScreen.test.tsx::makes no claims about ability,
+TC-MAST-004.2.2,MAST-004,AC2,unit,automated,partial,src/engine/engine.test.ts::reports one wrong answer as only a possible misconception,
+TC-MAST-004.3.1,MAST-004,AC3,document-review,manual,review-pending,,"Whether the report is understandable to a child and useful to a parent needs review with real users (CUR-004, UX testing)."
 TC-MAST-005.1.1,MAST-005,AC1,unit,automated,passing,src/lib/persist.test.ts::survives a refresh or restart: what is saved loads back the same,
 TC-MAST-005.1.2,MAST-005,AC1,unit,automated,partial,"src/lib/migrate.test.ts::keeps every star, the streak and the profile",Migration only
 TC-MAST-005.1.3,MAST-005,AC1,unit,automated,passing,src/lib/migrate.test.ts::gives the same mastery picture and next step,
@@ -380,7 +396,7 @@ TC-MAST-005.2.3,MAST-005,AC2,unit,automated,passing,src/engine/engine.test.ts::s
 TC-MAST-005.2.4,MAST-005,AC2,unit,automated,passing,src/engine/engine.test.ts::dismisses an old practice summary so it is not shown again,
 TC-MAST-005.2.5,MAST-005,AC2,unit,automated,passing,src/engine/engine.test.ts::tracks lesson position and furthest step,
 TC-MAST-005.2.6,MAST-005,AC2,unit,automated,passing,src/engine/engine.test.ts::keeps each topic,
-TC-MAST-005.3.1,MAST-005,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-MAST-005.3.1,MAST-005,AC3,component,automated,passing,"src/components/screens/GrownUps.test.tsx::asks before clearing, can be cancelled, and clears saved progress when confirmed",
 TC-TT-001.1.1,TT-001,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
 TC-TT-001.2.1,TT-001,AC2,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
 TC-TT-002.1.1,TT-002,AC1,unit,planned,planned,,Unit/content test asserting the rule
@@ -497,10 +513,13 @@ TC-QA-001.2.6,QA-001,AC2,unit,automated,passing,src/topics/fractions/evaluate.te
 TC-QA-001.2.7,QA-001,AC2,unit,automated,passing,src/lib/migrate.test.ts::ignores anything that isn't a version-1 save,Existing
 TC-QA-001.2.8,QA-001,AC2,unit,automated,passing,"src/maths/maths.test.ts::matches a BigInt oracle for every pair of safe-integer extremes, both divisor signs, zero and negative dividends",DEF-029 regression
 TC-QA-001.2.9,QA-001,AC2,unit,automated,passing,"src/maths/maths.test.ts::returns the reproduced case exactly: divmod(2, MAX) = { q: 0, r: 2 }",DEF-029 regression
-TC-QA-002.1.1,QA-002,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-QA-002.2.1,QA-002,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-QA-003.1.1,QA-003,AC1,e2e,planned,planned,,Playwright journey test asserting the behaviour
-TC-QA-003.2.1,QA-003,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-QA-002.1.1,QA-002,AC1,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::shades parts with a pointer and updates the notation and words at once (LAB-003, LAB-001)",Visual controls
+TC-QA-002.1.2,QA-002,AC1,component,automated,passing,"src/components/questions/QuestionPlayer.test.tsx::a tagged wrong answer gets a hedged diagnosis and a guided step before any reveal, and the retry is recorded (PRACT-008 AC2, AC3)",Validation and hints
+TC-QA-002.1.3,QA-002,AC1,component,automated,passing,"src/components/lesson/LessonPlayer.test.tsx::moves step by step, saves progress, and records the lesson check","Lesson progression, progress updates, persistence"
+TC-QA-002.2.1,QA-002,AC2,component,automated,passing,src/topics/fractions/ui/FractionLab.test.tsx::compares two models with the maths engine and recognises equivalent fractions as equal (LAB-005),
+TC-QA-002.2.2,QA-002,AC2,unit,automated,passing,"src/topics/fractions/labState.test.ts::keeps notation, parts and pictures in agreement through 20,000 random changes",
+TC-QA-003.1.1,QA-003,AC1,e2e,manual,partial,,"Developer run 9 Nov: docs/product/verification/journey-e2e.cjs, 18 checks pass (verification/results/r1/journey). Automated script, not in CI (needs a running build)."
+TC-QA-003.2.1,QA-003,AC2,e2e,manual,partial,,"All 58 internal links on the main pages respond; no placeholder text on the main pages. Developer run 9 Nov: docs/product/verification/journey-e2e.cjs, 18 checks pass (verification/results/r1/journey). Automated script, not in CI (needs a running build)."
 TC-QA-004.1.1,QA-004,AC1,unit,automated,passing,"src/defects.test.ts::gives every defect all the required fields, with valid severity and priority (QA-004 AC1)",Developer evidence: 38 defects with every required field.
 TC-QA-004.1.2,QA-004,AC1,unit,automated,passing,"src/defects.test.ts::has one row per defect, numbered DEF-001 upwards with no gaps or repeats",
 TC-QA-004.1.3,QA-004,AC1,unit,automated,passing,src/defects.test.ts::closes a defect only on independent verification that cites a recorded decision (QA-004 rule 4),
@@ -510,10 +529,11 @@ TC-QA-004.1.6,QA-004,AC1,unit,automated,passing,"src/defects.test.ts::is shown i
 TC-QA-004.1.7,QA-004,AC1,document-review,manual,review-pending,,Product Owner review of the register. DEF-001 to DEF-017 priorities and DEF-018 to DEF-038 fields were assigned in this round from the cited records.
 TC-QA-004.2.1,QA-004,AC2,unit,automated,passing,"src/defects.test.ts::blocks release on every open Critical or High defect, and invents no deferral approval (QA-004 AC2)",Developer evidence: records the rule; the open High defects are listed in QA-004 §3.
 TC-QA-004.2.2,QA-004,AC2,document-review,manual,review-pending,,Product Owner review of the triage rules (QA-004 §2).
-TC-QA-005.1.1,QA-005,AC1,visual-a11y-qa,manual,planned,,"Manual check at 320, 390, 768 and 1280px with keyboard, screen reader spot-check and reduced motion"
-TC-QA-005.2.1,QA-005,AC2,visual-a11y-qa,manual,planned,,"Manual check at 320, 390, 768 and 1280px with keyboard, screen reader spot-check and reduced motion"
-TC-QA-006.1.1,QA-006,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-QA-006.2.1,QA-006,AC2,unit,manual,passing,,CI run 41714084366 green on main (bbf210a); local npm test/lint/typecheck/build pass 3 Nov
-TC-QA-006.3.1,QA-006,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-QA-005.1.1,QA-005,AC1,visual-a11y-qa,manual,partial,,"Keyboard, focus, contrast (axe), text scaling, reduced motion and five screen widths executed; touch only by emulation. Developer run 9 Nov (docs/product/verification/r1-quality-pass.cjs; results in verification/results/r1/quality-pass). Not independently reproduced."
+TC-QA-005.2.1,QA-005,AC2,visual-a11y-qa,manual,partial,,"Failures logged and retested: small touch targets, a clipped title and DEF-039 were fixed and the same scripts re-run clean (UX-007 audit §3)."
+TC-QA-006.1.1,QA-006,AC1,unit,manual,partial,,Full suite and the browser scripts re-run after the R1 fixes on 9 Nov (docs/product/verification/QA-006-regression.md). Accepted R0 flows are covered by the unit suite.
+TC-QA-006.2.1,QA-006,AC2,unit,manual,partial,,CI now runs on pushes to claude/** branches; documented local commands in QA-006-regression.md. The first hosted run is recorded in the R1 report.
+TC-QA-006.3.1,QA-006,AC3,unit,automated,passing,"src/defects.test.ts::blocks release on every open Critical or High defect, and invents no deferral approval (QA-004 AC2)",
+TC-QA-006.3.2,QA-006,AC3,document-review,manual,review-pending,,Rule 2 of QA-006-regression.md and GOV-004.
 TC-QA-007.1.1,QA-007,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
 TC-QA-007.2.1,QA-007,AC2,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion

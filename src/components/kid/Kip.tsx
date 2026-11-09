@@ -47,7 +47,8 @@ function Face({ mood }: { mood: KipMood }) {
 export function Kip({
   mood = "happy",
   size = 96,
-  float = true,
+  // UX-006 AC2: the idle sway is decoration, so it is off unless a screen asks for it.
+  float = false,
   className = "",
 }: {
   mood?: KipMood;

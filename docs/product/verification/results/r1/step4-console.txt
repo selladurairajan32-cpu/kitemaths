@@ -1,0 +1,43 @@
+PASS phone: Map tab opens the world map 
+PASS phone: Practice tab opens the current island's practice http://localhost:3123/t/fractions/practice
+PASS phone: home links to the island map (learning journey) 
+PASS phone: island map opens a lesson http://localhost:3123/t/fractions/lesson/wholes
+PASS phone: island map shows skill outcomes 
+PASS phone: island map explains a prerequisite 
+PASS phone: island map marks the next step 
+PASS phone: a lesson finished by traversal shows "Finished", not done 
+PASS phone: progress survives a reload 
+PASS phone: no Lab tab on an island without a lab 
+PASS phone: Lab tab on Fractions 
+PASS phone: no page errors 
+PASS tablet: Map tab opens the world map 
+PASS tablet: Practice tab opens the current island's practice http://localhost:3123/t/fractions/practice
+PASS tablet: home links to the island map (learning journey) 
+PASS tablet: island map opens a lesson http://localhost:3123/t/fractions/lesson/wholes
+PASS tablet: island map shows skill outcomes 
+PASS tablet: island map explains a prerequisite 
+PASS tablet: island map marks the next step 
+PASS tablet: a lesson finished by traversal shows "Finished", not done 
+PASS tablet: progress survives a reload 
+PASS tablet: no Lab tab on an island without a lab 
+PASS tablet: Lab tab on Fractions 
+PASS tablet: no page errors 
+PASS desktop: Map tab opens the world map 
+PASS desktop: Practice tab opens the current island's practice http://localhost:3123/t/fractions/practice
+PASS desktop: home links to the island map (learning journey) 
+PASS desktop: island map opens a lesson http://localhost:3123/t/fractions/lesson/wholes
+PASS desktop: island map shows skill outcomes 
+PASS desktop: island map explains a prerequisite 
+PASS desktop: island map marks the next step 
+PASS desktop: a lesson finished by traversal shows "Finished", not done 
+PASS desktop: progress survives a reload 
+PASS desktop: no Lab tab on an island without a lab 
+PASS desktop: Lab tab on Fractions 
+PASS desktop: no page errors 
+PASS /practice opens the current island http://localhost:3123/t/place-value/practice
+PASS /lab on an island without a lab opens its map http://localhost:3123/t/place-value
+PASS /start opens the current island warm-up http://localhost:3123/t/place-value/start
+PASS /sky is not public 404
+PASS /crystal is not public 404
+PASS /preview/sky/index.html is not public 404
+42 passed, 0 failed

@@ -3,7 +3,9 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [main]
+    # QA-006: development branches get the same checks as main, so every pushed commit has a hosted run.
+    branches: [main, "claude/**"]
+  workflow_dispatch:
 
 jobs:
   check:
@@ -16,7 +18,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Unit and content tests
+      - name: Unit, content and component tests
         run: npm test
       - name: Lint
         run: npm run lint

@@ -139,7 +139,7 @@ function KidHome() {
       {warmUpOpen && (
         <KipSays mood="happy" tone="sky">
           New to {topic.title}? A short warm-up finds the right lesson to start with.{" "}
-          <Link href={links.start()} className="font-bold text-brand-strong underline underline-offset-4">
+          <Link href={links.start()} className="inline-flex min-h-11 items-center font-bold text-brand-strong underline underline-offset-4">
             Play the warm-up
           </Link>
         </KipSays>

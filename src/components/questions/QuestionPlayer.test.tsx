@@ -44,6 +44,22 @@ describe("question player (component)", () => {
     expect(onComplete).toHaveBeenCalledWith(expect.objectContaining({ correct: true, firstTry: true, attempts: 1, hintsUsed: 0 }));
   });
 
+  it("records the question, skill, response, correctness, attempts, hints and duration (ARCH-005)", async () => {
+    const user = userEvent.setup();
+    const { onComplete } = play("fractions.ad-2"); // {3/8} + {4/8}, written answer
+    const [top, bottom] = screen.queryAllByRole("spinbutton").length ? screen.queryAllByRole("spinbutton") : screen.getAllByRole("textbox");
+    await user.type(top, "7");
+    await user.type(bottom, "8");
+    await user.click(check());
+    await user.click(await screen.findByRole("button", { name: /Continue/ }));
+    const r = onComplete.mock.calls[0][0];
+    expect(r).toMatchObject({ questionId: "fractions.ad-2", skill: "fractions.add-same", correct: true, firstTry: true, attempts: 1, hintsUsed: 0, response: { kind: "write-fraction", value: { n: 7, d: 8 } } });
+    expect(typeof r.durationMs).toBe("number");
+    expect(r.durationMs).toBeGreaterThanOrEqual(0);
+    // Plain JSON, so it can be saved.
+    expect(JSON.parse(JSON.stringify(r.response))).toEqual(r.response);
+  });
+
   it("a tagged wrong answer gets a hedged diagnosis and a guided step before any reveal, and the retry is recorded (PRACT-008 AC2, AC3)", async () => {
     const user = userEvent.setup();
     const { onComplete } = play("fractions.ad-1");

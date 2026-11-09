@@ -164,3 +164,27 @@ describe("FR-009 adding and subtracting with the same denominator", () => {
     expect(tagged.length).toBeGreaterThan(100);
   });
 });
+
+describe("FR-010 worked examples and fading support", () => {
+  /** The selected core skills: the ones taught with a procedure (RC-010). */
+  const CORE = ["naming", "comparing", "equivalent", "number-line", "adding", "amounts"];
+
+  it("gives each core skill a worked example, a guided attempt, a hint and an independent question", () => {
+    for (const id of CORE) {
+      const steps = lessonById(id)!.steps;
+      const worked = steps.filter((s): s is Extract<LessonStep, { type: "worked" }> => s.type === "worked");
+      expect(worked.some((w) => w.support === "full"), `${id}: watch-me example`).toBe(true);
+      const guided = worked.filter((w) => w.support === "faded");
+      expect(guided.length, `${id}: guided attempt`).toBeGreaterThan(0);
+      // The guided attempt asks the child to supply at least one step, with a hint for it.
+      expect(guided.some((w) => w.steps.some((st) => st.blank && st.blank.hint.length > 0)), `${id}: guided blank with hint`).toBe(true);
+      const checks = steps.filter((s): s is Extract<LessonStep, { type: "check" }> => s.type === "check");
+      expect(checks.length, `${id}: independent question`).toBeGreaterThan(0);
+      for (const c of checks) expect(questionById(c.questionId).hint.length, `${id}: ${c.questionId} has a hint`).toBeGreaterThan(0);
+      // Support fades: watch me, then together, then on your own.
+      const order = steps.map((s) => (s.type === "worked" ? s.support : s.type));
+      expect(order.indexOf("full"), id).toBeLessThan(order.lastIndexOf("faded"));
+      expect(order.lastIndexOf("faded"), id).toBeLessThan(order.lastIndexOf("check"));
+    }
+  });
+});

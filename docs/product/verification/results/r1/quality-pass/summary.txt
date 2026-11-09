@@ -1,0 +1,8 @@
+screens: 55 (11 pages × 5 widths)
+sideways scroll: none
+clipped text: none
+overlapping controls: none
+touch targets under 44px: none
+axe (WCAG 2.1 A/AA) violations: none
+keyboard: home 39 focused, without visible focus: none; lesson-worked 36 focused, without visible focus: none; lab 39 focused, without visible focus: none; practice 35 focused, without visible focus: none
+reduced motion: {"matches":true,"transition":"1e-05s"}
