@@ -7,7 +7,7 @@
 | **Status** | READY FOR QA, waiting for Product Owner review. Not self-accepted (D-022). |
 | **Date** | 6 November 2026 |
 | **Acceptance criteria** | <ol><li>Defects have ID, severity, priority, reproduction steps, expected/actual result, evidence, owner, fix and retest status.</li><li>Critical/high defects block acceptance.</li></ol> |
-| **Data** | [`traceability/defects.csv`](traceability/defects.csv): the single register, 38 defects. This page is generated from it. |
+| **Data** | [`traceability/defects.csv`](traceability/defects.csv): the single register, 39 defects. This page is generated from it. |
 | **Checks** | `src/defects.test.ts` |
 
 **One register.** The register is the CSV. [`STATUS.md`](STATUS.md) carries a short index that points here and must agree with it (checked). The audit table in [GOV-001 §12](GOV-001-repository-audit.md#12-defects-found-provisional) stays as the original record of DEF-001 to DEF-017 and is not edited; the register reproduces its wording and adds the new fields. Reports and decisions are linked, not copied.
@@ -68,16 +68,16 @@
 | State | Count | Defects |
 |---|---|---|
 | Closed (verified) | 9 | DEF-029, DEF-030, DEF-031, DEF-032, DEF-033, DEF-034, DEF-035, DEF-036, DEF-037 |
-| Fixed, closure not confirmed | 25 | DEF-002, DEF-003, DEF-004, DEF-005, DEF-006, DEF-007, DEF-008, DEF-009, DEF-010, DEF-011, DEF-012, DEF-013, DEF-014, DEF-015, DEF-016, DEF-017, DEF-018, DEF-019, DEF-020, DEF-021, DEF-022, DEF-023, DEF-024, DEF-025, DEF-026 |
+| Fixed, closure not confirmed | 26 | DEF-002, DEF-003, DEF-004, DEF-005, DEF-006, DEF-007, DEF-008, DEF-009, DEF-010, DEF-011, DEF-012, DEF-013, DEF-014, DEF-015, DEF-016, DEF-017, DEF-018, DEF-019, DEF-020, DEF-021, DEF-022, DEF-023, DEF-024, DEF-025, DEF-026, DEF-039 |
 | Partly fixed (behaviour open) | 1 | DEF-038 |
 | Open | 3 | DEF-001, DEF-027, DEF-028 |
-| **Total** | **38** | |
+| **Total** | **39** | |
 
 | Severity | Open or unconfirmed |
 |---|---|
 | Critical | 0 |
 | High | 4: DEF-005, DEF-022, DEF-023, DEF-024 |
-| Medium | 16: DEF-001, DEF-002, DEF-003, DEF-004, DEF-009, DEF-010, DEF-011, DEF-012, DEF-013, DEF-015, DEF-018, DEF-019, DEF-020, DEF-025, DEF-026, DEF-038 |
+| Medium | 17: DEF-001, DEF-002, DEF-003, DEF-004, DEF-009, DEF-010, DEF-011, DEF-012, DEF-013, DEF-015, DEF-018, DEF-019, DEF-020, DEF-025, DEF-026, DEF-038, DEF-039 |
 | Low | 9: DEF-006, DEF-007, DEF-008, DEF-014, DEF-016, DEF-017, DEF-021, DEF-027, DEF-028 |
 
 **Critical or High defects not yet closed:** DEF-005, DEF-022, DEF-023, DEF-024.
@@ -147,6 +147,7 @@ Columns are shortened here; every field is in the CSV. Severity is as logged; pr
 | **DEF-036** | Specimen comparison rule says "same numerator (not zero)", which includes negative numerators | Low | P2 | Closed (verified) | UX-004 | `d8ae9c0` | Independently verified on `702743a` (D-024) | Needs an explicit Product Owner decision before release (backlog §9); fixed and verified |
 | **DEF-037** | The `round` comparison loses precision or overflows when scaling | Medium | P2 | Closed (verified) | ARCH-002 | `7ea4cd2` | Independently verified on `112eeb3` (D-025) | Needs an explicit Product Owner decision before release (backlog §9); fixed and verified |
 | **DEF-038** | Adapters do not reproduce existing kit marking exactly | Medium | P2 | Partly fixed (behaviour open) | ARCH-002 | `5162804` (documentation and differential test only) | Documentation independently verified on `112eeb3` (D-025); behaviour not retested because it is not fixed | R1 integration prerequisite: no marking may go through the question schema until it is resolved |
+| **DEF-039** | A focused practice session ends with no summary | Medium | P2 | Fixed, closure not confirmed | PRACT-008; FR-011; UX-005 | `673d57c` | Not retested | Needs an explicit Product Owner decision before release (backlog §9); fixed, awaiting independent retest |
 
 ## 7. Detail
 
@@ -605,4 +606,16 @@ Columns are shortened here; every field is in the CSV. Severity is as logged; pr
 - **Fix:** Documentation corrected; behavioural difference NOT fixed (`5162804` (documentation and differential test only)). **Retest:** Documentation independently verified on `112eeb3` (D-025); behaviour not retested because it is not fixed ([D-025](DECISIONS.md)).
 - **Release impact:** R1 integration prerequisite: no marking may go through the question schema until it is resolved. **Deferral:** Tracked for R1 under `TC-ARCH-002.1.13` (D-025). The behavioural difference is explicitly not fixed.
 - **History:** Found by independent QA 6 Nov 2026. Resolution: move kit marking to the contract, or add an explicit legacy comparison kind; no hidden epsilon either way.
+
+### DEF-039: A focused practice session ends with no summary
+
+- **Severity / priority:** Medium / P2. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
+- **Affects:** PRACT-008; FR-011; UX-005
+- **Steps:** Open /t/fractions/practice/add-same, press Play and answer all 10 questions
+- **Expected:** An end-of-session summary (stars, first-try count) as for mixed practice
+- **Actual:** The start screen appears again with no summary, so the child gets no confirmation that the session finished
+- **Evidence:** [R1 journey test](verification/journey-e2e.cjs); results in verification/results/r1/journey. **Tested on:** `a4a1e2c` working tree (developer, before the fix).
+- **Fix:** Fixed (`673d57c`). **Retest:** Not retested (Developer re-run of journey-e2e.cjs passes (18 checks); not independent.).
+- **Release impact:** Needs an explicit Product Owner decision before release (backlog §9); fixed, awaiting independent retest. **Deferral:** None needed: fixed
+- **History:** Found 9 Nov 2026 by the R1 end-to-end journey test (QA-003). Became visible because FR-011 now recommends focused practice. Fixed the same day.
 

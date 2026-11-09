@@ -33,27 +33,31 @@ breaking changes, so read the relevant guide in `node_modules/next/dist/docs/` b
 Test-case rule: every test file must be referenced by a test case; automated references must exist (`file::title`);
 only accepted items may have `accepted` cases. Update `test-cases.csv` in the same commit as any test change.
 
-## State (6 Nov 2026)
+## State (9 Nov 2026)
 
-`docs/product/STATUS.md` is the authoritative status register; check it for current statuses and counts rather than
-relying on this summary. Last recorded decision: D-025 (clarifications to RC-007).
+`docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Last recorded
+decision: D-026 (build all of R1 in sequence); clarifications to RC-010.
 
-- **Accepted** (each for the scope recorded in `STATUS.md`): GOV-001/002/003, UX-001, CUR-002, CUR-003, UX-002 (R0 token
-  and spec scope only), ARCH-001, UX-004 (R0 spec and specimen scope), and the three step-3 items ARCH-002, ARCH-003 and
-  QA-001 (delivered R0 scope).
-- **READY FOR QA (6 Nov, not accepted):** GOV-004 (`GOV-004-change-control.md`), CUR-001 (`curriculum/CUR-001-curriculum-map.md`, data in
-  `curriculum-map.csv`, RC-007) and QA-004 (`QA-004-defect-register.md`; the register is `traceability/defects.csv`, 38
-  defects; STATUS has only an index). Step-4 proposal: `reports/R0-step4-handoff.md` (not authorised).
-- **QA FAILED:** UX-003 only (AC3 text scaling; DEF-018 to DEF-021 are R1).
-- **Open R1 obligations (all preserved):** DEF-009, DEF-010, DEF-027, DEF-028; couplings K-1 to K-6 (ARCH-001 §4);
-  FR-011 AC3 (lessons complete on traversal); wiring the specs into the app.
-- **DEF-038 is NOT fixed:** the kit's `same()` and the new comparison contract still differ. It is an open R1 integration
-  prerequisite (`TC-ARCH-002.1.13`): resolve it before any marking goes through the question schema.
-- **Evidence limits:** browser checks, production exclusion and the generated-question comparison are developer evidence
-  from 6 Nov, not independently reproduced; no hosted CI run exists for this branch.
+- **Accepted** (R0, each for the scope in `STATUS.md`): GOV-001/002/003, UX-001, CUR-002, CUR-003, UX-002, ARCH-001,
+  UX-004, ARCH-002, ARCH-003, QA-001. Nothing in R1 is accepted.
+- **R1 (D-026) delivered, steps 4 to 11:** every R1 item is READY FOR QA except **MAST-001 (BLOCKED:** the
+  varied-examples criterion needs a decision). UX-003 is READY FOR RETEST. GOV-004, CUR-001, QA-004 still READY FOR QA.
+  Report: `docs/product/reports/R1-release-acceptance-report.md`.
+- **Child-facing screens may now change** where an R1 item requires it (D-026 lifts D-012 for R1 only).
+- **RC-008 to RC-010** are proposed readings awaiting confirmation (step-4 answers; soft prerequisites; core skills and
+  fading hints). Mastery thresholds were not changed (RC-008 Q-B).
+- **Defects:** register `docs/product/traceability/defects.csv` (39). DEF-002 to DEF-026 (not DEF-001) and DEF-039 are
+  fixed but not independently retested; High ones (DEF-022/023/024) block acceptance until retested. DEF-001, 027, 028
+  open. **DEF-038 is NOT fixed**: marking stays in the kit; resolve before any marking uses the question schema.
+- **Evidence limits:** browser, end-to-end and accessibility runs are developer evidence (scripts and results in
+  `docs/product/verification/`); no screen reader, real devices or children; CUR-004 independent review not done.
+  CI now runs on pushes to `claude/**`.
 
 ## Code layout and guarded rules
 
+- Component tests: `*.test.tsx` run in jsdom (vitest project `component`, setup `src/test/setup.ts`, animations
+  skipped). Docs generated from content (`MIS-001` catalogue, `CUR-004` pack) are refreshed with
+  `UPDATE_DOCS=1 npx vitest run <test>`.
 - `src/engine` (pure learning engine), `src/maths` (pure maths: fractions, integers, place value), `src/lessons`
   (schema), `src/curriculum` (prerequisite graph, unused by the app), `src/questions` (typed question schema, validator,
   adapters; unused by the app), `src/topics/<island>` (content; Fractions is R1, 18 other islands are unaccepted
