@@ -36,7 +36,9 @@ only accepted items may have `accepted` cases. Update `test-cases.csv` in the sa
 ## State (9 Nov 2026)
 
 `docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Last recorded
-decision: D-027 (R1 deployed to production; not accepted); clarifications to RC-010.
+decision: D-028 (content differentiation audit and copy changes, CH-042 to CH-044; audit in
+`docs/product/design/content-differentiation-audit.md`, recommendations R1 to R10 await decisions). D-027: R1 deployed
+to production; not accepted. Clarifications to RC-010.
 
 - **Accepted** (R0, each for the scope in `STATUS.md`): GOV-001/002/003, UX-001, CUR-002, CUR-003, UX-002, ARCH-001,
   UX-004, ARCH-002, ARCH-003, QA-001. Nothing in R1 is accepted.
