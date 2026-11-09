@@ -5,7 +5,7 @@ acceptance criteria are in [`backlog.md`](backlog.md); how statuses work is expl
 [`README.md`](README.md#status-definitions). `src/traceability.test.ts` checks that every backlog item
 is listed here exactly once with valid values (RC-003).
 
-**Last updated:** 6 November 2026: GOV-004, CUR-001 and QA-004 delivered and READY FOR QA, with the step-4 handoff and the [R0 readiness report](reports/R0-readiness-report.md). Earlier the same day: QA decision on `112eeb3` recorded (D-025): ARCH-002 accepted for R0 scope, DEF-037 closed, DEF-038 documentation verified with the behaviour still open for R1. Earlier the same day: retest of `702743a` recorded (D-024): DEF-029 to DEF-036 closed; ARCH-001, ARCH-003, QA-001 and UX-004 accepted for their scopes; ARCH-002 QA FAILED (DEF-037, DEF-038), then corrected and READY FOR QA ([report](reports/R0-review3-correction-report.md)). Earlier the same day: independent review of `0b45d12` recorded (D-023): CUR-002 and CUR-003 accepted for R0 specification scope, UX-002 accepted for R0 token and specification scope only. ARCH-001, ARCH-002, ARCH-003, QA-001 and UX-004 corrected and READY FOR QA ([correction report](reports/R0-review2-correction-report.md)). Earlier, 5 November: sprint step 3 delivered (ARCH-002, ARCH-003, QA-001 READY FOR QA, [step-3 report](reports/R0-step3-status-report.md)). Before that, the same day: step-2 corrections delivered ([correction report](reports/R0-step2-correction-report.md)). Five items are READY FOR QA again (D-022); UX-003 stays QA FAILED (D-021). Earlier the same day: the independent review set six items to QA FAILED (D-014), and Q-1 to Q-7 were decided (D-015 to D-021). 4 November: sprint step 2 delivered for review. CUR-002, CUR-003, UX-002, UX-003, UX-004 and ARCH-001 are READY FOR QA ([status report](reports/R0-step2-status-report.md)). Earlier the same day: GOV-002, GOV-003 and UX-001 accepted (D-011); step 2 authorised (D-012).
+**Last updated:** 9 November 2026: R1 authorised in sequence (D-026). Step 4 delivered: FR-011, ARCH-004 and UX-005 READY FOR QA, UX-003 READY FOR RETEST, DEF-002 to DEF-021 fixed except DEF-001 (awaiting retest). Earlier, 6 November: GOV-004, CUR-001 and QA-004 delivered and READY FOR QA, with the step-4 handoff and the [R0 readiness report](reports/R0-readiness-report.md). Earlier the same day: QA decision on `112eeb3` recorded (D-025): ARCH-002 accepted for R0 scope, DEF-037 closed, DEF-038 documentation verified with the behaviour still open for R1. Earlier the same day: retest of `702743a` recorded (D-024): DEF-029 to DEF-036 closed; ARCH-001, ARCH-003, QA-001 and UX-004 accepted for their scopes; ARCH-002 QA FAILED (DEF-037, DEF-038), then corrected and READY FOR QA ([report](reports/R0-review3-correction-report.md)). Earlier the same day: independent review of `0b45d12` recorded (D-023): CUR-002 and CUR-003 accepted for R0 specification scope, UX-002 accepted for R0 token and specification scope only. ARCH-001, ARCH-002, ARCH-003, QA-001 and UX-004 corrected and READY FOR QA ([correction report](reports/R0-review2-correction-report.md)). Earlier, 5 November: sprint step 3 delivered (ARCH-002, ARCH-003, QA-001 READY FOR QA, [step-3 report](reports/R0-step3-status-report.md)). Before that, the same day: step-2 corrections delivered ([correction report](reports/R0-step2-correction-report.md)). Five items are READY FOR QA again (D-022); UX-003 stays QA FAILED (D-021). Earlier the same day: the independent review set six items to QA FAILED (D-014), and Q-1 to Q-7 were decided (D-015 to D-021). 4 November: sprint step 2 delivered for review. CUR-002, CUR-003, UX-002, UX-003, UX-004 and ARCH-001 are READY FOR QA ([status report](reports/R0-step2-status-report.md)). Earlier the same day: GOV-002, GOV-003 and UX-001 accepted (D-011); step 2 authorised (D-012).
 
 ## Read this first: implemented is not accepted
 
@@ -82,9 +82,9 @@ only where it is evidence for a backlog item: Times Tables, Mental Maths, 11+ an
 |---|---|---|---|---|---|---|
 | UX-001 | Competitor UX benchmark | P0 | R0 | ACCEPTED (D-011) | Implemented | Delivered 3 Nov: [benchmark](benchmark/UX-001-competitor-benchmark.md). |
 | UX-002 | Create the visual design system | P0 | R0 | ACCEPTED (D-023) | Partial | **Accepted for R0 token and specification scope only (D-023).** Screen migration (AC2) and DEF-009 stay open for R1; planned R1 tests stay planned; browser and visual tests keep their actual status (developer browser evidence, not independently passed). Existing screens do not yet meet all UX-002 requirements. QA FAILED at `6050e3c` (D-014); corrected 5 Nov. [Design tokens](design/UX-002-design-tokens.md); label-background tokens; 52 checked pairings; a hex-occurrence ratchet (DEF-022). Screens are not yet migrated (R1, RC-006); DEF-009 is open. |
-| UX-003 | Define typography and mathematical readability | P0 | R0 | QA FAILED (D-021) | Partial | AC3 is not met by today's screens (DEF-018 to DEF-021, fix and retest early in R1). The contrast findings are corrected 5 Nov (DEF-022): fraction digits are checked at their real sizes. The specification is returned for review separately from item acceptance (D-021). |
+| UX-003 | Define typography and mathematical readability | P0 | R0 | READY FOR RETEST | Partial | **Fixed in R1 step 4 (D-026), awaiting independent retest.** DEF-018 to DEF-021 fixed: no sideways scroll or clipped text on the 8 tested pages at 200% text (390, 768, 1280px) and at 320px, except the internal design specimen at 768px (a worked-example panel, 24px). Developer evidence (`verification/text-scaling.cjs`). Was QA FAILED (D-021). |
 | UX-004 | Establish content differentiation rules | P0 | R0 | ACCEPTED (D-024) | Partial | **Accepted for R0 specification and specimen scope (D-024).** Screen migration, usability testing with children and browser-evidence independence stay R1/unchanged. **Review 2 corrected 6 Nov (DEF-036):** comparison rule states same positive numerator, positive denominators, same-sized wholes. QA FAILED at `6050e3c` (D-014); corrected 5 Nov. [Content types](design/UX-004-content-differentiation.md): corrected contrast, Q-6 wording, and supported pairings in §2.3 (DEF-022). Screens still share one treatment for hint, tip, notice and retry (R1). Child usability is not shown by the specimen (R1 testing). |
-| UX-005 | Build responsive application shell and navigation | P1 | R1 | SPECIFIED | Partial | Shell and navigation work on phone/desktop; Lab tab is a placeholder on 18 islands (DEF-005). |
+| UX-005 | Build responsive application shell and navigation | P1 | R1 | READY FOR QA | Implemented | **R1 step 4 (D-026), awaiting review.** Working navigation to home, map, island journey, lessons, practice and the grown-ups report at 390, 768 and 1280px; no placeholder Lab tab (DEF-005); hubs open the current island (DEF-014); mock-ups no longer public (DEF-016); header and tabs reflow at 200% text (DEF-018). Developer browser evidence (`verification/r1-step4-checks.cjs`), not independently reproduced. Tablet layout is the phone/desktop layout at 768px; no separate tablet design review yet. |
 | UX-006 | Motion and interaction language | P1 | R1 | SPECIFIED | Partial | Reduced motion respected (`MotionConfig`, CSS); some decorative motion; no documented timing/easing. |
 | UX-007 | Accessibility baseline | P1 | R1 | SPECIFIED | Partial | Skip link, focus ring, labels, read-aloud; number boxes lose focus ring (DEF-015); no audit. |
 | UX-008 | Responsive visual QA | P1 | R1 | SPECIFIED | Partial | Ad hoc Playwright checks at 390/1280px (3 Nov); not tablet/small-mobile; not in repo. |
@@ -96,7 +96,7 @@ only where it is evidence for a backlog item: Times Tables, Mental Maths, 11+ an
 | ARCH-001 | Define modular learning architecture | P0 | R0 | ACCEPTED (D-024) | Partial | **Accepted for delivered R0 scope (D-024).** Couplings K-1 to K-6 stay R1. **Review 2 corrected 6 Nov (DEF-030, DEF-031):** global-object escape detection, a layer matrix with a transitive check, 22 bad and 11 good fixtures. Documented allowlists unchanged. QA FAILED at `6050e3c` (D-014); corrected 5 Nov. [Architecture](architecture/ARCH-001-architecture.md). The guard is rebuilt on the TypeScript compiler (`src/architecture/analyse.ts`). 15 bad and 5 good fixtures; the reviewer's probe fails (DEF-023). Couplings K-1 to K-7 stay for R1; K-6 and K-7 were found by the new guard. |
 | ARCH-002 | Define a typed question schema | P0 | R0 | ACCEPTED (D-025) | Partial | **Accepted for delivered R0 schema, validator and adapter scope (D-025).** The behavioural difference between the kit's `same()` and the new comparator is **not fixed**: it stays an R1 integration prerequisite (`TC-ARCH-002.1.13`), and the schema is not used for marking. Using definitions in the app and DEF-028 stay R1.**QA FAILED on retest (D-024):** DEF-037 (rounding comparison loses precision or overflows) and DEF-038 (the claim that adapters reproduce existing kit marking is wrong). **Review 2 corrected 6 Nov (DEF-032 to DEF-035):** nested trap fields, one numeric comparison contract (no fixed allowance), duplicate fraction traps, explicit `ask` for model checks. DEF-028 exception narrowed. Limitations: `ask` absent means unchecked; fraction-text options and match pictures aren't checked against models. Delivered 5 Nov (step 3): [question schema](architecture/ARCH-002-question-schema.md): `src/questions/` schema, runtime validator and adapters for 12 interactions. Valid and invalid fixtures for each; all existing Fractions and kit questions validate apart from DEF-028. **Not yet used by the app.** |
 | ARCH-003 | Build pure mathematical logic modules | P0 | R0 | ACCEPTED (D-024) | Partial | **Accepted for delivered R0 scope (D-024).** DEF-027 and K-1 to K-6 stay R1. **Review 2 corrected 6 Nov (DEF-029):** exact Euclidean `divmod`, BigInt-oracle regression tests. Delivered 5 Nov (step 3): [pure maths](architecture/ARCH-003-maths.md): checked fraction arithmetic, mixed numbers, partitions, integers, place value. Duplicates replaced; 51,098 generated questions identical before and after. K-7 fixed. Existing unchecked functions keep their behaviour (DEF-027). |
-| ARCH-004 | Implement prototype progress persistence | P1 | R1 | SPECIFIED | Implemented | localStorage `kite-maths:v2`, versioned, v1 migration, corrupt-data backup (`src/lib/store.ts`). Store itself untested. |
+| ARCH-004 | Implement prototype progress persistence | P1 | R1 | READY FOR QA | Implemented | **R1 step 4 (D-026), awaiting review.** Load and save in `src/lib/persist.ts`, tested with an in-memory storage: refresh and restart, versioned schema, corrupt or missing data, blocked storage, v1 migration, and no personal data beyond an optional first name, year and avatar. Developer browser check of a reload. |
 | ARCH-005 | Build a reusable event and attempt model | P1 | R1 | SPECIFIED | Partial | `ItemResult` records attempts, hints, first try, time; no response or duration. |
 
 ### FR — Fractions learning journey
@@ -113,7 +113,7 @@ only where it is evidence for a backlog item: Times Tables, Mental Maths, 11+ an
 | FR-008 | Find simple fractions of quantities | P1 | R1 | SPECIFIED | Implemented | Lesson `amounts`, `fractionOfAmount` (whole results only). |
 | FR-009 | Add and subtract fractions with same denominator | P1 | R1 | SPECIFIED | Partial | Only in the unaccepted Fractions 2 preview (`fractions-2`, skill `add-same`). |
 | FR-010 | Fractions guided examples and fading support | P1 | R1 | SPECIFIED | Partial | Worked steps full/faded exist; single hint string, no gradual reduction. |
-| FR-011 | Fractions learning journey screen | P1 | R1 | SPECIFIED | Partial | `SkyMapScreen`/`JourneyScreen` show status and next; no prerequisites; completion by traversal. |
+| FR-011 | Fractions learning journey screen | P1 | R1 | READY FOR QA | Implemented | **R1 step 4 (D-026), awaiting review.** Lessons complete on independent evidence, not visits (CUR-002 §4, `src/engine/evidence.ts`); the island map and journey detail show status, skill outcome, prerequisites and the next recommended step; prerequisites are explained soft locks (RC-009). Existing completions keep their stars and show as finished until evidence exists (RC-008 Q-A). |
 
 ### LAB — Interactive laboratory
 
@@ -232,26 +232,26 @@ The defect register is [`traceability/defects.csv`](traceability/defects.csv), s
 | Defect | Severity | State | Affects |
 |---|---|---|---|
 | DEF-001 | Medium | Open | UX-005; MAST-003 |
-| DEF-002 | Medium | Open | UX-005; MAST-003 |
-| DEF-003 | Medium | Open | UX-005; MAST-003 |
-| DEF-004 | Medium | Open | UX-005; MAST-003 |
-| DEF-005 | High | Open | UX-005 AC3 |
-| DEF-006 | Low | Open | UX-005; MAST-003 |
-| DEF-007 | Low | Open | UX-005; MAST-003 |
-| DEF-008 | Low | Open | No specific acceptance criterion (copy accuracy) |
-| DEF-009 | Medium | Open | UX-002; UX-004 |
-| DEF-010 | Medium | Open | UX-003 |
-| DEF-011 | Medium | Open | FR-001; FR-011; CUR-002 |
-| DEF-012 | Medium | Open | MAST-003; PARENT-002 |
-| DEF-013 | Medium | Open | FR-011; CUR-002 |
-| DEF-014 | Low | Open | No specific acceptance criterion (redirects) |
-| DEF-015 | Medium | Open | UX-007 |
-| DEF-016 | Low | Open | No specific acceptance criterion (public preview pages) |
-| DEF-017 | Low | Partly fixed | GOV-002 |
-| DEF-018 | Medium | Open | UX-003 AC3; UX-005; UX-007 |
-| DEF-019 | Medium | Open | UX-003 AC3; FR-001 |
-| DEF-020 | Medium | Open | UX-003 AC3; PARENT |
-| DEF-021 | Low | Open | UX-003 AC3 |
+| DEF-002 | Medium | Fixed, closure not confirmed | UX-005; MAST-003 |
+| DEF-003 | Medium | Fixed, closure not confirmed | UX-005; MAST-003 |
+| DEF-004 | Medium | Fixed, closure not confirmed | UX-005; MAST-003 |
+| DEF-005 | High | Fixed, closure not confirmed | UX-005 AC3 |
+| DEF-006 | Low | Fixed, closure not confirmed | UX-005; MAST-003 |
+| DEF-007 | Low | Fixed, closure not confirmed | UX-005; MAST-003 |
+| DEF-008 | Low | Fixed, closure not confirmed | No specific acceptance criterion (copy accuracy) |
+| DEF-009 | Medium | Fixed, closure not confirmed | UX-002; UX-004 |
+| DEF-010 | Medium | Fixed, closure not confirmed | UX-003 |
+| DEF-011 | Medium | Fixed, closure not confirmed | FR-001; FR-011; CUR-002 |
+| DEF-012 | Medium | Fixed, closure not confirmed | MAST-003; PARENT-002 |
+| DEF-013 | Medium | Fixed, closure not confirmed | FR-011; CUR-002 |
+| DEF-014 | Low | Fixed, closure not confirmed | No specific acceptance criterion (redirects) |
+| DEF-015 | Medium | Fixed, closure not confirmed | UX-007 |
+| DEF-016 | Low | Fixed, closure not confirmed | No specific acceptance criterion (public preview pages) |
+| DEF-017 | Low | Fixed, closure not confirmed | GOV-002 |
+| DEF-018 | Medium | Fixed, closure not confirmed | UX-003 AC3; UX-005; UX-007 |
+| DEF-019 | Medium | Fixed, closure not confirmed | UX-003 AC3; FR-001 |
+| DEF-020 | Medium | Fixed, closure not confirmed | UX-003 AC3; PARENT |
+| DEF-021 | Low | Fixed, closure not confirmed | UX-003 AC3 |
 | DEF-022 | High | Fixed, closure not confirmed | UX-002; UX-003; UX-004 |
 | DEF-023 | High | Fixed, closure not confirmed | ARCH-001 |
 | DEF-024 | High | Fixed, closure not confirmed | CUR-002 AC3; CUR-003 |

@@ -68,10 +68,9 @@
 | State | Count | Defects |
 |---|---|---|
 | Closed (verified) | 9 | DEF-029, DEF-030, DEF-031, DEF-032, DEF-033, DEF-034, DEF-035, DEF-036, DEF-037 |
-| Fixed, closure not confirmed | 5 | DEF-022, DEF-023, DEF-024, DEF-025, DEF-026 |
-| Partly fixed | 1 | DEF-017 |
+| Fixed, closure not confirmed | 25 | DEF-002, DEF-003, DEF-004, DEF-005, DEF-006, DEF-007, DEF-008, DEF-009, DEF-010, DEF-011, DEF-012, DEF-013, DEF-014, DEF-015, DEF-016, DEF-017, DEF-018, DEF-019, DEF-020, DEF-021, DEF-022, DEF-023, DEF-024, DEF-025, DEF-026 |
 | Partly fixed (behaviour open) | 1 | DEF-038 |
-| Open | 22 | DEF-001, DEF-002, DEF-003, DEF-004, DEF-005, DEF-006, DEF-007, DEF-008, DEF-009, DEF-010, DEF-011, DEF-012, DEF-013, DEF-014, DEF-015, DEF-016, DEF-018, DEF-019, DEF-020, DEF-021, DEF-027, DEF-028 |
+| Open | 3 | DEF-001, DEF-027, DEF-028 |
 | **Total** | **38** | |
 
 | Severity | Open or unconfirmed |
@@ -82,7 +81,7 @@
 | Low | 9: DEF-006, DEF-007, DEF-008, DEF-014, DEF-016, DEF-017, DEF-021, DEF-027, DEF-028 |
 
 **Critical or High defects not yet closed:** DEF-005, DEF-022, DEF-023, DEF-024.
-DEF-005 is open (UX-005 is not accepted). DEF-022 to DEF-026 were fixed and the related items accepted (D-023, D-024), but no defect-level retest is recorded.
+A fixed defect stays "fixed, closure not confirmed" until an independent retest is recorded (rule 4), so these still block the related acceptances.
 
 ## 4. R1 obligations that are not defect rows
 
@@ -90,20 +89,19 @@ Requirements and couplings that were deferred on purpose. They are kept visible 
 
 | Obligation | Where recorded | Related defects |
 |---|---|---|
-| Text scaling and reflow on existing screens (UX-003 AC3); UX-003 stays QA FAILED | D-021; [UX-003 §7](design/UX-003-typography.md#7-text-scaling-ac3) | DEF-018 to DEF-021 |
+| Text scaling and reflow on existing screens (UX-003 AC3): fixed in R1 step 4, UX-003 READY FOR RETEST | D-021, D-026; [UX-003 §7](design/UX-003-typography.md#7-text-scaling-ac3) | DEF-018 to DEF-021 |
 | Screen migration to tokens and the type scale | D-012, D-013, RC-006; [UX-002](design/UX-002-design-tokens.md) | DEF-009, DEF-010 |
 | Route existing unchecked fraction functions through the checked ones | D-024, D-025; [ARCH-003 §5](architecture/ARCH-003-maths.md) | DEF-027 |
 | Kit duplicate-trap exception (14 preview templates) | D-024, D-025; [ARCH-002 §4](architecture/ARCH-002-question-schema.md) | DEF-028 |
 | Kit marking versus the comparison contract, before any marking uses the question schema (`TC-ARCH-002.1.13`) | D-025 | DEF-038 |
 | Couplings K-1 to K-6 | [ARCH-001 §4](architecture/ARCH-001-architecture.md) | none |
-| Lessons complete on traversal (FR-011 AC3, `TC-FR-011.3.1`) | [STATUS.md](STATUS.md) | none |
-| Wiring the evidence rules, lesson schema additions, question schema and tokens into the app | RC-005, RC-006; [step-4 handoff](reports/R0-step4-handoff.md) | DEF-024 to DEF-026 (specification part fixed) |
+| Lessons complete on evidence (FR-011 AC3): done in R1 step 4, awaiting review | D-026, RC-009 | none |
+| Wiring the lesson schema additions, question schema and remaining tokens into the app (the evidence rules were wired in R1 step 4) | RC-005, RC-006, D-026; [step-4 handoff](reports/R0-step4-handoff.md) | DEF-024 to DEF-026 (specification part fixed) |
 
 ## 5. Decisions needed
 
-1. **DEF-022 to DEF-026:** confirm closure (the acceptances in D-023 and D-024 did not record defect-level retests), or ask QA to retest them.
-2. **DEF-011 to DEF-017:** triage. They have no scheduling decision. Say which are fixed in R1 and which, if any, are deferred past it.
-3. **DEF-001 to DEF-008:** D-004 schedules the fixes for R1. DEF-001 (island list on Home) needs a Product Owner call on whether it is a defect given the R1 Fractions-first scope.
+1. **Independent retest** of every defect in state "fixed, closure not confirmed" (§3). For DEF-022 to DEF-026 the acceptances in D-023 and D-024 did not record defect-level retests.
+2. **DEF-001:** a Product Owner call on whether starting every new child on Fractions is a defect, given the R1 Fractions-first scope. It is unchanged.
 
 ## 6. The register
 
@@ -112,26 +110,26 @@ Columns are shortened here; every field is in the CSV. Severity is as logged; pr
 | ID | Title | Sev | Pri | State | Affects | Fix | Retest | Release impact |
 |---|---|---|---|---|---|---|---|---|
 | **DEF-001** | src/topics/index.ts (DEFAULT_TOPIC_ID = TOPICS[0]) | Medium | P2 | Open | UX-005; MAST-003 | — | Not retested | Needs an explicit Product Owner decision before release (backlog §9); scheduled for R1 by D-004 |
-| **DEF-002** | KidHomeScreen.tsx hero | Medium | P2 | Open | UX-005; MAST-003 | — | Not retested | Needs an explicit Product Owner decision before release (backlog §9); scheduled for R1 by D-004 |
-| **DEF-003** | KidHomeScreen.tsx (brandNew ignores lesson progress) | Medium | P2 | Open | UX-005; MAST-003 | — | Not retested | Needs an explicit Product Owner decision before release (backlog §9); scheduled for R1 by D-004 |
-| **DEF-004** | KidHomeScreen.tsx | Medium | P2 | Open | UX-005; MAST-003 | — | Not retested | Needs an explicit Product Owner decision before release (backlog §9); scheduled for R1 by D-004 |
-| **DEF-005** | AppShell.tsx Lab tab, LessonStudioScreen.tsx:31 | High | P2 | Open | UX-005 AC3 | — | Not retested | Blocks release (backlog §9) |
-| **DEF-006** | KidHomeScreen.tsx footer | Low | P3 | Open | UX-005; MAST-003 | — | Not retested | Can be scheduled after release if documented (backlog §9); scheduled for R1 by D-004 |
-| **DEF-007** | KidHomeScreen.tsx floating hero card | Low | P3 | Open | UX-005; MAST-003 | — | Not retested | Can be scheduled after release if documented (backlog §9); scheduled for R1 by D-004 |
-| **DEF-008** | src/components/kid/kidText.ts | Low | P3 | Open | No specific acceptance criterion (copy accuracy) | — | Not retested | Can be scheduled after release if documented (backlog §9); scheduled for R1 by D-004 |
-| **DEF-009** | Progress.tsx:84, WorkedExample.tsx:112, RecheckScreen.tsx:98 | Medium | P2 | Open | UX-002; UX-004 | — | Not retested | Needs an explicit Product Owner decision before release (backlog §9) |
-| **DEF-010** | ParentScreen.tsx:106 (text-[0.65rem], about 10px), KidHomeScreen.tsx:153 (13px) | Medium | P2 | Open | UX-003 | — | Not retested | Needs an explicit Product Owner decision before release (backlog §9) |
-| **DEF-011** | KidHomeScreen.tsx (only link to /start) | Medium | P2 | Open | FR-001; FR-011; CUR-002 | — | Not retested | Needs an explicit Product Owner decision before release (backlog §9) |
-| **DEF-012** | ParentScreen, JourneyScreen, ResultsScreen | Medium | P2 | Open | MAST-003; PARENT-002 | — | Not retested | Needs an explicit Product Owner decision before release (backlog §9) |
-| **DEF-013** | src/topics/recommend.ts (order restarts in each world) | Medium | P2 | Open | FR-011; CUR-002 | — | Not retested | Needs an explicit Product Owner decision before release (backlog §9) |
-| **DEF-014** | /practice, /lab, /start redirects in next.config.ts | Low | P3 | Open | No specific acceptance criterion (redirects) | — | Not retested | Can be scheduled after release if documented (backlog §9) |
-| **DEF-015** | inputs.tsx:110, kit/Input.tsx:59 (outline-none) | Medium | P2 | Open | UX-007 | — | Not retested | Needs an explicit Product Owner decision before release (backlog §9) |
-| **DEF-016** | public/preview, /sky and /crystal | Low | P3 | Open | No specific acceptance criterion (public preview pages) | — | Not retested | Can be scheduled after release if documented (backlog §9) |
-| **DEF-017** | README.md, src/app/layout.tsx metadata, docs/ROADMAP.md | Low | P3 | Partly fixed | GOV-002 | CH-005 (README, ROADMAP, DESIGN banners) | Not retested | Can be scheduled after release if documented (backlog §9) |
-| **DEF-018** | App header overflows at 320px and at 200% text | Medium | P2 | Open | UX-003 AC3; UX-005; UX-007 | — | Not retested | Needs an explicit Product Owner decision before release (backlog §9); blocks UX-003 acceptance |
-| **DEF-019** | Island lesson descriptions clamped to two lines | Medium | P2 | Open | UX-003 AC3; FR-001 | — | Not retested | Needs an explicit Product Owner decision before release (backlog §9); blocks UX-003 acceptance |
-| **DEF-020** | Grown-ups cards overflow on a phone at 200% text | Medium | P2 | Open | UX-003 AC3; PARENT | — | Not retested | Needs an explicit Product Owner decision before release (backlog §9); blocks UX-003 acceptance |
-| **DEF-021** | Lesson title truncated at 200% text | Low | P3 | Open | UX-003 AC3 | — | Not retested | Can be scheduled after release if documented (backlog §9); blocks UX-003 acceptance |
+| **DEF-002** | KidHomeScreen.tsx hero | Medium | P2 | Fixed, closure not confirmed | UX-005; MAST-003 | `98e46d8` | Not retested | Needs an explicit Product Owner decision before release (backlog §9); scheduled for R1 by D-004 |
+| **DEF-003** | KidHomeScreen.tsx (brandNew ignores lesson progress) | Medium | P2 | Fixed, closure not confirmed | UX-005; MAST-003 | `98e46d8` | Not retested | Needs an explicit Product Owner decision before release (backlog §9); scheduled for R1 by D-004 |
+| **DEF-004** | KidHomeScreen.tsx | Medium | P2 | Fixed, closure not confirmed | UX-005; MAST-003 | `98e46d8` | Not retested | Needs an explicit Product Owner decision before release (backlog §9); scheduled for R1 by D-004 |
+| **DEF-005** | AppShell.tsx Lab tab, LessonStudioScreen.tsx:31 | High | P2 | Fixed, closure not confirmed | UX-005 AC3 | `98e46d8` | Not retested | Blocks release until fixed and retested (backlog §9); fixed, awaiting independent retest |
+| **DEF-006** | KidHomeScreen.tsx footer | Low | P3 | Fixed, closure not confirmed | UX-005; MAST-003 | `98e46d8` | Not retested | Can be scheduled after release if documented (backlog §9); scheduled for R1 by D-004 |
+| **DEF-007** | KidHomeScreen.tsx floating hero card | Low | P3 | Fixed, closure not confirmed | UX-005; MAST-003 | `98e46d8` | Not retested | Can be scheduled after release if documented (backlog §9); scheduled for R1 by D-004 |
+| **DEF-008** | src/components/kid/kidText.ts | Low | P3 | Fixed, closure not confirmed | No specific acceptance criterion (copy accuracy) | `98e46d8` | Not retested | Can be scheduled after release if documented (backlog §9); scheduled for R1 by D-004 |
+| **DEF-009** | Progress.tsx:84, WorkedExample.tsx:112, RecheckScreen.tsx:98 | Medium | P2 | Fixed, closure not confirmed | UX-002; UX-004 | `98e46d8` | Not retested | Needs an explicit Product Owner decision before release (backlog §9) |
+| **DEF-010** | ParentScreen.tsx:106 (text-[0.65rem], about 10px), KidHomeScreen.tsx:153 (13px) | Medium | P2 | Fixed, closure not confirmed | UX-003 | `98e46d8` | Not retested | Needs an explicit Product Owner decision before release (backlog §9) |
+| **DEF-011** | KidHomeScreen.tsx (only link to /start) | Medium | P2 | Fixed, closure not confirmed | FR-001; FR-011; CUR-002 | `98e46d8` | Not retested | Needs an explicit Product Owner decision before release (backlog §9) |
+| **DEF-012** | ParentScreen, JourneyScreen, ResultsScreen | Medium | P2 | Fixed, closure not confirmed | MAST-003; PARENT-002 | `98e46d8` | Not retested | Needs an explicit Product Owner decision before release (backlog §9) |
+| **DEF-013** | src/topics/recommend.ts (order restarts in each world) | Medium | P2 | Fixed, closure not confirmed | FR-011; CUR-002 | `98e46d8` | Not retested | Needs an explicit Product Owner decision before release (backlog §9) |
+| **DEF-014** | /practice, /lab, /start redirects in next.config.ts | Low | P3 | Fixed, closure not confirmed | No specific acceptance criterion (redirects) | `98e46d8` | Not retested | Can be scheduled after release if documented (backlog §9) |
+| **DEF-015** | inputs.tsx:110, kit/Input.tsx:59 (outline-none) | Medium | P2 | Fixed, closure not confirmed | UX-007 | `98e46d8` | Not retested | Needs an explicit Product Owner decision before release (backlog §9) |
+| **DEF-016** | public/preview, /sky and /crystal | Low | P3 | Fixed, closure not confirmed | No specific acceptance criterion (public preview pages) | `98e46d8` | Not retested | Can be scheduled after release if documented (backlog §9) |
+| **DEF-017** | README.md, src/app/layout.tsx metadata, docs/ROADMAP.md | Low | P3 | Fixed, closure not confirmed | GOV-002 | `98e46d8` | Not retested | Can be scheduled after release if documented (backlog §9) |
+| **DEF-018** | App header overflows at 320px and at 200% text | Medium | P2 | Fixed, closure not confirmed | UX-003 AC3; UX-005; UX-007 | `98e46d8` | Not retested | Needs an explicit Product Owner decision before release (backlog §9); blocks UX-003 acceptance |
+| **DEF-019** | Island lesson descriptions clamped to two lines | Medium | P2 | Fixed, closure not confirmed | UX-003 AC3; FR-001 | `98e46d8` | Not retested | Needs an explicit Product Owner decision before release (backlog §9); blocks UX-003 acceptance |
+| **DEF-020** | Grown-ups cards overflow on a phone at 200% text | Medium | P2 | Fixed, closure not confirmed | UX-003 AC3; PARENT | `98e46d8` | Not retested | Needs an explicit Product Owner decision before release (backlog §9); blocks UX-003 acceptance |
+| **DEF-021** | Lesson title truncated at 200% text | Low | P3 | Fixed, closure not confirmed | UX-003 AC3 | `98e46d8` | Not retested | Can be scheduled after release if documented (backlog §9); blocks UX-003 acceptance |
 | **DEF-022** | White labels and small fraction digits below 4.5:1 on the specimen; the contrast test accepted 4:1 | High | P1 | Fixed, closure not confirmed | UX-002; UX-003; UX-004 | `6a42662` | Not retested | Blocks release until fixed (backlog §9); fixed in `6a42662` |
 | **DEF-023** | Architecture tests missed side-effect, dynamic and require imports, browser storage and .tsx files | High | P1 | Fixed, closure not confirmed | ARCH-001 | `8910dff` | Not retested | Blocks release until fixed (backlog §9); fixed in `8910dff` |
 | **DEF-024** | Answers after hints or retries counted as lesson evidence; mastery and placement precedence unclear | High | P1 | Fixed, closure not confirmed | CUR-002 AC3; CUR-003 | `48f7925` | Not retested | Blocks release until fixed (backlog §9); fixed (specification) in `48f7925`; wiring it into the app is R1 |
@@ -162,247 +160,247 @@ Columns are shortened here; every field is in the CSV. Severity is as logged; pr
 - **Evidence:** [GOV-001 audit §12](GOV-001-repository-audit.md#12-defects-found-provisional): production click-through at 390px and 1280px, 3 Nov 2026. **Tested on:** `bbf210a` (`main`); branch `1c14d24` has the same tree.
 - **Fix:** Open. **Retest:** Not retested.
 - **Release impact:** Needs an explicit Product Owner decision before release (backlog §9); scheduled for R1 by D-004. **Deferral:** D-004: logged as a defect and fixed in R1, not R0
-- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). Product Owner call: matches the R1 Fractions-first scope
+- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). Product Owner call: matches the R1 Fractions-first scope Not changed in R1 step 4: new learners start on Fractions, which matches the R1 Fractions-first scope. Still needs a Product Owner call.
 
 ### DEF-002: KidHomeScreen.tsx hero
 
-- **Severity / priority:** Medium / P2. **State:** Open. **Owner:** Delivery engineer.
+- **Severity / priority:** Medium / P2. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** UX-005; MAST-003
 - **Steps:** Start any non-Fractions island, return home
 - **Expected:** Copy names the current island
 - **Actual:** "shows me which fraction lessons you already know" on every island
 - **Evidence:** [GOV-001 audit §12](GOV-001-repository-audit.md#12-defects-found-provisional): production click-through at 390px and 1280px, 3 Nov 2026. **Tested on:** `bbf210a` (`main`); branch `1c14d24` has the same tree.
-- **Fix:** Open. **Retest:** Not retested.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
 - **Release impact:** Needs an explicit Product Owner decision before release (backlog §9); scheduled for R1 by D-004. **Deferral:** D-004: logged as a defect and fixed in R1, not R0
-- **History:** Observed 3 Nov 2026 (GOV-001 audit §12).
+- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). Fixed 9 Nov 2026 in R1 step 4 (D-026).
 
 ### DEF-003: KidHomeScreen.tsx (brandNew ignores lesson progress)
 
-- **Severity / priority:** Medium / P2. **State:** Open. **Owner:** Delivery engineer.
+- **Severity / priority:** Medium / P2. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** UX-005; MAST-003
 - **Steps:** Do step 1 of a Decimals lesson, go home
 - **Expected:** Hero says "carry on" with that lesson
 - **Actual:** Hero says "Let's find your start! Play the warm-up", while the lesson card says "Step 2 of 4"
 - **Evidence:** [GOV-001 audit §12](GOV-001-repository-audit.md#12-defects-found-provisional): production click-through at 390px and 1280px, 3 Nov 2026. **Tested on:** `bbf210a` (`main`); branch `1c14d24` has the same tree.
-- **Fix:** Open. **Retest:** Not retested.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
 - **Release impact:** Needs an explicit Product Owner decision before release (backlog §9); scheduled for R1 by D-004. **Deferral:** D-004: logged as a defect and fixed in R1, not R0
-- **History:** Observed 3 Nov 2026 (GOV-001 audit §12).
+- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). Fixed 9 Nov 2026 in R1 step 4 (D-026).
 
 ### DEF-004: KidHomeScreen.tsx
 
-- **Severity / priority:** Medium / P2. **State:** Open. **Owner:** Delivery engineer.
+- **Severity / priority:** Medium / P2. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** UX-005; MAST-003
 - **Steps:** Open home
 - **Expected:** Other islands are visible or reachable from home
 - **Actual:** Only the active island is shown. The "World map" card text "and the ones on the way" is out of date.
 - **Evidence:** [GOV-001 audit §12](GOV-001-repository-audit.md#12-defects-found-provisional): production click-through at 390px and 1280px, 3 Nov 2026. **Tested on:** `bbf210a` (`main`); branch `1c14d24` has the same tree.
-- **Fix:** Open. **Retest:** Not retested.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
 - **Release impact:** Needs an explicit Product Owner decision before release (backlog §9); scheduled for R1 by D-004. **Deferral:** D-004: logged as a defect and fixed in R1, not R0
-- **History:** Observed 3 Nov 2026 (GOV-001 audit §12).
+- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). Fixed 9 Nov 2026 in R1 step 4 (D-026).
 
 ### DEF-005: AppShell.tsx Lab tab, LessonStudioScreen.tsx:31
 
-- **Severity / priority:** High / P2. **State:** Open. **Owner:** Delivery engineer.
+- **Severity / priority:** High / P2. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** UX-005 AC3
 - **Steps:** Be on any island except Fractions, tap Lab
 - **Expected:** A working lab, or no Lab tab
 - **Actual:** "This island doesn't have a lab yet."
 - **Evidence:** [GOV-001 audit §12](GOV-001-repository-audit.md#12-defects-found-provisional): production click-through at 390px and 1280px, 3 Nov 2026. **Tested on:** `bbf210a` (`main`); branch `1c14d24` has the same tree.
-- **Fix:** Open. **Retest:** Not retested.
-- **Release impact:** Blocks release (backlog §9). **Deferral:** D-004: logged as a defect and fixed in R1, not R0
-- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). High: UX-005 forbids placeholder destinations.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
+- **Release impact:** Blocks release until fixed and retested (backlog §9); fixed, awaiting independent retest. **Deferral:** D-004: logged as a defect and fixed in R1, not R0
+- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). High: UX-005 forbids placeholder destinations. Fixed 9 Nov 2026 in R1 step 4 (D-026). Islands without a lab show no Lab tab; /lab on such an island opens its map.
 
 ### DEF-006: KidHomeScreen.tsx footer
 
-- **Severity / priority:** Low / P3. **State:** Open. **Owner:** Delivery engineer.
+- **Severity / priority:** Low / P3. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** UX-005; MAST-003
 - **Steps:** New child, home
 - **Expected:** "Play today to start a streak"
 - **Actual:** "Come back tomorrow and start a streak!"
 - **Evidence:** [GOV-001 audit §12](GOV-001-repository-audit.md#12-defects-found-provisional): production click-through at 390px and 1280px, 3 Nov 2026. **Tested on:** `bbf210a` (`main`); branch `1c14d24` has the same tree.
-- **Fix:** Open. **Retest:** Not retested.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
 - **Release impact:** Can be scheduled after release if documented (backlog §9); scheduled for R1 by D-004. **Deferral:** D-004: logged as a defect and fixed in R1, not R0
-- **History:** Observed 3 Nov 2026 (GOV-001 audit §12).
+- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). Fixed 9 Nov 2026 in R1 step 4 (D-026).
 
 ### DEF-007: KidHomeScreen.tsx floating hero card
 
-- **Severity / priority:** Low / P3. **State:** Open. **Owner:** Delivery engineer.
+- **Severity / priority:** Low / P3. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** UX-005; MAST-003
 - **Steps:** No next lesson
 - **Expected:** The island's own name
 - **Actual:** Says "Fractions island" whatever the island
 - **Evidence:** [GOV-001 audit §12](GOV-001-repository-audit.md#12-defects-found-provisional): production click-through at 390px and 1280px, 3 Nov 2026. **Tested on:** `bbf210a` (`main`); branch `1c14d24` has the same tree.
-- **Fix:** Open. **Retest:** Not retested.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
 - **Release impact:** Can be scheduled after release if documented (backlog §9); scheduled for R1 by D-004. **Deferral:** D-004: logged as a defect and fixed in R1, not R0
-- **History:** Observed 3 Nov 2026 (GOV-001 audit §12).
+- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). Fixed 9 Nov 2026 in R1 step 4 (D-026).
 
 ### DEF-008: src/components/kid/kidText.ts
 
-- **Severity / priority:** Low / P3. **State:** Open. **Owner:** Delivery engineer.
+- **Severity / priority:** Low / P3. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** No specific acceptance criterion (copy accuracy)
 - **Steps:** Finish an island that has no lab
 - **Expected:** No mention of the lab
 - **Actual:** "…or build in the lab"
 - **Evidence:** [GOV-001 audit §12](GOV-001-repository-audit.md#12-defects-found-provisional): production click-through at 390px and 1280px, 3 Nov 2026. **Tested on:** `bbf210a` (`main`); branch `1c14d24` has the same tree.
-- **Fix:** Open. **Retest:** Not retested.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
 - **Release impact:** Can be scheduled after release if documented (backlog §9); scheduled for R1 by D-004. **Deferral:** D-004: logged as a defect and fixed in R1, not R0
-- **History:** Observed 3 Nov 2026 (GOV-001 audit §12).
+- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). Fixed 9 Nov 2026 in R1 step 4 (D-026).
 
 ### DEF-009: Progress.tsx:84, WorkedExample.tsx:112, RecheckScreen.tsx:98
 
-- **Severity / priority:** Medium / P2. **State:** Open. **Owner:** Delivery engineer.
+- **Severity / priority:** Medium / P2. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** UX-002; UX-004
 - **Steps:** View a "Passed check" badge, a "Let's do it together" chip, or a recheck notice
 - **Expected:** A styled badge, chip or panel
 - **Actual:** `bg-violet-*` and `text-violet` aren't defined tokens, so they render with no colour
 - **Evidence:** [GOV-001 audit §12](GOV-001-repository-audit.md#12-defects-found-provisional): production click-through at 390px and 1280px, 3 Nov 2026. **Tested on:** `bbf210a` (`main`); branch `1c14d24` has the same tree.
-- **Fix:** Open. **Retest:** Not retested.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
 - **Release impact:** Needs an explicit Product Owner decision before release (backlog §9). **Deferral:** Screen migration is R1 (D-012, D-013, RC-006); DEF-009 is fixed by the R1 token migration, DEF-010 by the R1 type-scale migration
-- **History:** Observed 3 Nov 2026 (GOV-001 audit §12).
+- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). Fixed 9 Nov 2026 in R1 step 4 (D-026). Undefined violet classes replaced with existing tokens (example and notice); no violet token added (D-013).
 
 ### DEF-010: ParentScreen.tsx:106 (text-[0.65rem], about 10px), KidHomeScreen.tsx:153 (13px)
 
-- **Severity / priority:** Medium / P2. **State:** Open. **Owner:** Delivery engineer.
+- **Severity / priority:** Medium / P2. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** UX-003
 - **Steps:** Grown-ups overview; home streak row
 - **Expected:** At least 15px (`DESIGN.md`)
 - **Actual:** 10px and 13px text
 - **Evidence:** [GOV-001 audit §12](GOV-001-repository-audit.md#12-defects-found-provisional): production click-through at 390px and 1280px, 3 Nov 2026. **Tested on:** `bbf210a` (`main`); branch `1c14d24` has the same tree.
-- **Fix:** Open. **Retest:** Not retested.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
 - **Release impact:** Needs an explicit Product Owner decision before release (backlog §9). **Deferral:** Screen migration is R1 (D-012, D-013, RC-006); DEF-009 is fixed by the R1 token migration, DEF-010 by the R1 type-scale migration
-- **History:** Observed 3 Nov 2026 (GOV-001 audit §12).
+- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). Fixed 9 Nov 2026 in R1 step 4 (D-026). 10px and 13px text raised to the 15px label size.
 
 ### DEF-011: KidHomeScreen.tsx (only link to /start)
 
-- **Severity / priority:** Medium / P2. **State:** Open. **Owner:** Delivery engineer.
+- **Severity / priority:** Medium / P2. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** FR-001; FR-011; CUR-002
 - **Steps:** Move to a second island
 - **Expected:** That island's warm-up can be offered
 - **Actual:** Warm-up only reachable by typing the URL
 - **Evidence:** [GOV-001 audit §12](GOV-001-repository-audit.md#12-defects-found-provisional): production click-through at 390px and 1280px, 3 Nov 2026. **Tested on:** `bbf210a` (`main`); branch `1c14d24` has the same tree.
-- **Fix:** Open. **Retest:** Not retested.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
 - **Release impact:** Needs an explicit Product Owner decision before release (backlog §9). **Deferral:** None approved: Product Owner decision pending
-- **History:** Observed 3 Nov 2026 (GOV-001 audit §12).
+- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). Fixed 9 Nov 2026 in R1 step 4 (D-026).
 
 ### DEF-012: ParentScreen, JourneyScreen, ResultsScreen
 
-- **Severity / priority:** Medium / P2. **State:** Open. **Owner:** Delivery engineer.
+- **Severity / priority:** Medium / P2. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** MAST-003; PARENT-002
 - **Steps:** A child works on two islands
 - **Expected:** A grown-up can see each island
 - **Actual:** Only the active island is shown, with no picker
 - **Evidence:** [GOV-001 audit §12](GOV-001-repository-audit.md#12-defects-found-provisional): production click-through at 390px and 1280px, 3 Nov 2026. **Tested on:** `bbf210a` (`main`); branch `1c14d24` has the same tree.
-- **Fix:** Open. **Retest:** Not retested.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
 - **Release impact:** Needs an explicit Product Owner decision before release (backlog §9). **Deferral:** None approved: Product Owner decision pending
-- **History:** Observed 3 Nov 2026 (GOV-001 audit §12).
+- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). Fixed 9 Nov 2026 in R1 step 4 (D-026). Grown-ups pages have an island picker for every island the child has worked on.
 
 ### DEF-013: src/topics/recommend.ts (order restarts in each world)
 
-- **Severity / priority:** Medium / P2. **State:** Open. **Owner:** Delivery engineer.
+- **Severity / priority:** Medium / P2. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** FR-011; CUR-002
 - **Steps:** Finish an island
 - **Expected:** The next island follows the map
 - **Actual:** Jumps across worlds by per-world order number
 - **Evidence:** [GOV-001 audit §12](GOV-001-repository-audit.md#12-defects-found-provisional): production click-through at 390px and 1280px, 3 Nov 2026. **Tested on:** `bbf210a` (`main`); branch `1c14d24` has the same tree.
-- **Fix:** Open. **Retest:** Not retested.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
 - **Release impact:** Needs an explicit Product Owner decision before release (backlog §9). **Deferral:** None approved: Product Owner decision pending
-- **History:** Observed 3 Nov 2026 (GOV-001 audit §12).
+- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). Fixed 9 Nov 2026 in R1 step 4 (D-026). Islands are ordered world by world, then by order within the world.
 
 ### DEF-014: /practice, /lab, /start redirects in next.config.ts
 
-- **Severity / priority:** Low / P3. **State:** Open. **Owner:** Delivery engineer.
+- **Severity / priority:** Low / P3. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** No specific acceptance criterion (redirects)
 - **Steps:** Type `/practice`
 - **Expected:** The current island's practice
 - **Actual:** Always Fractions (in-app links are fine)
 - **Evidence:** [GOV-001 audit §12](GOV-001-repository-audit.md#12-defects-found-provisional): production click-through at 390px and 1280px, 3 Nov 2026. **Tested on:** `bbf210a` (`main`); branch `1c14d24` has the same tree.
-- **Fix:** Open. **Retest:** Not retested.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
 - **Release impact:** Can be scheduled after release if documented (backlog §9). **Deferral:** None approved: Product Owner decision pending
-- **History:** Observed 3 Nov 2026 (GOV-001 audit §12).
+- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). Fixed 9 Nov 2026 in R1 step 4 (D-026). /practice, /lab and /start are pages that open the learner's current island.
 
 ### DEF-015: inputs.tsx:110, kit/Input.tsx:59 (outline-none)
 
-- **Severity / priority:** Medium / P2. **State:** Open. **Owner:** Delivery engineer.
+- **Severity / priority:** Medium / P2. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** UX-007
 - **Steps:** Tab into a number box
 - **Expected:** A clear focus ring
 - **Actual:** Only the border colour changes
 - **Evidence:** [GOV-001 audit §12](GOV-001-repository-audit.md#12-defects-found-provisional): production click-through at 390px and 1280px, 3 Nov 2026. **Tested on:** `bbf210a` (`main`); branch `1c14d24` has the same tree.
-- **Fix:** Open. **Retest:** Not retested.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
 - **Release impact:** Needs an explicit Product Owner decision before release (backlog §9). **Deferral:** None approved: Product Owner decision pending
-- **History:** Observed 3 Nov 2026 (GOV-001 audit §12).
+- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). Fixed 9 Nov 2026 in R1 step 4 (D-026).
 
 ### DEF-016: public/preview, /sky and /crystal
 
-- **Severity / priority:** Low / P3. **State:** Open. **Owner:** Delivery engineer.
+- **Severity / priority:** Low / P3. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** No specific acceptance criterion (public preview pages)
 - **Steps:** Visit `/sky`
 - **Expected:** No public mock-ups
 - **Actual:** Design mock-ups are public
 - **Evidence:** [GOV-001 audit §12](GOV-001-repository-audit.md#12-defects-found-provisional): production click-through at 390px and 1280px, 3 Nov 2026. **Tested on:** `bbf210a` (`main`); branch `1c14d24` has the same tree.
-- **Fix:** Open. **Retest:** Not retested.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
 - **Release impact:** Can be scheduled after release if documented (backlog §9). **Deferral:** None approved: Product Owner decision pending
-- **History:** Observed 3 Nov 2026 (GOV-001 audit §12).
+- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). Fixed 9 Nov 2026 in R1 step 4 (D-026). Mock-ups moved to docs/design-previews/; /sky and /crystal return 404.
 
 ### DEF-017: README.md, src/app/layout.tsx metadata, docs/ROADMAP.md
 
-- **Severity / priority:** Low / P3. **State:** Partly fixed. **Owner:** Delivery engineer.
+- **Severity / priority:** Low / P3. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** GOV-002
 - **Steps:** Read them
 - **Expected:** They describe the current product
 - **Actual:** They say "Fractions adventure" and "only island is fractions"
 - **Evidence:** [GOV-001 audit §12](GOV-001-repository-audit.md#12-defects-found-provisional): production click-through at 390px and 1280px, 3 Nov 2026. **Tested on:** `bbf210a` (`main`); branch `1c14d24` has the same tree.
-- **Fix:** Partly fixed (CH-005 (README, ROADMAP, DESIGN banners)). **Retest:** Not retested.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
 - **Release impact:** Can be scheduled after release if documented (backlog §9). **Deferral:** None approved: Product Owner decision pending
-- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). README part fixed under GOV-002 (CH-005); site metadata in `src/app/layout.tsx` still open (code change, R1).
+- **History:** Observed 3 Nov 2026 (GOV-001 audit §12). README part fixed under GOV-002 (CH-005); site metadata in `src/app/layout.tsx` still open (code change, R1). Fixed 9 Nov 2026 in R1 step 4 (D-026). Site title and description in src/app/layout.tsx updated.
 
 ### DEF-018: App header overflows at 320px and at 200% text
 
-- **Severity / priority:** Medium / P2. **State:** Open. **Owner:** Delivery engineer.
+- **Severity / priority:** Medium / P2. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** UX-003 AC3; UX-005; UX-007
 - **Steps:** Open any kid screen with a production build; set the root font size to 200%, or the viewport to 320px wide; check for sideways scroll
 - **Expected:** The header wraps or collapses; no sideways scroll; tab labels stay legible
 - **Actual:** Sideways scroll of 232px (phone) and 684px (desktop) at 200% text, 25px at 320px; stars, streak and grown-ups link pushed off screen; bottom tab labels collide
 - **Evidence:** [UX-003 §7](design/UX-003-typography.md#7-text-scaling-ac3); raw results in [`design/evidence/data`](design/evidence/data/) and [`verification/results`](verification/results/). **Tested on:** `4431ae0` (production build, developer browser evidence); reproduced at `48f7925` and `d8ae9c0`.
-- **Fix:** Open. **Retest:** Not retested.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
 - **Release impact:** Needs an explicit Product Owner decision before release (backlog §9); blocks UX-003 acceptance. **Deferral:** Fix and retest early in R1 (D-021)
-- **History:** Found 4 Nov 2026 by the step-2 text-scaling check. UX-003 stays QA FAILED (D-021).
+- **History:** Found 4 Nov 2026 by the step-2 text-scaling check. UX-003 stays QA FAILED (D-021). Fixed 9 Nov 2026 in R1 step 4 (D-026). The header, bottom tabs and buttons wrap instead of overflowing.
 
 ### DEF-019: Island lesson descriptions clamped to two lines
 
-- **Severity / priority:** Medium / P2. **State:** Open. **Owner:** Delivery engineer.
+- **Severity / priority:** Medium / P2. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** UX-003 AC3; FR-001
 - **Steps:** Open `/t/fractions` at 100% text on 390px or 1280px; read the lesson descriptions
 - **Expected:** Descriptions show in full
 - **Actual:** Descriptions are cut to two lines (9 of 10 on phone, 4 on desktop) even at normal size; the island hero also clips at 200% text
 - **Evidence:** [UX-003 §7](design/UX-003-typography.md#7-text-scaling-ac3); raw results in [`design/evidence/data`](design/evidence/data/) and [`verification/results`](verification/results/). **Tested on:** `4431ae0` (production build, developer browser evidence); reproduced at `48f7925` and `d8ae9c0`.
-- **Fix:** Open. **Retest:** Not retested.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
 - **Release impact:** Needs an explicit Product Owner decision before release (backlog §9); blocks UX-003 acceptance. **Deferral:** Fix and retest early in R1 (D-021)
-- **History:** Found 4 Nov 2026 by the step-2 text-scaling check.
+- **History:** Found 4 Nov 2026 by the step-2 text-scaling check. Fixed 9 Nov 2026 in R1 step 4 (D-026). The island map is a flow layout; lesson descriptions are no longer clamped.
 
 ### DEF-020: Grown-ups cards overflow on a phone at 200% text
 
-- **Severity / priority:** Medium / P2. **State:** Open. **Owner:** Delivery engineer.
+- **Severity / priority:** Medium / P2. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** UX-003 AC3; PARENT
 - **Steps:** Pass the grown-ups gate at 390px with the root font size at 200%
 - **Expected:** Cards reflow within the screen
 - **Actual:** Cards overflow sideways by 115px
 - **Evidence:** [UX-003 §7](design/UX-003-typography.md#7-text-scaling-ac3); raw results in [`design/evidence/data`](design/evidence/data/) and [`verification/results`](verification/results/). **Tested on:** `4431ae0` (production build, developer browser evidence); reproduced at `48f7925` and `d8ae9c0`.
-- **Fix:** Open. **Retest:** Not retested.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
 - **Release impact:** Needs an explicit Product Owner decision before release (backlog §9); blocks UX-003 acceptance. **Deferral:** Fix and retest early in R1 (D-021)
-- **History:** Found 4 Nov 2026 by the step-2 text-scaling check.
+- **History:** Found 4 Nov 2026 by the step-2 text-scaling check. Fixed 9 Nov 2026 in R1 step 4 (D-026). Grown-ups cards reflow (grid tracks can shrink; title row wraps).
 
 ### DEF-021: Lesson title truncated at 200% text
 
-- **Severity / priority:** Low / P3. **State:** Open. **Owner:** Delivery engineer.
+- **Severity / priority:** Low / P3. **State:** Fixed, closure not confirmed. **Owner:** Delivery engineer.
 - **Affects:** UX-003 AC3
 - **Steps:** Open a lesson step with the root font size at 200%
 - **Expected:** The title wraps
 - **Actual:** The title in the lesson header is cut with an ellipsis
 - **Evidence:** [UX-003 §7](design/UX-003-typography.md#7-text-scaling-ac3); raw results in [`design/evidence/data`](design/evidence/data/) and [`verification/results`](verification/results/). **Tested on:** `4431ae0` (production build, developer browser evidence); reproduced at `48f7925` and `d8ae9c0`.
-- **Fix:** Open. **Retest:** Not retested.
+- **Fix:** Fixed (`98e46d8`). **Retest:** Not retested (Developer browser checks 9 Nov (r1-step4-checks.cjs, text-scaling.cjs); not independent.).
 - **Release impact:** Can be scheduled after release if documented (backlog §9); blocks UX-003 acceptance. **Deferral:** Fix and retest early in R1 (D-021)
-- **History:** Found 4 Nov 2026 by the step-2 text-scaling check.
+- **History:** Found 4 Nov 2026 by the step-2 text-scaling check. Fixed 9 Nov 2026 in R1 step 4 (D-026). The lesson title wraps instead of being cut.
 
 ### DEF-022: White labels and small fraction digits below 4.5:1 on the specimen; the contrast test accepted 4:1
 

@@ -82,24 +82,23 @@ for sv in ["Critical", "High", "Medium", "Low"]:
     ids = [r["id"] for r in sev_open if r["severity"] == sv]
     w(f"| {sv} | {len(ids)}{': ' + ', '.join(ids) if ids else ''} |")
 w("\n**Critical or High defects not yet closed:** " + (", ".join(r["id"] for r in sev_open if r["severity"] in ("Critical", "High")) or "none") + ".")
-w("DEF-005 is open (UX-005 is not accepted). DEF-022 to DEF-026 were fixed and the related items accepted (D-023, D-024), but no defect-level retest is recorded.\n")
+w("A fixed defect stays \"fixed, closure not confirmed\" until an independent retest is recorded (rule 4), so these still block the related acceptances.\n")
 w("## 4. R1 obligations that are not defect rows\n")
 w("Requirements and couplings that were deferred on purpose. They are kept visible here; they are not closed by anything above.\n")
 w("| Obligation | Where recorded | Related defects |\n|---|---|---|")
 for a, b, c in [
- ("Text scaling and reflow on existing screens (UX-003 AC3); UX-003 stays QA FAILED", "D-021; [UX-003 §7](design/UX-003-typography.md#7-text-scaling-ac3)", "DEF-018 to DEF-021"),
+ ("Text scaling and reflow on existing screens (UX-003 AC3): fixed in R1 step 4, UX-003 READY FOR RETEST", "D-021, D-026; [UX-003 §7](design/UX-003-typography.md#7-text-scaling-ac3)", "DEF-018 to DEF-021"),
  ("Screen migration to tokens and the type scale", "D-012, D-013, RC-006; [UX-002](design/UX-002-design-tokens.md)", "DEF-009, DEF-010"),
  ("Route existing unchecked fraction functions through the checked ones", "D-024, D-025; [ARCH-003 §5](architecture/ARCH-003-maths.md)", "DEF-027"),
  ("Kit duplicate-trap exception (14 preview templates)", "D-024, D-025; [ARCH-002 §4](architecture/ARCH-002-question-schema.md)", "DEF-028"),
  ("Kit marking versus the comparison contract, before any marking uses the question schema (`TC-ARCH-002.1.13`)", "D-025", "DEF-038"),
  ("Couplings K-1 to K-6", "[ARCH-001 §4](architecture/ARCH-001-architecture.md)", "none"),
- ("Lessons complete on traversal (FR-011 AC3, `TC-FR-011.3.1`)", "[STATUS.md](STATUS.md)", "none"),
- ("Wiring the evidence rules, lesson schema additions, question schema and tokens into the app", "RC-005, RC-006; [step-4 handoff](reports/R0-step4-handoff.md)", "DEF-024 to DEF-026 (specification part fixed)"),
+ ("Lessons complete on evidence (FR-011 AC3): done in R1 step 4, awaiting review", "D-026, RC-009", "none"),
+ ("Wiring the lesson schema additions, question schema and remaining tokens into the app (the evidence rules were wired in R1 step 4)", "RC-005, RC-006, D-026; [step-4 handoff](reports/R0-step4-handoff.md)", "DEF-024 to DEF-026 (specification part fixed)"),
 ]: w(f"| {a} | {b} | {c} |")
 w("\n## 5. Decisions needed\n")
-w("1. **DEF-022 to DEF-026:** confirm closure (the acceptances in D-023 and D-024 did not record defect-level retests), or ask QA to retest them.")
-w("2. **DEF-011 to DEF-017:** triage. They have no scheduling decision. Say which are fixed in R1 and which, if any, are deferred past it.")
-w("3. **DEF-001 to DEF-008:** D-004 schedules the fixes for R1. DEF-001 (island list on Home) needs a Product Owner call on whether it is a defect given the R1 Fractions-first scope.")
+w("1. **Independent retest** of every defect in state \"fixed, closure not confirmed\" (§3). For DEF-022 to DEF-026 the acceptances in D-023 and D-024 did not record defect-level retests.")
+w("2. **DEF-001:** a Product Owner call on whether starting every new child on Fractions is a defect, given the R1 Fractions-first scope. It is unchanged.")
 w("\n## 6. The register\n")
 w("Columns are shortened here; every field is in the CSV. Severity is as logged; priority was assigned in this round for DEF-001 to DEF-017 (the original audit set severity only).\n")
 w("| ID | Title | Sev | Pri | State | Affects | Fix | Retest | Release impact |\n|---|---|---|---|---|---|---|---|---|")
