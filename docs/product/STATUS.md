@@ -181,18 +181,18 @@ only where it is evidence for a backlog item: Times Tables, Mental Maths, 11+ an
 
 | ID | Title | Pri | Rel | QA status | Implementation | Evidence and notes |
 |---|---|---|---|---|---|---|
-| MM-001 | Research and validate a mental-strategy catalogue | P2 | R3 | SPECIFIED | Not implemented | No strategy catalogue. |
-| MM-002 | Build strategy learning template | P2 | R3 | SPECIFIED | Not implemented | No strategy lesson template. |
-| MM-003 | Teach number bonds, partitioning and place-value strategies | P2 | R3 | SPECIFIED | Partial | Add and subtract preview lesson 'Quick sums in your head' (bonds, round-and-adjust); not a strategy lesson. |
-| MM-004 | Teach doubling, halving and near-doubles | P2 | R3 | SPECIFIED | Partial | Times tables preview uses doubling for 4s and 8s; no doubling/halving strategy lesson. |
-| MM-005 | Teach multiplication and division strategies | P2 | R3 | SPECIFIED | Partial | Multiply and divide preview 'Split it up' partitioning; no strategy catalogue. |
-| MM-006 | Teach squares and number-pattern strategies | P2 | R3 | SPECIFIED | Not implemented | No squares/pattern strategies. |
-| MM-007 | Teach fraction, decimal and percentage shortcuts | P2 | R3 | SPECIFIED | Partial | Percentages preview teaches 10% build-up and FDP equivalents; not as strategy lessons. |
-| MM-008 | Evaluate Vedic Maths candidate techniques | P2 | R3 | SPECIFIED | Not implemented | No Vedic evaluation. |
-| MM-009 | Build compare-the-method activity | P2 | R3 | SPECIFIED | Not implemented | No compare-the-method activity. |
-| MM-010 | Build strategy-selection challenges | P2 | R3 | SPECIFIED | Not implemented | No strategy-selection challenges. |
-| MM-011 | Build accuracy-first timed practice | P2 | R3 | SPECIFIED | Not implemented | No timed practice. |
-| MM-012 | Build mental-strategy mastery analytics | P2 | R3 | SPECIFIED | Not implemented | No strategy analytics. |
+| MM-001 | Research and validate a mental-strategy catalogue | P2 | R3 | READY FOR QA | Implemented | **R3, D-032 step C, awaiting review; not accepted.** [Catalogue](curriculum/MM-001-strategy-catalogue.md), generated from `src/maths/strategies.ts`: 24 strategies with justification, unsuitable cases, prerequisites and ages; every step BigInt-checked; no speed claims. |
+| MM-002 | Build strategy learning template | P2 | R3 | READY FOR QA | Implemented | **R3, D-032 step C, awaiting review; not accepted.** Every Mental maths lesson has when to use it, why it works, a guided attempt, an independent transfer question and when not to use it (enforced by a test). |
+| MM-003 | Teach number bonds, partitioning and place-value strategies | P2 | R3 | READY FOR QA | Implemented | **R3, D-032 step C, awaiting review; not accepted.** Bridge through 10, partition and recombine, round and adjust (adding and subtracting), count up through the hundred. |
+| MM-004 | Teach doubling, halving and near-doubles | P2 | R3 | READY FOR QA | Implemented | **R3, D-032 step C, awaiting review; not accepted.** Near doubles, double one and halve the other, halve twice; linked to dividing and fractions. |
+| MM-005 | Teach multiplication and division strategies | P2 | R3 | READY FOR QA | Implemented | **R3, D-032 step C, awaiting review; not accepted.** ×5, ×9, ×11, ×25, ×50, ×99; partitioning, factorising (associativity), dividing by factors, multiplying near 100. |
+| MM-006 | Teach squares and number-pattern strategies | P2 | R3 | READY FOR QA | Implemented | **R3, D-032 step C, awaiting review; not accepted.** Squares to 12², squaring numbers ending in 5 with its boundary, next square from the last. |
+| MM-007 | Teach fraction, decimal and percentage shortcuts | P2 | R3 | READY FOR QA | Implemented | **R3, D-032 step C, awaiting review; not accepted.** 10%, 5%, 25% and 50% of amounts, fractions of amounts, each with why it works. |
+| MM-008 | Evaluate Vedic Maths candidate techniques | P2 | R3 | READY FOR QA | Implemented | **R3, D-032 step C, awaiting review; not accepted.** [Evaluation](curriculum/MM-008-vedic-evaluation.md): 2 techniques accepted with proofs, 3 left out with reasons; no historical or speed claims. Needs educational review. |
+| MM-009 | Build compare-the-method activity | P2 | R3 | READY FOR QA | Implemented | **R3, D-032 step C, awaiting review; not accepted.** Methods lab, compare: a standard method, an efficient alternative and sometimes a method with one wrong step; any working method accepted. |
+| MM-010 | Build strategy-selection challenges | P2 | R3 | READY FOR QA | Implemented | **R3, D-032 step C, awaiting review; not accepted.** Methods lab, choose and say why; and choose-a-method questions in island practice. Scored on validity and reason. |
+| MM-011 | Build accuracy-first timed practice | P2 | R3 | READY FOR QA | Implemented | **R3, D-032 step C, awaiting review; not accepted.** One-minute challenge, open after 10 untimed answers at 80%+; accuracy first; compared only with the child's own runs. |
+| MM-012 | Build mental-strategy mastery analytics | P2 | R3 | READY FOR QA | Implemented | **R3, D-032 step C, awaiting review; not accepted.** `/parent/strategies`: accuracy, method choice, independence, hints and time as separate columns; warns when speed hides lower accuracy; weakest skills recommended. |
 
 ### EXAM — 11+ preparation (future, R5)
 

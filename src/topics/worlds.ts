@@ -44,6 +44,7 @@ export const WORLDS: World[] = [
       { title: "Add and subtract", icon: "plus", topicId: "add-subtract" },
       { title: "Times tables", icon: "times", topicId: "times-tables" },
       { title: "Multiply and divide", icon: "divide", topicId: "multiply-divide" },
+      { title: "Mental maths", icon: "bulb", topicId: "mental-maths" },
     ],
   },
   {

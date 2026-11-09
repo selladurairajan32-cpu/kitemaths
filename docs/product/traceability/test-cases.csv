@@ -434,34 +434,34 @@ TC-TT-012.1.1,TT-012,AC1,unit,automated,passing,"src/engine/facts.test.ts::moves
 TC-TT-012.2.1,TT-012,AC2,unit,automated,passing,src/engine/facts.test.ts::keeps retrieving a known fact every fourth question,Developer evidence (CH-051)
 TC-TT-012.3.1,TT-012,AC3,unit,automated,passing,src/engine/facts.test.ts::is deterministic and respects the length and a chosen table,"Session length 5, 10 or 20, chosen by the child (CH-051)"
 TC-TT-012.4.1,TT-012,AC4,unit,automated,passing,src/engine/facts.test.ts::is deterministic and respects the length and a chosen table,Developer evidence (CH-051)
-TC-MM-001.1.1,MM-001,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
-TC-MM-001.2.1,MM-001,AC2,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
-TC-MM-001.3.1,MM-001,AC3,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
-TC-MM-002.1.1,MM-002,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-MM-003.1.1,MM-003,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-MM-003.2.1,MM-003,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-MM-004.1.1,MM-004,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-MM-004.2.1,MM-004,AC2,e2e,planned,planned,,Playwright journey test asserting the behaviour
-TC-MM-005.1.1,MM-005,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-MM-005.2.1,MM-005,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-MM-006.1.1,MM-006,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-MM-006.2.1,MM-006,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-MM-007.1.1,MM-007,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-MM-007.2.1,MM-007,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-MM-008.1.1,MM-008,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
-TC-MM-008.2.1,MM-008,AC2,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
-TC-MM-008.3.1,MM-008,AC3,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
-TC-MM-009.1.1,MM-009,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-MM-009.2.1,MM-009,AC2,e2e,planned,planned,,Playwright journey test asserting the behaviour
-TC-MM-009.3.1,MM-009,AC3,unit,planned,planned,,Unit/content test asserting the rule
-TC-MM-010.1.1,MM-010,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-MM-010.2.1,MM-010,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-MM-011.1.1,MM-011,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-MM-011.2.1,MM-011,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-MM-011.3.1,MM-011,AC3,unit,planned,planned,,Unit/content test asserting the rule
-TC-MM-012.1.1,MM-012,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-MM-012.2.1,MM-012,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-MM-012.3.1,MM-012,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-001.1.1,MM-001,AC1,unit,automated,passing,src/maths/strategies.test.ts::checks every step of every hand-picked example independently,"Plus 5,000+ generated cases and the justification fields; catalogue doc MM-001-strategy-catalogue.md (CH-052)"
+TC-MM-001.2.1,MM-001,AC2,unit,automated,passing,src/maths/strategies.test.ts::makes no claim about speed (MM-001 AC2),"No speed measured, so none claimed (CH-052)"
+TC-MM-001.3.1,MM-001,AC3,unit,automated,passing,"src/maths/strategies.test.ts::includes only the Vedic techniques accepted in MM-008, each with a proof",With the MM-008 evaluation (CH-052)
+TC-MM-002.1.1,MM-002,AC1,content,automated,passing,"src/topics/mental-maths/mental-maths.test.ts::gives every lesson: when to use it, why it works, a guided attempt, an independent transfer question and when not to use it",(CH-052)
+TC-MM-003.1.1,MM-003,AC1,content,automated,passing,"src/topics/mental-maths/mental-maths.test.ts::covers bonds, partitioning, bridging, compensation and counting up (MM-003), each mapped to prerequisites and ages",(CH-052)
+TC-MM-003.2.1,MM-003,AC2,unit,automated,passing,src/maths/strategies.test.ts::only cites curriculum objectives that exist in the map,Prerequisites and age range per technique (CH-052)
+TC-MM-004.1.1,MM-004,AC1,content,automated,passing,"src/topics/mental-maths/mental-maths.test.ts::connects doubling and halving to multiplying, dividing and fractions",(CH-052)
+TC-MM-004.2.1,MM-004,AC2,content,automated,passing,src/topics/mental-maths/mental-maths.test.ts::explains why the product is kept (MM-004),Explanation by choosing a reason in the methods lab (MM-010) (CH-052)
+TC-MM-005.1.1,MM-005,AC1,content,automated,passing,"src/topics/mental-maths/mental-maths.test.ts::covers partitioning, factors, commutativity and associativity, the special multipliers and dividing by factors (MM-005)",(CH-052)
+TC-MM-005.2.1,MM-005,AC2,unit,automated,passing,"src/maths/strategies.test.ts::is right for every input it says it fits, across thousands of cases",All examples proven and tested (CH-052)
+TC-MM-006.1.1,MM-006,AC1,content,automated,passing,"src/topics/mental-maths/mental-maths.test.ts::teaches squares, the numbers-ending-in-5 method and its boundary (MM-006)",(CH-052)
+TC-MM-006.2.1,MM-006,AC2,unit,automated,passing,src/maths/strategies.test.ts::teaches the boundaries: each strategy refuses the inputs it is unsuitable for,(CH-052)
+TC-MM-007.1.1,MM-007,AC1,content,automated,passing,"src/topics/mental-maths/mental-maths.test.ts::covers percentages, fractions of amounts and why each method works (MM-007)",(CH-052)
+TC-MM-007.2.1,MM-007,AC2,content,automated,passing,src/topics/mental-maths/mental-maths.test.ts::why each method works,(CH-052)
+TC-MM-008.1.1,MM-008,AC1,document-review,manual,review-pending,,Product Owner and educational review of MM-008-vedic-evaluation.md §2; accepted techniques are proven in src/maths/strategies.test.ts (CH-052)
+TC-MM-008.2.1,MM-008,AC2,document-review,manual,review-pending,,"Review of MM-008 §2 decisions: 2 accepted, 3 left out (CH-052)"
+TC-MM-008.3.1,MM-008,AC3,document-review,manual,review-pending,,"Review of MM-008 §3: no historical, speed or replacement claims (CH-052)"
+TC-MM-009.1.1,MM-009,AC1,unit,automated,passing,src/maths/strategies.test.ts::checks the standard method,"Standard method and alternatives, every step checked (CH-052)"
+TC-MM-009.2.1,MM-009,AC2,component,automated,passing,"src/components/screens/Strategies.test.tsx::shows a method with one wrong step, rejects it and points to the step",(CH-052)
+TC-MM-009.3.1,MM-009,AC3,component,automated,passing,src/components/screens/Strategies.test.tsx::accepts any method that works: the standard one or an efficient alternative,(CH-052)
+TC-MM-010.1.1,MM-010,AC1,component,automated,passing,src/components/screens/Strategies.test.tsx::rejects a method the numbers don,"Method and reason, both judged (CH-052)"
+TC-MM-010.2.1,MM-010,AC2,component,automated,passing,src/components/screens/Strategies.test.tsx::needs the right reason for full credit,No timer on the activity; scored on validity and reason (CH-052)
+TC-MM-011.1.1,MM-011,AC1,unit,automated,passing,src/engine/strategyStats.test.ts::needs 10 untimed answers with at least 80% right,And the screen stays closed until then (Strategies.test.tsx) (CH-052)
+TC-MM-011.2.1,MM-011,AC2,unit,automated,passing,src/engine/strategyStats.test.ts::groups answers into runs and judges accuracy before the number answered,(CH-052)
+TC-MM-011.3.1,MM-011,AC3,component,automated,passing,src/components/screens/Strategies.test.tsx::compares only with the child,No ranking or shaming words on screen (CH-052)
+TC-MM-012.1.1,MM-012,AC1,unit,automated,passing,"src/engine/strategyStats.test.ts::keeps accuracy, method choice, independence, hints and time apart",Separate columns on /parent/strategies (Strategies.test.tsx) (CH-052)
+TC-MM-012.2.1,MM-012,AC2,component,automated,passing,src/components/screens/Strategies.test.tsx::warns when a faster run hides lower accuracy,(CH-052)
+TC-MM-012.3.1,MM-012,AC3,unit,automated,passing,"src/engine/strategyStats.test.ts::recommends the weakest skills first, then skills not tried yet",(CH-052)
 TC-EXAM-001.1.1,EXAM-001,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
 TC-EXAM-001.2.1,EXAM-001,AC2,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
 TC-EXAM-002.1.1,EXAM-002,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion

@@ -18,6 +18,8 @@ export const routes = {
   parentAbout: () => "/parent/about",
   /** Times-table facts report (TT-011). */
   parentFacts: () => "/parent/facts",
+  /** Mental-strategy analytics (MM-012). */
+  parentStrategies: () => "/parent/strategies",
   results: () => "/results",
   review: () => "/results#review",
 };
@@ -42,6 +44,9 @@ export function topicRoutes(topicId: string) {
     facts: () => `${base}/facts`,
     factsRun: (mode: "practice" | "untimed" | "diagnostic" | "timed", table?: number) => `${base}/facts/${mode}${table ? `?table=${table}` : ""}`,
     factsExplore: () => `${base}/facts/explore`,
+    /** Mental-strategy activities (R3), only on the mental-maths island. */
+    strategies: () => `${base}/strategies`,
+    strategiesRun: (mode: "compare" | "choose" | "timed") => `${base}/strategies/${mode}`,
   };
 }
 

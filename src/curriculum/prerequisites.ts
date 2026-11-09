@@ -19,6 +19,7 @@ export const ISLAND_PREREQUISITES: Graph = {
   "add-subtract": ["place-value"],
   "times-tables": [],
   "multiply-divide": ["place-value", "times-tables"],
+  "mental-maths": ["add-subtract", "times-tables"],
   fractions: ["times-tables"],
   "fractions-2": ["fractions", "multiply-divide"],
   decimals: ["place-value", "fractions"],

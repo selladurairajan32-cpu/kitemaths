@@ -26,6 +26,7 @@ const PARENT_NAV = [
   { href: routes.parentJourney(), label: "Journey detail" },
   { href: routes.results(), label: "Full report" },
   { href: routes.parentFacts(), label: "Times tables" },
+  { href: routes.parentStrategies(), label: "Mental maths" },
   { href: routes.parentAbout(), label: "About" },
 ];
 
@@ -56,6 +57,7 @@ export function shellMode(pathname: string, practiceActive: (topicId: string) =>
   if (["lesson", "check", "recheck", "start"].includes(tp.section)) return "focus";
   // R2: a fact session (not the facts hub or the explorer) fills the screen like a lesson.
   if (/^\/t\/[^/]+\/facts\/(practice|untimed|diagnostic|timed)/.test(pathname)) return "focus";
+  if (/^\/t\/[^/]+\/strategies\/(compare|choose|timed)/.test(pathname)) return "focus";
   if (tp.section === "practice" && practiceActive(tp.topicId)) return "focus";
   return "kid";
 }
@@ -115,7 +117,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <header className="sticky top-0 z-40 border-b border-line bg-surface">
           <div className="mx-auto flex min-h-14 max-w-6xl flex-wrap items-center justify-between gap-x-3 gap-y-1 px-3 py-1 sm:px-6">
             <Link
-              href={tp ? (inPractice ? topicRoutes(tp.topicId).practice() : tp.section === "facts" ? topicRoutes(tp.topicId).facts() : topicRoutes(tp.topicId).island()) : routes.journey()}
+              href={tp ? (inPractice ? topicRoutes(tp.topicId).practice() : tp.section === "facts" ? topicRoutes(tp.topicId).facts() : tp.section === "strategies" ? topicRoutes(tp.topicId).strategies() : topicRoutes(tp.topicId).island()) : routes.journey()}
               onClick={(e) => {
                 if (tp && inPractice) {
                   e.preventDefault();

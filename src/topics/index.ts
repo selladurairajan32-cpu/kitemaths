@@ -17,6 +17,7 @@ import { rounding } from "./rounding";
 import { shapesAngles } from "./shapes-angles";
 import { time } from "./time";
 import { timesTables } from "./times-tables";
+import { mentalMaths } from "./mental-maths";
 import type { Question, TopicModule } from "./types";
 
 /**
@@ -32,6 +33,7 @@ export const TOPICS: TopicModule[] = [
   addSubtract as unknown as TopicModule,
   timesTables as unknown as TopicModule,
   multiplyDivide as unknown as TopicModule,
+  mentalMaths as unknown as TopicModule,
   fractions2 as unknown as TopicModule,
   decimals as unknown as TopicModule,
   percentages as unknown as TopicModule,

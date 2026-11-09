@@ -173,6 +173,18 @@ export function SkyMapScreen() {
         </Link>
       )}
 
+      {topic.id === "mental-maths" && (
+        // R3: the mental-maths island's methods lab (MM-009 to MM-011).
+        <Link href={links.strategies()} className="flex items-center gap-4 rounded-[24px] border-2 border-brand bg-surface p-4 shadow-[var(--shadow-card)] transition hover:shadow-[var(--shadow-lift)]">
+          <Pic name="bulb" size={48} />
+          <span className="min-w-0 flex-1">
+            <span className="block text-title font-extrabold text-ink">Methods lab</span>
+            <span className="block text-body text-ink-2">Compare methods, choose one and say why, and try the one-minute challenge.</span>
+          </span>
+          <ArrowRightIcon size={20} className="shrink-0 text-ink-2" />
+        </Link>
+      )}
+
       <section className="rounded-[32px] bg-sky-soft px-3 py-5 sm:px-5" aria-label="Lessons and challenges">
         <ol className="relative space-y-4">
           <span className="absolute bottom-8 left-[2.375rem] top-8 w-1 rounded-full bg-surface sm:hidden" aria-hidden />

@@ -489,7 +489,8 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "outcome": "Uses place value, known and derived facts to multiply and divide mentally, including × by 0 and 1, ÷ by 1 and multiplying 3 numbers.",
     "skills": [
       "multiply-divide.ten-hundred",
-      "times-tables.eleven-twelve"
+      "times-tables.eleven-twelve",
+      "mental-maths.partition-factors"
     ]
   },
   {
@@ -845,7 +846,8 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "status": "statutory",
     "outcome": "Adds and subtracts numbers mentally with increasingly large numbers.",
     "skills": [
-      "add-subtract.mental"
+      "add-subtract.mental",
+      "mental-maths.bridge-compensate"
     ]
   },
   {
@@ -898,7 +900,9 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "outcome": "Multiplies and divides mentally, drawing on known facts.",
     "skills": [
       "multiply-divide.ten-hundred",
-      "times-tables.division-facts"
+      "times-tables.division-facts",
+      "mental-maths.special-multipliers",
+      "mental-maths.partition-factors"
     ]
   },
   {
@@ -920,6 +924,16 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "skills": [
       "multiply-divide.ten-hundred",
       "decimals.times-ten"
+    ]
+  },
+  {
+    "id": "Y5.MD.8",
+    "year": 5,
+    "strand": "Number: multiplication and division",
+    "status": "statutory",
+    "outcome": "Recognises and uses square and cube numbers and the notation ² and ³.",
+    "skills": [
+      "mental-maths.squares"
     ]
   },
   {
@@ -1247,7 +1261,9 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "status": "statutory",
     "outcome": "Performs mental calculations, including mixed operations and large numbers.",
     "skills": [
-      "add-subtract.mental"
+      "add-subtract.mental",
+      "mental-maths.choose-method",
+      "mental-maths.bridge-compensate"
     ]
   },
   {
@@ -1385,7 +1401,8 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "outcome": "Solves problems calculating percentages (for example of measures, such as 15% of 360) and uses percentages for comparison.",
     "skills": [
       "percentages.of-amounts",
-      "percentages.problems"
+      "percentages.problems",
+      "mental-maths.percent-fraction"
     ]
   },
   {

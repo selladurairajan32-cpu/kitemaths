@@ -74,6 +74,8 @@ export interface ItemResult {
   slip?: boolean;
   /** TT-009: answered against the timed simulator's clock, so it is reported apart from untimed understanding (TT-011). */
   timed?: boolean;
+  /** R3: a method-choice answer (MM-009 compare, MM-010 choose): the method picked and whether it was valid for the numbers. */
+  strategy?: StrategyChoice;
   at: number;
 }
 
@@ -82,6 +84,17 @@ export interface ItemResult {
  * missing: the product (`mul`), a factor (`missing-factor`, a × ? = a·b), or one part of the division fact
  * (`div-quotient` a·b ÷ a = ?, `div-divisor` a·b ÷ ? = b, `div-dividend` ? ÷ a = b).
  */
+/** MM-009, MM-010: which method a child picked for a problem, and how it was judged. */
+export interface StrategyChoice {
+  kind: "compare" | "choose";
+  /** The catalogue id of the method picked ("standard" for the written method). */
+  chosen: string;
+  /** The method gives the right answer for these numbers. */
+  valid: boolean;
+  /** MM-010: the reason given was the right one for the method. */
+  reasonRight?: boolean;
+}
+
 export type FactForm = "mul" | "missing-factor" | "div-quotient" | "div-divisor" | "div-dividend";
 export interface FactRef {
   a: number;

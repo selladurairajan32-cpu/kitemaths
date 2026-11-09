@@ -620,6 +620,112 @@
   ]
  },
  {
+  "id": "mental-maths",
+  "title": "Mental maths",
+  "world": "calc",
+  "years": [
+   3,
+   4,
+   5,
+   6
+  ],
+  "skills": [
+   {
+    "id": "mental-maths.bridge-compensate",
+    "title": "Bridge and compensate",
+    "description": "Add and subtract in your head by bridging through tens, rounding and adjusting, and counting up."
+   },
+   {
+    "id": "mental-maths.double-halve",
+    "title": "Double and halve",
+    "description": "Use near doubles, double one number and halve the other, and halve twice to divide by 4."
+   },
+   {
+    "id": "mental-maths.special-multipliers",
+    "title": "Times 5, 9, 11, 25, 50 and 99",
+    "description": "Multiply by these numbers using 10 and 100."
+   },
+   {
+    "id": "mental-maths.partition-factors",
+    "title": "Partition and factorise",
+    "description": "Split a number into parts or factors to multiply and divide, and multiply near 100."
+   },
+   {
+    "id": "mental-maths.squares",
+    "title": "Square patterns",
+    "description": "Know squares to 12², square numbers ending in 5, and step from one square to the next."
+   },
+   {
+    "id": "mental-maths.percent-fraction",
+    "title": "Percent and fraction shortcuts",
+    "description": "Find 10%, 5%, 25% and 50% of an amount, and a fraction of an amount."
+   },
+   {
+    "id": "mental-maths.choose-method",
+    "title": "Choosing a method",
+    "description": "Pick the method that suits the numbers, and say why."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "bridge-compensate",
+    "title": "Bridge and compensate",
+    "objectives": [
+     "Bridge through 10 and 100",
+     "Round a number near a ten, then adjust"
+    ]
+   },
+   {
+    "id": "double-halve",
+    "title": "Double and halve",
+    "objectives": [
+     "Use near doubles",
+     "Explain why doubling one factor and halving the other keeps the product"
+    ]
+   },
+   {
+    "id": "special-multipliers",
+    "title": "Times 5, 9, 11, 25, 50 and 99",
+    "objectives": [
+     "Multiply by 5, 25 and 50 using 10 and 100",
+     "Multiply by 9, 11 and 99 by adjusting one lot"
+    ]
+   },
+   {
+    "id": "partition-factors",
+    "title": "Partition and factorise",
+    "objectives": [
+     "Multiply by partitioning",
+     "Multiply and divide using factors"
+    ]
+   },
+   {
+    "id": "square-patterns",
+    "title": "Square patterns",
+    "objectives": [
+     "Know square numbers to 12²",
+     "Square numbers ending in 5, and only those"
+    ]
+   },
+   {
+    "id": "percent-fraction",
+    "title": "Percent and fraction shortcuts",
+    "objectives": [
+     "Find 10%, 5%, 25% and 50% of an amount",
+     "Find a fraction of an amount"
+    ]
+   },
+   {
+    "id": "choose-method",
+    "title": "Choose your method",
+    "objectives": [
+     "Choose a method that suits the numbers",
+     "Give a reason for the choice"
+    ]
+   }
+  ]
+ },
+ {
   "id": "fractions-2",
   "title": "Fractions 2",
   "world": "fdp",
