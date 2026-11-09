@@ -268,6 +268,9 @@ export function PracticeScreen({ focusSkill = null }: { focusSkill?: string | nu
         <section className="card p-5 sm:p-8" aria-labelledby="practice-heading">
           <AnimatePresence mode="wait">
             <motion.div key={current!.id} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.22 }}>
+              {practice.currentReason === "transfer" && (
+                <p className="mb-4 rounded-[16px] bg-notice-soft px-4 py-2.5 text-label text-notice-ink">A new question on the same idea. Have a go on your own.</p>
+              )}
               <QuestionPlayer
                 question={current!}
                 context="practice"

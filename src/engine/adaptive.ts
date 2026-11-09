@@ -15,7 +15,8 @@ export interface SelectionInput<Q extends QuestionBase> {
 
 export interface Selection<Q extends QuestionBase> {
   question: Q;
-  reason: "focus" | "review" | "chosen-skill";
+  /** "transfer": a fresh question on the same skill after a suspected misconception (MIS-004). */
+  reason: "focus" | "review" | "chosen-skill" | "transfer";
   targetDifficulty: number;
 }
 
@@ -73,6 +74,19 @@ export function selectNextQuestion<Q extends QuestionBase>(
   input: SelectionInput<Q>,
 ): Selection<Q> | null {
   const { questions, skillOrder, results, sessionAsked, focusSkill } = input;
+
+  // MIS-004: after an answer that suggested a misconception, the next question is a transfer item: the same skill, a
+  // question the child has never seen, in a different form where one exists. Recovery is not judged on the original.
+  const lastId = sessionAsked[sessionAsked.length - 1];
+  const last = lastId ? [...results].reverse().find((r) => r.questionId === lastId && r.context === "practice") : undefined;
+  if (last && last.misconceptions.length > 0) {
+    const kindOf = (q: Q | undefined) => (q as { kind?: string } | undefined)?.kind;
+    const originalKind = kindOf(questions.find((q) => q.id === last.questionId));
+    const seen = new Set(results.map((r) => r.questionId));
+    const fresh = questions.filter((q) => q.skill === last.skill && !sessionAsked.includes(q.id) && !seen.has(q.id));
+    const transfer = fresh.find((q) => kindOf(q) !== originalKind) ?? fresh[0];
+    if (transfer) return { question: transfer, reason: "transfer", targetDifficulty: transfer.difficulty };
+  }
 
   if (focusSkill) {
     const level = targetDifficulty(focusSkill, results);

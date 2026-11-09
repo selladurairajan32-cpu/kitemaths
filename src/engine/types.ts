@@ -71,6 +71,8 @@ export interface MisconceptionDef {
   /** Parent-facing description used on the results screen. */
   description: string;
   explanation: string[];
+  /** Other reasons the same answer can happen, so the signal stays "possible" (MIS-001 AC2). */
+  alternatives?: string[];
   skills: SkillId[];
   followUps: string[];
 }

@@ -1,4 +1,5 @@
 import { cleanup } from "@testing-library/react";
+import { MotionGlobalConfig } from "motion/react";
 import { afterEach } from "vitest";
 
 // Component tests (QA-002) run in jsdom. Each test starts from a clean document and empty storage.
@@ -26,3 +27,6 @@ if (typeof window.PointerEvent === "undefined") {
   }
   window.PointerEvent = PointerEventPolyfill as unknown as typeof PointerEvent;
 }
+
+// Animations finish instantly in component tests, so AnimatePresence swaps panels without waiting for frames.
+MotionGlobalConfig.skipAnimations = true;

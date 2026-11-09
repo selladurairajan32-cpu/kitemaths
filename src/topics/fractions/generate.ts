@@ -608,6 +608,8 @@ export function contentKey(q: FractionQuestion): string {
 }
 
 export const GENERATED_SKILLS = [...new Set(TEMPLATES.map((t) => t.skill))];
+/** Each generator template's key, skill and difficulty levels (documented in PRACT-007's variation table). */
+export const TEMPLATE_INFO: readonly { key: string; skill: SkillId; difficulties: readonly number[] }[] = TEMPLATES.map((t) => ({ key: t.key, skill: t.skill, difficulties: t.difficulties }));
 
 /**
  * A fresh, deterministic pool of generated questions for one practice session.

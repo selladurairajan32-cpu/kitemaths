@@ -23,6 +23,10 @@ export const MISCONCEPTIONS: MisconceptionDef[] = [
       "The **bottom number (denominator)** tells us how many equal parts the whole is split into. Count every part.",
       "The **top number (numerator)** tells us how many of those parts we are talking about. Count only the shaded parts.",
     ],
+    alternatives: [
+      "A slip when typing into the boxes (the numbers went in the wrong boxes).",
+      "Reading the picture from a different side and counting the wrong group.",
+    ],
     skills: ["fractions.name", "fractions.represent", "fractions.fraction-of", "fractions.number-line"],
     followUps: ["fractions.fu-swap-1", "fractions.fu-swap-2"],
   },
@@ -36,6 +40,10 @@ export const MISCONCEPTIONS: MisconceptionDef[] = [
     explanation: [
       "The denominator tells us how many pieces the **same whole** is shared into.",
       "Sharing the same whole into **more** pieces makes each piece **smaller**. So with the same numerator, {1/8} is smaller than {1/3}.",
+    ],
+    alternatives: [
+      "Comparing the numbers only, without looking at the pictures, as with whole numbers.",
+      "Thinking about how many pieces there are rather than how big each one is.",
     ],
     skills: ["fractions.compare", "fractions.reasoning"],
     followUps: ["fractions.fu-bd-1", "fractions.fu-bd-2"],
@@ -51,6 +59,10 @@ export const MISCONCEPTIONS: MisconceptionDef[] = [
       "Fractions only work when the whole is split into **equal** parts — fair shares.",
       "Three pieces are only thirds if all three pieces are exactly the same size.",
     ],
+    alternatives: [
+      "Counting pieces quickly without checking their sizes.",
+      "Not seeing a small difference in size in the picture.",
+    ],
     skills: ["fractions.equal-parts", "fractions.reasoning"],
     followUps: ["fractions.fu-ue-1", "fractions.fu-ue-2"],
   },
@@ -64,6 +76,10 @@ export const MISCONCEPTIONS: MisconceptionDef[] = [
     explanation: [
       "The denominator counts **all** the equal parts in the whole — shaded and unshaded together.",
       "1 shaded and 3 unshaded makes 4 parts altogether, so 1 of them is {1/4}.",
+    ],
+    alternatives: [
+      "Counting the unshaded parts by mistake.",
+      "A slip when counting the total.",
     ],
     skills: ["fractions.name", "fractions.reasoning"],
     followUps: ["fractions.fu-pp-1", "fractions.fu-pp-2"],
@@ -79,6 +95,10 @@ export const MISCONCEPTIONS: MisconceptionDef[] = [
       "Count the **parts**, not the lines between them.",
       "On a number line, count the **gaps (jumps)** from 0 to 1, not the marks. 5 marks make only 4 gaps.",
     ],
+    alternatives: [
+      "Counting the marks instead of the gaps on a number line.",
+      "Losing count on a busy picture.",
+    ],
     skills: ["fractions.name", "fractions.number-line"],
     followUps: ["fractions.fu-mc-1", "fractions.fu-mc-2"],
   },
@@ -92,6 +112,10 @@ export const MISCONCEPTIONS: MisconceptionDef[] = [
     explanation: [
       "Dividing by the **denominator** gives the size of **one** equal part.",
       "Then multiply by the **numerator** to collect the number of parts you need.",
+    ],
+    alternatives: [
+      "Stopping after the first step by mistake.",
+      "Misreading the numerator as 1.",
     ],
     skills: ["fractions.fraction-of", "fractions.reasoning"],
     followUps: ["fractions.fu-uo-1", "fractions.fu-uo-2"],
@@ -107,6 +131,10 @@ export const MISCONCEPTIONS: MisconceptionDef[] = [
       "Equivalent fractions show the **same amount**.",
       "Splitting every part into the same number of smaller parts **multiplies** the top and bottom by the same number. Adding changes the amount.",
     ],
+    alternatives: [
+      "Guessing a pattern from one example.",
+      "Knowing the rule but slipping in the calculation.",
+    ],
     skills: ["fractions.equivalent", "fractions.reasoning"],
     followUps: ["fractions.fu-add-1", "fractions.fu-add-2"],
   },
@@ -118,6 +146,10 @@ export const MISCONCEPTIONS: MisconceptionDef[] = [
     explanation: [
       "The **denominator** names the **size** of the parts: sevenths are all the same size.",
       "Adding sevenths to sevenths still gives **sevenths**, so only the numerators are added: {2/7} + {3/7} = {5/7}. The whole is still split into 7.",
+    ],
+    alternatives: [
+      "Following the rule for multiplying fractions, which is taught later.",
+      "A slip: writing the denominator twice.",
     ],
     skills: ["fractions.add-same"],
     followUps: ["fractions.fu-ad-1", "fractions.fu-ad-2"],

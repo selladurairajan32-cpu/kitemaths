@@ -101,6 +101,10 @@ Each criterion is counted once, by the strongest evidence any of its test cases 
 | `src/topics/fractions/journey-content.test.ts` | 12 | FR-002 to FR-009 |
 | `src/topics/fractions/labState.test.ts` | 6 | LAB-001 to LAB-006 |
 | `src/topics/fractions/ui/FractionLab.test.tsx` | 7 | LAB-001 to LAB-007 (component, jsdom) |
+| `src/components/questions/QuestionPlayer.test.tsx` | 4 | PRACT-002 to PRACT-004, PRACT-008, MIS-004 (component, jsdom) |
+| `src/topics/fractions/practice-rules.test.ts` | 8 | PRACT-001 to PRACT-008 |
+| `src/topics/fractions/catalogue.test.ts` | 4 | MIS-001, MIS-002, MIS-003 |
+| `src/engine/recovery-transfer.test.ts` | 5 | MIS-003 to MIS-005 |
 | `src/design-tokens.test.ts` | 10 | UX-002, UX-003, UX-004 |
 | `src/maths/maths.test.ts` | 20 | ARCH-003, QA-001 |
 | `src/questions/questions.test.ts` | 28 | ARCH-002 |

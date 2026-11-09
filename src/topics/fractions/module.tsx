@@ -13,6 +13,7 @@ import type { FractionQuestion } from "./types";
 import { FractionsQuestionInput } from "./ui/FractionsQuestionInput";
 import { FractionsFreeLab, FractionsLessonLab, FREE_LAB_INTRO, isFractionsLabStepDone } from "./ui/labs";
 import { RemedyVisual } from "./ui/RemedyVisual";
+import { wellFormedOnly } from "./ui/wellFormed";
 import { VisualRenderer } from "./ui/Visuals";
 
 const LESSON_LOOKS: Record<string, Look> = {
@@ -49,7 +50,7 @@ export const fractions: TopicModule<FractionQuestion> = {
   skillById,
   misconceptionById,
   followUpFor,
-  practicePool,
+  practicePool: (seed, results) => wellFormedOnly(practicePool(seed, results)),
   questions: {
     Input: FractionsQuestionInput as unknown as ComponentType<QuestionInputProps<FractionQuestion>>,
     evaluate: (q, r) => evaluate(q, r as Parameters<typeof evaluate>[1]),
