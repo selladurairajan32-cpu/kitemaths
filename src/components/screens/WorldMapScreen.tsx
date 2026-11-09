@@ -40,10 +40,10 @@ export function WorldMapScreen() {
                   <PaperIcon name={world.icon} size={46} />
                 </span>
                 <div>
-                  <h2 id={`world-${world.id}`} className="display text-[1.5rem] sm:text-[1.875rem]">
+                  <h2 id={`world-${world.id}`} className="display text-heading-2">
                     {world.title}
                   </h2>
-                  <p className="text-[0.9375rem] font-semibold text-muted">
+                  <p className="text-label font-semibold text-muted">
                     {playable ? `${playable} of ${world.islands.length} islands open` : `${world.islands.length} islands, opening soon`}
                   </p>
                 </div>
@@ -59,7 +59,7 @@ export function WorldMapScreen() {
                         </span>
                         <span className="min-w-0">
                           <span className="block font-bold leading-snug text-ink-2">{island.title}</span>
-                          <span className="mt-0.5 inline-flex items-center gap-1 text-[0.9375rem] font-semibold text-muted">
+                          <span className="mt-0.5 inline-flex items-center gap-1 text-label font-semibold text-muted">
                             <LockIcon size={14} /> Opens soon
                           </span>
                         </span>
@@ -88,11 +88,11 @@ export function WorldMapScreen() {
                         </span>
                         <span className="min-w-0">
                           <span className="block font-extrabold leading-snug text-ink">{island.title}</span>
-                          <span className="block text-[0.9375rem] text-ink-2">{topic.subtitle}</span>
-                          <span className="block text-[0.9375rem] font-semibold text-muted">
+                          <span className="block text-label text-ink-2">{topic.subtitle}</span>
+                          <span className="block text-label font-semibold text-muted">
                             {done} of {topic.lessons.length} lessons
                           </span>
-                          {isHere && <span className="text-[0.9375rem] font-bold text-brand-strong">You are here</span>}
+                          {isHere && <span className="text-label font-bold text-brand-strong">You are here</span>}
                         </span>
                       </Link>
                     </li>

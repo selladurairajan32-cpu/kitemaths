@@ -165,7 +165,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Link
                 href={routes.parent()}
                 aria-label="Grown-ups"
-                className="ml-1 hidden min-h-11 min-w-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-3 text-[0.9375rem] font-semibold text-ink-2 hover:bg-sunk sm:flex"
+                className="ml-1 hidden min-h-11 min-w-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-3 text-label font-semibold text-ink-2 hover:bg-sunk sm:flex"
               >
                 <ParentIcon size={18} /> <span className="hidden xl:inline">Grown-ups</span>
               </Link>
@@ -179,7 +179,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="mx-auto flex min-h-14 max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 sm:px-6">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
               <Logo small />
-              <span className="text-[0.9375rem] font-semibold text-muted">Grown-ups</span>
+              <span className="text-label font-semibold text-muted">Grown-ups</span>
             </div>
             <nav aria-label="Grown-ups" className="order-3 w-full sm:order-none sm:w-auto">
               <ul className="flex flex-wrap items-center gap-1">
@@ -190,7 +190,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                       <Link
                         href={navHref(href)}
                         aria-current={active ? "page" : undefined}
-                        className={`flex min-h-11 items-center rounded-full px-4 text-[0.9375rem] ${active ? "bg-brand-soft font-bold text-brand-strong" : "font-semibold text-ink-2 hover:bg-sunk hover:text-ink"}`}
+                        className={`flex min-h-11 items-center rounded-full px-4 text-label ${active ? "bg-brand-soft font-bold text-brand-strong" : "font-semibold text-ink-2 hover:bg-sunk hover:text-ink"}`}
                       >
                         {label}
                       </Link>
@@ -199,7 +199,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 })}
               </ul>
             </nav>
-            <Link href="/" className="flex min-h-11 items-center gap-1.5 rounded-full px-4 text-[0.9375rem] font-semibold text-ink-2 hover:bg-sunk">
+            <Link href="/" className="flex min-h-11 items-center gap-1.5 rounded-full px-4 text-label font-semibold text-ink-2 hover:bg-sunk">
               <ArrowLeftIcon size={16} /> Child view
             </Link>
           </div>
@@ -228,7 +228,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   <Link
                     href={navHref(href)}
                     aria-current={active ? "page" : undefined}
-                    className={`flex min-h-16 min-w-0 flex-col items-center justify-center gap-1 px-0.5 py-1 text-center text-[0.9375rem] leading-tight [overflow-wrap:anywhere] ${active ? "font-bold text-brand-strong" : "font-semibold text-muted"}`}
+                    className={`flex min-h-16 min-w-0 flex-col items-center justify-center gap-1 px-0.5 py-1 text-center text-label leading-tight [overflow-wrap:anywhere] ${active ? "font-bold text-brand-strong" : "font-semibold text-muted"}`}
                   >
                     <span className={`grid h-8 w-full max-w-14 place-items-center rounded-full transition-colors ${active ? "bg-brand-soft" : ""}`}>
                       <Icon size={22} />

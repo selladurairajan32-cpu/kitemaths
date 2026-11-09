@@ -87,7 +87,7 @@ export function ParentGate({ children }: { children: ReactNode }) {
           />
         </label>
         {wrong && (
-          <p role="alert" className="text-[0.9375rem] text-num-strong">
+          <p role="alert" className="text-label text-num-strong">
             That&apos;s not it — try again.
           </p>
         )}

@@ -26,7 +26,7 @@ function PlaceValueChart({ v }: { v: Extract<KitVisual, { kind: "pv-chart" }> })
       <div className="w-full max-w-xl overflow-hidden rounded-[18px] border-2 border-ink" aria-hidden>
         <div className="grid" style={{ gridTemplateColumns: `repeat(${v.columns.length}, minmax(0, 1fr))` }}>
           {v.columns.map((c, i) => (
-            <div key={c} className={`border-b-2 border-ink px-1 py-2 text-center text-[0.9375rem] font-extrabold ${i < v.columns.length - 1 ? "border-r-2" : ""} ${c === v.highlight ? "bg-brand text-white" : "bg-tile-blue text-ink"}`}>
+            <div key={c} className={`border-b-2 border-ink px-1 py-2 text-center text-label font-extrabold ${i < v.columns.length - 1 ? "border-r-2" : ""} ${c === v.highlight ? "bg-brand text-white" : "bg-tile-blue text-ink"}`}>
               {c}
             </div>
           ))}
@@ -39,7 +39,7 @@ function PlaceValueChart({ v }: { v: Extract<KitVisual, { kind: "pv-chart" }> })
           ))}
         </div>
       </div>
-      {v.highlight && <figcaption className="mt-2 text-[0.9375rem] font-semibold text-muted">{COLUMN_NAME[v.highlight]} column</figcaption>}
+      {v.highlight && <figcaption className="mt-2 text-label font-semibold text-muted">{COLUMN_NAME[v.highlight]} column</figcaption>}
     </Frame>
   );
 }
@@ -85,7 +85,7 @@ function Blocks({ v }: { v: Extract<KitVisual, { kind: "blocks" }> }) {
           return <rect key={`o${i}`} x={x} y={y} width={S} height={S} fill="#c9f0dc" stroke={INK} strokeWidth="1.2" rx="1" />;
         })}
       </svg>
-      <figcaption className="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-1 text-[0.9375rem] font-bold">
+      <figcaption className="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-1 text-label font-bold">
         <span className="text-brand-strong">{v.hundreds} hundreds</span>
         <span className="text-num-strong">{v.tens} tens</span>
         <span className="text-ok">{v.ones} ones</span>
@@ -179,7 +179,7 @@ function ArrayVisual({ v }: { v: Extract<KitVisual, { kind: "array" }> }) {
           Array.from({ length: v.cols }, (_, c) => <circle key={`${r}-${c}`} cx={4 + c * g + g / 2} cy={4 + r * g + g / 2} r={g * 0.36} fill={r % 2 ? "#ffb58f" : CORAL} stroke={INK} strokeWidth="1.4" />),
         )}
       </svg>
-      <figcaption className="mt-2 text-[0.9375rem] font-bold text-ink-2">
+      <figcaption className="mt-2 text-label font-bold text-ink-2">
         {v.rows} rows of {v.cols}
       </figcaption>
     </Frame>
@@ -202,7 +202,7 @@ function GroupsVisual({ v }: { v: Extract<KitVisual, { kind: "groups" }> }) {
           </svg>
         ))}
       </div>
-      <figcaption className="mt-2 text-[0.9375rem] font-bold text-ink-2">{v.label ?? `${v.groups} groups of ${v.each}`}</figcaption>
+      <figcaption className="mt-2 text-label font-bold text-ink-2">{v.label ?? `${v.groups} groups of ${v.each}`}</figcaption>
     </Frame>
   );
 }
@@ -214,7 +214,7 @@ function BarModel({ v }: { v: Extract<KitVisual, { kind: "bar" }> }) {
     <Frame label={`Bar model: ${v.parts.map((p) => p.label).filter(Boolean).join(", ")}${v.total ? `, total ${v.total}` : ""}${v.note ? `. ${v.note}` : ""}`}>
       <div className="w-full max-w-xl" aria-hidden>
         {v.total && (
-          <div className="mb-2 flex items-center gap-2 text-center text-[0.9375rem] font-extrabold text-brand-strong">
+          <div className="mb-2 flex items-center gap-2 text-center text-label font-extrabold text-brand-strong">
             <span className="h-0.5 flex-1 bg-brand" />
             {v.total}
             <span className="h-0.5 flex-1 bg-brand" />
@@ -233,7 +233,7 @@ function BarModel({ v }: { v: Extract<KitVisual, { kind: "bar" }> }) {
         </div>
         <p className="sr-only">{total}</p>
       </div>
-      {v.note && <figcaption className="mt-2 text-[0.9375rem] font-semibold text-muted">{v.note}</figcaption>}
+      {v.note && <figcaption className="mt-2 text-label font-semibold text-muted">{v.note}</figcaption>}
     </Frame>
   );
 }
@@ -348,7 +348,7 @@ function FractionPicture({ v }: { v: Extract<KitVisual, { kind: "fraction" }> })
           ),
         )}
       </div>
-      {v.label && <figcaption className="mt-2 text-[0.9375rem] font-bold text-ink-2">{v.label}</figcaption>}
+      {v.label && <figcaption className="mt-2 text-label font-bold text-ink-2">{v.label}</figcaption>}
     </Frame>
   );
 }
@@ -363,7 +363,7 @@ function HundredSquare({ v }: { v: Extract<KitVisual, { kind: "grid100" }> }) {
         ))}
         <rect x="3" y="3" width={c * 10} height={c * 10} fill="none" stroke={INK} strokeWidth="3" rx="3" />
       </svg>
-      <figcaption className="mt-2 text-[0.9375rem] font-bold text-ink-2">{v.shaded} out of 100 shaded</figcaption>
+      <figcaption className="mt-2 text-label font-bold text-ink-2">{v.shaded} out of 100 shaded</figcaption>
     </Frame>
   );
 }

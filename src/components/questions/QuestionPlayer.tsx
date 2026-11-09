@@ -129,7 +129,7 @@ function QuestionPrompt({ q, focusOnMount = false, autoRead = false }: { q: Ques
   }, [autoRead, q.id, q.prompt]);
   return (
     <div className="flex items-start gap-3">
-      <h3 ref={ref} tabIndex={-1} className="min-w-0 flex-1 text-[1.5rem] font-extrabold leading-snug text-ink outline-none sm:text-[1.75rem]">
+      <h3 ref={ref} tabIndex={-1} className="min-w-0 flex-1 text-prompt-sm font-extrabold text-ink outline-none sm:text-prompt">
         <RichText text={q.prompt} />
       </h3>
       <ReadAloud text={q.prompt} label="Read the question aloud" />

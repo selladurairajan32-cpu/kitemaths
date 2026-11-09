@@ -18,11 +18,11 @@ function SkillActions({ m }: { m: SkillMastery }) {
   const skill = topic.skillById(m.skill);
   return (
     <span className="flex flex-wrap gap-x-4 gap-y-1">
-      <Link href={routes.practice(m.skill)} className="inline-flex min-h-11 items-center text-[0.9375rem] font-medium text-den hover:underline">
+      <Link href={routes.practice(m.skill)} className="inline-flex min-h-11 items-center text-label font-medium text-den hover:underline">
         Practise<span className="sr-only"> {skill.title}</span>
       </Link>
       {(m.status === "needs-review" || m.status === "passed-check") && (
-        <Link href={routes.recheck(m.skill)} className="inline-flex min-h-11 items-center text-[0.9375rem] font-medium text-den hover:underline">
+        <Link href={routes.recheck(m.skill)} className="inline-flex min-h-11 items-center text-label font-medium text-den hover:underline">
           Recheck<span className="sr-only"> {skill.title}</span>
         </Link>
       )}
@@ -58,7 +58,7 @@ export function ResultsScreen() {
         <span className="mx-auto grid size-14 place-items-center rounded-[20px] bg-sunk">
           <StarIcon size={24} />
         </span>
-        <h1 className="display mt-5 text-3xl font-semibold">Nothing to report yet</h1>
+        <h1 className="display mt-5 text-heading-2 sm:text-heading-1">Nothing to report yet</h1>
         <p className="mx-auto mt-2 max-w-md text-ink-2">
           This report fills in once {topic.title} lesson or practice questions are answered. It shows the evidence behind each skill label, any
           misunderstandings spotted, and a question-by-question review of the mastery check.
@@ -79,8 +79,8 @@ export function ResultsScreen() {
     <div className="space-y-6">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-[0.9375rem] font-bold text-muted">{topic.title}</p>
-          <h1 className="display text-3xl font-semibold sm:text-4xl">Full report</h1>
+          <p className="text-label font-bold text-muted">{topic.title}</p>
+          <h1 className="display text-heading-2 sm:text-heading-1">Full report</h1>
           <p className="mt-1 text-ink-2">
             The evidence behind every label: based on {stats.learningAnswered} lesson & practice answers{last ? " and the latest independent check" : ""}.
           </p>
@@ -103,16 +103,16 @@ export function ResultsScreen() {
           <div className="flex items-center gap-5 md:flex-col md:items-start">
             <ProgressRing value={score / last.order.length} size={120} label="Mastery check score">
               <span className="text-center">
-                <span className="block text-3xl font-semibold tabular-nums">{score}</span>
-                <span className="block text-[0.9375rem] text-muted">of {last.order.length}</span>
+                <span className="block text-heading-1 font-extrabold tabular-nums">{score}</span>
+                <span className="block text-label text-muted">of {last.order.length}</span>
               </span>
             </ProgressRing>
             <div className="space-y-2">
-              <h2 id="score-title" className="font-semibold">
+              <h2 id="score-title" className="text-title font-extrabold">
                 Last mastery check
               </h2>
               {last.completedAt && (
-                <p className="text-[0.9375rem] text-muted">{new Date(last.completedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</p>
+                <p className="text-label text-muted">{new Date(last.completedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</p>
               )}
               <div className="flex flex-wrap gap-2">
                 <a href="#review" className={buttonClass("secondary", "md")}>
@@ -132,7 +132,7 @@ export function ResultsScreen() {
               const right = rs.filter((x) => x.ev?.correct).length;
               return (
                 <li key={area}>
-                  <div className="mb-1 flex justify-between text-[0.9375rem]">
+                  <div className="mb-1 flex justify-between text-label">
                     <span>{area}</span>
                     <span className="tabular-nums text-muted">
                       {right} / {rs.length}
@@ -150,7 +150,7 @@ export function ResultsScreen() {
             <FlagIcon size={22} className="mt-0.5 shrink-0" />
             <div>
               <p className="font-semibold">{a.status === "in-progress" ? "Mastery check in progress" : "No mastery check yet"}</p>
-              <p className="text-[0.9375rem] text-ink-2">Skills can become “secure in practice” through practice. “Mastered” also needs the independent mastery check.</p>
+              <p className="text-label text-ink-2">Skills can become “secure in practice” through practice. “Mastered” also needs the independent mastery check.</p>
             </div>
           </div>
           <Link href={routes.assessment()} className={buttonClass("secondary", "md", "shrink-0")}>
@@ -161,7 +161,7 @@ export function ResultsScreen() {
 
       <div className="grid gap-5 lg:grid-cols-2">
         <section className="card p-5 sm:p-7" aria-labelledby="strengths-title">
-          <h2 id="strengths-title" className="flex items-center gap-2 font-semibold">
+          <h2 id="strengths-title" className="flex items-center gap-2 text-title font-extrabold">
             <span className="grid size-7 place-items-center rounded-full bg-ok-soft text-ok">
               <CheckIcon size={15} />
             </span>
@@ -173,26 +173,26 @@ export function ResultsScreen() {
                 <li key={m.skill} className="flex items-start justify-between gap-3">
                   <div>
                     <p className="font-medium">{skillById(m.skill).title}</p>
-                    <p className="text-[0.9375rem] text-muted">{independentText(m)} · {m.evidence} learning answers</p>
+                    <p className="text-label text-muted">{independentText(m)} · {m.evidence} learning answers</p>
                   </div>
                   <StatusBadge status={m.status} />
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="mt-3 text-[0.9375rem] text-ink-2">Keep going — strengths appear once a skill has several strong answers.</p>
+            <p className="mt-3 text-label text-ink-2">Keep going — strengths appear once a skill has several strong answers.</p>
           )}
         </section>
 
         <section className="card p-5 sm:p-7" aria-labelledby="next-title">
-          <h2 id="next-title" className="flex items-center gap-2 font-semibold">
+          <h2 id="next-title" className="flex items-center gap-2 text-title font-extrabold">
             <span className="grid size-7 place-items-center rounded-full bg-den-soft text-den">
               <ArrowRightIcon size={15} />
             </span>
             Next steps
           </h2>
           {toImprove.length === 0 ? (
-            <p className="mt-3 text-[0.9375rem] text-ink-2">Everything you&apos;ve worked on looks strong. Keep practising now and then so it stays that way.</p>
+            <p className="mt-3 text-label text-ink-2">Everything you&apos;ve worked on looks strong. Keep practising now and then so it stays that way.</p>
           ) : (
             <ul className="mt-4 space-y-3">
               {toImprove.slice(0, 4).map((m) => {
@@ -204,7 +204,7 @@ export function ResultsScreen() {
                       <p className="font-medium">{skill.title}</p>
                       <StatusBadge status={m.status} />
                     </div>
-                    <p className="mt-1 text-[0.9375rem] text-ink-2">
+                    <p className="mt-1 text-label text-ink-2">
                       {m.status === "needs-review"
                         ? "The latest independent check showed this needs another look: revisit the lesson, practise, then take a short recheck."
                         : m.status === "passed-check"
@@ -213,7 +213,7 @@ export function ResultsScreen() {
                     </p>
                     <div className="mt-1 flex flex-wrap gap-x-4">
                       {lesson && (
-                        <Link href={routes.lesson(lesson.id, 0)} className="inline-flex min-h-11 items-center text-[0.9375rem] font-medium text-den hover:underline">
+                        <Link href={routes.lesson(lesson.id, 0)} className="inline-flex min-h-11 items-center text-label font-medium text-den hover:underline">
                           Revisit “{lesson.title}”
                         </Link>
                       )}
@@ -228,10 +228,10 @@ export function ResultsScreen() {
       </div>
 
       <section className="card p-5 sm:p-7" aria-labelledby="skills-title">
-        <h2 id="skills-title" className="font-semibold">
+        <h2 id="skills-title" className="text-title font-extrabold">
           Skill by skill
         </h2>
-        <details className="mt-2 text-[0.9375rem] text-ink-2">
+        <details className="mt-2 text-label text-ink-2">
           <summary className="inline-flex min-h-11 cursor-pointer items-center font-medium text-den">How we decide each label</summary>
           <ul className="mt-2 max-w-3xl list-disc space-y-1 pl-5">
             <li>
@@ -262,16 +262,16 @@ export function ResultsScreen() {
                 <StatusBadge status={m.status} />
               </div>
               <EvidenceMeter count={m.recentCount} needed={SECURE_MIN_EVIDENCE} score={m.score} label={`${skillById(m.skill).title} practice`} />
-              <p className="text-[0.9375rem] text-muted">{independentText(m)}</p>
+              <p className="text-label text-muted">{independentText(m)}</p>
               <SkillActions m={m} />
             </li>
           ))}
         </ul>
         <div className="mt-4 hidden md:block">
-          <table className="w-full text-[0.9375rem]">
+          <table className="w-full text-label">
             <caption className="sr-only">Status and evidence for each skill</caption>
             <thead>
-              <tr className="border-b border-line text-left text-[0.9375rem] text-muted">
+              <tr className="border-b border-line text-left text-label text-muted">
                 <th scope="col" className="py-2 pr-3 font-medium">Skill</th>
                 <th scope="col" className="py-2 pr-3 font-medium">Status</th>
                 <th scope="col" className="py-2 pr-3 font-medium">Practice evidence</th>
@@ -293,7 +293,7 @@ export function ResultsScreen() {
                   <td className="py-2 pr-3">
                     <EvidenceMeter count={m.recentCount} needed={SECURE_MIN_EVIDENCE} score={m.score} label={`${skillById(m.skill).title} practice`} />
                   </td>
-                  <td className="py-2 pr-3 text-[0.9375rem]">{independentText(m)}</td>
+                  <td className="py-2 pr-3 text-label">{independentText(m)}</td>
                   <td className="py-2 text-right">
                     <SkillActions m={m} />
                   </td>
@@ -305,14 +305,14 @@ export function ResultsScreen() {
       </section>
 
       <section className="card p-5 sm:p-7" aria-labelledby="misc-title">
-        <h2 id="misc-title" className="font-semibold">
+        <h2 id="misc-title" className="text-title font-extrabold">
           Ideas to watch
         </h2>
-        <p className="mt-1 text-[0.9375rem] text-muted">
+        <p className="mt-1 text-label text-muted">
           We only call something a “likely pattern” after seeing it more than once, and we mark it resolved once later work shows the idea is understood.
         </p>
         {reports.length === 0 ? (
-          <p className="mt-4 rounded-[16px] bg-ok-soft px-4 py-3 text-[0.9375rem] text-ok">No common misconceptions spotted so far.</p>
+          <p className="mt-4 rounded-[16px] bg-ok-soft px-4 py-3 text-label text-ok">No common misconceptions spotted so far.</p>
         ) : (
           <ul className="mt-4 grid gap-3 md:grid-cols-2">
             {reports.map((r) => {
@@ -321,17 +321,17 @@ export function ResultsScreen() {
               return (
                 <li key={r.id} className="rounded-[20px] border border-line p-4">
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className={`rounded-full px-2.5 py-0.5 text-[0.9375rem] font-medium ${stateStyle}`}>
+                    <span className={`rounded-full px-2.5 py-0.5 text-label font-medium ${stateStyle}`}>
                       {r.state === "watching" ? "Still working on it" : r.state === "improving" ? "Improving" : "Resolved"}
                     </span>
-                    <span className="text-[0.9375rem] text-muted">{r.confidence === "likely" ? `Likely pattern · seen ${r.timesSeen} times` : "Possible · seen once"}</span>
+                    <span className="text-label text-muted">{r.confidence === "likely" ? `Likely pattern · seen ${r.timesSeen} times` : "Possible · seen once"}</span>
                   </div>
                   <p className="mt-2 font-medium">{def.name}</p>
-                  <p className="mt-1 text-[0.9375rem] text-ink-2">
+                  <p className="mt-1 text-label text-ink-2">
                     <RichText text={def.description} />
                   </p>
                   {r.state !== "resolved" && (
-                    <Link href={routes.practice(def.skills[0])} className="mt-1 inline-flex min-h-11 items-center text-[0.9375rem] font-medium text-den hover:underline">
+                    <Link href={routes.practice(def.skills[0])} className="mt-1 inline-flex min-h-11 items-center text-label font-medium text-den hover:underline">
                       Practise {skillById(def.skills[0]).title.toLowerCase()} →
                     </Link>
                   )}
@@ -344,10 +344,10 @@ export function ResultsScreen() {
 
       {last && (
         <section id="review" className="card scroll-mt-24 p-5 sm:p-7" aria-labelledby="review-title">
-          <h2 id="review-title" className="font-semibold">
+          <h2 id="review-title" className="text-title font-extrabold">
             Mastery check review
           </h2>
-          <p className="mt-1 text-[0.9375rem] text-muted">Each question is shown as you saw it, with your answer and the correct answer marked.</p>
+          <p className="mt-1 text-label text-muted">Each question is shown as you saw it, with your answer and the correct answer marked.</p>
           <ol className="mt-4 divide-y divide-line">
             {lastItems.map(({ q, ev, response }, i) => {
               const right = !!ev?.correct;
@@ -355,10 +355,10 @@ export function ResultsScreen() {
                 <li key={q.id}>
                   <details className="group py-2">
                     <summary className="flex min-h-11 cursor-pointer list-none items-center gap-3 rounded-lg py-1">
-                      <span className={`grid size-7 shrink-0 place-items-center rounded-full text-[0.9375rem] font-bold text-white ${right ? "bg-ok" : "bg-num"}`} aria-hidden>
+                      <span className={`grid size-7 shrink-0 place-items-center rounded-full text-label font-bold text-white ${right ? "bg-ok" : "bg-num"}`} aria-hidden>
                         {right ? "✓" : "✗"}
                       </span>
-                      <span className="flex-1 text-[0.9375rem]">
+                      <span className="flex-1 text-label">
                         <span className="text-muted">
                           Q{i + 1} · {q.area} ·{" "}
                         </span>
@@ -369,7 +369,7 @@ export function ResultsScreen() {
                         ›
                       </span>
                     </summary>
-                    <div className="mt-2 space-y-4 rounded-[16px] bg-paper p-4 text-[0.9375rem] sm:ml-10">
+                    <div className="mt-2 space-y-4 rounded-[16px] bg-paper p-4 text-label sm:ml-10">
                       <div className="pointer-events-none">
                         <QuestionInput question={q} response={response ?? null} onChange={() => {}} locked reveal orderKey={`assess:${last.seed}`} />
                       </div>
@@ -402,16 +402,16 @@ export function ResultsScreen() {
 
       <section className="grid gap-3 sm:grid-cols-3" aria-label="Activity">
         <div className="card p-5">
-          <p className="text-3xl font-semibold tabular-nums">{stats.learningAnswered}</p>
-          <p className="text-[0.9375rem] text-muted">lesson & practice answers</p>
+          <p className="text-heading-2 font-extrabold tabular-nums">{stats.learningAnswered}</p>
+          <p className="text-label text-muted">lesson & practice answers</p>
         </div>
         <div className="card p-5">
-          <p className="text-3xl font-semibold tabular-nums">{stats.firstTryRate === null ? "—" : `${Math.round(stats.firstTryRate * 100)}%`}</p>
-          <p className="text-[0.9375rem] text-muted">of those right first time</p>
+          <p className="text-heading-2 font-extrabold tabular-nums">{stats.firstTryRate === null ? "—" : `${Math.round(stats.firstTryRate * 100)}%`}</p>
+          <p className="text-label text-muted">of those right first time</p>
         </div>
         <div className="card p-5">
-          <p className="text-3xl font-semibold tabular-nums">{stats.hintsUsed}</p>
-          <p className="text-[0.9375rem] text-muted">hints & guided explanations in those answers</p>
+          <p className="text-heading-2 font-extrabold tabular-nums">{stats.hintsUsed}</p>
+          <p className="text-label text-muted">hints & guided explanations in those answers</p>
         </div>
       </section>
     </div>

@@ -33,7 +33,7 @@ export function Stepper({
   const labelId = useId();
   return (
     <div className="flex items-center gap-3">
-      <span className="text-[0.9375rem] font-medium text-ink-2" id={labelId}>
+      <span className="text-label font-medium text-ink-2" id={labelId}>
         {label}
       </span>
       <div className="flex items-center rounded-full border border-line-strong bg-surface" role="group" aria-labelledby={labelId}>
@@ -84,7 +84,7 @@ function Segmented<T extends string>({
           role="radio"
           aria-checked={value === o.value}
           onClick={() => onChange(o.value)}
-          className={`relative h-11 rounded-full px-4 text-[0.9375rem] font-medium transition-colors ${value === o.value ? "text-ink" : "text-muted hover:text-ink"}`}
+          className={`relative h-11 rounded-full px-4 text-label font-medium transition-colors ${value === o.value ? "text-ink" : "text-muted hover:text-ink"}`}
         >
           {value === o.value && (
             <motion.span layoutId={layoutId} className="absolute inset-0 rounded-full bg-surface" transition={{ duration: 0.18, ease: "easeOut" }} />
@@ -101,7 +101,7 @@ function Readout({ f, words = true }: { f: Fraction; words?: boolean }) {
     <div className="flex items-center gap-4">
       <FractionNotation n={f.n} d={f.d} size="xl" animate />
       {words && (
-        <div className="text-[0.9375rem] leading-relaxed text-ink-2" aria-live="polite">
+        <div className="text-label leading-relaxed text-ink-2" aria-live="polite">
           <p>
             <strong className="text-num-strong">{f.n}</strong> out of <strong className="text-den">{f.d}</strong> equal part{f.d === 1 ? "" : "s"} shaded
           </p>
@@ -171,15 +171,15 @@ export function FractionLab({
               <div className="flex flex-col items-center gap-3 md:w-64 md:items-start">
                 <Readout f={snapshot.build} />
                 <div className="flex gap-2">
-                  <button type="button" className="h-11 rounded-full px-3 text-[0.9375rem] font-medium text-ink-2 hover:bg-sunk" onClick={() => dispatch({ type: "shade-all", model: "build" })}>
+                  <button type="button" className="h-11 rounded-full px-3 text-label font-medium text-ink-2 hover:bg-sunk" onClick={() => dispatch({ type: "shade-all", model: "build" })}>
                     Shade all
                   </button>
-                  <button type="button" className="h-11 rounded-full px-3 text-[0.9375rem] font-medium text-ink-2 hover:bg-sunk" onClick={() => dispatch({ type: "clear", model: "build" })}>
+                  <button type="button" className="h-11 rounded-full px-3 text-label font-medium text-ink-2 hover:bg-sunk" onClick={() => dispatch({ type: "clear", model: "build" })}>
                     Clear
                   </button>
                 </div>
                 {snapshot.build.n > 0 && snapshot.build.n === snapshot.build.d && (
-                  <p className="rounded-[16px] bg-ok-soft px-3 py-1.5 text-[0.9375rem] text-ok">All parts shaded = one whole!</p>
+                  <p className="rounded-[16px] bg-ok-soft px-3 py-1.5 text-label text-ok">All parts shaded = one whole!</p>
                 )}
               </div>
             </div>
@@ -217,14 +217,14 @@ export function FractionLab({
             <StackedBars rows={[{ f: eqBase }, { f: snapshot.equivalentResult }]} guide />
             <div className="flex flex-wrap items-center justify-center gap-4" aria-live="polite">
               <FractionNotation n={eqBase.n} d={eqBase.d} size="lg" animate />
-              <div className="flex flex-col items-center text-[0.9375rem] font-semibold text-muted">
+              <div className="flex flex-col items-center text-label font-semibold text-muted">
                 <span>× {split}</span>
                 <span className="text-3xl leading-none text-ink">=</span>
                 <span>× {split}</span>
               </div>
               <FractionNotation n={snapshot.equivalentResult.n} d={snapshot.equivalentResult.d} size="lg" animate />
             </div>
-            <p className="text-center text-[0.9375rem] text-ink-2">
+            <p className="text-center text-label text-ink-2">
               {split === 1
                 ? "Split each part to see a new name for the same amount."
                 : `Every part was split into ${split}, so there are ${split}× as many parts — and ${split}× as many shaded. The amount stays the same.`}
@@ -240,7 +240,7 @@ export function FractionLab({
             </div>
             <div className="flex flex-wrap items-center justify-center gap-4" aria-live="polite">
               <FractionNotation n={lab.line.marker} d={lab.line.intervals} size="lg" animate />
-              <p className="text-[0.9375rem] text-ink-2">
+              <p className="text-label text-ink-2">
                 The marker is {lab.line.marker} of {lab.line.intervals} equal gaps from 0
                 {lab.line.marker === lab.line.intervals ? ": that is 1 whole." : "."}
               </p>
@@ -318,7 +318,7 @@ function ChallengeItem({
               type="button"
               onClick={() => setHintOpen((o) => !o)}
               aria-expanded={hintOpen}
-              className="inline-flex h-11 items-center gap-1 rounded-full px-2.5 text-[0.9375rem] text-muted hover:bg-sunk hover:text-ink"
+              className="inline-flex h-11 items-center gap-1 rounded-full px-2.5 text-label text-muted hover:bg-sunk hover:text-ink"
             >
               <BulbIcon size={16} /> Hint
             </button>
@@ -327,7 +327,7 @@ function ChallengeItem({
                 type="button"
                 onClick={check}
                 aria-label={`Check: ${c.text.replace(/[{}*]/g, "")}`}
-                className="inline-flex h-11 items-center rounded-full bg-ink px-4 text-[0.9375rem] font-medium text-white hover:bg-ink-2"
+                className="inline-flex h-11 items-center rounded-full bg-ink px-4 text-label font-medium text-white hover:bg-ink-2"
               >
                 Check
               </button>
@@ -336,13 +336,13 @@ function ChallengeItem({
         )}
       </div>
       <div aria-live="polite">
-        {hintOpen && !done && <p className="mt-2 pl-10 text-[0.9375rem] text-ink-2">{c.hint}</p>}
-        {status === "not-yet" && !done && <p className="mt-2 pl-10 text-[0.9375rem] text-warn">Not yet. {message}</p>}
-        {done && <p className="mt-2 pl-10 text-[0.9375rem] text-ok"><RichText text={c.success} /></p>}
+        {hintOpen && !done && <p className="mt-2 pl-10 text-label text-ink-2">{c.hint}</p>}
+        {status === "not-yet" && !done && <p className="mt-2 pl-10 text-label text-warn">Not yet. {message}</p>}
+        {done && <p className="mt-2 pl-10 text-label text-ok"><RichText text={c.success} /></p>}
       </div>
       {status === "observe" && !done && c.observe && (
         <fieldset className="mt-3 space-y-2 pl-10">
-          <legend className="mb-2 text-[0.9375rem] font-medium text-ink">
+          <legend className="mb-2 text-label font-medium text-ink">
             Your construction is right. <RichText text={c.observe.prompt} />
           </legend>
           <div className="flex flex-wrap gap-2">
@@ -354,13 +354,13 @@ function ChallengeItem({
                   if (o.id === c.observe!.answer) onComplete();
                   else setObserveWrong(true);
                 }}
-                className="min-h-11 rounded-[16px] border-2 border-line-strong bg-surface px-3 py-2 text-left text-[0.9375rem] font-medium hover:bg-sunk"
+                className="min-h-11 rounded-[16px] border-2 border-line-strong bg-surface px-3 py-2 text-left text-label font-medium hover:bg-sunk"
               >
                 <RichText text={o.label} />
               </button>
             ))}
           </div>
-          {observeWrong && <p className="text-[0.9375rem] text-warn">{c.observe.retry}</p>}
+          {observeWrong && <p className="text-label text-warn">{c.observe.retry}</p>}
         </fieldset>
       )}
     </li>
@@ -378,7 +378,7 @@ function CompareResult({ a, b }: { a: Fraction; b: Fraction }) {
         <span className="grid size-9 place-items-center rounded-full bg-ink font-semibold text-white">{sym}</span>
         <FractionNotation n={b.n} d={b.d} size="sm" />
       </span>
-      <span className="text-[0.9375rem] text-ink-2">
+      <span className="text-label text-ink-2">
         {toWords(a)} {words} {toWords(b)}
         {same && a.n > 0 && !(a.n === b.n && a.d === b.d) && (
           <> — they&apos;re equivalent (both {toWords(simplify(a))})</>

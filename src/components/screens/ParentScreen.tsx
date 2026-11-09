@@ -62,7 +62,7 @@ function ParentOverview() {
     <div className="space-y-6">
       <motion.header initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}>
         <p className="text-muted">Grown-ups&apos; overview</p>
-        <h1 className="display text-3xl sm:text-4xl">{name ? `How ${name} is doing` : "How your child is doing"}</h1>
+        <h1 className="display text-heading-2 sm:text-heading-1">{name ? `How ${name} is doing` : "How your child is doing"}</h1>
         <p className="mt-1 max-w-2xl text-ink-2">
           {stars} stars earned · {streak.current}-day streak (best {streak.best})
           {placement.status === "complete" &&
@@ -78,8 +78,8 @@ function ParentOverview() {
           <div className="space-y-5 p-5 sm:p-7">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="min-w-0">
-                <p className="text-[0.9375rem] font-bold text-muted">Current module</p>
-                <h2 id="topic-title" className="display mt-1 text-3xl font-semibold sm:text-4xl">
+                <p className="text-label font-bold text-muted">Current module</p>
+                <h2 id="topic-title" className="display mt-1 text-title sm:text-heading-2">
                   {topic.title}
                 </h2>
                 <p className="mt-1 text-ink-2">{topic.subtitle}</p>
@@ -89,10 +89,10 @@ function ParentOverview() {
             <PhasePath />
           </div>
           <div className="border-t border-line bg-paper p-5 sm:p-7">
-            <p className="text-[0.9375rem] font-bold text-den-strong">Recommended next</p>
+            <p className="text-label font-bold text-den-strong">Recommended next</p>
             <div className="mt-2 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <h3 className="text-xl font-semibold">{rec.title}</h3>
+                <h3 className="text-title font-extrabold">{rec.title}</h3>
                 <p className="mt-1 max-w-md text-ink-2">{rec.reason}</p>
               </div>
               <RecommendationLink rec={rec} className="shrink-0">
@@ -103,37 +103,37 @@ function ParentOverview() {
         </section>
 
         <section className="card flex flex-col gap-5 p-5 sm:p-7" aria-labelledby="progress-title">
-          <h2 id="progress-title" className="font-semibold">
+          <h2 id="progress-title" className="text-title font-extrabold">
             Progress
           </h2>
           <div className="flex items-center gap-5">
             <ProgressRing value={activity} size={104} label="Activities completed">
               <span className="text-center leading-tight">
-                <span className="block text-2xl font-semibold tabular-nums">{Math.round(activity * 100)}%</span>
-                <span className="block text-[0.9375rem] text-muted">activities</span>
+                <span className="block text-heading-2 font-extrabold tabular-nums">{Math.round(activity * 100)}%</span>
+                <span className="block text-label text-muted">activities</span>
               </span>
             </ProgressRing>
-            <dl className="grid flex-1 gap-2 text-[0.9375rem]">
+            <dl className="grid flex-1 gap-2 text-label">
               <Stat label="Lessons done" value={`${lessonsDone} / ${topic.lessons.length}`} />
               <Stat label="Secure in practice" value={`${secure} / ${total}`} />
               <Stat label="Mastered" value={`${mastered} / ${total}`} />
               {review > 0 && <Stat label="Needs review" value={`${review}`} tone="num" />}
             </dl>
           </div>
-          <p className="text-[0.9375rem] text-muted">
+          <p className="text-label text-muted">
             The ring shows activities completed (lessons, practice milestone, mastery check) — not how much is mastered.
           </p>
           <div className="grid grid-cols-2 gap-3 border-t border-line pt-4">
             <div>
-              <p className="text-2xl font-semibold tabular-nums">{stats.learningAnswered}</p>
-              <p className="text-[0.9375rem] text-muted">lesson & practice answers</p>
+              <p className="text-heading-2 font-extrabold tabular-nums">{stats.learningAnswered}</p>
+              <p className="text-label text-muted">lesson & practice answers</p>
             </div>
             <div>
-              <p className="text-2xl font-semibold tabular-nums">{stats.firstTryRate === null ? "—" : `${Math.round(stats.firstTryRate * 100)}%`}</p>
-              <p className="text-[0.9375rem] text-muted">of those right first time</p>
+              <p className="text-heading-2 font-extrabold tabular-nums">{stats.firstTryRate === null ? "—" : `${Math.round(stats.firstTryRate * 100)}%`}</p>
+              <p className="text-label text-muted">of those right first time</p>
             </div>
             <div className="col-span-2">
-              <p className="text-[0.9375rem]">
+              <p className="text-label">
                 <span className="text-muted">Mastery check: </span>
                 <strong>{last ? `${lastScore} / ${last.order.length}` : t.assessment.status === "in-progress" ? "in progress" : "not taken yet"}</strong>
               </p>
@@ -143,18 +143,18 @@ function ParentOverview() {
 
         <section className="card p-5 sm:p-7 lg:col-span-2" aria-labelledby="skills-title">
           <div className="mb-3 flex items-center justify-between">
-            <h2 id="skills-title" className="font-semibold">
+            <h2 id="skills-title" className="text-title font-extrabold">
               Skills at a glance
             </h2>
-            <Link href={routes.results()} className="inline-flex min-h-11 items-center rounded text-[0.9375rem] font-medium text-den hover:underline">
+            <Link href={routes.results()} className="inline-flex min-h-11 items-center rounded text-label font-medium text-den hover:underline">
               Full report
             </Link>
           </div>
-          <p className="mb-2 text-[0.9375rem] text-muted">Labels only. The full report shows the answers behind each label and what to do about it.</p>
+          <p className="mb-2 text-label text-muted">Labels only. The full report shows the answers behind each label and what to do about it.</p>
           <ul className="grid gap-x-8 sm:grid-cols-2">
             {topic.skills.map((s) => (
               <li key={s.id} className="flex items-center justify-between gap-3 border-b border-line py-2.5">
-                <span className="text-[0.9375rem]">{s.title}</span>
+                <span className="text-label">{s.title}</span>
                 <StatusBadge status={skillMastery(s.id, learner.results).status} />
               </li>
             ))}
@@ -162,11 +162,11 @@ function ParentOverview() {
         </section>
 
         <section className="card flex flex-col gap-4 p-5 sm:p-7" aria-labelledby="focus-title">
-          <h2 id="focus-title" className="font-semibold">
+          <h2 id="focus-title" className="text-title font-extrabold">
             Ideas we&apos;re working on
           </h2>
           {working.length === 0 ? (
-            <p className="text-[0.9375rem] text-ink-2">
+            <p className="text-label text-ink-2">
               {stats.learningAnswered === 0
                 ? "Nothing yet. When a wrong answer matches a known misunderstanding, it appears here, with how often it has been seen."
                 : "No unresolved misunderstandings in the answers so far."}
@@ -175,8 +175,8 @@ function ParentOverview() {
             <ul className="space-y-2.5">
               {working.slice(0, 3).map((r) => (
                 <li key={r.id} className="rounded-[16px] bg-paper p-3">
-                  <p className="text-[0.9375rem] font-medium">{misconceptionById(r.id)?.name}</p>
-                  <p className="text-[0.9375rem] text-muted">
+                  <p className="text-label font-medium">{misconceptionById(r.id)?.name}</p>
+                  <p className="text-label text-muted">
                     {r.confidence === "likely" ? `Seen ${r.timesSeen} times` : "Seen once — just keeping an eye on it"}
                     {r.state === "improving" ? " · improving" : ""}
                   </p>
@@ -185,13 +185,13 @@ function ParentOverview() {
             </ul>
           )}
           <div className="mt-auto space-y-3 border-t border-line pt-4">
-            <p className="text-[0.9375rem] text-muted">
+            <p className="text-label text-muted">
               Progress is saved in this browser on this device only. Clearing browser data, private browsing or another device will start fresh. There
               are no accounts yet.
             </p>
             {confirmReset ? (
               <div className="space-y-2">
-                <p className="text-[0.9375rem] text-ink-2">Clear all progress saved in this browser?</p>
+                <p className="text-label text-ink-2">Clear all progress saved in this browser?</p>
                 <div className="flex gap-2">
                   <Button
                     variant="secondary"
@@ -208,7 +208,7 @@ function ParentOverview() {
                 </div>
               </div>
             ) : (
-              <button type="button" onClick={() => setConfirmReset(true)} className="inline-flex h-11 items-center gap-1.5 rounded text-[0.9375rem] text-muted hover:text-ink">
+              <button type="button" onClick={() => setConfirmReset(true)} className="inline-flex h-11 items-center gap-1.5 rounded text-label text-muted hover:text-ink">
                 <RefreshIcon size={15} /> Reset progress
               </button>
             )}
@@ -217,11 +217,11 @@ function ParentOverview() {
       </div>
 
       <section className="card p-5 sm:p-7" aria-labelledby="settings-title">
-        <h2 id="settings-title" className="font-semibold">
+        <h2 id="settings-title" className="text-title font-extrabold">
           Settings
         </h2>
         <div className="mt-4 grid gap-5 sm:grid-cols-2">
-          <label className="block text-[0.9375rem]">
+          <label className="block text-label">
             <span className="font-medium">Child&apos;s first name</span>
             <input
               value={learner.profile.name}
@@ -230,7 +230,7 @@ function ParentOverview() {
               className="mt-1 h-11 w-full rounded-[16px] border-2 border-line-strong bg-surface px-3"
             />
           </label>
-          <label className="block text-[0.9375rem]">
+          <label className="block text-label">
             <span className="font-medium">School year</span>
             <select
               value={learner.profile.year ?? ""}
@@ -261,10 +261,10 @@ function ParentOverview() {
       </section>
 
       <section className="rounded-[var(--radius-card)] border-2 border-dashed border-line-strong p-5 sm:p-7" aria-labelledby="roadmap-title">
-        <h2 id="roadmap-title" className="font-semibold">
+        <h2 id="roadmap-title" className="text-title font-extrabold">
           About this module
         </h2>
-        <div className="mt-1 max-w-3xl space-y-2 text-[0.9375rem] text-ink-2">
+        <div className="mt-1 max-w-3xl space-y-2 text-label text-ink-2">
           <p>
             <strong>{topic.title}.</strong> {topic.subtitle}.
           </p>
@@ -288,7 +288,7 @@ function ParentOverview() {
 function Toggle({ label, hint, on, onChange }: { label: string; hint: string; on: boolean; onChange: (v: boolean) => void }) {
   return (
     <div className="flex items-start justify-between gap-4 rounded-[20px] bg-paper p-3">
-      <div className="text-[0.9375rem]">
+      <div className="text-label">
         <p className="font-medium">{label}</p>
         <p className="text-muted">{hint}</p>
       </div>

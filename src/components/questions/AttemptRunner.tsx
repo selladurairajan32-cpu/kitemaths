@@ -63,14 +63,14 @@ function AttemptQuestion({
       className="space-y-6"
     >
       <div className="flex items-start gap-3">
-        <h2 ref={heading} tabIndex={-1} className="min-w-0 flex-1 text-xl font-semibold leading-relaxed outline-none sm:text-2xl">
+        <h2 ref={heading} tabIndex={-1} className="min-w-0 flex-1 text-prompt-sm font-extrabold text-ink outline-none sm:text-prompt">
           <span className="sr-only">Question {index + 1} of {total}. </span>
           <RichText text={q.prompt} />
         </h2>
         <ReadAloud text={q.prompt} label="Read the question aloud" />
       </div>
       <QuestionInput question={q} response={response} onChange={change} locked={false} orderKey={orderKey} />
-      {problem && <p className="rounded-[16px] border border-warn/30 bg-warn-soft px-4 py-3 text-[0.9375rem] text-ink-2">{problem} This answer isn&apos;t saved yet.</p>}
+      {problem && <p className="rounded-[16px] border border-warn/30 bg-warn-soft px-4 py-3 text-label text-ink-2">{problem} This answer isn&apos;t saved yet.</p>}
       <div className="sticky bottom-0 z-10 -mx-5 flex flex-wrap items-center justify-between gap-3 border-t border-line bg-surface px-5 py-3 sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:pb-0 sm:pt-5">
         <Button variant="ghost" onClick={() => onNavigate(index - 1)} disabled={index === 0}>
           <ArrowLeftIcon size={17} /> Back
@@ -117,8 +117,8 @@ export function AttemptRunner({
     <div className="mx-auto max-w-3xl space-y-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="display text-2xl font-semibold">{title}</h1>
-          <p className="text-[0.9375rem] text-muted" aria-live="polite">
+          <h1 className="display text-title">{title}</h1>
+          <p className="text-label text-muted" aria-live="polite">
             {reviewing ? "Review your answers" : `Question ${current + 1} of ${order.length}`} · {answered} answered · no hints
           </p>
         </div>
@@ -134,7 +134,7 @@ export function AttemptRunner({
               onClick={() => go(i)}
               aria-label={`Question ${i + 1}${done ? ", answered" : ", not answered"}`}
               aria-current={isCurrent ? "step" : undefined}
-              className={`grid size-11 place-items-center rounded-[16px] text-[0.9375rem] font-semibold transition-colors ${
+              className={`grid size-11 place-items-center rounded-[16px] text-label font-semibold transition-colors ${
                 isCurrent ? "bg-brand text-white shadow-[var(--shadow-card)]" : done ? "bg-ok-soft text-ok" : "bg-sunk text-muted hover:bg-line"
               }`}
             >
@@ -149,7 +149,7 @@ export function AttemptRunner({
         <AnimatePresence mode="wait">
           {reviewing ? (
             <motion.div key="review" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-5">
-              <h2 className="display text-2xl font-semibold outline-none" tabIndex={-1} ref={(el) => el?.focus()}>
+              <h2 className="display text-heading-2 outline-none" tabIndex={-1} ref={(el) => el?.focus()}>
                 Ready to finish?
               </h2>
               <p className="text-ink-2">

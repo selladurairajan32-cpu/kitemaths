@@ -103,6 +103,8 @@ export function AssessmentScreen() {
   const strongNow = last ? topic.skills.filter((sk) => latestOK(sk.id, learner.results)) : [];
   const revisit = last ? topic.skills.filter((sk) => !latestOK(sk.id, learner.results)) : [];
 
+  const IntroTitle = justFinished && last ? "h2" : "h1";
+
   return (
     <section className="card relative mx-auto max-w-3xl p-6 sm:p-10">
       {justFinished && last && (
@@ -111,7 +113,7 @@ export function AssessmentScreen() {
           <div className="flex justify-center">
             <Kip mood="cheer" size={96} />
           </div>
-          <h1 className="display mt-2 text-3xl sm:text-4xl" tabIndex={-1} ref={(el) => el?.focus()}>
+          <h1 className="display mt-2 text-heading-2 sm:text-heading-1" tabIndex={-1} ref={(el) => el?.focus()}>
             Challenge complete!
           </h1>
           <p className="mt-1 text-lg text-ink-2">
@@ -145,7 +147,8 @@ export function AssessmentScreen() {
           <PaperIcon name="trophy" size={56} />
         </span>
         <div>
-          <h2 className="display text-3xl sm:text-4xl">The big challenge</h2>
+          {/* One h1 per screen: after a finish, the celebration above holds it. */}
+          <IntroTitle className="display text-heading-2 sm:text-heading-1">The big challenge</IntroTitle>
         </div>
       </div>
       <KipSays mood="happy" tone="sky" className="mt-5" speak={`There are ${items.length} questions, two for every skill, and no hints. Take your time and do your best thinking. You'll earn ${STARS.check} bonus stars for finishing.`}>
@@ -155,7 +158,7 @@ export function AssessmentScreen() {
 
       {last && (
         <div className="mt-6 flex flex-col gap-3 rounded-[20px] border border-line bg-paper p-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-[0.9375rem] text-ink-2">
+          <p className="text-label text-ink-2">
             Last check:{" "}
             <strong className="text-ink">
               {lastScore} / {last.order.length}
@@ -170,13 +173,13 @@ export function AssessmentScreen() {
 
       <ul className="mt-6 grid gap-2 sm:grid-cols-2">
         {ASSESSMENT_AREAS.map((area) => (
-          <li key={area} className="flex items-center justify-between rounded-[16px] bg-paper px-4 py-3 text-[0.9375rem]">
+          <li key={area} className="flex items-center justify-between rounded-[16px] bg-paper px-4 py-3 text-label">
             {area}
             <span className="text-muted">{items.filter((q) => q.area === area).length} questions</span>
           </li>
         ))}
       </ul>
-      <ul className="mt-6 space-y-1.5 text-[0.9375rem] text-ink-2">
+      <ul className="mt-6 space-y-1.5 text-label text-ink-2">
         <li>• Take your time — there&apos;s no timer.</li>
         <li>• You can skip a question and come back to it, and change any answer before you finish.</li>
         <li>• Your answers are saved on this device as you go.</li>

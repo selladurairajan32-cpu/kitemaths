@@ -72,7 +72,7 @@ export function SkyScene({
         <path d={`M${REEL.x - 6} ${REEL.y - 9} v18 M${REEL.x + 6} ${REEL.y - 9} v18`} stroke={PAPER.ink} strokeWidth="1.5" strokeOpacity="0.5" />
       </svg>
 
-      <span className="absolute right-4 -translate-y-full pb-1 text-[0.9375rem] font-semibold text-ink-2" style={{ top: `${(LINE_Y / H) * 100}%` }}>
+      <span className="absolute right-4 -translate-y-full pb-1 text-label font-semibold text-ink-2" style={{ top: `${(LINE_Y / H) * 100}%` }}>
         Level {nextLevel}
       </span>
 

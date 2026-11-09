@@ -62,7 +62,7 @@ export function Hud({ compact = false }: { compact?: boolean }) {
           {gained > 0 && (
             <motion.span
               key={`gain-${stars}`}
-              className="absolute -top-4 left-2 whitespace-nowrap text-[0.9375rem] font-bold text-ink"
+              className="absolute -top-4 left-2 whitespace-nowrap text-label font-bold text-ink"
               initial={{ opacity: 1, y: 0 }}
               animate={{ opacity: 0, y: -12 }}
               transition={{ duration: 1.1, ease: "easeOut" }}
@@ -73,7 +73,7 @@ export function Hud({ compact = false }: { compact?: boolean }) {
           )}
         </AnimatePresence>
       </span>
-      {!compact && <span className="hidden whitespace-nowrap text-[0.9375rem] font-semibold text-muted xl:inline">Level {level.level}</span>}
+      {!compact && <span className="hidden whitespace-nowrap text-label font-semibold text-muted xl:inline">Level {level.level}</span>}
       <span className="flex min-h-11 items-center gap-1 rounded-full bg-tile-orange pl-1.5 pr-3.5" title={`${streak.current} day streak`}>
         <Pic name="flame" size={28} muted={!streak.activeToday} />
         <span className={`text-lg font-extrabold tabular-nums leading-none ${streak.activeToday ? "text-ink" : "text-muted"}`}>{streak.current}</span>

@@ -57,7 +57,7 @@ function SkillPicker({ focusSkill }: { focusSkill: string | null }) {
   return (
     <nav aria-label="Choose what to practise" className="card p-5 sm:p-6">
       <h2 className="display text-xl">Pick a power-up</h2>
-      <p className="text-[0.9375rem] text-muted">Practise one skill, or mix them all.</p>
+      <p className="text-label text-muted">Practise one skill, or mix them all.</p>
       <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
         <li className="sm:col-span-2">
           <Link
@@ -72,7 +72,7 @@ function SkillPicker({ focusSkill }: { focusSkill: string | null }) {
             </span>
             <span className="min-w-0 flex-1">
               <span className="block font-semibold">Mixed challenge</span>
-              <span className="block text-[0.9375rem] text-muted">Kip picks what helps you most</span>
+              <span className="block text-label text-muted">Kip picks what helps you most</span>
             </span>
           </Link>
         </li>
@@ -90,8 +90,8 @@ function SkillPicker({ focusSkill }: { focusSkill: string | null }) {
                 <span className="grid size-12 shrink-0 place-items-center rounded-[16px] bg-tile-yellow" aria-hidden>
                   <PaperIcon name={look.icon} size={32} />
                 </span>
-                <span className="min-w-0 flex-1 text-[0.9375rem] font-semibold leading-tight">{s.title}</span>
-                <span className={`shrink-0 rounded-full px-2 py-0.5 text-[0.9375rem] font-bold ${st.cls}`}>{st.label}</span>
+                <span className="min-w-0 flex-1 text-label font-semibold leading-tight">{s.title}</span>
+                <span className={`shrink-0 rounded-full px-2 py-0.5 text-label font-bold ${st.cls}`}>{st.label}</span>
               </Link>
             </li>
           );
@@ -195,15 +195,15 @@ function Summary() {
       </motion.p>
       <dl className="mt-6 grid grid-cols-3 gap-3 text-left">
         <div className="rounded-[24px] bg-ok-soft p-4">
-          <dt className="text-[0.9375rem] font-semibold text-ok">First try</dt>
+          <dt className="text-label font-semibold text-ok">First try</dt>
           <dd className="display text-3xl tabular-nums">{first}</dd>
         </div>
         <div className="rounded-[24px] bg-sky-soft p-4">
-          <dt className="text-[0.9375rem] font-semibold text-den-strong">With a little help</dt>
+          <dt className="text-label font-semibold text-den-strong">With a little help</dt>
           <dd className="display text-3xl tabular-nums">{supported}</dd>
         </div>
         <div className="rounded-[24px] bg-sun-soft p-4">
-          <dt className="text-[0.9375rem] font-semibold text-warn">Still growing</dt>
+          <dt className="text-label font-semibold text-warn">Still growing</dt>
           <dd className="display text-3xl tabular-nums">{notYet}</dd>
         </div>
       </dl>
@@ -247,7 +247,7 @@ export function PracticeScreen({ focusSkill = null }: { focusSkill?: string | nu
             <PaperIcon name={topic.lessonLook(topic.skillById(current!.skill).lessonId).icon} size={32} />
           </span>
           <div className="min-w-0 flex-1">
-            <h1 id="practice-heading" className="flex items-center justify-between gap-2 text-[0.9375rem] font-semibold text-muted">
+            <h1 id="practice-heading" className="flex items-center justify-between gap-2 text-label font-semibold text-muted">
               <span className="min-w-0">
                 <span className="text-ink">{topic.skillById(current!.skill).title}</span>
                 <span className="sr-only">

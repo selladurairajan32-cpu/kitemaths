@@ -95,7 +95,7 @@ export function JourneyScreen() {
       <div>
         <header className="mb-6">
           <p className="text-label font-bold text-muted">{topic.title}</p>
-          <h1 className="display text-3xl font-semibold sm:text-4xl">Learning journey</h1>
+          <h1 className="display text-heading-2 sm:text-heading-1">Learning journey</h1>
           <p className="mt-2 max-w-xl text-ink-2">
             Lesson by lesson: what each one teaches, what it builds on, and what evidence marked it complete. {LESSONS.length} lessons, then practice
             until skills are secure, then an independent mastery check.
@@ -132,7 +132,7 @@ export function JourneyScreen() {
                           {STATUS_TEXT[status]}
                         </span>
                       </p>
-                      <h2 className="mt-1.5 text-lg font-semibold">{l.title}</h2>
+                      <h2 className="mt-1.5 text-title font-extrabold">{l.title}</h2>
                       <p className="text-label text-ink-2">
                         <RichText text={l.summary} />
                       </p>
@@ -195,7 +195,7 @@ export function JourneyScreen() {
                       {STATUS_TEXT[practiceStatus]}
                     </span>
                   </p>
-                  <h2 className="mt-1.5 flex items-center gap-2 text-lg font-semibold">
+                  <h2 className="mt-1.5 flex items-center gap-2 text-title font-extrabold">
                     <PracticeIcon size={18} /> Practice milestone
                   </h2>
                   <p className="text-label text-ink-2">
@@ -234,7 +234,7 @@ export function JourneyScreen() {
                       {STATUS_TEXT[assessStatus]}
                     </span>
                   </p>
-                  <h2 className="mt-1.5 flex items-center gap-2 text-lg font-semibold">
+                  <h2 className="mt-1.5 flex items-center gap-2 text-title font-extrabold">
                     <FlagIcon size={18} /> Mastery check
                   </h2>
                   <p className="text-label text-ink-2">
@@ -296,7 +296,7 @@ export function JourneyScreen() {
 
       <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
         <div className="card p-5">
-          <h2 className="font-semibold">What the lesson tags mean</h2>
+          <h2 className="text-title font-extrabold">What the lesson tags mean</h2>
           <p className="mt-1 text-label text-ink-2">
             Each lesson is tagged with its main purpose. Lessons move broadly from understanding to mastery, but a purpose can come up more than once, so
             the tags are not strict steps in order.

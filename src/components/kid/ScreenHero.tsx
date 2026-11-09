@@ -39,7 +39,7 @@ export function ScreenHero({
             </span>
           ) : null}
           <div className="min-w-0">
-            <h1 id={titleId} className="display text-[2rem] sm:text-[2.625rem]">
+            <h1 id={titleId} className="display text-heading-1 sm:text-display-2">
               {title}
             </h1>
             {line && <div className="mt-2 max-w-2xl text-lg text-ink-2">{line}</div>}

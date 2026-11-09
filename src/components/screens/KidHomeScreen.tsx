@@ -94,7 +94,7 @@ function KidHome() {
             </p>
             {brandNew ? (
               <>
-                <h1 id="next-title" className="display mt-3 text-[2.125rem] sm:text-[3rem]">
+                <h1 id="next-title" className="display mt-3 text-heading-1 sm:text-display-1">
                   I&apos;m Kip. Let&apos;s find your start!
                 </h1>
                 <p className="mt-4 max-w-xl text-lg text-ink-2 sm:text-[1.1875rem]">
@@ -108,7 +108,7 @@ function KidHome() {
               </>
             ) : (
               <>
-                <h1 id="next-title" className="display mt-3 text-[2.125rem] sm:text-[3rem]">
+                <h1 id="next-title" className="display mt-3 text-heading-1 sm:text-display-1">
                   {next.title}
                 </h1>
                 <p className="mt-4 max-w-xl text-lg text-ink-2 sm:text-[1.1875rem]">
@@ -123,7 +123,7 @@ function KidHome() {
                   </ButtonLink>
                 </div>
                 {nextIndex >= 0 && (
-                  <p className="mt-5 text-base font-semibold text-muted">
+                  <p className="mt-5 text-label font-semibold text-muted">
                     Lesson {nextIndex + 1} of {topic.lessons.length} · {topic.lessons[nextIndex].minutes} minutes
                   </p>
                 )}
@@ -223,9 +223,9 @@ function KidHome() {
                     <PaperIcon name={lessonLook(l.id).icon} size={56} />
                   </span>
                   <span className="min-w-0">
-                    <span className="block text-[0.9375rem] font-bold text-muted">Lesson {i + 1}</span>
-                    <span className="mt-0.5 block text-lg font-extrabold leading-snug text-ink sm:text-xl">{l.title}</span>
-                    <span className={`mt-1.5 flex items-center gap-1.5 text-[0.9375rem] font-bold ${isDone ? "text-ok" : isNext ? "text-brand-strong" : "font-semibold text-muted"}`}>
+                    <span className="block text-label font-bold text-muted">Lesson {i + 1}</span>
+                    <span className="mt-0.5 block text-body font-extrabold leading-snug text-ink sm:text-title">{l.title}</span>
+                    <span className={`mt-1.5 flex items-center gap-1.5 text-label font-bold ${isDone ? "text-ok" : isNext ? "text-brand-strong" : "font-semibold text-muted"}`}>
                       {isDone && <CheckIcon size={17} strokeWidth={3} />}
                       {status}
                     </span>
@@ -253,9 +253,9 @@ function KidHome() {
                 <Pic name="trophy" size={56} />
               </span>
               <span className="min-w-0">
-                <span className="block text-[0.9375rem] font-bold text-muted">The big challenge</span>
+                <span className="block text-label font-bold text-muted">The big challenge</span>
                 <span className="mt-0.5 block text-lg font-extrabold leading-snug text-ink sm:text-xl">Show what you know</span>
-                <span className="mt-1.5 flex items-center gap-1.5 text-[0.9375rem] font-semibold text-muted">
+                <span className="mt-1.5 flex items-center gap-1.5 text-label font-semibold text-muted">
                   {inTopic.assessment.last ? (
                     <>
                       <CheckIcon size={17} strokeWidth={3} /> Taken · try it again any time
@@ -287,14 +287,14 @@ function KidHome() {
           {shelf.map((b) => (
             <li key={b.id} className="flex flex-col items-center gap-2 rounded-[24px] border border-line bg-surface px-3 pb-5 pt-6 text-center shadow-[var(--shadow-card)]">
               <Pic name={badgePic(b.id)} size={72} muted={!b.earned} />
-              <span className="text-base font-extrabold leading-snug text-ink">{b.title}</span>
-              {!b.earned && <span className="text-[0.9375rem] text-ink-2">{b.description}</span>}
+              <span className="text-body font-extrabold leading-snug text-ink">{b.title}</span>
+              {!b.earned && <span className="text-label text-ink-2">{b.description}</span>}
               {b.earned ? (
-                <span className="text-[0.9375rem] font-bold text-ok">Won</span>
+                <span className="text-label font-bold text-ok">Won</span>
               ) : (
                 <>
                   <Meter value={b.progress} fill="bg-warn-bright" label={`${b.title}: ${Math.round(b.progress * 100)}%`} className="mt-0 w-4/5" />
-                  <span className="text-[0.9375rem] font-semibold text-muted">{Math.round(b.progress * 100)}% there</span>
+                  <span className="text-label font-semibold text-muted">{Math.round(b.progress * 100)}% there</span>
                 </>
               )}
             </li>
@@ -304,7 +304,7 @@ function KidHome() {
 
       {/* Other things to do. */}
       <section aria-labelledby="more-title">
-        <h2 id="more-title" className="display text-[1.625rem] sm:text-[2.125rem]">
+        <h2 id="more-title" className="display text-heading-2 sm:text-heading-1">
           More to explore
         </h2>
         <ul className="mt-5 grid grid-cols-[repeat(auto-fit,minmax(min(100%,16rem),1fr))] gap-4">
@@ -325,7 +325,7 @@ function KidHome() {
               ? `Streak safe for today. ${DAILY_GOAL - today} more question${DAILY_GOAL - today === 1 ? "" : "s"} and you reach today's goal.`
               : `Goal done! Come back tomorrow to make it a ${streak.current + 1}-day streak.`}
         </KipSays>
-        <p className="text-[0.9375rem] text-muted">3D pictures: Microsoft Fluent Emoji, MIT licence.</p>
+        <p className="text-label text-muted">3D pictures: Microsoft Fluent Emoji, MIT licence.</p>
       </footer>
     </div>
   );
@@ -352,8 +352,8 @@ function HeroArt({ mood, cards }: { mood: "happy" | "cheer"; cards: { pic: PicNa
         <div key={i} className={`absolute flex items-center gap-2.5 rounded-[18px] bg-surface py-2 pl-2 pr-4 shadow-[var(--shadow-lift)] ${spots[i]}`}>
           <Pic name={c.pic} size={40} />
           <span className="leading-tight">
-            <span className="block text-base font-extrabold text-ink">{c.title}</span>
-            <span className="block text-[0.9375rem] font-semibold text-muted">{c.sub}</span>
+            <span className="block text-body font-extrabold text-ink">{c.title}</span>
+            <span className="block text-label font-semibold text-muted">{c.sub}</span>
           </span>
         </div>
       ))}
@@ -365,7 +365,7 @@ function SectionHead({ id, title, line, href, cta }: { id: string; title: string
   return (
     <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <h2 id={id} className="display text-[1.625rem] sm:text-[2.125rem]">
+        <h2 id={id} className="display text-heading-2 sm:text-heading-1">
           {title}
         </h2>
         <p className="mt-1.5 text-lg text-ink-2">{line}</p>
@@ -403,14 +403,14 @@ function StatCard({
           <Pic name={pic} size={36} />
         </span>
         <span className="min-w-0">
-          <span className="block text-[0.9375rem] font-bold text-muted">{label}</span>
-          <span className="block text-[1.75rem] font-extrabold leading-tight text-ink">
+          <span className="block text-label font-bold text-muted">{label}</span>
+          <span className="block text-heading-2 font-extrabold leading-tight text-ink">
             {value}
-            {unit && <span className="ml-1 text-base font-bold text-muted">{unit}</span>}
+            {unit && <span className="ml-1 text-label font-bold text-muted">{unit}</span>}
           </span>
         </span>
       </div>
-      <p className="mt-3 text-[0.9375rem] font-semibold text-muted">{sub}</p>
+      <p className="mt-3 text-label font-semibold text-muted">{sub}</p>
       {children}
     </>
   );
@@ -435,7 +435,7 @@ function MoreCard({ href, pic, tile, title, line }: { href: string; pic: PicName
         </span>
         <span className="min-w-0 flex-1">
           <span className="block text-lg font-extrabold text-ink">{title}</span>
-          <span className="block text-base text-ink-2">{line}</span>
+          <span className="block text-body text-ink-2">{line}</span>
         </span>
         <ArrowRightIcon size={20} className="shrink-0 text-ink-2" />
       </Link>

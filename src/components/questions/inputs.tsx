@@ -25,7 +25,7 @@ export function MarkIcon({ mark }: { mark: Mark }) {
   if (!mark || mark === "missed") return null;
   return (
     <span
-      className={`absolute -right-2 -top-2 grid size-7 place-items-center rounded-full text-[0.9375rem] font-bold text-white ${mark === "correct" ? "bg-ok" : "bg-num-strong"}`}
+      className={`absolute -right-2 -top-2 grid size-7 place-items-center rounded-full text-label font-bold text-white ${mark === "correct" ? "bg-ok" : "bg-num-strong"}`}
       aria-hidden
     >
       {mark === "correct" ? <CheckIcon size={15} strokeWidth={3} /> : <CloseIcon size={15} strokeWidth={3} />}

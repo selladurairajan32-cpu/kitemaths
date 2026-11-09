@@ -53,7 +53,7 @@ function pairings(): Pairing[] {
 }
 
 /** Baselines measured on 4 Nov 2026 (R0 step 2). These may only go down as screens move to tokens in R1. */
-const ARBITRARY_TEXT_SIZE_BASELINE = 224;
+const ARBITRARY_TEXT_SIZE_BASELINE = 24; // Lowered from 224 on 9 Nov 2026 when screens moved to the type tokens (CH-046).
 const TSX_FILES_WITH_HEX_BASELINE = 15;
 /**
  * Added 5 Nov (independent review): counting files alone let more hex values be added inside files that

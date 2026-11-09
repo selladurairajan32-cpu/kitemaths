@@ -182,7 +182,7 @@ export function SkyMapScreen() {
                     {s.status === "current" && " · Next!"}
                     {s.status === "done" && " · Done"}
                   </p>
-                  <p className="text-lg font-extrabold leading-snug text-ink">
+                  <p className="text-title font-extrabold text-ink">
                     <Link href={s.href} className="hover:underline">
                       {s.title}
                     </Link>
@@ -219,7 +219,7 @@ export function SkyMapScreen() {
       </section>
 
       <section className="card p-5" aria-labelledby="skills-title">
-        <h2 id="skills-title" className="display text-xl">
+        <h2 id="skills-title" className="display text-title">
           My skills
         </h2>
         <ul className="mt-3 grid gap-2 sm:grid-cols-2">

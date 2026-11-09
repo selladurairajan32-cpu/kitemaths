@@ -13,7 +13,7 @@ export function PhasePath() {
       {phases.map(({ phase, status }, i) => (
         <li key={phase} className="flex shrink-0 items-center gap-1">
           <span
-            className={`inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-[0.9375rem] font-semibold ${
+            className={`inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-label font-semibold ${
               status === "done" ? "bg-ok-soft text-ok" : status === "current" ? "bg-ink text-white" : "bg-sunk text-muted"
             }`}
             aria-current={status === "current" ? "step" : undefined}
@@ -44,7 +44,7 @@ export function StorageNotice() {
   const status = useStorageStatus();
   if (status === "ok") return null;
   return (
-    <p role="status" className="rounded-[20px] border border-warn/30 bg-warn-soft px-4 py-3 text-[0.9375rem] text-ink-2">
+    <p role="status" className="rounded-[20px] border border-warn/30 bg-warn-soft px-4 py-3 text-label text-ink-2">
       {status === "unavailable"
         ? "This browser isn't letting us save progress (for example in private browsing). You can keep learning, but progress will be lost when this tab closes."
         : "We found saved progress we couldn't read, so we kept a backup copy in this browser and started fresh."}

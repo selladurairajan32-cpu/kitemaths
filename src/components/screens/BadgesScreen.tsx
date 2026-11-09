@@ -34,14 +34,14 @@ export function BadgesScreen() {
               <Pic name="star" size={40} />
               <span className="leading-tight">
                 <span className="block text-2xl font-extrabold text-ink">{stars}</span>
-                <span className="block text-[0.9375rem] font-semibold text-muted">stars</span>
+                <span className="block text-label font-semibold text-muted">stars</span>
               </span>
             </span>
             <span className="flex items-center gap-2 rounded-[20px] bg-surface px-4 py-3 shadow-[var(--shadow-card)]">
               <Pic name="trophy" size={40} />
               <span className="leading-tight">
                 <span className="block text-2xl font-extrabold text-ink">Level {level.level}</span>
-                <span className="block text-[0.9375rem] font-semibold text-muted">{level.title}</span>
+                <span className="block text-label font-semibold text-muted">{level.title}</span>
               </span>
             </span>
           </div>
@@ -55,9 +55,9 @@ export function BadgesScreen() {
               <Pic name={badgePic(b.id)} size={64} muted={!b.earned} />
             </span>
             <p className="mt-1 text-lg font-extrabold leading-snug text-ink">{b.title}</p>
-            <p className="text-[0.9375rem] text-ink-2">{b.description}</p>
+            <p className="text-label text-ink-2">{b.description}</p>
             {b.earned ? (
-              <span className="mt-auto rounded-full bg-ok-soft px-3 py-1 text-[0.9375rem] font-bold text-ok">Won</span>
+              <span className="mt-auto rounded-full bg-ok-soft px-3 py-1 text-label font-bold text-ok">Won</span>
             ) : (
               <div className="mt-auto w-full pt-1">
                 <div
@@ -70,7 +70,7 @@ export function BadgesScreen() {
                 >
                   <div className="h-full rounded-full bg-warn-bright" style={{ width: `${b.progress * 100}%` }} />
                 </div>
-                <p className="mt-1.5 text-[0.9375rem] font-semibold text-muted">{Math.round(b.progress * 100)}% there</p>
+                <p className="mt-1.5 text-label font-semibold text-muted">{Math.round(b.progress * 100)}% there</p>
               </div>
             )}
           </li>

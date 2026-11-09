@@ -105,7 +105,7 @@ export function EvidenceMeter({
             <span key={i} className={`h-2 w-5 rounded-full ${i < count ? "bg-den/60" : "bg-sunk"}`} />
           ))}
         </span>
-        <span className="text-[0.9375rem] text-muted">
+        <span className="text-label text-muted">
           {count}/{needed} answers
         </span>
       </div>
@@ -114,7 +114,7 @@ export function EvidenceMeter({
   return (
     <div className="flex items-center gap-2">
       <ProgressBar value={score} label={`${label}: recent score ${Math.round(score * 100)}%`} tone={score >= 0.75 ? "ok" : "den"} className="w-24" />
-      <span className="whitespace-nowrap text-[0.9375rem] text-muted">{Math.round(score * 100)}% recent</span>
+      <span className="whitespace-nowrap text-label text-muted">{Math.round(score * 100)}% recent</span>
     </div>
   );
 }
@@ -122,7 +122,7 @@ export function EvidenceMeter({
 export function StatusBadge({ status }: { status: SkillStatus }) {
   const m = STATUS_META[status];
   return (
-    <span className={`inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[0.9375rem] font-medium ${m.className}`}>
+    <span className={`inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-0.5 text-label font-medium ${m.className}`}>
       <span className={`size-1.5 rounded-full ${m.dot}`} aria-hidden />
       {m.label}
     </span>

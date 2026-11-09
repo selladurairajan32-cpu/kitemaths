@@ -63,7 +63,7 @@ TC-UX-002.1.4,UX-002,AC1,unit,automated,passing,"src/design-tokens.test.ts::meet
 TC-UX-002.1.5,UX-002,AC1,unit,automated,passing,"src/design-tokens.test.ts::adds no violet token (D-013: the undefined violet classes are fixed in R1, DEF-009)",
 TC-UX-002.1.6,UX-002,AC1,unit,automated,passing,src/design.test.ts::keeps violet and gradients out of the stylesheet,Palette rule
 TC-UX-002.1.7,UX-002,AC1,visual-a11y-qa,manual,review-pending,,"Specimen /design-specimen at 390px and 1280px, with a browser contrast audit of computed colours (docs/product/verification/)"
-TC-UX-002.2.1,UX-002,AC2,unit,automated,passing,src/design-tokens.test.ts::does not let one-off text sizes or hex colours grow (ratchet),"Baselines on 4 Nov: 224 one-off text sizes, 15 .tsx files with hex (RC-006)"
+TC-UX-002.2.1,UX-002,AC2,unit,automated,passing,src/design-tokens.test.ts::does not let one-off text sizes or hex colours grow (ratchet),"Baselines on 4 Nov: 224 one-off text sizes, 15 .tsx files with hex (RC-006); one-off text sizes lowered to 24 on 9 Nov when screens adopted the type tokens (CH-046)"
 TC-UX-002.2.2,UX-002,AC2,unit,automated,passing,src/design.test.ts::names only paper icons that exist,Icons come from one registry
 TC-UX-002.2.3,UX-002,AC2,unit,automated,passing,src/design.test.ts::has a 3D picture file for every picture name,
 TC-UX-002.2.4,UX-002,AC2,visual-a11y-qa,manual,review-pending,,"No visible change (D-013): 38 screens before and after the tokens, 0 differing pixels (evidence/data/pixdiff-before-after.txt)"

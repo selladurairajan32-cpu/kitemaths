@@ -97,7 +97,7 @@ export function EquivalentBars({ fractions }: { fractions: Fraction[] }) {
   return (
     <div className="flex w-full flex-col items-center gap-3">
       <StackedBars rows={fractions.map((f) => ({ f }))} guide />
-      <p className="text-[0.9375rem] text-muted">The dashed line shows the shaded amount is identical on every bar.</p>
+      <p className="text-label text-muted">The dashed line shows the shaded amount is identical on every bar.</p>
     </div>
   );
 }
@@ -176,13 +176,13 @@ export function Counters({ amount, groups, highlight }: { amount: number; groups
                   />
                 ))}
               </div>
-              <span className={`text-[0.9375rem] font-semibold ${on ? "text-num-strong" : "text-muted"}`}>{per}</span>
+              <span className={`text-label font-semibold ${on ? "text-num-strong" : "text-muted"}`}>{per}</span>
             </motion.div>
           );
         })}
       </div>
       {highlight > 0 && (
-        <p className="mt-3 text-center text-[0.9375rem] text-ink-2">
+        <p className="mt-3 text-center text-label text-ink-2">
           {highlight} group{highlight === 1 ? "" : "s"} of {per} = <strong>{highlight * per}</strong>
         </p>
       )}
@@ -247,7 +247,7 @@ export function EverydayWholes() {
           transition={{ delay: i * 0.08 }}
         >
           <div className="grid w-16 shrink-0 place-items-center sm:h-20 sm:w-auto">{it.el}</div>
-          <span className="text-[0.9375rem] leading-snug text-ink-2">{it.label}</span>
+          <span className="text-label leading-snug text-ink-2">{it.label}</span>
         </motion.li>
       ))}
     </ul>
@@ -266,7 +266,7 @@ export function SplitDemo() {
             role="radio"
             aria-checked={people === n}
             onClick={() => setPeople(n)}
-            className={`h-11 min-w-11 rounded-[16px] px-3 text-[0.9375rem] font-semibold transition-colors ${
+            className={`h-11 min-w-11 rounded-[16px] px-3 text-label font-semibold transition-colors ${
               people === n ? "bg-ink text-white" : "border border-line-strong bg-surface hover:bg-sunk"
             }`}
           >
@@ -296,14 +296,14 @@ export function FairUnfair() {
     <div className="grid w-full grid-cols-2 gap-3 sm:gap-6">
       <figure className="flex flex-col items-center gap-3 rounded-[16px] border-2 border-ok/40 bg-ok-soft/50 p-4">
         <FractionShape diagram={{ shape: "circle", parts: 4 }} size="sm" label="A pizza cut into 4 equal slices" />
-        <figcaption className="text-center text-[0.9375rem]">
+        <figcaption className="text-center text-label">
           <span className="font-semibold text-ok">Fair ✓</span>
           <br />4 equal slices — these are quarters
         </figcaption>
       </figure>
       <figure className="flex flex-col items-center gap-3 rounded-[16px] border-2 border-num/40 bg-num-soft/50 p-4">
         <FractionShape diagram={{ shape: "circle", parts: 4, sizes: [3, 1, 2, 2] }} size="sm" label="A pizza cut into 4 unequal slices" />
-        <figcaption className="text-center text-[0.9375rem]">
+        <figcaption className="text-center text-label">
           <span className="font-semibold text-num-strong">Not fair ✗</span>
           <br />4 slices, but not equal — not quarters
         </figcaption>
@@ -319,7 +319,7 @@ export function Anatomy({ fraction }: { fraction: Fraction }) {
     <div className="flex w-full flex-col items-center gap-6 sm:flex-row sm:justify-center sm:gap-10">
       <div className="flex items-center gap-3">
         <FractionNotation n={fraction.n} d={fraction.d} size="xl" />
-        <div className="flex flex-col gap-6 text-[0.9375rem]">
+        <div className="flex flex-col gap-6 text-label">
           <button
             type="button"
             onClick={() => setFocus(focus === "num" ? null : "num")}
@@ -347,7 +347,7 @@ export function Anatomy({ fraction }: { fraction: Fraction }) {
           countParts={focus === "den" ? true : focus === "num" ? shaded : false}
           size="md"
         />
-        <p className="text-[0.9375rem] text-muted">{focus ? "Tap again to hide the counting." : "Tap a label to count the parts."}</p>
+        <p className="text-label text-muted">{focus ? "Tap again to hide the counting." : "Tap a label to count the parts."}</p>
       </div>
     </div>
   );
@@ -359,7 +359,7 @@ export function VisualRenderer({ spec }: { spec: VisualSpec }) {
       return (
         <figure className="flex w-full flex-col items-center gap-3">
           <FractionShape key={String(spec.countParts)} diagram={spec.diagram} countParts={spec.countParts} size="md" />
-          {spec.caption && <figcaption className="text-[0.9375rem] text-muted">{spec.caption}</figcaption>}
+          {spec.caption && <figcaption className="text-label text-muted">{spec.caption}</figcaption>}
         </figure>
       );
     case "everyday":
