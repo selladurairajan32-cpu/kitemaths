@@ -465,6 +465,63 @@ export const LESSONS: Lesson[] = [
     ],
   },
   {
+    id: "adding",
+    title: "Adding and subtracting fractions",
+    phase: "Apply",
+    summary: "Add and take away fractions with the same denominator, within one whole.",
+    minutes: 7,
+    objectives: ["Add fractions with the same denominator", "Take away fractions with the same denominator", "Explain why the denominator stays the same"],
+    steps: [
+      {
+        type: "explain",
+        title: "Sevenths and sevenths make sevenths",
+        body: [
+          "When fractions have the **same denominator**, the parts are all the **same size**. You can count them like objects.",
+          "2 sevenths + 3 sevenths = **5 sevenths**, just like 2 apples + 3 apples = 5 apples. The **denominator stays the same** because the parts are still sevenths: the whole is still split into 7.",
+          "Adding the denominators would make 14ths, which are smaller pieces. That can't be right: we haven't cut anything again.",
+        ],
+        visual: { type: "diagram", diagram: { shape: "bar", parts: 7, shaded: [0, 1, 2, 3, 4], added: [2, 3, 4] }, caption: "{2/7} + {3/7} = {5/7}" },
+        tip: "Add or take away the numerators. Keep the denominator.",
+      },
+      {
+        type: "worked",
+        title: "Watch me: add two fractions",
+        support: "full",
+        problem: "{3/8} + {2/8} = ?",
+        visual: { type: "diagram", diagram: { shape: "bar", parts: 8, shaded: [0, 1, 2] } },
+        steps: [
+          { text: "Start with **3 eighths** shaded." },
+          {
+            text: "Add **2 more eighths**. The bar is still split into 8 equal parts.",
+            visual: { type: "diagram", diagram: { shape: "bar", parts: 8, shaded: [0, 1, 2, 3, 4], added: [3, 4] } },
+          },
+          { text: "Count the eighths: 3 + 2 = **5**. The denominator stays 8." },
+        ],
+        conclusion: "{3/8} + {2/8} = {5/8}.",
+      },
+      {
+        type: "worked",
+        title: "Let's do it together: take away",
+        support: "faded",
+        problem: "{5/6} − {2/6} = ?",
+        visual: { type: "diagram", diagram: { shape: "bar", parts: 6, shaded: [0, 1, 2, 3, 4] } },
+        steps: [
+          {
+            text: "Start with **5 sixths**, then take away **2 sixths**.",
+            visual: { type: "diagram", diagram: { shape: "bar", parts: 6, shaded: [0, 1, 2], removed: [3, 4] } },
+          },
+          {
+            text: "How many sixths are left?",
+            blank: { prompt: "Sixths left", answer: 3, hint: "5 − 2", worked: "5 sixths − 2 sixths = 3 sixths.", traps: [{ value: 7, feedback: "That's adding. We are taking 2 sixths away." }] },
+          },
+        ],
+        conclusion: "{5/6} − {2/6} = {3/6}. The parts are still sixths.",
+      },
+      { type: "check", title: "Add two fractions", questionId: "fractions.ls-add-1" },
+      { type: "check", title: "Take away", questionId: "fractions.ls-add-2" },
+    ],
+  },
+  {
     id: "amounts",
     title: "Fractions of amounts",
     phase: "Apply",

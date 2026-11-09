@@ -22,6 +22,7 @@ const LESSON_LOOKS: Record<string, Look> = {
   comparing: { icon: "scales", color: "var(--color-sun-strong)", soft: "var(--color-sun-soft)" },
   equivalent: { icon: "puzzle", color: "var(--color-leaf)", soft: "var(--color-leaf-soft)" },
   "number-line": { icon: "ruler", color: "var(--color-kite-red)", soft: "var(--color-brand-soft)" },
+  adding: { icon: "plus", color: "var(--color-leaf)", soft: "var(--color-leaf-soft)" },
   amounts: { icon: "sweets", color: "var(--color-num)", soft: "var(--color-num-soft)" },
   reasoning: { icon: "magnifier", color: "var(--color-den)", soft: "var(--color-den-soft)" },
 };

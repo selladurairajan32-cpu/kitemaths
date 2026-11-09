@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { type KeyboardEvent } from "react";
+import { useRef, type KeyboardEvent, type PointerEvent } from "react";
 /** Shared size scale for maths pictures. */
 export type ShapeSize = "xs" | "sm" | "md" | "lg";
 
@@ -43,6 +43,32 @@ export function NumberLine({
   const interactive = !!onSelect;
   const marker = interactive ? selected ?? null : point ?? null;
 
+  const svgRef = useRef<SVGSVGElement>(null);
+  const dragging = useRef(false);
+  /** The nearest mark to a pointer position, snapped to a tick from 1 to `intervals` (LAB-006 AC2). */
+  const markAt = (clientX: number) => {
+    const r = svgRef.current?.getBoundingClientRect();
+    if (!r || r.width === 0) return null;
+    const x = ((clientX - r.left) / r.width) * W;
+    return Math.max(1, Math.min(intervals, Math.round((x - left) / step)));
+  };
+  // Drag the marker along the line with a mouse, pen or finger (LAB-006 AC1, AC3). Tapping a mark still works.
+  const onPointerDown = (e: PointerEvent<SVGSVGElement>) => {
+    if (!interactive) return;
+    dragging.current = true;
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    const m = markAt(e.clientX);
+    if (m !== null && m !== selected) onSelect?.(m);
+  };
+  const onPointerMove = (e: PointerEvent<SVGSVGElement>) => {
+    if (!dragging.current) return;
+    const m = markAt(e.clientX);
+    if (m !== null && m !== selected) onSelect?.(m);
+  };
+  const endDrag = () => {
+    dragging.current = false;
+  };
+
   const choose = (i: number, from: Element) => {
     const clamped = Math.max(1, Math.min(intervals, i));
     onSelect?.(clamped);
@@ -69,13 +95,18 @@ export function NumberLine({
   };
 
   const label = interactive
-    ? `Number line from 0 to 1 split into ${intervals} equal gaps. Use arrow keys to choose a mark.`
+    ? `Number line from 0 to 1 split into ${intervals} equal gaps. Drag the marker, tap a mark, or use the arrow keys.`
     : `Number line from 0 to 1 split into ${intervals} equal gaps${point !== undefined ? `, with a point ${point} gaps from 0` : ""}`;
 
   return (
     <svg
+      ref={svgRef}
       viewBox={`0 0 ${W} ${H}`}
-      className={`block h-auto w-full ${MAX_W[size]} ${interactive ? "touch-manipulation" : ""} ${className}`}
+      className={`block h-auto w-full ${MAX_W[size]} ${interactive ? "touch-none select-none" : ""} ${className}`}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={endDrag}
+      onPointerCancel={endDrag}
       role={interactive ? "radiogroup" : "img"}
       aria-label={label}
     >

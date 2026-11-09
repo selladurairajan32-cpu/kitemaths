@@ -98,6 +98,9 @@ Each criterion is counted once, by the strongest evidence any of its test cases 
 | `src/governance.test.ts` | 5 | GOV-004 |
 | `src/engine/evidence.test.ts` | 10 | FR-011, CUR-002 (R1 wiring) |
 | `src/lib/persist.test.ts` | 8 | ARCH-004, MAST-005 |
+| `src/topics/fractions/journey-content.test.ts` | 12 | FR-002 to FR-009 |
+| `src/topics/fractions/labState.test.ts` | 6 | LAB-001 to LAB-006 |
+| `src/topics/fractions/ui/FractionLab.test.tsx` | 7 | LAB-001 to LAB-007 (component, jsdom) |
 | `src/design-tokens.test.ts` | 10 | UX-002, UX-003, UX-004 |
 | `src/maths/maths.test.ts` | 20 | ARCH-003, QA-001 |
 | `src/questions/questions.test.ts` | 28 | ARCH-002 |

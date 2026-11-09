@@ -22,10 +22,91 @@ const grid = (rows: number, cols: number, shaded: number[] = []): Diagram => ({
   shaded,
 });
 const line = (intervals: number, point?: number): Diagram => ({ shape: "line", intervals, point });
+const upTo = (from: number, to: number) => Array.from({ length: to - from }, (_, i) => from + i);
+/** a/parts + b/parts as a bar: a parts shaded, then b more added (FR-009). `shaded` is the sum. */
+const sum = (parts: number, a: number, b: number): Diagram => ({ shape: "bar", parts, shaded: upTo(0, a + b), added: upTo(a, a + b) });
+/** a/parts − b/parts as a bar: a were shaded, the last b are taken away. `shaded` is the difference. */
+const diff = (parts: number, a: number, b: number): Diagram => ({ shape: "bar", parts, shaded: upTo(0, a - b), removed: upTo(a - b, a) });
 
 /* ───────────────────────────── Practice centre ───────────────────────────── */
 
 export const PRACTICE_QUESTIONS: FractionQuestion[] = [
+  // Adding and subtracting (same denominator)
+  {
+    id: "fractions.ad-1",
+    skill: "fractions.add-same",
+    difficulty: 1,
+    kind: "choose-fraction",
+    prompt: "{1/5} + {2/5} = ?",
+    diagram: sum(5, 1, 2),
+    options: [f(3, 5), f(3, 10), f(2, 5), f(5, 3)],
+    answer: f(3, 5),
+    hint: "Count the fifths: 1 fifth, then 2 more fifths.",
+    explanation: "1 fifth + 2 fifths = 3 fifths: {3/5}. The parts are still fifths.",
+  },
+  {
+    id: "fractions.ad-2",
+    skill: "fractions.add-same",
+    difficulty: 1,
+    kind: "write-fraction",
+    prompt: "Write the answer: {3/8} + {4/8} = ?",
+    diagram: sum(8, 3, 4),
+    answer: f(7, 8),
+    hint: "Eighths add to eighths. How many eighths altogether?",
+    explanation: "3 eighths + 4 eighths = 7 eighths: {7/8}.",
+  },
+  {
+    id: "fractions.ad-3",
+    skill: "fractions.add-same",
+    difficulty: 2,
+    kind: "write-fraction",
+    prompt: "Write the answer: {5/6} − {2/6} = ?",
+    diagram: diff(6, 5, 2),
+    answer: f(3, 6),
+    hint: "Start with 5 sixths and take 2 sixths away.",
+    explanation: "5 sixths − 2 sixths = 3 sixths: {3/6}. The parts are still sixths.",
+  },
+  {
+    id: "fractions.ad-4",
+    skill: "fractions.add-same",
+    difficulty: 2,
+    kind: "choose",
+    prompt: "What is {2/9} + {5/9}?",
+    options: [
+      { id: "a", label: "{7/9}" },
+      { id: "b", label: "{7/18}", misconception: M.ADD_DEN },
+      { id: "c", label: "{3/9}" },
+    ],
+    answer: "a",
+    hint: "Ninths add to ninths. Only the number of ninths changes.",
+    explanation: "2 ninths + 5 ninths = 7 ninths: {7/9}.",
+  },
+  {
+    id: "fractions.ad-5",
+    skill: "fractions.add-same",
+    difficulty: 3,
+    kind: "write-fraction",
+    prompt: "A pizza is cut into 8 equal slices. Sam eats {3/8}. What fraction of the pizza is left?",
+    diagram: diff(8, 8, 3),
+    answer: f(5, 8),
+    hint: "The whole pizza is {8/8}. Take away {3/8}.",
+    explanation: "{8/8} − {3/8} = {5/8} of the pizza is left.",
+  },
+  {
+    id: "fractions.ad-6",
+    skill: "fractions.add-same",
+    difficulty: 3,
+    kind: "choose",
+    prompt: "Mia says {4/10} + {3/10} = {7/20}. Is she right?",
+    options: [
+      { id: "a", label: "No: tenths add to tenths, so the answer is {7/10}" },
+      { id: "b", label: "Yes: you add the tops and the bottoms", misconception: M.ADD_DEN },
+      { id: "c", label: "No: the answer is {12/10}" },
+    ],
+    answer: "a",
+    hint: "What size are the parts before and after adding?",
+    explanation: "The parts are tenths before and after: 4 tenths + 3 tenths = 7 tenths, {7/10}. {7/20} would be smaller than {4/10}, which can't be right.",
+  },
   // Wholes and equal parts
   {
     id: "fractions.ep-1",
@@ -885,6 +966,29 @@ export const PRACTICE_QUESTIONS: FractionQuestion[] = [
 
 export const LESSON_QUESTIONS: FractionQuestion[] = [
   {
+    id: "fractions.ls-add-1",
+    skill: "fractions.add-same",
+    difficulty: 1,
+    kind: "choose-fraction",
+    prompt: "{2/6} + {3/6} = ?",
+    diagram: sum(6, 2, 3),
+    options: [f(5, 6), f(5, 12), f(6, 5), f(1, 6)],
+    answer: f(5, 6),
+    hint: "Sixths add to sixths. Count the sixths.",
+    explanation: "2 sixths + 3 sixths = 5 sixths: {5/6}.",
+  },
+  {
+    id: "fractions.ls-add-2",
+    skill: "fractions.add-same",
+    difficulty: 2,
+    kind: "write-fraction",
+    prompt: "Write the answer: {7/9} − {4/9} = ?",
+    diagram: diff(9, 7, 4),
+    answer: f(3, 9),
+    hint: "Start with 7 ninths and take away 4 ninths.",
+    explanation: "7 ninths − 4 ninths = 3 ninths: {3/9}.",
+  },
+  {
     id: "fractions.ls-wholes-1",
     skill: "fractions.equal-parts",
     difficulty: 1,
@@ -1141,6 +1245,32 @@ export const LESSON_QUESTIONS: FractionQuestion[] = [
 /* ─────────────────────────── Misconception follow-ups ─────────────────────────── */
 
 export const FOLLOWUP_QUESTIONS: FractionQuestion[] = [
+  {
+    id: "fractions.fu-ad-1",
+    skill: "fractions.add-same",
+    difficulty: 1,
+    kind: "choose",
+    prompt: "Look at the bar: {2/5} and then {1/5} more. How many equal parts is the whole bar split into?",
+    diagram: sum(5, 2, 1),
+    options: [
+      { id: "a", label: "5, so the answer is in fifths" },
+      { id: "b", label: "10, because 5 + 5 = 10", misconception: M.ADD_DEN },
+    ],
+    answer: "a",
+    hint: "Adding doesn't cut the bar into more pieces.",
+    explanation: "The bar is still split into 5 equal parts, so {2/5} + {1/5} = {3/5}.",
+  },
+  {
+    id: "fractions.fu-ad-2",
+    skill: "fractions.add-same",
+    difficulty: 1,
+    kind: "write-fraction",
+    prompt: "Write the answer: {1/4} + {2/4} = ?",
+    diagram: sum(4, 1, 2),
+    answer: f(3, 4),
+    hint: "Quarters add to quarters. Count the quarters.",
+    explanation: "1 quarter + 2 quarters = 3 quarters: {3/4}.",
+  },
   {
     id: "fractions.fu-swap-1",
     skill: "fractions.name",
@@ -1602,6 +1732,34 @@ const ASSESSMENT_QUESTIONS_A: (FractionQuestion & { area: AssessmentArea })[] = 
     hint: "",
     explanation: "There are 8 equal gaps from 0 to 1 and the point is 3 gaps along: {3/8}.",
   },
+  {
+    id: "fractions.as-17",
+    area: "Application",
+    skill: "fractions.add-same",
+    difficulty: 2,
+    kind: "write-fraction",
+    prompt: "Write the answer: {2/7} + {4/7} = ?",
+    diagram: sum(7, 2, 4),
+    answer: f(6, 7),
+    hint: "",
+    explanation: "2 sevenths + 4 sevenths = 6 sevenths: {6/7}.",
+  },
+  {
+    id: "fractions.as-18",
+    area: "Application",
+    skill: "fractions.add-same",
+    difficulty: 2,
+    kind: "choose",
+    prompt: "A jug is {9/10} full. Ava pours out {4/10}. How full is it now?",
+    options: [
+      { id: "a", label: "{5/10}" },
+      { id: "b", label: "{13/10}" },
+      { id: "c", label: "{4/10}" },
+    ],
+    answer: "a",
+    hint: "",
+    explanation: "9 tenths − 4 tenths = 5 tenths: {5/10}.",
+  },
 ];
 
 const FORM_B: (FractionQuestion & { area: AssessmentArea })[] = [
@@ -1855,6 +2013,34 @@ const FORM_B: (FractionQuestion & { area: AssessmentArea })[] = [
     ],
     hint: "",
     explanation: "The circle has 7 equal parts altogether and 3 are shaded: {3/7}. Leo compared the shaded parts with the unshaded parts.",
+  },
+  {
+    id: "fractions.bs-17",
+    area: "Application",
+    skill: "fractions.add-same",
+    difficulty: 2,
+    kind: "write-fraction",
+    prompt: "Write the answer: {3/5} + {1/5} = ?",
+    diagram: sum(5, 3, 1),
+    answer: f(4, 5),
+    hint: "",
+    explanation: "3 fifths + 1 fifth = 4 fifths: {4/5}.",
+  },
+  {
+    id: "fractions.bs-18",
+    area: "Application",
+    skill: "fractions.add-same",
+    difficulty: 2,
+    kind: "choose",
+    prompt: "What is {11/12} − {5/12}?",
+    options: [
+      { id: "a", label: "{6/12}" },
+      { id: "b", label: "{16/12}" },
+      { id: "c", label: "{5/12}" },
+    ],
+    answer: "a",
+    hint: "",
+    explanation: "11 twelfths − 5 twelfths = 6 twelfths: {6/12}.",
   },
 ];
 

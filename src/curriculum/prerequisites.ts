@@ -42,6 +42,8 @@ export const FRACTIONS_SKILL_PREREQUISITES: Graph = {
   "fractions.compare": ["fractions.name", "fractions.represent"],
   "fractions.equivalent": ["fractions.represent", "fractions.compare"],
   "fractions.number-line": ["fractions.name"],
+  // Adding like fractions counts equal parts of the same size: it needs naming and building fractions.
+  "fractions.add-same": ["fractions.name", "fractions.represent"],
   // Finding 3/4 of 12 means sharing into equal groups: it needs division facts.
   "fractions.fraction-of": ["fractions.name", "times-tables.division-facts"],
   "fractions.reasoning": ["fractions.compare", "fractions.equivalent"],

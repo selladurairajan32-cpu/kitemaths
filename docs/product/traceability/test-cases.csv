@@ -180,38 +180,60 @@ TC-FR-001.1.1,FR-001,AC1,unit,automated,partial,"src/engine/rewards.test.ts::bui
 TC-FR-001.2.1,FR-001,AC2,e2e,planned,planned,,Only 'Start from the beginning' exists (PlacementScreen.tsx:114)
 TC-FR-001.3.1,FR-001,AC3,unit,automated,passing,"src/engine/rewards.test.ts::skips lessons answered correctly before the first gap, and stops after two misses in a row",
 TC-FR-001.3.2,FR-001,AC3,unit,automated,passing,src/engine/rewards.test.ts::marks placed-out lessons done without counting placement towards mastery,
-TC-FR-002.1.1,FR-002,AC1,unit,automated,partial,src/topics/fractions/evaluate.test.ts::flags unequal shapes chosen as equal parts,
-TC-FR-002.1.2,FR-002,AC1,unit,automated,partial,src/topics/fractions/math.test.ts::recognises equal partitions,
-TC-FR-002.2.1,FR-002,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-FR-002.3.1,FR-002,AC3,unit,planned,planned,,Unit/content test asserting the rule
-TC-FR-003.1.1,FR-003,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-FR-003.2.1,FR-003,AC2,unit,automated,partial,src/topics/fractions/evaluate.test.ts::validates choose-fraction answers with tagged distractors,
-TC-FR-003.3.1,FR-003,AC3,unit,automated,partial,src/topics/fractions/evaluate.test.ts::spots a swapped numerator and denominator,Feedback text itself needs review
-TC-FR-004.1.1,FR-004,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-FR-004.2.1,FR-004,AC2,unit,automated,partial,src/topics/fractions/evaluate.test.ts::accepts any shading of the right amount,
-TC-FR-004.2.2,FR-004,AC2,unit,automated,partial,src/topics/fractions/evaluate.test.ts::spots part-to-part thinking,
-TC-FR-004.3.1,FR-004,AC3,content,automated,passing,"src/topics/fractions/content.test.ts::builds thousands of valid, correctly-marked questions",
-TC-FR-005.1.1,FR-005,AC1,unit,automated,partial,"src/topics/fractions/math.test.ts::compares fractions, including unit fractions",
-TC-FR-005.2.1,FR-005,AC2,unit,automated,partial,src/topics/fractions/evaluate.test.ts::spots 'bigger denominator means bigger',Explanation wording needs content review
+TC-FR-002.1.1,FR-002,AC1,unit,automated,passing,src/topics/fractions/evaluate.test.ts::flags unequal shapes chosen as equal parts,
+TC-FR-002.1.2,FR-002,AC1,unit,automated,passing,src/topics/fractions/math.test.ts::recognises equal partitions,
+TC-FR-002.1.3,FR-002,AC1,unit,automated,passing,src/topics/fractions/journey-content.test.ts::shows valid and invalid divisions and says why unequal pieces are not equal parts,
+TC-FR-002.1.4,FR-002,AC1,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-002.2.1,FR-002,AC2,unit,automated,passing,src/topics/fractions/journey-content.test.ts::shows valid and invalid divisions and says why unequal pieces are not equal parts,
+TC-FR-002.2.2,FR-002,AC2,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-002.3.1,FR-002,AC3,unit,automated,passing,src/topics/fractions/journey-content.test.ts::shows valid and invalid divisions and says why unequal pieces are not equal parts,Checks the wording exists; whether it is clear to a child is CUR-004.
+TC-FR-002.3.2,FR-002,AC3,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-003.1.1,FR-003,AC1,unit,automated,passing,src/topics/fractions/journey-content.test.ts::introduces both terms with a synchronised diagram,
+TC-FR-003.1.2,FR-003,AC1,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-003.2.1,FR-003,AC2,unit,automated,passing,src/topics/fractions/evaluate.test.ts::validates choose-fraction answers with tagged distractors,
+TC-FR-003.2.2,FR-003,AC2,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-003.3.1,FR-003,AC3,unit,automated,passing,src/topics/fractions/evaluate.test.ts::spots a swapped numerator and denominator,
+TC-FR-003.3.2,FR-003,AC3,unit,automated,passing,"src/topics/fractions/journey-content.test.ts::never reverses the terms in lessons, hints, feedback or misconception explanations",
+TC-FR-003.3.3,FR-003,AC3,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-004.1.1,FR-004,AC1,unit,automated,passing,src/topics/fractions/journey-content.test.ts::covers continuous models and discrete sets,
+TC-FR-004.1.2,FR-004,AC1,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-004.2.1,FR-004,AC2,unit,automated,passing,src/topics/fractions/evaluate.test.ts::accepts any shading of the right amount,
+TC-FR-004.2.2,FR-004,AC2,unit,automated,passing,src/topics/fractions/evaluate.test.ts::spots part-to-part thinking,
+TC-FR-004.2.3,FR-004,AC2,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-004.3.1,FR-004,AC3,unit,automated,passing,"src/topics/fractions/content.test.ts::builds thousands of valid, correctly-marked questions",
+TC-FR-005.1.1,FR-005,AC1,unit,automated,passing,"src/topics/fractions/math.test.ts::compares fractions, including unit fractions",
+TC-FR-005.1.2,FR-005,AC1,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-005.2.1,FR-005,AC2,unit,automated,passing,src/topics/fractions/journey-content.test.ts::explains why a larger denominator can mean smaller parts,
+TC-FR-005.2.2,FR-005,AC2,unit,automated,passing,src/topics/fractions/evaluate.test.ts::spots 'bigger denominator means bigger',
+TC-FR-005.2.3,FR-005,AC2,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
 TC-FR-005.3.1,FR-005,AC3,unit,automated,passing,src/topics/fractions/evaluate.test.ts::validates comparison symbols,
 TC-FR-005.3.2,FR-005,AC3,unit,automated,passing,src/topics/fractions/math.test.ts::detects equivalence exactly,
-TC-FR-006.1.1,FR-006,AC1,unit,automated,partial,src/topics/fractions/evaluate.test.ts::checks compare and equivalence challenges exactly,
-TC-FR-006.2.1,FR-006,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-FR-006.1.1,FR-006,AC1,unit,automated,passing,src/topics/fractions/evaluate.test.ts::checks compare and equivalence challenges exactly,
+TC-FR-006.1.2,FR-006,AC1,unit,automated,passing,src/topics/fractions/journey-content.test.ts::connects multiplying top and bottom by the same number to a picture of split parts,
+TC-FR-006.1.3,FR-006,AC1,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-006.2.1,FR-006,AC2,unit,automated,passing,src/topics/fractions/journey-content.test.ts::connects multiplying top and bottom by the same number to a picture of split parts,
+TC-FR-006.2.2,FR-006,AC2,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
 TC-FR-006.3.1,FR-006,AC3,unit,automated,passing,src/topics/fractions/math.test.ts::detects equivalence exactly,
 TC-FR-006.3.2,FR-006,AC3,unit,automated,passing,src/topics/fractions/math.test.ts::lists equivalents from the simplest form,
 TC-FR-006.3.3,FR-006,AC3,unit,automated,passing,src/topics/fractions/evaluate.test.ts::accepts equivalent written fractions and explains why,
-TC-FR-007.1.1,FR-007,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-FR-007.2.1,FR-007,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-FR-007.3.1,FR-007,AC3,unit,automated,partial,"src/topics/fractions/evaluate.test.ts::validates number line placement by value, not by position label",
-TC-FR-007.3.2,FR-007,AC3,unit,automated,partial,src/topics/fractions/evaluate.test.ts::spots counting marks instead of gaps,
-TC-FR-007.4.1,FR-007,AC4,unit,planned,planned,,Unit/content test asserting the rule
-TC-FR-008.1.1,FR-008,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-FR-007.1.1,FR-007,AC1,unit,automated,passing,"src/topics/fractions/journey-content.test.ts::uses equal intervals from 0 to 1 with points strictly between, or on 1 only when asked",
+TC-FR-007.2.1,FR-007,AC2,unit,automated,passing,"src/topics/fractions/journey-content.test.ts::uses equal intervals from 0 to 1 with points strictly between, or on 1 only when asked",
+TC-FR-007.3.1,FR-007,AC3,unit,automated,passing,"src/topics/fractions/evaluate.test.ts::validates number line placement by value, not by position label",
+TC-FR-007.3.2,FR-007,AC3,unit,automated,passing,src/topics/fractions/evaluate.test.ts::spots counting marks instead of gaps,
+TC-FR-007.3.3,FR-007,AC3,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::moves the number-line marker by keyboard and by dragging, snapping to marks (LAB-006)",
+TC-FR-007.4.1,FR-007,AC4,unit,automated,passing,"src/topics/fractions/journey-content.test.ts::uses equal intervals from 0 to 1 with points strictly between, or on 1 only when asked",0 and 1 are labelled on every line (NumberLine).
+TC-FR-007.4.2,FR-007,AC4,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-008.1.1,FR-008,AC1,unit,automated,passing,"src/topics/fractions/journey-content.test.ts::teaches sharing into denominator groups, then counting numerator groups, with whole-number results first",
+TC-FR-008.1.2,FR-008,AC1,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
 TC-FR-008.2.1,FR-008,AC2,unit,automated,passing,src/topics/fractions/math.test.ts::finds fractions of amounts only when whole,
-TC-FR-008.3.1,FR-008,AC3,unit,automated,partial,src/topics/fractions/evaluate.test.ts::diagnoses fraction-of answers,
-TC-FR-008.3.2,FR-008,AC3,unit,automated,partial,src/topics/fractions/evaluate.test.ts::spots finding one part only,
-TC-FR-009.1.1,FR-009,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-FR-009.2.1,FR-009,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-FR-009.3.1,FR-009,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-FR-008.2.2,FR-008,AC2,unit,automated,passing,"src/topics/fractions/journey-content.test.ts::teaches sharing into denominator groups, then counting numerator groups, with whole-number results first",
+TC-FR-008.3.1,FR-008,AC3,unit,automated,passing,src/topics/fractions/evaluate.test.ts::diagnoses fraction-of answers,
+TC-FR-008.3.2,FR-008,AC3,unit,automated,passing,"src/topics/fractions/journey-content.test.ts::teaches sharing into denominator groups, then counting numerator groups, with whole-number results first",
+TC-FR-009.1.1,FR-009,AC1,unit,automated,passing,src/topics/fractions/journey-content.test.ts::explains why the denominator stays the same,"New lesson ""adding"" in the R1 Fractions island (9 Nov, D-026)."
+TC-FR-009.1.2,FR-009,AC1,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-009.2.1,FR-009,AC2,unit,automated,passing,"src/topics/fractions/journey-content.test.ts::keeps every result within one whole, with valid answers",
+TC-FR-009.3.1,FR-009,AC3,unit,automated,passing,src/topics/fractions/journey-content.test.ts::draws exactly the operation in the prompt: the picture and the symbols agree,
+TC-FR-009.3.2,FR-009,AC3,unit,automated,passing,src/topics/fractions/journey-content.test.ts::flags adding the denominators as a possible misconception,
 TC-FR-010.1.1,FR-010,AC1,content,automated,partial,src/topics/fractions/content.test.ts::follows the teaching sequence: explain before checking in every lesson,
 TC-FR-010.2.1,FR-010,AC2,unit,automated,partial,src/engine/engine.test.ts::shows a hint beside the still-editable question,"Single hint, no fading"
 TC-FR-010.2.2,FR-010,AC2,unit,automated,partial,src/engine/engine.test.ts::keeps the question editable when a hint is requested,
@@ -224,31 +246,41 @@ TC-FR-011.2.1,FR-011,AC2,unit,automated,passing,src/engine/evidence.test.ts::exp
 TC-FR-011.2.2,FR-011,AC2,e2e,manual,partial,,Developer browser check that the notice is shown on the island map (r1-step4-checks.cjs).
 TC-FR-011.3.1,FR-011,AC3,unit,automated,passing,src/engine/evidence.test.ts::does not complete a lesson by reaching its end,R1 (D-026): completion is independent evidence (CUR-002 §4.2). Stars still reward activity.
 TC-FR-011.3.2,FR-011,AC3,unit,automated,passing,"src/engine/evidence.test.ts::marks the island's phases done by evidence, not by visits",
-TC-LAB-001.1.1,LAB-001,AC1,component,planned,planned,,Component test of the lab control plus Playwright interaction check
-TC-LAB-001.2.1,LAB-001,AC2,component,planned,planned,,Component test of the lab control plus Playwright interaction check
-TC-LAB-002.1.1,LAB-002,AC1,component,planned,planned,,Component test of the lab control plus Playwright interaction check
-TC-LAB-002.2.1,LAB-002,AC2,unit,automated,partial,src/topics/fractions/math.test.ts::recognises equal partitions,
-TC-LAB-002.3.1,LAB-002,AC3,component,planned,planned,,Component test of the lab control plus Playwright interaction check
-TC-LAB-002.4.1,LAB-002,AC4,component,planned,planned,,Component test of the lab control plus Playwright interaction check
-TC-LAB-003.1.1,LAB-003,AC1,component,planned,planned,,Component test of the lab control plus Playwright interaction check
-TC-LAB-003.2.1,LAB-003,AC2,component,planned,planned,,Component test of the lab control plus Playwright interaction check
-TC-LAB-003.3.1,LAB-003,AC3,component,planned,planned,,Component test of the lab control plus Playwright interaction check
-TC-LAB-003.4.1,LAB-003,AC4,component,planned,planned,,Component test of the lab control plus Playwright interaction check
-TC-LAB-004.1.1,LAB-004,AC1,component,planned,planned,,Component test of the lab control plus Playwright interaction check
-TC-LAB-004.2.1,LAB-004,AC2,unit,automated,partial,src/topics/fractions/math.test.ts::recognises equal partitions,
-TC-LAB-004.3.1,LAB-004,AC3,component,planned,planned,,Component test of the lab control plus Playwright interaction check
-TC-LAB-005.1.1,LAB-005,AC1,component,planned,planned,,Component test of the lab control plus Playwright interaction check
+TC-LAB-001.1.1,LAB-001,AC1,unit,automated,passing,"src/topics/fractions/labState.test.ts::keeps notation, parts and pictures in agreement through 20,000 random changes",
+TC-LAB-001.1.2,LAB-001,AC1,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::shades parts with a pointer and updates the notation and words at once (LAB-003, LAB-001)",
+TC-LAB-001.2.1,LAB-001,AC2,unit,automated,passing,"src/topics/fractions/labState.test.ts::keeps notation, parts and pictures in agreement through 20,000 random changes",The lab has one state (labReducer); every display is derived from it.
+TC-LAB-002.1.1,LAB-002,AC1,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::changes the number of equal parts only within 1 to 12, and the labels follow (LAB-002)",
+TC-LAB-002.2.1,LAB-002,AC2,unit,automated,passing,src/topics/fractions/math.test.ts::recognises equal partitions,
+TC-LAB-002.2.2,LAB-002,AC2,unit,automated,passing,src/topics/fractions/labState.test.ts::offers 1 to 12 equal parts and refuses anything else rather than approximating it,
+TC-LAB-002.3.1,LAB-002,AC3,unit,automated,passing,src/topics/fractions/labState.test.ts::offers 1 to 12 equal parts and refuses anything else rather than approximating it,
+TC-LAB-002.4.1,LAB-002,AC4,unit,automated,passing,"src/topics/fractions/labState.test.ts::drops shading that no longer exists when the parts change, and relabels the parts",
+TC-LAB-002.4.2,LAB-002,AC4,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::changes the number of equal parts only within 1 to 12, and the labels follow (LAB-002)",
+TC-LAB-003.1.1,LAB-003,AC1,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::shades parts with a pointer and updates the notation and words at once (LAB-003, LAB-001)",
+TC-LAB-003.1.2,LAB-003,AC1,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::works from the keyboard: arrows move between parts, Space shades (LAB-003, LAB-007)",
+TC-LAB-003.1.3,LAB-003,AC1,e2e,manual,planned,,Touch on a real phone or tablet (QA-005).
+TC-LAB-003.2.1,LAB-003,AC2,unit,automated,passing,src/topics/fractions/labState.test.ts::updates the numerator immediately and toggles predictably on repeated taps,
+TC-LAB-003.2.2,LAB-003,AC2,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::shades parts with a pointer and updates the notation and words at once (LAB-003, LAB-001)",
+TC-LAB-003.3.1,LAB-003,AC3,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::shades parts with a pointer and updates the notation and words at once (LAB-003, LAB-001)",aria-checked state and a tick on each shaded part.
+TC-LAB-003.4.1,LAB-003,AC4,unit,automated,passing,src/topics/fractions/labState.test.ts::updates the numerator immediately and toggles predictably on repeated taps,
+TC-LAB-004.1.1,LAB-004,AC1,component,automated,passing,src/topics/fractions/ui/FractionLab.test.tsx::keeps the fraction when switching from bar to circle (LAB-004),
+TC-LAB-004.2.1,LAB-004,AC2,unit,automated,passing,src/topics/fractions/math.test.ts::recognises equal partitions,
+TC-LAB-004.3.1,LAB-004,AC3,unit,automated,passing,src/topics/fractions/labState.test.ts::keeps the same fraction when the build model switches between bar and circle (LAB-004 AC3),
+TC-LAB-004.3.2,LAB-004,AC3,component,automated,passing,src/topics/fractions/ui/FractionLab.test.tsx::keeps the fraction when switching from bar to circle (LAB-004),
+TC-LAB-005.1.1,LAB-005,AC1,component,automated,passing,src/topics/fractions/ui/FractionLab.test.tsx::compares two models with the maths engine and recognises equivalent fractions as equal (LAB-005),
 TC-LAB-005.2.1,LAB-005,AC2,unit,automated,passing,src/topics/fractions/evaluate.test.ts::checks compare and equivalence challenges exactly,
 TC-LAB-005.3.1,LAB-005,AC3,unit,automated,passing,src/topics/fractions/math.test.ts::detects equivalence exactly,
-TC-LAB-005.4.1,LAB-005,AC4,component,planned,planned,,Component test of the lab control plus Playwright interaction check
-TC-LAB-006.1.1,LAB-006,AC1,component,planned,planned,,Component test of the lab control plus Playwright interaction check
-TC-LAB-006.2.1,LAB-006,AC2,component,planned,planned,,Component test of the lab control plus Playwright interaction check
-TC-LAB-006.3.1,LAB-006,AC3,component,planned,planned,,Component test of the lab control plus Playwright interaction check
-TC-LAB-006.4.1,LAB-006,AC4,component,planned,planned,,Component test of the lab control plus Playwright interaction check
-TC-LAB-007.1.1,LAB-007,AC1,component,planned,planned,,Component test of the lab control plus Playwright interaction check
-TC-LAB-007.2.1,LAB-007,AC2,component,planned,planned,,Component test of the lab control plus Playwright interaction check
-TC-LAB-007.3.1,LAB-007,AC3,component,planned,planned,,Component test of the lab control plus Playwright interaction check
-TC-LAB-007.4.1,LAB-007,AC4,component,planned,planned,,Component test of the lab control plus Playwright interaction check
+TC-LAB-005.3.2,LAB-005,AC3,component,automated,passing,src/topics/fractions/ui/FractionLab.test.tsx::compares two models with the maths engine and recognises equivalent fractions as equal (LAB-005),
+TC-LAB-005.4.1,LAB-005,AC4,component,automated,passing,src/topics/fractions/ui/FractionLab.test.tsx::compares two models with the maths engine and recognises equivalent fractions as equal (LAB-005),
+TC-LAB-006.1.1,LAB-006,AC1,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::moves the number-line marker by keyboard and by dragging, snapping to marks (LAB-006)",Drag is simulated with pointer events in jsdom.
+TC-LAB-006.2.1,LAB-006,AC2,unit,automated,passing,src/topics/fractions/labState.test.ts::snaps the marker to a mark between 0 and 1 and keeps its value when the gaps change where it can,
+TC-LAB-006.3.1,LAB-006,AC3,e2e,manual,planned,,Touch drag on a real phone or tablet (QA-005); jsdom only simulates pointer events.
+TC-LAB-006.4.1,LAB-006,AC4,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::moves the number-line marker by keyboard and by dragging, snapping to marks (LAB-006)",
+TC-LAB-007.1.1,LAB-007,AC1,component,automated,passing,src/topics/fractions/ui/FractionLab.test.tsx::gives every control an accessible name (LAB-007),
+TC-LAB-007.1.2,LAB-007,AC1,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::works from the keyboard: arrows move between parts, Space shades (LAB-003, LAB-007)",
+TC-LAB-007.2.1,LAB-007,AC2,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::shades parts with a pointer and updates the notation and words at once (LAB-003, LAB-001)","A tick marks each shaded part, as well as colour."
+TC-LAB-007.3.1,LAB-007,AC3,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::shades parts with a pointer and updates the notation and words at once (LAB-003, LAB-001)",Pointer tested in jsdom.
+TC-LAB-007.3.2,LAB-007,AC3,e2e,manual,planned,,Touch on real devices (QA-005).
+TC-LAB-007.4.1,LAB-007,AC4,unit,manual,partial,,"Motion is wrapped in MotionConfig reducedMotion=""user"" (AppShell); not verified with a reduced-motion browser run yet (UX-006, QA-005)."
 TC-PRACT-001.1.1,PRACT-001,AC1,content,automated,passing,src/topics/fractions/content.test.ts::rebuilds the same question from its id,
 TC-PRACT-001.1.2,PRACT-001,AC1,unit,automated,passing,src/lib/migrate.test.ts::rebuilds a migrated generated question as the same question,
 TC-PRACT-001.1.3,PRACT-001,AC1,unit,automated,passing,src/engine/engine.test.ts::is deterministic,

@@ -16,6 +16,7 @@ export const PLACEMENT_PLAN: { lessonId: string; template: string }[] = [
   { lessonId: "comparing", template: "cp-sign" },
   { lessonId: "equivalent", template: "eq-missing" },
   { lessonId: "number-line", template: "nl-place" },
+  { lessonId: "adding", template: "ad-sum" },
   { lessonId: "amounts", template: "fo-amount" },
   { lessonId: "reasoning", template: "rs-claim" },
 ];

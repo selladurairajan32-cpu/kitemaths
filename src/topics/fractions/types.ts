@@ -2,9 +2,14 @@ import type { QuestionBase } from "@/engine/types";
 import type { CompareSymbol, Fraction } from "./math";
 import type { NumericTrap } from "@/lessons/types";
 
+/**
+ * Partition pictures. For adding and subtracting like fractions (FR-009) a bar or circle can also show `added` parts (a
+ * subset of `shaded`, drawn in a second colour with a plus) and `removed` parts (not shaded, crossed out). `shaded` is
+ * always the result, so the picture and the answer agree.
+ */
 export type Diagram =
-  | { shape: "bar"; parts: number; shaded?: number[]; sizes?: number[] }
-  | { shape: "circle"; parts: number; shaded?: number[]; sizes?: number[] }
+  | { shape: "bar"; parts: number; shaded?: number[]; sizes?: number[]; added?: number[]; removed?: number[] }
+  | { shape: "circle"; parts: number; shaded?: number[]; sizes?: number[]; added?: number[]; removed?: number[] }
   | { shape: "grid"; rows: number; cols: number; shaded?: number[] }
   | { shape: "line"; intervals: number; point?: number };
 

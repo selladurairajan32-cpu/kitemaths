@@ -318,7 +318,7 @@ describe("journey recommendations", () => {
     // One independent practice answer per skill evidences each lesson (CUR-002 §4.1); then the milestone practice.
     for (const skill of SKILL_ORDER) s = recordResult(s, result({ skill }));
     expect(recommendNext(FRACTIONS_TOPIC, s)).toMatchObject({ kind: "practice", focusSkill: null });
-    for (const skill of SKILL_ORDER.slice(0, 4)) {
+    for (const skill of SKILL_ORDER.slice(0, Math.ceil(SKILL_ORDER.length / 2))) {
       for (let i = 0; i < 3; i++) s = recordResult(s, result({ skill }));
     }
     expect(isPracticeMilestoneMet(FRACTIONS_TOPIC, s)).toBe(true);

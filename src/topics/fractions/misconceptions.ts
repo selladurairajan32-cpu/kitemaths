@@ -8,6 +8,7 @@ export const M = {
   MISCOUNT: "fractions.miscounted-total",
   UNIT_ONLY: "fractions.found-one-part-only",
   ADDITIVE: "fractions.additive-equivalence",
+  ADD_DEN: "fractions.added-denominators",
 } as const;
 
 export const MISCONCEPTIONS: MisconceptionDef[] = [
@@ -108,6 +109,18 @@ export const MISCONCEPTIONS: MisconceptionDef[] = [
     ],
     skills: ["fractions.equivalent", "fractions.reasoning"],
     followUps: ["fractions.fu-add-1", "fractions.fu-add-2"],
+  },
+  {
+    id: M.ADD_DEN,
+    name: "Adding or subtracting the denominators",
+    possibleCause: "It looks like the bottom numbers might have been added (or taken away) too.",
+    description: "Writes {2/7} + {3/7} = {5/14}, treating the denominator like another number to add.",
+    explanation: [
+      "The **denominator** names the **size** of the parts: sevenths are all the same size.",
+      "Adding sevenths to sevenths still gives **sevenths**, so only the numerators are added: {2/7} + {3/7} = {5/7}. The whole is still split into 7.",
+    ],
+    skills: ["fractions.add-same"],
+    followUps: ["fractions.fu-ad-1", "fractions.fu-ad-2"],
   },
 ];
 

@@ -40,6 +40,11 @@
     "description": "Places and reads fractions on a number line from 0 to 1."
    },
    {
+    "id": "fractions.add-same",
+    "title": "Adding and subtracting fractions",
+    "description": "Adds and subtracts fractions with the same denominator within one whole."
+   },
+   {
     "id": "fractions.fraction-of",
     "title": "Fractions of amounts",
     "description": "Finds a fraction of a number or quantity, including word problems."
@@ -97,6 +102,15 @@
     "objectives": [
      "Count gaps, not marks",
      "Place and read fractions between 0 and 1"
+    ]
+   },
+   {
+    "id": "adding",
+    "title": "Adding and subtracting fractions",
+    "objectives": [
+     "Add fractions with the same denominator",
+     "Take away fractions with the same denominator",
+     "Explain why the denominator stays the same"
     ]
    },
    {

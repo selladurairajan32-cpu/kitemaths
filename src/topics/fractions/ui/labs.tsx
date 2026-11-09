@@ -23,7 +23,7 @@ export const FREE_LAB_INTRO = `Cut shapes into up to ${LAB_LIMITS.maxParts} equa
 export function FractionsFreeLab() {
   return (
     <>
-      <FractionLab modes={["build", "compare", "equivalent"]} />
+      <FractionLab modes={["build", "compare", "equivalent", "line"]} />
       <p className="flex items-center gap-2 text-[0.9375rem] text-muted">
         <CheckIcon size={15} /> Keyboard: Tab to a shape, arrow keys to move between parts, Space to shade.
       </p>

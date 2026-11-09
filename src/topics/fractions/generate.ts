@@ -421,6 +421,46 @@ const TEMPLATES: Template[] = [
     },
   },
 
+  /* ─────────── Adding and subtracting (same denominator) ─────────── */
+  {
+    key: "ad-sum",
+    skill: "fractions.add-same",
+    difficulties: [1, 2, 3],
+    make: (r, base) => {
+      const d = int(r, 3, base.difficulty === 1 ? 8 : 12);
+      if (base.difficulty === 1) {
+        // a/d + b/d with the result within one whole.
+        const a = int(r, 1, d - 2);
+        const b = int(r, 1, d - 1 - a);
+        const answer = f(a + b, d);
+        const options: FractionOption[] = [answer, { ...f(a + b, d + d), misconception: M.ADD_DEN }, f(Math.max(a, b), d), f(d, a + b)];
+        return {
+          ...base,
+          kind: "choose-fraction",
+          prompt: `${fr(f(a, d))} + ${fr(f(b, d))} = ?`,
+          diagram: { shape: "bar", parts: d, shaded: range(a + b), added: range(a + b).slice(a) },
+          options: options.filter((o, i) => options.findIndex((x) => x.n * o.d === o.n * x.d && x.n === o.n) === i),
+          answer,
+          hint: `The parts are all ${fr(f(1, d))}s. Count them.`,
+          explanation: `${a} + ${b} = ${a + b}, and the parts stay the same size: ${fr(answer)}.`,
+        };
+      }
+      // a/d − b/d; at difficulty 3 the first fraction is the whole, d/d.
+      const a = base.difficulty === 3 ? d : int(r, 2, d - 1);
+      const b = int(r, 1, a - 1);
+      const answer = f(a - b, d);
+      return {
+        ...base,
+        kind: "write-fraction",
+        prompt: base.difficulty === 3 ? `A whole bar is ${fr(f(d, d))}. Take away ${fr(f(b, d))}. Write what is left.` : `Write the answer: ${fr(f(a, d))} − ${fr(f(b, d))} = ?`,
+        diagram: { shape: "bar", parts: d, shaded: range(a - b), removed: range(a).slice(a - b) },
+        answer,
+        hint: "Take away the numerators. The denominator stays the same.",
+        explanation: `${a} − ${b} = ${a - b}, and the parts stay the same size: ${fr(answer)}.`,
+      };
+    },
+  },
+
   /* ─────────── Fractions of amounts ─────────── */
   {
     key: "fo-amount",
