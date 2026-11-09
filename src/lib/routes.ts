@@ -16,6 +16,8 @@ export const routes = {
   parentJourney: () => "/parent/journey",
   /** For a new grown-up; not behind the gate. */
   parentAbout: () => "/parent/about",
+  /** Times-table facts report (TT-011). */
+  parentFacts: () => "/parent/facts",
   results: () => "/results",
   review: () => "/results#review",
 };
@@ -36,6 +38,10 @@ export function topicRoutes(topicId: string) {
     check: () => `${base}/check`,
     recheck: (skill: SkillId) => `${base}/recheck/${urlSkill(skill)}`,
     start: () => `${base}/start`,
+    /** Times-table facts (R2), only on the times-tables island. */
+    facts: () => `${base}/facts`,
+    factsRun: (mode: "practice" | "untimed" | "diagnostic" | "timed", table?: number) => `${base}/facts/${mode}${table ? `?table=${table}` : ""}`,
+    factsExplore: () => `${base}/facts/explore`,
   };
 }
 

@@ -499,7 +499,8 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "status": "statutory",
     "outcome": "Recognises and uses factor pairs and commutativity in mental calculations.",
     "skills": [
-      "multiply-divide.factors"
+      "multiply-divide.factors",
+      "times-tables.laws"
     ]
   },
   {
@@ -521,7 +522,9 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "skills": [
       "problem-solving.sum-difference",
       "problem-solving.counting",
-      "multiply-divide.short-mult"
+      "multiply-divide.short-mult",
+      "times-tables.laws",
+      "times-tables.meaning"
     ]
   },
   {

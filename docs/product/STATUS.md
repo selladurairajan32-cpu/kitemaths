@@ -164,18 +164,18 @@ only where it is evidence for a backlog item: Times Tables, Mental Maths, 11+ an
 
 | ID | Title | Pri | Rel | QA status | Implementation | Evidence and notes |
 |---|---|---|---|---|---|---|
-| TT-001 | Create the Times Tables curriculum and progression | P2 | R2 | SPECIFIED | Partial | Unaccepted Times tables preview: 5 lessons grouped by families (`src/topics/times-tables`); no MTC distinction. |
-| TT-002 | Build conceptual multiplication lessons | P2 | R2 | SPECIFIED | Partial | Preview uses arrays and doubling; no number-line/scaling or distributive lesson. |
-| TT-003 | Build division and inverse-fact lessons | P2 | R2 | SPECIFIED | Partial | Preview 'Division facts' lesson with fact families. |
-| TT-004 | Build table-by-table learning paths | P2 | R2 | SPECIFIED | Partial | Preview groups tables into 5 skills; no per-fact known/developing view. |
-| TT-005 | Build an all-facts diagnostic | P2 | R2 | SPECIFIED | Not implemented | No all-facts diagnostic. |
-| TT-006 | Build targeted fact practice | P2 | R2 | SPECIFIED | Partial | Adaptive practice per skill, not per fact. |
-| TT-007 | Build times-table visual explorer | P2 | R2 | SPECIFIED | Not implemented | No interactive grid explorer (a static times-row picture exists). |
-| TT-008 | Build division fact recall practice | P2 | R2 | SPECIFIED | Partial | Preview division templates (`tt-div`, `tt-div-family`). |
-| TT-009 | Build MTC-style timed simulator | P2 | R2 | SPECIFIED | Not implemented | No timed MTC-style mode. |
-| TT-010 | Build untimed confidence mode | P2 | R2 | SPECIFIED | Partial | All practice is untimed; no dedicated confidence mode. |
-| TT-011 | Build times-table mastery reporting | P2 | R2 | SPECIFIED | Not implemented | No per-fact reporting. |
-| TT-012 | Build spaced review and practice scheduling | P2 | R2 | SPECIFIED | Not implemented | No spaced review scheduling. |
+| TT-001 | Create the Times Tables curriculum and progression | P2 | R2 | READY FOR QA | Implemented | **R2, D-032 step B, awaiting review; not accepted.** [TT-001 progression](curriculum/TT-001-times-tables-progression.md): curriculum, the Year 4 MTC and extension kept apart with sources; prior facts; lesson and table order; proposed fact thresholds (§5) for review. |
+| TT-002 | Build conceptual multiplication lessons | P2 | R2 | READY FOR QA | Implemented | **R2, D-032 step B, awaiting review; not accepted.** 3 new skills and lessons on the times-tables island: groups, repeated addition, number-line jumps and scaling (`groups-and-jumps`); commutativity and the distributive law (`turn-and-split`). |
+| TT-003 | Build division and inverse-fact lessons | P2 | R2 | READY FOR QA | Implemented | **R2, D-032 step B, awaiting review; not accepted.** `share-and-group`: sharing and grouping, fact families, and choosing the explanation of the inverse; division forms in fact practice. |
+| TT-004 | Build table-by-table learning paths | P2 | R2 | READY FOR QA | Implemented | **R2, D-032 step B, awaiting review; not accepted.** Facts hub (`/t/times-tables/facts`): table-by-table paths in curriculum order, the 66-fact grid (known, growing, not yet, new), next table from the evidence. |
+| TT-005 | Build an all-facts diagnostic | P2 | R2 | READY FOR QA | Implemented | **R2, D-032 step B, awaiting review; not accepted.** 25-fact diagnostic sampling every table; typing slips classed apart and asked again; framed as a starting point, not a label. |
+| TT-006 | Build targeted fact practice | P2 | R2 | READY FOR QA | Implemented | **R2, D-032 step B, awaiting review; not accepted.** `planSession`: weak facts first, a known fact every 4th question, new facts paced; known after 3 recalls in a row. |
+| TT-007 | Build times-table visual explorer | P2 | R2 | READY FOR QA | Implemented | **R2, D-032 step B, awaiting review; not accepted.** Explorer (`/t/times-tables/facts/explore`): 12 × 12 grid, array, number-line jumps, fact family and multiples highlight. |
+| TT-008 | Build division fact recall practice | P2 | R2 | READY FOR QA | Implemented | **R2, D-032 step B, awaiting review; not accepted.** Missing dividend, divisor, quotient and factor forms, asked once the multiplication is recalled; exact integer answers. |
+| TT-009 | Build MTC-style timed simulator | P2 | R2 | READY FOR QA | Implemented | **R2, D-032 step B, awaiting review; not accepted.** Timed practice built to the STA framework (25 questions, 6 s, 3 s pause, Table 1 and 2 limits), 3 unscored warm-ups, facts to revisit; labelled a practice simulation; kept out of fact status and skill mastery (context `timed`). |
+| TT-010 | Build untimed confidence mode | P2 | R2 | READY FOR QA | Implemented | **R2, D-032 step B, awaiting review; not accepted.** Untimed mode: no clock, hint button, unlimited retries, "Show me"; summary counts facts, not speed. |
+| TT-011 | Build times-table mastery reporting | P2 | R2 | READY FOR QA | Implemented | **R2, D-032 step B, awaiting review; not accepted.** Grown-up report (`/parent/facts`): per-fact accuracy, last-three consistency, division answers, timed answers in their own column, slips, recommended practice; no comparisons. |
+| TT-012 | Build spaced review and practice scheduling | P2 | R2 | READY FOR QA | Implemented | **R2, D-032 step B, awaiting review; not accepted.** Leitner review boxes (0, 1, 2, 4, 7, 14 days), deterministic sessions, child-chosen length (5, 10, 20). |
 
 ### MM — Mental Maths (future, R3)
 

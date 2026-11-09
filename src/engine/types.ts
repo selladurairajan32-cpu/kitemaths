@@ -42,7 +42,11 @@ export interface Evaluation {
   feedback?: string;
 }
 
-export type ResultContext = "lesson" | "practice" | "followup" | "assessment" | "recheck" | "placement";
+/**
+ * Where an answer was given. `timed` is the times-tables timed simulator (TT-009): it is kept out of skill mastery and
+ * learning statistics, so speed is never read as understanding (TT-010, TT-011).
+ */
+export type ResultContext = "lesson" | "practice" | "followup" | "assessment" | "recheck" | "placement" | "timed";
 
 export const INDEPENDENT_CONTEXTS: ResultContext[] = ["assessment", "recheck"];
 
@@ -64,7 +68,25 @@ export interface ItemResult {
   durationMs?: number;
   /** For follow-up questions: the misconception the follow-up was checking. */
   targets?: MisconceptionId;
+  /** TT: the multiplication or division fact this answer was about (times-tables fact practice). Optional. */
+  fact?: FactRef;
+  /** TT-005: a wrong answer that looks like a typing slip (digits swapped, doubled or dropped), not a gap in recall. */
+  slip?: boolean;
+  /** TT-009: answered against the timed simulator's clock, so it is reported apart from untimed understanding (TT-011). */
+  timed?: boolean;
   at: number;
+}
+
+/**
+ * One times-table fact as asked: `a` is the table and `b` the multiplier (a × b = a·b). `form` says which number was
+ * missing: the product (`mul`), a factor (`missing-factor`, a × ? = a·b), or one part of the division fact
+ * (`div-quotient` a·b ÷ a = ?, `div-divisor` a·b ÷ ? = b, `div-dividend` ? ÷ a = b).
+ */
+export type FactForm = "mul" | "missing-factor" | "div-quotient" | "div-divisor" | "div-dividend";
+export interface FactRef {
+  a: number;
+  b: number;
+  form: FactForm;
 }
 
 export interface MisconceptionDef {

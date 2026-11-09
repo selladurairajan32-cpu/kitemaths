@@ -7,7 +7,7 @@ import { ScreenHero } from "@/components/kid/ScreenHero";
 import { RichText } from "@/components/math/RichText";
 import { PaperIcon, type IconName } from "@/components/paper/PaperIcon";
 import { isPicName, Pic } from "@/components/paper/Pic";
-import { ArrowLeftIcon, CheckIcon } from "@/components/ui/Icons";
+import { ArrowLeftIcon, ArrowRightIcon, CheckIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 import { allLessonEvidence, unmetPrerequisites, type LessonEvidence } from "@/engine/evidence";
 import { isPracticeMilestoneMet, recommendNext, reviewSkills, strongSkills } from "@/engine/journey";
@@ -17,6 +17,8 @@ import { routes as appRoutes } from "@/lib/routes";
 import { useHydrated } from "@/lib/store";
 import { useTopicState } from "@/topics/context";
 import { topicOf } from "@/topics";
+import { factStates } from "@/engine/facts";
+import { FACTS_TOPIC } from "@/topics/times-tables/facts";
 
 type Status = "done" | "current" | "open";
 
@@ -155,6 +157,20 @@ export function SkyMapScreen() {
             </Link>
           </span>
         </KipSays>
+      )}
+
+      {topic.id === FACTS_TOPIC && (
+        // R2: the times-tables island's facts area (TT-004 to TT-012).
+        <Link href={links.facts()} className="flex items-center gap-4 rounded-[24px] border-2 border-brand bg-surface p-4 shadow-[var(--shadow-card)] transition hover:shadow-[var(--shadow-lift)]">
+          <Pic name="times" size={48} />
+          <span className="min-w-0 flex-1">
+            <span className="block text-title font-extrabold text-ink">My times-table facts</span>
+            <span className="block text-body text-ink-2">
+              {factStates(learner.results).filter((x) => x.status === "known").length} of 66 facts known. Practise, check what you know, or try timed practice.
+            </span>
+          </span>
+          <ArrowRightIcon size={20} className="shrink-0 text-ink-2" />
+        </Link>
       )}
 
       <section className="rounded-[32px] bg-sky-soft px-3 py-5 sm:px-5" aria-label="Lessons and challenges">

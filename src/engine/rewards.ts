@@ -21,6 +21,8 @@ export function starsForResult(r: ItemResult): number {
       return r.correct ? 2 : 1;
     case "placement":
       return r.correct ? 1 : 0;
+    case "timed":
+      return r.correct ? 1 : 0;
   }
 }
 

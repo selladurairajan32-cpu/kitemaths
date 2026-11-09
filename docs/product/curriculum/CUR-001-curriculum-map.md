@@ -70,10 +70,10 @@ Each objective names one or more kinds. Every kind assumes the CUR-002 §4 contr
 | Year | Objectives | Addressed | Partial | Not addressed |
 |---|---:|---:|---:|---:|
 | 3 | 33 | 19 | 12 | 2 |
-| 4 | 42 | 26 | 13 | 3 |
+| 4 | 42 | 28 | 11 | 3 |
 | 5 | 47 | 18 | 20 | 9 |
 | 6 | 49 | 13 | 23 | 13 |
-| **All** | **171** | **76** | **68** | **27** |
+| **All** | **171** | **78** | **66** | **27** |
 
 ### 4.2 Fractions R1 dependencies
 
@@ -282,9 +282,9 @@ Source: <https://www.gov.uk/government/publications/national-curriculum-in-engla
 |---|---|---|---|---|---|---|---|
 | Y4.MD.1<br>**R1: prerequisite**<br>recall multiplication and division facts for multiplication tables up to 12 × 12 | Recalls multiplication and division facts up to 12 × 12. | Y3.MD.1 | times table, product, 12 × 12 | 7 × 8 = 56; 132 ÷ 12 = 11 | **F** Fluency and recall | `times-tables.six-seven-nine`<br>`times-tables.eleven-twelve`<br>`times-tables.division-facts` | **Addressed**. The Year 4 Multiplication Tables Check (MTC) format is R2 (TT epic), not here. |
 | Y4.MD.2<br>use place value, known and derived facts to multiply and divide mentally, including: multiplying by 0 and 1; dividing by 1; multiplying together 3 numbers | Uses place value, known and derived facts to multiply and divide mentally, including × by 0 and 1, ÷ by 1 and multiplying 3 numbers. | Y4.MD.1; Y3.MD.2 | derived fact, mentally, multiply by 0, multiply together | 6 × 7 × 5; 70 × 4 from 7 × 4 | **F** Fluency and recall | `multiply-divide.ten-hundred`<br>`times-tables.eleven-twelve` | **Partial**. Multiplying by 0 and 1, and three numbers, are not confirmed in the lesson descriptions. |
-| Y4.MD.3<br>recognise and use factor pairs and commutativity in mental calculations | Recognises and uses factor pairs and commutativity in mental calculations. | Y4.MD.1; Y2.MD.3 commutativity | factor pair, commutative, factor | Factor pairs of 24; 3 × 17 × 2 = 17 × 6 | **R** Representation and concept | `multiply-divide.factors` | **Partial**. Commutativity in mental calculation is not specifically taught. |
+| Y4.MD.3<br>recognise and use factor pairs and commutativity in mental calculations | Recognises and uses factor pairs and commutativity in mental calculations. | Y4.MD.1; Y2.MD.3 commutativity | factor pair, commutative, factor | Factor pairs of 24; 3 × 17 × 2 = 17 × 6 | **R** Representation and concept | `multiply-divide.factors`<br>`times-tables.laws` | **Addressed** |
 | Y4.MD.4<br>multiply two-digit and three-digit numbers by a one-digit number using formal written layout | Multiplies 2-digit and 3-digit numbers by a 1-digit number using a formal written layout. | Y4.MD.1; Y3.MD.2 | short multiplication, carry, formal method | 346 × 7 by short multiplication | **P** Procedure | `multiply-divide.short-mult` | **Addressed** |
-| Y4.MD.5<br>solve problems involving multiplying and adding, including using the distributive law to multiply two-digit numbers by 1 digit, integer scaling problems and harder correspondence problems such as n objects are connected to m objects | Solves problems with multiplying and adding, using the distributive law, integer scaling and harder correspondence problems. | Y4.MD.4; Y3.MD.3 | distributive law, scaling, correspondence | 23 × 7 = 20 × 7 + 3 × 7; 'times as many' | **W** Problems in context | `problem-solving.sum-difference`<br>`problem-solving.counting`<br>`multiply-divide.short-mult` | **Partial**. The distributive law is used implicitly (partitioning) but not named. |
+| Y4.MD.5<br>solve problems involving multiplying and adding, including using the distributive law to multiply two-digit numbers by 1 digit, integer scaling problems and harder correspondence problems such as n objects are connected to m objects | Solves problems with multiplying and adding, using the distributive law, integer scaling and harder correspondence problems. | Y4.MD.4; Y3.MD.3 | distributive law, scaling, correspondence | 23 × 7 = 20 × 7 + 3 × 7; 'times as many' | **W** Problems in context | `problem-solving.sum-difference`<br>`problem-solving.counting`<br>`multiply-divide.short-mult`<br>`times-tables.laws`<br>`times-tables.meaning` | **Addressed** |
 
 #### Year 4 · Number: fractions (including decimals and percentages)
 
@@ -596,7 +596,7 @@ Objectives **not addressed** by any existing skill, grouped by strand. These are
 | Number: addition, subtraction, multiplication and division | Y6.ASMD.2, Y6.ASMD.6 |
 | Algebra | Y6.ALG.4 |
 
-**Totals:** 27 not addressed, 68 partial, 76 addressed, of 171. Topics with nothing taught: measuring and converting length, mass and capacity, volume, symmetry, circles, primes, squares and cubes, order of operations, Roman numerals, long division, fraction multiplication and division, and measuring angles with a protractor.
+**Totals:** 27 not addressed, 66 partial, 78 addressed, of 171. Topics with nothing taught: measuring and converting length, mass and capacity, volume, symmetry, circles, primes, squares and cubes, order of operations, Roman numerals, long division, fraction multiplication and division, and measuring angles with a protractor.
 
 ## 8. Decisions needed
 

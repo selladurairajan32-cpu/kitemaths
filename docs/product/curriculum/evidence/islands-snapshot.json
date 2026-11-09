@@ -458,9 +458,32 @@
     "id": "times-tables.division-facts",
     "title": "Division facts",
     "description": "Use times tables to divide, and see fact families."
+   },
+   {
+    "id": "times-tables.meaning",
+    "title": "What multiplying means",
+    "description": "See times as equal groups, repeated adding, jumps on a number line and scaling."
+   },
+   {
+    "id": "times-tables.laws",
+    "title": "Turn it round, split it up",
+    "description": "Multiply in either order, and split a fact into two you know."
+   },
+   {
+    "id": "times-tables.fact-families",
+    "title": "Sharing, grouping and fact families",
+    "description": "Divide by sharing or grouping, and write the four facts in a family."
    }
   ],
   "lessons": [
+   {
+    "id": "groups-and-jumps",
+    "title": "Groups, jumps and scaling",
+    "objectives": [
+     "See multiplication as equal groups and repeated adding",
+     "Use jumps on a number line and scaling for times"
+    ]
+   },
    {
     "id": "two-five-ten",
     "title": "2s, 5s and 10s",
@@ -475,6 +498,14 @@
     "objectives": [
      "Know the 3, 4 and 8 times tables",
      "Double to get the 4s and 8s"
+    ]
+   },
+   {
+    "id": "turn-and-split",
+    "title": "Turn it round, split it up",
+    "objectives": [
+     "Know that multiplying can be done in any order",
+     "Split a fact into two facts you know and add them"
     ]
    },
    {
@@ -499,6 +530,14 @@
     "objectives": [
      "Divide using times tables",
      "Write the fact family for a multiplication"
+    ]
+   },
+   {
+    "id": "share-and-group",
+    "title": "Sharing, grouping and fact families",
+    "objectives": [
+     "Divide by sharing and by grouping",
+     "Write and explain a fact family"
     ]
    }
   ]

@@ -5,8 +5,15 @@ import type { Difficulty, Rng, Template } from "@/topics/kit/types";
 
 const T = "times-tables";
 const gen = genFor(T);
-const S = { easy: `${T}.two-five-ten`, doubling: `${T}.three-four-eight`, tricky: `${T}.six-seven-nine`, big: `${T}.eleven-twelve`, division: `${T}.division-facts` };
+const S = {
+  easy: `${T}.two-five-ten`, doubling: `${T}.three-four-eight`, tricky: `${T}.six-seven-nine`, big: `${T}.eleven-twelve`, division: `${T}.division-facts`,
+  // R2 (TT-002, TT-003): what multiplying means, the laws that link facts, and division as sharing and grouping.
+  meaning: `${T}.meaning`, laws: `${T}.laws`, families: `${T}.fact-families`,
+};
 const M = { added: `${T}.added-not-multiplied`, step: `${T}.one-step-out`, divMult: `${T}.multiplied-not-divided` };
+/** For the fact screens (R2), which record answers against these skills and misconceptions. */
+export const TT_SKILLS = S;
+export const TT_MISCONCEPTIONS = M;
 
 const FAMILIES: Record<string, { skill: string; tables: number[] }> = {
   easy: { skill: S.easy, tables: [2, 5, 10] },
@@ -90,7 +97,250 @@ function missingTemplate(family: string): Template {
   };
 }
 
+/** TT-002: multiplication as equal groups, repeated addition, jumps on a number line and scaling. */
+const meaningTemplates: Template[] = [
+  {
+    key: "tt-groups",
+    skill: S.meaning,
+    difficulties: [1, 2],
+    make: (r, { difficulty }) => {
+      const groups = int(r, 2, difficulty === 1 ? 5 : 8);
+      const each = int(r, 2, difficulty === 1 ? 5 : 9);
+      return {
+        kind: "number",
+        prompt: `**${groups} groups of ${each}**. How many altogether?`,
+        visual: { kind: "groups", groups, each, label: `${groups} groups of ${each}` },
+        answer: groups * each,
+        traps: [{ value: groups + each, misconception: M.added, feedback: `That's ${groups} add ${each}. There are ${groups} groups, with ${each} in each.` }].filter((t) => t.value !== groups * each),
+        hint: `Count in ${each}s, once for each group.`,
+        explanation: `${groups} groups of ${each} is ${groups} × ${each} = **${groups * each}**.`,
+      };
+    },
+  },
+  {
+    key: "tt-repeat",
+    skill: S.meaning,
+    difficulties: [1, 2],
+    make: (r, { difficulty }) => {
+      const n = int(r, 3, difficulty === 1 ? 5 : 7);
+      const v = int(r, 2, difficulty === 1 ? 5 : 9);
+      const sum = Array.from({ length: n }, () => v).join(" + ");
+      return {
+        kind: "choose",
+        prompt: `Which is the same as **${sum}**?`,
+        options: [
+          { text: `${n} × ${v}` },
+          { text: `${n} + ${v}`, misconception: M.added, feedback: `${n} + ${v} adds the two numbers once. The sum has ${n} lots of ${v}.` },
+          { text: `${v} × ${v}`, feedback: `That's ${v} lots of ${v}. Count how many ${v}s are added: ${n}.` },
+          { text: `${n + 1} × ${v}`, misconception: M.step, feedback: `Count again: there are ${n} lots of ${v}, not ${n + 1}.` },
+        ].filter((o, i, all) => all.findIndex((x) => x.text === o.text) === i),
+        answer: 0,
+        hint: `Count how many ${v}s are added together.`,
+        explanation: `${n} lots of ${v} is **${n} × ${v}** = ${n * v}.`,
+      };
+    },
+  },
+  {
+    key: "tt-jumps",
+    skill: S.meaning,
+    difficulties: [2, 3],
+    make: (r, { difficulty }) => {
+      const step = int(r, 2, difficulty === 2 ? 5 : 9);
+      const n = int(r, 3, difficulty === 2 ? 6 : 9);
+      return {
+        kind: "number",
+        prompt: `Kip jumps along the number line in **${step}s**, starting at 0. Where does Kip land after **${n} jumps**?`,
+        visual: {
+          kind: "line", min: 0, max: step * n, step,
+          jumps: Array.from({ length: n }, (_, i) => ({ from: i * step, to: (i + 1) * step })),
+          unknown: step * n,
+        },
+        answer: step * n,
+        traps: [
+          { value: step + n, misconception: M.added, feedback: `That adds ${step} and ${n}. Each of the ${n} jumps is ${step} long.` },
+          { value: step * (n - 1), misconception: M.step, feedback: `That's ${n - 1} jumps. Count all ${n}.` },
+        ].filter((t) => t.value !== step * n),
+        hint: `Each jump adds ${step}. Count ${n} jumps of ${step}.`,
+        explanation: `${n} jumps of ${step} is ${n} × ${step} = **${step * n}**.`,
+      };
+    },
+  },
+  {
+    key: "tt-scale",
+    skill: S.meaning,
+    difficulties: [2, 3],
+    make: (r, { difficulty }) => {
+      const base = int(r, 2, difficulty === 2 ? 6 : 12);
+      const times = int(r, 2, difficulty === 2 ? 5 : 9);
+      const thing = pick(r, [["ribbon", "cm"], ["path", "m"], ["snake", "cm"], ["rope", "m"]] as const);
+      return {
+        kind: "number",
+        prompt: `A red ${thing[0]} is **${base} ${thing[1]}** long. A blue ${thing[0]} is **${times} times as long**. How long is the blue ${thing[0]}, in ${thing[1]}?`,
+        visual: { kind: "bar", parts: Array.from({ length: times }, () => ({ label: `${base} ${thing[1]}`, size: 1, tone: "brand" as const })), total: `${times} × ${base} ${thing[1]}`, note: `red: ${base} ${thing[1]}` },
+        answer: base * times,
+        traps: [{ value: base + times, misconception: M.added, feedback: `${times} times as long means ${times} lots of ${base}, not ${times} more.` }].filter((t) => t.value !== base * times),
+        hint: `${times} times as long means ${times} lots of the red one.`,
+        explanation: `${times} × ${base} = **${times * base}** ${thing[1]}.`,
+      };
+    },
+  },
+];
+
+/** TT-002: commutativity and the distributive law, linked to facts the child knows. */
+const lawTemplates: Template[] = [
+  {
+    key: "tt-commute",
+    skill: S.laws,
+    difficulties: [1, 2, 3],
+    make: (r, { difficulty }) => {
+      const a = int(r, 2, upTo(difficulty));
+      const b = int(r, 3, 12);
+      return {
+        kind: "number",
+        prompt: `**${a} × ${b} = ${a * b}**. What is **${b} × ${a}**?`,
+        visual: difficulty === 1 && a * b <= 60 ? { kind: "array", rows: a, cols: b } : undefined,
+        answer: a * b,
+        traps: [{ value: a * b + a, misconception: M.step, feedback: `Turning it round doesn't change the answer: ${b} × ${a} is still ${a * b}.` }, { value: a + b, misconception: M.added, feedback: "That adds the numbers. Times in either order gives the same answer." }].filter((t) => t.value !== a * b),
+        hint: "Turn the array round: the number of dots stays the same.",
+        explanation: `Multiplying works in either order, so ${b} × ${a} = **${a * b}**.`,
+      };
+    },
+  },
+  {
+    key: "tt-split",
+    skill: S.laws,
+    difficulties: [2, 3],
+    make: (r, { difficulty }) => {
+      const a = int(r, 6, difficulty === 2 ? 9 : 12);
+      const b = int(r, 3, 9);
+      const known = a <= 9 ? 5 : 10;
+      return {
+        kind: "number",
+        prompt: `**${a} × ${b}** is the same as **${known} × ${b} + ? × ${b}**. What is the missing number?`,
+        visual: { kind: "bar", total: `${a} × ${b}`, parts: [{ label: `${known} × ${b}`, size: known, tone: "brand" }, { label: `? × ${b}`, size: a - known, tone: "num" }] },
+        answer: a - known,
+        traps: [{ value: a, feedback: `That would make ${known + a} lots of ${b}. Split ${a} into ${known} and what?` }, { value: b, feedback: `Split the ${a}, not the ${b}: ${a} = ${known} + ?` }].filter((t, i, all) => t.value !== a - known && all.findIndex((x) => x.value === t.value) === i),
+        hint: `${a} = ${known} + ?`,
+        explanation: `${a} = ${known} + ${a - known}, so ${a} × ${b} = ${known} × ${b} + **${a - known}** × ${b}.`,
+      };
+    },
+  },
+  {
+    key: "tt-split-total",
+    skill: S.laws,
+    difficulties: [2, 3],
+    make: (r, { difficulty }) => {
+      const b = int(r, 3, 9);
+      const a = difficulty === 2 ? int(r, 6, 9) : pick(r, [11, 12]);
+      const known = a <= 9 ? 5 : 10;
+      const rest = a - known;
+      return {
+        kind: "number",
+        prompt: `Use **${known} × ${b} = ${known * b}** and **${rest} × ${b} = ${rest * b}**. What is **${a} × ${b}**?`,
+        answer: a * b,
+        traps: [{ value: known * b + rest, misconception: M.added, feedback: `Add the two parts: ${known * b} + ${rest * b}.` }, { value: known * b * rest, feedback: `Add the two parts, don't multiply them: ${known * b} + ${rest * b}.` }].filter((t, i, all) => t.value !== a * b && all.findIndex((x) => x.value === t.value) === i),
+        hint: `${a} lots of ${b} is ${known} lots plus ${rest} lots.`,
+        explanation: `${known * b} + ${rest * b} = **${a * b}**, so ${a} × ${b} = ${a * b}.`,
+      };
+    },
+  },
+];
+
+/** TT-003: division as sharing and as grouping, fact families, and why multiplying tells you the division. */
+const familyTemplates: Template[] = [
+  {
+    key: "tt-share",
+    skill: S.families,
+    difficulties: [1, 2, 3],
+    make: (r, { difficulty }) => {
+      const people = int(r, 2, difficulty === 1 ? 5 : difficulty === 2 ? 8 : 12);
+      const each = int(r, 2, difficulty === 1 ? 5 : 12);
+      const total = people * each;
+      const thing = pick(r, ["sweets", "stickers", "marbles", "cards"]);
+      return {
+        kind: "number",
+        prompt: `**${total} ${thing}** are shared equally between **${people} children**. How many does each child get?`,
+        visual: difficulty === 1 ? { kind: "groups", groups: people, each, label: `${total} shared between ${people}` } : undefined,
+        answer: each,
+        traps: [{ value: total * people, misconception: M.divMult, feedback: `Sharing makes smaller amounts: ${total} ÷ ${people}.` }, { value: total - people, feedback: `Share, don't take away: ${total} ÷ ${people}.` }].filter((t, i, all) => t.value !== each && t.value > 0 && all.findIndex((x) => x.value === t.value) === i),
+        hint: `What times ${people} makes ${total}?`,
+        explanation: `Sharing ${total} between ${people}: ${total} ÷ ${people} = **${each}** each, because ${people} × ${each} = ${total}.`,
+      };
+    },
+  },
+  {
+    key: "tt-group",
+    skill: S.families,
+    difficulties: [1, 2, 3],
+    make: (r, { difficulty }) => {
+      const size = int(r, 2, difficulty === 1 ? 5 : difficulty === 2 ? 8 : 12);
+      const bags = int(r, 2, difficulty === 1 ? 5 : 12);
+      const total = size * bags;
+      const thing = pick(r, ["eggs", "pencils", "apples", "beads"]);
+      const box = pick(r, ["boxes", "packs", "bags", "jars"]);
+      return {
+        kind: "number",
+        prompt: `**${total} ${thing}** are put into ${box} of **${size}**. How many ${box} are filled?`,
+        visual: difficulty === 1 ? { kind: "groups", groups: bags, each: size, label: `${total} in groups of ${size}` } : undefined,
+        answer: bags,
+        traps: [{ value: total * size, misconception: M.divMult, feedback: `Grouping makes fewer, not more: how many ${size}s make ${total}?` }, { value: size, feedback: `${size} is how many go in each. How many ${box}?` }].filter((t, i, all) => t.value !== bags && all.findIndex((x) => x.value === t.value) === i),
+        hint: `How many groups of ${size} make ${total}?`,
+        explanation: `${total} ÷ ${size} = **${bags}** ${box}, because ${bags} × ${size} = ${total}.`,
+      };
+    },
+  },
+  {
+    key: "tt-family-odd",
+    skill: S.families,
+    difficulties: [2, 3],
+    make: (r, { difficulty }) => {
+      const a = int(r, 3, difficulty === 2 ? 9 : 12);
+      let b = int(r, 3, difficulty === 2 ? 9 : 12);
+      if (b === a) b = a === 12 ? 11 : a + 1;
+      const p = a * b;
+      const odd = pick(r, [`${a} ÷ ${p} = ${b}`, `${p} × ${a} = ${b}`, `${p} ÷ ${a} = ${a}`]);
+      const truths = [`${a} × ${b} = ${p}`, `${b} × ${a} = ${p}`, `${p} ÷ ${a} = ${b}`, `${p} ÷ ${b} = ${a}`];
+      const shown = [odd, ...truths.slice(0, 3)];
+      return {
+        kind: "choose",
+        prompt: `Which is **not** part of the fact family for **${a}, ${b} and ${p}**?`,
+        options: shown.map((text, i) => (i === 0 ? { text } : { text, feedback: `${text} is true: it belongs to the family.` })),
+        answer: 0,
+        hint: `The family has two times facts and two division facts, always starting division with ${p}.`,
+        explanation: `The family is ${truths.join(", ")}. **${odd}** is not true.`,
+      };
+    },
+  },
+  {
+    key: "tt-family-why",
+    skill: S.families,
+    difficulties: [3],
+    make: (r) => {
+      const a = int(r, 3, 12);
+      let b = int(r, 3, 12);
+      if (b === a) b = a === 12 ? 11 : a + 1;
+      const p = a * b;
+      return {
+        kind: "choose",
+        prompt: `**${a} × ${b} = ${p}**. Why does that tell you **${p} ÷ ${b} = ${a}**?`,
+        options: [
+          { text: `${a} groups of ${b} make ${p}, so ${p} split into groups of ${b} makes ${a} groups.` },
+          { text: `Because ${p} − ${b} = ${a}.`, feedback: `${p} − ${b} is ${p - b}. Division undoes multiplying, not adding.` },
+          { text: `Because you always divide by the bigger number.`, feedback: `You can divide by either number in the family: ${p} ÷ ${a} = ${b} too.` },
+          { text: `Because ${a} + ${b} = ${p}.`, misconception: M.added, feedback: `${a} + ${b} is ${a + b}. The family comes from ${a} × ${b}.` },
+        ],
+        answer: 0,
+        hint: "Division undoes multiplication.",
+        explanation: `Dividing undoes multiplying: ${a} groups of ${b} make ${p}, so ${p} ÷ ${b} = **${a}**.`,
+      };
+    },
+  },
+];
+
 const templates: Template[] = [
+  ...meaningTemplates,
+  ...lawTemplates,
+  ...familyTemplates,
   factTemplate("easy"),
   rowTemplate("easy"),
   {
@@ -175,9 +425,43 @@ export const timesTables = defineTopic({
     { id: S.tricky, title: "6, 7 and 9 times tables", description: "Know the 6s, 7s and 9s, with tricks for the hard ones.", lessonId: "six-seven-nine" },
     { id: S.big, title: "11 and 12 times tables", description: "Know the 11s and 12s using patterns and partitioning.", lessonId: "eleven-twelve" },
     { id: S.division, title: "Division facts", description: "Use times tables to divide, and see fact families.", lessonId: "division-facts" },
+    { id: S.meaning, title: "What multiplying means", description: "See times as equal groups, repeated adding, jumps on a number line and scaling.", lessonId: "groups-and-jumps" },
+    { id: S.laws, title: "Turn it round, split it up", description: "Multiply in either order, and split a fact into two you know.", lessonId: "turn-and-split" },
+    { id: S.families, title: "Sharing, grouping and fact families", description: "Divide by sharing or grouping, and write the four facts in a family.", lessonId: "share-and-group" },
   ],
-  lessonIcons: { "two-five-ten": "star", "three-four-eight": "dice", "six-seven-nine": "bulb", "eleven-twelve": "trophy", "division-facts": "divide" },
+  lessonIcons: { "groups-and-jumps": "plus", "two-five-ten": "star", "three-four-eight": "dice", "turn-and-split": "puzzle", "six-seven-nine": "bulb", "eleven-twelve": "trophy", "division-facts": "divide", "share-and-group": "sweets" },
   lessons: [
+    {
+      id: "groups-and-jumps",
+      title: "Groups, jumps and scaling",
+      phase: "Understand",
+      summary: "Times means equal groups: as adding, as jumps, as rows and as times as big.",
+      minutes: 7,
+      objectives: ["See multiplication as equal groups and repeated adding", "Use jumps on a number line and scaling for times"],
+      steps: [
+        {
+          type: "explain",
+          title: "Equal groups",
+          body: ["**4 groups of 3** is 3 + 3 + 3 + 3 = 12. We write it **4 × 3 = 12**.", "Times only works when every group is the same size."],
+          visual: { kind: "groups", groups: 4, each: 3, label: "4 groups of 3" },
+        },
+        {
+          type: "explain",
+          title: "Jumps on a number line",
+          body: ["Jump in **3s** from 0, four times: 3, 6, 9, **12**. Four jumps of 3 is 4 × 3."],
+          visual: { kind: "line", min: 0, max: 12, step: 3, jumps: [{ from: 0, to: 3 }, { from: 3, to: 6 }, { from: 6, to: 9 }, { from: 9, to: 12 }] },
+        },
+        {
+          type: "explain",
+          title: "Times as big",
+          body: ["A ribbon **3 times as long** as a 4 cm ribbon is 3 lots of 4 cm: **12 cm**.", "Scaling is multiplying too."],
+          visual: { kind: "bar", parts: [{ label: "4 cm", size: 1, tone: "brand" }, { label: "4 cm", size: 1, tone: "brand" }, { label: "4 cm", size: 1, tone: "brand" }], total: "3 × 4 cm = 12 cm" },
+          tip: "Groups, adding, jumps and scaling are four ways of seeing the same fact.",
+        },
+        { type: "check", title: "Your turn", questionId: gen("tt-groups", 1, 2) },
+        { type: "check", title: "One more", questionId: gen("tt-jumps", 2, 4) },
+      ],
+    },
     {
       id: "two-five-ten",
       title: "2s, 5s and 10s",
@@ -231,6 +515,42 @@ export const timesTables = defineTopic({
         },
         { type: "check", title: "Your turn", questionId: gen("tt-doubling", 1, 4) },
         { type: "check", title: "One more", questionId: gen("tt-doubling-row", 2, 8) },
+      ],
+    },
+    {
+      id: "turn-and-split",
+      title: "Turn it round, split it up",
+      phase: "Explain",
+      summary: "Multiply in either order, and split a hard fact into two easy ones.",
+      minutes: 8,
+      objectives: ["Know that multiplying can be done in any order", "Split a fact into two facts you know and add them"],
+      steps: [
+        {
+          type: "explain",
+          title: "Turn it round",
+          body: ["This array is **3 rows of 6**: 18 dots. Turn it round and it is **6 rows of 3**: still 18.", "So 3 × 6 = 6 × 3. If you know one, you know the other."],
+          visual: { kind: "array", rows: 3, cols: 6 },
+        },
+        {
+          type: "explain",
+          title: "Split it up",
+          body: ["**7 × 6** is 5 lots of 6 and 2 lots of 6: **30 + 12 = 42**.", "Split the number into parts you know, multiply each part, then add."],
+          visual: { kind: "bar", total: "7 × 6", parts: [{ label: "5 × 6 = 30", size: 5, tone: "brand" }, { label: "2 × 6 = 12", size: 2, tone: "num" }] },
+        },
+        {
+          type: "worked",
+          title: "Let's do it together",
+          support: "faded",
+          problem: "**8 × 7**",
+          steps: [
+            { text: "Split 8 into 5 and 3." },
+            { text: "5 × 7 = 35.", blank: { prompt: "What is 3 × 7?", answer: 21, hint: "Count in 7s three times.", worked: "3 × 7 = **21**." } },
+            { text: "Add the parts: 35 + 21 = 56." },
+          ],
+          conclusion: "8 × 7 = **56**.",
+        },
+        { type: "check", title: "Your turn", questionId: gen("tt-commute", 1, 3) },
+        { type: "check", title: "One more", questionId: gen("tt-split", 2, 5) },
       ],
     },
     {
@@ -294,6 +614,36 @@ export const timesTables = defineTopic({
         { type: "check", title: "One more", questionId: gen("tt-div-family", 2, 2) },
       ],
     },
+    {
+      id: "share-and-group",
+      title: "Sharing, grouping and fact families",
+      phase: "Apply",
+      summary: "Two ways to divide, and the four facts every family gives you.",
+      minutes: 8,
+      objectives: ["Divide by sharing and by grouping", "Write and explain a fact family"],
+      steps: [
+        {
+          type: "explain",
+          title: "Sharing",
+          body: ["**12 sweets shared between 3 children**: give one each, again and again. Each child gets **4**.", "12 ÷ 3 = 4."],
+          visual: { kind: "groups", groups: 3, each: 4, label: "12 shared between 3" },
+        },
+        {
+          type: "explain",
+          title: "Grouping",
+          body: ["**12 eggs in boxes of 3**: fill a box, then another. You fill **4** boxes.", "That's also 12 ÷ 3 = 4: the same division, a different question."],
+          visual: { kind: "groups", groups: 4, each: 3, label: "12 in groups of 3" },
+        },
+        {
+          type: "explain",
+          title: "A fact family",
+          body: ["**3, 4 and 12** make four facts: 3 × 4 = 12, 4 × 3 = 12, 12 ÷ 3 = 4 and 12 ÷ 4 = 3.", "Division undoes multiplication, so one fact gives you all four."],
+          tip: "Division facts always start with the biggest number of the family.",
+        },
+        { type: "check", title: "Your turn", questionId: gen("tt-share", 1, 4) },
+        { type: "check", title: "One more", questionId: gen("tt-family-why", 3, 1) },
+      ],
+    },
   ],
   templates,
   misconceptions: [
@@ -302,10 +652,13 @@ export const timesTables = defineTopic({
     { id: M.divMult, name: "Multiplying when dividing", possibleCause: "It looks like the numbers were multiplied instead of divided.", description: "Works out 24 ÷ 6 as 144.", explanation: ["Dividing shares or groups: the answer is smaller.", "24 ÷ 6 asks what times 6 makes 24: 4."], skills: [S.division, S.tricky, S.big], followUpTemplates: ["tt-div", "tt-div-family"] },
   ],
   placement: [
+    { lessonId: "groups-and-jumps", template: "tt-groups" },
     { lessonId: "two-five-ten", template: "tt-easy" },
     { lessonId: "three-four-eight", template: "tt-doubling" },
+    { lessonId: "turn-and-split", template: "tt-commute" },
     { lessonId: "six-seven-nine", template: "tt-tricky" },
     { lessonId: "eleven-twelve", template: "tt-big" },
     { lessonId: "division-facts", template: "tt-div" },
+    { lessonId: "share-and-group", template: "tt-group" },
   ],
 });

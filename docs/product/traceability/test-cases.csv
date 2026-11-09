@@ -397,43 +397,43 @@ TC-MAST-005.2.4,MAST-005,AC2,unit,automated,passing,src/engine/engine.test.ts::d
 TC-MAST-005.2.5,MAST-005,AC2,unit,automated,passing,src/engine/engine.test.ts::tracks lesson position and furthest step,
 TC-MAST-005.2.6,MAST-005,AC2,unit,automated,passing,src/engine/engine.test.ts::keeps each topic,
 TC-MAST-005.3.1,MAST-005,AC3,component,automated,passing,"src/components/screens/GrownUps.test.tsx::asks before clearing, can be cancelled, and clears saved progress when confirmed",
-TC-TT-001.1.1,TT-001,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
-TC-TT-001.2.1,TT-001,AC2,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
-TC-TT-002.1.1,TT-002,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-002.2.1,TT-002,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-002.3.1,TT-002,AC3,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-003.1.1,TT-003,AC1,content,automated,partial,src/topics/kit/kit.test.ts::makes well-formed questions that mark their own answer right and every trap wrong,Times tables preview division templates
-TC-TT-003.2.1,TT-003,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-003.3.1,TT-003,AC3,e2e,planned,planned,,Playwright journey test asserting the behaviour
-TC-TT-004.1.1,TT-004,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-004.2.1,TT-004,AC2,e2e,planned,planned,,Playwright journey test asserting the behaviour
-TC-TT-004.3.1,TT-004,AC3,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-005.1.1,TT-005,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-005.2.1,TT-005,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-005.3.1,TT-005,AC3,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-006.1.1,TT-006,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-006.2.1,TT-006,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-006.3.1,TT-006,AC3,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-007.1.1,TT-007,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-007.2.1,TT-007,AC2,e2e,planned,planned,,Playwright journey test asserting the behaviour
-TC-TT-007.3.1,TT-007,AC3,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-008.1.1,TT-008,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-008.2.1,TT-008,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-001.1.1,TT-001,AC1,document-review,manual,review-pending,,Product Owner review of docs/product/curriculum/TT-001-times-tables-progression.md §2–§4 (CH-051)
+TC-TT-001.2.1,TT-001,AC2,document-review,manual,review-pending,,"Product Owner review of TT-001 §1: curriculum, the Year 4 MTC and extension kept apart, with sources (CH-051)"
+TC-TT-002.1.1,TT-002,AC1,content,automated,passing,"src/topics/times-tables/times-tables.test.ts::teach equal groups, repeated addition, number-line jumps, arrays and scaling",Developer evidence (CH-051)
+TC-TT-002.2.1,TT-002,AC2,content,automated,passing,src/topics/times-tables/times-tables.test.ts::show commutativity and the distributive law,Developer evidence (CH-051)
+TC-TT-002.3.1,TT-002,AC3,content,automated,passing,src/topics/times-tables/times-tables.test.ts::each joined to a times sign,Practice for each representation has a symbolic answer (CH-051)
+TC-TT-003.1.1,TT-003,AC1,content,automated,passing,"src/topics/times-tables/times-tables.test.ts::cover sharing and grouping, and connect each multiplication to two divisions",Developer evidence (CH-051)
+TC-TT-003.2.1,TT-003,AC2,content,automated,passing,src/topics/times-tables/times-tables.test.ts::cover sharing and grouping,Developer evidence (CH-051)
+TC-TT-003.3.1,TT-003,AC3,content,automated,passing,src/topics/times-tables/times-tables.test.ts::let the learner identify a fact family and choose the explanation of the relationship,"Explanation by choosing, not free writing (D-017 style) (CH-051)"
+TC-TT-004.1.1,TT-004,AC1,unit,automated,passing,src/engine/facts.test.ts::summarises each table and recommends the first table in the order that isn,Developer evidence (CH-051)
+TC-TT-004.2.1,TT-004,AC2,component,automated,passing,"src/components/screens/Facts.test.tsx::shows the child which facts are known, growing, not yet secure and new, and the next table to learn",Developer evidence (CH-051)
+TC-TT-004.3.1,TT-004,AC3,unit,automated,passing,src/engine/facts.test.ts::recommends the first table in the order,"The next table follows the evidence, so a diagnostic moves it on (CH-051)"
+TC-TT-005.1.1,TT-005,AC1,unit,automated,passing,"src/engine/facts.test.ts::samples every table at least twice, with no fact twice, deterministically",Developer evidence (CH-051)
+TC-TT-005.2.1,TT-005,AC2,unit,automated,passing,src/engine/facts.test.ts::ignores slips when judging recall,With the answer classes in the same describe block (CH-051)
+TC-TT-005.3.1,TT-005,AC3,unit,automated,passing,src/engine/facts.test.ts::marks a fact known only after three recalls in a row,One answer never decides a fact (CH-051)
+TC-TT-006.1.1,TT-006,AC1,unit,automated,passing,"src/engine/facts.test.ts::puts weak facts first, keeps retrieving a known fact every fourth question, and adds a few new facts",Developer evidence (CH-051)
+TC-TT-006.2.1,TT-006,AC2,unit,automated,passing,src/engine/facts.test.ts::keeps retrieving a known fact every fourth question,Mixed and interleaved (CH-051)
+TC-TT-006.3.1,TT-006,AC3,unit,automated,passing,src/engine/facts.test.ts::marks a fact known only after three recalls in a row,Developer evidence (CH-051)
+TC-TT-007.1.1,TT-007,AC1,component,automated,passing,src/components/screens/Facts.test.tsx::draws every chosen fact correctly,"Grid, array and number line (CH-051)"
+TC-TT-007.2.1,TT-007,AC2,component,automated,passing,src/components/screens/Facts.test.tsx::lights up multiples and says how many there are,"Multiples, with inverse facts in the family list (CH-051)"
+TC-TT-007.3.1,TT-007,AC3,component,automated,passing,src/components/screens/Facts.test.tsx::draws every chosen fact correctly: the array has a × b dots,"Checked at 1×1, 3×12, 7×8, 12×12 and 12×1 (CH-051)"
+TC-TT-008.1.1,TT-008,AC1,unit,automated,passing,"src/engine/facts.test.ts::asks every form with exact answers, true signs and the missing number in the right place",Developer evidence (CH-051)
+TC-TT-008.2.1,TT-008,AC2,unit,automated,passing,src/engine/facts.test.ts::asks a division or missing-number form only once the multiplication has been recalled,Developer evidence (CH-051)
 TC-TT-008.3.1,TT-008,AC3,content,automated,partial,src/topics/kit/kit.test.ts::makes well-formed questions that mark their own answer right and every trap wrong,Exact arithmetic on preview items
-TC-TT-009.1.1,TT-009,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-009.2.1,TT-009,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-009.3.1,TT-009,AC3,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-009.4.1,TT-009,AC4,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-010.1.1,TT-010,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-010.2.1,TT-010,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-010.3.1,TT-010,AC3,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-011.1.1,TT-011,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-011.2.1,TT-011,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-011.3.1,TT-011,AC3,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-012.1.1,TT-012,AC1,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-012.2.1,TT-012,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-012.3.1,TT-012,AC3,unit,planned,planned,,Unit/content test asserting the rule
-TC-TT-012.4.1,TT-012,AC4,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-009.1.1,TT-009,AC1,unit,automated,passing,"src/engine/facts.test.ts::builds every form within the published table, key-stage and duplicate limits","Oracle: STA MTC framework Tables 1 and 2, 60 seeds; timing in Facts.test.tsx (CH-051)"
+TC-TT-009.2.1,TT-009,AC2,component,automated,passing,src/components/screens/Facts.test.tsx::starts with unscored warm-ups,Developer evidence (CH-051)
+TC-TT-009.3.1,TT-009,AC3,component,automated,passing,src/components/screens/Facts.test.tsx::ends a timed run with the score in time and the facts to revisit,Developer evidence (CH-051)
+TC-TT-009.4.1,TT-009,AC4,component,automated,passing,src/components/screens/Facts.test.tsx::labels timed practice as a simulation,Developer evidence (CH-051)
+TC-TT-010.1.1,TT-010,AC1,component,automated,passing,src/components/screens/Facts.test.tsx::has no countdown in untimed mode,Developer evidence (CH-051)
+TC-TT-010.2.1,TT-010,AC2,component,automated,passing,src/components/screens/Facts.test.tsx::keeps hints and retries,Developer evidence (CH-051)
+TC-TT-010.3.1,TT-010,AC3,component,automated,passing,"src/components/screens/Facts.test.tsx::has no countdown in untimed mode, keeps hints and retries, and lets the child choose the session length",No clock or speed text on screen (CH-051)
+TC-TT-011.1.1,TT-011,AC1,unit,automated,passing,"src/engine/facts.test.ts::separates timed from untimed, counts inverse forms and slips, and shows recent consistency",Recommended practice on the report from planSession (CH-051)
+TC-TT-011.2.1,TT-011,AC2,component,automated,passing,src/components/screens/Facts.test.tsx::keeps timed answers apart from untimed ones,Developer evidence (CH-051)
+TC-TT-011.3.1,TT-011,AC3,component,automated,passing,src/components/screens/Facts.test.tsx::makes no comparison with other children,Developer evidence (CH-051)
+TC-TT-012.1.1,TT-012,AC1,unit,automated,passing,"src/engine/facts.test.ts::moves a fact up one review box per recall and back to box 1 after a miss, then schedules it by the box",Developer evidence (CH-051)
+TC-TT-012.2.1,TT-012,AC2,unit,automated,passing,src/engine/facts.test.ts::keeps retrieving a known fact every fourth question,Developer evidence (CH-051)
+TC-TT-012.3.1,TT-012,AC3,unit,automated,passing,src/engine/facts.test.ts::is deterministic and respects the length and a chosen table,"Session length 5, 10 or 20, chosen by the child (CH-051)"
+TC-TT-012.4.1,TT-012,AC4,unit,automated,passing,src/engine/facts.test.ts::is deterministic and respects the length and a chosen table,Developer evidence (CH-051)
 TC-MM-001.1.1,MM-001,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
 TC-MM-001.2.1,MM-001,AC2,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
 TC-MM-001.3.1,MM-001,AC3,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
