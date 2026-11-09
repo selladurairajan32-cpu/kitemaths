@@ -47,7 +47,7 @@ export function Hud({ compact = false }: { compact?: boolean }) {
       className="flex items-center gap-2 rounded-full"
       aria-label={`${stars} stars, level ${level.level}${streak.current ? `, ${streak.current} day streak` : ""}. See your kites.`}
     >
-      <span className="relative flex h-11 items-center gap-1.5 rounded-full bg-tile-yellow pl-1.5 pr-3.5">
+      <span className="relative flex min-h-11 items-center gap-1.5 rounded-full bg-tile-yellow pl-1.5 pr-3.5">
         <motion.span
           key={stars}
           className="grid"
@@ -74,7 +74,7 @@ export function Hud({ compact = false }: { compact?: boolean }) {
         </AnimatePresence>
       </span>
       {!compact && <span className="hidden whitespace-nowrap text-[0.9375rem] font-semibold text-muted xl:inline">Level {level.level}</span>}
-      <span className="flex h-11 items-center gap-1 rounded-full bg-tile-orange pl-1.5 pr-3.5" title={`${streak.current} day streak`}>
+      <span className="flex min-h-11 items-center gap-1 rounded-full bg-tile-orange pl-1.5 pr-3.5" title={`${streak.current} day streak`}>
         <Pic name="flame" size={28} muted={!streak.activeToday} />
         <span className={`text-lg font-extrabold tabular-nums leading-none ${streak.activeToday ? "text-ink" : "text-muted"}`}>{streak.current}</span>
       </span>

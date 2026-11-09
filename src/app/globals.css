@@ -180,6 +180,8 @@
     line-height: 1.6;
     background: var(--color-paper);
     font-variant-numeric: tabular-nums;
+    /* UX-003 AC3: a word wider than its box breaks rather than pushing the page sideways at large text sizes. */
+    overflow-wrap: anywhere;
   }
   :focus-visible {
     outline: 3px solid var(--color-brand);

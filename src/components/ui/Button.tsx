@@ -27,9 +27,9 @@ const variants: Record<Variant, string> = {
 };
 
 const sizes: Record<Size, string> = {
-  md: "h-12 px-5 text-[1.0625rem] gap-2",
-  lg: "h-14 px-7 text-lg gap-2.5",
-  xl: "h-[3.75rem] px-8 text-[1.1875rem] gap-3",
+  md: "min-h-12 py-1.5 px-5 text-[1.0625rem] gap-2 text-center",
+  lg: "min-h-14 py-2 px-7 text-lg gap-2.5 text-center",
+  xl: "min-h-[3.75rem] py-2 px-8 text-[1.1875rem] gap-3 text-center",
 };
 
 export function buttonClass(variant: Variant = "primary", size: Size = "md", extra = "") {

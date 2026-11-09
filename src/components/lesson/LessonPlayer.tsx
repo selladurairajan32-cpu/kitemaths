@@ -224,7 +224,7 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
         <div className="mb-4 flex items-center gap-3">
           <PaperIcon name={lessonLook(lesson.id).icon} size={44} />
           <div className="min-w-0">
-            <p className="truncate text-lg font-semibold leading-tight text-ink">{lesson.title}</p>
+            <p className="text-lg font-semibold leading-tight text-ink">{lesson.title}</p>
             <p className="text-[0.9375rem] text-muted">
               Lesson {lessonIndex + 1} of {LESSONS.length} · step {stepIndex + 1} of {lesson.steps.length}
             </p>

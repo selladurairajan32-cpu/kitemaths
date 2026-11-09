@@ -107,7 +107,7 @@ export function NumberInput({
         const digits = e.target.value.replace(/[^0-9]/g, "").slice(0, 4);
         onValue(digits === "" ? null : Number(digits));
       }}
-      className={`rounded-[16px] border-2 bg-surface text-center font-bold tabular-nums outline-none transition-colors disabled:bg-sunk ${ring} ${text} ${
+      className={`rounded-[16px] border-2 bg-surface text-center font-bold tabular-nums outline-none transition-colors focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:bg-sunk ${ring} ${text} ${
         size === "lg" ? "h-16 w-28 text-[2rem]" : "h-12 w-16 text-2xl"
       }`}
     />

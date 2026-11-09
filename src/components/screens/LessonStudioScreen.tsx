@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { LessonPlayer } from "@/components/lesson/LessonPlayer";
+import { topicRoutes } from "@/lib/routes";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 import { recommendNext } from "@/engine/journey";
 import { useHydrated } from "@/lib/store";
@@ -28,7 +30,17 @@ export function FreeLabScreen() {
   return (
     <div className="space-y-5">
       <ScreenHero pic="lab" titleId="lab-title" title="The lab" line={topic.ui.freeLabIntro ?? `Free play on ${topic.title}.`} />
-      <section className="card space-y-4 p-5 sm:p-8" aria-labelledby="lab-title">{FreeLab ? <FreeLab /> : <p className="text-ink-2">This island doesn&apos;t have a lab yet.</p>}</section>
+      <section className="card space-y-4 p-5 sm:p-8" aria-labelledby="lab-title">{FreeLab ? (
+          <FreeLab />
+        ) : (
+          <p className="text-ink-2">
+            {topic.title} has no lab. Its lessons, practice and big challenge are on the{" "}
+            <Link href={topicRoutes(topic.id).island()} className="font-semibold text-brand underline underline-offset-2">
+              island map
+            </Link>
+            .
+          </p>
+        )}</section>
     </div>
   );
 }

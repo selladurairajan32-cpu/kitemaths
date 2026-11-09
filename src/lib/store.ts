@@ -1,74 +1,29 @@
 "use client";
 
 import { useMemo, useSyncExternalStore } from "react";
-import { createInitialState, hydrateState, inTopic, isCompatibleState, topicLearner, type LearnerState, type TopicLearner } from "@/engine/progress";
-import { migrateV1 } from "./migrate";
+import { createInitialState, inTopic, topicLearner, type LearnerState, type TopicLearner } from "@/engine/progress";
+import { loadState, saveState, STORAGE_KEY, type StorageLike, type StorageStatus } from "./persist";
 
-export const STORAGE_KEY = "kite-maths:v2";
-/** Version-1 saves (fractions only). Read once to migrate, then left untouched as a backup. */
-export const LEGACY_STORAGE_KEY = "kite-maths:fractions:v1";
+export { LEGACY_STORAGE_KEY, STORAGE_KEY, type StorageStatus } from "./persist";
 const SERVER_STATE = createInitialState();
-
-export type StorageStatus = "ok" | "unavailable" | "recovered";
 
 let state: LearnerState = SERVER_STATE;
 let status: StorageStatus = "ok";
 let loaded = false;
 const listeners = new Set<() => void>();
 
-function load() {
-  if (loaded || typeof window === "undefined") return;
-  loaded = true;
-  let raw: string | null = null;
+function browserStorage(): StorageLike | null {
   try {
-    raw = window.localStorage.getItem(STORAGE_KEY);
-    if (raw === null) {
-      const legacy = window.localStorage.getItem(LEGACY_STORAGE_KEY);
-      if (legacy !== null) {
-        if (migrateLegacy(legacy)) return;
-        // Unreadable old save: it stays where it is as the backup, and we start fresh.
-        status = "recovered";
-      }
-    }
+    return window.localStorage;
   } catch {
-    status = "unavailable";
-    state = createInitialState();
-    return;
-  }
-  if (raw === null) {
-    state = createInitialState();
-    return;
-  }
-  try {
-    const parsed: unknown = JSON.parse(raw);
-    if (!isCompatibleState(parsed)) throw new Error("incompatible");
-    state = hydrateState(parsed);
-  } catch {
-    try {
-      window.localStorage.setItem(`${STORAGE_KEY}:backup:${Date.now()}`, raw);
-    } catch {
-    }
-    status = "recovered";
-    state = createInitialState();
+    return null;
   }
 }
 
-/** Migrates version-1 progress into a new version-2 save. Returns false if it couldn't be read. */
-function migrateLegacy(raw: string): boolean {
-  let migrated: LearnerState | null = null;
-  try {
-    migrated = migrateV1(JSON.parse(raw));
-  } catch {
-    migrated = null;
-  }
-  if (!migrated) return false;
-  state = migrated;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch {
-    status = "unavailable";
-  }
-  return true;
+function load() {
+  if (loaded || typeof window === "undefined") return;
+  loaded = true;
+  ({ state, status } = loadState(browserStorage(), Date.now()));
 }
 
 function emit() {
@@ -101,11 +56,7 @@ export function updateLearner(fn: (s: LearnerState) => LearnerState) {
   const next = fn(state);
   if (next === state) return;
   state = next;
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch {
-    status = "unavailable";
-  }
+  if (saveState(browserStorage(), state) === "unavailable") status = "unavailable";
   emit();
 }
 

@@ -95,7 +95,7 @@ export function RecheckScreen({ skill }: { skill: string }) {
             mastery-check evidence with the newer result.
           </p>
           {m.status === "passed-check" && !m.learningSecure && (
-            <p className="mt-3 rounded-[16px] bg-violet-soft px-4 py-3 text-[0.9375rem] text-ink-2">
+            <p className="mt-3 rounded-[16px] bg-notice-soft px-4 py-3 text-[0.9375rem] text-notice-ink">
               To reach “Mastered”, this skill also needs secure practice (at least 3 recent answers, mostly right first time).
             </p>
           )}

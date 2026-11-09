@@ -296,7 +296,7 @@ export function QuestionPlayer({
         )}
 
         {answering && (
-          <div className="sticky bottom-0 z-10 -mx-5 flex items-center justify-between gap-3 rounded-b-[28px] border-t border-line bg-surface px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 sm:static sm:mx-0 sm:rounded-none sm:border-0 sm:p-0">
+          <div className="sticky bottom-0 z-10 -mx-5 flex flex-wrap items-center justify-between gap-3 rounded-b-[28px] border-t border-line bg-surface px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 sm:static sm:mx-0 sm:rounded-none sm:border-0 sm:p-0">
             {q.hint && !state.hintVisible ? (
               <Button variant="quiet" size="lg" onClick={() => dispatch({ type: "request-hint" })} className="shrink-0">
                 <BulbIcon size={20} /> Hint

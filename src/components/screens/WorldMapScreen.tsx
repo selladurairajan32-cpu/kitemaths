@@ -5,7 +5,7 @@ import { ScreenHero } from "@/components/kid/ScreenHero";
 import { PaperIcon } from "@/components/paper/PaperIcon";
 import { CheckIcon, LockIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton } from "@/components/ui/Screen";
-import { lessonsCompleted, recommendNext } from "@/engine/journey";
+import { lessonsEvidenced, recommendNext } from "@/engine/journey";
 import { topicLearner } from "@/engine/progress";
 import { topicRoutes } from "@/lib/routes";
 import { useHydrated, useLearner } from "@/lib/store";
@@ -67,7 +67,7 @@ export function WorldMapScreen() {
                     );
                   }
                   const t = topicLearner(learner, topic.id);
-                  const done = lessonsCompleted(topic, t);
+                  const done = lessonsEvidenced(topic, t);
                   const finished = recommendNext(topic, t).kind === "results";
                   const isHere = topic.id === here;
                   return (

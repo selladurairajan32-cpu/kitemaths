@@ -38,10 +38,11 @@ TC-CUR-002.2.1,CUR-002,AC2,document-review,manual,accepted,,CUR-002 §6: within-
 TC-CUR-002.2.2,CUR-002,AC2,content,automated,passing,src/curriculum/prerequisites.test.ts::shows a picture or a lab before the first check in every Fractions lesson (concrete before abstract),Fractions (R1) only; kit islands are preview content
 TC-CUR-002.2.3,CUR-002,AC2,content,automated,passing,src/curriculum/prerequisites.test.ts::teaches every Fractions prerequisite in an earlier lesson,
 TC-CUR-002.3.1,CUR-002,AC3,document-review,manual,accepted,,"CUR-002 §3–§5 (corrected 5 Nov, DEF-024/025): activity vs supported vs independent evidence vs mastery; attempt table; one independence contract; precedence; which state drives what; lab path with no auto-advance — accepted 6 Nov 2026 for R0 scope (D-023)"
-TC-CUR-002.3.2,CUR-002,AC3,unit,planned,planned,,R1: recommendNext never advances past a lesson whose activity is done but whose evidence is missing; routes to targeted practice (rule 3b)
-TC-CUR-002.3.3,CUR-002,AC3,unit,planned,planned,,"R1: the §5.1 lab → represent practice → comparing acceptance scenario, including the assisted-answer and manual-navigation cases"
-TC-CUR-002.3.4,CUR-002,AC3,unit,planned,planned,,"R1: hint-assisted answers, supported retries and answers to a revealed item are never independent evidence; a fresh transfer item can be"
-TC-CUR-002.3.5,CUR-002,AC3,unit,planned,planned,,R1: a later needs-review result overrides a placement exemption
+TC-CUR-002.3.2,CUR-002,AC3,unit,automated,passing,"src/engine/evidence.test.ts::sends a child who finished a lesson without evidence to targeted practice, not back into the lesson",R1 wiring (D-026). Rule 3b.
+TC-CUR-002.3.3,CUR-002,AC3,unit,automated,passing,"src/engine/evidence.test.ts::routes the lab to represent practice, then to comparing (TC-CUR-002.3.3)",R1 wiring (D-026). Manual navigation awards no evidence: opening a lesson records nothing (covered by the evidence rules).
+TC-CUR-002.3.4,CUR-002,AC3,unit,automated,passing,"src/engine/evidence.test.ts::counts only right-first-time, unhinted answers as independent",
+TC-CUR-002.3.5,CUR-002,AC3,unit,automated,passing,"src/engine/evidence.test.ts::counts placement, and lets a later needs-review result override earlier evidence (§4.4)",
+TC-CUR-002.3.6,CUR-002,AC3,unit,automated,passing,"src/engine/evidence.test.ts::moves on once a fresh practice question is answered independently, and never automatically otherwise",
 TC-CUR-003.1.1,CUR-003,AC1,document-review,manual,accepted,,CUR-003 §1–§2 (corrected 5 Nov): the ten elements with Q-1 to Q-3 decisions; the proposed additive R1 schema; fresh-example rule with bounded deterministic retries (DEF-026) — accepted 6 Nov 2026 for R0 scope (D-023)
 TC-CUR-003.1.2,CUR-003,AC1,content,automated,passing,src/curriculum/prerequisites.test.ts::shows a picture or a lab before the first check in every Fractions lesson (concrete before abstract),Enforces template element 4 (representation before the first independent question) for Fractions
 TC-CUR-003.1.3,CUR-003,AC1,content-review,manual,review-pending,,CUR-003 §3: conformance of the 8 Fractions lessons and the R1 authoring findings
@@ -70,9 +71,9 @@ TC-UX-003.2.2,UX-003,AC2,unit,automated,passing,src/design-tokens.test.ts::check
 TC-UX-003.2.3,UX-003,AC2,unit,automated,passing,"src/design-tokens.test.ts::meets the contrast minimum for every supported pairing at its real size and weight, without rounding",
 TC-UX-003.2.4,UX-003,AC2,unit,automated,passing,src/design.test.ts::uses no emoji anywhere in the app: pictures are drawn paper icons,"Pictures are drawn, not font glyphs"
 TC-UX-003.2.5,UX-003,AC2,visual-a11y-qa,manual,review-pending,,"Specimen maths section at 390px and 1280px, at 200% text and at 320px (docs/product/verification/)"
-TC-UX-003.3.1,UX-003,AC3,visual-a11y-qa,manual,failing,,Text-scaling check 4 Nov (UX-003 §7): browser zoom passes; 200% text and 320px reflow fail on existing screens (DEF-018 to DEF-021)
+TC-UX-003.3.1,UX-003,AC3,visual-a11y-qa,manual,partial,,"Developer re-run 9 Nov (R1 step 4, text-scaling.cjs): 200% text at 390, 768 and 1280px and 320px reflow show no sideways scroll and no clipped text on the 8 tested pages, except the internal design specimen at 768px (24px, a worked-example panel). DEF-018 to DEF-021 fixed; awaiting independent retest. Was failing on 4 Nov."
 TC-UX-003.3.2,UX-003,AC3,document-review,manual,review-pending,,"UX-003 §7: method, results and rules that prevent the failures"
-TC-UX-003.3.3,UX-003,AC3,e2e,planned,planned,,"R1: automate the scaling check at 320px and at 200% text (UX-008, QA-005)"
+TC-UX-003.3.3,UX-003,AC3,e2e,planned,planned,,"R1: automate the scaling check at 320px and at 200% text in CI (UX-008, QA-005)"
 TC-UX-004.1.1,UX-004,AC1,document-review,manual,accepted,,"UX-004 §1–§3: ten content types with colour, icon, label and shape; the prompt; the supported pairings; today and gaps — accepted 6 Nov 2026 for R0 scope (D-024)"
 TC-UX-004.1.2,UX-004,AC1,unit,automated,passing,"src/design-tokens.test.ts::keeps content ink on every content-type background at the 7:1 product target, with labels on dark backgrounds",
 TC-UX-004.1.3,UX-004,AC1,unit,automated,passing,"src/design-tokens.test.ts::meets the contrast minimum for every supported pairing at its real size and weight, without rounding",
@@ -81,9 +82,9 @@ TC-UX-004.1.5,UX-004,AC1,unit,automated,passing,"src/design-tokens.test.ts::stat
 TC-UX-004.2.1,UX-004,AC2,document-review,manual,accepted,,"UX-004 §4: one task, one primary action, blocked actions explained, feedback carries the next action — accepted 6 Nov 2026 for R0 scope (D-024)"
 TC-UX-004.2.2,UX-004,AC2,component,planned,planned,,R1: each screen state has exactly one primary button (QA-002)
 TC-UX-004.2.3,UX-004,AC2,visual-a11y-qa,planned,planned,,R1: 5-second test with children on the migrated question and lesson screens
-TC-UX-005.1.1,UX-005,AC1,e2e,manual,partial,,Production click-through 3 Nov at 390/1280px (GOV-001 §9); not automated
-TC-UX-005.2.1,UX-005,AC2,visual-a11y-qa,manual,planned,,"Manual check at 320, 390, 768 and 1280px with keyboard, screen reader spot-check and reduced motion"
-TC-UX-005.3.1,UX-005,AC3,e2e,manual,failing,,DEF-005: Lab tab is a placeholder on 18 islands
+TC-UX-005.1.1,UX-005,AC1,e2e,manual,partial,,"Developer browser check 9 Nov (docs/product/verification/r1-step4-checks.cjs) at 390, 768 and 1280px: home, map, island journey, lesson and practice reached by clicking navigation; the report is reached from the grown-ups navigation. Not independently reproduced."
+TC-UX-005.2.1,UX-005,AC2,visual-a11y-qa,manual,partial,,"Developer screenshots at 390, 768 and 1280px and text scaling at 200% (r1-step4-checks.cjs, text-scaling.cjs). Keyboard, screen reader and child usability not checked."
+TC-UX-005.3.1,UX-005,AC3,e2e,manual,partial,,"DEF-005 fixed 9 Nov: islands without a lab have no Lab tab and /lab opens the island map; /practice, /lab and /start open the current island (DEF-014); the mock-ups are no longer public (DEF-016). Developer browser check (r1-step4-checks.cjs); awaiting independent retest."
 TC-UX-006.1.1,UX-006,AC1,visual-a11y-qa,manual,planned,,"Manual check at 320, 390, 768 and 1280px with keyboard, screen reader spot-check and reduced motion"
 TC-UX-006.2.1,UX-006,AC2,visual-a11y-qa,manual,planned,,"Manual check at 320, 390, 768 and 1280px with keyboard, screen reader spot-check and reduced motion"
 TC-UX-006.3.1,UX-006,AC3,visual-a11y-qa,manual,planned,,"Manual check at 320, 390, 768 and 1280px with keyboard, screen reader spot-check and reduced motion"
@@ -160,11 +161,17 @@ TC-ARCH-003.3.2,ARCH-003,AC3,content,automated,passing,"src/topics/fractions/rep
 TC-ARCH-003.3.3,ARCH-003,AC3,unit,automated,passing,src/architecture.test.ts::A6: lets only the known content-contract files import UI types,K-7 fixed: place-value maths no longer comes from a UI file
 TC-ARCH-003.3.4,ARCH-003,AC3,unit,manual,review-pending,,"Generated-question comparison 6050e3c vs step-3 head: every practice, assessment and kit question (150 seeds) identical after the extraction (docs/product/verification/results/step3/)"
 TC-ARCH-003.3.5,ARCH-003,AC3,unit,automated,passing,"src/topics/fractions/evaluate.test.ts::accepts any shading of the right amount, including equivalent amounts",Existing
-TC-ARCH-004.1.1,ARCH-004,AC1,e2e,planned,planned,,Playwright journey test asserting the behaviour
-TC-ARCH-004.2.1,ARCH-004,AC2,unit,automated,passing,"src/lib/migrate.test.ts::keeps lessons, placement and practice exactly where they were",
-TC-ARCH-004.2.2,ARCH-004,AC2,unit,automated,passing,src/engine/engine.test.ts::survives corrupt or outdated saved data,
-TC-ARCH-004.3.1,ARCH-004,AC3,unit,automated,passing,src/engine/engine.test.ts::survives corrupt or outdated saved data,
-TC-ARCH-004.4.1,ARCH-004,AC4,unit,planned,planned,,Unit/content test asserting the rule
+TC-ARCH-004.1.1,ARCH-004,AC1,unit,automated,passing,src/lib/persist.test.ts::survives a refresh or restart: what is saved loads back the same,Refresh and restart are a fresh read of the same storage.
+TC-ARCH-004.1.2,ARCH-004,AC1,e2e,manual,partial,,Developer browser check: progress kept after reload (r1-step4-checks.cjs).
+TC-ARCH-004.2.1,ARCH-004,AC2,unit,automated,passing,src/lib/persist.test.ts::is versioned: an incompatible version is backed up and the learner starts fresh,
+TC-ARCH-004.2.2,ARCH-004,AC2,unit,automated,passing,"src/lib/migrate.test.ts::keeps lessons, placement and practice exactly where they were",
+TC-ARCH-004.2.3,ARCH-004,AC2,unit,automated,passing,src/lib/persist.test.ts::migrates a version-1 save once and leaves the original as a backup,
+TC-ARCH-004.3.1,ARCH-004,AC3,unit,automated,passing,"src/lib/persist.test.ts::fails gracefully on corrupt data, keeping a backup",
+TC-ARCH-004.3.2,ARCH-004,AC3,unit,automated,passing,"src/lib/persist.test.ts::starts fresh, without an error, when nothing is saved",
+TC-ARCH-004.3.3,ARCH-004,AC3,unit,automated,passing,src/lib/persist.test.ts::keeps working when storage is blocked or full,
+TC-ARCH-004.3.4,ARCH-004,AC3,unit,automated,passing,src/lib/persist.test.ts::keeps an unreadable version-1 save untouched and starts fresh,
+TC-ARCH-004.3.5,ARCH-004,AC3,unit,automated,passing,src/engine/engine.test.ts::survives corrupt or outdated saved data,
+TC-ARCH-004.4.1,ARCH-004,AC4,unit,automated,passing,"src/lib/persist.test.ts::collects no personal data beyond an optional first name, year and avatar","The name is optional and blank by default; no account, e-mail or tracking id."
 TC-ARCH-005.1.1,ARCH-005,AC1,unit,automated,partial,src/engine/engine.test.ts::records a clean first-try success,No response or duration stored
 TC-ARCH-005.1.2,ARCH-005,AC1,unit,automated,partial,src/engine/engine.test.ts::counts a voluntary hint as support,
 TC-ARCH-005.2.1,ARCH-005,AC2,unit,automated,passing,"src/engine/engine.test.ts::diagnoses, explains, asks a follow-up, then lets the child retry without revealing",
@@ -209,9 +216,14 @@ TC-FR-010.1.1,FR-010,AC1,content,automated,partial,src/topics/fractions/content.
 TC-FR-010.2.1,FR-010,AC2,unit,automated,partial,src/engine/engine.test.ts::shows a hint beside the still-editable question,"Single hint, no fading"
 TC-FR-010.2.2,FR-010,AC2,unit,automated,partial,src/engine/engine.test.ts::keeps the question editable when a hint is requested,
 TC-FR-010.3.1,FR-010,AC3,unit,automated,partial,src/engine/engine.test.ts::counts a voluntary hint as support,Hints are optional
-TC-FR-011.1.1,FR-011,AC1,unit,automated,partial,"src/engine/engine.test.ts::leads through lessons, then practice, then the mastery check",
-TC-FR-011.2.1,FR-011,AC2,unit,planned,planned,,Unit/content test asserting the rule
-TC-FR-011.3.1,FR-011,AC3,unit,planned,failing,,"Completion is recorded on traversal, not mastery evidence (GOV-001 R-3)"
+TC-FR-011.1.1,FR-011,AC1,unit,automated,passing,"src/engine/engine.test.ts::leads through lessons, then practice, then the mastery check",Next recommended activity from evidence.
+TC-FR-011.1.2,FR-011,AC1,unit,automated,passing,src/engine/evidence.test.ts::uses only a lesson's final checks as its evidence questions,
+TC-FR-011.1.3,FR-011,AC1,unit,automated,passing,src/engine/evidence.test.ts::shows started and unstarted lessons separately,Current status per lesson; the island map and journey detail show it with the skill outcome and prerequisites.
+TC-FR-011.1.4,FR-011,AC1,e2e,manual,partial,,Developer browser check of the island map and journey detail (docs/product/verification/r1-step4-checks.cjs); not independently reproduced.
+TC-FR-011.2.1,FR-011,AC2,unit,automated,passing,src/engine/evidence.test.ts::explains a soft prerequisite instead of blocking (FR-011 AC2),"Prerequisites are explained ""best after"" notices, never hard locks (CUR-002 principle 2)."
+TC-FR-011.2.2,FR-011,AC2,e2e,manual,partial,,Developer browser check that the notice is shown on the island map (r1-step4-checks.cjs).
+TC-FR-011.3.1,FR-011,AC3,unit,automated,passing,src/engine/evidence.test.ts::does not complete a lesson by reaching its end,R1 (D-026): completion is independent evidence (CUR-002 §4.2). Stars still reward activity.
+TC-FR-011.3.2,FR-011,AC3,unit,automated,passing,"src/engine/evidence.test.ts::marks the island's phases done by evidence, not by visits",
 TC-LAB-001.1.1,LAB-001,AC1,component,planned,planned,,Component test of the lab control plus Playwright interaction check
 TC-LAB-001.2.1,LAB-001,AC2,component,planned,planned,,Component test of the lab control plus Playwright interaction check
 TC-LAB-002.1.1,LAB-002,AC1,component,planned,planned,,Component test of the lab control plus Playwright interaction check
@@ -306,8 +318,9 @@ TC-MAST-003.3.4,MAST-003,AC3,unit,automated,partial,src/engine/rewards.test.ts::
 TC-MAST-004.1.1,MAST-004,AC1,unit,planned,planned,,Unit/content test asserting the rule
 TC-MAST-004.2.1,MAST-004,AC2,unit,automated,partial,src/engine/engine.test.ts::reports one wrong answer as only a possible misconception,
 TC-MAST-004.3.1,MAST-004,AC3,unit,planned,planned,,Unit/content test asserting the rule
-TC-MAST-005.1.1,MAST-005,AC1,unit,automated,partial,"src/lib/migrate.test.ts::keeps every star, the streak and the profile",Migration only; refresh not tested end-to-end
-TC-MAST-005.1.2,MAST-005,AC1,unit,automated,partial,src/lib/migrate.test.ts::gives the same mastery picture and next step,
+TC-MAST-005.1.1,MAST-005,AC1,unit,automated,passing,src/lib/persist.test.ts::survives a refresh or restart: what is saved loads back the same,
+TC-MAST-005.1.2,MAST-005,AC1,unit,automated,partial,"src/lib/migrate.test.ts::keeps every star, the streak and the profile",Migration only
+TC-MAST-005.1.3,MAST-005,AC1,unit,automated,passing,src/lib/migrate.test.ts::gives the same mastery picture and next step,
 TC-MAST-005.2.1,MAST-005,AC2,unit,automated,passing,"src/engine/engine.test.ts::records each episode once, even if submitted twice",
 TC-MAST-005.2.2,MAST-005,AC2,unit,automated,passing,src/engine/engine.test.ts::keeps the last completed check when a retake starts,
 TC-MAST-005.2.3,MAST-005,AC2,unit,automated,passing,src/engine/engine.test.ts::stores a finished recheck separately and clears the active one,

@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import { FRACTIONS_SKILL_PREREQUISITES } from "@/curriculum/prerequisites";
 import type { LabStepProps, Look, QuestionInputProps, TopicModule } from "@/topics/types";
 import { followUpFor, FRACTIONS_TOPIC, practicePool } from "./index";
 import { PHASE_DESCRIPTIONS } from "./journey";
@@ -40,6 +41,7 @@ export const fractions: TopicModule<FractionQuestion> = {
   order: 1,
   look: LOOK,
   lessons: LESSONS,
+  skillPrerequisites: FRACTIONS_SKILL_PREREQUISITES,
   lessonLook: (id) => LESSON_LOOKS[id] ?? LOOK,
   phaseDescriptions: PHASE_DESCRIPTIONS,
   lessonById,

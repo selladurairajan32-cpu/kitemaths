@@ -9,7 +9,8 @@ import { isPicName, Pic, type PicName } from "@/components/paper/Pic";
 import { ButtonLink } from "@/components/ui/Button";
 import { ArrowRightIcon, CheckIcon, LockIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton, StorageNotice } from "@/components/ui/Screen";
-import { lessonsCompleted, recommendNext, reviewSkills } from "@/engine/journey";
+import { allLessonEvidence } from "@/engine/evidence";
+import { lessonsEvidenced, recommendNext, reviewSkills } from "@/engine/journey";
 import { activeDays, answeredToday, badgesFor, DAILY_GOAL, dayKey, levelFor, STARS, streakFor, totalStars } from "@/engine/rewards";
 import { routes } from "@/lib/routes";
 import { useHydrated, useLearner, useNow } from "@/lib/store";
@@ -44,7 +45,10 @@ function KidHome() {
   const now = useNow();
   const { skillById, lessonLook } = topic;
 
-  const brandNew = inTopic.placement.status === "not-started" && learner.results.length === 0;
+  // DEF-003: any lesson progress means the child has started, even before answering a question.
+  const brandNew = inTopic.placement.status === "not-started" && learner.results.length === 0 && Object.keys(inTopic.lessons).length === 0;
+  // DEF-011: every island's warm-up is offered from home until it is done or skipped.
+  const warmUpOpen = !brandNew && inTopic.placement.status === "not-started" && !!topic.placement;
   const rec = recommendNext(topic, inTopic);
   const next = kidNext(rec, topic);
   const stars = totalStars(learner);
@@ -58,7 +62,9 @@ function KidHome() {
   });
   const review = reviewSkills(topic, inTopic);
   const name = learner.profile.name.trim();
-  const done = lessonsCompleted(topic, inTopic);
+  // FR-011 AC3: a lesson is done when it has independent evidence, not when its last page was reached.
+  const done = lessonsEvidenced(topic, inTopic);
+  const evidence = new Map(allLessonEvidence(topic, inTopic).map((e) => [e.lessonId, e]));
   const lessonCount = TOPICS.reduce((n, t) => n + t.lessons.length, 0);
   const badges = badgesFor(learner, TOPICS.flatMap((t) => t.skills), lessonCount, now);
   const won = badges.filter((b) => b.earned);
@@ -86,7 +92,7 @@ function KidHome() {
                   I&apos;m Kip. Let&apos;s find your start!
                 </h1>
                 <p className="mt-4 max-w-xl text-lg text-ink-2 sm:text-[1.1875rem]">
-                  A short warm-up game shows me which fraction lessons you already know, so you start in the right place.
+                  A short warm-up game shows me which {topic.title} lessons you already know, so you start in the right place.
                 </p>
                 <div className="mt-7 flex flex-wrap gap-3">
                   <ButtonLink href={links.start()} size="xl" className="w-full sm:w-auto">
@@ -121,7 +127,7 @@ function KidHome() {
           <HeroArt
             mood={brandNew ? "cheer" : "happy"}
             cards={[
-              { pic: nextPic, title: nextIndex >= 0 ? `Lesson ${nextIndex + 1}` : "Fractions", sub: nextIndex >= 0 ? `of ${topic.lessons.length}` : "island" },
+              { pic: nextPic, title: nextIndex >= 0 ? `Lesson ${nextIndex + 1}` : topic.title, sub: nextIndex >= 0 ? `of ${topic.lessons.length}` : "island" },
               { pic: "star", title: `+${STARS.lesson} stars`, sub: "for a lesson" },
               { pic: "trophy", title: `Level ${level.level + 1}`, sub: `${level.needed - level.into} stars away` },
               { pic: "flame", title: `${streak.current} day${streak.current === 1 ? "" : "s"}`, sub: "streak" },
@@ -129,6 +135,15 @@ function KidHome() {
           />
         </div>
       </section>
+
+      {warmUpOpen && (
+        <KipSays mood="happy" tone="sky">
+          New to {topic.title}? A short warm-up finds the right lesson to start with.{" "}
+          <Link href={links.start()} className="font-bold text-brand-strong underline underline-offset-4">
+            Play the warm-up
+          </Link>
+        </KipSays>
+      )}
 
       {review.length > 0 && (
         <KipSays mood="think" tone="sun" speak={`Let's revisit ${skillById(review[0]).title}. A little practice will make it strong again.`}>
@@ -141,16 +156,16 @@ function KidHome() {
 
       {/* Stars, streak, lessons and today's goal. */}
       <section aria-label="Your progress">
-        <ul className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+        <ul className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,10rem),1fr))] gap-3 sm:gap-5">
           <StatCard href={routes.badges()} pic="star" tile="bg-tile-yellow" label="Stars" value={String(stars)} sub={`Level ${level.level} · ${level.title}`}>
             <Meter value={level.into / level.needed} fill="bg-warn-bright" label={`Level ${level.level}: ${level.into} of ${level.needed} stars`} />
           </StatCard>
           <StatCard pic="flame" tile="bg-tile-orange" label="Streak" value={String(streak.current)} unit={streak.current === 1 ? "day" : "days"} sub={streak.activeToday ? "Done for today" : "Play today to keep it"}>
-            <ol className="mt-2.5 flex gap-1" aria-label="The last 7 days">
+            <ol className="mt-2.5 flex flex-wrap gap-1" aria-label="The last 7 days">
               {week.map((d) => (
                 <li
                   key={d.key}
-                  className={`grid size-7 place-items-center rounded-full text-[0.8125rem] font-bold ${d.done ? "bg-fire text-white" : d.today ? "border-2 border-dashed border-line-strong text-muted" : "bg-sunk text-muted"}`}
+                  className={`grid min-h-7 min-w-7 place-items-center rounded-full text-label font-bold ${d.done ? "bg-fire text-white" : d.today ? "border-2 border-dashed border-line-strong text-muted" : "bg-sunk text-muted"}`}
                   aria-label={`${d.today ? "Today" : d.key}: ${d.done ? "learned" : "not yet"}`}
                 >
                   <span aria-hidden>{d.letter}</span>
@@ -173,13 +188,26 @@ function KidHome() {
         <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
           {topic.lessons.map((l, i) => {
             const p = inTopic.lessons[l.id];
-            const isDone = !!p?.completed;
-            const isNext = rec.kind === "lesson" && rec.lessonId === l.id;
-            const status = isDone ? (p?.placedOut ? "You already knew this" : `Done · ${STARS.lesson} stars won`) : isNext ? (p ? `Step ${Math.min(p.furthestStep + 1, l.steps.length)} of ${l.steps.length}` : "Up next") : `${l.minutes} min`;
+            const e = evidence.get(l.id)!;
+            const isDone = e.status === "evidenced";
+            const isNext = (rec.kind === "lesson" && rec.lessonId === l.id) || (rec.kind === "practice" && !!rec.focusSkill && rec.focusSkill === e.skill && e.status === "needs-evidence");
+            const status = isDone
+              ? e.via === "placement"
+                ? "You already knew this"
+                : "Done · you showed you can do it"
+              : e.status === "needs-evidence"
+                ? "Finished · practise to complete it"
+                : e.status === "needs-review"
+                  ? "Let's revisit this"
+                  : isNext
+                    ? p
+                      ? `Step ${Math.min(p.furthestStep + 1, l.steps.length)} of ${l.steps.length}`
+                      : "Up next"
+                    : `${l.minutes} min`;
             return (
               <li key={l.id} className="flex">
                 <Link
-                  href={links.lesson(l.id)}
+                  href={isNext && e.status === "needs-evidence" && e.skill ? links.practice(e.skill) : links.lesson(l.id)}
                   className={`relative grid flex-1 grid-cols-[4.5rem_1fr] content-center items-center gap-x-4 rounded-[24px] border bg-surface p-4 shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)] sm:grid-cols-[5.25rem_1fr] sm:p-5 ${
                     isNext ? "border-2 border-brand shadow-[0_0_0_6px_var(--color-brand-soft),var(--shadow-lift)]" : "border-line"
                   }`}
@@ -266,16 +294,20 @@ function KidHome() {
         <h2 id="more-title" className="display text-[1.625rem] sm:text-[2.125rem]">
           More to explore
         </h2>
-        <ul className="mt-5 grid gap-4 sm:grid-cols-3">
+        <ul className="mt-5 grid grid-cols-[repeat(auto-fit,minmax(min(100%,16rem),1fr))] gap-4">
           <MoreCard href={links.practice()} pic="target" tile="bg-tile-green" title="Practice" line="Ten questions, a star for each one." />
           {topic.ui.FreeLab && <MoreCard href={links.lab()} pic="lab" tile="bg-tile-sky" title="The lab" line="Cut, colour and compare in free play." />}
-          <MoreCard href={routes.journey()} pic="map" tile="bg-tile-blue" title="World map" line="Every island, and the ones on the way." />
+          <MoreCard href={routes.journey()} pic="map" tile="bg-tile-blue" title="World map" line="Every island on the map. Pick any one to explore." />
         </ul>
       </section>
 
       <footer className="flex flex-col gap-3 pb-4">
         <KipSays mood="happy" tone="sky" size={72}>
-          {streak.current > 0 ? `Come back tomorrow to keep your ${streak.current}-day streak!` : "Come back tomorrow and start a streak!"}
+          {streak.current === 0
+            ? "Play today to start a streak!"
+            : streak.activeToday
+              ? `Come back tomorrow to keep your ${streak.current}-day streak!`
+              : `Play today to keep your ${streak.current}-day streak!`}
         </KipSays>
         <p className="text-[0.9375rem] text-muted">3D pictures: Microsoft Fluent Emoji, MIT licence.</p>
       </footer>
@@ -350,7 +382,7 @@ function StatCard({
 }) {
   const body = (
     <>
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center gap-3">
         <span className={`grid size-12 shrink-0 place-items-center rounded-[16px] sm:size-14 ${tile}`}>
           <Pic name={pic} size={36} />
         </span>

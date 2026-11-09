@@ -69,7 +69,7 @@ export function kidNext(rec: Recommendation, topic: TopicModule): KidNext {
         icon: "kite",
         kicker: "Island complete",
         title: `${topic.title}: mastered`,
-        line: "Keep your skills sharp with practice, or build in the lab.",
+        line: topic.ui.FreeLab ? "Keep your skills sharp with practice, or build in the lab." : "Keep your skills sharp with practice.",
         cta: "See my kites",
         href: routes.badges(),
       };

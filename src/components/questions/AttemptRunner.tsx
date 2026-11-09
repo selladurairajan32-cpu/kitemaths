@@ -71,7 +71,7 @@ function AttemptQuestion({
       </div>
       <QuestionInput question={q} response={response} onChange={change} locked={false} orderKey={orderKey} />
       {problem && <p className="rounded-[16px] border border-warn/30 bg-warn-soft px-4 py-3 text-[0.9375rem] text-ink-2">{problem} This answer isn&apos;t saved yet.</p>}
-      <div className="sticky bottom-0 z-10 -mx-5 flex items-center justify-between gap-3 border-t border-line bg-surface px-5 py-3 sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:pb-0 sm:pt-5">
+      <div className="sticky bottom-0 z-10 -mx-5 flex flex-wrap items-center justify-between gap-3 border-t border-line bg-surface px-5 py-3 sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:pb-0 sm:pt-5">
         <Button variant="ghost" onClick={() => onNavigate(index - 1)} disabled={index === 0}>
           <ArrowLeftIcon size={17} /> Back
         </Button>

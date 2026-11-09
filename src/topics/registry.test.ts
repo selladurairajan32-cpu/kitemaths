@@ -102,7 +102,8 @@ describe("a second topic", () => {
     const c = topicLearner(s, "counting");
     const f = topicLearner(s, "fractions");
     expect(recommendNext(counting, c)).toMatchObject({ kind: "lesson", lessonId: "more", topicId: "counting" });
-    expect(recommendNext(fractions, f)).toMatchObject({ kind: "lesson", lessonId: "naming", topicId: "fractions" });
+    // Reaching the end of "wholes" is activity, not evidence (FR-011 AC3): the next step is practice on its skill.
+    expect(recommendNext(fractions, f)).toMatchObject({ kind: "practice", focusSkill: "fractions.equal-parts", topicId: "fractions" });
 
     // Counting answers never count towards fractions milestones.
     expect(practiceResultsCount(counting, c)).toBe(9);

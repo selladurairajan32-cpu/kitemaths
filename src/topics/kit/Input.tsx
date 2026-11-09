@@ -56,7 +56,7 @@ function KitNumberBox({
           const value = Number(body === "." ? "" : body);
           onValue(body === "" || body === "." || Number.isNaN(value) ? null : (minus ? -1 : 1) * value);
         }}
-        className={`h-16 w-40 rounded-[18px] border-2 text-center text-[2rem] font-extrabold tabular-nums text-ink outline-none transition-colors disabled:opacity-100 ${ring}`}
+        className={`h-16 w-40 rounded-[18px] border-2 text-center text-[2rem] font-extrabold tabular-nums text-ink outline-none transition-colors focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:opacity-100 ${ring}`}
       />
       {unit && unit !== "£" && <span>{unit}</span>}
       <MarkIcon mark={mark} />

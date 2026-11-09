@@ -45,27 +45,27 @@ On 3 Nov the checker was deliberately broken twice to show it fails: once with a
 to a test that doesn't exist, and once with a P1 criterion left without a test case. Both times the
 right check went red (see the status report).
 
-## Coverage on 6 Nov 2026 (R0 readiness: CUR-001, GOV-004, QA-004)
+## Coverage on 9 Nov 2026 (R1 step 4)
 
 Each criterion is counted once, by the strongest evidence any of its test cases has.
 
 | Epic | Items | Criteria | Test cases | Automated | Accepted | Passing | Review pending | Partial | Failing | Planned |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | GOV | 4 | 10 | 18 | 11 | 5 | 5 | 0 | 0 | 0 | 0 |
-| CUR | 4 | 9 | 32 | 17 | 4 | 3 | 0 | 1 | 0 | 1 |
-| UX | 8 | 22 | 45 | 15 | 5 | 3 | 1 | 2 | 1 | 10 |
-| ARCH | 5 | 14 | 75 | 66 | 4 | 7 | 0 | 1 | 0 | 2 |
-| FR | 11 | 34 | 43 | 28 | 0 | 5 | 0 | 14 | 1 | 14 |
+| CUR | 4 | 9 | 33 | 22 | 4 | 3 | 0 | 1 | 0 | 1 |
+| UX | 8 | 22 | 45 | 15 | 5 | 3 | 1 | 4 | 0 | 9 |
+| ARCH | 5 | 14 | 81 | 73 | 4 | 9 | 0 | 1 | 0 | 0 |
+| FR | 11 | 34 | 48 | 33 | 0 | 8 | 0 | 13 | 0 | 13 |
 | LAB | 7 | 25 | 25 | 4 | 0 | 2 | 0 | 2 | 0 | 21 |
 | PRACT | 8 | 25 | 34 | 24 | 0 | 9 | 0 | 6 | 0 | 10 |
 | MIS | 5 | 12 | 16 | 15 | 0 | 4 | 0 | 7 | 0 | 1 |
-| MAST | 5 | 16 | 28 | 24 | 0 | 6 | 0 | 6 | 0 | 4 |
+| MAST | 5 | 16 | 29 | 25 | 0 | 7 | 0 | 5 | 0 | 4 |
 | TT | 12 | 37 | 37 | 2 | 0 | 0 | 0 | 2 | 0 | 35 |
 | MM | 12 | 28 | 28 | 0 | 0 | 0 | 0 | 0 | 0 | 28 |
 | EXAM | 6 | 16 | 16 | 1 | 0 | 0 | 0 | 1 | 0 | 15 |
 | PARENT | 3 | 7 | 7 | 0 | 0 | 0 | 0 | 0 | 0 | 7 |
 | QA | 7 | 15 | 48 | 35 | 0 | 5 | 0 | 0 | 0 | 10 |
-| **Total** | **97** | **270** | **452** | **242** | **18** | **49** | **1** | **42** | **2** | **158** |
+| **Total** | **97** | **270** | **465** | **260** | **18** | **55** | **1** | **42** | **0** | **154** |
 
 **How to read this:**
 - Fractions logic (FR, PRACT, MIS, MAST) already has substantial automated evidence. Its **planned**
@@ -96,6 +96,8 @@ Each criterion is counted once, by the strongest evidence any of its test cases 
 | `src/curriculum/map.test.ts` | 10 | CUR-001 |
 | `src/defects.test.ts` | 9 | QA-004 |
 | `src/governance.test.ts` | 5 | GOV-004 |
+| `src/engine/evidence.test.ts` | 10 | FR-011, CUR-002 (R1 wiring) |
+| `src/lib/persist.test.ts` | 8 | ARCH-004, MAST-005 |
 | `src/design-tokens.test.ts` | 10 | UX-002, UX-003, UX-004 |
 | `src/maths/maths.test.ts` | 20 | ARCH-003, QA-001 |
 | `src/questions/questions.test.ts` | 28 | ARCH-002 |

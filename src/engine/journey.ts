@@ -1,3 +1,4 @@
+import { allLessonEvidence, lessonEvidence, unmetPrerequisites } from "./evidence";
 import { readyForRecheck, skillMastery } from "./mastery";
 import type { TopicLearner } from "./progress";
 import { PHASES, type ItemResult, type MisconceptionDef, type Phase, type QuestionBase, type Skill, type SkillId } from "./types";
@@ -22,6 +23,8 @@ export interface TopicDefinition<Q extends QuestionBase = QuestionBase> {
   assessmentQuestions: Q[];
   misconceptions: MisconceptionDef[];
   questionById: (id: string) => Q;
+  /** Skill → skills that should be satisfied first (CUR-002 §2). Only islands with a skill graph set it. */
+  skillPrerequisites?: Readonly<Record<SkillId, readonly SkillId[]>>;
 }
 
 export const PRACTICE_READY_RESULTS = 8;
@@ -38,6 +41,11 @@ export type Recommendation = RecommendationBody & { topicId: string };
 
 export function lessonsCompleted(topic: TopicDefinition, state: TopicLearner): number {
   return topic.lessons.filter((l) => state.lessons[l.id]?.completed).length;
+}
+
+/** Lessons with independent evidence (CUR-002 §4.2). This, not reaching the end, is what "completed" means (FR-011 AC3). */
+export function lessonsEvidenced(topic: TopicDefinition, state: TopicLearner): number {
+  return allLessonEvidence(topic, state).filter((e) => e.status === "evidenced").length;
 }
 
 export function strongSkills(topic: TopicDefinition, state: TopicLearner): SkillId[] {
@@ -104,26 +112,44 @@ function recommendInTopic(topic: TopicDefinition, state: TopicLearner): Recommen
     };
   }
 
-  const nextLesson = topic.lessons.find((l) => !state.lessons[l.id]?.completed);
-  if (nextLesson) {
-    const started = (state.lessons[nextLesson.id]?.furthestStep ?? 0) > 0;
-    return {
-      kind: "lesson",
-      lessonId: nextLesson.id,
-      resume: started,
-      title: nextLesson.title,
-      reason: started
-        ? "Pick up where you left off."
-        : "Each lesson builds on the one before, so this is the best next step.",
-    };
-  }
-
+  // CUR-002 §5 rule 1: an assessment in progress is resumed before anything else.
   if (state.assessment.status === "in-progress") {
     return {
       kind: "assessment",
       resume: true,
       title: "Finish your mastery check",
       reason: "You've started the mastery check — your answers so far are saved.",
+    };
+  }
+
+  // Rule 2: a skill needing review comes before new lessons (§4.4). Handled with the post-check rules below.
+  const anyReview = state.assessment.last && topic.skills.some((s) => skillMastery(s.id, state.results).status === "needs-review");
+
+  // Rule 3: the first lesson, in island order, without independent evidence.
+  const next = anyReview ? undefined : allLessonEvidence(topic, state).find((e) => e.status !== "evidenced");
+  if (next) {
+    const lesson = topic.lessons.find((l) => l.id === next.lessonId)!;
+    if (next.status === "needs-evidence" && next.skill) {
+      // 3b: the activity is done but evidence is missing → targeted practice on that skill, not the lesson again.
+      return {
+        kind: "practice",
+        focusSkill: next.skill,
+        title: `Practise: ${skillTitle(next.skill)}`,
+        reason: "You've finished the lesson. Now show you can do it on your own: answer a few new questions first time, without a hint.",
+      };
+    }
+    const started = next.status === "in-progress";
+    const unmet = unmetPrerequisites(topic, state, lesson.id).filter((p) => topic.skills.some((s) => s.id === p));
+    return {
+      kind: "lesson",
+      lessonId: lesson.id,
+      resume: started,
+      title: lesson.title,
+      reason: started
+        ? "Pick up where you left off."
+        : unmet.length
+          ? `Best after “${skillTitle(unmet[0])}”, which this lesson builds on. You can start it now, and practise that skill too.`
+          : "Each lesson builds on the one before, so this is the best next step.",
     };
   }
 
@@ -194,7 +220,7 @@ function phaseDone(topic: TopicDefinition, phase: Phase, state: TopicLearner): b
       return !!state.assessment.last && reviewSkills(topic, state).length === 0;
     default: {
       const lessons = topic.lessons.filter((l) => l.phase === phase);
-      return lessons.length > 0 && lessons.every((l) => state.lessons[l.id]?.completed);
+      return lessons.length > 0 && lessons.every((l) => lessonEvidence(topic, state, l.id).status === "evidenced");
     }
   }
 }
