@@ -160,7 +160,7 @@ export function ResultsScreen() {
       )}
 
       <div className="grid gap-5 lg:grid-cols-2">
-        <section className="card p-5 sm:p-7" aria-labelledby="strengths-title">
+        <section className="card min-w-0 p-5 sm:p-7" aria-labelledby="strengths-title">
           <h2 id="strengths-title" className="flex items-center gap-2 text-title font-extrabold">
             <span className="grid size-7 place-items-center rounded-full bg-ok-soft text-ok">
               <CheckIcon size={15} />
@@ -170,7 +170,7 @@ export function ResultsScreen() {
           {strengths.length ? (
             <ul className="mt-4 space-y-3">
               {strengths.map((m) => (
-                <li key={m.skill} className="flex items-start justify-between gap-3">
+                <li key={m.skill} className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1">
                   <div>
                     <p className="font-medium">{skillById(m.skill).title}</p>
                     <p className="text-label text-muted">{independentText(m)} · {m.evidence} learning answers</p>
@@ -184,7 +184,7 @@ export function ResultsScreen() {
           )}
         </section>
 
-        <section className="card p-5 sm:p-7" aria-labelledby="next-title">
+        <section className="card min-w-0 p-5 sm:p-7" aria-labelledby="next-title">
           <h2 id="next-title" className="flex items-center gap-2 text-title font-extrabold">
             <span className="grid size-7 place-items-center rounded-full bg-den-soft text-den">
               <ArrowRightIcon size={15} />
@@ -200,7 +200,7 @@ export function ResultsScreen() {
                 const lesson = lessonById(skill.lessonId);
                 return (
                   <li key={m.skill} className="rounded-[16px] bg-paper p-3.5">
-                    <div className="flex items-center justify-between gap-3">
+                    <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
                       <p className="font-medium">{skill.title}</p>
                       <StatusBadge status={m.status} />
                     </div>
@@ -257,7 +257,7 @@ export function ResultsScreen() {
         <ul className="mt-4 divide-y divide-line md:hidden">
           {mastery.map((m) => (
             <li key={m.skill} className="space-y-2 py-3">
-              <div className="flex items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
                 <span className="font-medium">{skillById(m.skill).title}</span>
                 <StatusBadge status={m.status} />
               </div>

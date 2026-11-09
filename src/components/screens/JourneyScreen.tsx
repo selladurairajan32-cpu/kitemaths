@@ -120,7 +120,7 @@ export function JourneyScreen() {
                 className="relative flex gap-4"
               >
                 <Node status={status} index={i + 1} />
-                <div className={`card flex-1 p-4 sm:p-5 ${status === "next" || status === "active" ? "ring-1 ring-ink/15" : ""}`}>
+                <div className={`card min-w-0 flex-1 p-4 sm:p-5 ${status === "next" || status === "active" ? "ring-1 ring-ink/15" : ""}`}>
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div className="min-w-0">
                       <p className="flex flex-wrap items-center gap-2 text-label">
@@ -186,7 +186,7 @@ export function JourneyScreen() {
 
           <li className="relative flex gap-4">
             <Node status={practiceStatus} index={LESSONS.length + 1} />
-            <div className={`card flex-1 p-4 sm:p-5 ${practiceStatus === "next" ? "ring-1 ring-ink/15" : ""}`}>
+            <div className={`card min-w-0 flex-1 p-4 sm:p-5 ${practiceStatus === "next" ? "ring-1 ring-ink/15" : ""}`}>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="flex items-center gap-2 text-label">
@@ -225,7 +225,7 @@ export function JourneyScreen() {
 
           <li className="relative flex gap-4">
             <Node status={assessStatus} index={LESSONS.length + 2} />
-            <div className={`card flex-1 p-4 sm:p-5 ${assessStatus === "next" || assessStatus === "active" ? "ring-1 ring-ink/15" : ""}`}>
+            <div className={`card min-w-0 flex-1 p-4 sm:p-5 ${assessStatus === "next" || assessStatus === "active" ? "ring-1 ring-ink/15" : ""}`}>
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="flex items-center gap-2 text-label">
@@ -244,20 +244,20 @@ export function JourneyScreen() {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {a.status === "in-progress" ? (
-                    <Link href={routes.assessment()} className={buttonClass("primary", "md", "shrink-0")}>
+                    <Link href={routes.assessment()} className={buttonClass("primary", "md", "max-w-full text-center")}>
                       Resume check
                     </Link>
                   ) : a.last ? (
                     <>
-                      <Link href={routes.review()} className={buttonClass("secondary", "md", "shrink-0")}>
+                      <Link href={routes.review()} className={buttonClass("secondary", "md", "max-w-full text-center")}>
                         Review answers
                       </Link>
-                      <Link href={routes.assessment()} className={buttonClass("secondary", "md", "shrink-0")}>
+                      <Link href={routes.assessment()} className={buttonClass("secondary", "md", "max-w-full text-center")}>
                         Retake check
                       </Link>
                     </>
                   ) : (
-                    <Link href={routes.assessment()} className={buttonClass(assessStatus === "next" ? "primary" : "secondary", "md", "shrink-0")}>
+                    <Link href={routes.assessment()} className={buttonClass(assessStatus === "next" ? "primary" : "secondary", "md", "max-w-full text-center")}>
                       Open check
                     </Link>
                   )}

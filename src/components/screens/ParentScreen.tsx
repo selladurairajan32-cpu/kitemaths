@@ -141,7 +141,7 @@ function ParentOverview() {
           </div>
         </section>
 
-        <section className="card p-5 sm:p-7 lg:col-span-2" aria-labelledby="skills-title">
+        <section className="card min-w-0 p-5 sm:p-7 lg:col-span-2" aria-labelledby="skills-title">
           <div className="mb-3 flex items-center justify-between">
             <h2 id="skills-title" className="text-title font-extrabold">
               Skills at a glance
@@ -153,8 +153,8 @@ function ParentOverview() {
           <p className="mb-2 text-label text-muted">Labels only. The full report shows the answers behind each label and what to do about it.</p>
           <ul className="grid gap-x-8 sm:grid-cols-2">
             {topic.skills.map((s) => (
-              <li key={s.id} className="flex items-center justify-between gap-3 border-b border-line py-2.5">
-                <span className="text-label">{s.title}</span>
+              <li key={s.id} className="flex min-w-0 flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-line py-2.5">
+                <span className="min-w-0 text-label">{s.title}</span>
                 <StatusBadge status={skillMastery(s.id, learner.results).status} />
               </li>
             ))}
