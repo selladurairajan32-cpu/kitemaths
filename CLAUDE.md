@@ -7,7 +7,7 @@ breaking changes, so read the relevant guide in `node_modules/next/dist/docs/` b
 ## Working rules (from the Product Owner, D-002, D-006, D-012)
 
 - **Development branch only:** `claude/pensive-pasteur-bs5979`. No pull request, merge or deployment unless the Product
-  Owner explicitly asks. Production is https://kitemaths.vercel.app (`main` at `bbf210a`); do not touch it.
+  Owner explicitly asks. Production is https://kitemaths.vercel.app (Vercel deploys `main`). R1 was merged to `main` and deployed on 9 Nov 2026 at the Product Owner's explicit request (D-027); any further deployment still needs an explicit request.
 - **No change to existing child-facing screens** (appearance or behaviour) unless an item says so. Screen migration, the
   accessibility layout fixes and wiring new specs into the app are R1 work.
 - **Preserve the architecture; no broad rewrites.** Additive foundations and behaviour-preserving extraction only.
@@ -36,7 +36,7 @@ only accepted items may have `accepted` cases. Update `test-cases.csv` in the sa
 ## State (9 Nov 2026)
 
 `docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Last recorded
-decision: D-026 (build all of R1 in sequence); clarifications to RC-010.
+decision: D-027 (R1 deployed to production; not accepted); clarifications to RC-010.
 
 - **Accepted** (R0, each for the scope in `STATUS.md`): GOV-001/002/003, UX-001, CUR-002, CUR-003, UX-002, ARCH-001,
   UX-004, ARCH-002, ARCH-003, QA-001. Nothing in R1 is accepted.
