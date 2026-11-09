@@ -58,9 +58,10 @@ export function ResultsScreen() {
         <span className="mx-auto grid size-14 place-items-center rounded-[20px] bg-sunk">
           <StarIcon size={24} />
         </span>
-        <h1 className="display mt-5 text-3xl font-semibold">Your results will appear here</h1>
+        <h1 className="display mt-5 text-3xl font-semibold">Nothing to report yet</h1>
         <p className="mx-auto mt-2 max-w-md text-ink-2">
-          As you work through lessons and practice, you&apos;ll see which skills are secure, which ideas need more work, and what to do next.
+          This report fills in once {topic.title} lesson or practice questions are answered. It shows the evidence behind each skill label, any
+          misunderstandings spotted, and a question-by-question review of the mastery check.
         </p>
         <RecommendationLink rec={rec} className="mt-6">
           {recommendationVerb(rec)} <ArrowRightIcon size={18} />
@@ -79,9 +80,9 @@ export function ResultsScreen() {
       <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-[0.9375rem] font-bold text-muted">{topic.title}</p>
-          <h1 className="display text-3xl font-semibold sm:text-4xl">Mastery results</h1>
+          <h1 className="display text-3xl font-semibold sm:text-4xl">Full report</h1>
           <p className="mt-1 text-ink-2">
-            Based on {stats.learningAnswered} lesson & practice answers{last ? " and your latest independent check" : ""}.
+            The evidence behind every label: based on {stats.learningAnswered} lesson & practice answers{last ? " and the latest independent check" : ""}.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">

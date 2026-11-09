@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Kip, KipSays } from "@/components/kid/Kip";
 import { kidNext } from "@/components/kid/kidText";
+import { RichText } from "@/components/math/RichText";
 import { PaperIcon } from "@/components/paper/PaperIcon";
 import { isPicName, Pic, type PicName } from "@/components/paper/Pic";
 import { ButtonLink } from "@/components/ui/Button";
@@ -18,7 +19,10 @@ import { useHydrated, useLearner, useNow } from "@/lib/store";
 import { TOPICS } from "@/topics";
 import { useTopicState } from "@/topics/context";
 import { ActiveTopicProvider } from "@/topics/ActiveTopic";
+import { WORLDS } from "@/topics/worlds";
 import { badgePic } from "@/components/kid/badgePic";
+
+const islandCount = WORLDS.reduce((n, w) => n + w.islands.length, 0);
 
 const DAY_LETTERS = ["S", "M", "T", "W", "T", "F", "S"];
 /** Each lesson card gets its own pastel tile, in turn. */
@@ -69,7 +73,8 @@ function KidHome() {
   const lessonCount = TOPICS.reduce((n, t) => n + t.lessons.length, 0);
   const badges = badgesFor(learner, TOPICS.flatMap((t) => t.skills), lessonCount, now);
   const won = badges.filter((b) => b.earned);
-  const shelf = [...won, ...badges.filter((b) => !b.earned).sort((a, b) => b.progress - a.progress)].slice(0, 6);
+  // Home shows what to aim for next (the closest badges still to win); the Badges page is the whole collection.
+  const shelf = [...badges.filter((b) => !b.earned).sort((a, b) => b.progress - a.progress), ...won].slice(0, 6);
   const nextIndex = rec.kind === "lesson" ? topic.lessons.findIndex((l) => l.id === rec.lessonId) : -1;
   const nextIcon = nextIndex >= 0 ? lessonLook(topic.lessons[nextIndex].id).icon : "pizza";
   const nextPic: PicName = isPicName(nextIcon) ? nextIcon : "pizza";
@@ -107,7 +112,7 @@ function KidHome() {
                   {next.title}
                 </h1>
                 <p className="mt-4 max-w-xl text-lg text-ink-2 sm:text-[1.1875rem]">
-                  {next.kicker}. {next.line}
+                  {next.kicker}. <RichText text={next.line} />
                 </p>
                 <div className="mt-7 flex flex-wrap gap-3">
                   <ButtonLink href={next.href} size="xl" className="w-full sm:w-auto">
@@ -161,7 +166,7 @@ function KidHome() {
           <StatCard href={routes.badges()} pic="star" tile="bg-tile-yellow" label="Stars" value={String(stars)} sub={`Level ${level.level} · ${level.title}`}>
             <Meter value={level.into / level.needed} fill="bg-warn-bright" label={`Level ${level.level}: ${level.into} of ${level.needed} stars`} />
           </StatCard>
-          <StatCard pic="flame" tile="bg-tile-orange" label="Streak" value={String(streak.current)} unit={streak.current === 1 ? "day" : "days"} sub={streak.activeToday ? "Done for today" : "Play today to keep it"}>
+          <StatCard pic="flame" tile="bg-tile-orange" label="Streak" value={String(streak.current)} unit={streak.current === 1 ? "day" : "days"} sub={streak.activeToday ? "Done for today" : streak.current === 0 ? "Play today to start one" : "Play today to keep it"}>
             <ol className="mt-2.5 flex flex-wrap gap-1" aria-label="The last 7 days">
               {week.map((d) => (
                 <li
@@ -271,12 +276,19 @@ function KidHome() {
 
       {/* Badges to collect. */}
       <section className="rounded-[32px] bg-[#f0f5ff] px-5 py-8 sm:px-10 sm:py-10" aria-labelledby="badges-title">
-        <SectionHead id="badges-title" title="Your badges" line={`${won.length} of ${badges.length} won. Every badge is a little trophy for your learning.`} href={routes.badges()} cta="See all badges" />
+        <SectionHead
+          id="badges-title"
+          title={won.length === badges.length ? "Every badge won!" : "Badges to win next"}
+          line={won.length === badges.length ? `All ${badges.length} badges are yours.` : `The ones you're closest to, and how to win them. ${won.length} of ${badges.length} won so far.`}
+          href={routes.badges()}
+          cta="See all badges"
+        />
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
           {shelf.map((b) => (
             <li key={b.id} className="flex flex-col items-center gap-2 rounded-[24px] border border-line bg-surface px-3 pb-5 pt-6 text-center shadow-[var(--shadow-card)]">
               <Pic name={badgePic(b.id)} size={72} muted={!b.earned} />
               <span className="text-base font-extrabold leading-snug text-ink">{b.title}</span>
+              {!b.earned && <span className="text-[0.9375rem] text-ink-2">{b.description}</span>}
               {b.earned ? (
                 <span className="text-[0.9375rem] font-bold text-ok">Won</span>
               ) : (
@@ -298,17 +310,20 @@ function KidHome() {
         <ul className="mt-5 grid grid-cols-[repeat(auto-fit,minmax(min(100%,16rem),1fr))] gap-4">
           <MoreCard href={links.practice()} pic="target" tile="bg-tile-green" title="Practice" line={`${PRACTICE_SESSION_LENGTH} questions. Up to 3 stars each, for right first time.`} />
           {topic.ui.FreeLab && <MoreCard href={links.lab()} pic="lab" tile="bg-tile-sky" title="The lab" line="Cut, colour and compare in free play." />}
-          <MoreCard href={routes.journey()} pic="map" tile="bg-tile-blue" title="World map" line="Every island on the map. Pick any one to explore." />
+          <MoreCard href={routes.journey()} pic="map" tile="bg-tile-blue" title="World map" line={`${islandCount} islands in ${WORLDS.length} worlds, from place value to 11+ practice.`} />
         </ul>
       </section>
 
       <footer className="flex flex-col gap-3 pb-4">
         <KipSays mood="happy" tone="sky" size={72}>
-          {streak.current === 0
-            ? "Play today to start a streak!"
-            : streak.activeToday
-              ? `Come back tomorrow to keep your ${streak.current}-day streak!`
-              : `Play today to keep your ${streak.current}-day streak!`}
+          {/* What exactly keeps the streak going: the streak card above only says whether today is done. */}
+          {!streak.activeToday
+            ? streak.current === 0
+              ? "Answer just one question today to start a streak!"
+              : `Answer just one question today to keep your ${streak.current}-day streak!`
+            : today < DAILY_GOAL
+              ? `Streak safe for today. ${DAILY_GOAL - today} more question${DAILY_GOAL - today === 1 ? "" : "s"} and you reach today's goal.`
+              : `Goal done! Come back tomorrow to make it a ${streak.current + 1}-day streak.`}
         </KipSays>
         <p className="text-[0.9375rem] text-muted">3D pictures: Microsoft Fluent Emoji, MIT licence.</p>
       </footer>

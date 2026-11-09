@@ -28,7 +28,7 @@ export function WorldMapScreen() {
 
   return (
     <div className="space-y-10">
-      <ScreenHero kip="happy" titleId="map-title" title="World map" line={open === all ? `Fly from island to island. All ${all} islands are open: pick one and go!` : `Fly from island to island. ${open} of ${all} islands are open, and more are on their way.`} />
+      <ScreenHero kip="happy" titleId="map-title" title="World map" line={`${open === all ? `All ${all} islands are open` : `${open} of ${all} islands are open, and more are on their way`}. Each one says what it covers, so you can pick what you want to learn.`} />
 
       <ol className="space-y-6">
         {WORLDS.map((world, wi) => {
@@ -88,6 +88,7 @@ export function WorldMapScreen() {
                         </span>
                         <span className="min-w-0">
                           <span className="block font-extrabold leading-snug text-ink">{island.title}</span>
+                          <span className="block text-[0.9375rem] text-ink-2">{topic.subtitle}</span>
                           <span className="block text-[0.9375rem] font-semibold text-muted">
                             {done} of {topic.lessons.length} lessons
                           </span>

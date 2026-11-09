@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Kip, KipSays } from "@/components/kid/Kip";
 import { KID_STATUS } from "@/components/kid/kidText";
 import { ScreenHero } from "@/components/kid/ScreenHero";
+import { RichText } from "@/components/math/RichText";
 import { PaperIcon, type IconName } from "@/components/paper/PaperIcon";
 import { isPicName, Pic } from "@/components/paper/Pic";
 import { ArrowLeftIcon, CheckIcon } from "@/components/ui/Icons";
@@ -142,7 +143,7 @@ export function SkyMapScreen() {
         pic={isPicName(topic.look.icon) ? topic.look.icon : "map"}
         titleId="island-title"
         title={topic.title}
-        line={`${doneCount} of ${stops.length} stops done. Tap any stop to play!`}
+        line={`${topic.subtitle}. ${doneCount} of ${stops.length} stops done: each one says what you'll learn.`}
       />
 
       {review.length > 0 && (
@@ -187,7 +188,10 @@ export function SkyMapScreen() {
                     </Link>
                   </p>
                   {s.outcome && <p className="text-label font-semibold text-ink-2">You&apos;ll learn: {s.outcome}</p>}
-                  <p className="mt-0.5 text-label text-ink-2">{s.line}</p>
+                  <p className="mt-0.5 text-label text-ink-2">
+                    {/* Lesson summaries can hold fraction markup such as {1/2}. */}
+                    <RichText text={s.line} />
+                  </p>
                   {s.bestAfter && <p className="mt-1.5 rounded-[14px] bg-sun-soft px-3 py-1.5 text-label text-ink">{s.bestAfter}</p>}
                   <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1">
                     {s.extra && (

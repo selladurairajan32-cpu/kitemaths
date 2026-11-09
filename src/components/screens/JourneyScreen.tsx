@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import Link from "next/link";
+import { RichText } from "@/components/math/RichText";
 import { buttonClass } from "@/components/ui/Button";
 import { CheckIcon, FlagIcon, PracticeIcon } from "@/components/ui/Icons";
 import { ProgressBar } from "@/components/ui/Progress";
@@ -96,7 +97,8 @@ export function JourneyScreen() {
           <p className="text-label font-bold text-muted">{topic.title}</p>
           <h1 className="display text-3xl font-semibold sm:text-4xl">Learning journey</h1>
           <p className="mt-2 max-w-xl text-ink-2">
-            {topic.subtitle}. {LESSONS.length} short lessons, then practice until each skill is secure, then an independent mastery check.
+            Lesson by lesson: what each one teaches, what it builds on, and what evidence marked it complete. {LESSONS.length} lessons, then practice
+            until skills are secure, then an independent mastery check.
           </p>
         </header>
 
@@ -131,7 +133,9 @@ export function JourneyScreen() {
                         </span>
                       </p>
                       <h2 className="mt-1.5 text-lg font-semibold">{l.title}</h2>
-                      <p className="text-label text-ink-2">{l.summary}</p>
+                      <p className="text-label text-ink-2">
+                        <RichText text={l.summary} />
+                      </p>
                       {e.skill && (
                         <p className="mt-1 text-label text-ink-2">
                           <span className="font-semibold">Skill outcome:</span> {skillById(e.skill).title}
@@ -234,7 +238,7 @@ export function JourneyScreen() {
                     <FlagIcon size={18} /> Mastery check
                   </h2>
                   <p className="text-label text-ink-2">
-                    {firstForm.length} questions on your own — no hints — two for every skill.
+                    {firstForm.length} questions answered independently, with no hints: two for every skill.
                     {a.last && ` Last result: ${lastScore} / ${a.last.order.length}.`}
                   </p>
                 </div>

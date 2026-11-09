@@ -28,21 +28,26 @@ export interface KidNext {
 export function kidNext(rec: Recommendation, topic: TopicModule): KidNext {
   const links = topicRoutes(rec.topicId);
   switch (rec.kind) {
-    case "lesson":
+    case "lesson": {
+      // What this particular lesson is about, not a description that fits every lesson.
+      const summary = topic.lessons.find((l) => l.id === rec.lessonId)?.summary;
       return {
         icon: topic.lessonLook(rec.lessonId).icon,
         kicker: rec.resume ? "Your lesson so far" : "Your next lesson",
         title: rec.title,
-        line: rec.resume ? "You're part of the way through. Pick up where you stopped." : "A short lesson with pictures, a puzzle and a quick question at the end.",
+        line: rec.resume ? `Pick up where you stopped. ${summary ?? ""}`.trim() : summary ?? "A short lesson with pictures and a quick question at the end.",
         cta: rec.resume ? "Carry on" : "Start the lesson",
         href: links.lesson(rec.lessonId),
       };
+    }
     case "practice":
       return {
         icon: "target",
         kicker: "Practice",
         title: rec.focusSkill ? rec.title.replace(/^(Practise|Strengthen): /, "") : "Mixed practice",
-        line: "Ten questions that get harder as you get stronger. Each one earns stars.",
+        line: rec.focusSkill
+          ? "Questions on just this skill. Get new ones right first time, without a hint, to show you've got it."
+          : "Kip starts with the skills that aren't strong yet. Now and then, one revisits a skill you already know.",
         cta: "Play ten questions",
         href: links.practice(rec.focusSkill),
       };

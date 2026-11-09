@@ -27,7 +27,7 @@ export function BadgesScreen() {
         kip={earned.length ? "cheer" : "happy"}
         titleId="badges-title"
         title="Your badges"
-        line={`${earned.length} of ${badges.length} won. Every badge is a little trophy for your learning.`}
+        line={`Your whole collection: ${earned.length} of ${badges.length} won. Badges you've won come first, then the ones you're closest to.`}
         aside={
           <div className="flex gap-3">
             <span className="flex items-center gap-2 rounded-[20px] bg-surface px-4 py-3 shadow-[var(--shadow-card)]">

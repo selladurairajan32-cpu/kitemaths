@@ -144,12 +144,13 @@ function ParentOverview() {
         <section className="card p-5 sm:p-7 lg:col-span-2" aria-labelledby="skills-title">
           <div className="mb-3 flex items-center justify-between">
             <h2 id="skills-title" className="font-semibold">
-              Skills in this module
+              Skills at a glance
             </h2>
             <Link href={routes.results()} className="inline-flex min-h-11 items-center rounded text-[0.9375rem] font-medium text-den hover:underline">
               Full report
             </Link>
           </div>
+          <p className="mb-2 text-[0.9375rem] text-muted">Labels only. The full report shows the answers behind each label and what to do about it.</p>
           <ul className="grid gap-x-8 sm:grid-cols-2">
             {topic.skills.map((s) => (
               <li key={s.id} className="flex items-center justify-between gap-3 border-b border-line py-2.5">
@@ -167,8 +168,8 @@ function ParentOverview() {
           {working.length === 0 ? (
             <p className="text-[0.9375rem] text-ink-2">
               {stats.learningAnswered === 0
-                ? "As you answer questions, we'll notice any tricky ideas and help you with them here."
-                : "Nothing to work on right now — great thinking!"}
+                ? "Nothing yet. When a wrong answer matches a known misunderstanding, it appears here, with how often it has been seen."
+                : "No unresolved misunderstandings in the answers so far."}
             </p>
           ) : (
             <ul className="space-y-2.5">
@@ -265,7 +266,7 @@ function ParentOverview() {
         </h2>
         <div className="mt-1 max-w-3xl space-y-2 text-[0.9375rem] text-ink-2">
           <p>
-            <strong>{topic.title}</strong>: {topic.subtitle}.
+            <strong>{topic.title}.</strong> {topic.subtitle}.
           </p>
           <p>
             {topic.id === REFERENCE_TOPIC
