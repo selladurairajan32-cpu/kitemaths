@@ -7,7 +7,7 @@ breaking changes, so read the relevant guide in `node_modules/next/dist/docs/` b
 ## Working rules (from the Product Owner, D-002, D-006, D-012)
 
 - **Development branch only:** `claude/pensive-pasteur-bs5979`. No pull request, merge or deployment unless the Product
-  Owner explicitly asks. Production is https://kitemaths.vercel.app (Vercel deploys `main`). R1 was merged to `main` and deployed on 9 Nov 2026 at the Product Owner's explicit request (D-027); any further deployment still needs an explicit request.
+  Owner explicitly asks. Production is https://kitemaths.vercel.app (Vercel deploys `main`). R1 was merged to `main` and deployed on 9 Nov 2026 at the Product Owner's explicit request (D-027), and the content differentiation changes the same day (D-029); any further deployment still needs an explicit request.
 - **No change to existing child-facing screens** (appearance or behaviour) unless an item says so. Screen migration, the
   accessibility layout fixes and wiring new specs into the app are R1 work.
 - **Preserve the architecture; no broad rewrites.** Additive foundations and behaviour-preserving extraction only.
@@ -36,7 +36,7 @@ only accepted items may have `accepted` cases. Update `test-cases.csv` in the sa
 ## State (9 Nov 2026)
 
 `docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Last recorded
-decision: D-028 (content differentiation audit and copy changes, CH-042 to CH-044; audit in
+decision: D-029 (content changes deployed to production; not accepted). D-028 (content differentiation audit and copy changes, CH-042 to CH-044; audit in
 `docs/product/design/content-differentiation-audit.md`, recommendations R1 to R10 await decisions). D-027: R1 deployed
 to production; not accepted. Clarifications to RC-010.
 
