@@ -11,7 +11,7 @@ import { Button, ButtonLink, buttonClass } from "@/components/ui/Button";
 import { ArrowRightIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 import { PRACTICE_SESSION_LENGTH, selectNextQuestion } from "@/engine/adaptive";
-import { skillMastery } from "@/engine/mastery";
+import { SECURE_MIN_EVIDENCE, SECURE_THRESHOLD, skillMastery } from "@/engine/mastery";
 import {
   completePracticeSession,
   dismissPracticeSummary,
@@ -56,7 +56,7 @@ function SkillPicker({ focusSkill }: { focusSkill: string | null }) {
   const { topic, learner, links } = useTopicState();
   return (
     <nav aria-label="Choose what to practise" className="card p-5 sm:p-6">
-      <h2 className="display text-xl">Pick a power-up</h2>
+      <h2 className="display text-xl">Choose what to practise</h2>
       <p className="text-label text-muted">Practise one skill, or mix them all.</p>
       <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
         <li className="sm:col-span-2">
@@ -71,7 +71,7 @@ function SkillPicker({ focusSkill }: { focusSkill: string | null }) {
               <PaperIcon name="dice" size={28} />
             </span>
             <span className="min-w-0 flex-1">
-              <span className="block font-semibold">Mixed challenge</span>
+              <span className="block font-semibold">Mixed practice</span>
               <span className="block text-label text-muted">Kip picks what helps you most</span>
             </span>
           </Link>
@@ -110,7 +110,7 @@ function Intro({ focusSkill }: { focusSkill: string | null }) {
       <ScreenHero
         kip="cheer"
         titleId="practice-title"
-        title={skill ? skill.title : "Mixed challenge"}
+        title={skill ? skill.title : "Mixed practice"}
         line={
           <>
             {PRACTICE_SESSION_LENGTH} questions that get trickier as you get stronger. If you get stuck, Kip helps. Win up to{" "}
@@ -127,6 +127,17 @@ function Intro({ focusSkill }: { focusSkill: string | null }) {
           </ButtonLink>
         )}
       </ScreenHero>
+
+      {/* R6: where this child stands on this skill, and what "strong" takes (SECURE_MIN_EVIDENCE, SECURE_THRESHOLD). */}
+      {skill && m && m.status !== "needs-review" && (
+        <p className="text-body text-ink-2">
+          <span className={`mr-2 inline-block rounded-full px-2.5 py-0.5 text-label font-bold ${KID_STATUS[m.status].cls}`}>{KID_STATUS[m.status].label}</span>
+          <span className="sr-only">. </span>
+          {m.learningSecure
+            ? "This skill is already strong. A little practice now and then keeps it that way."
+            : `Strong means at least ${SECURE_MIN_EVIDENCE} recent answers, with about ${Math.round(SECURE_THRESHOLD * 4)} in every 4 right. Right first time with no hint counts fully; right after a hint or a second try counts half. You have ${m.recentCount} recent answer${m.recentCount === 1 ? "" : "s"} on this skill.`}
+        </p>
+      )}
 
       {m?.status === "needs-review" && (
         <KipSays mood="think" tone="sun" speak="Practise until this feels strong, then try a quick recheck.">

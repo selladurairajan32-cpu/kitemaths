@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useSyncExternalStore, type FormEvent, type ReactNode } from "react";
+import Link from "next/link";
+import { routes } from "@/lib/routes";
 import { Button } from "./Button";
 import { LockIcon } from "./Icons";
 import { useHydrated, useNow } from "@/lib/store";
@@ -95,6 +97,13 @@ export function ParentGate({ children }: { children: ReactNode }) {
           Continue
         </Button>
       </form>
+      <p className="mt-6 text-label text-ink-2">
+        New to Kite Maths?{" "}
+        <Link href={routes.parentAbout()} className="font-semibold text-den underline underline-offset-2">
+          Read what it is and where progress is kept
+        </Link>
+        , no sum needed.
+      </p>
     </section>
   );
 }

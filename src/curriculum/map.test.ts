@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { TOPICS } from "@/topics";
@@ -169,6 +169,44 @@ describe("curriculum map (CUR-001)", () => {
     expect(text).not.toMatch(/\b\d+\s*(out of|of the last)\s*\d+\s*(correct|right|items|questions|answers)/i);
     expect(text).not.toMatch(/\b\d+\s*%\s*(correct|accuracy|mastery)/i);
     expect(doc).toMatch(/owned by MAST-001/);
+  });
+
+  it("keeps the app's objective list (src/curriculum/objectives.ts) in step with the map", () => {
+    // Content audit R5: Journey detail shows the objectives a lesson's skill serves. The app can't read the CSV, so this
+    // generates a typed copy; refresh it with UPDATE_DOCS=1 after editing curriculum-map.csv.
+    const mapped = rows.filter((r) => r.skills.trim());
+    const entries = mapped.map((r) => ({
+      id: r.id, year: r.year ? Number(r.year) : null, strand: r.strand, status: r.status, outcome: r.outcome,
+      skills: r.skills.split(";").map((x) => x.trim()).filter(Boolean),
+    }));
+    const body = [
+      "// Generated from docs/product/curriculum/curriculum-map.csv by src/curriculum/map.test.ts. Do not edit by hand:",
+      "// edit the CSV, then run `UPDATE_DOCS=1 npx vitest run src/curriculum/map.test.ts`.",
+      "// Not independently reviewed (CUR-004): shown to grown-ups with that caveat.",
+      "",
+      "export interface CurriculumObjective {",
+      "  id: string;",
+      '  /** null for an 11+ extension candidate, which belongs to no school year. */',
+      "  year: number | null;",
+      "  strand: string;",
+      '  /** "statutory" (DfE programme of study) or "11+-extension-candidate" (not statutory). */',
+      "  status: string;",
+      "  outcome: string;",
+      "  skills: string[];",
+      "}",
+      "",
+      `export const OBJECTIVES: CurriculumObjective[] = ${JSON.stringify(entries, null, 2)};`,
+      "",
+      "/** The objectives a skill serves, statutory first, in map order. */",
+      "export function objectivesForSkill(skill: string): CurriculumObjective[] {",
+      '  const own = OBJECTIVES.filter((o) => o.skills.includes(skill));',
+      '  return [...own.filter((o) => o.status === "statutory"), ...own.filter((o) => o.status !== "statutory")];',
+      "}",
+      "",
+    ].join("\n");
+    const file = join(process.cwd(), "src/curriculum/objectives.ts");
+    if (process.env.UPDATE_DOCS) writeFileSync(file, body);
+    expect(readFileSync(file, "utf8")).toBe(body);
   });
 
   it("states the year-allocation caveat and the evidence method in the document", () => {

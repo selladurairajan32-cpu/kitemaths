@@ -93,7 +93,7 @@ function ParentOverview() {
             <div className="mt-2 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <h3 className="text-title font-extrabold">{rec.title}</h3>
-                <p className="mt-1 max-w-md text-ink-2">{rec.reason}</p>
+                <p className="mt-1 max-w-md text-ink-2">{rec.parentReason}</p>
               </div>
               <RecommendationLink rec={rec} className="shrink-0">
                 {recommendationVerb(rec)} <ArrowRightIcon size={18} />
@@ -134,7 +134,7 @@ function ParentOverview() {
             </div>
             <div className="col-span-2">
               <p className="text-label">
-                <span className="text-muted">Mastery check: </span>
+                <span className="text-muted">Mastery check (&ldquo;the big challenge&rdquo;): </span>
                 <strong>{last ? `${lastScore} / ${last.order.length}` : t.assessment.status === "in-progress" ? "in progress" : "not taken yet"}</strong>
               </p>
             </div>

@@ -14,6 +14,7 @@ import { useHydrated } from "@/lib/store";
 import { useTopicState } from "@/topics/context";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 import { topicOf } from "@/topics";
+import { objectivesForSkill } from "@/curriculum/objectives";
 
 type NodeStatus = "done" | "active" | "next" | "upcoming";
 
@@ -97,7 +98,7 @@ export function JourneyScreen() {
           <p className="text-label font-bold text-muted">{topic.title}</p>
           <h1 className="display text-heading-2 sm:text-heading-1">Learning journey</h1>
           <p className="mt-2 max-w-xl text-ink-2">
-            Lesson by lesson: what each one teaches, what it builds on, and what evidence marked it complete. {LESSONS.length} lessons, then practice
+            Lesson by lesson: what each one teaches, which curriculum objectives it serves, what it builds on, and what evidence marked it complete. {LESSONS.length} lessons, then practice
             until skills are secure, then an independent mastery check.
           </p>
         </header>
@@ -140,6 +141,19 @@ export function JourneyScreen() {
                         <p className="mt-1 text-label text-ink-2">
                           <span className="font-semibold">Skill outcome:</span> {skillById(e.skill).title}
                         </p>
+                      )}
+                      {/* R5 (content audit): the curriculum objectives this lesson's skill serves, from the CUR-001 map. */}
+                      {e.skill && objectivesForSkill(e.skill).length > 0 && (
+                        <div className="mt-1 text-label text-ink-2">
+                          <span className="font-semibold">Curriculum:</span>
+                          <ul className="mt-0.5 space-y-0.5">
+                            {objectivesForSkill(e.skill).map((o) => (
+                              <li key={o.id}>
+                                {o.status === "statutory" ? `Year ${o.year}, statutory` : "11+ extension (not statutory)"}: {o.outcome}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       )}
                       <p className="mt-1 text-label text-ink-2">
                         <span className="font-semibold">Status:</span> {EVIDENCE_TEXT[e.status]}
@@ -238,7 +252,8 @@ export function JourneyScreen() {
                     <FlagIcon size={18} /> Mastery check
                   </h2>
                   <p className="text-label text-ink-2">
-                    {firstForm.length} questions answered independently, with no hints: two for every skill.
+                    {firstForm.length} questions answered independently, with no hints: two for every skill. Your child sees it as &ldquo;the big
+                    challenge&rdquo;.
                     {a.last && ` Last result: ${lastScore} / ${a.last.order.length}.`}
                   </p>
                 </div>
@@ -300,6 +315,9 @@ export function JourneyScreen() {
           <p className="mt-1 text-label text-ink-2">
             Each lesson is tagged with its main purpose. Lessons move broadly from understanding to mastery, but a purpose can come up more than once, so
             the tags are not strict steps in order.
+          </p>
+          <p className="mt-3 text-label text-muted">
+            Curriculum links come from our map of the national curriculum for England (Years 3 to 6). The map has not yet had an independent review.
           </p>
           <ol className="mt-4 space-y-3">
             {phaseStatuses(topic, learner).map(({ phase, status }, i) => (

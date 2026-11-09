@@ -4,7 +4,7 @@ import { MISCONCEPTIONS, M } from "@/topics/fractions/misconceptions";
 import { PRACTICE_QUESTIONS } from "@/topics/fractions/questions";
 import { SKILL_ORDER } from "@/topics/fractions/skills";
 import { REVIEW_EVERY, selectNextQuestion, targetDifficulty } from "./adaptive";
-import { activityProgress, isPracticeMilestoneMet, phaseStatuses, recommendNext } from "./journey";
+import { activityProgress, isPracticeMilestoneMet, phaseStatuses, recommendNext, weeklyComparison } from "./journey";
 import { misconceptionReports, readyForRecheck, skillMastery } from "./mastery";
 import {
   completeLesson,
@@ -360,5 +360,30 @@ describe("seeded option order", () => {
       return seededShuffle(q.options, `practice:1:${q.id}:options`).findIndex((o) => o.n === q.answer.n && o.d === q.answer.d);
     });
     expect(new Set(firsts).size).toBeGreaterThan(1);
+  });
+});
+
+describe("weekly comparison (content audit R4)", () => {
+  it("splits lesson and practice answers into the last 7 days and the 7 before, each answer in exactly one window", () => {
+    const D = 86_400_000;
+    const now = 100 * D;
+    const skill = FRACTIONS_TOPIC.skills[0].id;
+    const at = (t: number, firstTry: boolean, context: ItemResult["context"] = "practice"): ItemResult =>
+      ({ context, skill, questionId: `q${t}`, correct: firstTry, firstTry, attempts: 1, hintsUsed: 0, misconceptions: [], at: t });
+    const state = { ...createTopicLearner(), results: [
+      at(now - 1, true), // this week
+      at(now - 7 * D, false, "lesson"), // exactly 7 days back: still this week (window is [now − 7d, now))
+      at(now - 7 * D - 1, true), // last week
+      at(now - 14 * D, true), // exactly 14 days back: last week
+      at(now - 14 * D - 1, true), // before both windows
+      at(now, true), // at now: in neither window
+      at(now - 2 * D, true, "assessment"), // not a lesson or practice answer
+    ] };
+    // Hand-counted: this week 2 answers, 1 right first time; last week 2 answers, both right first time.
+    expect(weeklyComparison(FRACTIONS_TOPIC, state, now)).toEqual({
+      thisWeek: { answered: 2, firstTryRate: 0.5 },
+      lastWeek: { answered: 2, firstTryRate: 1 },
+    });
+    expect(weeklyComparison(FRACTIONS_TOPIC, { ...createTopicLearner(), results: [] }, now).thisWeek.firstTryRate).toBeNull();
   });
 });

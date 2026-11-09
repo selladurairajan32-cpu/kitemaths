@@ -114,7 +114,7 @@ export function SkyMapScreen() {
       color: "var(--color-leaf)",
       soft: "var(--color-leaf-soft)",
       kicker: "Practice",
-      title: "Power-up practice",
+      title: "Mixed practice",
       line: practiceMet ? "Your skills are strong!" : `Make ${needStrong} skills strong (${strong} so far).`,
       status: practiceMet ? "done" : rec.kind === "practice" && !rec.focusSkill ? "current" : "open",
       reward: 0,

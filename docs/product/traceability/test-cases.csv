@@ -537,3 +537,6 @@ TC-QA-006.3.1,QA-006,AC3,unit,automated,passing,"src/defects.test.ts::blocks rel
 TC-QA-006.3.2,QA-006,AC3,document-review,manual,review-pending,,Rule 2 of QA-006-regression.md and GOV-004.
 TC-QA-007.1.1,QA-007,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
 TC-QA-007.2.1,QA-007,AC2,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-CUR-001.2.3,CUR-001,AC2,unit,automated,passing,"src/curriculum/map.test.ts::keeps the app's objective list (src/curriculum/objectives.ts) in step with the map","Content audit R5 (CH-050): Journey detail shows each lesson's objectives, statutory and 11+ extension labelled separately"
+TC-PARENT-002.1.2,PARENT-002,AC1,unit,automated,passing,"src/engine/engine.test.ts::splits lesson and practice answers into the last 7 days and the 7 before, each answer in exactly one window","Activity over time on the Full report (content audit R4, CH-050)"
+TC-ARCH-001.2.6,ARCH-001,AC2,unit,automated,passing,"src/topics/registry.test.ts::counts only the active island for a new learner, and adds an island once it has an answer","Skill badges follow the islands a learner has started (content audit R3, CH-050)"

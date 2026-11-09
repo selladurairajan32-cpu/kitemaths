@@ -14,6 +14,8 @@ export const routes = {
   lab: () => "/lab",
   parent: () => "/parent",
   parentJourney: () => "/parent/journey",
+  /** For a new grown-up; not behind the gate. */
+  parentAbout: () => "/parent/about",
   results: () => "/results",
   review: () => "/results#review",
 };

@@ -5,6 +5,7 @@ import { completeLesson, createInitialState, inTopic, recordResult, topicLearner
 import { badgesFor, totalStars, STARS } from "@/engine/rewards";
 import type { ItemResult, QuestionBase } from "@/engine/types";
 import { globalId, localId, questionById, TOPICS, topicById, topicIdOf, topicOf } from "./index";
+import { activeTopic, startedTopics } from "./recommend";
 import { WORLDS } from "./worlds";
 
 describe("topic registry", () => {
@@ -127,5 +128,29 @@ describe("a second topic", () => {
       asked.push(sel.question.id);
     }
     expect(asked).toHaveLength(counting.practiceQuestions.length);
+  });
+});
+
+describe("skill badges follow the islands a learner has started (content audit R3)", () => {
+  it("counts only the active island for a new learner, and adds an island once it has an answer", () => {
+    const fresh = createInitialState();
+    const startedIds = (s: typeof fresh) => startedTopics(s).map((t) => t.id);
+    // A new learner has started only the island they are shown first.
+    expect(startedIds(fresh)).toEqual([activeTopic(fresh).id]);
+    const first = activeTopic(fresh);
+    const other = TOPICS.find((t) => t.id !== first.id)!;
+    const answer = (t: typeof first, at: number): ItemResult => ({
+      context: "practice", skill: t.skills[0].id, questionId: t.practiceQuestions[0].id,
+      correct: true, firstTry: true, attempts: 1, hintsUsed: 0, misconceptions: [], at,
+    });
+    // Answering on another island makes it the active one; an untouched first island drops out.
+    const elsewhere = inTopic(fresh, other.id, (t) => recordResult(t, answer(other, 1)));
+    expect(startedIds(elsewhere)).toEqual([other.id]);
+    // With an answer on both islands, both count.
+    const both = inTopic(inTopic(fresh, first.id, (t) => recordResult(t, answer(first, 1))), other.id, (t) => recordResult(t, answer(other, 2)));
+    expect(new Set(startedIds(both))).toEqual(new Set([first.id, other.id]));
+    // Hand-counted oracle: the skill badges are exactly those two islands' skills.
+    const skillBadges = badgesFor(both, startedTopics(both).flatMap((t) => t.skills), 1, 1).filter((b) => b.id.startsWith("skill:"));
+    expect(skillBadges.length).toBe(first.skills.length + other.skills.length);
   });
 });

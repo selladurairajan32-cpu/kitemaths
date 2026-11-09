@@ -7,6 +7,7 @@ import { ScreenSkeleton } from "@/components/ui/Screen";
 import { badgesFor, levelFor, totalStars } from "@/engine/rewards";
 import { useHydrated, useLearner, useNow } from "@/lib/store";
 import { TOPICS } from "@/topics";
+import { startedTopics } from "@/topics/recommend";
 
 export function BadgesScreen() {
   const hydrated = useHydrated();
@@ -16,7 +17,7 @@ export function BadgesScreen() {
 
   const stars = totalStars(learner);
   const level = levelFor(stars);
-  const badges = badgesFor(learner, TOPICS.flatMap((t) => t.skills), TOPICS.reduce((n, t) => n + t.lessons.length, 0), now);
+  const badges = badgesFor(learner, startedTopics(learner).flatMap((t) => t.skills), TOPICS.reduce((n, t) => n + t.lessons.length, 0), now);
   const earned = badges.filter((b) => b.earned);
   // Show the earned ones first, then the closest to being earned.
   const ordered = [...earned, ...badges.filter((b) => !b.earned).sort((a, b) => b.progress - a.progress)];
@@ -27,7 +28,7 @@ export function BadgesScreen() {
         kip={earned.length ? "cheer" : "happy"}
         titleId="badges-title"
         title="Your badges"
-        line={`Your whole collection: ${earned.length} of ${badges.length} won. Badges you've won come first, then the ones you're closest to.`}
+        line={`Your whole collection: ${earned.length} of ${badges.length} won. Badges you've won come first, then the ones you're closest to. Each island you start adds a badge for each of its skills.`}
         aside={
           <div className="flex gap-3">
             <span className="flex items-center gap-2 rounded-[20px] bg-surface px-4 py-3 shadow-[var(--shadow-card)]">

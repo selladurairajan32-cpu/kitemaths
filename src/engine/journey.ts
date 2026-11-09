@@ -30,13 +30,16 @@ export interface TopicDefinition<Q extends QuestionBase = QuestionBase> {
 export const PRACTICE_READY_RESULTS = 8;
 
 type RecommendationBody =
-  | { kind: "lesson"; lessonId: string; resume: boolean; title: string; reason: string }
-  | { kind: "practice"; focusSkill: SkillId | null; title: string; reason: string }
-  | { kind: "assessment"; resume: boolean; title: string; reason: string }
-  | { kind: "recheck"; skill: SkillId; resume: boolean; title: string; reason: string }
-  | { kind: "results"; title: string; reason: string };
+  | { kind: "lesson"; lessonId: string; resume: boolean; title: string; reason: string; parentReason: string }
+  | { kind: "practice"; focusSkill: SkillId | null; title: string; reason: string; parentReason: string }
+  | { kind: "assessment"; resume: boolean; title: string; reason: string; parentReason: string }
+  | { kind: "recheck"; skill: SkillId; resume: boolean; title: string; reason: string; parentReason: string }
+  | { kind: "results"; title: string; reason: string; parentReason: string };
 
-/** What to do next, and in which topic. */
+/**
+ * What to do next, and in which topic. `reason` speaks to the child; `parentReason` says the same to a grown-up, in
+ * the third person, naming the evidence rule behind the choice.
+ */
 export type Recommendation = RecommendationBody & { topicId: string };
 
 export function lessonsCompleted(topic: TopicDefinition, state: TopicLearner): number {
@@ -109,6 +112,7 @@ function recommendInTopic(topic: TopicDefinition, state: TopicLearner): Recommen
       resume: true,
       title: `Finish your recheck: ${skillTitle(state.recheck.skill)}`,
       reason: "You started a short recheck — finish it to update this skill.",
+      parentReason: "A short recheck is in progress. Finishing it updates this skill's label.",
     };
   }
 
@@ -119,6 +123,7 @@ function recommendInTopic(topic: TopicDefinition, state: TopicLearner): Recommen
       resume: true,
       title: "Finish your mastery check",
       reason: "You've started the mastery check — your answers so far are saved.",
+      parentReason: "The mastery check is in progress. The answers so far are saved on this device.",
     };
   }
 
@@ -136,6 +141,7 @@ function recommendInTopic(topic: TopicDefinition, state: TopicLearner): Recommen
         focusSkill: next.skill,
         title: `Practise: ${skillTitle(next.skill)}`,
         reason: "You've finished the lesson. Now show you can do it on your own: answer a few new questions first time, without a hint.",
+        parentReason: "The lesson is finished, but it only counts as done once a new question on its skill is answered right first time, without a hint. A short practice gives that chance.",
       };
     }
     const started = next.status === "in-progress";
@@ -150,6 +156,11 @@ function recommendInTopic(topic: TopicDefinition, state: TopicLearner): Recommen
         : unmet.length
           ? `Best after “${skillTitle(unmet[0])}”, which this lesson builds on. You can start it now, and practise that skill too.`
           : "Each lesson builds on the one before, so this is the best next step.",
+      parentReason: started
+        ? "This lesson is part-way through and picks up where it stopped."
+        : unmet.length
+          ? `This lesson builds on “${skillTitle(unmet[0])}”, which isn't secure yet. It isn't locked, so it can start now; practising that skill as well will help.`
+          : "This is the next lesson in order. Each lesson builds on the one before.",
     };
   }
 
@@ -159,10 +170,13 @@ function recommendInTopic(topic: TopicDefinition, state: TopicLearner): Recommen
       return {
         kind: "practice",
         focusSkill: null,
-        title: "Practise all the skills",
+        title: "Mixed practice",
         reason: weakest
           ? `Lessons complete! Practice will strengthen skills such as “${skillTitle(weakest.skill)}”.`
           : "Lessons complete! A short practice will get you ready for the mastery check.",
+        parentReason: weakest
+          ? `Every lesson is done. Practice now builds the evidence needed before the mastery check; “${skillTitle(weakest.skill)}” is not secure in practice yet.`
+          : "Every lesson is done. A short practice gets the evidence ready for the mastery check.",
       };
     }
     return {
@@ -170,6 +184,7 @@ function recommendInTopic(topic: TopicDefinition, state: TopicLearner): Recommen
       resume: false,
       title: "Take the mastery check",
       reason: "Your practice shows you're ready to show what you know on your own.",
+      parentReason: "Practice evidence is strong enough for the independent mastery check: questions on every skill, with no hints.",
     };
   }
 
@@ -184,12 +199,14 @@ function recommendInTopic(topic: TopicDefinition, state: TopicLearner): Recommen
           resume: false,
           title: `Recheck: ${skillTitle(review.skill)}`,
           reason: "Your practice since the check looks strong. A short independent recheck will confirm it.",
+          parentReason: "The mastery check found this skill needed review. Practice since then looks strong, so a short independent recheck can confirm it.",
         }
       : {
           kind: "practice",
           focusSkill: review.skill,
           title: `Practise: ${skillTitle(review.skill)}`,
           reason: "The mastery check showed this skill needs another look. Practise it, then take a short recheck.",
+          parentReason: "The mastery check found this skill needs review. Practice comes first; a short recheck follows once practice looks strong.",
         };
   }
 
@@ -200,6 +217,7 @@ function recommendInTopic(topic: TopicDefinition, state: TopicLearner): Recommen
       focusSkill: toConfirm.skill,
       title: `Strengthen: ${skillTitle(toConfirm.skill)}`,
       reason: "You got this right in the check. A little more practice will confirm it is secure.",
+      parentReason: "This skill was right in the mastery check, but there isn't yet enough recent practice evidence to call it secure.",
     };
   }
 
@@ -207,6 +225,7 @@ function recommendInTopic(topic: TopicDefinition, state: TopicLearner): Recommen
     kind: "results",
     title: "Review your mastery results",
     reason: "Your latest evidence is strong across the module. See what you've achieved.",
+    parentReason: "The latest evidence is strong across the module. The full report shows the detail.",
   };
 }
 
@@ -252,4 +271,25 @@ export function learningStats(topic: TopicDefinition, state: TopicLearner): Lear
     firstTryRate: scored.length ? scored.filter((r) => r.firstTry).length / scored.length : null,
     hintsUsed: scored.reduce((n, r) => n + r.hintsUsed, 0),
   };
+}
+
+export interface PeriodStats {
+  answered: number;
+  /** Share right first time, as in `learningStats`; null when nothing was answered. */
+  firstTryRate: number | null;
+}
+
+const DAY_MS = 86_400_000;
+
+/**
+ * Lesson and practice answers in the last 7 days against the 7 days before (content audit R4). Both windows end at
+ * `now` and are half-open, so an answer is counted in exactly one: [now − 7d, now) and [now − 14d, now − 7d).
+ */
+export function weeklyComparison(topic: TopicDefinition, state: TopicLearner, now: number): { thisWeek: PeriodStats; lastWeek: PeriodStats } {
+  const scored = topicResults(topic, state.results).filter((r) => r.context === "practice" || r.context === "lesson");
+  const period = (from: number, to: number): PeriodStats => {
+    const rs = scored.filter((r) => r.at >= from && r.at < to);
+    return { answered: rs.length, firstTryRate: rs.length ? rs.filter((r) => r.firstTry).length / rs.length : null };
+  };
+  return { thisWeek: period(now - 7 * DAY_MS, now), lastWeek: period(now - 14 * DAY_MS, now - 7 * DAY_MS) };
 }

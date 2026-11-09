@@ -25,6 +25,7 @@ const PARENT_NAV = [
   { href: routes.parent(), label: "Overview" },
   { href: routes.parentJourney(), label: "Journey detail" },
   { href: routes.results(), label: "Full report" },
+  { href: routes.parentAbout(), label: "About" },
 ];
 
 /** "/t/fractions/practice/compare" → { topicId: "fractions", section: "practice" }. */

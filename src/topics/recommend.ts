@@ -21,3 +21,20 @@ export function activeTopic(state: LearnerState): TopicModule {
   if (!finished(current)) return current;
   return [...TOPICS].sort(mapOrder).find((t) => !finished(t)) ?? current;
 }
+
+/**
+ * The islands a learner has started: the active one, plus any with an answer, lesson progress or a warm-up begun.
+ * Skill badges are counted only for these, so the badge total reflects where the child has been (content audit R3).
+ */
+export function startedTopics(state: LearnerState): TopicModule[] {
+  const active = activeTopic(state).id;
+  return TOPICS.filter((t) => {
+    const p = state.topics[t.id];
+    return (
+      t.id === active ||
+      state.results.some((r) => r.skill.startsWith(`${t.id}.`)) ||
+      Object.keys(p?.lessons ?? {}).length > 0 ||
+      (p?.placement?.status ?? "not-started") !== "not-started"
+    );
+  });
+}

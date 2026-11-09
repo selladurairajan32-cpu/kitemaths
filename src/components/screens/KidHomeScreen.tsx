@@ -20,6 +20,7 @@ import { TOPICS } from "@/topics";
 import { useTopicState } from "@/topics/context";
 import { ActiveTopicProvider } from "@/topics/ActiveTopic";
 import { WORLDS } from "@/topics/worlds";
+import { startedTopics } from "@/topics/recommend";
 import { badgePic } from "@/components/kid/badgePic";
 
 const islandCount = WORLDS.reduce((n, w) => n + w.islands.length, 0);
@@ -71,13 +72,39 @@ function KidHome() {
   const done = lessonsEvidenced(topic, inTopic);
   const evidence = new Map(allLessonEvidence(topic, inTopic).map((e) => [e.lessonId, e]));
   const lessonCount = TOPICS.reduce((n, t) => n + t.lessons.length, 0);
-  const badges = badgesFor(learner, TOPICS.flatMap((t) => t.skills), lessonCount, now);
+  const badges = badgesFor(learner, startedTopics(learner).flatMap((t) => t.skills), lessonCount, now);
   const won = badges.filter((b) => b.earned);
   // Home shows what to aim for next (the closest badges still to win); the Badges page is the whole collection.
   const shelf = [...badges.filter((b) => !b.earned).sort((a, b) => b.progress - a.progress), ...won].slice(0, 6);
   const nextIndex = rec.kind === "lesson" ? topic.lessons.findIndex((l) => l.id === rec.lessonId) : -1;
   const nextIcon = nextIndex >= 0 ? lessonLook(topic.lessons[nextIndex].id).icon : "pizza";
   const nextPic: PicName = isPicName(nextIcon) ? nextIcon : "pizza";
+  // R2 (content audit): the hero's cards describe the next step only. Stars, level and streak live in the stat row.
+  const heroCards: { pic: PicName; title: string; sub: string }[] = brandNew
+    ? [
+        { pic: "map", title: `${topic.lessons.length} lessons`, sub: "on this island" },
+        { pic: "star", title: `+${STARS.lesson} stars`, sub: "for each lesson" },
+      ]
+    : rec.kind === "lesson" && nextIndex >= 0
+      ? [
+          { pic: nextPic, title: `${topic.lessons[nextIndex].steps.length} steps`, sub: "in this lesson" },
+          { pic: "star", title: `+${STARS.lesson} stars`, sub: "when you finish" },
+        ]
+      : rec.kind === "practice"
+        ? [
+            { pic: "target", title: `${PRACTICE_SESSION_LENGTH} questions`, sub: "in a session" },
+            { pic: "star", title: `Up to ${PRACTICE_SESSION_LENGTH * 3}`, sub: "stars to win" },
+          ]
+        : rec.kind === "assessment"
+          ? [
+              { pic: "trophy", title: `+${STARS.check} stars`, sub: "for finishing" },
+              { pic: "medal", title: "No hints", sub: "all by yourself" },
+            ]
+          : rec.kind === "recheck"
+            ? [{ pic: "recheck", title: "A quick recheck", sub: "on one skill" }]
+            : [{ pic: "kite", title: "Island", sub: "complete" }];
+  // R1 (content audit): Home shows the next three unfinished lessons; the island map lists them all.
+  const upcoming = topic.lessons.map((l, i) => ({ l, i })).filter(({ l }) => evidence.get(l.id)!.status !== "evidenced").slice(0, 3);
 
   return (
     <div className="space-y-12 sm:space-y-16">
@@ -132,12 +159,7 @@ function KidHome() {
           </div>
           <HeroArt
             mood={brandNew ? "cheer" : "happy"}
-            cards={[
-              { pic: nextPic, title: nextIndex >= 0 ? `Lesson ${nextIndex + 1}` : topic.title, sub: nextIndex >= 0 ? `of ${topic.lessons.length}` : "island" },
-              { pic: "star", title: `+${STARS.lesson} stars`, sub: "for a lesson" },
-              { pic: "trophy", title: `Level ${level.level + 1}`, sub: `${level.needed - level.into} stars away` },
-              { pic: "flame", title: `${streak.current} day${streak.current === 1 ? "" : "s"}`, sub: "streak" },
-            ]}
+            cards={heroCards}
           />
         </div>
       </section>
@@ -188,11 +210,21 @@ function KidHome() {
         </ul>
       </section>
 
-      {/* The island: one card per lesson, then the big challenge. */}
+      {/* The island: the next lessons, then the big challenge. */}
       <section aria-labelledby="island-title">
-        <SectionHead id="island-title" title={topic.title} line={`${done} of ${topic.lessons.length} lessons done. Finish them all, then take the big challenge.`} href={links.island()} cta="See the map" />
+        <SectionHead
+          id="island-title"
+          title={topic.title}
+          line={
+            upcoming.length === 0
+              ? `All ${topic.lessons.length} lessons done. Next: the big challenge.`
+              : `${done} of ${topic.lessons.length} lessons done. ${upcoming.length === 1 ? "Your last lesson is" : "Your next lessons are"} here; the map shows them all.`
+          }
+          href={links.island()}
+          cta="See the map"
+        />
         <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
-          {topic.lessons.map((l, i) => {
+          {upcoming.map(({ l, i }) => {
             const p = inTopic.lessons[l.id];
             const e = evidence.get(l.id)!;
             const isDone = e.status === "evidenced";

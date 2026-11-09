@@ -6,9 +6,9 @@ import { buttonClass } from "@/components/ui/Button";
 import { ArrowRightIcon, CheckIcon, FlagIcon, StarIcon } from "@/components/ui/Icons";
 import { EvidenceMeter, ProgressBar, ProgressRing, StatusBadge } from "@/components/ui/Progress";
 import { RecommendationLink, recommendationVerb } from "@/components/ui/RecommendationLink";
-import { learningStats, recommendNext, topicResults } from "@/engine/journey";
+import { learningStats, recommendNext, topicResults, weeklyComparison } from "@/engine/journey";
 import { MASTERY_MIN_INDEPENDENT, SECURE_MIN_EVIDENCE, misconceptionReports, skillMastery, type SkillMastery } from "@/engine/mastery";
-import { useHydrated } from "@/lib/store";
+import { useHydrated, useNow } from "@/lib/store";
 import { useTopic, useTopicState } from "@/topics/context";
 import type { AnswerResponse as Response } from "@/topics/types";
 import { ScreenSkeleton } from "@/components/ui/Screen";
@@ -43,12 +43,14 @@ export function ResultsScreen() {
   const { skillById, lessonById, misconceptionById } = topic;
   const { areas: ASSESSMENT_AREAS, item: assessmentItem } = topic.assessment;
   const { Input: QuestionInput, answerText, responseText } = topic.questions;
+  const now = useNow();
   if (!hydrated) return <ScreenSkeleton />;
 
   const mastery = topic.skills.map((s) => skillMastery(s.id, learner.results));
   const reports = misconceptionReports(topicResults(topic, learner.results), topic.misconceptions);
   const rec = recommendNext(topic, learner);
   const stats = learningStats(topic, learner);
+  const weeks = weeklyComparison(topic, learner, now);
   const a = learner.assessment;
   const last = a.last;
 
@@ -150,7 +152,7 @@ export function ResultsScreen() {
             <FlagIcon size={22} className="mt-0.5 shrink-0" />
             <div>
               <p className="font-semibold">{a.status === "in-progress" ? "Mastery check in progress" : "No mastery check yet"}</p>
-              <p className="text-label text-ink-2">Skills can become “secure in practice” through practice. “Mastered” also needs the independent mastery check.</p>
+              <p className="text-label text-ink-2">Skills can become “secure in practice” through practice. “Mastered” also needs the independent mastery check (“the big challenge” in your child&apos;s view).</p>
             </div>
           </div>
           <Link href={routes.assessment()} className={buttonClass("secondary", "md", "shrink-0")}>
@@ -347,7 +349,7 @@ export function ResultsScreen() {
           <h2 id="review-title" className="text-title font-extrabold">
             Mastery check review
           </h2>
-          <p className="mt-1 text-label text-muted">Each question is shown as you saw it, with your answer and the correct answer marked.</p>
+          <p className="mt-1 text-label text-muted">“The big challenge” in your child&apos;s view. Each question is shown as it was seen, with the answer given and the correct answer marked.</p>
           <ol className="mt-4 divide-y divide-line">
             {lastItems.map(({ q, ev, response }, i) => {
               const right = !!ev?.correct;
@@ -413,6 +415,33 @@ export function ResultsScreen() {
           <p className="text-heading-2 font-extrabold tabular-nums">{stats.hintsUsed}</p>
           <p className="text-label text-muted">hints & guided explanations in those answers</p>
         </div>
+      </section>
+
+      {/* R4 (content audit): change over time, which the Overview doesn't show. Each figure names its window. */}
+      <section className="card p-5 sm:p-7" aria-labelledby="trend-title">
+        <h2 id="trend-title" className="text-title font-extrabold">
+          This week against last week
+        </h2>
+        <table className="mt-3 w-full text-label">
+          <caption className="sr-only">Lesson and practice answers in the last 7 days and the 7 days before</caption>
+          <thead>
+            <tr className="border-b border-line text-left text-muted">
+              <th scope="col" className="py-2 pr-3 font-medium">Period</th>
+              <th scope="col" className="py-2 pr-3 text-right font-medium">Answers</th>
+              <th scope="col" className="py-2 text-right font-medium">Right first time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {([["Last 7 days", weeks.thisWeek], ["The 7 days before", weeks.lastWeek]] as const).map(([label, p]) => (
+              <tr key={label} className="border-b border-line last:border-0">
+                <th scope="row" className="py-2 pr-3 text-left font-medium">{label}</th>
+                <td className="py-2 pr-3 text-right tabular-nums">{p.answered}</td>
+                <td className="py-2 text-right tabular-nums">{p.firstTryRate === null ? "—" : `${Math.round(p.firstTryRate * 100)}%`}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="mt-2 text-label text-muted">Lesson and practice answers only. A dash means nothing was answered in that period.</p>
       </section>
     </div>
   );
