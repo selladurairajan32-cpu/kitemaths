@@ -36,7 +36,9 @@ only accepted items may have `accepted` cases. Update `test-cases.csv` in the sa
 ## State (9 Nov 2026)
 
 `docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Last recorded
-decision: D-029 (content changes deployed to production; not accepted). D-028 (content differentiation audit and copy changes, CH-042 to CH-044; audit in
+decision: D-030 (typography and hierarchy audit, CH-046 to CH-048, in
+`docs/product/design/typography-hierarchy-audit.md`; one-off text sizes ratchet now 24; not deployed). D-029 (content
+changes deployed to production; not accepted). D-028 (content differentiation audit and copy changes, CH-042 to CH-044; audit in
 `docs/product/design/content-differentiation-audit.md`, recommendations R1 to R10 await decisions). D-027: R1 deployed
 to production; not accepted. Clarifications to RC-010.
 
