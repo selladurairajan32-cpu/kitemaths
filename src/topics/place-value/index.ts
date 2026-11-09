@@ -1,7 +1,7 @@
 import { defineTopic, genFor, int, pick } from "@/topics/kit/define";
 import { num } from "@/topics/kit/evaluate";
 import type { PlaceColumn, Template, Rng } from "@/topics/kit/types";
-import { PLACE, digitIn } from "@/topics/kit/visuals";
+import { PLACE, digitIn } from "@/maths/place-value";
 import { numberWords } from "@/topics/kit/words";
 
 /** Place value: what each digit is worth, reading and writing big numbers, partitioning, comparing. */

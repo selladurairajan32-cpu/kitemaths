@@ -1,0 +1,136 @@
+// UX-001 pass 2: question-level typography on real learning screens, corrected target sizes,
+// keyboard probe on an interactive maths control, and clean screenshots.
+const { chromium } = require('playwright');
+const fs = require('fs');
+const OUT = __dirname;
+const KA = 'https://www.khanacademy.org/math/arithmetic/fraction-arithmetic/x18ca194a:';
+const T = [
+  { id: 'IXL-P1', url: 'https://uk.ixl.com/maths/year-4/understand-fractions-fraction-bars', prompt: 'Use the fraction bar' },
+  { id: 'IXL-P2', url: 'https://uk.ixl.com/maths/year-4/fractions-of-a-group', prompt: 'What fraction of the shapes' },
+  { id: 'KHAN-P1', url: `${KA}fractions-intro/e/that-s-not-fair-`, prompt: null },
+  { id: 'KHAN-P2', url: `${KA}fractions-on-the-number-line/e/fractions_on_the_number_line_1`, prompt: 'Move the dot', probe: true },
+  { id: 'KITE-L', url: 'https://kitemaths.vercel.app/t/fractions/lesson/wholes/1', prompt: 'is one complete thing' },
+  { id: 'KITE-Q', url: 'https://kitemaths.vercel.app/t/fractions/practice/equal-parts', prompt: 'Which shapes are split', play: true },
+  { id: 'ATOM-M', url: 'https://atomlearning.com/11-plus', atomPreview: true },
+  { id: 'TTRS-M', url: 'https://ttrockstars.com/' },
+  { id: 'DOODLE-M', url: 'https://doodlelearning.com/maths-app' },
+  { id: 'MATHLETICS-M', url: 'https://www.mathletics.com/uk/' },
+  { id: 'POLYPAD-T', url: 'https://polypad.amplify.com/' },
+  { id: 'KITE-H', url: 'https://kitemaths.vercel.app/' },
+];
+
+const PROMPT = (sample) => {
+  const own = (el) => [...el.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join('').trim();
+  const vis = (el) => {
+    const r = el.getBoundingClientRect();
+    const s = getComputedStyle(el);
+    return r.width > 2 && r.height > 2 && s.visibility !== 'hidden' && s.display !== 'none' && parseFloat(s.opacity) > 0;
+  };
+  const lum = (c) => {
+    const m = c.match(/[\d.]+/g);
+    const [r, g, b] = m.slice(0, 3).map((v) => {
+      v = Number(v) / 255;
+      return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const bgOf = (el) => {
+    for (let e = el; e; e = e.parentElement) {
+      const c = getComputedStyle(e).backgroundColor;
+      const a = c.match(/[\d.]+/g);
+      if (a && (a.length < 4 || Number(a[3]) > 0.5)) return c;
+    }
+    return 'rgb(255, 255, 255)';
+  };
+  const info = (el) => {
+    if (!el) return null;
+    const s = getComputedStyle(el);
+    const L1 = lum(s.color);
+    const L2 = lum(bgOf(el));
+    return {
+      text: (el.innerText || own(el)).replace(/\s+/g, ' ').trim().slice(0, 80),
+      font: s.fontFamily.split(',')[0].replace(/["']/g, ''),
+      size: parseFloat(s.fontSize),
+      lineHeight: s.lineHeight,
+      weight: s.fontWeight,
+      contrast: Math.round(((Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05)) * 10) / 10,
+    };
+  };
+  let prompt = null;
+  if (sample) prompt = [...document.querySelectorAll('body *')].find((el) => vis(el) && own(el).includes(sample)) || [...document.querySelectorAll('body *')].find((el) => vis(el) && (el.innerText || '').includes(sample) && el.children.length < 6);
+  // Khan: Perseus question text lives in .perseus-renderer paragraphs.
+  if (!prompt) prompt = [...document.querySelectorAll('.perseus-renderer p, [data-testid="exercise-question-renderer"] p')].find(vis) || null;
+  // Answer choices / buttons inside the main question area.
+  const choices = [...document.querySelectorAll('[role=radio], [role=checkbox], label, button')].filter(vis).filter((el) => (el.innerText || '').trim().length > 0 && (el.innerText || '').trim().length < 40);
+  const sizes = [...new Set(choices.map((c) => Math.round(parseFloat(getComputedStyle(c).fontSize))))].sort((a, b) => a - b);
+  const inter = [...document.querySelectorAll('a,button,input,select,textarea,[role=button],[role=radio],[role=checkbox],[role=slider]')].filter(vis);
+  const inlineLink = (el) => el.tagName === 'A' && el.closest('p,li') && own(el.closest('p,li')).length > 20;
+  const small = inter.filter((el) => !inlineLink(el)).filter((el) => {
+    const r = el.getBoundingClientRect();
+    return r.width < 24 || r.height < 24;
+  });
+  return { prompt: info(prompt), controlTextSizes: sizes, interactive: inter.length, targetsUnder24px: small.length, smallExamples: small.slice(0, 4).map((el) => `${el.tagName.toLowerCase()}:${(el.getAttribute('aria-label') || el.innerText || '').trim().slice(0, 20)}`) };
+};
+
+async function clear(p) {
+  for (const n of [/strictly necessary only/i, /^reject all$/i, /^keep exploring$/i, /^accept$/i, /^close$/i, /^dismiss/i]) {
+    const b = p.getByRole('button', { name: n }).first();
+    if (await b.count().catch(() => 0)) await b.click({ timeout: 2000 }).catch(() => {});
+  }
+  for (const sel of ['button[aria-label="Close"]', 'button[aria-label="Dismiss"]', '.cookie-notice-close', '[aria-label="Close banner"]']) {
+    for (const el of await p.$$(sel)) await el.click({ timeout: 1000 }).catch(() => {});
+  }
+  await p.waitForTimeout(800);
+}
+
+(async () => {
+  const b = await chromium.launch();
+  const out = [];
+  for (const [vw, w, h] of [['desktop', 1280, 800], ['phone', 390, 844]]) {
+    const ctx = await b.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, locale: 'en-GB', isMobile: vw === 'phone', hasTouch: vw === 'phone' });
+    for (const t of T) {
+      const p = await ctx.newPage();
+      const rec = { id: t.id, viewport: vw, url: t.url, observed: new Date().toISOString() };
+      try {
+        await p.goto(t.url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        await p.waitForLoadState('networkidle', { timeout: 20000 }).catch(() => {});
+        await p.waitForTimeout(2500);
+        await clear(p);
+        if (t.play) {
+          await p.getByRole('button', { name: /^Play/ }).first().click({ timeout: 5000 }).catch(() => {});
+          await p.waitForTimeout(1500);
+        }
+        if (t.atomPreview) {
+          await p.mouse.wheel(0, 500);
+          await p.waitForTimeout(4000);
+        }
+        Object.assign(rec, await p.evaluate(PROMPT, t.prompt));
+        if (t.probe && vw === 'desktop') {
+          // Keyboard probe: can the number-line point be moved without a mouse?
+          const handle = p.locator('[role=slider], .graphie-movable-point, [data-testid*="movable-point"], [aria-label*="point" i]').first();
+          rec.probe = { found: (await handle.count()) > 0 };
+          if (rec.probe.found) {
+            const before = await handle.boundingBox();
+            await handle.focus().catch(() => {});
+            rec.probe.focusable = await p.evaluate(() => document.activeElement && document.activeElement !== document.body);
+            await p.keyboard.press('ArrowRight');
+            await p.waitForTimeout(400);
+            const after = await handle.boundingBox();
+            rec.probe.movedWithArrowKey = !!(before && after && Math.abs(after.x - before.x) > 1);
+            rec.probe.role = await handle.getAttribute('role');
+            rec.probe.ariaLabel = await handle.getAttribute('aria-label');
+          }
+        }
+        await p.screenshot({ path: `${OUT}/shots/${t.id}-${vw}-clean.jpg`, type: 'jpeg', quality: 72 });
+      } catch (e) {
+        rec.error = e.message.slice(0, 160);
+      }
+      out.push(rec);
+      console.log(vw, t.id, JSON.stringify(rec.prompt), 'controls', rec.controlTextSizes, 'small', rec.targetsUnder24px, '/', rec.interactive, rec.probe ? JSON.stringify(rec.probe) : '');
+      await p.close();
+    }
+    await ctx.close();
+  }
+  fs.writeFileSync(`${OUT}/results2.json`, JSON.stringify(out, null, 1));
+  await b.close();
+})();

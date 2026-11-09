@@ -1,5 +1,6 @@
 import { defineTopic, genFor, int, pick } from "@/topics/kit/define";
 import type { ChooseOption, Template } from "@/topics/kit/types";
+import { gcd } from "@/maths/fraction";
 
 /** Ratio and algebra: ratio and sharing, scaling recipes, missing numbers and equations, formulas, and sequences. */
 
@@ -8,7 +9,6 @@ const gen = genFor(T);
 const S = { ratio: `${T}.ratio`, scale: `${T}.scaling`, equations: `${T}.equations`, formulas: `${T}.formulas`, sequences: `${T}.sequences` };
 const M = { part: `${T}.ratio-parts`, add: `${T}.adding-not-scaling`, inverse: `${T}.wrong-inverse`, letters: `${T}.letter-next-to-number`, nth: `${T}.position-rule` };
 
-const gcd = (a: number, b: number): number => (b ? gcd(b, a % b) : a);
 function unique(right: string, wrong: ChooseOption[]): ChooseOption[] {
   const out: ChooseOption[] = [{ text: right }];
   for (const w of wrong) if (!out.some((o) => o.text === w.text)) out.push(w);

@@ -1,0 +1,1139 @@
+[
+ {
+  "id": "ATOM-M",
+  "who": "Atom Learning",
+  "kind": "marketing",
+  "url": "https://atomlearning.com/11-plus",
+  "viewport": "desktop",
+  "observed": "2026-11-03T22:31:48.827Z",
+  "status": 200,
+  "banner": "^accept$",
+  "finalUrl": "https://www.atomlearning.com/11-plus",
+  "title": "11 Plus (11+) Exam Preparation | Online Revision & Mock Tests | Atom Learning",
+  "fonts": [
+   "Inter (9226)",
+   "National B Condensed (683)"
+  ],
+  "bodyFont": "Inter",
+  "bodySize": 16,
+  "readingSize": 14,
+  "readingLineHeight": "20px",
+  "readingWeight": "400",
+  "readingSample": "Tell Atom which grammar schools you’re applying to, and we’ll create a",
+  "readingContrast": 11.8,
+  "h1": {
+   "size": 56,
+   "weight": "700",
+   "font": "National B Condensed",
+   "text": "Personalised 11+ preparation that grows with your child"
+  },
+  "minTextSize": 14,
+  "shareTextUnder14px": 0,
+  "textElements": 159,
+  "reducedMotionRules": 0,
+  "stylesheetsUnreadable": 1,
+  "runningAnimations": 3,
+  "sidewaysScroll": false,
+  "interactive": 71,
+  "targetsUnder24px": 25,
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 18
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "nodes": 4
+   }
+  ]
+ },
+ {
+  "id": "TTRS-M",
+  "who": "Times Tables Rock Stars",
+  "kind": "marketing",
+  "url": "https://ttrockstars.com/",
+  "viewport": "desktop",
+  "observed": "2026-11-03T22:31:58.120Z",
+  "status": 200,
+  "banner": "^reject all$",
+  "finalUrl": "https://ttrockstars.com/",
+  "title": "Home - Times Tables Rock Stars",
+  "fonts": [
+   "Open-Sans (3194)",
+   "Roboto (2369)",
+   "Boogaloo (668)",
+   "Roboto Slab (380)"
+  ],
+  "bodyFont": "Open-Sans",
+  "bodySize": 18,
+  "readingSize": 18,
+  "readingLineHeight": "25.2px",
+  "readingWeight": "700",
+  "readingSample": "You know how important it is for your children to learn their times ta",
+  "readingContrast": 12.8,
+  "h1": {
+   "size": 38,
+   "weight": "400",
+   "font": "Boogaloo",
+   "text": "MULTIPLICATION & DIVISION.  SOLVED."
+  },
+  "minTextSize": 12,
+  "shareTextUnder14px": 2,
+  "textElements": 123,
+  "reducedMotionRules": 2,
+  "stylesheetsUnreadable": 1,
+  "runningAnimations": 0,
+  "sidewaysScroll": false,
+  "interactive": 98,
+  "targetsUnder24px": 35,
+  "axe": [
+   {
+    "id": "aria-allowed-attr",
+    "impact": "critical",
+    "nodes": 2
+   },
+   {
+    "id": "target-size",
+    "impact": "serious",
+    "nodes": 2
+   }
+  ]
+ },
+ {
+  "id": "DOODLE-M",
+  "who": "DoodleMaths",
+  "kind": "marketing",
+  "url": "https://doodlelearning.com/maths-app",
+  "viewport": "desktop",
+  "observed": "2026-11-03T22:32:06.654Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://doodlelearning.com/maths-app",
+  "title": "DoodleMaths: The Best Maths App for Kids | DoodleLearning",
+  "fonts": [
+   "Nunito Sans (4884)"
+  ],
+  "bodyFont": "Nunito Sans",
+  "bodySize": 18,
+  "readingSize": 18,
+  "readingLineHeight": "25px",
+  "readingWeight": "400",
+  "readingSample": "Personalised, curriculum-aligned maths practice for Reception, KS1, KS",
+  "readingContrast": 10.4,
+  "h1": null,
+  "minTextSize": 14,
+  "shareTextUnder14px": 0,
+  "textElements": 138,
+  "reducedMotionRules": 77,
+  "stylesheetsUnreadable": 2,
+  "runningAnimations": 0,
+  "sidewaysScroll": true,
+  "interactive": 77,
+  "targetsUnder24px": 14,
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 5
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "nodes": 3
+   }
+  ]
+ },
+ {
+  "id": "MATHLETICS-M",
+  "who": "Mathletics",
+  "kind": "marketing",
+  "url": "https://www.mathletics.com/uk/",
+  "viewport": "desktop",
+  "observed": "2026-11-03T22:32:25.155Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://www.mathletics.com/uk/",
+  "title": "Mathletics United Kingdom | Empowering Maths Learning Online",
+  "fonts": [
+   "Open Sans (4182)",
+   "Montserrat (992)",
+   "awb-icons (32)"
+  ],
+  "bodyFont": "Open Sans",
+  "bodySize": 16,
+  "readingSize": 16,
+  "readingLineHeight": "20px",
+  "readingWeight": "400",
+  "readingSample": "Mathletics provides the perfect level of support and challenge to make",
+  "readingContrast": 6.9,
+  "h1": {
+   "size": 44,
+   "weight": "600",
+   "font": "Montserrat",
+   "text": "The world’s leading online maths program"
+  },
+  "minTextSize": 12,
+  "shareTextUnder14px": 5,
+  "textElements": 79,
+  "reducedMotionRules": 0,
+  "stylesheetsUnreadable": 0,
+  "runningAnimations": 0,
+  "sidewaysScroll": false,
+  "interactive": 42,
+  "targetsUnder24px": 28,
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 2
+   },
+   {
+    "id": "image-alt",
+    "impact": "critical",
+    "nodes": 3
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "nodes": 4
+   },
+   {
+    "id": "target-size",
+    "impact": "serious",
+    "nodes": 4
+   }
+  ]
+ },
+ {
+  "id": "IXL-P1",
+  "who": "IXL",
+  "kind": "product (public practice)",
+  "url": "https://uk.ixl.com/maths/year-4/understand-fractions-fraction-bars",
+  "viewport": "desktop",
+  "observed": "2026-11-03T22:32:36.206Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://uk.ixl.com/maths/year-4/understand-fractions-fraction-bars",
+  "title": "IXL - Understand fractions: fraction bars (Year 4 maths practice)",
+  "fonts": [
+   "Verdana (839)",
+   "ixl-glyphs (315)",
+   "Roboto Slab (142)",
+   "Trebuchet MS (27)"
+  ],
+  "bodyFont": "Verdana",
+  "bodySize": 13,
+  "readingSize": 9,
+  "readingLineHeight": "normal",
+  "readingWeight": "400",
+  "readingSample": "|\n      \n        \n         |\n      \n      \n         |\n      \n      \n  ",
+  "readingContrast": 2.1,
+  "h1": {
+   "size": 12,
+   "weight": "400",
+   "font": "Verdana",
+   "text": "Understand fractions: fraction bars"
+  },
+  "minTextSize": 9,
+  "shareTextUnder14px": 45,
+  "textElements": 92,
+  "reducedMotionRules": 1,
+  "stylesheetsUnreadable": 0,
+  "runningAnimations": 0,
+  "sidewaysScroll": false,
+  "interactive": 56,
+  "targetsUnder24px": 32,
+  "axe": [
+   {
+    "id": "aria-tooltip-name",
+    "impact": "serious",
+    "nodes": 1
+   },
+   {
+    "id": "button-name",
+    "impact": "critical",
+    "nodes": 1
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 30
+   },
+   {
+    "id": "list",
+    "impact": "serious",
+    "nodes": 3
+   },
+   {
+    "id": "listitem",
+    "impact": "serious",
+    "nodes": 6
+   }
+  ]
+ },
+ {
+  "id": "IXL-P2",
+  "who": "IXL",
+  "kind": "product (public practice)",
+  "url": "https://uk.ixl.com/maths/year-4/fractions-of-a-group",
+  "viewport": "desktop",
+  "observed": "2026-11-03T22:32:47.080Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://uk.ixl.com/maths/year-4/fractions-of-a-group",
+  "title": "IXL - Fractions of a group (Year 4 maths practice)",
+  "fonts": [
+   "Verdana (805)",
+   "ixl-glyphs (274)",
+   "Roboto Slab (38)",
+   "Trebuchet MS (27)"
+  ],
+  "bodyFont": "Verdana",
+  "bodySize": 13,
+  "readingSize": 16,
+  "readingLineHeight": "22.4px",
+  "readingWeight": "400",
+  "readingSample": "What fraction of the shapes are circles?",
+  "readingContrast": 21,
+  "h1": {
+   "size": 12,
+   "weight": "400",
+   "font": "Verdana",
+   "text": "Fractions of a group"
+  },
+  "minTextSize": 9,
+  "shareTextUnder14px": 64,
+  "textElements": 64,
+  "reducedMotionRules": 1,
+  "stylesheetsUnreadable": 0,
+  "runningAnimations": 0,
+  "sidewaysScroll": false,
+  "interactive": 52,
+  "targetsUnder24px": 26,
+  "axe": [
+   {
+    "id": "aria-tooltip-name",
+    "impact": "serious",
+    "nodes": 1
+   },
+   {
+    "id": "button-name",
+    "impact": "critical",
+    "nodes": 1
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 25
+   },
+   {
+    "id": "list",
+    "impact": "serious",
+    "nodes": 3
+   },
+   {
+    "id": "listitem",
+    "impact": "serious",
+    "nodes": 6
+   }
+  ]
+ },
+ {
+  "id": "KHAN-P1",
+  "who": "Khan Academy",
+  "kind": "product (public exercise)",
+  "url": "https://www.khanacademy.org/math/arithmetic/fraction-arithmetic/x18ca194a:fractions-intro/e/that-s-not-fair-",
+  "viewport": "desktop",
+  "observed": "2026-11-03T22:32:53.243Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://www.khanacademy.org/math/arithmetic/fraction-arithmetic/x18ca194a:fractions-intro/e/that-s-not-fair-",
+  "title": "Cut shapes into equal parts (practice) | Khan Academy",
+  "fonts": [
+   "Lato (1376)"
+  ],
+  "bodyFont": "Lato",
+  "bodySize": 14,
+  "readingSize": 12,
+  "readingLineHeight": "16px",
+  "readingWeight": "500",
+  "readingSample": "Cookies are small files placed on your device that collect information",
+  "readingContrast": 21,
+  "h1": {
+   "size": 28,
+   "weight": "700",
+   "font": "Lato",
+   "text": "Cut shapes into equal parts"
+  },
+  "minTextSize": 12,
+  "shareTextUnder14px": 21,
+  "textElements": 62,
+  "reducedMotionRules": 0,
+  "stylesheetsUnreadable": 5,
+  "runningAnimations": 0,
+  "sidewaysScroll": false,
+  "interactive": 50,
+  "targetsUnder24px": 16,
+  "axe": []
+ },
+ {
+  "id": "KHAN-P2",
+  "who": "Khan Academy",
+  "kind": "product (public exercise)",
+  "url": "https://www.khanacademy.org/math/arithmetic/fraction-arithmetic/x18ca194a:fractions-on-the-number-line/e/fractions_on_the_number_line_1",
+  "viewport": "desktop",
+  "observed": "2026-11-03T22:33:16.671Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://www.khanacademy.org/math/arithmetic/fraction-arithmetic/x18ca194a:fractions-on-the-number-line/e/fractions_on_the_number_line_1",
+  "title": "Fractions on the number line (practice) | Khan Academy",
+  "fonts": [
+   "Lato (1579)"
+  ],
+  "bodyFont": "Lato",
+  "bodySize": 14,
+  "readingSize": 12,
+  "readingLineHeight": "16px",
+  "readingWeight": "500",
+  "readingSample": "Cookies are small files placed on your device that collect information",
+  "readingContrast": 21,
+  "h1": {
+   "size": 28,
+   "weight": "700",
+   "font": "Lato",
+   "text": "Fractions on the number line"
+  },
+  "minTextSize": 12,
+  "shareTextUnder14px": 21,
+  "textElements": 63,
+  "reducedMotionRules": 0,
+  "stylesheetsUnreadable": 5,
+  "runningAnimations": 0,
+  "sidewaysScroll": false,
+  "interactive": 52,
+  "targetsUnder24px": 16,
+  "axe": []
+ },
+ {
+  "id": "POLYPAD-T",
+  "who": "Polypad (Amplify/Mathigon)",
+  "kind": "tool (public)",
+  "url": "https://polypad.amplify.com/",
+  "viewport": "desktop",
+  "observed": "2026-11-03T22:33:39.927Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://polypad.amplify.com/",
+  "title": "Polypad – The Mathematical Playground",
+  "fonts": [
+   "benton-sans (2755)",
+   "amplify (149)"
+  ],
+  "bodyFont": "benton-sans",
+  "bodySize": 18,
+  "readingSize": 18,
+  "readingLineHeight": "28.8px",
+  "readingWeight": "400",
+  "readingSample": "Congrats to all the winners of our !",
+  "readingContrast": 10.8,
+  "h1": {
+   "size": 42,
+   "weight": "400",
+   "font": "amplify",
+   "text": "Welcome to Polypad!"
+  },
+  "minTextSize": 9,
+  "shareTextUnder14px": 37,
+  "textElements": 117,
+  "reducedMotionRules": 74,
+  "stylesheetsUnreadable": 0,
+  "runningAnimations": 0,
+  "sidewaysScroll": false,
+  "interactive": 31,
+  "targetsUnder24px": 0,
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 26
+   },
+   {
+    "id": "image-alt",
+    "impact": "critical",
+    "nodes": 1
+   }
+  ]
+ },
+ {
+  "id": "KITE-H",
+  "who": "Kite Maths",
+  "kind": "product (home)",
+  "url": "https://kitemaths.vercel.app/",
+  "viewport": "desktop",
+  "observed": "2026-11-03T22:33:47.681Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://kitemaths.vercel.app/",
+  "title": "Home · Kite Maths",
+  "fonts": [
+   "Nunito (1293)"
+  ],
+  "bodyFont": "Nunito",
+  "bodySize": 18,
+  "readingSize": 18,
+  "readingLineHeight": "28px",
+  "readingWeight": "500",
+  "readingSample": "0 of 8 lessons done. Finish them all, then take the big challenge.",
+  "readingContrast": 6.9,
+  "h1": {
+   "size": 48,
+   "weight": "800",
+   "font": "Nunito",
+   "text": "I'm Kip. Let's find your start!"
+  },
+  "minTextSize": 15,
+  "shareTextUnder14px": 0,
+  "textElements": 87,
+  "reducedMotionRules": 1,
+  "stylesheetsUnreadable": 0,
+  "runningAnimations": 2,
+  "sidewaysScroll": false,
+  "interactive": 28,
+  "targetsUnder24px": 1,
+  "axe": []
+ },
+ {
+  "id": "KITE-L",
+  "who": "Kite Maths",
+  "kind": "product (lesson)",
+  "url": "https://kitemaths.vercel.app/t/fractions/lesson/wholes/1",
+  "viewport": "desktop",
+  "observed": "2026-11-03T22:33:53.775Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://kitemaths.vercel.app/t/fractions/lesson/wholes/1",
+  "title": "Wholes and equal parts · step 1 · Kite Maths",
+  "fonts": [
+   "Nunito (626)"
+  ],
+  "bodyFont": "Nunito",
+  "bodySize": 18,
+  "readingSize": 18,
+  "readingLineHeight": "29.25px",
+  "readingWeight": "500",
+  "readingSample": "A  is one complete thing: a whole pizza, a whole chocolate bar, a whol",
+  "readingContrast": 7.3,
+  "h1": {
+   "size": 32,
+   "weight": "800",
+   "font": "Nunito",
+   "text": "Everything starts with a whole"
+  },
+  "minTextSize": 15,
+  "shareTextUnder14px": 0,
+  "textElements": 21,
+  "reducedMotionRules": 1,
+  "stylesheetsUnreadable": 0,
+  "runningAnimations": 1,
+  "sidewaysScroll": false,
+  "interactive": 13,
+  "targetsUnder24px": 1,
+  "axe": []
+ },
+ {
+  "id": "KITE-Q",
+  "who": "Kite Maths",
+  "kind": "product (practice question)",
+  "url": "https://kitemaths.vercel.app/t/fractions/practice/equal-parts",
+  "viewport": "desktop",
+  "observed": "2026-11-03T22:33:58.201Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://kitemaths.vercel.app/t/fractions/practice/equal-parts",
+  "title": "Practise Wholes and equal parts · Kite Maths",
+  "fonts": [
+   "Nunito (169)"
+  ],
+  "bodyFont": "Nunito",
+  "bodySize": 18,
+  "readingSize": 28,
+  "readingLineHeight": "38.5px",
+  "readingWeight": "800",
+  "readingSample": "Which shapes are split into ? Select all that are.",
+  "readingContrast": 14.4,
+  "h1": {
+   "size": 15,
+   "weight": "600",
+   "font": "Nunito",
+   "text": "Wholes and equal parts · Question 1 of 100"
+  },
+  "minTextSize": 15,
+  "shareTextUnder14px": 0,
+  "textElements": 9,
+  "reducedMotionRules": 1,
+  "stylesheetsUnreadable": 0,
+  "runningAnimations": 0,
+  "sidewaysScroll": false,
+  "interactive": 12,
+  "targetsUnder24px": 5,
+  "axe": []
+ },
+ {
+  "id": "ATOM-M",
+  "who": "Atom Learning",
+  "kind": "marketing",
+  "url": "https://atomlearning.com/11-plus",
+  "viewport": "phone",
+  "observed": "2026-11-03T22:34:04.829Z",
+  "status": 200,
+  "banner": "^accept$",
+  "finalUrl": "https://www.atomlearning.com/11-plus",
+  "title": "11 Plus (11+) Exam Preparation | Online Revision & Mock Tests | Atom Learning",
+  "fonts": [
+   "Inter (8622)",
+   "National B Condensed (453)"
+  ],
+  "bodyFont": "Inter",
+  "bodySize": 16,
+  "readingSize": 12.8,
+  "readingLineHeight": "19.2px",
+  "readingWeight": "400",
+  "readingSample": "Tell Atom which grammar schools you’re applying to, and we’ll create a",
+  "readingContrast": 11.8,
+  "h1": {
+   "size": 48,
+   "weight": "700",
+   "font": "National B Condensed",
+   "text": "Personalised 11+ preparation that grows with your child"
+  },
+  "minTextSize": 12.8,
+  "shareTextUnder14px": 25,
+  "textElements": 134,
+  "reducedMotionRules": 0,
+  "stylesheetsUnreadable": 1,
+  "runningAnimations": 1,
+  "sidewaysScroll": false,
+  "interactive": 57,
+  "targetsUnder24px": 25,
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 7
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "nodes": 3
+   },
+   {
+    "id": "scrollable-region-focusable",
+    "impact": "serious",
+    "nodes": 1
+   }
+  ]
+ },
+ {
+  "id": "TTRS-M",
+  "who": "Times Tables Rock Stars",
+  "kind": "marketing",
+  "url": "https://ttrockstars.com/",
+  "viewport": "phone",
+  "observed": "2026-11-03T22:34:14.517Z",
+  "status": 200,
+  "banner": "^reject all$",
+  "finalUrl": "https://ttrockstars.com/",
+  "title": "Home - Times Tables Rock Stars",
+  "fonts": [
+   "Open-Sans (3194)",
+   "Roboto (2369)",
+   "Boogaloo (668)",
+   "Roboto Slab (380)"
+  ],
+  "bodyFont": "Open-Sans",
+  "bodySize": 14,
+  "readingSize": 14,
+  "readingLineHeight": "19.6px",
+  "readingWeight": "700",
+  "readingSample": "You know how important it is for your children to learn their times ta",
+  "readingContrast": 12.8,
+  "h1": {
+   "size": 11,
+   "weight": "400",
+   "font": "Boogaloo",
+   "text": "MULTIPLICATION & DIVISION.  SOLVED."
+  },
+  "minTextSize": 11,
+  "shareTextUnder14px": 3,
+  "textElements": 123,
+  "reducedMotionRules": 2,
+  "stylesheetsUnreadable": 1,
+  "runningAnimations": 0,
+  "sidewaysScroll": false,
+  "interactive": 84,
+  "targetsUnder24px": 38,
+  "axe": [
+   {
+    "id": "aria-allowed-attr",
+    "impact": "critical",
+    "nodes": 2
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 1
+   },
+   {
+    "id": "target-size",
+    "impact": "serious",
+    "nodes": 8
+   }
+  ]
+ },
+ {
+  "id": "DOODLE-M",
+  "who": "DoodleMaths",
+  "kind": "marketing",
+  "url": "https://doodlelearning.com/maths-app",
+  "viewport": "phone",
+  "observed": "2026-11-03T22:34:22.689Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://doodlelearning.com/maths-app",
+  "title": "DoodleMaths: The Best Maths App for Kids | DoodleLearning",
+  "fonts": [
+   "Nunito Sans (3839)"
+  ],
+  "bodyFont": "Nunito Sans",
+  "bodySize": 18,
+  "readingSize": 18,
+  "readingLineHeight": "25px",
+  "readingWeight": "400",
+  "readingSample": "Personalised, curriculum-aligned maths practice for Reception, KS1, KS",
+  "readingContrast": 10.4,
+  "h1": null,
+  "minTextSize": 16,
+  "shareTextUnder14px": 0,
+  "textElements": 102,
+  "reducedMotionRules": 77,
+  "stylesheetsUnreadable": 2,
+  "runningAnimations": 0,
+  "sidewaysScroll": false,
+  "interactive": 60,
+  "targetsUnder24px": 12,
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 4
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "nodes": 3
+   }
+  ]
+ },
+ {
+  "id": "MATHLETICS-M",
+  "who": "Mathletics",
+  "kind": "marketing",
+  "url": "https://www.mathletics.com/uk/",
+  "viewport": "phone",
+  "observed": "2026-11-03T22:34:37.313Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://www.mathletics.com/uk/",
+  "title": "Mathletics United Kingdom | Empowering Maths Learning Online",
+  "fonts": [
+   "Open Sans (3935)",
+   "Montserrat (1169)",
+   "awb-icons (32)"
+  ],
+  "bodyFont": "Open Sans",
+  "bodySize": 16,
+  "readingSize": 16,
+  "readingLineHeight": "24px",
+  "readingWeight": "400",
+  "readingSample": "Transform the way your students learn maths with Mathletics, the world",
+  "readingContrast": 17.6,
+  "h1": {
+   "size": 27.1568,
+   "weight": "600",
+   "font": "Montserrat",
+   "text": "The world’s leading online maths program"
+  },
+  "minTextSize": 12,
+  "shareTextUnder14px": 4,
+  "textElements": 72,
+  "reducedMotionRules": 0,
+  "stylesheetsUnreadable": 0,
+  "runningAnimations": 0,
+  "sidewaysScroll": false,
+  "interactive": 38,
+  "targetsUnder24px": 29,
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 3
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "nodes": 4
+   },
+   {
+    "id": "target-size",
+    "impact": "serious",
+    "nodes": 4
+   }
+  ]
+ },
+ {
+  "id": "IXL-P1",
+  "who": "IXL",
+  "kind": "product (public practice)",
+  "url": "https://uk.ixl.com/maths/year-4/understand-fractions-fraction-bars",
+  "viewport": "phone",
+  "observed": "2026-11-03T22:35:04.398Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://uk.ixl.com/maths/year-4/understand-fractions-fraction-bars",
+  "title": "IXL - Understand fractions: fraction bars (Year 4 maths practice)",
+  "fonts": [
+   "Verdana (635)",
+   "ixl-glyphs (315)",
+   "Roboto Slab (115)",
+   "Roboto (48)"
+  ],
+  "bodyFont": "Verdana",
+  "bodySize": 13,
+  "readingSize": 9,
+  "readingLineHeight": "normal",
+  "readingWeight": "400",
+  "readingSample": "|\n      \n        \n         |\n      \n      \n         |\n      \n      \n  ",
+  "readingContrast": 2.1,
+  "h1": {
+   "size": 10.5,
+   "weight": "400",
+   "font": "Roboto",
+   "text": "Understand fractions: fraction bars"
+  },
+  "minTextSize": 9,
+  "shareTextUnder14px": 34,
+  "textElements": 73,
+  "reducedMotionRules": 1,
+  "stylesheetsUnreadable": 0,
+  "runningAnimations": 0,
+  "sidewaysScroll": false,
+  "interactive": 42,
+  "targetsUnder24px": 30,
+  "axe": [
+   {
+    "id": "button-name",
+    "impact": "critical",
+    "nodes": 1
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 20
+   }
+  ]
+ },
+ {
+  "id": "IXL-P2",
+  "who": "IXL",
+  "kind": "product (public practice)",
+  "url": "https://uk.ixl.com/maths/year-4/fractions-of-a-group",
+  "viewport": "phone",
+  "observed": "2026-11-03T22:35:15.048Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://uk.ixl.com/maths/year-4/fractions-of-a-group",
+  "title": "IXL - Fractions of a group (Year 4 maths practice)",
+  "fonts": [
+   "Verdana (616)",
+   "ixl-glyphs (284)",
+   "Trebuchet MS (41)",
+   "Roboto (33)"
+  ],
+  "bodyFont": "Verdana",
+  "bodySize": 13,
+  "readingSize": 16,
+  "readingLineHeight": "22.4px",
+  "readingWeight": "400",
+  "readingSample": "What fraction of the shapes are triangles?",
+  "readingContrast": 21,
+  "h1": {
+   "size": 10.5,
+   "weight": "400",
+   "font": "Roboto",
+   "text": "Fractions of a group"
+  },
+  "minTextSize": 9,
+  "shareTextUnder14px": 56,
+  "textElements": 43,
+  "reducedMotionRules": 1,
+  "stylesheetsUnreadable": 0,
+  "runningAnimations": 0,
+  "sidewaysScroll": false,
+  "interactive": 37,
+  "targetsUnder24px": 24,
+  "axe": [
+   {
+    "id": "button-name",
+    "impact": "critical",
+    "nodes": 1
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 15
+   }
+  ]
+ },
+ {
+  "id": "KHAN-P1",
+  "who": "Khan Academy",
+  "kind": "product (public exercise)",
+  "url": "https://www.khanacademy.org/math/arithmetic/fraction-arithmetic/x18ca194a:fractions-intro/e/that-s-not-fair-",
+  "viewport": "phone",
+  "observed": "2026-11-03T22:35:21.392Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://www.khanacademy.org/math/arithmetic/fraction-arithmetic/x18ca194a:fractions-intro/e/that-s-not-fair-",
+  "title": "Cut shapes into equal parts (practice) | Khan Academy",
+  "fonts": [
+   "Lato (1092)"
+  ],
+  "bodyFont": "Lato",
+  "bodySize": 14,
+  "readingSize": 12,
+  "readingLineHeight": "16px",
+  "readingWeight": "500",
+  "readingSample": "Cookies are small files placed on your device that collect information",
+  "readingContrast": 21,
+  "h1": {
+   "size": 16,
+   "weight": "700",
+   "font": "Lato",
+   "text": "Cut shapes into equal parts"
+  },
+  "minTextSize": 12,
+  "shareTextUnder14px": 15,
+  "textElements": 40,
+  "reducedMotionRules": 0,
+  "stylesheetsUnreadable": 5,
+  "runningAnimations": 0,
+  "sidewaysScroll": false,
+  "interactive": 30,
+  "targetsUnder24px": 6,
+  "axe": []
+ },
+ {
+  "id": "KHAN-P2",
+  "who": "Khan Academy",
+  "kind": "product (public exercise)",
+  "url": "https://www.khanacademy.org/math/arithmetic/fraction-arithmetic/x18ca194a:fractions-on-the-number-line/e/fractions_on_the_number_line_1",
+  "viewport": "phone",
+  "observed": "2026-11-03T22:35:44.744Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://www.khanacademy.org/math/arithmetic/fraction-arithmetic/x18ca194a:fractions-on-the-number-line/e/fractions_on_the_number_line_1",
+  "title": "Fractions on the number line (practice) | Khan Academy",
+  "fonts": [
+   "Lato (1121)"
+  ],
+  "bodyFont": "Lato",
+  "bodySize": 14,
+  "readingSize": 12,
+  "readingLineHeight": "16px",
+  "readingWeight": "500",
+  "readingSample": "Cookies are small files placed on your device that collect information",
+  "readingContrast": 21,
+  "h1": {
+   "size": 16,
+   "weight": "700",
+   "font": "Lato",
+   "text": "Fractions on the number line"
+  },
+  "minTextSize": 12,
+  "shareTextUnder14px": 16,
+  "textElements": 37,
+  "reducedMotionRules": 0,
+  "stylesheetsUnreadable": 5,
+  "runningAnimations": 0,
+  "sidewaysScroll": false,
+  "interactive": 28,
+  "targetsUnder24px": 6,
+  "axe": []
+ },
+ {
+  "id": "POLYPAD-T",
+  "who": "Polypad (Amplify/Mathigon)",
+  "kind": "tool (public)",
+  "url": "https://polypad.amplify.com/",
+  "viewport": "phone",
+  "observed": "2026-11-03T22:36:07.992Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://polypad.amplify.com/",
+  "title": "Polypad – The Mathematical Playground",
+  "fonts": [
+   "benton-sans (2639)",
+   "amplify (149)"
+  ],
+  "bodyFont": "benton-sans",
+  "bodySize": 18,
+  "readingSize": 18,
+  "readingLineHeight": "28.8px",
+  "readingWeight": "400",
+  "readingSample": "Congrats to all the winners of our !",
+  "readingContrast": 10.8,
+  "h1": {
+   "size": 42,
+   "weight": "400",
+   "font": "amplify",
+   "text": "Welcome to Polypad!"
+  },
+  "minTextSize": 12,
+  "shareTextUnder14px": 13,
+  "textElements": 71,
+  "reducedMotionRules": 74,
+  "stylesheetsUnreadable": 0,
+  "runningAnimations": 0,
+  "sidewaysScroll": false,
+  "interactive": 30,
+  "targetsUnder24px": 0,
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 26
+   },
+   {
+    "id": "image-alt",
+    "impact": "critical",
+    "nodes": 1
+   }
+  ]
+ },
+ {
+  "id": "KITE-H",
+  "who": "Kite Maths",
+  "kind": "product (home)",
+  "url": "https://kitemaths.vercel.app/",
+  "viewport": "phone",
+  "observed": "2026-11-03T22:36:14.866Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://kitemaths.vercel.app/",
+  "title": "Home · Kite Maths",
+  "fonts": [
+   "Nunito (1277)"
+  ],
+  "bodyFont": "Nunito",
+  "bodySize": 18,
+  "readingSize": 18,
+  "readingLineHeight": "28px",
+  "readingWeight": "500",
+  "readingSample": "A short warm-up game shows me which fraction lessons you already know,",
+  "readingContrast": 6.6,
+  "h1": {
+   "size": 34,
+   "weight": "800",
+   "font": "Nunito",
+   "text": "I'm Kip. Let's find your start!"
+  },
+  "minTextSize": 15,
+  "shareTextUnder14px": 0,
+  "textElements": 85,
+  "reducedMotionRules": 1,
+  "stylesheetsUnreadable": 0,
+  "runningAnimations": 2,
+  "sidewaysScroll": false,
+  "interactive": 27,
+  "targetsUnder24px": 1,
+  "axe": []
+ },
+ {
+  "id": "KITE-L",
+  "who": "Kite Maths",
+  "kind": "product (lesson)",
+  "url": "https://kitemaths.vercel.app/t/fractions/lesson/wholes/1",
+  "viewport": "phone",
+  "observed": "2026-11-03T22:36:20.509Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://kitemaths.vercel.app/t/fractions/lesson/wholes/1",
+  "title": "Wholes and equal parts · step 1 · Kite Maths",
+  "fonts": [
+   "Nunito (503)"
+  ],
+  "bodyFont": "Nunito",
+  "bodySize": 18,
+  "readingSize": 18,
+  "readingLineHeight": "29.25px",
+  "readingWeight": "500",
+  "readingSample": "A  is one complete thing: a whole pizza, a whole chocolate bar, a whol",
+  "readingContrast": 7.3,
+  "h1": {
+   "size": 28,
+   "weight": "800",
+   "font": "Nunito",
+   "text": "Everything starts with a whole"
+  },
+  "minTextSize": 15,
+  "shareTextUnder14px": 0,
+  "textElements": 16,
+  "reducedMotionRules": 1,
+  "stylesheetsUnreadable": 0,
+  "runningAnimations": 1,
+  "sidewaysScroll": false,
+  "interactive": 7,
+  "targetsUnder24px": 1,
+  "axe": []
+ },
+ {
+  "id": "KITE-Q",
+  "who": "Kite Maths",
+  "kind": "product (practice question)",
+  "url": "https://kitemaths.vercel.app/t/fractions/practice/equal-parts",
+  "viewport": "phone",
+  "observed": "2026-11-03T22:36:24.707Z",
+  "status": 200,
+  "banner": null,
+  "finalUrl": "https://kitemaths.vercel.app/t/fractions/practice/equal-parts",
+  "title": "Practise Wholes and equal parts · Kite Maths",
+  "fonts": [
+   "Nunito (169)"
+  ],
+  "bodyFont": "Nunito",
+  "bodySize": 18,
+  "readingSize": 24,
+  "readingLineHeight": "33px",
+  "readingWeight": "800",
+  "readingSample": "Which shapes are split into ? Select all that are.",
+  "readingContrast": 14.4,
+  "h1": {
+   "size": 15,
+   "weight": "600",
+   "font": "Nunito",
+   "text": "Wholes and equal parts · Question 1 of 100"
+  },
+  "minTextSize": 15,
+  "shareTextUnder14px": 0,
+  "textElements": 9,
+  "reducedMotionRules": 1,
+  "stylesheetsUnreadable": 0,
+  "runningAnimations": 0,
+  "sidewaysScroll": false,
+  "interactive": 11,
+  "targetsUnder24px": 5,
+  "axe": []
+ }
+]

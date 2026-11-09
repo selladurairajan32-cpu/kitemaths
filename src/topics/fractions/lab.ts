@@ -1,7 +1,7 @@
 import type { Fraction } from "./math";
 import { compare, equivalent, sameFraction } from "./math";
 
-export type LabMode = "build" | "compare" | "equivalent";
+export type LabMode = "build" | "compare" | "equivalent" | "line";
 
 export type LabCheck =
   | { kind: "make"; target: Fraction; parts?: number }

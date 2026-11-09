@@ -1,6 +1,7 @@
 import { defineTopic, genFor, int, pick } from "@/topics/kit/define";
 import { num } from "@/topics/kit/evaluate";
 import type { Template } from "@/topics/kit/types";
+import { factors } from "@/maths/integer";
 
 /** Multiply and divide: by 10, 100 and 1,000, short and long multiplication, division with remainders, factors. */
 
@@ -12,9 +13,6 @@ const M = { zeros: `${T}.zeros`, carry: `${T}.no-carry`, tensPlace: `${T}.tens-p
 /** Each digit times m, keeping only the ones digit (no carrying). */
 function noCarryProduct(n: number, m: number) {
   return Number(String(n).split("").map((d) => (Number(d) * m) % 10).join(""));
-}
-function factors(n: number) {
-  return Array.from({ length: n }, (_, i) => i + 1).filter((d) => n % d === 0);
 }
 
 const templates: Template[] = [

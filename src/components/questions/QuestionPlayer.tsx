@@ -193,6 +193,7 @@ export function QuestionPlayer({
   index,
   orderKey,
   autoFocus = false,
+  autoHint = true,
 }: {
   question: Question;
   context: ResultContext;
@@ -203,6 +204,8 @@ export function QuestionPlayer({
   index?: number;
   orderKey?: string;
   autoFocus?: boolean;
+  /** FR-010: false once the skill is secure, so a hint is offered rather than shown. */
+  autoHint?: boolean;
 }) {
   const topic = useTopic();
   const { Input: QuestionInput, evaluate, inputProblem, isComplete: isResponseComplete, answerText } = topic.questions;
@@ -212,7 +215,7 @@ export function QuestionPlayer({
   const [problem, setProblem] = useState<string | null>(null);
   const [state, dispatch] = useReducer(
     (s: RecoveryState, e: Parameters<typeof recoveryReducer>[1]) =>
-      recoveryReducer(s, e, { followUpFor: (suspected) => followUpFor(suspected, usedFollowUps) }),
+      recoveryReducer(s, e, { followUpFor: (suspected) => followUpFor(suspected, usedFollowUps), autoHint }),
     initialRecovery,
   );
   const [episodeId] = useState(() => newEpisodeId(q.id));
@@ -220,6 +223,12 @@ export function QuestionPlayer({
   const [completed, setCompleted] = useState(false);
   const [returned, setReturned] = useState(0);
   const [scope, animateEl] = useAnimate<HTMLFormElement>();
+  // ARCH-005: what was answered last, and how long the question took.
+  const lastResponse = useRef<AnswerResponse | null>(null);
+  const shownAt = useRef<number | null>(null);
+  useEffect(() => {
+    shownAt.current = Date.now();
+  }, []);
   const reduceMotion = useReducedMotion();
 
   const answering = state.stage === "answering";
@@ -234,6 +243,7 @@ export function QuestionPlayer({
       return;
     }
     const evaluation = evaluate(q, response);
+    lastResponse.current = response;
     playSound(evaluation.correct ? "correct" : "tryAgain");
     if (!evaluation.correct && !reduceMotion && scope.current) void animateEl(scope.current, { x: [0, -8, 8, -6, 6, 0] }, { duration: 0.4 });
     dispatch({ type: "submit", evaluation });
@@ -248,7 +258,17 @@ export function QuestionPlayer({
     if (completed) return;
     setCompleted(true);
     const s = recoverySummary(state);
-    onComplete({ id: episodeId, questionId: q.id, skill: q.skill, context, difficulty: q.difficulty, ...s });
+    const durationMs = shownAt.current === null ? undefined : Math.max(0, Date.now() - shownAt.current);
+    onComplete({
+      id: episodeId,
+      questionId: q.id,
+      skill: q.skill,
+      context,
+      difficulty: q.difficulty,
+      ...s,
+      ...(lastResponse.current ? { response: JSON.parse(JSON.stringify(lastResponse.current)) as unknown } : {}),
+      ...(durationMs !== undefined ? { durationMs } : {}),
+    });
   };
 
   const followUp = state.followUpId ? questionById(state.followUpId) : null;
@@ -296,7 +316,7 @@ export function QuestionPlayer({
         )}
 
         {answering && (
-          <div className="sticky bottom-0 z-10 -mx-5 flex items-center justify-between gap-3 rounded-b-[28px] border-t border-line bg-surface px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 sm:static sm:mx-0 sm:rounded-none sm:border-0 sm:p-0">
+          <div className="sticky bottom-0 z-10 -mx-5 flex flex-wrap items-center justify-between gap-3 rounded-b-[28px] border-t border-line bg-surface px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 sm:static sm:mx-0 sm:rounded-none sm:border-0 sm:p-0">
             {q.hint && !state.hintVisible ? (
               <Button variant="quiet" size="lg" onClick={() => dispatch({ type: "request-hint" })} className="shrink-0">
                 <BulbIcon size={20} /> Hint

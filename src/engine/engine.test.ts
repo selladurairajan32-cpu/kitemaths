@@ -313,8 +313,12 @@ describe("journey recommendations", () => {
     s = goToStep(s, "wholes", 2);
     expect(recommendNext(FRACTIONS_TOPIC, s)).toMatchObject({ kind: "lesson", resume: true });
     for (const l of FRACTIONS_TOPIC.lessons) s = completeLesson(s, l.id, 1);
-    expect(recommendNext(FRACTIONS_TOPIC, s).kind).toBe("practice");
-    for (const skill of SKILL_ORDER.slice(0, 4)) {
+    // Traversal alone is not evidence (FR-011 AC3): practice on the first lesson's skill comes next.
+    expect(recommendNext(FRACTIONS_TOPIC, s)).toMatchObject({ kind: "practice", focusSkill: "fractions.equal-parts" });
+    // One independent practice answer per skill evidences each lesson (CUR-002 §4.1); then the milestone practice.
+    for (const skill of SKILL_ORDER) s = recordResult(s, result({ skill }));
+    expect(recommendNext(FRACTIONS_TOPIC, s)).toMatchObject({ kind: "practice", focusSkill: null });
+    for (const skill of SKILL_ORDER.slice(0, Math.ceil(SKILL_ORDER.length / 2))) {
       for (let i = 0; i < 3; i++) s = recordResult(s, result({ skill }));
     }
     expect(isPracticeMilestoneMet(FRACTIONS_TOPIC, s)).toBe(true);

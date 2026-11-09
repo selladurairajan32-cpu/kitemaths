@@ -1,0 +1,12 @@
+contrast: 268 elements checked, 11 below minimum
+  FAIL span "3" 4.181 < 4.5 (rgb(47, 111, 216) on rgb(232, 240, 255), 16.56px/600)
+  FAIL span "5" 4.181 < 4.5 (rgb(47, 111, 216) on rgb(232, 240, 255), 16.56px/600)
+  FAIL p "Watch me" 4.291 < 4.5 (rgb(255, 255, 255) on rgb(20, 137, 123), 15px/800)
+  FAIL span "4" 4.278 < 4.5 (rgb(47, 111, 216) on rgb(228, 246, 242), 16.56px/600)
+  FAIL span "4" 4.278 < 4.5 (rgb(47, 111, 216) on rgb(228, 246, 242), 16.56px/600)
+  FAIL span "8" 4.292 < 4.5 (rgb(47, 111, 216) on rgb(255, 240, 227), 16.56px/600)
+  FAIL span "3" 4.292 < 4.5 (rgb(47, 111, 216) on rgb(255, 240, 227), 16.56px/600)
+  FAIL span "5" 4.315 < 4.5 (rgb(47, 111, 216) on rgb(227, 248, 238), 16.56px/600)
+  FAIL span "3" 4.315 < 4.5 (rgb(47, 111, 216) on rgb(227, 248, 238), 16.56px/600)
+  FAIL p "Challenge" 2.450 < 4.5 (rgb(255, 255, 255) on rgb(217, 154, 0), 15px/800)
+  FAIL svg "" 2.450 < 3 (rgb(255, 255, 255) on rgb(217, 154, 0), 15px/800)

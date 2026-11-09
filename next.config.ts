@@ -15,13 +15,8 @@ const nextConfig: NextConfig = {
       { source: "/practice/:skill", destination: `${t}/practice/:skill`, permanent: true },
       { source: "/assessment", destination: `${t}/check`, permanent: true },
       { source: "/assessment/recheck/:skill", destination: `${t}/recheck/:skill`, permanent: true },
-      // Hubs: for now they open the first island; they'll become pickers as islands are added.
-      { source: "/practice", destination: `${t}/practice`, permanent: false },
-      { source: "/lab", destination: `${t}/lab`, permanent: false },
-      { source: "/start", destination: `${t}/start`, permanent: false },
-      // Design previews (static pages in public/preview), for the owner to check.
-      { source: "/sky", destination: "/preview/sky/index.html", permanent: false },
-      { source: "/crystal", destination: "/preview/crystal/index.html", permanent: false },
+      // The hubs /practice, /lab and /start are pages that open the learner's current island (DEF-014).
+      // The design mock-ups are no longer public (DEF-016): they are in docs/design-previews/.
     ];
   },
   cacheComponents: true,

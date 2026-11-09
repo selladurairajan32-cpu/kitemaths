@@ -81,7 +81,7 @@ export const STATUS_META: Record<SkillStatus, { label: string; className: string
   "not-started": { label: "Not started", className: "bg-sunk text-muted", dot: "bg-line-strong" },
   developing: { label: "Developing", className: "bg-warn-soft text-warn", dot: "bg-warn" },
   secure: { label: "Secure in practice", className: "bg-den-soft text-den-strong", dot: "bg-den" },
-  "passed-check": { label: "Passed check", className: "bg-violet-soft text-violet", dot: "bg-violet" },
+  "passed-check": { label: "Passed check", className: "bg-example-soft text-example-ink", dot: "bg-example-ink" },
   mastered: { label: "Mastered", className: "bg-ok-soft text-ok", dot: "bg-ok" },
   "needs-review": { label: "Needs review", className: "bg-num-soft text-num-strong", dot: "bg-num" },
 };

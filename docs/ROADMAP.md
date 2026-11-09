@@ -1,5 +1,15 @@
 # Kite Maths — roadmap for the full KS2 + 11+ platform
 
+> **Background document. Not the source of truth.**
+> - This roadmap predates product backlog v1.0 (3 November 2026).
+> - Scope, priorities, releases, acceptance criteria and status now live in
+>   [`docs/product/`](product/README.md). Where this file disagrees with them, `docs/product/` wins
+>   (decision D-007).
+> - Known stale parts: the "Context" and "What blocks scaling today" sections; the milestone
+>   sequencing (content ran ahead of M2–M4); "6–10 lessons per island" (islands have 4–6); and
+>   critical-file names that don't exist (`src/questions/kinds/*`).
+> - Kept for the long-term vision and the competitor strategy.
+
 ## Context
 
 Kite Maths is live (kitemaths.vercel.app) with one module, **Fractions foundations**, plus the kid-friendly design, Kip, rewards, placement, read-aloud and generated questions.

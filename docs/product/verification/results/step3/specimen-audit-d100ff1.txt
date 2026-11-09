@@ -1,0 +1,9 @@
+contrast: 270 elements checked, 0 below minimum, 0 on translucent backgrounds (not computed)
+  lowest svg "" 3.164 (min 3, 18px/500)
+  lowest svg "" 3.451 (min 3, 18px/500)
+  lowest span "5" 4.788 (min 3, 44.16px/600)
+layout desktop-100: status 200, specimen content overflowing 0, page overflow 0px (includes the shared header, DEF-018), console errors 0
+layout phone-100: status 200, specimen content overflowing 0, page overflow 0px (includes the shared header, DEF-018), console errors 0
+layout desktop-200: status 200, specimen content overflowing 0, page overflow 683px (includes the shared header, DEF-018), console errors 0
+layout phone-200: status 200, specimen content overflowing 0, page overflow 232px (includes the shared header, DEF-018), console errors 0
+layout reflow-320: status 200, specimen content overflowing 0, page overflow 25px (includes the shared header, DEF-018), console errors 0

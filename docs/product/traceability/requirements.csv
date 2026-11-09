@@ -1,0 +1,271 @@
+req_id,ac,epic,title,priority,release,acceptance_criterion
+GOV-001,AC1,GOV,Inspect the existing repository,P0,R0,A concise repository audit exists
+GOV-001,AC2,GOV,Inspect the existing repository,P0,R0,existing framework is reused unless a documented technical reason justifies a change
+GOV-001,AC3,GOV,Inspect the existing repository,P0,R0,no unrelated project files are modified
+GOV-001,AC4,GOV,Inspect the existing repository,P0,R0,no production deployment occurs
+GOV-002,AC1,GOV,Establish the product source of truth,P0,R0,"Product vision, scope, backlog IDs, definitions of status and priority, key decisions and change history are recorded in the repository"
+GOV-002,AC2,GOV,Establish the product source of truth,P0,R0,later changes are reflected consistently
+GOV-003,AC1,GOV,Create requirements traceability,P0,R0,Each P0/P1 backlog item maps to acceptance criteria and one or more test cases
+GOV-003,AC2,GOV,Create requirements traceability,P0,R0,every delivered feature can be traced from requirement to implementation and test evidence
+GOV-004,AC1,GOV,Define change-control rules,P0,R0,"Any material scope, curriculum, UX or architecture change has a reason, impact, owner and decision"
+GOV-004,AC2,GOV,Define change-control rules,P0,R0,Claude Code does not silently reinterpret a requirement
+CUR-001,AC1,CUR,Build the Year 3–6 curriculum map,P0,R0,"Each objective has year group, strand, prerequisite, expected knowledge, key vocabulary, examples, mastery evidence and source"
+CUR-001,AC2,CUR,Build the Year 3–6 curriculum map,P0,R0,statutory curriculum and optional 11+ extension are labelled separately
+CUR-001,AC3,CUR,Build the Year 3–6 curriculum map,P0,R0,year allocation is verified against official sources
+CUR-002,AC1,CUR,Define the learning progression model,P0,R0,Prerequisites form an explicit dependency graph
+CUR-002,AC2,CUR,Define the learning progression model,P0,R0,lessons progress from concrete / visual to abstract where appropriate
+CUR-002,AC3,CUR,Define the learning progression model,P0,R0,students are not advanced solely because they have clicked through a lesson
+CUR-003,AC1,CUR,Create the instructional lesson template,P0,R0,"Reusable template supports objective, prerequisite check, explanation, representation, worked example, guided activity, independent practice, reflection, mastery check and next step"
+CUR-004,AC1,CUR,Review all Fractions content for mathematical validity,P1,R1,"Every authored fraction example, visual, question, distractor and explanation is independently checked"
+CUR-004,AC2,CUR,Review all Fractions content for mathematical validity,P1,R1,no ambiguous question or incorrect representation is accepted
+UX-001,AC1,UX,Competitor UX benchmark,P0,R0,"Evidence-based benchmark lists strengths, weaknesses, expected baseline features and specific opportunities for differentiation"
+UX-001,AC2,UX,Competitor UX benchmark,P0,R0,no unsupported “best in market” claim is used
+UX-002,AC1,UX,Create the visual design system,P0,R0,"Design tokens define colour, typography, spacing, layout widths, borders, elevation, radii, icon rules, focus states, disabled states, validation states and interaction feedback"
+UX-002,AC2,UX,Create the visual design system,P0,R0,styles are implemented as reusable tokens rather than isolated values
+UX-003,AC1,UX,Define typography and mathematical readability,P0,R0,"Font family, type scale, line length, line height, weights and hierarchy are specified for headings, explanations, labels, question text, hints, results and maths notation"
+UX-003,AC2,UX,Define typography and mathematical readability,P0,R0,"fractions, superscripts, symbols and long calculations remain legible at all supported sizes"
+UX-003,AC3,UX,Define typography and mathematical readability,P0,R0,text scaling does not break layouts
+UX-004,AC1,UX,Establish content differentiation rules,P0,R0,"Teaching, examples, rules, question prompts, hints, feedback, misconceptions, worked solutions and challenge content have clearly distinguishable visual treatments"
+UX-004,AC2,UX,Establish content differentiation rules,P0,R0,the child can identify the task and next action immediately
+UX-005,AC1,UX,Build responsive application shell and navigation,P1,R1,"Dashboard, learning journey, lesson, practice and results are reachable through working navigation"
+UX-005,AC2,UX,Build responsive application shell and navigation,P1,R1,"desktop, tablet and mobile layouts are intentionally designed"
+UX-005,AC3,UX,Build responsive application shell and navigation,P1,R1,no dead links or placeholder destinations
+UX-006,AC1,UX,Motion and interaction language,P1,R1,Animation timing and easing are consistent
+UX-006,AC2,UX,Motion and interaction language,P1,R1,animation communicates a mathematical change or interaction state
+UX-006,AC3,UX,Motion and interaction language,P1,R1,users can complete all tasks without relying on animation
+UX-006,AC4,UX,Motion and interaction language,P1,R1,reduced-motion preference is respected
+UX-007,AC1,UX,Accessibility baseline,P1,R1,"Keyboard navigation, visible focus, semantic controls, labels, sufficient contrast, non-colour-only feedback, accessible names and reduced-motion behaviour are checked"
+UX-007,AC2,UX,Accessibility baseline,P1,R1,touch targets are appropriate for children
+UX-007,AC3,UX,Accessibility baseline,P1,R1,known limitations are documented
+UX-008,AC1,UX,Responsive visual QA,P1,R1,"Main flows are checked at representative small-mobile, large-mobile, tablet and desktop widths"
+UX-008,AC2,UX,Responsive visual QA,P1,R1,"no clipped equations, overlapping controls, horizontal overflow or unreadable text"
+UX-008,AC3,UX,Responsive visual QA,P1,R1,screenshots are retained as evidence
+ARCH-001,AC1,ARCH,Define modular learning architecture,P0,R0,"Presentation, lesson content, question definitions, mathematical logic, validation, progress, assessment and feedback are separated"
+ARCH-001,AC2,ARCH,Define modular learning architecture,P0,R0,the architecture supports adding Tables and Mental Maths without rewriting the Fractions engine
+ARCH-002,AC1,ARCH,Define a typed question schema,P0,R0,"Questions can declare skill, year/level, difficulty, prompt, interaction type, correct answer, distractors, validation, explanation, hints, misconception tags and scoring metadata"
+ARCH-002,AC2,ARCH,Define a typed question schema,P0,R0,invalid definitions fail validation
+ARCH-003,AC1,ARCH,Build pure mathematical logic modules,P0,R0,Core calculations and validators are pure functions independent of UI
+ARCH-003,AC2,ARCH,Build pure mathematical logic modules,P0,R0,edge cases are covered by unit tests
+ARCH-003,AC3,ARCH,Build pure mathematical logic modules,P0,R0,UI never becomes the source of mathematical truth
+ARCH-004,AC1,ARCH,Implement prototype progress persistence,P1,R1,Learner progress survives refresh and normal browser restart
+ARCH-004,AC2,ARCH,Implement prototype progress persistence,P1,R1,data schema is versioned or safely resettable
+ARCH-004,AC3,ARCH,Implement prototype progress persistence,P1,R1,corrupted or missing data fails gracefully
+ARCH-004,AC4,ARCH,Implement prototype progress persistence,P1,R1,no personal data is unnecessarily collected
+ARCH-005,AC1,ARCH,Build a reusable event and attempt model,P1,R1,"Records question ID, skill, response, correctness, attempt count, hints, timestamp and optional duration"
+ARCH-005,AC2,ARCH,Build a reusable event and attempt model,P1,R1,events distinguish first attempt from retries
+ARCH-005,AC3,ARCH,Build a reusable event and attempt model,P1,R1,data supports progress and misconception analysis without assuming a diagnosis
+FR-001,AC1,FR,Fractions diagnostic and entry path,P1,R1,"Short, low-pressure prerequisite check covers whole, equal parts and simple fraction recognition"
+FR-001,AC2,FR,Fractions diagnostic and entry path,P1,R1,learner can choose a supported starting point
+FR-001,AC3,FR,Fractions diagnostic and entry path,P1,R1,one wrong answer does not permanently label the learner
+FR-002,AC1,FR,Teach whole and equal parts,P1,R1,"Child can distinguish a whole, a part, equal partition and unequal partition"
+FR-002,AC2,FR,Teach whole and equal parts,P1,R1,visual examples include valid and invalid divisions
+FR-002,AC3,FR,Teach whole and equal parts,P1,R1,explanation explicitly states why unequal pieces cannot be counted as equal fractional parts of that whole
+FR-003,AC1,FR,Teach numerator and denominator,P1,R1,Numerator and denominator are introduced with accurate language and synchronised diagrams
+FR-003,AC2,FR,Teach numerator and denominator,P1,R1,learner can identify each part in symbolic and visual form
+FR-003,AC3,FR,Teach numerator and denominator,P1,R1,feedback does not reverse the terms
+FR-004,AC1,FR,Fractions of shapes and sets,P1,R1,Activities cover continuous models (shapes / bars) and discrete sets (objects)
+FR-004,AC2,FR,Fractions of shapes and sets,P1,R1,selected numerator counts selected parts and denominator counts total equal parts or total objects as appropriate
+FR-004,AC3,FR,Fractions of shapes and sets,P1,R1,all generated examples have valid answers
+FR-005,AC1,FR,Compare simple fractions visually,P1,R1,Child compares unit fractions and fractions with the same denominator using accurate models
+FR-005,AC2,FR,Compare simple fractions visually,P1,R1,explanations address why a larger denominator can mean smaller equal parts
+FR-005,AC3,FR,Compare simple fractions visually,P1,R1,answer validation covers equivalent and non-equivalent examples
+FR-006,AC1,FR,Explore equivalent fractions,P1,R1,Child can see equivalent amounts represented with different partitions
+FR-006,AC2,FR,Explore equivalent fractions,P1,R1,multiplication of numerator and denominator by the same non-zero whole number is explained with a visual connection
+FR-006,AC3,FR,Explore equivalent fractions,P1,R1,examples are checked by simplification or cross-multiplication logic as appropriate
+FR-007,AC1,FR,Fractions on a number line,P1,R1,Number line is split into equal intervals
+FR-007,AC2,FR,Fractions on a number line,P1,R1,endpoints and interval counts are correct
+FR-007,AC3,FR,Fractions on a number line,P1,R1,learner can place and identify simple fractions
+FR-007,AC4,FR,Fractions on a number line,P1,R1,"zero, one and fractions between them are unambiguous"
+FR-008,AC1,FR,Find simple fractions of quantities,P1,R1,Activities teach sharing into denominator equal groups then selecting numerator groups
+FR-008,AC2,FR,Find simple fractions of quantities,P1,R1,examples include whole-number results first
+FR-008,AC3,FR,Find simple fractions of quantities,P1,R1,the method and visual grouping agree with the numerical answer
+FR-009,AC1,FR,Add and subtract fractions with same denominator,P1,R1,Lesson explains why denominators remain the same when adding/subtracting like parts
+FR-009,AC2,FR,Add and subtract fractions with same denominator,P1,R1,questions include valid results within one whole at introductory level
+FR-009,AC3,FR,Add and subtract fractions with same denominator,P1,R1,representations match the symbolic operation
+FR-010,AC1,FR,Fractions guided examples and fading support,P1,R1,"Each selected core skill has worked example, guided attempt, scaffolded hint and independent question"
+FR-010,AC2,FR,Fractions guided examples and fading support,P1,R1,hints reduce gradually and can be requested
+FR-010,AC3,FR,Fractions guided examples and fading support,P1,R1,a student is not forced to use a hint after demonstrating understanding
+FR-011,AC1,FR,Fractions learning journey screen,P1,R1,"Lessons display prerequisites, current status, skill outcomes and next recommended lesson"
+FR-011,AC2,FR,Fractions learning journey screen,P1,R1,locked states explain why a prerequisite is needed
+FR-011,AC3,FR,Fractions learning journey screen,P1,R1,"completed status is based on mastery evidence, not page visits"
+LAB-001,AC1,LAB,Build fraction model data engine,P1,R1,"A single mathematical state drives fraction notation, selected parts, total parts and visual representation"
+LAB-001,AC2,LAB,Build fraction model data engine,P1,R1,no independently editable UI state can cause the model and displayed answer to disagree
+LAB-002,AC1,LAB,Equal partition controls,P1,R1,Child can change supported denominator values
+LAB-002,AC2,LAB,Equal partition controls,P1,R1,generated partitions are geometrically equal
+LAB-002,AC3,LAB,Equal partition controls,P1,R1,unsupported values are unavailable rather than approximated incorrectly
+LAB-002,AC4,LAB,Equal partition controls,P1,R1,partition labels update correctly
+LAB-003,AC1,LAB,Select and shade parts,P1,R1,"Child can shade/unshade individual sections using mouse, touch and keyboard"
+LAB-003,AC2,LAB,Select and shade parts,P1,R1,numerator updates immediately
+LAB-003,AC3,LAB,Select and shade parts,P1,R1,selected state has accessible feedback
+LAB-003,AC4,LAB,Select and shade parts,P1,R1,repeated taps behave predictably
+LAB-004,AC1,LAB,Multiple visual models,P1,R1,At least fraction bars and a second shape representation are implemented
+LAB-004,AC2,LAB,Multiple visual models,P1,R1,each uses mathematically correct equal partitions
+LAB-004,AC3,LAB,Multiple visual models,P1,R1,changing one model updates the common fraction state where appropriate
+LAB-005,AC1,LAB,Compare two fractions,P1,R1,Two synchronised models can be displayed
+LAB-005,AC2,LAB,Compare two fractions,P1,R1,comparison result is computed by the maths engine
+LAB-005,AC3,LAB,Compare two fractions,P1,R1,equivalent fractions are recognised as equal
+LAB-005,AC4,LAB,Compare two fractions,P1,R1,visual and symbolic outputs agree
+LAB-006,AC1,LAB,Number-line interaction,P1,R1,Learner can drag or keyboard-position a marker
+LAB-006,AC2,LAB,Number-line interaction,P1,R1,snapping uses valid interval locations
+LAB-006,AC3,LAB,Number-line interaction,P1,R1,touch interaction is reliable
+LAB-006,AC4,LAB,Number-line interaction,P1,R1,keyboard alternative is available
+LAB-007,AC1,LAB,Laboratory accessibility and input QA,P1,R1,Every laboratory action has a keyboard alternative and accessible name
+LAB-007,AC2,LAB,Laboratory accessibility and input QA,P1,R1,selection is not communicated by colour alone
+LAB-007,AC3,LAB,Laboratory accessibility and input QA,P1,R1,touch and pointer behaviour are tested
+LAB-007,AC4,LAB,Laboratory accessibility and input QA,P1,R1,reduced motion is respected
+PRACT-001,AC1,PRACT,Build deterministic question renderer and validator,P1,R1,"Same question definition produces consistent prompt, interaction and validation"
+PRACT-001,AC2,PRACT,Build deterministic question renderer and validator,P1,R1,correct answers are evaluated by pure maths logic
+PRACT-001,AC3,PRACT,Build deterministic question renderer and validator,P1,R1,malformed questions are rejected
+PRACT-001,AC4,PRACT,Build deterministic question renderer and validator,P1,R1,test fixtures cover boundary cases
+PRACT-002,AC1,PRACT,Multiple-choice and selection questions,P1,R1,"Supports single-answer selection, clear selected state, submit and feedback"
+PRACT-002,AC2,PRACT,Multiple-choice and selection questions,P1,R1,distractors correspond to plausible errors and are themselves verified as incorrect
+PRACT-003,AC1,PRACT,Shade-the-fraction questions,P1,R1,Question asks for a fraction to shade
+PRACT-003,AC2,PRACT,Shade-the-fraction questions,P1,R1,visual partitions are valid
+PRACT-003,AC3,PRACT,Shade-the-fraction questions,P1,R1,child can select sections
+PRACT-003,AC4,PRACT,Shade-the-fraction questions,P1,R1,validation checks selected count and the intended model
+PRACT-004,AC1,PRACT,Diagram-to-fraction matching,P1,R1,Supports matching diagrams to notation
+PRACT-004,AC2,PRACT,Diagram-to-fraction matching,P1,R1,diagram labels are not ambiguous
+PRACT-004,AC3,PRACT,Diagram-to-fraction matching,P1,R1,"matching can be completed with touch, pointer and keyboard"
+PRACT-005,AC1,PRACT,Equal / unequal partition identification,P1,R1,Includes balanced examples with equal and unequal partitions
+PRACT-005,AC2,PRACT,Equal / unequal partition identification,P1,R1,explanations make the mathematical reason explicit
+PRACT-005,AC3,PRACT,Equal / unequal partition identification,P1,R1,the system does not mark arbitrary unequal sectors as valid equal parts
+PRACT-006,AC1,PRACT,Number-line and quantity questions,P1,R1,Number-line placement and fraction-of-quantity activities use the same validated mathematics as the lesson laboratory
+PRACT-006,AC2,PRACT,Number-line and quantity questions,P1,R1,generated values always have well-defined answers
+PRACT-007,AC1,PRACT,Question difficulty and variation rules,P1,R1,"Variation changes mathematical structure, representation and context rather than only changing numerals"
+PRACT-007,AC2,PRACT,Question difficulty and variation rules,P1,R1,difficulty dimensions are documented
+PRACT-007,AC3,PRACT,Question difficulty and variation rules,P1,R1,duplicate questions are limited within a practice session
+PRACT-008,AC1,PRACT,Feedback and retry behaviour,P1,R1,Correct responses receive informative confirmation
+PRACT-008,AC2,PRACT,Feedback and retry behaviour,P1,R1,incorrect responses receive a useful prompt or hint before full solution reveal
+PRACT-008,AC3,PRACT,Feedback and retry behaviour,P1,R1,retries are recorded
+PRACT-008,AC4,PRACT,Feedback and retry behaviour,P1,R1,feedback is respectful and age-appropriate
+MIS-001,AC1,MIS,Define misconception catalogue,P1,R1,"Catalogue includes numerator/denominator reversal, denominator-size misconception, unequal-partition error, part-to-part vs part-to-whole confusion and incorrect total-part counting"
+MIS-001,AC2,MIS,Define misconception catalogue,P1,R1,"each entry has example evidence, alternative explanations and recovery activity"
+MIS-002,AC1,MIS,Tag questions and distractors,P1,R1,Misconception tags are attached only where an answer genuinely provides evidence
+MIS-002,AC2,MIS,Tag questions and distractors,P1,R1,distractor-to-misconception mapping is documented and tested
+MIS-003,AC1,MIS,Pattern-based misconception signals,P1,R1,"Signal is raised from a repeated or sufficiently specific response pattern, not a single generic mistake"
+MIS-003,AC2,MIS,Pattern-based misconception signals,P1,R1,system labels it as a possible misconception
+MIS-003,AC3,MIS,Pattern-based misconception signals,P1,R1,confidence and evidence are retained internally
+MIS-004,AC1,MIS,Targeted recovery sequence,P1,R1,"Recovery contains a different representation or explanation, a guided follow-up and a transfer question"
+MIS-004,AC2,MIS,Targeted recovery sequence,P1,R1,solution is not revealed immediately unless the learner requests it or the designed support sequence requires it
+MIS-005,AC1,MIS,Verify understanding after recovery,P1,R1,Learner answers new questions without the same scaffolding
+MIS-005,AC2,MIS,Verify understanding after recovery,P1,R1,recovery success is not inferred from repeating the original question
+MIS-005,AC3,MIS,Verify understanding after recovery,P1,R1,unresolved uncertainty remains visible in progress state
+MAST-001,AC1,MAST,Define skill mastery model,P1,R1,"Each skill has explicit criteria covering accuracy, varied examples and independent application"
+MAST-001,AC2,MAST,Define skill mastery model,P1,R1,mastery is not awarded by one correct answer or one completed quiz
+MAST-001,AC3,MAST,Define skill mastery model,P1,R1,thresholds are documented and adjustable
+MAST-002,AC1,MAST,Build independent Fractions assessment,P1,R1,"Assessment samples conceptual, representational, comparison, equivalence, quantity and reasoning skills"
+MAST-002,AC2,MAST,Build independent Fractions assessment,P1,R1,includes unfamiliar examples
+MAST-002,AC3,MAST,Build independent Fractions assessment,P1,R1,hints are disabled or clearly recorded
+MAST-002,AC4,MAST,Build independent Fractions assessment,P1,R1,scoring explains skill-level evidence
+MAST-003,AC1,MAST,Build progress dashboard,P1,R1,"Shows completed lessons, developing skills, mastered skills and next recommended activity"
+MAST-003,AC2,MAST,Build progress dashboard,P1,R1,progress is derived from recorded attempts
+MAST-003,AC3,MAST,Build progress dashboard,P1,R1,no fake or decorative progress values
+MAST-004,AC1,MAST,Build mastery results screen,P1,R1,"Reports strengths, skills still developing, patterns of difficulty and recommended next steps"
+MAST-004,AC2,MAST,Build mastery results screen,P1,R1,avoids unsupported labels or claims about ability
+MAST-004,AC3,MAST,Build mastery results screen,P1,R1,explanations are understandable to a child and useful to a parent
+MAST-005,AC1,MAST,Persistence and recovery testing,P1,R1,Refreshing and returning to the app restores correct progress
+MAST-005,AC2,MAST,Persistence and recovery testing,P1,R1,duplicate or interrupted attempts do not corrupt mastery
+MAST-005,AC3,MAST,Persistence and recovery testing,P1,R1,reset behaviour is clear and testable
+TT-001,AC1,TT,Create the Times Tables curriculum and progression,P2,R2,"Progression covers 2–12 tables, relevant prior number facts, multiplication/division fact families and year-appropriate sequence"
+TT-001,AC2,TT,Create the Times Tables curriculum and progression,P2,R2,curriculum expectations and the England Year 4 MTC are clearly distinguished from optional extension
+TT-002,AC1,TT,Build conceptual multiplication lessons,P2,R2,"Teach multiplication through equal groups, arrays, repeated addition, number lines and scaling"
+TT-002,AC2,TT,Build conceptual multiplication lessons,P2,R2,show commutativity and distributive relationships
+TT-002,AC3,TT,Build conceptual multiplication lessons,P2,R2,representations connect to symbolic facts
+TT-003,AC1,TT,Build division and inverse-fact lessons,P2,R2,Every relevant multiplication fact is connected to division facts
+TT-003,AC2,TT,Build division and inverse-fact lessons,P2,R2,examples cover grouping and sharing
+TT-003,AC3,TT,Build division and inverse-fact lessons,P2,R2,learner can identify a fact family and explain the relationship
+TT-004,AC1,TT,Build table-by-table learning paths,P2,R2,Tables can be learned and reviewed in a recommended progression
+TT-004,AC2,TT,Build table-by-table learning paths,P2,R2,"child can see known, developing and not-yet-secure facts"
+TT-004,AC3,TT,Build table-by-table learning paths,P2,R2,progression can be personalised based on diagnostic evidence
+TT-005,AC1,TT,Build an all-facts diagnostic,P2,R2,Diagnostic covers multiplication facts from 2×2 through 12×12 with suitable sampling
+TT-005,AC2,TT,Build an all-facts diagnostic,P2,R2,it distinguishes lack of recall from input mistakes where possible
+TT-005,AC3,TT,Build an all-facts diagnostic,P2,R2,it does not use one result as a permanent ability label
+TT-006,AC1,TT,Build targeted fact practice,P2,R2,Practice focuses on weak facts while continuing retrieval of secure facts
+TT-006,AC2,TT,Build targeted fact practice,P2,R2,includes mixed and interleaved practice
+TT-006,AC3,TT,Build targeted fact practice,P2,R2,repeated correct recall is required before a fact is marked secure
+TT-007,AC1,TT,Build times-table visual explorer,P2,R2,Interactive grid / array / number-line views reveal patterns and relationships
+TT-007,AC2,TT,Build times-table visual explorer,P2,R2,child can explore multiples and inverse facts
+TT-007,AC3,TT,Build times-table visual explorer,P2,R2,visuals remain correct for all supported values
+TT-008,AC1,TT,Build division fact recall practice,P2,R2,"Questions include missing dividend, divisor or quotient forms"
+TT-008,AC2,TT,Build division fact recall practice,P2,R2,division facts are linked to related multiplication facts
+TT-008,AC3,TT,Build division fact recall practice,P2,R2,validation checks exact arithmetic
+TT-009,AC1,TT,Build MTC-style timed simulator,P2,R2,"Practice mode offers a 25-question format, six-second response window and three-second between-question interval to reflect the published standard format"
+TT-009,AC2,TT,Build MTC-style timed simulator,P2,R2,includes familiarisation questions
+TT-009,AC3,TT,Build MTC-style timed simulator,P2,R2,results identify facts to revisit
+TT-009,AC4,TT,Build MTC-style timed simulator,P2,R2,"clearly labels itself as a practice simulation, not the official DfE check"
+TT-010,AC1,TT,Build untimed confidence mode,P2,R2,Children can practise without a countdown
+TT-010,AC2,TT,Build untimed confidence mode,P2,R2,explanations and retry support remain available
+TT-010,AC3,TT,Build untimed confidence mode,P2,R2,speed scores are not shown as the only measure of success
+TT-011,AC1,TT,Build times-table mastery reporting,P2,R2,"Report includes per-fact accuracy, recall consistency, inverse-fact understanding and recommended practice"
+TT-011,AC2,TT,Build times-table mastery reporting,P2,R2,timed performance is separated from conceptual understanding
+TT-011,AC3,TT,Build times-table mastery reporting,P2,R2,no unsupported comparison with other pupils
+TT-012,AC1,TT,Build spaced review and practice scheduling,P2,R2,Review interval responds to demonstrated recall and errors
+TT-012,AC2,TT,Build spaced review and practice scheduling,P2,R2,previously secure facts reappear periodically
+TT-012,AC3,TT,Build spaced review and practice scheduling,P2,R2,practice load is manageable and adjustable
+TT-012,AC4,TT,Build spaced review and practice scheduling,P2,R2,schedule is deterministic and testable
+MM-001,AC1,MM,Research and validate a mental-strategy catalogue,P2,R3,No strategy is taught without a mathematical justification and independently checked examples
+MM-001,AC2,MM,Research and validate a mental-strategy catalogue,P2,R3,claims about speed are not made without measured evidence
+MM-001,AC3,MM,Research and validate a mental-strategy catalogue,P2,R3,"Vedic techniques are included only where accurate, understandable and useful for the learner"
+MM-002,AC1,MM,Build strategy learning template,P2,R3,"Every strategy lesson includes when to use it, why it works, worked example, visual or place-value explanation where helpful, guided attempt, independent transfer question and situations where the strategy is unsuitable"
+MM-003,AC1,MM,"Teach number bonds, partitioning and place-value strategies",P2,R3,"Covers bonds, partitioning, recombining, bridging through 10/100/1,000, compensation and place-value reasoning"
+MM-003,AC2,MM,"Teach number bonds, partitioning and place-value strategies",P2,R3,each technique is mapped to prerequisite knowledge and age range
+MM-004,AC1,MM,"Teach doubling, halving and near-doubles",P2,R3,"Includes connected examples for multiplication, division and fractions"
+MM-004,AC2,MM,"Teach doubling, halving and near-doubles",P2,R3,learner can explain when doubling one quantity and halving another preserves a product
+MM-005,AC1,MM,Teach multiplication and division strategies,P2,R3,"Covers distributive partitioning, factorisation, commutativity, associativity, multiplying by 5/9/11/25/50/99 where appropriate, base-10/base-100 methods and division by factor relationships"
+MM-005,AC2,MM,Teach multiplication and division strategies,P2,R3,all examples are proven and tested
+MM-006,AC1,MM,Teach squares and number-pattern strategies,P2,R3,Includes age-appropriate square-number patterns and validated methods such as squaring numbers ending in 5 where prerequisites are established
+MM-006,AC2,MM,Teach squares and number-pattern strategies,P2,R3,boundaries and exceptions are taught
+MM-007,AC1,MM,"Teach fraction, decimal and percentage shortcuts",P2,R3,"Covers common equivalences, finding simple percentages, fraction-of-quantity strategies and efficient conversions"
+MM-007,AC2,MM,"Teach fraction, decimal and percentage shortcuts",P2,R3,learners understand why the method works and when it applies
+MM-008,AC1,MM,Evaluate Vedic Maths candidate techniques,P2,R3,"Candidate techniques such as multiplication near powers of 10, vertically-and-crosswise multiplication and selected squaring methods are individually validated"
+MM-008,AC2,MM,Evaluate Vedic Maths candidate techniques,P2,R3,only suitable techniques enter the learner curriculum
+MM-008,AC3,MM,Evaluate Vedic Maths candidate techniques,P2,R3,marketing claims and unsupported historical claims are excluded
+MM-009,AC1,MM,Build compare-the-method activity,P2,R3,Suitable questions present a standard method and one or more efficient alternatives
+MM-009,AC2,MM,Build compare-the-method activity,P2,R3,child can compare steps and select a valid strategy
+MM-009,AC3,MM,Build compare-the-method activity,P2,R3,the system accepts different mathematically valid methods where the question allows them
+MM-010,AC1,MM,Build strategy-selection challenges,P2,R3,Child identifies the most efficient suitable strategy for a question and gives a reason
+MM-010,AC2,MM,Build strategy-selection challenges,P2,R3,"scoring values mathematical validity and method choice, not speed alone"
+MM-011,AC1,MM,Build accuracy-first timed practice,P2,R3,Timed challenges unlock or are recommended only after adequate untimed accuracy
+MM-011,AC2,MM,Build accuracy-first timed practice,P2,R3,feedback compares the learner with their own previous performance
+MM-011,AC3,MM,Build accuracy-first timed practice,P2,R3,no public ranking or shame-based messaging
+MM-012,AC1,MM,Build mental-strategy mastery analytics,P2,R3,"Tracks accuracy, method choice, independence, hint use and time as separate measures"
+MM-012,AC2,MM,Build mental-strategy mastery analytics,P2,R3,improvement in speed does not conceal declining accuracy
+MM-012,AC3,MM,Build mental-strategy mastery analytics,P2,R3,strategy weaknesses drive recommendations
+EXAM-001,AC1,EXAM,Define exam-profile data model,P3,R5,"School / consortium profiles can record verified subjects, provider, question formats, timing, calculators policy where officially known, admissions-cycle year and source date"
+EXAM-001,AC2,EXAM,Define exam-profile data model,P3,R5,unknown information remains explicitly unknown
+EXAM-002,AC1,EXAM,Build exam-format research and verification workflow,P3,R5,"Exam format is sourced from current official school, council or consortium information wherever possible"
+EXAM-002,AC2,EXAM,Build exam-format research and verification workflow,P3,R5,provider format is not inferred from nearby schools
+EXAM-002,AC3,EXAM,Build exam-format research and verification workflow,P3,R5,changes are date-stamped
+EXAM-003,AC1,EXAM,Create 11+ question taxonomy,P3,R5,"Questions are tagged by curriculum skill, reasoning demand, representation, difficulty, format and relevant exam profile"
+EXAM-003,AC2,EXAM,Create 11+ question taxonomy,P3,R5,curriculum questions and exam-specific styles are not conflated
+EXAM-004,AC1,EXAM,Build multi-step and unfamiliar problem practice,P3,R5,"Includes multi-step arithmetic, word problems, interpretation, working backwards, estimation, pattern recognition and method selection"
+EXAM-004,AC2,EXAM,Build multi-step and unfamiliar problem practice,P3,R5,"solutions explain reasoning, not only the final answer"
+EXAM-005,AC1,EXAM,Build timed section and mock-test engine,P3,R5,"Supports configurable question count, section timing, review rules and question format"
+EXAM-005,AC2,EXAM,Build timed section and mock-test engine,P3,R5,stores attempts and review
+EXAM-005,AC3,EXAM,Build timed section and mock-test engine,P3,R5,is configurable by verified exam profile
+EXAM-005,AC4,EXAM,Build timed section and mock-test engine,P3,R5,clearly distinguishes practice material from official papers
+EXAM-006,AC1,EXAM,Build post-test analysis,P3,R5,"Separates knowledge gaps, careless errors, timing pressure and question-format issues where evidence permits"
+EXAM-006,AC2,EXAM,Build post-test analysis,P3,R5,provides actionable revision plan
+EXAM-006,AC3,EXAM,Build post-test analysis,P3,R5,does not claim to predict admission or an offer probability without a defensible model and data
+PARENT-001,AC1,PARENT,Define learner profile and year group,P3,R5,Stores selected year group and learning preferences
+PARENT-001,AC2,PARENT,Define learner profile and year group,P3,R5,profile changes do not erase progress
+PARENT-001,AC3,PARENT,Define learner profile and year group,P3,R5,data collection is minimal and transparent
+PARENT-002,AC1,PARENT,Build parent progress summary,P3,R5,"Shows time and activity summary, skill development, areas needing support and next recommendations"
+PARENT-002,AC2,PARENT,Build parent progress summary,P3,R5,avoids unsupported rankings and deterministic predictions
+PARENT-003,AC1,PARENT,Build weekly learning plan,P3,R5,"Recommends a manageable mix of new learning, spaced review, times tables, mental maths and application based on evidence"
+PARENT-003,AC2,PARENT,Build weekly learning plan,P3,R5,parent can understand and adjust workload
+QA-001,AC1,QA,Build mathematical unit-test suite,P0,R0/R1,"Tests cover fraction arithmetic, equality, simplification, comparison, part-of-quantity calculations, partition mapping and all core arithmetic functions"
+QA-001,AC2,QA,Build mathematical unit-test suite,P0,R0/R1,boundary and invalid-input cases are included
+QA-002,AC1,QA,Build component and integration tests,P1,R1,"Test key visual controls, question validation, lesson progression, hint behaviour, progress updates and persistence"
+QA-002,AC2,QA,Build component and integration tests,P1,R1,tests assert synchronisation between visual models and mathematical state
+QA-003,AC1,QA,Build end-to-end learning journey tests,P1,R1,"Automated test completes a full student journey from dashboard through lesson, practice, recovery and assessment"
+QA-003,AC2,QA,Build end-to-end learning journey tests,P1,R1,critical actions are not represented by non-functional decorative controls
+QA-004,AC1,QA,Create defect register and triage rules,P0,R0,"Defects have ID, severity, priority, reproduction steps, expected/actual result, evidence, owner, fix and retest status"
+QA-004,AC2,QA,Create defect register and triage rules,P0,R0,critical/high defects block acceptance
+QA-005,AC1,QA,Accessibility and responsive test pass,P1,R1,"Keyboard, focus, contrast, text scaling, touch, reduced motion and supported screen-size checks are executed"
+QA-005,AC2,QA,Accessibility and responsive test pass,P1,R1,failures are logged and retested
+QA-006,AC1,QA,Regression test suite,P1,R1,Previously accepted learning flows are retested after fixes
+QA-006,AC2,QA,Regression test suite,P1,R1,CI or documented local commands run reliably
+QA-006,AC3,QA,Regression test suite,P1,R1,test failures are not waived without an explicit decision
+QA-007,AC1,QA,Release acceptance report,P1,R1,"Report lists accepted features, tests actually executed, results, unresolved defects, known limitations and final acceptance decision"
+QA-007,AC2,QA,Release acceptance report,P1,R1,“not tested” is never reported as “passed”

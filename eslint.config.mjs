@@ -5,6 +5,11 @@ import nextTs from "eslint-config-next/typescript";
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
+  // Verification scripts (docs/product/verification) are CommonJS Node tools run outside the app.
+  {
+    files: ["docs/product/verification/**/*.cjs"],
+    rules: { "@typescript-eslint/no-require-imports": "off" },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
@@ -14,6 +19,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Third-party design skill (scripts and assets for the coding assistant), not app code.
     ".claude/**",
+    // Deliberately broken code that the architecture test (ARCH-001) must reject.
+    "src/architecture/fixtures/**",
   ]),
 ]);
 

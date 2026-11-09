@@ -1,0 +1,16 @@
+phone home overflowX 232 clipped 0
+phone map overflowX 232 clipped 0
+phone island overflowX 232 clipped 11
+phone lesson overflowX 123 clipped 1
+phone question overflowX 123 clipped 1
+phone practice overflowX 232 clipped 0
+phone grown-ups overflowX 115 clipped 0
+phone specimen overflowX 232 clipped 0
+desktop home overflowX 684 clipped 0
+desktop map overflowX 684 clipped 0
+desktop island overflowX 684 clipped 5
+desktop lesson overflowX 0 clipped 1
+desktop question overflowX 0 clipped 1
+desktop practice overflowX 686 clipped 0
+desktop grown-ups overflowX 0 clipped 0
+desktop specimen overflowX 683 clipped 0

@@ -1,0 +1,539 @@
+tc_id,req_id,ac,level,automation,status,test_ref,notes
+TC-GOV-001.1.1,GOV-001,AC1,document-review,manual,accepted,,Accepted by PO on 3 Nov 2026 (D-005)
+TC-GOV-001.2.1,GOV-001,AC2,document-review,manual,accepted,,Audit §2 and §14: existing framework kept (D-005)
+TC-GOV-001.3.1,GOV-001,AC3,document-review,manual,accepted,,`git diff` of the GOV-001 commit adds one doc file only (D-005)
+TC-GOV-001.4.1,GOV-001,AC4,document-review,manual,accepted,,"No deploy since backlog receipt (D-002, D-005)"
+TC-GOV-002.1.1,GOV-002,AC1,document-review,manual,accepted,,"docs/product/README.md, backlog.md, STATUS.md, DECISIONS.md — accepted 4 Nov 2026 (D-011)"
+TC-GOV-002.2.1,GOV-002,AC2,unit,automated,passing,src/traceability.test.ts::lists every backlog item exactly once in the status register,Checker keeps status and backlog consistent (RC-003)
+TC-GOV-002.2.2,GOV-002,AC2,unit,automated,passing,src/traceability.test.ts::only marks an item ACCEPTED when a recorded decision says so,
+TC-GOV-003.1.1,GOV-003,AC1,unit,automated,passing,src/traceability.test.ts::gives every P0/P1 acceptance criterion at least one test case,RC-001
+TC-GOV-003.1.2,GOV-003,AC1,unit,automated,passing,src/traceability.test.ts::lists every backlog item and acceptance criterion as a requirement,
+TC-GOV-003.2.1,GOV-003,AC2,unit,automated,passing,src/traceability.test.ts::points every automated test case at a test that exists,
+TC-GOV-003.2.2,GOV-003,AC2,unit,automated,passing,src/traceability.test.ts::traces every test file in the repository to at least one requirement,
+TC-GOV-004.1.1,GOV-004,AC1,unit,automated,passing,"src/governance.test.ts::defines the material kinds, the four required items, the roles and the no-silent-reinterpretation rule","Developer evidence: the document defines material changes and the reason, impact, owner and decision record."
+TC-GOV-004.1.2,GOV-004,AC1,unit,automated,passing,"src/governance.test.ts::numbers decisions, clarifications and changes in order, with no gaps and no repeats",
+TC-GOV-004.1.3,GOV-004,AC1,unit,automated,passing,"src/governance.test.ts::resolves every decision, clarification and change cited in the records",
+TC-GOV-004.1.4,GOV-004,AC1,unit,automated,passing,src/governance.test.ts::lets only a decision accept an item: every ACCEPTED status cites one that exists,
+TC-GOV-004.1.5,GOV-004,AC1,document-review,manual,review-pending,,"Product Owner review of docs/product/GOV-004-change-control.md §2, §3, §9."
+TC-GOV-004.2.1,GOV-004,AC2,unit,automated,passing,"src/governance.test.ts::defines the material kinds, the four required items, the roles and the no-silent-reinterpretation rule",Checks that §6 exists; whether the rules are adequate is a review matter.
+TC-GOV-004.2.2,GOV-004,AC2,document-review,manual,review-pending,,Product Owner review of GOV-004 §5 and §6.
+TC-CUR-001.1.1,CUR-001,AC1,unit,automated,passing,src/curriculum/map.test.ts::gives every objective all the required fields,"Developer evidence: 171 statutory objectives, each with year, strand, prerequisites, outcome, vocabulary, examples, proposed mastery evidence kind (no thresholds), source anchor and position."
+TC-CUR-001.1.2,CUR-001,AC1,unit,automated,passing,"src/curriculum/map.test.ts::has prerequisites that exist, are not from a later year, and form no cycle",
+TC-CUR-001.1.3,CUR-001,AC1,unit,automated,passing,"src/curriculum/map.test.ts::maps only to existing skills, keeps coverage consistent with the mapping, and covers every Fractions skill",
+TC-CUR-001.1.4,CUR-001,AC1,unit,automated,passing,src/curriculum/map.test.ts::invents no mastery threshold: thresholds belong to MAST-001,
+TC-CUR-001.1.5,CUR-001,AC1,document-review,manual,review-pending,,"Product Owner and educational QA review of docs/product/curriculum/CUR-001-curriculum-map.md; coverage ratings are desk judgement, not independently verified."
+TC-CUR-001.2.1,CUR-001,AC2,unit,automated,passing,"src/curriculum/map.test.ts::keeps the 11+ extension separate: labelled, unsourced, never statutory, and never based on an invented specification","Developer evidence. No single official 11+ specification exists; extension rows are candidates, unsourced."
+TC-CUR-001.2.2,CUR-001,AC2,document-review,manual,review-pending,,"Product Owner review of the extension candidates (CUR-001 §6, §8)."
+TC-CUR-001.3.1,CUR-001,AC3,unit,automated,passing,"src/curriculum/map.test.ts::records its official source: publisher, URL, page date, retrieval date and licence",Developer evidence against the DfE page retrieved 6 Nov 2026.
+TC-CUR-001.3.2,CUR-001,AC3,unit,automated,passing,"src/curriculum/map.test.ts::maps every Year 3–6 statutory statement exactly once, in source order, with year, strand and location from the source",
+TC-CUR-001.3.3,CUR-001,AC3,unit,automated,passing,src/curriculum/map.test.ts::states the year-allocation caveat and the evidence method in the document,
+TC-CUR-001.3.4,CUR-001,AC3,unit,automated,passing,"src/curriculum/map.test.ts::keeps the island snapshot in step with the live islands, so a change to islands flags the map",
+TC-CUR-001.3.5,CUR-001,AC3,document-review,manual,review-pending,,Independent re-extraction from the DfE page (docs/product/verification/extract-dfe-curriculum.py) and review.
+TC-CUR-002.1.1,CUR-002,AC1,document-review,manual,accepted,,"CUR-002 §2: skill graph (Fractions), island graph (19 islands), planned TT/MM areas — accepted 6 Nov 2026 for R0 scope (D-023)"
+TC-CUR-002.1.2,CUR-002,AC1,unit,automated,passing,"src/curriculum/prerequisites.test.ts::has no cycles, at island level, at Fractions skill level, or across planned areas",
+TC-CUR-002.1.3,CUR-002,AC1,unit,automated,passing,src/curriculum/prerequisites.test.ts::covers every island and every Fractions skill,
+TC-CUR-002.1.4,CUR-002,AC1,unit,automated,passing,"src/curriculum/prerequisites.test.ts::uses only real islands, real skills or planned areas",
+TC-CUR-002.1.5,CUR-002,AC1,unit,automated,passing,src/curriculum/prerequisites.test.ts::places Times Tables fluency (R2) and Mental Maths (R3) in the graph as planned areas,
+TC-CUR-002.2.1,CUR-002,AC2,document-review,manual,accepted,,CUR-002 §6: within-lesson CPA rule and the deviations table for educational QA — accepted 6 Nov 2026 for R0 scope (D-023)
+TC-CUR-002.2.2,CUR-002,AC2,content,automated,passing,src/curriculum/prerequisites.test.ts::shows a picture or a lab before the first check in every Fractions lesson (concrete before abstract),Fractions (R1) only; kit islands are preview content
+TC-CUR-002.2.3,CUR-002,AC2,content,automated,passing,src/curriculum/prerequisites.test.ts::teaches every Fractions prerequisite in an earlier lesson,
+TC-CUR-002.3.1,CUR-002,AC3,document-review,manual,accepted,,"CUR-002 §3–§5 (corrected 5 Nov, DEF-024/025): activity vs supported vs independent evidence vs mastery; attempt table; one independence contract; precedence; which state drives what; lab path with no auto-advance — accepted 6 Nov 2026 for R0 scope (D-023)"
+TC-CUR-002.3.2,CUR-002,AC3,unit,automated,passing,"src/engine/evidence.test.ts::sends a child who finished a lesson without evidence to targeted practice, not back into the lesson",R1 wiring (D-026). Rule 3b.
+TC-CUR-002.3.3,CUR-002,AC3,unit,automated,passing,"src/engine/evidence.test.ts::routes the lab to represent practice, then to comparing (TC-CUR-002.3.3)",R1 wiring (D-026). Manual navigation awards no evidence: opening a lesson records nothing (covered by the evidence rules).
+TC-CUR-002.3.4,CUR-002,AC3,unit,automated,passing,"src/engine/evidence.test.ts::counts only right-first-time, unhinted answers as independent",
+TC-CUR-002.3.5,CUR-002,AC3,unit,automated,passing,"src/engine/evidence.test.ts::counts placement, and lets a later needs-review result override earlier evidence (§4.4)",
+TC-CUR-002.3.6,CUR-002,AC3,unit,automated,passing,"src/engine/evidence.test.ts::moves on once a fresh practice question is answered independently, and never automatically otherwise",
+TC-CUR-003.1.1,CUR-003,AC1,document-review,manual,accepted,,CUR-003 §1–§2 (corrected 5 Nov): the ten elements with Q-1 to Q-3 decisions; the proposed additive R1 schema; fresh-example rule with bounded deterministic retries (DEF-026) — accepted 6 Nov 2026 for R0 scope (D-023)
+TC-CUR-003.1.2,CUR-003,AC1,content,automated,passing,src/curriculum/prerequisites.test.ts::shows a picture or a lab before the first check in every Fractions lesson (concrete before abstract),Enforces template element 4 (representation before the first independent question) for Fractions
+TC-CUR-003.1.3,CUR-003,AC1,content-review,manual,review-pending,,CUR-003 §3: conformance of the 8 Fractions lessons and the R1 authoring findings
+TC-CUR-003.1.4,CUR-003,AC1,unit,planned,planned,,"R1 (RC-005): template-conformance tests once the schema adds prereq-check, reflect and mastery-check steps"
+TC-CUR-003.1.5,CUR-003,AC1,unit,planned,planned,,"R1 (CUR-003, MIS-005): fresh-example generation is deterministic, never matches a demonstrated example, falls back to same-skill templates, and raises FreshnessExhausted instead of looping or reusing"
+TC-CUR-004.1.1,CUR-004,AC1,content,automated,partial,src/topics/fractions/content.test.ts::gives every question a mathematically correct answer,Automated maths check only; independent review pending
+TC-CUR-004.1.2,CUR-004,AC1,unit,automated,passing,src/topics/fractions/reviewPack.test.ts::lists every authored question once and matches the content,Review pack for the independent reviewer: docs/product/curriculum/CUR-004-review-pack.md
+TC-CUR-004.1.3,CUR-004,AC1,content-review,manual,planned,,The independent review itself has not been done.
+TC-CUR-004.2.1,CUR-004,AC2,unit,automated,passing,"src/topics/fractions/practice-rules.test.ts::makes every matching picture unambiguous: one picture per fraction, and each picture shows its own answer (PRACT-004 AC2)",
+TC-CUR-004.2.2,CUR-004,AC2,unit,automated,passing,src/topics/fractions/journey-content.test.ts::draws exactly the operation in the prompt: the picture and the symbols agree,
+TC-CUR-004.2.3,CUR-004,AC2,content-review,manual,planned,,Independent review for ambiguity (CUR-004).
+TC-UX-001.1.1,UX-001,AC1,document-review,manual,accepted,,benchmark/UX-001-competitor-benchmark.md §5–§8 — accepted 4 Nov 2026 (D-011)
+TC-UX-001.2.1,UX-001,AC2,document-review,manual,accepted,,Benchmark claims cite evidence IDs; §1 states no superiority claim — accepted 4 Nov 2026 (D-011)
+TC-UX-002.1.1,UX-002,AC1,document-review,manual,accepted,,"UX-002 §2: colour (incl. label backgrounds and the contrast rule), typography, spacing, widths, borders, radii, elevation, icons, focus, disabled, validation and interaction feedback — accepted 6 Nov 2026 for R0 scope (D-023)"
+TC-UX-002.1.2,UX-002,AC1,unit,automated,passing,src/design-tokens.test.ts::defines every token the design specs name,The three design specs and globals.css stay in step
+TC-UX-002.1.3,UX-002,AC1,unit,automated,passing,src/design-tokens.test.ts::keeps state colours readable and the focus ring visible,
+TC-UX-002.1.4,UX-002,AC1,unit,automated,passing,"src/design-tokens.test.ts::meets the contrast minimum for every supported pairing at its real size and weight, without rounding",52 pairings in UX-004 §2.3; corrected 5 Nov (DEF-022)
+TC-UX-002.1.5,UX-002,AC1,unit,automated,passing,"src/design-tokens.test.ts::adds no violet token (D-013: the undefined violet classes are fixed in R1, DEF-009)",
+TC-UX-002.1.6,UX-002,AC1,unit,automated,passing,src/design.test.ts::keeps violet and gradients out of the stylesheet,Palette rule
+TC-UX-002.1.7,UX-002,AC1,visual-a11y-qa,manual,review-pending,,"Specimen /design-specimen at 390px and 1280px, with a browser contrast audit of computed colours (docs/product/verification/)"
+TC-UX-002.2.1,UX-002,AC2,unit,automated,passing,src/design-tokens.test.ts::does not let one-off text sizes or hex colours grow (ratchet),"Baselines on 4 Nov: 224 one-off text sizes, 15 .tsx files with hex (RC-006)"
+TC-UX-002.2.2,UX-002,AC2,unit,automated,passing,src/design.test.ts::names only paper icons that exist,Icons come from one registry
+TC-UX-002.2.3,UX-002,AC2,unit,automated,passing,src/design.test.ts::has a 3D picture file for every picture name,
+TC-UX-002.2.4,UX-002,AC2,visual-a11y-qa,manual,review-pending,,"No visible change (D-013): 38 screens before and after the tokens, 0 differing pixels (evidence/data/pixdiff-before-after.txt)"
+TC-UX-002.2.5,UX-002,AC2,unit,planned,planned,,R1: lower the ratchet baselines as screens move to tokens (UX-002 §5)
+TC-UX-003.1.1,UX-003,AC1,document-review,manual,review-pending,,"UX-003 §1–§5: family, weights, scale, hierarchy by role, line length and line height"
+TC-UX-003.1.2,UX-003,AC1,unit,automated,passing,"src/design-tokens.test.ts::gives every type role a size and line height, none below 15px",
+TC-UX-003.2.1,UX-003,AC2,document-review,manual,review-pending,,"UX-003 §6: fractions, superscripts, symbols, numbers and long calculations; fraction digits at 4.5:1 at their real size"
+TC-UX-003.2.2,UX-003,AC2,unit,automated,passing,src/design-tokens.test.ts::checks fraction digits at the sizes FractionNotation actually renders,"Sizes come from the component, not assumptions (DEF-022)"
+TC-UX-003.2.3,UX-003,AC2,unit,automated,passing,"src/design-tokens.test.ts::meets the contrast minimum for every supported pairing at its real size and weight, without rounding",
+TC-UX-003.2.4,UX-003,AC2,unit,automated,passing,src/design.test.ts::uses no emoji anywhere in the app: pictures are drawn paper icons,"Pictures are drawn, not font glyphs"
+TC-UX-003.2.5,UX-003,AC2,visual-a11y-qa,manual,review-pending,,"Specimen maths section at 390px and 1280px, at 200% text and at 320px (docs/product/verification/)"
+TC-UX-003.3.1,UX-003,AC3,visual-a11y-qa,manual,partial,,"Developer re-run 9 Nov (R1 step 4, text-scaling.cjs): 200% text at 390, 768 and 1280px and 320px reflow show no sideways scroll and no clipped text on the 8 tested pages, except the internal design specimen at 768px (24px, a worked-example panel). DEF-018 to DEF-021 fixed; awaiting independent retest. Was failing on 4 Nov."
+TC-UX-003.3.2,UX-003,AC3,document-review,manual,review-pending,,"UX-003 §7: method, results and rules that prevent the failures"
+TC-UX-003.3.3,UX-003,AC3,e2e,planned,planned,,"R1: automate the scaling check at 320px and at 200% text in CI (UX-008, QA-005)"
+TC-UX-004.1.1,UX-004,AC1,document-review,manual,accepted,,"UX-004 §1–§3: ten content types with colour, icon, label and shape; the prompt; the supported pairings; today and gaps — accepted 6 Nov 2026 for R0 scope (D-024)"
+TC-UX-004.1.2,UX-004,AC1,unit,automated,passing,"src/design-tokens.test.ts::keeps content ink on every content-type background at the 7:1 product target, with labels on dark backgrounds",
+TC-UX-004.1.3,UX-004,AC1,unit,automated,passing,"src/design-tokens.test.ts::meets the contrast minimum for every supported pairing at its real size and weight, without rounding",
+TC-UX-004.1.4,UX-004,AC1,visual-a11y-qa,manual,review-pending,,"Specimen content types in colour and greyscale, with the browser contrast audit (docs/product/verification/)"
+TC-UX-004.1.5,UX-004,AC1,unit,automated,passing,"src/design-tokens.test.ts::states the comparison rule's domain: same positive numerator, positive denominators, same-sized wholes (DEF-036)",DEF-036 regression
+TC-UX-004.2.1,UX-004,AC2,document-review,manual,accepted,,"UX-004 §4: one task, one primary action, blocked actions explained, feedback carries the next action — accepted 6 Nov 2026 for R0 scope (D-024)"
+TC-UX-004.2.2,UX-004,AC2,component,planned,planned,,R1: each screen state has exactly one primary button (QA-002)
+TC-UX-004.2.3,UX-004,AC2,visual-a11y-qa,planned,planned,,R1: 5-second test with children on the migrated question and lesson screens
+TC-UX-005.1.1,UX-005,AC1,e2e,manual,partial,,"Developer browser check 9 Nov (docs/product/verification/r1-step4-checks.cjs) at 390, 768 and 1280px: home, map, island journey, lesson and practice reached by clicking navigation; the report is reached from the grown-ups navigation. Not independently reproduced."
+TC-UX-005.2.1,UX-005,AC2,visual-a11y-qa,manual,partial,,"Developer screenshots at 390, 768 and 1280px and text scaling at 200% (r1-step4-checks.cjs, text-scaling.cjs). Keyboard, screen reader and child usability not checked."
+TC-UX-005.3.1,UX-005,AC3,e2e,manual,partial,,"DEF-005 fixed 9 Nov: islands without a lab have no Lab tab and /lab opens the island map; /practice, /lab and /start open the current island (DEF-014); the mock-ups are no longer public (DEF-016). Developer browser check (r1-step4-checks.cjs); awaiting independent retest."
+TC-UX-006.1.1,UX-006,AC1,unit,automated,passing,src/design-tokens.test.ts::uses only the documented motion timings and respects reduced motion (UX-006),docs/product/design/UX-006-motion.md
+TC-UX-006.2.1,UX-006,AC2,unit,automated,passing,src/design-tokens.test.ts::uses only the documented motion timings and respects reduced motion (UX-006),Each timing names what it communicates; Kip's decorative sway is off by default.
+TC-UX-006.2.2,UX-006,AC2,document-review,manual,review-pending,,Review of the motion table (UX-006 §1).
+TC-UX-006.3.1,UX-006,AC3,component,automated,passing,"src/components/questions/QuestionPlayer.test.tsx::single-answer choice: clear selected state, submit, and informative confirmation (PRACT-002 AC1, PRACT-008 AC1)",All component tests run with animations skipped and complete their flows.
+TC-UX-006.4.1,UX-006,AC4,unit,automated,passing,src/design-tokens.test.ts::uses only the documented motion timings and respects reduced motion (UX-006),
+TC-UX-006.4.2,UX-006,AC4,visual-a11y-qa,manual,partial,,"Reduced motion emulated in the quality pass: preference detected, transitions cut. Developer run 9 Nov (docs/product/verification/r1-quality-pass.cjs; results in verification/results/r1/quality-pass). Not independently reproduced."
+TC-UX-007.1.1,UX-007,AC1,visual-a11y-qa,manual,partial,,axe-core WCAG 2.1 A/AA on 11 screens at 375 and 1280px: 0 violations; keyboard walk: visible focus on every control; names and non-colour cues by component tests. Developer run 9 Nov (docs/product/verification/r1-quality-pass.cjs; results in verification/results/r1/quality-pass). Not independently reproduced.
+TC-UX-007.1.2,UX-007,AC1,component,automated,passing,src/topics/fractions/ui/FractionLab.test.tsx::gives every control an accessible name (LAB-007),
+TC-UX-007.2.1,UX-007,AC2,visual-a11y-qa,manual,partial,,Every tappable control is at least 44×44px on 11 screens at 5 widths. Developer run 9 Nov (docs/product/verification/r1-quality-pass.cjs; results in verification/results/r1/quality-pass). Not independently reproduced.
+TC-UX-007.3.1,UX-007,AC3,document-review,manual,review-pending,,Known limitations in docs/product/design/UX-007-accessibility-audit.md §2.
+TC-UX-008.1.1,UX-008,AC1,visual-a11y-qa,manual,partial,,"11 main screens at 320, 375, 430, 768 and 1280px. Developer run 9 Nov (docs/product/verification/r1-quality-pass.cjs; results in verification/results/r1/quality-pass). Not independently reproduced."
+TC-UX-008.2.1,UX-008,AC2,visual-a11y-qa,manual,partial,,"No sideways scroll, clipped text or overlapping controls at any tested width; 200% text and 320px reflow clean on child screens. Developer run 9 Nov (docs/product/verification/r1-quality-pass.cjs; results in verification/results/r1/quality-pass). Not independently reproduced."
+TC-UX-008.3.1,UX-008,AC3,visual-a11y-qa,manual,partial,,55 screenshots kept in docs/product/verification/results/r1/quality-pass/screens/.
+TC-ARCH-001.1.1,ARCH-001,AC1,document-review,manual,accepted,,"ARCH-001 §1–§4: layers, how the rebuilt check works, rules A1–A7, couplings K-1 to K-7 — accepted 6 Nov 2026 for R0 scope (D-024)"
+TC-ARCH-001.1.2,ARCH-001,AC1,unit,automated,passing,"src/architecture.test.ts::A1: keeps the engine pure, importing only other engine files","Rebuilt 5 Nov (DEF-023): parsed imports, real resolution, prohibited globals; the reviewer probe fails"
+TC-ARCH-001.1.3,ARCH-001,AC1,unit,automated,passing,src/architecture.test.ts::A2: keeps mathematical logic self-contained,
+TC-ARCH-001.1.4,ARCH-001,AC1,unit,automated,passing,"src/architecture.test.ts::A3: keeps Fractions content, marking and diagnosis free of UI code",.ts and .tsx; module.tsx is the composition root (presentation)
+TC-ARCH-001.1.5,ARCH-001,AC1,unit,automated,passing,src/architecture.test.ts::A4: keeps the lesson schema free of UI code,
+TC-ARCH-001.1.6,ARCH-001,AC1,unit,automated,passing,src/architecture.test.ts::A5: keeps curriculum data free of UI code,
+TC-ARCH-001.1.7,ARCH-001,AC1,unit,automated,partial,src/architecture.test.ts::A6: lets only the known content-contract files import UI types,"4 documented files (K-1, K-2) plus 2 discovered by the rebuilt check (K-6, K-7); the list may only shrink"
+TC-ARCH-001.1.8,ARCH-001,AC1,unit,automated,passing,"src/architecture.test.ts::guard: rejects every bad fixture, each for the expected reason","22 bad fixtures incl. DEF-030 (destructuring, alias, Reflect.get, shadow plus real use) and DEF-031 (lib/store as the questions layer, runtime import of Fractions content, indirect helper)"
+TC-ARCH-001.1.9,ARCH-001,AC1,unit,automated,passing,"src/architecture.test.ts::guard: accepts good fixtures: comments, strings, property names, local names, same-layer and allowed type-only imports, pure .tsx","11 good fixtures, incl. same-layer and allowed type-only imports"
+TC-ARCH-001.1.10,ARCH-001,AC1,unit,automated,passing,src/architecture.test.ts::guard: finds Node-typed fetch even without the DOM library,
+TC-ARCH-001.1.11,ARCH-001,AC1,unit,automated,passing,src/architecture.test.ts::guard: the transitive check alone detects a violation hidden behind an intermediate module,DEF-031 regression: the helper isn't scanned directly and no direct rule fails; QA's lib/store probe is a permanent fixture
+TC-ARCH-001.2.1,ARCH-001,AC2,document-review,manual,accepted,,"ARCH-001 §3 (plug-in contract) and §6 (Times Tables, Mental Maths, 11+ plug-in points) — accepted 6 Nov 2026 for R0 scope (D-024)"
+TC-ARCH-001.2.2,ARCH-001,AC2,unit,automated,passing,"src/topics/registry.test.ts::keeps its own journey while sharing results, stars and badges",A second topic plugs in without changing the Fractions engine
+TC-ARCH-001.2.3,ARCH-001,AC2,unit,automated,passing,src/topics/registry.test.ts::gets adaptive practice from its own pool,
+TC-ARCH-001.2.4,ARCH-001,AC2,unit,automated,passing,"src/topics/registry.test.ts::namespaces every skill, question and misconception by its topic",
+TC-ARCH-001.2.5,ARCH-001,AC2,content,automated,partial,src/topics/kit/kit.test.ts::makes plenty of fresh questions for every skill,18 kit islands added through the same contract
+TC-ARCH-002.1.1,ARCH-002,AC1,document-review,manual,accepted,,"ARCH-002 spec §2–§3: every backlog field, interaction-specific answers, distractors, validation and scoring — accepted 6 Nov 2026 for R0 scope (D-025)"
+TC-ARCH-002.1.2,ARCH-002,AC1,unit,automated,passing,"src/questions/questions.test.ts::has a valid fixture for every interaction, and each one validates",12 interactions
+TC-ARCH-002.1.3,ARCH-002,AC1,unit,automated,passing,src/questions/questions.test.ts::survives a JSON round trip: definitions are plain data,
+TC-ARCH-002.1.4,ARCH-002,AC1,unit,automated,passing,src/questions/questions.test.ts::validates every existing Fractions question through the adapter,Compatibility
+TC-ARCH-002.1.5,ARCH-002,AC1,unit,automated,passing,"src/questions/questions.test.ts::validates every kit island's questions through the adapter, across seeds; the only failures are the known duplicate traps (DEF-028)","DEF-028 exception narrowed to number-entry, the trap-value path and the exact message; no other exception exists"
+TC-ARCH-002.1.6,ARCH-002,AC1,unit,automated,passing,"src/questions/questions.test.ts::never invents a year mapping: the caller's level is used, and unverified is explicit",
+TC-ARCH-002.1.7,ARCH-002,AC1,unit,automated,passing,src/architecture.test.ts::A7: keeps the question schema free of UI code and browser access,UI-independent
+TC-ARCH-002.1.8,ARCH-002,AC1,unit,automated,passing,"src/questions/questions.test.ts::adapters set `ask` from the existing data's meaning, and the existing write-fraction questions agree with it",Existing data's own meaning
+TC-ARCH-002.1.9,ARCH-002,AC1,unit,automated,passing,"src/questions/questions.test.ts::QA's example: answer −5, response −5.0005. The kit marks it correct; the new comparator does not",DEF-038 differential: negative ties
+TC-ARCH-002.1.10,ARCH-002,AC1,unit,automated,passing,src/questions/questions.test.ts::the kit also has an unexplained 1e-9 allowance the new contract deliberately does not: a second known difference,DEF-038 differential: the 1e-9 allowance
+TC-ARCH-002.1.11,ARCH-002,AC1,unit,automated,passing,"src/questions/questions.test.ts::agrees on ordinary values, and every disagreement is explained by one of the two known causes",DEF-038 sweep; the difference stays visible
+TC-ARCH-002.1.12,ARCH-002,AC1,unit,automated,passing,"src/questions/questions.test.ts::adapters declare the comparison honestly: round to 3 places, which is NOT the kit's rule",DEF-038
+TC-ARCH-002.1.13,ARCH-002,AC1,unit,planned,planned,,"R1 integration prerequisite (DEF-038): resolve the kit-marking difference (move kit marking to the contract, or add an explicit legacy comparison kind) before any marking goes through the schema — remains planned and open for R1 after D-025: the behavioural difference is not fixed"
+TC-ARCH-002.2.1,ARCH-002,AC2,unit,automated,passing,"src/questions/questions.test.ts::rejects invalid definitions for every interaction, naming the field at fault","At least 2 invalid fixtures per interaction with exact error paths; Review 2 adds QA's cases a to e verbatim (DEF-032 to DEF-035), tolerance and rounding traps incl. negatives, overlapping and duplicate traps, ask/model disagreements, duplicate match choices"
+TC-ARCH-002.2.2,ARCH-002,AC2,unit,automated,passing,"src/questions/questions.test.ts::rejects bad common fields: id, level, difficulty, hints, scoring and unknown interactions",
+TC-ARCH-002.2.3,ARCH-002,AC2,content,automated,partial,src/topics/kit/kit.test.ts::makes well-formed questions that mark their own answer right and every trap wrong,Existing content check; runtime validation now in src/questions/validate.ts (not yet used by the app)
+TC-ARCH-002.2.4,ARCH-002,AC2,unit,automated,passing,"src/questions/questions.test.ts::tolerance is inclusive: exactly at the boundary matches, just inside matches, just outside does not",Comparison contract: no fixed allowance (DEF-033)
+TC-ARCH-002.2.5,ARCH-002,AC2,unit,automated,passing,src/questions/questions.test.ts::adds no fixed allowance: very small tolerances keep their stated boundary,A 1e-12 tolerance must not accept 2e-12
+TC-ARCH-002.2.6,ARCH-002,AC2,unit,automated,passing,"src/questions/questions.test.ts::rounds half away from zero, including negative values (hand-worked)",Rounding contract incl. negatives
+TC-ARCH-002.2.7,ARCH-002,AC2,unit,automated,passing,src/questions/questions.test.ts::is used consistently: the validator judges traps by the same function as answers,One comparison for answers and traps (DEF-033)
+TC-ARCH-002.2.8,ARCH-002,AC2,unit,automated,passing,src/questions/questions.test.ts::accepts the answer for each explicitly asked quantity,"`ask` shaded, unshaded, marked (DEF-035)"
+TC-ARCH-002.2.9,ARCH-002,AC2,unit,automated,passing,src/questions/questions.test.ts::does not guess when `ask` is absent: the answer is simply not checked against the model (recorded limitation),"Limitation recorded, not claimed verified"
+TC-ARCH-002.2.10,ARCH-002,AC2,unit,automated,passing,src/questions/questions.test.ts::allows scaffolding: a pre-shaded model for shade and a pre-marked number line for placement,No universal bans
+TC-ARCH-002.2.11,ARCH-002,AC2,unit,automated,passing,src/questions/questions.test.ts::never equates distinct values because scaling loses precision: QA's example throws instead of returning true,"DEF-037: MAX_SAFE_INTEGER and MAX_SAFE_INTEGER−1, negatives"
+TC-ARCH-002.2.12,ARCH-002,AC2,unit,automated,passing,src/questions/questions.test.ts::never equates values because scaling overflows to Infinity: QA's 1e308 example throws instead of returning true,"DEF-037: 1e308 and 1.1e308, negatives"
+TC-ARCH-002.2.13,ARCH-002,AC2,unit,automated,passing,src/questions/questions.test.ts::defines the domain exactly: |value × 10^places| must not exceed MAX_SAFE_INTEGER,DEF-037 domain boundary
+TC-ARCH-002.2.14,ARCH-002,AC2,unit,automated,passing,src/questions/questions.test.ts::still compares correctly at the edge of the domain and for ordinary values,DEF-037: ordinary and negative rounding unchanged
+TC-ARCH-002.2.15,ARCH-002,AC2,unit,automated,passing,src/questions/questions.test.ts::keeps the approved no-epsilon contract: tolerance and exact are unchanged and unrestricted by the rounding domain,No hidden epsilon
+TC-ARCH-002.2.16,ARCH-002,AC2,unit,automated,passing,"src/questions/questions.test.ts::the validator rejects an answer or trap outside the rounding domain, with exact paths, and does not mark distinct values correct",DEF-037 validator paths
+TC-ARCH-002.2.17,ARCH-002,AC2,unit,automated,passing,"src/questions/questions.test.ts::the validator accepts distinct values inside the domain, and still rejects genuine rounding collisions",DEF-037 no over-rejection
+TC-ARCH-003.1.1,ARCH-003,AC1,document-review,manual,accepted,,"ARCH-003 spec: number domain, mixed numbers, divmod, partitions, kept behaviour, what moved — accepted 6 Nov 2026 for R0 scope (D-024)"
+TC-ARCH-003.1.2,ARCH-003,AC1,unit,automated,passing,src/architecture.test.ts::A2: keeps mathematical logic self-contained,Maths files depend only on maths and use no browser or network globals
+TC-ARCH-003.1.3,ARCH-003,AC1,unit,automated,passing,"src/maths/maths.test.ts::adds, subtracts, multiplies and divides exactly, in simplest form (hand-worked table)",
+TC-ARCH-003.1.4,ARCH-003,AC1,unit,automated,passing,src/maths/maths.test.ts::lists factors and multiples (hand-worked),
+TC-ARCH-003.1.5,ARCH-003,AC1,unit,automated,passing,"src/maths/maths.test.ts::finds digits by place value (hand-worked, moved from a UI file without change)",K-7 removed
+TC-ARCH-003.1.6,ARCH-003,AC1,unit,automated,passing,src/topics/fractions/math.test.ts::simplifies fractions,Existing
+TC-ARCH-003.2.1,ARCH-003,AC2,unit,automated,passing,"src/maths/maths.test.ts::rejects zero or negative denominators, non-integers, NaN and Infinity",
+TC-ARCH-003.2.2,ARCH-003,AC2,unit,automated,passing,src/maths/maths.test.ts::refuses division by zero,
+TC-ARCH-003.2.3,ARCH-003,AC2,unit,automated,passing,src/maths/maths.test.ts::throws on overflow instead of returning an imprecise answer,
+TC-ARCH-003.2.4,ARCH-003,AC2,unit,automated,passing,src/maths/maths.test.ts::rejects mixed numbers outside the rules,
+TC-ARCH-003.2.5,ARCH-003,AC2,unit,automated,passing,"src/maths/maths.test.ts::gives no fraction for unequal parts, and rejects invalid partitions",
+TC-ARCH-003.2.6,ARCH-003,AC2,unit,automated,passing,src/topics/fractions/evaluate.test.ts::treats a zero denominator as an input problem,Existing
+TC-ARCH-003.2.7,ARCH-003,AC2,unit,planned,planned,,"R1 (DEF-027): existing unchecked functions route through the checked versions; out-of-domain inputs (0/0, non-integers, overflowing compare) are rejected"
+TC-ARCH-003.2.8,ARCH-003,AC2,unit,automated,passing,"src/maths/maths.test.ts::matches a BigInt oracle for every pair of safe-integer extremes, both divisor signs, zero and negative dividends",DEF-029 regression
+TC-ARCH-003.2.9,ARCH-003,AC2,unit,automated,passing,"src/maths/maths.test.ts::returns the reproduced case exactly: divmod(2, MAX) = { q: 0, r: 2 }",DEF-029 regression
+TC-ARCH-003.3.1,ARCH-003,AC3,content,automated,passing,src/topics/fractions/representations.test.ts::name the fraction: the shaded (or unshaded) count over the parts of an equal-part picture is the answer,Pictures and answers agree; marking checked against hand rules
+TC-ARCH-003.3.2,ARCH-003,AC3,content,automated,passing,"src/topics/fractions/representations.test.ts::number line: the target sits on a tick of the scale, and only that tick is right",
+TC-ARCH-003.3.3,ARCH-003,AC3,unit,automated,passing,src/architecture.test.ts::A6: lets only the known content-contract files import UI types,K-7 fixed: place-value maths no longer comes from a UI file
+TC-ARCH-003.3.4,ARCH-003,AC3,unit,manual,review-pending,,"Generated-question comparison 6050e3c vs step-3 head: every practice, assessment and kit question (150 seeds) identical after the extraction (docs/product/verification/results/step3/)"
+TC-ARCH-003.3.5,ARCH-003,AC3,unit,automated,passing,"src/topics/fractions/evaluate.test.ts::accepts any shading of the right amount, including equivalent amounts",Existing
+TC-ARCH-004.1.1,ARCH-004,AC1,unit,automated,passing,src/lib/persist.test.ts::survives a refresh or restart: what is saved loads back the same,Refresh and restart are a fresh read of the same storage.
+TC-ARCH-004.1.2,ARCH-004,AC1,e2e,manual,partial,,Developer browser check: progress kept after reload (r1-step4-checks.cjs).
+TC-ARCH-004.2.1,ARCH-004,AC2,unit,automated,passing,src/lib/persist.test.ts::is versioned: an incompatible version is backed up and the learner starts fresh,
+TC-ARCH-004.2.2,ARCH-004,AC2,unit,automated,passing,"src/lib/migrate.test.ts::keeps lessons, placement and practice exactly where they were",
+TC-ARCH-004.2.3,ARCH-004,AC2,unit,automated,passing,src/lib/persist.test.ts::migrates a version-1 save once and leaves the original as a backup,
+TC-ARCH-004.3.1,ARCH-004,AC3,unit,automated,passing,"src/lib/persist.test.ts::fails gracefully on corrupt data, keeping a backup",
+TC-ARCH-004.3.2,ARCH-004,AC3,unit,automated,passing,"src/lib/persist.test.ts::starts fresh, without an error, when nothing is saved",
+TC-ARCH-004.3.3,ARCH-004,AC3,unit,automated,passing,src/lib/persist.test.ts::keeps working when storage is blocked or full,
+TC-ARCH-004.3.4,ARCH-004,AC3,unit,automated,passing,src/lib/persist.test.ts::keeps an unreadable version-1 save untouched and starts fresh,
+TC-ARCH-004.3.5,ARCH-004,AC3,unit,automated,passing,src/engine/engine.test.ts::survives corrupt or outdated saved data,
+TC-ARCH-004.4.1,ARCH-004,AC4,unit,automated,passing,"src/lib/persist.test.ts::collects no personal data beyond an optional first name, year and avatar","The name is optional and blank by default; no account, e-mail or tracking id."
+TC-ARCH-005.1.1,ARCH-005,AC1,component,automated,passing,"src/components/questions/QuestionPlayer.test.tsx::records the question, skill, response, correctness, attempts, hints and duration (ARCH-005)",
+TC-ARCH-005.1.2,ARCH-005,AC1,unit,automated,partial,src/engine/engine.test.ts::records a clean first-try success,No response or duration stored
+TC-ARCH-005.2.1,ARCH-005,AC2,unit,automated,passing,"src/engine/engine.test.ts::diagnoses, explains, asks a follow-up, then lets the child retry without revealing",
+TC-ARCH-005.2.2,ARCH-005,AC2,component,automated,passing,"src/components/questions/QuestionPlayer.test.tsx::a tagged wrong answer gets a hedged diagnosis and a guided step before any reveal, and the retry is recorded (PRACT-008 AC2, AC3)",
+TC-ARCH-005.3.1,ARCH-005,AC3,unit,automated,passing,src/engine/engine.test.ts::reports one wrong answer as only a possible misconception,
+TC-ARCH-005.3.2,ARCH-005,AC3,unit,automated,passing,"src/engine/recovery-transfer.test.ts::labels one answer as possible, repeated ones as likely, and keeps the evidence (MIS-003)",
+TC-FR-001.1.1,FR-001,AC1,unit,automated,partial,"src/engine/rewards.test.ts::builds one real question per lesson, matching that lesson",
+TC-FR-001.1.2,FR-001,AC1,document-review,manual,review-pending,,"The warm-up covers equal parts first, then naming, then each later lesson; it has no timer and stops after two misses. Review whether it feels low-pressure (CUR-004)."
+TC-FR-001.2.1,FR-001,AC2,component,automated,passing,"src/components/screens/PlacementScreen.test.tsx::suggests a start and offers the beginning too, without locking anything",
+TC-FR-001.3.1,FR-001,AC3,unit,automated,passing,"src/engine/rewards.test.ts::skips lessons answered correctly before the first gap, and stops after two misses in a row",
+TC-FR-001.3.2,FR-001,AC3,unit,automated,passing,src/engine/rewards.test.ts::marks placed-out lessons done without counting placement towards mastery,
+TC-FR-002.1.1,FR-002,AC1,unit,automated,passing,src/topics/fractions/evaluate.test.ts::flags unequal shapes chosen as equal parts,
+TC-FR-002.1.2,FR-002,AC1,unit,automated,passing,src/topics/fractions/math.test.ts::recognises equal partitions,
+TC-FR-002.1.3,FR-002,AC1,unit,automated,passing,src/topics/fractions/journey-content.test.ts::shows valid and invalid divisions and says why unequal pieces are not equal parts,
+TC-FR-002.1.4,FR-002,AC1,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-002.2.1,FR-002,AC2,unit,automated,passing,src/topics/fractions/journey-content.test.ts::shows valid and invalid divisions and says why unequal pieces are not equal parts,
+TC-FR-002.2.2,FR-002,AC2,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-002.3.1,FR-002,AC3,unit,automated,passing,src/topics/fractions/journey-content.test.ts::shows valid and invalid divisions and says why unequal pieces are not equal parts,Checks the wording exists; whether it is clear to a child is CUR-004.
+TC-FR-002.3.2,FR-002,AC3,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-003.1.1,FR-003,AC1,unit,automated,passing,src/topics/fractions/journey-content.test.ts::introduces both terms with a synchronised diagram,
+TC-FR-003.1.2,FR-003,AC1,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-003.2.1,FR-003,AC2,unit,automated,passing,src/topics/fractions/evaluate.test.ts::validates choose-fraction answers with tagged distractors,
+TC-FR-003.2.2,FR-003,AC2,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-003.3.1,FR-003,AC3,unit,automated,passing,src/topics/fractions/evaluate.test.ts::spots a swapped numerator and denominator,
+TC-FR-003.3.2,FR-003,AC3,unit,automated,passing,"src/topics/fractions/journey-content.test.ts::never reverses the terms in lessons, hints, feedback or misconception explanations",
+TC-FR-003.3.3,FR-003,AC3,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-004.1.1,FR-004,AC1,unit,automated,passing,src/topics/fractions/journey-content.test.ts::covers continuous models and discrete sets,
+TC-FR-004.1.2,FR-004,AC1,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-004.2.1,FR-004,AC2,unit,automated,passing,src/topics/fractions/evaluate.test.ts::accepts any shading of the right amount,
+TC-FR-004.2.2,FR-004,AC2,unit,automated,passing,src/topics/fractions/evaluate.test.ts::spots part-to-part thinking,
+TC-FR-004.2.3,FR-004,AC2,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-004.3.1,FR-004,AC3,unit,automated,passing,"src/topics/fractions/content.test.ts::builds thousands of valid, correctly-marked questions",
+TC-FR-005.1.1,FR-005,AC1,unit,automated,passing,"src/topics/fractions/math.test.ts::compares fractions, including unit fractions",
+TC-FR-005.1.2,FR-005,AC1,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-005.2.1,FR-005,AC2,unit,automated,passing,src/topics/fractions/journey-content.test.ts::explains why a larger denominator can mean smaller parts,
+TC-FR-005.2.2,FR-005,AC2,unit,automated,passing,src/topics/fractions/evaluate.test.ts::spots 'bigger denominator means bigger',
+TC-FR-005.2.3,FR-005,AC2,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-005.3.1,FR-005,AC3,unit,automated,passing,src/topics/fractions/evaluate.test.ts::validates comparison symbols,
+TC-FR-005.3.2,FR-005,AC3,unit,automated,passing,src/topics/fractions/math.test.ts::detects equivalence exactly,
+TC-FR-006.1.1,FR-006,AC1,unit,automated,passing,src/topics/fractions/evaluate.test.ts::checks compare and equivalence challenges exactly,
+TC-FR-006.1.2,FR-006,AC1,unit,automated,passing,src/topics/fractions/journey-content.test.ts::connects multiplying top and bottom by the same number to a picture of split parts,
+TC-FR-006.1.3,FR-006,AC1,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-006.2.1,FR-006,AC2,unit,automated,passing,src/topics/fractions/journey-content.test.ts::connects multiplying top and bottom by the same number to a picture of split parts,
+TC-FR-006.2.2,FR-006,AC2,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-006.3.1,FR-006,AC3,unit,automated,passing,src/topics/fractions/math.test.ts::detects equivalence exactly,
+TC-FR-006.3.2,FR-006,AC3,unit,automated,passing,src/topics/fractions/math.test.ts::lists equivalents from the simplest form,
+TC-FR-006.3.3,FR-006,AC3,unit,automated,passing,src/topics/fractions/evaluate.test.ts::accepts equivalent written fractions and explains why,
+TC-FR-007.1.1,FR-007,AC1,unit,automated,passing,"src/topics/fractions/journey-content.test.ts::uses equal intervals from 0 to 1 with points strictly between, or on 1 only when asked",
+TC-FR-007.2.1,FR-007,AC2,unit,automated,passing,"src/topics/fractions/journey-content.test.ts::uses equal intervals from 0 to 1 with points strictly between, or on 1 only when asked",
+TC-FR-007.3.1,FR-007,AC3,unit,automated,passing,"src/topics/fractions/evaluate.test.ts::validates number line placement by value, not by position label",
+TC-FR-007.3.2,FR-007,AC3,unit,automated,passing,src/topics/fractions/evaluate.test.ts::spots counting marks instead of gaps,
+TC-FR-007.3.3,FR-007,AC3,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::moves the number-line marker by keyboard and by dragging, snapping to marks (LAB-006)",
+TC-FR-007.4.1,FR-007,AC4,unit,automated,passing,"src/topics/fractions/journey-content.test.ts::uses equal intervals from 0 to 1 with points strictly between, or on 1 only when asked",0 and 1 are labelled on every line (NumberLine).
+TC-FR-007.4.2,FR-007,AC4,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-008.1.1,FR-008,AC1,unit,automated,passing,"src/topics/fractions/journey-content.test.ts::teaches sharing into denominator groups, then counting numerator groups, with whole-number results first",
+TC-FR-008.1.2,FR-008,AC1,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-008.2.1,FR-008,AC2,unit,automated,passing,src/topics/fractions/math.test.ts::finds fractions of amounts only when whole,
+TC-FR-008.2.2,FR-008,AC2,unit,automated,passing,"src/topics/fractions/journey-content.test.ts::teaches sharing into denominator groups, then counting numerator groups, with whole-number results first",
+TC-FR-008.3.1,FR-008,AC3,unit,automated,passing,src/topics/fractions/evaluate.test.ts::diagnoses fraction-of answers,
+TC-FR-008.3.2,FR-008,AC3,unit,automated,passing,"src/topics/fractions/journey-content.test.ts::teaches sharing into denominator groups, then counting numerator groups, with whole-number results first",
+TC-FR-009.1.1,FR-009,AC1,unit,automated,passing,src/topics/fractions/journey-content.test.ts::explains why the denominator stays the same,"New lesson ""adding"" in the R1 Fractions island (9 Nov, D-026)."
+TC-FR-009.1.2,FR-009,AC1,content-review,manual,planned,,Independent educational review of the authored content (CUR-004).
+TC-FR-009.2.1,FR-009,AC2,unit,automated,passing,"src/topics/fractions/journey-content.test.ts::keeps every result within one whole, with valid answers",
+TC-FR-009.3.1,FR-009,AC3,unit,automated,passing,src/topics/fractions/journey-content.test.ts::draws exactly the operation in the prompt: the picture and the symbols agree,
+TC-FR-009.3.2,FR-009,AC3,unit,automated,passing,src/topics/fractions/journey-content.test.ts::flags adding the denominators as a possible misconception,
+TC-FR-010.1.1,FR-010,AC1,unit,automated,passing,"src/topics/fractions/journey-content.test.ts::gives each core skill a worked example, a guided attempt, a hint and an independent question",Core skills per RC-010.
+TC-FR-010.2.1,FR-010,AC2,unit,automated,passing,src/engine/recovery-transfer.test.ts::shows the hint after an unexplained mistake while the skill is still being learned,
+TC-FR-010.2.2,FR-010,AC2,unit,automated,passing,"src/engine/recovery-transfer.test.ts::does not push a hint on a child who has shown the skill is secure, but still lets them ask",
+TC-FR-010.2.3,FR-010,AC2,unit,automated,partial,src/engine/engine.test.ts::keeps the question editable when a hint is requested,
+TC-FR-010.3.1,FR-010,AC3,unit,automated,passing,"src/engine/recovery-transfer.test.ts::does not push a hint on a child who has shown the skill is secure, but still lets them ask",
+TC-FR-010.3.2,FR-010,AC3,unit,automated,partial,src/engine/engine.test.ts::counts a voluntary hint as support,Hints are optional
+TC-FR-011.1.1,FR-011,AC1,unit,automated,passing,"src/engine/engine.test.ts::leads through lessons, then practice, then the mastery check",Next recommended activity from evidence.
+TC-FR-011.1.2,FR-011,AC1,unit,automated,passing,src/engine/evidence.test.ts::uses only a lesson's final checks as its evidence questions,
+TC-FR-011.1.3,FR-011,AC1,unit,automated,passing,src/engine/evidence.test.ts::shows started and unstarted lessons separately,Current status per lesson; the island map and journey detail show it with the skill outcome and prerequisites.
+TC-FR-011.1.4,FR-011,AC1,e2e,manual,partial,,Developer browser check of the island map and journey detail (docs/product/verification/r1-step4-checks.cjs); not independently reproduced.
+TC-FR-011.2.1,FR-011,AC2,unit,automated,passing,src/engine/evidence.test.ts::explains a soft prerequisite instead of blocking (FR-011 AC2),"Prerequisites are explained ""best after"" notices, never hard locks (CUR-002 principle 2)."
+TC-FR-011.2.2,FR-011,AC2,e2e,manual,partial,,Developer browser check that the notice is shown on the island map (r1-step4-checks.cjs).
+TC-FR-011.3.1,FR-011,AC3,unit,automated,passing,src/engine/evidence.test.ts::does not complete a lesson by reaching its end,R1 (D-026): completion is independent evidence (CUR-002 §4.2). Stars still reward activity.
+TC-FR-011.3.2,FR-011,AC3,unit,automated,passing,"src/engine/evidence.test.ts::marks the island's phases done by evidence, not by visits",
+TC-LAB-001.1.1,LAB-001,AC1,unit,automated,passing,"src/topics/fractions/labState.test.ts::keeps notation, parts and pictures in agreement through 20,000 random changes",
+TC-LAB-001.1.2,LAB-001,AC1,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::shades parts with a pointer and updates the notation and words at once (LAB-003, LAB-001)",
+TC-LAB-001.2.1,LAB-001,AC2,unit,automated,passing,"src/topics/fractions/labState.test.ts::keeps notation, parts and pictures in agreement through 20,000 random changes",The lab has one state (labReducer); every display is derived from it.
+TC-LAB-002.1.1,LAB-002,AC1,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::changes the number of equal parts only within 1 to 12, and the labels follow (LAB-002)",
+TC-LAB-002.2.1,LAB-002,AC2,unit,automated,passing,src/topics/fractions/math.test.ts::recognises equal partitions,
+TC-LAB-002.2.2,LAB-002,AC2,unit,automated,passing,src/topics/fractions/labState.test.ts::offers 1 to 12 equal parts and refuses anything else rather than approximating it,
+TC-LAB-002.3.1,LAB-002,AC3,unit,automated,passing,src/topics/fractions/labState.test.ts::offers 1 to 12 equal parts and refuses anything else rather than approximating it,
+TC-LAB-002.4.1,LAB-002,AC4,unit,automated,passing,"src/topics/fractions/labState.test.ts::drops shading that no longer exists when the parts change, and relabels the parts",
+TC-LAB-002.4.2,LAB-002,AC4,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::changes the number of equal parts only within 1 to 12, and the labels follow (LAB-002)",
+TC-LAB-003.1.1,LAB-003,AC1,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::shades parts with a pointer and updates the notation and words at once (LAB-003, LAB-001)",
+TC-LAB-003.1.2,LAB-003,AC1,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::works from the keyboard: arrows move between parts, Space shades (LAB-003, LAB-007)",
+TC-LAB-003.1.3,LAB-003,AC1,e2e,manual,planned,,Touch on a real phone or tablet (QA-005).
+TC-LAB-003.2.1,LAB-003,AC2,unit,automated,passing,src/topics/fractions/labState.test.ts::updates the numerator immediately and toggles predictably on repeated taps,
+TC-LAB-003.2.2,LAB-003,AC2,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::shades parts with a pointer and updates the notation and words at once (LAB-003, LAB-001)",
+TC-LAB-003.3.1,LAB-003,AC3,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::shades parts with a pointer and updates the notation and words at once (LAB-003, LAB-001)",aria-checked state and a tick on each shaded part.
+TC-LAB-003.4.1,LAB-003,AC4,unit,automated,passing,src/topics/fractions/labState.test.ts::updates the numerator immediately and toggles predictably on repeated taps,
+TC-LAB-004.1.1,LAB-004,AC1,component,automated,passing,src/topics/fractions/ui/FractionLab.test.tsx::keeps the fraction when switching from bar to circle (LAB-004),
+TC-LAB-004.2.1,LAB-004,AC2,unit,automated,passing,src/topics/fractions/math.test.ts::recognises equal partitions,
+TC-LAB-004.3.1,LAB-004,AC3,unit,automated,passing,src/topics/fractions/labState.test.ts::keeps the same fraction when the build model switches between bar and circle (LAB-004 AC3),
+TC-LAB-004.3.2,LAB-004,AC3,component,automated,passing,src/topics/fractions/ui/FractionLab.test.tsx::keeps the fraction when switching from bar to circle (LAB-004),
+TC-LAB-005.1.1,LAB-005,AC1,component,automated,passing,src/topics/fractions/ui/FractionLab.test.tsx::compares two models with the maths engine and recognises equivalent fractions as equal (LAB-005),
+TC-LAB-005.2.1,LAB-005,AC2,unit,automated,passing,src/topics/fractions/evaluate.test.ts::checks compare and equivalence challenges exactly,
+TC-LAB-005.3.1,LAB-005,AC3,unit,automated,passing,src/topics/fractions/math.test.ts::detects equivalence exactly,
+TC-LAB-005.3.2,LAB-005,AC3,component,automated,passing,src/topics/fractions/ui/FractionLab.test.tsx::compares two models with the maths engine and recognises equivalent fractions as equal (LAB-005),
+TC-LAB-005.4.1,LAB-005,AC4,component,automated,passing,src/topics/fractions/ui/FractionLab.test.tsx::compares two models with the maths engine and recognises equivalent fractions as equal (LAB-005),
+TC-LAB-006.1.1,LAB-006,AC1,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::moves the number-line marker by keyboard and by dragging, snapping to marks (LAB-006)",Drag is simulated with pointer events in jsdom.
+TC-LAB-006.2.1,LAB-006,AC2,unit,automated,passing,src/topics/fractions/labState.test.ts::snaps the marker to a mark between 0 and 1 and keeps its value when the gaps change where it can,
+TC-LAB-006.3.1,LAB-006,AC3,e2e,manual,planned,,Touch drag on a real phone or tablet (QA-005); jsdom only simulates pointer events.
+TC-LAB-006.4.1,LAB-006,AC4,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::moves the number-line marker by keyboard and by dragging, snapping to marks (LAB-006)",
+TC-LAB-007.1.1,LAB-007,AC1,component,automated,passing,src/topics/fractions/ui/FractionLab.test.tsx::gives every control an accessible name (LAB-007),
+TC-LAB-007.1.2,LAB-007,AC1,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::works from the keyboard: arrows move between parts, Space shades (LAB-003, LAB-007)",
+TC-LAB-007.2.1,LAB-007,AC2,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::shades parts with a pointer and updates the notation and words at once (LAB-003, LAB-001)","A tick marks each shaded part, as well as colour."
+TC-LAB-007.3.1,LAB-007,AC3,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::shades parts with a pointer and updates the notation and words at once (LAB-003, LAB-001)",Pointer tested in jsdom.
+TC-LAB-007.3.2,LAB-007,AC3,e2e,manual,planned,,Touch on real devices (QA-005).
+TC-LAB-007.4.1,LAB-007,AC4,unit,manual,partial,,"Motion is wrapped in MotionConfig reducedMotion=""user"" (AppShell); not verified with a reduced-motion browser run yet (UX-006, QA-005)."
+TC-PRACT-001.1.1,PRACT-001,AC1,unit,automated,passing,src/topics/fractions/content.test.ts::rebuilds the same question from its id,
+TC-PRACT-001.1.2,PRACT-001,AC1,unit,automated,passing,src/lib/migrate.test.ts::rebuilds a migrated generated question as the same question,
+TC-PRACT-001.1.3,PRACT-001,AC1,unit,automated,passing,src/engine/engine.test.ts::is deterministic,
+TC-PRACT-001.2.1,PRACT-001,AC2,unit,automated,passing,src/topics/fractions/content.test.ts::gives every question a mathematically correct answer,
+TC-PRACT-001.3.1,PRACT-001,AC3,unit,automated,passing,"src/topics/fractions/practice-rules.test.ts::rejects malformed questions at run time, so they never reach a child (PRACT-001 AC3)","R1 (D-026): the practice pool is checked against the ARCH-002 validator at run time. Marking is unchanged (DEF-038 gate, RC-008 Q-E)."
+TC-PRACT-001.3.2,PRACT-001,AC3,unit,automated,passing,src/topics/fractions/evaluate.test.ts::refuses a response of the wrong kind,
+TC-PRACT-001.4.1,PRACT-001,AC4,unit,automated,passing,src/topics/fractions/evaluate.test.ts::accepts whole and zero fractions where they are the true value,
+TC-PRACT-001.4.2,PRACT-001,AC4,unit,automated,passing,src/topics/fractions/evaluate.test.ts::treats a zero denominator as an input problem,
+TC-PRACT-001.4.3,PRACT-001,AC4,unit,automated,passing,"src/topics/fractions/practice-rules.test.ts::rejects malformed questions at run time, so they never reach a child (PRACT-001 AC3)",
+TC-PRACT-002.1.1,PRACT-002,AC1,component,automated,passing,"src/components/questions/QuestionPlayer.test.tsx::single-answer choice: clear selected state, submit, and informative confirmation (PRACT-002 AC1, PRACT-008 AC1)",
+TC-PRACT-002.2.1,PRACT-002,AC2,unit,automated,passing,src/topics/kit/kit.test.ts::makes well-formed questions that mark their own answer right and every trap wrong,
+TC-PRACT-002.2.2,PRACT-002,AC2,unit,automated,passing,src/topics/fractions/evaluate.test.ts::validates choose-fraction answers with tagged distractors,
+TC-PRACT-002.2.3,PRACT-002,AC2,unit,automated,passing,"src/topics/fractions/catalogue.test.ts::tags only answers that the evaluator marks wrong, and maps each tag to a known misconception",
+TC-PRACT-003.1.1,PRACT-003,AC1,unit,automated,passing,"src/topics/fractions/practice-rules.test.ts::asks for a fraction to shade on valid, equal partitions where the target can be shaded exactly (PRACT-003)",
+TC-PRACT-003.2.1,PRACT-003,AC2,unit,automated,passing,"src/topics/fractions/practice-rules.test.ts::asks for a fraction to shade on valid, equal partitions where the target can be shaded exactly (PRACT-003)",
+TC-PRACT-003.3.1,PRACT-003,AC3,component,automated,passing,"src/components/questions/QuestionPlayer.test.tsx::shade: asks for a fraction, sections can be selected by keyboard, and validation checks the amount (PRACT-003)",
+TC-PRACT-003.3.2,PRACT-003,AC3,e2e,manual,planned,,Touch on real devices (QA-005).
+TC-PRACT-003.4.1,PRACT-003,AC4,unit,automated,passing,"src/topics/fractions/evaluate.test.ts::accepts any shading of the right amount, including equivalent amounts",
+TC-PRACT-003.4.2,PRACT-003,AC4,unit,automated,passing,"src/topics/fractions/practice-rules.test.ts::asks for a fraction to shade on valid, equal partitions where the target can be shaded exactly (PRACT-003)",
+TC-PRACT-004.1.1,PRACT-004,AC1,unit,automated,passing,src/topics/fractions/evaluate.test.ts::validates matching row by row,
+TC-PRACT-004.2.1,PRACT-004,AC2,unit,automated,passing,"src/topics/fractions/practice-rules.test.ts::makes every matching picture unambiguous: one picture per fraction, and each picture shows its own answer (PRACT-004 AC2)",
+TC-PRACT-004.3.1,PRACT-004,AC3,component,automated,passing,src/components/questions/QuestionPlayer.test.tsx::match: every picture is matched with the keyboard alone (PRACT-004 AC3),Keyboard and pointer in jsdom; touch on devices is QA-005.
+TC-PRACT-004.3.2,PRACT-004,AC3,e2e,manual,planned,,Touch on real devices (QA-005).
+TC-PRACT-005.1.1,PRACT-005,AC1,unit,automated,passing,src/topics/fractions/journey-content.test.ts::shows valid and invalid divisions and says why unequal pieces are not equal parts,
+TC-PRACT-005.2.1,PRACT-005,AC2,unit,automated,passing,src/topics/fractions/practice-rules.test.ts::explains equal and unequal partitions with the mathematical reason (PRACT-005 AC2),
+TC-PRACT-005.2.2,PRACT-005,AC2,content-review,manual,planned,,Independent educational review (CUR-004).
+TC-PRACT-005.3.1,PRACT-005,AC3,unit,automated,passing,src/topics/fractions/evaluate.test.ts::flags unequal shapes chosen as equal parts,
+TC-PRACT-005.3.2,PRACT-005,AC3,unit,automated,passing,src/topics/fractions/math.test.ts::recognises equal partitions,
+TC-PRACT-006.1.1,PRACT-006,AC1,unit,automated,passing,src/topics/fractions/practice-rules.test.ts::marks number-line and fraction-of answers with the same maths the lab uses (PRACT-006 AC1),
+TC-PRACT-006.2.1,PRACT-006,AC2,unit,automated,passing,"src/topics/fractions/content.test.ts::builds thousands of valid, correctly-marked questions",
+TC-PRACT-006.2.2,PRACT-006,AC2,unit,automated,passing,src/topics/fractions/content.test.ts::covers every skill at every difficulty,
+TC-PRACT-007.1.1,PRACT-007,AC1,unit,automated,passing,"src/topics/fractions/practice-rules.test.ts::varies structure and representation within every skill, not only the numbers (PRACT-007 AC1)",
+TC-PRACT-007.1.2,PRACT-007,AC1,unit,automated,passing,src/topics/fractions/content.test.ts::offers real variety and never repeats content the learner has seen,
+TC-PRACT-007.2.1,PRACT-007,AC2,unit,automated,passing,src/topics/fractions/practice-rules.test.ts::documents the difficulty dimensions of every template (PRACT-007 AC2),docs/product/curriculum/PRACT-007-question-variation.md
+TC-PRACT-007.2.2,PRACT-007,AC2,document-review,manual,review-pending,,Product Owner review of the variation document.
+TC-PRACT-007.3.1,PRACT-007,AC3,unit,automated,passing,src/engine/engine.test.ts::moves on once a skill is secure and never repeats within a session,
+TC-PRACT-007.3.2,PRACT-007,AC3,unit,automated,passing,"src/topics/fractions/content.test.ts::fills a full focused session for every skill, twice in a row",
+TC-PRACT-008.1.1,PRACT-008,AC1,component,automated,passing,"src/components/questions/QuestionPlayer.test.tsx::single-answer choice: clear selected state, submit, and informative confirmation (PRACT-002 AC1, PRACT-008 AC1)",
+TC-PRACT-008.2.1,PRACT-008,AC2,unit,automated,passing,src/engine/engine.test.ts::shows a hint beside the still-editable question when no misconception is clear,
+TC-PRACT-008.2.2,PRACT-008,AC2,unit,automated,passing,src/engine/engine.test.ts::reveals the worked answer after the final attempt,
+TC-PRACT-008.2.3,PRACT-008,AC2,component,automated,passing,"src/components/questions/QuestionPlayer.test.tsx::a tagged wrong answer gets a hedged diagnosis and a guided step before any reveal, and the retry is recorded (PRACT-008 AC2, AC3)",
+TC-PRACT-008.3.1,PRACT-008,AC3,component,automated,passing,"src/components/questions/QuestionPlayer.test.tsx::a tagged wrong answer gets a hedged diagnosis and a guided step before any reveal, and the retry is recorded (PRACT-008 AC2, AC3)",
+TC-PRACT-008.3.2,PRACT-008,AC3,unit,automated,passing,"src/engine/engine.test.ts::records each episode once, even if submitted twice",
+TC-PRACT-008.4.1,PRACT-008,AC4,unit,automated,passing,"src/topics/fractions/practice-rules.test.ts::uses respectful, age-appropriate language in hints, feedback and diagnoses (PRACT-008 AC4)",A word check; whether the tone suits children is a content review (CUR-004).
+TC-PRACT-008.4.2,PRACT-008,AC4,content-review,manual,planned,,Independent educational review (CUR-004).
+TC-MIS-001.1.1,MIS-001,AC1,unit,automated,passing,src/topics/fractions/catalogue.test.ts::includes the five required misconceptions,
+TC-MIS-001.1.2,MIS-001,AC1,unit,automated,passing,src/topics/fractions/evaluate.test.ts::spots a swapped numerator and denominator,
+TC-MIS-001.1.3,MIS-001,AC1,unit,automated,passing,src/topics/fractions/evaluate.test.ts::spots 'bigger denominator means bigger',
+TC-MIS-001.1.4,MIS-001,AC1,unit,automated,passing,src/topics/fractions/evaluate.test.ts::spots part-to-part thinking,
+TC-MIS-001.1.5,MIS-001,AC1,unit,automated,passing,src/topics/fractions/evaluate.test.ts::flags unequal shapes chosen as equal parts,
+TC-MIS-001.1.6,MIS-001,AC1,unit,automated,passing,src/topics/fractions/evaluate.test.ts::spots counting marks instead of gaps,
+TC-MIS-001.2.1,MIS-001,AC2,unit,automated,passing,"src/topics/fractions/catalogue.test.ts::gives every entry example evidence, alternative explanations and a recovery activity",docs/product/curriculum/MIS-001-misconception-catalogue.md
+TC-MIS-001.2.2,MIS-001,AC2,content-review,manual,planned,,Independent educational review (CUR-004).
+TC-MIS-002.1.1,MIS-002,AC1,unit,automated,passing,src/topics/fractions/evaluate.test.ts::does not claim a misconception for unexplained answers or equivalent answers,
+TC-MIS-002.1.2,MIS-002,AC1,unit,automated,passing,"src/topics/fractions/catalogue.test.ts::tags only answers that the evaluator marks wrong, and maps each tag to a known misconception",
+TC-MIS-002.2.1,MIS-002,AC2,unit,automated,passing,src/topics/fractions/catalogue.test.ts::keeps the catalogue document in step with the content,The distractor map is generated from the content (MIS-001 catalogue §2).
+TC-MIS-002.2.2,MIS-002,AC2,unit,automated,passing,src/topics/fractions/evaluate.test.ts::validates choose-fraction answers with tagged distractors,
+TC-MIS-003.1.1,MIS-003,AC1,unit,automated,passing,src/engine/recovery-transfer.test.ts::does not use a transfer item after an untagged mistake (a hint is given instead),A diagnosis needs a specific tagged answer; a generic mistake gets a hint only.
+TC-MIS-003.1.2,MIS-003,AC1,unit,automated,passing,src/engine/engine.test.ts::needs repeated evidence for 'likely' and later clean work for 'resolved',
+TC-MIS-003.2.1,MIS-003,AC2,unit,automated,passing,src/engine/engine.test.ts::reports one wrong answer as only a possible misconception,
+TC-MIS-003.2.2,MIS-003,AC2,unit,automated,passing,"src/topics/fractions/catalogue.test.ts::gives every entry example evidence, alternative explanations and a recovery activity",
+TC-MIS-003.3.1,MIS-003,AC3,unit,automated,passing,"src/engine/recovery-transfer.test.ts::labels one answer as possible, repeated ones as likely, and keeps the evidence (MIS-003)",
+TC-MIS-004.1.1,MIS-004,AC1,unit,automated,passing,"src/engine/recovery-transfer.test.ts::follows a tagged wrong answer with a new question on the same skill, in a different form where possible",
+TC-MIS-004.1.2,MIS-004,AC1,component,automated,passing,"src/components/questions/QuestionPlayer.test.tsx::a tagged wrong answer gets a hedged diagnosis and a guided step before any reveal, and the retry is recorded (PRACT-008 AC2, AC3)",
+TC-MIS-004.2.1,MIS-004,AC2,unit,automated,passing,"src/engine/engine.test.ts::diagnoses, explains, asks a follow-up, then lets the child retry without revealing",
+TC-MIS-004.2.2,MIS-004,AC2,component,automated,passing,"src/components/questions/QuestionPlayer.test.tsx::a tagged wrong answer gets a hedged diagnosis and a guided step before any reveal, and the retry is recorded (PRACT-008 AC2, AC3)",
+TC-MIS-005.1.1,MIS-005,AC1,unit,automated,passing,"src/engine/recovery-transfer.test.ts::follows a tagged wrong answer with a new question on the same skill, in a different form where possible",
+TC-MIS-005.1.2,MIS-005,AC1,unit,automated,passing,src/engine/engine.test.ts::lets a later recheck replace older check evidence,
+TC-MIS-005.2.1,MIS-005,AC2,unit,automated,passing,src/engine/recovery-transfer.test.ts::does not count getting the original question right again,
+TC-MIS-005.3.1,MIS-005,AC3,unit,automated,passing,"src/engine/recovery-transfer.test.ts::counts new questions answered first time, and keeps unresolved ones visible",
+TC-MIS-005.3.2,MIS-005,AC3,unit,automated,passing,"src/engine/engine.test.ts::keeps the mastery phase unfinished while a skill needs review, and labels activity separately",
+TC-MAST-001.1.1,MAST-001,AC1,unit,automated,passing,src/engine/engine.test.ts::needs several strong recent results before a skill is secure,
+TC-MAST-001.1.2,MAST-001,AC1,unit,automated,passing,src/engine/engine.test.ts::awards mastery only for two or more independent items plus secure practice,
+TC-MAST-001.1.3,MAST-001,AC1,document-review,manual,failing,,Varied examples is not a coded criterion (MAST-001 §4); a Product Owner decision is needed. MAST-001 is BLOCKED.
+TC-MAST-001.2.1,MAST-001,AC2,unit,automated,passing,src/engine/engine.test.ts::does not award mastery from a single correct item,
+TC-MAST-001.2.2,MAST-001,AC2,unit,automated,passing,src/engine/engine.test.ts::awards mastery only for two or more independent items plus secure practice,
+TC-MAST-001.3.1,MAST-001,AC3,unit,automated,partial,"src/engine/engine.test.ts::uses the latest independent evidence, and practice cannot clear a needs-review",Thresholds are named constants; not yet documented for the PO
+TC-MAST-001.3.2,MAST-001,AC3,document-review,manual,review-pending,,Thresholds documented in docs/product/curriculum/MAST-001-mastery-model.md; adjustable named constants in src/engine/mastery.ts.
+TC-MAST-002.1.1,MAST-002,AC1,content,automated,passing,"src/topics/fractions/content.test.ts::each assessment form covers every skill at least twice and every area, without hints",
+TC-MAST-002.1.2,MAST-002,AC1,content,automated,passing,src/topics/fractions/content.test.ts::assessment forms are parallel,
+TC-MAST-002.1.3,MAST-002,AC1,unit,automated,passing,"src/topics/fractions/assessment.test.ts::samples conceptual, representational, comparison, equivalence, quantity and reasoning skills on both forms",
+TC-MAST-002.2.1,MAST-002,AC2,unit,automated,passing,"src/topics/fractions/assessment.test.ts::uses unfamiliar items: none is a practice, lesson or follow-up question, by id or by content",
+TC-MAST-002.3.1,MAST-002,AC3,content,automated,passing,"src/topics/fractions/content.test.ts::each assessment form covers every skill at least twice and every area, without hints",
+TC-MAST-002.3.2,MAST-002,AC3,unit,automated,passing,src/topics/fractions/assessment.test.ts::offers no hints during the check,
+TC-MAST-002.4.1,MAST-002,AC4,component,automated,passing,"src/components/screens/ResultsScreen.test.tsx::reports strengths, skills to develop, patterns of difficulty and next steps, by skill",
+TC-MAST-003.1.1,MAST-003,AC1,component,automated,passing,"src/components/screens/GrownUps.test.tsx::shows completed lessons, developing and mastered skills, and the next activity, all from recorded attempts",
+TC-MAST-003.2.1,MAST-003,AC2,component,automated,passing,"src/components/screens/GrownUps.test.tsx::shows completed lessons, developing and mastered skills, and the next activity, all from recorded attempts",
+TC-MAST-003.2.2,MAST-003,AC2,unit,automated,passing,src/engine/rewards.test.ts::awards badges from real progress,
+TC-MAST-003.2.3,MAST-003,AC2,unit,automated,passing,"src/engine/rewards.test.ts::adds lessons, lab challenges and checks, but not lessons skipped by placement",
+TC-MAST-003.3.1,MAST-003,AC3,component,automated,passing,"src/components/screens/GrownUps.test.tsx::shows completed lessons, developing and mastered skills, and the next activity, all from recorded attempts",The activity ring equals the engine's figure.
+TC-MAST-004.1.1,MAST-004,AC1,component,automated,passing,"src/components/screens/ResultsScreen.test.tsx::reports strengths, skills to develop, patterns of difficulty and next steps, by skill",
+TC-MAST-004.2.1,MAST-004,AC2,component,automated,passing,src/components/screens/ResultsScreen.test.tsx::makes no claims about ability,
+TC-MAST-004.2.2,MAST-004,AC2,unit,automated,partial,src/engine/engine.test.ts::reports one wrong answer as only a possible misconception,
+TC-MAST-004.3.1,MAST-004,AC3,document-review,manual,review-pending,,"Whether the report is understandable to a child and useful to a parent needs review with real users (CUR-004, UX testing)."
+TC-MAST-005.1.1,MAST-005,AC1,unit,automated,passing,src/lib/persist.test.ts::survives a refresh or restart: what is saved loads back the same,
+TC-MAST-005.1.2,MAST-005,AC1,unit,automated,partial,"src/lib/migrate.test.ts::keeps every star, the streak and the profile",Migration only
+TC-MAST-005.1.3,MAST-005,AC1,unit,automated,passing,src/lib/migrate.test.ts::gives the same mastery picture and next step,
+TC-MAST-005.2.1,MAST-005,AC2,unit,automated,passing,"src/engine/engine.test.ts::records each episode once, even if submitted twice",
+TC-MAST-005.2.2,MAST-005,AC2,unit,automated,passing,src/engine/engine.test.ts::keeps the last completed check when a retake starts,
+TC-MAST-005.2.3,MAST-005,AC2,unit,automated,passing,src/engine/engine.test.ts::stores a finished recheck separately and clears the active one,
+TC-MAST-005.2.4,MAST-005,AC2,unit,automated,passing,src/engine/engine.test.ts::dismisses an old practice summary so it is not shown again,
+TC-MAST-005.2.5,MAST-005,AC2,unit,automated,passing,src/engine/engine.test.ts::tracks lesson position and furthest step,
+TC-MAST-005.2.6,MAST-005,AC2,unit,automated,passing,src/engine/engine.test.ts::keeps each topic,
+TC-MAST-005.3.1,MAST-005,AC3,component,automated,passing,"src/components/screens/GrownUps.test.tsx::asks before clearing, can be cancelled, and clears saved progress when confirmed",
+TC-TT-001.1.1,TT-001,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-TT-001.2.1,TT-001,AC2,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-TT-002.1.1,TT-002,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-002.2.1,TT-002,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-002.3.1,TT-002,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-003.1.1,TT-003,AC1,content,automated,partial,src/topics/kit/kit.test.ts::makes well-formed questions that mark their own answer right and every trap wrong,Times tables preview division templates
+TC-TT-003.2.1,TT-003,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-003.3.1,TT-003,AC3,e2e,planned,planned,,Playwright journey test asserting the behaviour
+TC-TT-004.1.1,TT-004,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-004.2.1,TT-004,AC2,e2e,planned,planned,,Playwright journey test asserting the behaviour
+TC-TT-004.3.1,TT-004,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-005.1.1,TT-005,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-005.2.1,TT-005,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-005.3.1,TT-005,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-006.1.1,TT-006,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-006.2.1,TT-006,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-006.3.1,TT-006,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-007.1.1,TT-007,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-007.2.1,TT-007,AC2,e2e,planned,planned,,Playwright journey test asserting the behaviour
+TC-TT-007.3.1,TT-007,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-008.1.1,TT-008,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-008.2.1,TT-008,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-008.3.1,TT-008,AC3,content,automated,partial,src/topics/kit/kit.test.ts::makes well-formed questions that mark their own answer right and every trap wrong,Exact arithmetic on preview items
+TC-TT-009.1.1,TT-009,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-009.2.1,TT-009,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-009.3.1,TT-009,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-009.4.1,TT-009,AC4,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-010.1.1,TT-010,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-010.2.1,TT-010,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-010.3.1,TT-010,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-011.1.1,TT-011,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-011.2.1,TT-011,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-011.3.1,TT-011,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-012.1.1,TT-012,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-012.2.1,TT-012,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-012.3.1,TT-012,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-TT-012.4.1,TT-012,AC4,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-001.1.1,MM-001,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-MM-001.2.1,MM-001,AC2,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-MM-001.3.1,MM-001,AC3,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-MM-002.1.1,MM-002,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-003.1.1,MM-003,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-003.2.1,MM-003,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-004.1.1,MM-004,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-004.2.1,MM-004,AC2,e2e,planned,planned,,Playwright journey test asserting the behaviour
+TC-MM-005.1.1,MM-005,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-005.2.1,MM-005,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-006.1.1,MM-006,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-006.2.1,MM-006,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-007.1.1,MM-007,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-007.2.1,MM-007,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-008.1.1,MM-008,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-MM-008.2.1,MM-008,AC2,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-MM-008.3.1,MM-008,AC3,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-MM-009.1.1,MM-009,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-009.2.1,MM-009,AC2,e2e,planned,planned,,Playwright journey test asserting the behaviour
+TC-MM-009.3.1,MM-009,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-010.1.1,MM-010,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-010.2.1,MM-010,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-011.1.1,MM-011,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-011.2.1,MM-011,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-011.3.1,MM-011,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-012.1.1,MM-012,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-012.2.1,MM-012,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-MM-012.3.1,MM-012,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-EXAM-001.1.1,EXAM-001,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-EXAM-001.2.1,EXAM-001,AC2,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-EXAM-002.1.1,EXAM-002,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-EXAM-002.2.1,EXAM-002,AC2,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-EXAM-002.3.1,EXAM-002,AC3,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-EXAM-003.1.1,EXAM-003,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-EXAM-003.2.1,EXAM-003,AC2,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-EXAM-004.1.1,EXAM-004,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-EXAM-004.2.1,EXAM-004,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-EXAM-005.1.1,EXAM-005,AC1,content,automated,partial,src/topics/kit/kit.test.ts::asks every skill twice in each form of the big challenge,"Mock exams preview: fixed 12-question form, untimed"
+TC-EXAM-005.2.1,EXAM-005,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-EXAM-005.3.1,EXAM-005,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-EXAM-005.4.1,EXAM-005,AC4,unit,planned,planned,,Unit/content test asserting the rule
+TC-EXAM-006.1.1,EXAM-006,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-EXAM-006.2.1,EXAM-006,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-EXAM-006.3.1,EXAM-006,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-PARENT-001.1.1,PARENT-001,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-PARENT-001.2.1,PARENT-001,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-PARENT-001.3.1,PARENT-001,AC3,unit,planned,planned,,Unit/content test asserting the rule
+TC-PARENT-002.1.1,PARENT-002,AC1,e2e,planned,planned,,Playwright journey test asserting the behaviour
+TC-PARENT-002.2.1,PARENT-002,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-PARENT-003.1.1,PARENT-003,AC1,unit,planned,planned,,Unit/content test asserting the rule
+TC-PARENT-003.2.1,PARENT-003,AC2,unit,planned,planned,,Unit/content test asserting the rule
+TC-QA-001.1.1,QA-001,AC1,unit,automated,passing,"src/maths/maths.test.ts::adds, subtracts, multiplies and divides exactly, in simplest form (hand-worked table)",Fraction arithmetic
+TC-QA-001.1.2,QA-001,AC1,unit,automated,passing,"src/maths/maths.test.ts::matches an independent BigInt oracle on 2,000 seeded cases, including negatives",Arithmetic and comparison against an oracle written in the test
+TC-QA-001.1.3,QA-001,AC1,unit,automated,passing,"src/maths/maths.test.ts::simplifies, compares and tests equivalence on the supported domain (hand-worked)","Equality, simplification, comparison"
+TC-QA-001.1.4,QA-001,AC1,unit,automated,passing,src/maths/maths.test.ts::finds fractions of quantities only when the answer is whole (hand-worked),Part of a quantity
+TC-QA-001.1.5,QA-001,AC1,unit,automated,passing,src/maths/maths.test.ts::converts with an authoritative sign and canonical zero (hand-worked),Mixed numbers
+TC-QA-001.1.6,QA-001,AC1,unit,automated,passing,"src/maths/maths.test.ts::maps shaded equal parts to the fraction the picture shows, unsimplified (hand-worked)",Partition mapping
+TC-QA-001.1.7,QA-001,AC1,unit,automated,passing,"src/maths/maths.test.ts::divides with a non-negative remainder (Euclidean, hand-worked)",Core arithmetic
+TC-QA-001.1.8,QA-001,AC1,content,automated,passing,"src/topics/fractions/representations.test.ts::compare: the right sign is the one cross-multiplication gives, and the others are wrong",Representations agree with values
+TC-QA-001.1.9,QA-001,AC1,content,automated,passing,"src/topics/fractions/representations.test.ts::shade: the target is a whole number of the picture's equal parts, and shading exactly that many is right",
+TC-QA-001.1.10,QA-001,AC1,content,automated,passing,"src/topics/fractions/representations.test.ts::match: each row's picture shows its answer, and the answer is one of the choices",
+TC-QA-001.1.11,QA-001,AC1,content,automated,passing,src/topics/fractions/representations.test.ts::fraction of an amount: the answer is a whole number and the marking accepts exactly it,
+TC-QA-001.1.12,QA-001,AC1,content,automated,passing,src/topics/fractions/representations.test.ts::missing number: filling the gap makes the two fractions equal,
+TC-QA-001.1.13,QA-001,AC1,content,automated,passing,"src/topics/fractions/representations.test.ts::counterexample: hand-picked pairs that break the claim are accepted, and pairs that fit it are not",
+TC-QA-001.1.14,QA-001,AC1,content,automated,passing,"src/topics/fractions/representations.test.ts::explain frame: every slot's answer is one of its options, all right answers pass, and one wrong slot fails",
+TC-QA-001.1.15,QA-001,AC1,content,automated,passing,"src/topics/fractions/representations.test.ts::equal parts: the answer is exactly the pictures whose parts are equal, and picking an unequal one is rejected",Unequal parts
+TC-QA-001.1.16,QA-001,AC1,content,automated,passing,src/topics/fractions/representations.test.ts::covers every Fractions interaction that has a picture or a numeric model,
+TC-QA-001.1.17,QA-001,AC1,unit,automated,passing,src/topics/fractions/math.test.ts::computes greatest common divisors,Existing
+TC-QA-001.1.18,QA-001,AC1,unit,automated,passing,"src/maths/maths.test.ts::matches the oracle on 3,000 seeded cases across the whole safe range","Independent BigInt oracle, whole safe range"
+TC-QA-001.1.19,QA-001,AC1,unit,automated,passing,"src/maths/maths.test.ts::gcd, lcm and the checked add and multiply are exact or throw, never imprecise",Extremes against BigInt
+TC-QA-001.2.1,QA-001,AC2,unit,automated,passing,"src/maths/maths.test.ts::rejects zero or negative denominators, non-integers, NaN and Infinity",
+TC-QA-001.2.2,QA-001,AC2,unit,automated,passing,src/maths/maths.test.ts::refuses division by zero,
+TC-QA-001.2.3,QA-001,AC2,unit,automated,passing,src/maths/maths.test.ts::throws on overflow instead of returning an imprecise answer,Includes a case just below 2^53 that must stay exact
+TC-QA-001.2.4,QA-001,AC2,unit,automated,passing,src/maths/maths.test.ts::rejects mixed numbers outside the rules,
+TC-QA-001.2.5,QA-001,AC2,unit,automated,passing,"src/maths/maths.test.ts::gives no fraction for unequal parts, and rejects invalid partitions",
+TC-QA-001.2.6,QA-001,AC2,unit,automated,passing,src/topics/fractions/evaluate.test.ts::treats a zero denominator as an input problem,Existing
+TC-QA-001.2.7,QA-001,AC2,unit,automated,passing,src/lib/migrate.test.ts::ignores anything that isn't a version-1 save,Existing
+TC-QA-001.2.8,QA-001,AC2,unit,automated,passing,"src/maths/maths.test.ts::matches a BigInt oracle for every pair of safe-integer extremes, both divisor signs, zero and negative dividends",DEF-029 regression
+TC-QA-001.2.9,QA-001,AC2,unit,automated,passing,"src/maths/maths.test.ts::returns the reproduced case exactly: divmod(2, MAX) = { q: 0, r: 2 }",DEF-029 regression
+TC-QA-002.1.1,QA-002,AC1,component,automated,passing,"src/topics/fractions/ui/FractionLab.test.tsx::shades parts with a pointer and updates the notation and words at once (LAB-003, LAB-001)",Visual controls
+TC-QA-002.1.2,QA-002,AC1,component,automated,passing,"src/components/questions/QuestionPlayer.test.tsx::a tagged wrong answer gets a hedged diagnosis and a guided step before any reveal, and the retry is recorded (PRACT-008 AC2, AC3)",Validation and hints
+TC-QA-002.1.3,QA-002,AC1,component,automated,passing,"src/components/lesson/LessonPlayer.test.tsx::moves step by step, saves progress, and records the lesson check","Lesson progression, progress updates, persistence"
+TC-QA-002.2.1,QA-002,AC2,component,automated,passing,src/topics/fractions/ui/FractionLab.test.tsx::compares two models with the maths engine and recognises equivalent fractions as equal (LAB-005),
+TC-QA-002.2.2,QA-002,AC2,unit,automated,passing,"src/topics/fractions/labState.test.ts::keeps notation, parts and pictures in agreement through 20,000 random changes",
+TC-QA-003.1.1,QA-003,AC1,e2e,manual,partial,,"Developer run 9 Nov: docs/product/verification/journey-e2e.cjs, 18 checks pass (verification/results/r1/journey). Automated script, not in CI (needs a running build)."
+TC-QA-003.2.1,QA-003,AC2,e2e,manual,partial,,"All 58 internal links on the main pages respond; no placeholder text on the main pages. Developer run 9 Nov: docs/product/verification/journey-e2e.cjs, 18 checks pass (verification/results/r1/journey). Automated script, not in CI (needs a running build)."
+TC-QA-004.1.1,QA-004,AC1,unit,automated,passing,"src/defects.test.ts::gives every defect all the required fields, with valid severity and priority (QA-004 AC1)",Developer evidence: 38 defects with every required field.
+TC-QA-004.1.2,QA-004,AC1,unit,automated,passing,"src/defects.test.ts::has one row per defect, numbered DEF-001 upwards with no gaps or repeats",
+TC-QA-004.1.3,QA-004,AC1,unit,automated,passing,src/defects.test.ts::closes a defect only on independent verification that cites a recorded decision (QA-004 rule 4),
+TC-QA-004.1.4,QA-004,AC1,unit,automated,passing,"src/defects.test.ts::keeps DEF-038 explicit: the documentation is verified, the behaviour is not fixed and is tracked for R1",
+TC-QA-004.1.5,QA-004,AC1,unit,automated,passing,"src/defects.test.ts::is mirrored by the STATUS.md index: same ids, severity, state and affected items",
+TC-QA-004.1.6,QA-004,AC1,unit,automated,passing,"src/defects.test.ts::is shown in the generated page with every defect, the rules and the state counts",
+TC-QA-004.1.7,QA-004,AC1,document-review,manual,review-pending,,Product Owner review of the register. DEF-001 to DEF-017 priorities and DEF-018 to DEF-038 fields were assigned in this round from the cited records.
+TC-QA-004.2.1,QA-004,AC2,unit,automated,passing,"src/defects.test.ts::blocks release on every open Critical or High defect, and invents no deferral approval (QA-004 AC2)",Developer evidence: records the rule; the open High defects are listed in QA-004 §3.
+TC-QA-004.2.2,QA-004,AC2,document-review,manual,review-pending,,Product Owner review of the triage rules (QA-004 §2).
+TC-QA-005.1.1,QA-005,AC1,visual-a11y-qa,manual,partial,,"Keyboard, focus, contrast (axe), text scaling, reduced motion and five screen widths executed; touch only by emulation. Developer run 9 Nov (docs/product/verification/r1-quality-pass.cjs; results in verification/results/r1/quality-pass). Not independently reproduced."
+TC-QA-005.2.1,QA-005,AC2,visual-a11y-qa,manual,partial,,"Failures logged and retested: small touch targets, a clipped title and DEF-039 were fixed and the same scripts re-run clean (UX-007 audit §3)."
+TC-QA-006.1.1,QA-006,AC1,unit,manual,partial,,Full suite and the browser scripts re-run after the R1 fixes on 9 Nov (docs/product/verification/QA-006-regression.md). Accepted R0 flows are covered by the unit suite.
+TC-QA-006.2.1,QA-006,AC2,unit,manual,partial,,CI now runs on pushes to claude/** branches; documented local commands in QA-006-regression.md. The first hosted run is recorded in the R1 report.
+TC-QA-006.3.1,QA-006,AC3,unit,automated,passing,"src/defects.test.ts::blocks release on every open Critical or High defect, and invents no deferral approval (QA-004 AC2)",
+TC-QA-006.3.2,QA-006,AC3,document-review,manual,review-pending,,Rule 2 of QA-006-regression.md and GOV-004.
+TC-QA-007.1.1,QA-007,AC1,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion
+TC-QA-007.2.1,QA-007,AC2,document-review,manual,planned,,Product Owner / educational QA review of the deliverable against this criterion

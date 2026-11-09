@@ -1,0 +1,1410 @@
+{
+ "source": {
+  "title": "National curriculum in England: mathematics programmes of study",
+  "publisher": "Department for Education",
+  "url": "https://www.gov.uk/government/publications/national-curriculum-in-england-mathematics-programmes-of-study/national-curriculum-in-england-mathematics-programmes-of-study",
+  "page_last_modified": "2021-09-28T14:00:04+01:00",
+  "retrieved": "2026-11-06",
+  "licence": "Open Government Licence v3.0"
+ },
+ "sections": [
+  {
+   "year": 2,
+   "heading": "Number - number and place value",
+   "anchor": "number---number-and-place-value-1",
+   "code": "NPV",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y2.NPV.1",
+     "text": "count in steps of 2, 3, and 5 from 0, and in 10s from any number, forward and backward"
+    },
+    {
+     "id": "Y2.NPV.2",
+     "text": "recognise the place value of each digit in a two-digit number (10s, 1s)"
+    },
+    {
+     "id": "Y2.NPV.3",
+     "text": "identify, represent and estimate numbers using different representations, including the number line"
+    },
+    {
+     "id": "Y2.NPV.4",
+     "text": "compare and order numbers from 0 up to 100; use <, > and = signs"
+    },
+    {
+     "id": "Y2.NPV.5",
+     "text": "read and write numbers to at least 100 in numerals and in words"
+    },
+    {
+     "id": "Y2.NPV.6",
+     "text": "use place value and number facts to solve problems"
+    }
+   ],
+   "notes_non_statutory": [
+    "Using materials and a range of representations, pupils practise counting, reading, writing and comparing numbers to at least 100 and solving a variety of related problems to develop fluency. They count in multiples of 3 to support their later understanding of a third.",
+    "As they become more confident with numbers up to 100, pupils are introduced to larger numbers to develop further their recognition of patterns within the number system and represent them in different ways, including spatial representations.",
+    "Pupils should partition numbers in different ways (for example, 23 = 20 + 3 and 23 = 10 + 13) to support subtraction. They become fluent and apply their knowledge of numbers to reason with, discuss and solve problems that emphasise the value of each digit in two-digit numbers. They begin to understand 0 as a place holder."
+   ]
+  },
+  {
+   "year": 2,
+   "heading": "Number - addition and subtraction",
+   "anchor": "number---addition-and-subtraction-1",
+   "code": "AS",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y2.AS.1",
+     "text": "solve problems with addition and subtraction: using concrete objects and pictorial representations, including those involving numbers, quantities and measures; applying their increasing knowledge of mental and written methods"
+    },
+    {
+     "id": "Y2.AS.2",
+     "text": "recall and use addition and subtraction facts to 20 fluently, and derive and use related facts up to 100"
+    },
+    {
+     "id": "Y2.AS.3",
+     "text": "add and subtract numbers using concrete objects, pictorial representations, and mentally, including: a two-digit number and 1s; a two-digit number and 10s; 2 two-digit numbers; adding 3 one-digit numbers"
+    },
+    {
+     "id": "Y2.AS.4",
+     "text": "show that addition of 2 numbers can be done in any order (commutative) and subtraction of 1 number from another cannot"
+    },
+    {
+     "id": "Y2.AS.5",
+     "text": "recognise and use the inverse relationship between addition and subtraction and use this to check calculations and solve missing number problems"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils extend their understanding of the language of addition and subtraction to include sum and difference.",
+    "Pupils practise addition and subtraction to 20 to become increasingly fluent in deriving facts such as using 3 + 7 = 10; 10 − 7 = 3 and 7 = 10 − 3 to calculate 30 + 70 = 100; 100 − 70 = 30 and 70 = 100 − 30. They check their calculations, including by adding to check subtraction and adding numbers in a different order to check addition (for example, 5 + 2 + 1 = 1 + 5 + 2 = 1 + 2 + 5). This establishes commutativity and associativity of addition.",
+    "Recording addition and subtraction in columns supports place value and prepares for formal written methods with larger numbers."
+   ]
+  },
+  {
+   "year": 2,
+   "heading": "Number - multiplication and division",
+   "anchor": "number---multiplication-and-division-1",
+   "code": "MD",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y2.MD.1",
+     "text": "recall and use multiplication and division facts for the 2, 5 and 10 multiplication tables, including recognising odd and even numbers"
+    },
+    {
+     "id": "Y2.MD.2",
+     "text": "calculate mathematical statements for multiplication and division within the multiplication tables and write them using the multiplication (×), division (÷) and equals (=) signs"
+    },
+    {
+     "id": "Y2.MD.3",
+     "text": "show that multiplication of 2 numbers can be done in any order (commutative) and division of 1 number by another cannot"
+    },
+    {
+     "id": "Y2.MD.4",
+     "text": "solve problems involving multiplication and division, using materials, arrays, repeated addition, mental methods, and multiplication and division facts, including problems in contexts"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils use a variety of language to describe multiplication and division.",
+    "Pupils are introduced to the multiplication tables. They practise to become fluent in the 2, 5 and 10 multiplication tables and connect them to each other. They connect the 10 multiplication table to place value, and the 5 multiplication table to the divisions on the clock face. They begin to use other multiplication tables and recall multiplication facts, including using related division facts to perform written and mental calculations.",
+    "Pupils work with a range of materials and contexts in which multiplication and division relate to grouping and sharing discrete and continuous quantities, to arrays and to repeated addition. They begin to relate these to fractions and measures (for example, 40 ÷ 2 = 20, 20 is a half of 40). They use commutativity and inverse relations to develop multiplicative reasoning (for example, 4 × 5 = 20 and 20 ÷ 5 = 4)."
+   ]
+  },
+  {
+   "year": 2,
+   "heading": "Number - fractions",
+   "anchor": "number---fractions-1",
+   "code": "FRAC",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y2.FRAC.1",
+     "text": "recognise, find, name and write fractions 1/3, 1/4, 2/4 and 3/4 of a length, shape, set of objects or quantity"
+    },
+    {
+     "id": "Y2.FRAC.2",
+     "text": "write simple fractions, for example 1/2 of 6 = 3 and recognise the equivalence of 2/4 and 1/2"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils use fractions as ‘fractions of’ discrete and continuous quantities by solving problems using shapes, objects and quantities. They connect unit fractions to equal sharing and grouping, to numbers when they can be calculated, and to measures, finding fractions of lengths, quantities, sets of objects or shapes. They meet 3/4 as the first example of a non-unit fraction.",
+    "Pupils should count in fractions up to 10, starting from any number and using the 1/2 and 2/4 equivalence on the number line (for example, 11/4, 12/4 (or 11/2), 13/4, 2). This reinforces the concept of fractions as numbers and that they can add up to more than 1."
+   ]
+  },
+  {
+   "year": 2,
+   "heading": "Measurement",
+   "anchor": "measurement-1",
+   "code": "MEAS",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y2.MEAS.1",
+     "text": "choose and use appropriate standard units to estimate and measure length/height in any direction (m/cm); mass (kg/g); temperature (°C); capacity (litres/ml) to the nearest appropriate unit, using rulers, scales, thermometers and measuring vessels"
+    },
+    {
+     "id": "Y2.MEAS.2",
+     "text": "compare and order lengths, mass, volume/capacity and record the results using >, < and ="
+    },
+    {
+     "id": "Y2.MEAS.3",
+     "text": "recognise and use symbols for pounds (£) and pence (p); combine amounts to make a particular value"
+    },
+    {
+     "id": "Y2.MEAS.4",
+     "text": "find different combinations of coins that equal the same amounts of money"
+    },
+    {
+     "id": "Y2.MEAS.5",
+     "text": "solve simple problems in a practical context involving addition and subtraction of money of the same unit, including giving change"
+    },
+    {
+     "id": "Y2.MEAS.6",
+     "text": "compare and sequence intervals of time"
+    },
+    {
+     "id": "Y2.MEAS.7",
+     "text": "tell and write the time to five minutes, including quarter past/to the hour and draw the hands on a clock face to show these times"
+    },
+    {
+     "id": "Y2.MEAS.8",
+     "text": "know the number of minutes in an hour and the number of hours in a day"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils use standard units of measurement with increasing accuracy, using their knowledge of the number system. They use the appropriate language and record using standard abbreviations.",
+    "Comparing measures includes simple multiples such as ‘half as high’; ‘twice as wide’.",
+    "Pupils become fluent in telling the time on analogue clocks and recording it. They become fluent in counting and recognising coins. They read and say amounts of money confidently and use the symbols £ and p accurately, recording pounds and pence separately."
+   ]
+  },
+  {
+   "year": 2,
+   "heading": "Geometry - properties of shapes",
+   "anchor": "geometry---properties-of-shapes-1",
+   "code": "GPS",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y2.GPS.1",
+     "text": "identify and describe the properties of 2-D shapes, including the number of sides, and line symmetry in a vertical line"
+    },
+    {
+     "id": "Y2.GPS.2",
+     "text": "identify and describe the properties of 3-D shapes, including the number of edges, vertices and faces"
+    },
+    {
+     "id": "Y2.GPS.3",
+     "text": "identify 2-D shapes on the surface of 3-D shapes, [for example, a circle on a cylinder and a triangle on a pyramid]"
+    },
+    {
+     "id": "Y2.GPS.4",
+     "text": "compare and sort common 2-D and 3-D shapes and everyday objects"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils handle and name a wide variety of common 2-D and 3-D shapes including: quadrilaterals and polygons and cuboids, prisms and cones, and identify the properties of each shape (for example, number of sides, number of faces). Pupils identify, compare and sort shapes on the basis of their properties and use vocabulary precisely, such as sides, edges, vertices and faces.",
+    "Pupils read and write names for shapes that are appropriate for their word reading and spelling. Pupils draw lines and shapes using a straight edge."
+   ]
+  },
+  {
+   "year": 2,
+   "heading": "Geometry - position and direction",
+   "anchor": "geometry---position-and-direction-1",
+   "code": "GPD",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y2.GPD.1",
+     "text": "order and arrange combinations of mathematical objects in patterns and sequences"
+    },
+    {
+     "id": "Y2.GPD.2",
+     "text": "use mathematical vocabulary to describe position, direction and movement, including movement in a straight line and distinguishing between rotation as a turn and in terms of right angles for quarter, half and three-quarter turns (clockwise and anti-clockwise)"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils should work with patterns of shapes, including those in different orientations.",
+    "Pupils use the concept and language of angles to describe ‘turn’ by applying rotations, including in practical contexts (for example, pupils themselves moving in turns, giving instructions to other pupils to do so, and programming robots using instructions given in right angles)."
+   ]
+  },
+  {
+   "year": 2,
+   "heading": "Statistics",
+   "anchor": "statistics",
+   "code": "STAT",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y2.STAT.1",
+     "text": "interpret and construct simple pictograms, tally charts, block diagrams and tables"
+    },
+    {
+     "id": "Y2.STAT.2",
+     "text": "ask and answer simple questions by counting the number of objects in each category and sorting the categories by quantity"
+    },
+    {
+     "id": "Y2.STAT.3",
+     "text": "ask-and-answer questions about totalling and comparing categorical data"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils record, interpret, collate, organise and compare information (for example, using many-to-one correspondence in pictograms with simple ratios 2, 5,10)."
+   ]
+  },
+  {
+   "year": 3,
+   "heading": "Number - number and place value",
+   "anchor": "number---number-and-place-value-2",
+   "code": "NPV",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y3.NPV.1",
+     "text": "count from 0 in multiples of 4, 8, 50 and 100; find 10 or 100 more or less than a given number"
+    },
+    {
+     "id": "Y3.NPV.2",
+     "text": "recognise the place value of each digit in a 3-digit number (100s, 10s, 1s)"
+    },
+    {
+     "id": "Y3.NPV.3",
+     "text": "compare and order numbers up to 1,000"
+    },
+    {
+     "id": "Y3.NPV.4",
+     "text": "identify, represent and estimate numbers using different representations"
+    },
+    {
+     "id": "Y3.NPV.5",
+     "text": "read and write numbers up to 1,000 in numerals and in words"
+    },
+    {
+     "id": "Y3.NPV.6",
+     "text": "solve number problems and practical problems involving these ideas"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils now use multiples of 2, 3, 4, 5, 8, 10, 50 and 100.",
+    "They use larger numbers to at least 1,000, applying partitioning related to place value using varied and increasingly complex problems, building on work in year 2 (for example, 146 = 100 + 40 + 6, 146 = 130 +16).",
+    "Using a variety of representations, including those related to measure, pupils continue to count in 1s, 10s and 100s, so that they become fluent in the order and place value of numbers to 1,000."
+   ]
+  },
+  {
+   "year": 3,
+   "heading": "Number - addition and subtraction",
+   "anchor": "number---addition-and-subtraction-2",
+   "code": "AS",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y3.AS.1",
+     "text": "add and subtract numbers mentally, including: a three-digit number and 1s; a three-digit number and 10s; a three-digit number and 100s"
+    },
+    {
+     "id": "Y3.AS.2",
+     "text": "add and subtract numbers with up to 3 digits, using formal written methods of columnar addition and subtraction"
+    },
+    {
+     "id": "Y3.AS.3",
+     "text": "estimate the answer to a calculation and use inverse operations to check answers"
+    },
+    {
+     "id": "Y3.AS.4",
+     "text": "solve problems, including missing number problems, using number facts, place value, and more complex addition and subtraction"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils practise solving varied addition and subtraction questions. For mental calculations with two-digit numbers, the answers could exceed 100.",
+    "Pupils use their understanding of place value and partitioning, and practise using columnar addition and subtraction with increasingly large numbers up to 3 digits to become fluent (see mathematics appendix 1 (PDF, 248KB))."
+   ]
+  },
+  {
+   "year": 3,
+   "heading": "Number - multiplication and division",
+   "anchor": "number---multiplication-and-division-2",
+   "code": "MD",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y3.MD.1",
+     "text": "recall and use multiplication and division facts for the 3, 4 and 8 multiplication tables"
+    },
+    {
+     "id": "Y3.MD.2",
+     "text": "write and calculate mathematical statements for multiplication and division using the multiplication tables that they know, including for two-digit numbers times one-digit numbers, using mental and progressing to formal written methods"
+    },
+    {
+     "id": "Y3.MD.3",
+     "text": "solve problems, including missing number problems, involving multiplication and division, including positive integer scaling problems and correspondence problems in which n objects are connected to m objects"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils continue to practise their mental recall of multiplication tables when they are calculating mathematical statements in order to improve fluency. Through doubling, they connect the 2, 4 and 8 multiplication tables.",
+    "Pupils develop efficient mental methods, for example, using commutativity and associativity (for example, 4 × 12 × 5 = 4 × 5 × 12 = 20 × 12 = 240) and multiplication and division facts (for example, using 3 × 2 = 6, 6 ÷ 3 = 2 and 2 = 6 ÷ 3) to derive related facts (30 × 2 = 60, 60 ÷ 3 = 20 and 20 = 60 ÷ 3).",
+    "Pupils develop reliable written methods for multiplication and division, starting with calculations of two-digit numbers by one-digit numbers and progressing to the formal written methods of short multiplication and division.",
+    "Pupils solve simple problems in contexts, deciding which of the 4 operations to use and why. These include measuring and scaling contexts, (for example 4 times as high, 8 times as long etc) and correspondence problems in which m objects are connected to n objects (for example, 3 hats and 4 coats, how many different outfits?, 12 sweets shared equally between 4 children, 4 cakes shared equally between 8 children)."
+   ]
+  },
+  {
+   "year": 3,
+   "heading": "Number - fractions",
+   "anchor": "number---fractions-2",
+   "code": "FRAC",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y3.FRAC.1",
+     "text": "count up and down in tenths; recognise that tenths arise from dividing an object into 10 equal parts and in dividing one-digit numbers or quantities by 10"
+    },
+    {
+     "id": "Y3.FRAC.2",
+     "text": "recognise, find and write fractions of a discrete set of objects: unit fractions and non-unit fractions with small denominators"
+    },
+    {
+     "id": "Y3.FRAC.3",
+     "text": "recognise and use fractions as numbers: unit fractions and non-unit fractions with small denominators"
+    },
+    {
+     "id": "Y3.FRAC.4",
+     "text": "recognise and show, using diagrams, equivalent fractions with small denominators"
+    },
+    {
+     "id": "Y3.FRAC.5",
+     "text": "add and subtract fractions with the same denominator within one whole [for example, 5/7+1/7 = 6/7]"
+    },
+    {
+     "id": "Y3.FRAC.6",
+     "text": "compare and order unit fractions, and fractions with the same denominators"
+    },
+    {
+     "id": "Y3.FRAC.7",
+     "text": "solve problems that involve all of the above"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils connect tenths to place value, decimal measures and to division by 10.",
+    "They begin to understand unit and non-unit fractions as numbers on the number line, and deduce relations between them, such as size and equivalence. They should go beyond the [0, 1] interval, including relating this to measure.",
+    "Pupils understand the relation between unit fractions as operators (fractions of), and division by integers.",
+    "They continue to recognise fractions in the context of parts of a whole, numbers, measurements, a shape, and unit fractions as a division of a quantity.",
+    "Pupils practise adding and subtracting fractions with the same denominator through a variety of increasingly complex problems to improve fluency."
+   ]
+  },
+  {
+   "year": 3,
+   "heading": "Measurement",
+   "anchor": "measurement-2",
+   "code": "MEAS",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y3.MEAS.1",
+     "text": "measure, compare, add and subtract: lengths (m/cm/mm); mass (kg/g); volume/capacity (l/ml)"
+    },
+    {
+     "id": "Y3.MEAS.2",
+     "text": "measure the perimeter of simple 2-D shapes"
+    },
+    {
+     "id": "Y3.MEAS.3",
+     "text": "add and subtract amounts of money to give change, using both £ and p in practical contexts"
+    },
+    {
+     "id": "Y3.MEAS.4",
+     "text": "tell and write the time from an analogue clock, including using Roman numerals from I to XII, and 12-hour and 24-hour clocks"
+    },
+    {
+     "id": "Y3.MEAS.5",
+     "text": "estimate and read time with increasing accuracy to the nearest minute; record and compare time in terms of seconds, minutes and hours; use vocabulary such as o’clock, am/pm, morning, afternoon, noon and midnight"
+    },
+    {
+     "id": "Y3.MEAS.6",
+     "text": "know the number of seconds in a minute and the number of days in each month, year and leap year"
+    },
+    {
+     "id": "Y3.MEAS.7",
+     "text": "compare durations of events [for example, to calculate the time taken by particular events or tasks]"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils continue to measure using the appropriate tools and units, progressing to using a wider range of measures, including comparing and using mixed units (for example, 1 kg and 200g) and simple equivalents of mixed units (for example, 5m = 500cm).",
+    "The comparison of measures includes simple scaling by integers (for example, a given quantity or measure is twice as long or 5 times as high) and this connects to multiplication.",
+    "Pupils continue to become fluent in recognising the value of coins, by adding and subtracting amounts, including mixed units, and giving change using manageable amounts. They record £ and p separately. The decimal recording of money is introduced formally in year 4.",
+    "Pupils use both analogue and digital 12-hour clocks and record their times. In this way they become fluent in and prepared for using digital 24-hour clocks in year 4."
+   ]
+  },
+  {
+   "year": 3,
+   "heading": "Geometry - properties of shapes",
+   "anchor": "geometry---properties-of-shapes-2",
+   "code": "GPS",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y3.GPS.1",
+     "text": "draw 2-D shapes and make 3-D shapes using modelling materials; recognise 3-D shapes in different orientations and describe them"
+    },
+    {
+     "id": "Y3.GPS.2",
+     "text": "recognise angles as a property of shape or a description of a turn"
+    },
+    {
+     "id": "Y3.GPS.3",
+     "text": "identify right angles, recognise that 2 right angles make a half-turn, 3 make three-quarters of a turn and 4 a complete turn; identify whether angles are greater than or less than a right angle"
+    },
+    {
+     "id": "Y3.GPS.4",
+     "text": "identify horizontal and vertical lines and pairs of perpendicular and parallel lines"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils’ knowledge of the properties of shapes is extended at this stage to symmetrical and non-symmetrical polygons and polyhedra. Pupils extend their use of the properties of shapes. They should be able to describe the properties of 2-D and 3-D shapes using accurate language, including lengths of lines and acute and obtuse for angles greater or lesser than a right angle.",
+    "Pupils connect decimals and rounding to drawing and measuring straight lines in centimetres, in a variety of contexts."
+   ]
+  },
+  {
+   "year": 3,
+   "heading": "Statistics",
+   "anchor": "statistics-1",
+   "code": "STAT",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y3.STAT.1",
+     "text": "interpret and present data using bar charts, pictograms and tables"
+    },
+    {
+     "id": "Y3.STAT.2",
+     "text": "solve one-step and two-step questions [for example ‘How many more?’ and ‘How many fewer?’] using information presented in scaled bar charts and pictograms and tables"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils understand and use simple scales (for example, 2, 5, 10 units per cm) in pictograms and bar charts with increasing accuracy.",
+    "They continue to interpret data presented in many contexts."
+   ]
+  },
+  {
+   "year": 4,
+   "heading": "Number - number and place value",
+   "anchor": "number---number-and-place-value-3",
+   "code": "NPV",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y4.NPV.1",
+     "text": "count in multiples of 6, 7, 9, 25 and 1,000"
+    },
+    {
+     "id": "Y4.NPV.2",
+     "text": "find 1,000 more or less than a given number"
+    },
+    {
+     "id": "Y4.NPV.3",
+     "text": "count backwards through 0 to include negative numbers"
+    },
+    {
+     "id": "Y4.NPV.4",
+     "text": "recognise the place value of each digit in a four-digit number (1,000s, 100s, 10s, and 1s)"
+    },
+    {
+     "id": "Y4.NPV.5",
+     "text": "order and compare numbers beyond 1,000"
+    },
+    {
+     "id": "Y4.NPV.6",
+     "text": "identify, represent and estimate numbers using different representations"
+    },
+    {
+     "id": "Y4.NPV.7",
+     "text": "round any number to the nearest 10, 100 or 1,000"
+    },
+    {
+     "id": "Y4.NPV.8",
+     "text": "solve number and practical problems that involve all of the above and with increasingly large positive numbers"
+    },
+    {
+     "id": "Y4.NPV.9",
+     "text": "read Roman numerals to 100 (I to C) and know that over time, the numeral system changed to include the concept of 0 and place value"
+    }
+   ],
+   "notes_non_statutory": [
+    "Using a variety of representations, including measures, pupils become fluent in the order and place value of numbers beyond 1,000, including counting in 10s and 100s, and maintaining fluency in other multiples through varied and frequent practice. They begin to extend their knowledge of the number system to include the decimal numbers and fractions that they have met so far.",
+    "They connect estimation and rounding numbers to the use of measuring instruments.",
+    "Roman numerals should be put in their historical context so pupils understand that there have been different ways to write whole numbers and that the important concepts of 0 and place value were introduced over a period of time."
+   ]
+  },
+  {
+   "year": 4,
+   "heading": "Number - addition and subtraction",
+   "anchor": "number---addition-and-subtraction-3",
+   "code": "AS",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y4.AS.1",
+     "text": "add and subtract numbers with up to 4 digits using the formal written methods of columnar addition and subtraction where appropriate"
+    },
+    {
+     "id": "Y4.AS.2",
+     "text": "estimate and use inverse operations to check answers to a calculation"
+    },
+    {
+     "id": "Y4.AS.3",
+     "text": "solve addition and subtraction two-step problems in contexts, deciding which operations and methods to use and why"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils continue to practise both mental methods and columnar addition and subtraction with increasingly large numbers to aid fluency (see mathematics appendix 1 (PDF, 248KB))."
+   ]
+  },
+  {
+   "year": 4,
+   "heading": "Number - multiplication and division",
+   "anchor": "number---multiplication-and-division-3",
+   "code": "MD",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y4.MD.1",
+     "text": "recall multiplication and division facts for multiplication tables up to 12 × 12"
+    },
+    {
+     "id": "Y4.MD.2",
+     "text": "use place value, known and derived facts to multiply and divide mentally, including: multiplying by 0 and 1; dividing by 1; multiplying together 3 numbers"
+    },
+    {
+     "id": "Y4.MD.3",
+     "text": "recognise and use factor pairs and commutativity in mental calculations"
+    },
+    {
+     "id": "Y4.MD.4",
+     "text": "multiply two-digit and three-digit numbers by a one-digit number using formal written layout"
+    },
+    {
+     "id": "Y4.MD.5",
+     "text": "solve problems involving multiplying and adding, including using the distributive law to multiply two-digit numbers by 1 digit, integer scaling problems and harder correspondence problems such as n objects are connected to m objects"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils continue to practise recalling and using multiplication tables and related division facts to aid fluency.",
+    "Pupils practise mental methods and extend this to 3-digit numbers to derive facts, (for example 600 ÷ 3 = 200 can be derived from 2 x 3 = 6).",
+    "Pupils practise to become fluent in the formal written method of short multiplication and short division with exact answers (see mathematics appendix 1 (PDF, 248KB)).",
+    "Pupils write statements about the equality of expressions (for example, use the distributive law 39 × 7 = 30 × 7 + 9 × 7 and associative law (2 × 3) × 4 = 2 × (3 × 4)). They combine their knowledge of number facts and rules of arithmetic to solve mental and written calculations for example, 2 x 6 x 5 = 10 x 6 = 60.",
+    "Pupils solve two-step problems in contexts, choosing the appropriate operation, working with increasingly harder numbers. This should include correspondence questions such as the numbers of choices of a meal on a menu, or 3 cakes shared equally between 10 children."
+   ]
+  },
+  {
+   "year": 4,
+   "heading": "Number - fractions (including decimals)",
+   "anchor": "number---fractions-including-decimals",
+   "code": "FRAC",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y4.FRAC.1",
+     "text": "recognise and show, using diagrams, families of common equivalent fractions"
+    },
+    {
+     "id": "Y4.FRAC.2",
+     "text": "count up and down in hundredths; recognise that hundredths arise when dividing an object by 100 and dividing tenths by 10"
+    },
+    {
+     "id": "Y4.FRAC.3",
+     "text": "solve problems involving increasingly harder fractions to calculate quantities, and fractions to divide quantities, including non-unit fractions where the answer is a whole number"
+    },
+    {
+     "id": "Y4.FRAC.4",
+     "text": "add and subtract fractions with the same denominator"
+    },
+    {
+     "id": "Y4.FRAC.5",
+     "text": "recognise and write decimal equivalents of any number of tenths or hundreds"
+    },
+    {
+     "id": "Y4.FRAC.6",
+     "text": "recognise and write decimal equivalents to 1/4, 1/2, 3/4"
+    },
+    {
+     "id": "Y4.FRAC.7",
+     "text": "find the effect of dividing a one- or two-digit number by 10 and 100, identifying the value of the digits in the answer as ones, tenths and hundredths"
+    },
+    {
+     "id": "Y4.FRAC.8",
+     "text": "round decimals with 1 decimal place to the nearest whole number"
+    },
+    {
+     "id": "Y4.FRAC.9",
+     "text": "compare numbers with the same number of decimal places up to 2 decimal places"
+    },
+    {
+     "id": "Y4.FRAC.10",
+     "text": "solve simple measure and money problems involving fractions and decimals to 2 decimal places"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils should connect hundredths to tenths and place value and decimal measure.",
+    "They extend the use of the number line to connect fractions, numbers and measures.",
+    "Pupils understand the relation between non-unit fractions and multiplication and division of quantities, with particular emphasis on tenths and hundredths. Pupils make connections between fractions of a length, of a shape and as a representation of one whole or set of quantities. Pupils use factors and multiples to recognise equivalent fractions and simplify where appropriate (for example, 6/9 = 2/3 or 1/4 = 2/8).",
+    "Pupils continue to practise adding and subtracting fractions with the same denominator, to become fluent through a variety of increasingly complex problems beyond one whole.",
+    "Pupils are taught throughout that decimals and fractions are different ways of expressing numbers and proportions.",
+    "Pupils’ understanding of the number system and decimal place value is extended at this stage to tenths and then hundredths. This includes relating the decimal notation to division of whole number by 10 and later 100.",
+    "They practise counting using simple fractions and decimals, both forwards and backwards.",
+    "Pupils learn decimal notation and the language associated with it, including in the context of measurements. They make comparisons and order decimal amounts and quantities that are expressed to the same number of decimal places. They should be able to represent numbers with 1 or 2 decimal places in several ways, such as on number lines."
+   ]
+  },
+  {
+   "year": 4,
+   "heading": "Measurement",
+   "anchor": "measurement-3",
+   "code": "MEAS",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y4.MEAS.1",
+     "text": "convert between different units of measure [for example, kilometre to metre; hour to minute]"
+    },
+    {
+     "id": "Y4.MEAS.2",
+     "text": "measure and calculate the perimeter of a rectilinear figure (including squares) in centimetres and metres"
+    },
+    {
+     "id": "Y4.MEAS.3",
+     "text": "find the area of rectilinear shapes by counting squares"
+    },
+    {
+     "id": "Y4.MEAS.4",
+     "text": "estimate, compare and calculate different measures, including money in pounds and pence"
+    },
+    {
+     "id": "Y4.MEAS.5",
+     "text": "read, write and convert time between analogue and digital 12- and 24-hour clocks"
+    },
+    {
+     "id": "Y4.MEAS.6",
+     "text": "solve problems involving converting from hours to minutes, minutes to seconds, years to months, weeks to days"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils build on their understanding of place value and decimal notation to record metric measures, including money.",
+    "They use multiplication to convert from larger to smaller units.",
+    "Perimeter can be expressed algebraically as 2(a + b) where a and b are the dimensions in the same unit.",
+    "They relate area to arrays and multiplication."
+   ]
+  },
+  {
+   "year": 4,
+   "heading": "Geometry - properties of shapes",
+   "anchor": "geometry---properties-of-shapes-3",
+   "code": "GPS",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y4.GPS.1",
+     "text": "compare and classify geometric shapes, including quadrilaterals and triangles, based on their properties and sizes"
+    },
+    {
+     "id": "Y4.GPS.2",
+     "text": "identify acute and obtuse angles and compare and order angles up to 2 right angles by size"
+    },
+    {
+     "id": "Y4.GPS.3",
+     "text": "identify lines of symmetry in 2-D shapes presented in different orientations"
+    },
+    {
+     "id": "Y4.GPS.4",
+     "text": "complete a simple symmetric figure with respect to a specific line of symmetry"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils continue to classify shapes using geometrical properties, extending to classifying different triangles (for example, isosceles, equilateral, scalene) and quadrilaterals (for example, parallelogram, rhombus, trapezium).",
+    "Pupils compare and order angles in preparation for using a protractor and compare lengths and angles to decide if a polygon is regular or irregular.",
+    "Pupils draw symmetric patterns using a variety of media to become familiar with different orientations of lines of symmetry; and recognise line symmetry in a variety of diagrams, including where the line of symmetry does not dissect the original shape."
+   ]
+  },
+  {
+   "year": 4,
+   "heading": "Geometry - position and direction",
+   "anchor": "geometry---position-and-direction-2",
+   "code": "GPD",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y4.GPD.1",
+     "text": "describe positions on a 2-D grid as coordinates in the first quadrant"
+    },
+    {
+     "id": "Y4.GPD.2",
+     "text": "describe movements between positions as translations of a given unit to the left/right and up/down"
+    },
+    {
+     "id": "Y4.GPD.3",
+     "text": "plot specified points and draw sides to complete a given polygon"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils draw a pair of axes in one quadrant, with equal scales and integer labels. They read, write and use pairs of co-ordinates, for example (2, 5), including using co-ordinate-plotting ICT tools."
+   ]
+  },
+  {
+   "year": 4,
+   "heading": "Statistics",
+   "anchor": "statistics-2",
+   "code": "STAT",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y4.STAT.1",
+     "text": "interpret and present discrete and continuous data using appropriate graphical methods, including bar charts and time graphs"
+    },
+    {
+     "id": "Y4.STAT.2",
+     "text": "solve comparison, sum and difference problems using information presented in bar charts, pictograms, tables and other graphs"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils understand and use a greater range of scales in their representations.",
+    "Pupils begin to relate the graphical representation of data to recording change over time."
+   ]
+  },
+  {
+   "year": 5,
+   "heading": "Number - number and place value",
+   "anchor": "number---number-and-place-value-4",
+   "code": "NPV",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y5.NPV.1",
+     "text": "read, write, order and compare numbers to at least 1,000,000 and determine the value of each digit"
+    },
+    {
+     "id": "Y5.NPV.2",
+     "text": "count forwards or backwards in steps of powers of 10 for any given number up to 1,000,000"
+    },
+    {
+     "id": "Y5.NPV.3",
+     "text": "interpret negative numbers in context, count forwards and backwards with positive and negative whole numbers, including through 0"
+    },
+    {
+     "id": "Y5.NPV.4",
+     "text": "round any number up to 1,000,000 to the nearest 10, 100, 1,000, 10,000 and 100,000"
+    },
+    {
+     "id": "Y5.NPV.5",
+     "text": "solve number problems and practical problems that involve all of the above"
+    },
+    {
+     "id": "Y5.NPV.6",
+     "text": "read Roman numerals to 1,000 (M) and recognise years written in Roman numerals"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils identify the place value in large whole numbers.",
+    "They continue to use number in context, including measurement. Pupils extend and apply their understanding of the number system to the decimal numbers and fractions that they have met so far.",
+    "They should recognise and describe linear number sequences (for example, 3, 31/2, 4, 41/2 …), including those involving fractions and decimals, and find the term-to-term rule in words (for example, add 1/2)."
+   ]
+  },
+  {
+   "year": 5,
+   "heading": "Number - addition and subtraction",
+   "anchor": "number---addition-and-subtraction-4",
+   "code": "AS",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y5.AS.1",
+     "text": "add and subtract whole numbers with more than 4 digits, including using formal written methods (columnar addition and subtraction)"
+    },
+    {
+     "id": "Y5.AS.2",
+     "text": "add and subtract numbers mentally with increasingly large numbers"
+    },
+    {
+     "id": "Y5.AS.3",
+     "text": "use rounding to check answers to calculations and determine, in the context of a problem, levels of accuracy"
+    },
+    {
+     "id": "Y5.AS.4",
+     "text": "solve addition and subtraction multi-step problems in contexts, deciding which operations and methods to use and why"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils practise using the formal written methods of columnar addition and subtraction with increasingly large numbers to aid fluency (see mathematics appendix 1 (PDF, 248KB)).",
+    "They practise mental calculations with increasingly large numbers to aid fluency (for example, 12,462 – 2,300 = 10,162)."
+   ]
+  },
+  {
+   "year": 5,
+   "heading": "Number - multiplication and division",
+   "anchor": "number---multiplication-and-division-4",
+   "code": "MD",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y5.MD.1",
+     "text": "identify multiples and factors, including finding all factor pairs of a number, and common factors of 2 numbers"
+    },
+    {
+     "id": "Y5.MD.2",
+     "text": "know and use the vocabulary of prime numbers, prime factors and composite (non-prime) numbers"
+    },
+    {
+     "id": "Y5.MD.3",
+     "text": "establish whether a number up to 100 is prime and recall prime numbers up to 19"
+    },
+    {
+     "id": "Y5.MD.4",
+     "text": "multiply numbers up to 4 digits by a one- or two-digit number using a formal written method, including long multiplication for two-digit numbers"
+    },
+    {
+     "id": "Y5.MD.5",
+     "text": "multiply and divide numbers mentally, drawing upon known facts"
+    },
+    {
+     "id": "Y5.MD.6",
+     "text": "divide numbers up to 4 digits by a one-digit number using the formal written method of short division and interpret remainders appropriately for the context"
+    },
+    {
+     "id": "Y5.MD.7",
+     "text": "multiply and divide whole numbers and those involving decimals by 10, 100 and 1,000"
+    },
+    {
+     "id": "Y5.MD.8",
+     "text": "recognise and use square numbers and cube numbers, and the notation for squared (²) and cubed (³)"
+    },
+    {
+     "id": "Y5.MD.9",
+     "text": "solve problems involving multiplication and division, including using their knowledge of factors and multiples, squares and cubes"
+    },
+    {
+     "id": "Y5.MD.10",
+     "text": "solve problems involving addition, subtraction, multiplication and division and a combination of these, including understanding the meaning of the equals sign"
+    },
+    {
+     "id": "Y5.MD.11",
+     "text": "solve problems involving multiplication and division, including scaling by simple fractions and problems involving simple rates"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils practise and extend their use of the formal written methods of short multiplication and short division (see mathematics appendix 1 (PDF, 248KB)). They apply all the multiplication tables and related division facts frequently, commit them to memory and use them confidently to make larger calculations.",
+    "They use and understand the terms factor, multiple and prime, square and cube numbers.",
+    "Pupils interpret non-integer answers to division by expressing results in different ways according to the context, including with remainders, as fractions, as decimals or by rounding (for example, 98 ÷ 4 = 98/4 = 24 r 2 = 241/2 = 24.5 ≈ 25).",
+    "Pupils use multiplication and division as inverses to support the introduction of ratio in year 6, for example, by multiplying and dividing by powers of 10 in scale drawings or by multiplying and dividing by powers of a 1,000 in converting between units such as kilometres and metres.",
+    "Distributivity can be expressed as a(b + c) = ab + ac.",
+    "They understand the terms factor, multiple and prime, square and cube numbers and use them to construct equivalence statements (for example, 4 x 35 = 2 x 2 x 35; 3 x 270 = 3 x 3 x 9 x 10 = 9² x 10).",
+    "Pupils use and explain the equals sign to indicate equivalence, including in missing number problems (for example 13 + 24 = 12 + 25; 33 = 5 x ?)."
+   ]
+  },
+  {
+   "year": 5,
+   "heading": "Number - fractions (including decimals and percentages)",
+   "anchor": "number---fractions-including-decimals-and-percentages",
+   "code": "FRAC",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y5.FRAC.1",
+     "text": "compare and order fractions whose denominators are all multiples of the same number"
+    },
+    {
+     "id": "Y5.FRAC.2",
+     "text": "identify, name and write equivalent fractions of a given fraction, represented visually, including tenths and hundredths"
+    },
+    {
+     "id": "Y5.FRAC.3",
+     "text": "recognise mixed numbers and improper fractions and convert from one form to the other and write mathematical statements > 1 as a mixed number [for example, 2/5+4/5 = 6/5 = 1 1/5 ]"
+    },
+    {
+     "id": "Y5.FRAC.4",
+     "text": "add and subtract fractions with the same denominator, and denominators that are multiples of the same number"
+    },
+    {
+     "id": "Y5.FRAC.5",
+     "text": "multiply proper fractions and mixed numbers by whole numbers, supported by materials and diagrams"
+    },
+    {
+     "id": "Y5.FRAC.6",
+     "text": "read and write decimal numbers as fractions [for example, 0.71 = 71/100 ]"
+    },
+    {
+     "id": "Y5.FRAC.7",
+     "text": "recognise and use thousandths and relate them to tenths, hundredths and decimal equivalents"
+    },
+    {
+     "id": "Y5.FRAC.8",
+     "text": "round decimals with 2 decimal places to the nearest whole number and to 1 decimal place"
+    },
+    {
+     "id": "Y5.FRAC.9",
+     "text": "read, write, order and compare numbers with up to 3 decimal places"
+    },
+    {
+     "id": "Y5.FRAC.10",
+     "text": "solve problems involving number up to 3 decimal places"
+    },
+    {
+     "id": "Y5.FRAC.11",
+     "text": "recognise the per cent symbol (%) and understand that per cent relates to ‘number of parts per 100’, and write percentages as a fraction with denominator 100, and as a decimal fraction"
+    },
+    {
+     "id": "Y5.FRAC.12",
+     "text": "solve problems which require knowing percentage and decimal equivalents of 1/2, 1/4, 1/5, 2/5, 4/5 and those fractions with a denominator of a multiple of 10 or 25"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils should be taught throughout that percentages, decimals and fractions are different ways of expressing proportions.",
+    "They extend their knowledge of fractions to thousandths and connect to decimals and measures.",
+    "Pupils connect equivalent fractions > 1 that simplify to integers with division and other fractions > 1 to division with remainders, using the number line and other models, and hence move from these to improper and mixed fractions.",
+    "Pupils connect multiplication by a fraction to using fractions as operators (fractions of), and to division, building on work from previous years. This relates to scaling by simple fractions, including fractions > 1.",
+    "Pupils practise adding and subtracting fractions to become fluent through a variety of increasingly complex problems. They extend their understanding of adding and subtracting fractions to calculations that exceed 1 as a mixed number.",
+    "Pupils continue to practise counting forwards and backwards in simple fractions.",
+    "Pupils continue to develop their understanding of fractions as numbers, measures and operators by finding fractions of numbers and quantities.",
+    "Pupils extend counting from year 4, using decimals and fractions including bridging 0, for example on a number line.",
+    "Pupils say, read and write decimal fractions and related tenths, hundredths and thousandths accurately and are confident in checking the reasonableness of their answers to problems.",
+    "They mentally add and subtract tenths, and one-digit whole numbers and tenths.",
+    "They practise adding and subtracting decimals, including a mix of whole numbers and decimals, decimals with different numbers of decimal places, and complements of 1 (for example, 0.83 + 0.17 = 1).",
+    "Pupils should go beyond the measurement and money models of decimals, for example, by solving puzzles involving decimals.",
+    "Pupils should make connections between percentages, fractions and decimals (for example, 100% represents a whole quantity and 1% is 1/100, 50% is 50/100, 25% is 25/100) and relate this to finding ‘fractions of’."
+   ]
+  },
+  {
+   "year": 5,
+   "heading": "Measurement",
+   "anchor": "measurement-4",
+   "code": "MEAS",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y5.MEAS.1",
+     "text": "convert between different units of metric measure [for example, kilometre and metre; centimetre and metre; centimetre and millimetre; gram and kilogram; litre and millilitre]"
+    },
+    {
+     "id": "Y5.MEAS.2",
+     "text": "understand and use approximate equivalences between metric units and common imperial units such as inches, pounds and pints"
+    },
+    {
+     "id": "Y5.MEAS.3",
+     "text": "measure and calculate the perimeter of composite rectilinear shapes in centimetres and metres"
+    },
+    {
+     "id": "Y5.MEAS.4",
+     "text": "calculate and compare the area of rectangles (including squares), including using standard units, square centimetres (cm²) and square metres (m²), and estimate the area of irregular shapes"
+    },
+    {
+     "id": "Y5.MEAS.5",
+     "text": "estimate volume [for example, using 1 cm³ blocks to build cuboids (including cubes)] and capacity [for example, using water]"
+    },
+    {
+     "id": "Y5.MEAS.6",
+     "text": "solve problems involving converting between units of time"
+    },
+    {
+     "id": "Y5.MEAS.7",
+     "text": "use all four operations to solve problems involving measure [for example, length, mass, volume, money] using decimal notation, including scaling"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils use their knowledge of place value and multiplication and division to convert between standard units.",
+    "Pupils calculate the perimeter of rectangles and related composite shapes, including using the relations of perimeter or area to find unknown lengths. Missing measures questions such as these can be expressed algebraically, for example 4 + 2b = 20 for a rectangle of sides 2 cm and b cm and perimeter of 20cm.",
+    "Pupils calculate the area from scale drawings using given measurements.",
+    "Pupils use all 4 operations in problems involving time and money, including conversions (for example, days to weeks, expressing the answer as weeks and days)."
+   ]
+  },
+  {
+   "year": 5,
+   "heading": "Geometry - properties of shapes",
+   "anchor": "geometry---properties-of-shapes-4",
+   "code": "GPS",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y5.GPS.1",
+     "text": "identify 3-D shapes, including cubes and other cuboids, from 2-D representations"
+    },
+    {
+     "id": "Y5.GPS.2",
+     "text": "know angles are measured in degrees: estimate and compare acute, obtuse and reflex angles"
+    },
+    {
+     "id": "Y5.GPS.3",
+     "text": "draw given angles, and measure them in degrees (°)"
+    },
+    {
+     "id": "Y5.GPS.4",
+     "text": "identify: angles at a point and 1 whole turn (total 360°); angles at a point on a straight line and half a turn (total 180°); other multiples of 90°; use the properties of rectangles to deduce related facts and find missing lengths and angles; distinguish between regular and irregular polygons based on reasoning about equal sides and angles"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils become accurate in drawing lines with a ruler to the nearest millimetre, and measuring with a protractor. They use conventional markings for parallel lines and right angles.",
+    "Pupils use the term diagonal and make conjectures about the angles formed between sides, and between diagonals and parallel sides, and other properties of quadrilaterals, for example using dynamic geometry ICT tools.",
+    "Pupils use angle sum facts and other properties to make deductions about missing angles and relate these to missing number problems."
+   ]
+  },
+  {
+   "year": 5,
+   "heading": "Geometry - position and direction",
+   "anchor": "geometry---position-and-direction-3",
+   "code": "GPD",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y5.GPD.1",
+     "text": "identify, describe and represent the position of a shape following a reflection or translation, using the appropriate language, and know that the shape has not changed"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils recognise and use reflection and translation in a variety of diagrams, including continuing to use a 2-D grid and coordinates in the first quadrant. Reflection should be in lines that are parallel to the axes."
+   ]
+  },
+  {
+   "year": 5,
+   "heading": "Statistics",
+   "anchor": "statistics-3",
+   "code": "STAT",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y5.STAT.1",
+     "text": "solve comparison, sum and difference problems using information presented in a line graph"
+    },
+    {
+     "id": "Y5.STAT.2",
+     "text": "complete, read and interpret information in tables, including timetables"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils connect their work on coordinates and scales to their interpretation of time graphs.",
+    "They begin to decide which representations of data are most appropriate and why."
+   ]
+  },
+  {
+   "year": 6,
+   "heading": "Number - number and place value",
+   "anchor": "number---number-and-place-value-5",
+   "code": "NPV",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y6.NPV.1",
+     "text": "read, write, order and compare numbers up to 10,000,000 and determine the value of each digit"
+    },
+    {
+     "id": "Y6.NPV.2",
+     "text": "round any whole number to a required degree of accuracy"
+    },
+    {
+     "id": "Y6.NPV.3",
+     "text": "use negative numbers in context, and calculate intervals across 0"
+    },
+    {
+     "id": "Y6.NPV.4",
+     "text": "solve number and practical problems that involve all of the above"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils use the whole number system, including saying, reading and writing numbers accurately."
+   ]
+  },
+  {
+   "year": 6,
+   "heading": "Number - addition, subtraction, multiplication and division",
+   "anchor": "number----addition-subtraction-multiplication-and-division",
+   "code": "ASMD",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y6.ASMD.1",
+     "text": "multiply multi-digit numbers up to 4 digits by a two-digit whole number using the formal written method of long multiplication"
+    },
+    {
+     "id": "Y6.ASMD.2",
+     "text": "divide numbers up to 4 digits by a two-digit whole number using the formal written method of long division, and interpret remainders as whole number remainders, fractions, or by rounding, as appropriate for the context"
+    },
+    {
+     "id": "Y6.ASMD.3",
+     "text": "divide numbers up to 4 digits by a two-digit number using the formal written method of short division where appropriate, interpreting remainders according to the context"
+    },
+    {
+     "id": "Y6.ASMD.4",
+     "text": "perform mental calculations, including with mixed operations and large numbers"
+    },
+    {
+     "id": "Y6.ASMD.5",
+     "text": "identify common factors, common multiples and prime numbers"
+    },
+    {
+     "id": "Y6.ASMD.6",
+     "text": "use their knowledge of the order of operations to carry out calculations involving the 4 operations"
+    },
+    {
+     "id": "Y6.ASMD.7",
+     "text": "solve addition and subtraction multi-step problems in contexts, deciding which operations and methods to use and why"
+    },
+    {
+     "id": "Y6.ASMD.8",
+     "text": "solve problems involving addition, subtraction, multiplication and division"
+    },
+    {
+     "id": "Y6.ASMD.9",
+     "text": "use estimation to check answers to calculations and determine, in the context of a problem, an appropriate degree of accuracy"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils practise addition, subtraction, multiplication and division for larger numbers, using the formal written methods of columnar addition and subtraction, short and long multiplication, and short and long division (see mathematics appendix 1 (PDF, 248KB)).",
+    "They undertake mental calculations with increasingly large numbers and more complex calculations.",
+    "Pupils continue to use all the multiplication tables to calculate mathematical statements in order to maintain their fluency.",
+    "Pupils round answers to a specified degree of accuracy, for example, to the nearest 10, 20, 50, etc, but not to a specified number of significant figures.",
+    "Pupils explore the order of operations using brackets; for example, 2 + 1 x 3 = 5 and (2 + 1) x 3 = 9.",
+    "Common factors can be related to finding equivalent fractions."
+   ]
+  },
+  {
+   "year": 6,
+   "heading": "Number - Fractions (including decimals and percentages)",
+   "anchor": "number---fractions-including-decimals-and-percentages-1",
+   "code": "FRAC",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y6.FRAC.1",
+     "text": "use common factors to simplify fractions; use common multiples to express fractions in the same denomination"
+    },
+    {
+     "id": "Y6.FRAC.2",
+     "text": "compare and order fractions, including fractions >1"
+    },
+    {
+     "id": "Y6.FRAC.3",
+     "text": "add and subtract fractions with different denominators and mixed numbers, using the concept of equivalent fractions"
+    },
+    {
+     "id": "Y6.FRAC.4",
+     "text": "multiply simple pairs of proper fractions, writing the answer in its simplest form [for example, 1/4 × 1/2 = 1/8]"
+    },
+    {
+     "id": "Y6.FRAC.5",
+     "text": "divide proper fractions by whole numbers [for example, 1/3 ÷ 2 = 1/6]"
+    },
+    {
+     "id": "Y6.FRAC.6",
+     "text": "associate a fraction with division and calculate decimal fraction equivalents [for example, 0.375] for a simple fraction [for example, 3/8]"
+    },
+    {
+     "id": "Y6.FRAC.7",
+     "text": "identify the value of each digit in numbers given to 3 decimal places and multiply and divide numbers by 10, 100 and 1,000 giving answers up to 3 decimal places"
+    },
+    {
+     "id": "Y6.FRAC.8",
+     "text": "multiply one-digit numbers with up to 2 decimal places by whole numbers"
+    },
+    {
+     "id": "Y6.FRAC.9",
+     "text": "use written division methods in cases where the answer has up to 2 decimal places"
+    },
+    {
+     "id": "Y6.FRAC.10",
+     "text": "solve problems which require answers to be rounded to specified degrees of accuracy"
+    },
+    {
+     "id": "Y6.FRAC.11",
+     "text": "recall and use equivalences between simple fractions, decimals and percentages, including in different contexts"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils should practise, use and understand the addition and subtraction of fractions with different denominators by identifying equivalent fractions with the same denominator. They should start with fractions where the denominator of one fraction is a multiple of the other (for example, 1/2+1/8 = 5/8] and progress to varied and increasingly complex problems.",
+    "Pupils should use a variety of images to support their understanding of multiplication with fractions. This follows earlier work about fractions as operators (fractions of), as numbers, and as equal parts of objects, for example as parts of a rectangle. Pupils use their understanding of the relationship between unit fractions and division to work backwards by multiplying a quantity that represents a unit fraction to find the whole quantity (for example, if quarter of a length is 36cm, then the whole length is 36 × 4 = 144cm).",
+    "They practise calculations with simple fractions and decimal fraction equivalents to aid fluency, including listing equivalent fractions to identify fractions with common denominators.",
+    "Pupils can explore and make conjectures about converting a simple fraction to a decimal fraction (for example, 3 ÷ 8 = 0.375). For simple fractions with recurring decimal equivalents, pupils learn about rounding the decimal to three decimal places, or other appropriate approximations depending on the context. Pupils multiply and divide numbers with up to 2 decimal places by one-digit and two-digit whole numbers. Pupils multiply decimals by whole numbers, starting with the simplest cases, such as 0.4 × 2 = 0.8, and in practical contexts, such as measures and money.",
+    "Pupils are introduced to the division of decimal numbers by one-digit whole numbers, initially, in practical contexts involving measures and money. They recognise division calculations as the inverse of multiplication.",
+    "Pupils also develop their skills of rounding and estimating as a means of predicting and checking the order of magnitude of their answers to decimal calculations. This includes rounding answers to a specified degree of accuracy and checking the reasonableness of their answers."
+   ]
+  },
+  {
+   "year": 6,
+   "heading": "Ratio and proportion",
+   "anchor": "ratio-and-proportion",
+   "code": "RP",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y6.RP.1",
+     "text": "solve problems involving the relative sizes of 2 quantities where missing values can be found by using integer multiplication and division facts"
+    },
+    {
+     "id": "Y6.RP.2",
+     "text": "solve problems involving the calculation of percentages [for example, of measures and such as 15% of 360] and the use of percentages for comparison"
+    },
+    {
+     "id": "Y6.RP.3",
+     "text": "solve problems involving similar shapes where the scale factor is known or can be found"
+    },
+    {
+     "id": "Y6.RP.4",
+     "text": "solve problems involving unequal sharing and grouping using knowledge of fractions and multiples"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils recognise proportionality in contexts when the relations between quantities are in the same ratio (for example, similar shapes and recipes).",
+    "Pupils link percentages or 360° to calculating angles of pie charts.",
+    "Pupils should consolidate their understanding of ratio when comparing quantities, sizes and scale drawings by solving a variety of problems. They might use the notation a:b to record their work.",
+    "Pupils solve problems involving unequal quantities, for example, ’for every egg you need 3 spoonfuls of flour’, ‘3/5 of the class are boys’. These problems are the foundation for later formal approaches to ratio and proportion."
+   ]
+  },
+  {
+   "year": 6,
+   "heading": "Algebra",
+   "anchor": "algebra",
+   "code": "ALG",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y6.ALG.1",
+     "text": "use simple formulae"
+    },
+    {
+     "id": "Y6.ALG.2",
+     "text": "generate and describe linear number sequences"
+    },
+    {
+     "id": "Y6.ALG.3",
+     "text": "express missing number problems algebraically"
+    },
+    {
+     "id": "Y6.ALG.4",
+     "text": "find pairs of numbers that satisfy an equation with 2 unknowns"
+    },
+    {
+     "id": "Y6.ALG.5",
+     "text": "enumerate possibilities of combinations of 2 variables"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils should be introduced to the use of symbols and letters to represent variables and unknowns in mathematical situations that they already understand, such as:"
+   ]
+  },
+  {
+   "year": 6,
+   "heading": "Measurement",
+   "anchor": "measurement-5",
+   "code": "MEAS",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y6.MEAS.1",
+     "text": "solve problems involving the calculation and conversion of units of measure, using decimal notation up to 3 decimal places where appropriate"
+    },
+    {
+     "id": "Y6.MEAS.2",
+     "text": "use, read, write and convert between standard units, converting measurements of length, mass, volume and time from a smaller unit of measure to a larger unit, and vice versa, using decimal notation to up to 3 decimal places"
+    },
+    {
+     "id": "Y6.MEAS.3",
+     "text": "convert between miles and kilometres"
+    },
+    {
+     "id": "Y6.MEAS.4",
+     "text": "recognise that shapes with the same areas can have different perimeters and vice versa"
+    },
+    {
+     "id": "Y6.MEAS.5",
+     "text": "recognise when it is possible to use formulae for area and volume of shapes"
+    },
+    {
+     "id": "Y6.MEAS.6",
+     "text": "calculate the area of parallelograms and triangles"
+    },
+    {
+     "id": "Y6.MEAS.7",
+     "text": "calculate, estimate and compare volume of cubes and cuboids using standard units, including cubic centimetres (cm³) and cubic metres (m³), and extending to other units [for example, mm³ and km³]"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils connect conversion (for example, from kilometres to miles) to a graphical representation as preparation for understanding linear/proportional graphs.",
+    "They know approximate conversions and are able to tell if an answer is sensible.",
+    "Using the number line, pupils use, add and subtract positive and negative integers for measures such as temperature.",
+    "They relate the area of rectangles to parallelograms and triangles, for example, by dissection, and calculate their areas, understanding and using the formulae (in words or symbols) to do this.",
+    "Pupils could be introduced to compound units for speed, such as miles per hour, and apply their knowledge in science or other subjects as appropriate."
+   ]
+  },
+  {
+   "year": 6,
+   "heading": "Geometry - properties of shapes",
+   "anchor": "geometry---properties-of-shapes-5",
+   "code": "GPS",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y6.GPS.1",
+     "text": "draw 2-D shapes using given dimensions and angles"
+    },
+    {
+     "id": "Y6.GPS.2",
+     "text": "recognise, describe and build simple 3-D shapes, including making nets"
+    },
+    {
+     "id": "Y6.GPS.3",
+     "text": "compare and classify geometric shapes based on their properties and sizes and find unknown angles in any triangles, quadrilaterals, and regular polygons"
+    },
+    {
+     "id": "Y6.GPS.4",
+     "text": "illustrate and name parts of circles, including radius, diameter and circumference and know that the diameter is twice the radius"
+    },
+    {
+     "id": "Y6.GPS.5",
+     "text": "recognise angles where they meet at a point, are on a straight line, or are vertically opposite, and find missing angles"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils draw shapes and nets accurately, using measuring tools and conventional markings and labels for lines and angles.",
+    "Pupils describe the properties of shapes and explain how unknown angles and lengths can be derived from known measurements.",
+    "These relationships might be expressed algebraically for example, d = 2 × r; a = 180 − (b + c)."
+   ]
+  },
+  {
+   "year": 6,
+   "heading": "Geometry - position and direction",
+   "anchor": "geometry---position-and-direction-4",
+   "code": "GPD",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y6.GPD.1",
+     "text": "describe positions on the full coordinate grid (all 4 quadrants)"
+    },
+    {
+     "id": "Y6.GPD.2",
+     "text": "draw and translate simple shapes on the coordinate plane, and reflect them in the axes"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils draw and label a pair of axes in all 4 quadrants with equal scaling. This extends their knowledge of one quadrant to all 4 quadrants, including the use of negative numbers.",
+    "Pupils draw and label rectangles (including squares), parallelograms and rhombuses, specified by coordinates in the four quadrants, predicting missing coordinates using the properties of shapes. These might be expressed algebraically for example, translating vertex (a, b) to (a − 2, b + 3); (a, b) and (a + d, b + d) being opposite vertices of a square of side d."
+   ]
+  },
+  {
+   "year": 6,
+   "heading": "Statistics",
+   "anchor": "statistics-4",
+   "code": "STAT",
+   "intro": "Pupils should be taught to:",
+   "statements": [
+    {
+     "id": "Y6.STAT.1",
+     "text": "interpret and construct pie charts and line graphs and use these to solve problems"
+    },
+    {
+     "id": "Y6.STAT.2",
+     "text": "calculate and interpret the mean as an average"
+    }
+   ],
+   "notes_non_statutory": [
+    "Pupils connect their work on angles, fractions and percentages to the interpretation of pie charts.",
+    "Pupils both encounter and draw graphs relating 2 variables, arising from their own enquiry and in other subjects.",
+    "They should connect conversion from kilometres to miles in measurement to its graphical representation.",
+    "Pupils know when it is appropriate to find the mean of a data set."
+   ]
+  }
+ ],
+ "school_curriculum": [
+  "The programmes of study for mathematics are set out year-by-year for key stages 1 and 2. Schools are, however, only required to teach the relevant programme of study by the end of the key stage. Within each key stage, schools therefore have the flexibility to introduce content earlier or later than set out in the programme of study. In addition, schools can introduce key stage content during an earlier key stage, if appropriate. All schools are also required to set out their school curriculum for mathematics on a year-by-year basis and make this information available online."
+ ]
+}

@@ -1,11 +1,11 @@
 import { num } from "./evaluate";
 import { BRAND, CORAL, Frame, INK, TONE } from "./frame";
 import { ShapeVisual } from "./visuals-shape";
+import { digitIn } from "@/maths/place-value";
 import type { KitVisual, PlaceColumn, RectSide } from "./types";
 
 /** The kit's maths pictures, drawn for the Crystal look: ink outlines, pastel fills, big readable labels. */
 
-export const PLACE: Record<PlaceColumn, number> = { M: 1e6, HTh: 1e5, TTh: 1e4, Th: 1e3, H: 100, T: 10, O: 1, t: 0.1, h: 0.01 };
 const COLUMN_NAME: Record<PlaceColumn, string> = {
   M: "Millions",
   HTh: "Hundred thousands",
@@ -18,14 +18,6 @@ const COLUMN_NAME: Record<PlaceColumn, string> = {
   h: "Hundredths",
 };
 
-/** The digit of `value` in a column, or null for a leading blank. */
-export function digitIn(value: number, col: PlaceColumn): number | null {
-  const place = PLACE[col];
-  const scaled = Math.round(Math.abs(value) * 100);
-  const p = Math.round(place * 100);
-  if (p >= 100 && scaled < p && col !== "O") return null;
-  return Math.floor(scaled / p) % 10;
-}
 
 function PlaceValueChart({ v }: { v: Extract<KitVisual, { kind: "pv-chart" }> }) {
   const digits = v.columns.map((c) => digitIn(v.value, c));

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { ArrowRightIcon, RefreshIcon } from "@/components/ui/Icons";
 import { ProgressRing, StatusBadge } from "@/components/ui/Progress";
 import { RecommendationLink, recommendationVerb } from "@/components/ui/RecommendationLink";
-import { activityProgress, learningStats, lessonsCompleted, masteredSkills, recommendNext, reviewSkills, strongSkills, topicResults } from "@/engine/journey";
+import { activityProgress, learningStats, lessonsEvidenced, masteredSkills, recommendNext, reviewSkills, strongSkills, topicResults } from "@/engine/journey";
 import { misconceptionReports, skillMastery } from "@/engine/mastery";
 import { routes } from "@/lib/routes";
 import { resetLearner, useHydrated, useLearner, useNow } from "@/lib/store";
@@ -22,7 +22,7 @@ export function ParentScreen() {
   const hydrated = useHydrated();
   if (!hydrated) return <ScreenSkeleton />;
   return (
-    <ActiveTopicProvider>
+    <ActiveTopicProvider choosable>
       <ParentOverview />
     </ActiveTopicProvider>
   );
@@ -37,7 +37,7 @@ function ParentOverview() {
 
   const rec = recommendNext(topic, t);
   const activity = activityProgress(topic, t);
-  const lessonsDone = lessonsCompleted(topic, t);
+  const lessonsDone = lessonsEvidenced(topic, t);
   const secure = strongSkills(topic, t).length;
   const mastered = masteredSkills(topic, t).length;
   const review = reviewSkills(topic, t).length;
@@ -66,11 +66,11 @@ function ParentOverview() {
 
       <StorageNotice />
 
-      <div className="grid gap-5 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
         <section className="card min-w-0 overflow-hidden lg:col-span-2" aria-labelledby="topic-title">
           <div className="space-y-5 p-5 sm:p-7">
-            <div className="flex items-start justify-between gap-4">
-              <div>
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div className="min-w-0">
                 <p className="text-[0.9375rem] font-bold text-muted">Current module</p>
                 <h2 id="topic-title" className="display mt-1 text-3xl font-semibold sm:text-4xl">
                   {topic.title}
@@ -103,7 +103,7 @@ function ParentOverview() {
             <ProgressRing value={activity} size={104} label="Activities completed">
               <span className="text-center leading-tight">
                 <span className="block text-2xl font-semibold tabular-nums">{Math.round(activity * 100)}%</span>
-                <span className="block text-[0.65rem] text-muted">activities</span>
+                <span className="block text-[0.9375rem] text-muted">activities</span>
               </span>
             </ProgressRing>
             <dl className="grid flex-1 gap-2 text-[0.9375rem]">
@@ -139,7 +139,7 @@ function ParentOverview() {
             <h2 id="skills-title" className="font-semibold">
               Skills in this module
             </h2>
-            <Link href={routes.results()} className="rounded text-[0.9375rem] font-medium text-den hover:underline">
+            <Link href={routes.results()} className="inline-flex min-h-11 items-center rounded text-[0.9375rem] font-medium text-den hover:underline">
               Full report
             </Link>
           </div>
@@ -279,9 +279,11 @@ function Toggle({ label, hint, on, onChange }: { label: string; hint: string; on
         aria-checked={on}
         aria-label={label}
         onClick={() => onChange(!on)}
-        className={`relative h-8 w-14 shrink-0 rounded-full transition-colors ${on ? "bg-ok-bright" : "bg-line-strong"}`}
+        className="relative h-11 w-14 shrink-0"
       >
-        <span className={`absolute top-1 size-6 rounded-full bg-white shadow transition-all ${on ? "left-7" : "left-1"}`} />
+        {/* A 44px-tall target around the 32px track (UX-007 AC2). */}
+        <span className={`absolute inset-x-0 top-1.5 h-8 rounded-full transition-colors ${on ? "bg-ok-bright" : "bg-line-strong"}`} />
+        <span className={`absolute top-2.5 size-6 rounded-full bg-white shadow transition-all ${on ? "left-7" : "left-1"}`} />
       </button>
     </div>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
 import { PaperIcon } from "@/components/paper/PaperIcon";
 import { useRouter } from "next/navigation";
@@ -48,7 +49,7 @@ function Intro() {
       <div className="flex flex-col items-center text-center">
         <Kip mood="cheer" size={120} />
         <h1 className="display mt-2 text-4xl leading-tight">Hi! I&apos;m Kip.</h1>
-        <p className="mt-2 text-lg text-ink-2">I&apos;ll be your guide on a fractions adventure. Let&apos;s get to know each other!</p>
+        <p className="mt-2 text-lg text-ink-2">I&apos;ll be your guide on {topic.title}. Let&apos;s get to know each other!</p>
       </div>
 
       <section className="card space-y-5 p-5 sm:p-7">
@@ -255,6 +256,22 @@ function Done() {
         <ButtonLink href={links.island()} variant="secondary" size="xl">
           See my map
         </ButtonLink>
+      </div>
+      {/* FR-001 AC2: the child (or a grown-up) can choose another supported starting point. */}
+      <div className="mt-8 border-t border-line pt-5 text-left">
+        <h2 className="text-lg font-bold">Or choose where to start</h2>
+        <p className="mt-1 text-label text-ink-2">The warm-up only suggests a start. You can begin anywhere, and any lesson can be replayed later.</p>
+        <ul className="mt-3 flex flex-col gap-2">
+          {[LESSONS[0], ...(first && first.id !== LESSONS[0].id ? [first] : [])].map((l) => (
+            <li key={l.id}>
+              <Link href={links.lesson(l.id)} className="flex min-h-12 items-center gap-3 rounded-[16px] border border-line bg-surface px-3 py-2 font-semibold hover:bg-sunk">
+                <PaperIcon name={topic.lessonLook(l.id).icon} size={28} />
+                <span className="min-w-0 flex-1">{l.id === LESSONS[0].id ? `From the beginning: ${l.title}` : `The suggested lesson: ${l.title}`}</span>
+                <ArrowRightIcon size={18} />
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
     </motion.section>
   );

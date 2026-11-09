@@ -1,0 +1,212 @@
+[
+ {
+  "name": "phone: Map tab opens the world map",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "phone: Practice tab opens the current island's practice",
+  "ok": true,
+  "detail": "http://localhost:3123/t/fractions/practice"
+ },
+ {
+  "name": "phone: home links to the island map (learning journey)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "phone: island map opens a lesson",
+  "ok": true,
+  "detail": "http://localhost:3123/t/fractions/lesson/wholes"
+ },
+ {
+  "name": "phone: island map shows skill outcomes",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "phone: island map explains a prerequisite",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "phone: island map marks the next step",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "phone: a lesson finished by traversal shows \"Finished\", not done",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "phone: progress survives a reload",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "phone: no Lab tab on an island without a lab",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "phone: Lab tab on Fractions",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "phone: no page errors",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "tablet: Map tab opens the world map",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "tablet: Practice tab opens the current island's practice",
+  "ok": true,
+  "detail": "http://localhost:3123/t/fractions/practice"
+ },
+ {
+  "name": "tablet: home links to the island map (learning journey)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "tablet: island map opens a lesson",
+  "ok": true,
+  "detail": "http://localhost:3123/t/fractions/lesson/wholes"
+ },
+ {
+  "name": "tablet: island map shows skill outcomes",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "tablet: island map explains a prerequisite",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "tablet: island map marks the next step",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "tablet: a lesson finished by traversal shows \"Finished\", not done",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "tablet: progress survives a reload",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "tablet: no Lab tab on an island without a lab",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "tablet: Lab tab on Fractions",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "tablet: no page errors",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "desktop: Map tab opens the world map",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "desktop: Practice tab opens the current island's practice",
+  "ok": true,
+  "detail": "http://localhost:3123/t/fractions/practice"
+ },
+ {
+  "name": "desktop: home links to the island map (learning journey)",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "desktop: island map opens a lesson",
+  "ok": true,
+  "detail": "http://localhost:3123/t/fractions/lesson/wholes"
+ },
+ {
+  "name": "desktop: island map shows skill outcomes",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "desktop: island map explains a prerequisite",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "desktop: island map marks the next step",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "desktop: a lesson finished by traversal shows \"Finished\", not done",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "desktop: progress survives a reload",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "desktop: no Lab tab on an island without a lab",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "desktop: Lab tab on Fractions",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "desktop: no page errors",
+  "ok": true,
+  "detail": ""
+ },
+ {
+  "name": "/practice opens the current island",
+  "ok": true,
+  "detail": "http://localhost:3123/t/place-value/practice"
+ },
+ {
+  "name": "/lab on an island without a lab opens its map",
+  "ok": true,
+  "detail": "http://localhost:3123/t/place-value"
+ },
+ {
+  "name": "/start opens the current island warm-up",
+  "ok": true,
+  "detail": "http://localhost:3123/t/place-value/start"
+ },
+ {
+  "name": "/sky is not public",
+  "ok": true,
+  "detail": "404"
+ },
+ {
+  "name": "/crystal is not public",
+  "ok": true,
+  "detail": "404"
+ },
+ {
+  "name": "/preview/sky/index.html is not public",
+  "ok": true,
+  "detail": "404"
+ }
+]

@@ -1,0 +1,24 @@
+phone home 32px overflowX 0 clipped 0  
+phone map 32px overflowX 0 clipped 0  
+phone island 32px overflowX 0 clipped 0  
+phone lesson 32px overflowX 0 clipped 0  
+phone question 32px overflowX 0 clipped 0  
+phone practice 32px overflowX 0 clipped 0  
+phone grown-ups 32px overflowX 0 clipped 0  
+phone specimen 32px overflowX 0 clipped 0  
+tablet home 32px overflowX 0 clipped 0  
+tablet map 32px overflowX 0 clipped 0  
+tablet island 32px overflowX 0 clipped 0  
+tablet lesson 32px overflowX 0 clipped 0  
+tablet question 32px overflowX 0 clipped 0  
+tablet practice 32px overflowX 0 clipped 0  
+tablet grown-ups 32px overflowX 0 clipped 0  
+tablet specimen 32px overflowX 24 clipped 1 div.max-w-reading.overflow-hidden.rounded-panel "Worked example1. Find three quarters34 o" span. right=792 | span.inline-flex.flex-col.items-center right=792 | span.sr-only right=770 | span.text-[0.92em].leading-[1.05].text-num-strong right=780 | span.block.text-center right=780
+desktop home 32px overflowX 0 clipped 0  
+desktop map 32px overflowX 0 clipped 0  
+desktop island 32px overflowX 0 clipped 0  
+desktop lesson 32px overflowX 0 clipped 0  
+desktop question 32px overflowX 0 clipped 0  
+desktop practice 32px overflowX 0 clipped 0  
+desktop grown-ups 32px overflowX 0 clipped 0  
+desktop specimen 32px overflowX 0 clipped 0  

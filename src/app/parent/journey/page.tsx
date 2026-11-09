@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Journey detail · Kite Maths" };
 export default function Page() {
   return (
     <ParentGate>
-      <ActiveTopicProvider>
+      <ActiveTopicProvider choosable>
         <JourneyScreen />
       </ActiveTopicProvider>
     </ParentGate>

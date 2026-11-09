@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import { FRACTIONS_SKILL_PREREQUISITES } from "@/curriculum/prerequisites";
 import type { LabStepProps, Look, QuestionInputProps, TopicModule } from "@/topics/types";
 import { followUpFor, FRACTIONS_TOPIC, practicePool } from "./index";
 import { PHASE_DESCRIPTIONS } from "./journey";
@@ -12,6 +13,7 @@ import type { FractionQuestion } from "./types";
 import { FractionsQuestionInput } from "./ui/FractionsQuestionInput";
 import { FractionsFreeLab, FractionsLessonLab, FREE_LAB_INTRO, isFractionsLabStepDone } from "./ui/labs";
 import { RemedyVisual } from "./ui/RemedyVisual";
+import { wellFormedOnly } from "./ui/wellFormed";
 import { VisualRenderer } from "./ui/Visuals";
 
 const LESSON_LOOKS: Record<string, Look> = {
@@ -21,6 +23,7 @@ const LESSON_LOOKS: Record<string, Look> = {
   comparing: { icon: "scales", color: "var(--color-sun-strong)", soft: "var(--color-sun-soft)" },
   equivalent: { icon: "puzzle", color: "var(--color-leaf)", soft: "var(--color-leaf-soft)" },
   "number-line": { icon: "ruler", color: "var(--color-kite-red)", soft: "var(--color-brand-soft)" },
+  adding: { icon: "plus", color: "var(--color-leaf)", soft: "var(--color-leaf-soft)" },
   amounts: { icon: "sweets", color: "var(--color-num)", soft: "var(--color-num-soft)" },
   reasoning: { icon: "magnifier", color: "var(--color-den)", soft: "var(--color-den-soft)" },
 };
@@ -40,13 +43,14 @@ export const fractions: TopicModule<FractionQuestion> = {
   order: 1,
   look: LOOK,
   lessons: LESSONS,
+  skillPrerequisites: FRACTIONS_SKILL_PREREQUISITES,
   lessonLook: (id) => LESSON_LOOKS[id] ?? LOOK,
   phaseDescriptions: PHASE_DESCRIPTIONS,
   lessonById,
   skillById,
   misconceptionById,
   followUpFor,
-  practicePool,
+  practicePool: (seed, results) => wellFormedOnly(practicePool(seed, results)),
   questions: {
     Input: FractionsQuestionInput as unknown as ComponentType<QuestionInputProps<FractionQuestion>>,
     evaluate: (q, r) => evaluate(q, r as Parameters<typeof evaluate>[1]),

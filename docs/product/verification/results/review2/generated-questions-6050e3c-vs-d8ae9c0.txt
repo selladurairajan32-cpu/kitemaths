@@ -1,0 +1,26 @@
+Generated-question comparison (150 seeds per template and difficulty)
+baseline: 6050e3c (git worktree, npm ci)
+head:     d8ae9c0 (working copy)
+
+topic | questions | differing | baseline sha256 | head sha256
+add-subtract | 3910 | 0 | 95a4b33a47d534c8 | 95a4b33a47d534c8
+area-perimeter | 2260 | 0 | edc8430e613bf36a | edc8430e613bf36a
+charts-data | 2260 | 0 | 8a23ff3a0c9fcf90 | 8a23ff3a0c9fcf90
+coordinates | 1808 | 0 | ac516c7a2814de47 | ac516c7a2814de47
+decimals | 3610 | 0 | 92a01a3565d651f1 | 92a01a3565d651f1
+fractions | 78 | 0 | 9c7193c93ead0903 | 9c7193c93ead0903
+fractions-2 | 3910 | 0 | d5a7329487077bdb | d5a7329487077bdb
+mock-exams | 1812 | 0 | d0328b59caf7457e | d0328b59caf7457e
+money | 2560 | 0 | c649e36975fe4d56 | c649e36975fe4d56
+multiply-divide | 3160 | 0 | 5b1c44a862e1bc6d | 5b1c44a862e1bc6d
+negative | 2408 | 0 | 268bc4e488f7c28a | 268bc4e488f7c28a
+percentages | 3008 | 0 | c7db4035df0c5a53 | c7db4035df0c5a53
+place-value | 3910 | 0 | 93356768730c7d94 | 93356768730c7d94
+problem-solving | 2560 | 0 | 557345f7b85afb57 | 557345f7b85afb57
+ratio-algebra | 2260 | 0 | 934dc110a989b425 | 934dc110a989b425
+rounding | 2558 | 0 | 09ff4c3d4dc19aa1 | 09ff4c3d4dc19aa1
+shapes-angles | 2708 | 0 | 1d0e2728c3067d34 | 1d0e2728c3067d34
+time | 2258 | 0 | 637c0ac9479ac1c0 | 637c0ac9479ac1c0
+times-tables | 4060 | 0 | 407e00a8ae819f15 | 407e00a8ae819f15
+
+TOTAL questions 51098, differing 0

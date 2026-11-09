@@ -1,0 +1,498 @@
+[
+ {
+  "id": "IXL-P1",
+  "viewport": "desktop",
+  "url": "https://uk.ixl.com/maths/year-4/understand-fractions-fraction-bars",
+  "observed": "2026-11-03T22:37:43.794Z",
+  "prompt": {
+   "text": "Year 4 AA.1 Understand fractions: fraction bars QJN Share skill share to faceboo",
+   "font": "Verdana",
+   "size": 13,
+   "lineHeight": "normal",
+   "weight": "400",
+   "contrast": 21
+  },
+  "controlTextSizes": [
+   14,
+   15
+  ],
+  "interactive": 51,
+  "targetsUnder24px": 29,
+  "smallExamples": [
+   "a:privacy policy",
+   "button:",
+   "a:International",
+   "button:Search topics, skill"
+  ]
+ },
+ {
+  "id": "IXL-P2",
+  "viewport": "desktop",
+  "url": "https://uk.ixl.com/maths/year-4/fractions-of-a-group",
+  "observed": "2026-11-03T22:37:57.022Z",
+  "prompt": {
+   "text": "What fraction of the shapes are triangles?",
+   "font": "ixl-glyphs",
+   "size": 16,
+   "lineHeight": "22.4px",
+   "weight": "400",
+   "contrast": 21
+  },
+  "controlTextSizes": [
+   14,
+   15,
+   16
+  ],
+  "interactive": 49,
+  "targetsUnder24px": 23,
+  "smallExamples": [
+   "a:privacy policy",
+   "button:",
+   "a:International",
+   "button:Search topics, skill"
+  ]
+ },
+ {
+  "id": "KHAN-P1",
+  "viewport": "desktop",
+  "url": "https://www.khanacademy.org/math/arithmetic/fraction-arithmetic/x18ca194a:fractions-intro/e/that-s-not-fair-",
+  "observed": "2026-11-03T22:38:03.405Z",
+  "prompt": {
+   "text": "This cake is cut into 6 ‍ pieces.",
+   "font": "Lato",
+   "size": 16,
+   "lineHeight": "20px",
+   "weight": "400",
+   "contrast": 15.5
+  },
+  "controlTextSizes": [
+   12,
+   13,
+   14,
+   16,
+   20
+  ],
+  "interactive": 42,
+  "targetsUnder24px": 12,
+  "smallExamples": [
+   "a:Khan Academy Distric",
+   "a:COURSE: ARITHMETIC",
+   "a:UNIT 4",
+   "a:Math"
+  ]
+ },
+ {
+  "id": "KHAN-P2",
+  "viewport": "desktop",
+  "url": "https://www.khanacademy.org/math/arithmetic/fraction-arithmetic/x18ca194a:fractions-on-the-number-line/e/fractions_on_the_number_line_1",
+  "observed": "2026-11-03T22:38:27.408Z",
+  "prompt": {
+   "text": "Move the dot to 1 4 ‍ on the number line.",
+   "font": "Lato",
+   "size": 16,
+   "lineHeight": "20px",
+   "weight": "700",
+   "contrast": 15.5
+  },
+  "controlTextSizes": [
+   13,
+   14,
+   16,
+   20
+  ],
+  "interactive": 44,
+  "targetsUnder24px": 12,
+  "smallExamples": [
+   "a:Khan Academy Distric",
+   "a:COURSE: ARITHMETIC",
+   "a:UNIT 4",
+   "a:Math"
+  ],
+  "probe": {
+   "found": false
+  }
+ },
+ {
+  "id": "KITE-L",
+  "viewport": "desktop",
+  "url": "https://kitemaths.vercel.app/t/fractions/lesson/wholes/1",
+  "observed": "2026-11-03T22:38:51.147Z",
+  "prompt": {
+   "text": "A whole is one complete thing: a whole pizza, a whole chocolate bar, a whole rib",
+   "font": "Nunito",
+   "size": 18,
+   "lineHeight": "29.25px",
+   "weight": "500",
+   "contrast": 7.3
+  },
+  "controlTextSizes": [
+   16,
+   18,
+   19
+  ],
+  "interactive": 13,
+  "targetsUnder24px": 1,
+  "smallExamples": [
+   "a:Skip to content"
+  ]
+ },
+ {
+  "id": "KITE-Q",
+  "viewport": "desktop",
+  "url": "https://kitemaths.vercel.app/t/fractions/practice/equal-parts",
+  "observed": "2026-11-03T22:38:56.741Z",
+  "prompt": {
+   "text": "Which shapes are split into equal parts? Select all that are.",
+   "font": "Nunito",
+   "size": 28,
+   "lineHeight": "38.5px",
+   "weight": "800",
+   "contrast": 14.4
+  },
+  "controlTextSizes": [
+   18,
+   19
+  ],
+  "interactive": 8,
+  "targetsUnder24px": 1,
+  "smallExamples": [
+   "a:Skip to content"
+  ]
+ },
+ {
+  "id": "ATOM-M",
+  "viewport": "desktop",
+  "url": "https://atomlearning.com/11-plus",
+  "observed": "2026-11-03T22:39:03.998Z",
+  "prompt": null,
+  "controlTextSizes": [],
+  "interactive": 71,
+  "targetsUnder24px": 25,
+  "smallExamples": [
+   "a:Progress tracking",
+   "a:Paper tests",
+   "a:Mock tests",
+   "a:Exam plan"
+  ]
+ },
+ {
+  "id": "TTRS-M",
+  "viewport": "desktop",
+  "url": "https://ttrockstars.com/",
+  "observed": "2026-11-03T22:39:17.530Z",
+  "prompt": null,
+  "controlTextSizes": [
+   31
+  ],
+  "interactive": 97,
+  "targetsUnder24px": 34,
+  "smallExamples": [
+   "a:",
+   "div:Previous slide",
+   "div:Next slide",
+   "a:Google Store. Opens "
+  ]
+ },
+ {
+  "id": "DOODLE-M",
+  "viewport": "desktop",
+  "url": "https://doodlelearning.com/maths-app",
+  "observed": "2026-11-03T22:39:28.090Z",
+  "prompt": null,
+  "controlTextSizes": [
+   16,
+   18
+  ],
+  "interactive": 76,
+  "targetsUnder24px": 13,
+  "smallExamples": [
+   "button:Open For parents",
+   "button:Open For schools",
+   "button:Open For trusts",
+   "div:Previous slide"
+  ]
+ },
+ {
+  "id": "MATHLETICS-M",
+  "viewport": "desktop",
+  "url": "https://www.mathletics.com/uk/",
+  "observed": "2026-11-03T22:39:42.947Z",
+  "prompt": null,
+  "controlTextSizes": [],
+  "interactive": 41,
+  "targetsUnder24px": 27,
+  "smallExamples": [
+   "a:Testimonial Paginati",
+   "a:Testimonial Paginati",
+   "a:Testimonial Paginati",
+   "a:Testimonial Paginati"
+  ]
+ },
+ {
+  "id": "POLYPAD-T",
+  "viewport": "desktop",
+  "url": "https://polypad.amplify.com/",
+  "observed": "2026-11-03T22:39:53.172Z",
+  "prompt": null,
+  "controlTextSizes": [
+   15
+  ],
+  "interactive": 31,
+  "targetsUnder24px": 0,
+  "smallExamples": []
+ },
+ {
+  "id": "KITE-H",
+  "viewport": "desktop",
+  "url": "https://kitemaths.vercel.app/",
+  "observed": "2026-11-03T22:40:03.346Z",
+  "prompt": null,
+  "controlTextSizes": [],
+  "interactive": 28,
+  "targetsUnder24px": 1,
+  "smallExamples": [
+   "a:Skip to content"
+  ]
+ },
+ {
+  "id": "IXL-P1",
+  "viewport": "phone",
+  "url": "https://uk.ixl.com/maths/year-4/understand-fractions-fraction-bars",
+  "observed": "2026-11-03T22:40:08.994Z",
+  "prompt": {
+   "text": "Year 4 AA.1 Understand fractions: fraction bars QJN Learn with an example Use th",
+   "font": "Verdana",
+   "size": 13,
+   "lineHeight": "normal",
+   "weight": "400",
+   "contrast": 21
+  },
+  "controlTextSizes": [
+   14,
+   15
+  ],
+  "interactive": 36,
+  "targetsUnder24px": 27,
+  "smallExamples": [
+   "a:privacy policy",
+   "button:",
+   "a:International",
+   "input:answer"
+  ]
+ },
+ {
+  "id": "IXL-P2",
+  "viewport": "phone",
+  "url": "https://uk.ixl.com/maths/year-4/fractions-of-a-group",
+  "observed": "2026-11-03T22:40:21.115Z",
+  "prompt": {
+   "text": "What fraction of the shapes are squares?",
+   "font": "ixl-glyphs",
+   "size": 16,
+   "lineHeight": "22.4px",
+   "weight": "400",
+   "contrast": 21
+  },
+  "controlTextSizes": [
+   14,
+   15,
+   16
+  ],
+  "interactive": 34,
+  "targetsUnder24px": 21,
+  "smallExamples": [
+   "a:privacy policy",
+   "button:",
+   "a:International",
+   "a:Company"
+  ]
+ },
+ {
+  "id": "KHAN-P1",
+  "viewport": "phone",
+  "url": "https://www.khanacademy.org/math/arithmetic/fraction-arithmetic/x18ca194a:fractions-intro/e/that-s-not-fair-",
+  "observed": "2026-11-03T22:40:27.527Z",
+  "prompt": {
+   "text": "This cake is cut into 6 ‍ pieces.",
+   "font": "Lato",
+   "size": 16,
+   "lineHeight": "20px",
+   "weight": "400",
+   "contrast": 15.5
+  },
+  "controlTextSizes": [
+   12,
+   13,
+   14
+  ],
+  "interactive": 22,
+  "targetsUnder24px": 2,
+  "smallExamples": [
+   "a:3.G.A.2",
+   "a:3.NF.A.1"
+  ]
+ },
+ {
+  "id": "KHAN-P2",
+  "viewport": "phone",
+  "url": "https://www.khanacademy.org/math/arithmetic/fraction-arithmetic/x18ca194a:fractions-on-the-number-line/e/fractions_on_the_number_line_1",
+  "observed": "2026-11-03T22:40:51.468Z",
+  "prompt": {
+   "text": "Move the dot to 1 4 ‍ on the number line.",
+   "font": "Lato",
+   "size": 16,
+   "lineHeight": "20px",
+   "weight": "700",
+   "contrast": 15.5
+  },
+  "controlTextSizes": [
+   13,
+   14,
+   16
+  ],
+  "interactive": 20,
+  "targetsUnder24px": 2,
+  "smallExamples": [
+   "a:3.NF.A.2",
+   "a:3.NF.A.2.b"
+  ]
+ },
+ {
+  "id": "KITE-L",
+  "viewport": "phone",
+  "url": "https://kitemaths.vercel.app/t/fractions/lesson/wholes/1",
+  "observed": "2026-11-03T22:41:15.265Z",
+  "prompt": {
+   "text": "A whole is one complete thing: a whole pizza, a whole chocolate bar, a whole rib",
+   "font": "Nunito",
+   "size": 18,
+   "lineHeight": "29.25px",
+   "weight": "500",
+   "contrast": 7.3
+  },
+  "controlTextSizes": [
+   18,
+   19
+  ],
+  "interactive": 7,
+  "targetsUnder24px": 1,
+  "smallExamples": [
+   "a:Skip to content"
+  ]
+ },
+ {
+  "id": "KITE-Q",
+  "viewport": "phone",
+  "url": "https://kitemaths.vercel.app/t/fractions/practice/equal-parts",
+  "observed": "2026-11-03T22:41:20.840Z",
+  "prompt": {
+   "text": "Which shapes are split into equal parts? Select all that are.",
+   "font": "Nunito",
+   "size": 24,
+   "lineHeight": "33px",
+   "weight": "800",
+   "contrast": 14.4
+  },
+  "controlTextSizes": [
+   18,
+   19
+  ],
+  "interactive": 7,
+  "targetsUnder24px": 1,
+  "smallExamples": [
+   "a:Skip to content"
+  ]
+ },
+ {
+  "id": "ATOM-M",
+  "viewport": "phone",
+  "url": "https://atomlearning.com/11-plus",
+  "observed": "2026-11-03T22:41:27.794Z",
+  "prompt": null,
+  "controlTextSizes": [],
+  "interactive": 57,
+  "targetsUnder24px": 25,
+  "smallExamples": [
+   "a:Progress tracking",
+   "a:Paper tests",
+   "a:Mock tests",
+   "a:Exam plan"
+  ]
+ },
+ {
+  "id": "TTRS-M",
+  "viewport": "phone",
+  "url": "https://ttrockstars.com/",
+  "observed": "2026-11-03T22:41:41.105Z",
+  "prompt": null,
+  "controlTextSizes": [
+   24
+  ],
+  "interactive": 80,
+  "targetsUnder24px": 34,
+  "smallExamples": [
+   "a:",
+   "div:Previous slide",
+   "div:Next slide",
+   "a:Google Store. Opens "
+  ]
+ },
+ {
+  "id": "DOODLE-M",
+  "viewport": "phone",
+  "url": "https://doodlelearning.com/maths-app",
+  "observed": "2026-11-03T22:41:51.255Z",
+  "prompt": null,
+  "controlTextSizes": [],
+  "interactive": 59,
+  "targetsUnder24px": 11,
+  "smallExamples": [
+   "button:Menu Toggle",
+   "div:Previous slide",
+   "div:Next slide",
+   "span:Go to slide 1"
+  ]
+ },
+ {
+  "id": "MATHLETICS-M",
+  "viewport": "phone",
+  "url": "https://www.mathletics.com/uk/",
+  "observed": "2026-11-03T22:42:03.363Z",
+  "prompt": null,
+  "controlTextSizes": [],
+  "interactive": 37,
+  "targetsUnder24px": 28,
+  "smallExamples": [
+   "a:Toggle mobile menu",
+   "a:Testimonial Paginati",
+   "a:Testimonial Paginati",
+   "a:Testimonial Paginati"
+  ]
+ },
+ {
+  "id": "POLYPAD-T",
+  "viewport": "phone",
+  "url": "https://polypad.amplify.com/",
+  "observed": "2026-11-03T22:42:30.402Z",
+  "prompt": null,
+  "controlTextSizes": [
+   15
+  ],
+  "interactive": 30,
+  "targetsUnder24px": 0,
+  "smallExamples": []
+ },
+ {
+  "id": "KITE-H",
+  "viewport": "phone",
+  "url": "https://kitemaths.vercel.app/",
+  "observed": "2026-11-03T22:42:40.308Z",
+  "prompt": null,
+  "controlTextSizes": [],
+  "interactive": 27,
+  "targetsUnder24px": 1,
+  "smallExamples": [
+   "a:Skip to content"
+  ]
+ }
+]

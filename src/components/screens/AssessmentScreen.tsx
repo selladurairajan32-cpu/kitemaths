@@ -34,10 +34,12 @@ export function independentResults(
   context: ItemResult["context"],
   at: number,
   idPrefix: string,
+  responses: Record<string, unknown> = {},
 ): ItemResult[] {
   return order.map((id) => {
     const q = topic.questionById(id);
     const ev = evaluations[id];
+    const response = responses[id];
     return {
       id: `${idPrefix}:${id}`,
       questionId: id,
@@ -49,6 +51,7 @@ export function independentResults(
       attempts: ev ? 1 : 0,
       hintsUsed: 0,
       misconceptions: ev?.misconceptions ?? [],
+      ...(response !== undefined ? { response } : {}),
       at,
     };
   });
@@ -82,7 +85,7 @@ export function AssessmentScreen() {
         onFinish={() => {
           const at = Date.now();
           updateLearner((s) =>
-            finishAssessment(s, independentResults(topic, s.assessment.order, s.assessment.evaluations, "assessment", at, `assess:${s.assessment.seed}`), at),
+            finishAssessment(s, independentResults(topic, s.assessment.order, s.assessment.evaluations, "assessment", at, `assess:${s.assessment.seed}`, s.assessment.responses), at),
           );
           playSound("complete");
           setJustFinished(true);

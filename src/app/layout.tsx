@@ -7,8 +7,8 @@ import "./globals.css";
 const nunito = Nunito({ variable: "--font-nunito", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Kite Maths · Fractions adventure",
-  description: "A playful maths adventure for Years 3–6: learn fractions with Kip the kite, one fun step at a time.",
+  title: "Kite Maths · Maths for Years 3 to 6",
+  description: "A maths learning app for Years 3 to 6 with Kip the kite. Start with fractions: learn, explore, practise and show what you know.",
 };
 
 export const viewport: Viewport = {

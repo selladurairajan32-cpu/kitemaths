@@ -67,6 +67,104 @@
   --radius-card: 24px;
   --shadow-card: 0 10px 30px rgba(27, 37, 89, 0.06);
   --shadow-lift: 0 18px 44px rgba(27, 37, 89, 0.1);
+
+  /*
+   * UX-002 / UX-003 / UX-004 tokens (R0 step 2, D-013). Additive: new names only, so no existing
+   * screen changes. Screens adopt them in R1. Specs: docs/product/design/. Specimen: /design-specimen.
+   */
+
+  /* Type scale by role (UX-003). Nothing below 15px (label). */
+  --text-display-1: 3rem; /* 48px: home hero, desktop */
+  --text-display-1--line-height: 1.1;
+  --text-display-2: 2.625rem; /* 42px: screen hero, desktop */
+  --text-display-2--line-height: 1.15;
+  --text-heading-1: 2.125rem; /* 34px: screen title; hero on phone */
+  --text-heading-1--line-height: 1.2;
+  --text-heading-2: 1.625rem; /* 26px: section title */
+  --text-heading-2--line-height: 1.25;
+  --text-prompt: 1.75rem; /* 28px: question prompt, desktop */
+  --text-prompt--line-height: 1.35;
+  --text-prompt-sm: 1.5rem; /* 24px: question prompt, phone */
+  --text-prompt-sm--line-height: 1.35;
+  --text-title: 1.25rem; /* 20px: card and panel titles */
+  --text-title--line-height: 1.35;
+  --text-body-lg: 1.1875rem; /* 19px: lesson explanations */
+  --text-body-lg--line-height: 1.6;
+  --text-body: 1.125rem; /* 18px: reading text (the body default) */
+  --text-body--line-height: 1.6;
+  --text-label: 0.9375rem; /* 15px: labels and meta, the minimum */
+  --text-label--line-height: 1.4;
+
+  /* Layout widths */
+  --container-reading: 40rem; /* 640px: about 65 characters of body text */
+  --container-lesson: 45rem; /* 720px: the lesson and question column */
+  --container-page: 72rem; /* 1152px: whole screens */
+
+  /* Radii, smallest to largest (card stays 24px) */
+  --radius-control: 16px; /* buttons, inputs, inline notices */
+  --radius-tile: 18px; /* answer tiles, icon tiles */
+  --radius-panel: 20px; /* content-type panels inside cards */
+  --radius-hero: 32px; /* hero cards and map panels */
+
+  /* Elevation: card and lift above, plus the bottom sheet */
+  --shadow-sheet: 0 -14px 40px rgba(27, 37, 89, 0.1);
+
+  /* Interaction and validation states */
+  --color-focus: #2563eb; /* focus ring, 5.2:1 on white */
+  --color-selected: #1b2559;
+  --color-selected-soft: #e8f0ff;
+  --color-disabled-ink: #5d6785;
+  --color-disabled-soft: #edf2fa;
+  --color-correct: #167a4b;
+  --color-correct-edge: #22a565;
+  --color-correct-soft: #e3f8ee;
+  --color-incorrect: #a3361a;
+  --color-incorrect-edge: #f4623a;
+  --color-incorrect-soft: #fde5dc;
+
+  /*
+   * Content types (UX-004). Each has a background (soft), an accent edge and an ink for its label,
+   * icon and text. Ink on soft is at least 7:1; fraction digits stay at least 4:1 on every soft.
+   * Colour is never the only cue: each type also has its own icon, label and shape.
+   */
+  --color-teach-soft: #ffffff;
+  --color-teach-edge: #d3dcec;
+  --color-teach-ink: #1b2559;
+  --color-rule-soft: #e8f0ff;
+  --color-rule-edge: #2563eb;
+  --color-rule-ink: #1e40af;
+  --color-example-soft: #e4f6f2;
+  --color-example-edge: #14897b;
+  --color-example-ink: #085249;
+  --color-hint-soft: #fff4d6;
+  --color-hint-edge: #f2a516;
+  --color-hint-ink: #6b4000;
+  --color-tip-soft: #ffe8f0;
+  --color-tip-edge: #d6457a;
+  --color-tip-ink: #97194b;
+  --color-notice-soft: #edf2fa;
+  --color-notice-edge: #5d6785;
+  --color-notice-ink: #1b2559;
+  --color-misconception-soft: #fff0e3;
+  --color-misconception-edge: #e8742c;
+  --color-misconception-ink: #7f3406;
+  --color-success-soft: #e3f8ee;
+  --color-success-edge: #22a565;
+  --color-success-ink: #0f5c37;
+  --color-retry-soft: #e0f0fd;
+  --color-retry-edge: #3b8fd6;
+  --color-retry-ink: #0a4a80;
+  --color-challenge-soft: #fffbeb;
+  --color-challenge-edge: #d99a00;
+  --color-challenge-ink: #1b2559;
+
+  /*
+   * Solid label backgrounds for white text (DEF-022, 5 Nov): the edge colours are too light for 15px white
+   * labels, so headers and ribbons use these. White on each is at least 7:1.
+   */
+  --color-on-strong: #ffffff;
+  --color-example-strong: #0a5c53;
+  --color-challenge-strong: #7a4f00;
 }
 
 @layer base {
@@ -82,6 +180,8 @@
     line-height: 1.6;
     background: var(--color-paper);
     font-variant-numeric: tabular-nums;
+    /* UX-003 AC3: a word wider than its box breaks rather than pushing the page sideways at large text sizes. */
+    overflow-wrap: anywhere;
   }
   :focus-visible {
     outline: 3px solid var(--color-brand);

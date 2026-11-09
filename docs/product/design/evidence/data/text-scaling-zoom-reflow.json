@@ -1,0 +1,185 @@
+[
+ {
+  "vw": "zoom200-of-1280",
+  "name": "home",
+  "root": "16px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "zoom200-of-1280",
+  "name": "map",
+  "root": "16px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "zoom200-of-1280",
+  "name": "island",
+  "root": "16px",
+  "overflowX": 0,
+  "clipped": [
+   "p.mt-0.5.line-clamp-2.text-[0.9375rem] \"8 min · Which fraction of the same whole\"",
+   "p.mt-0.5.line-clamp-2.text-[0.9375rem] \"6 min · Fractions are numbers with a pla\"",
+   "p.mt-0.5.line-clamp-2.text-[0.9375rem] \"12 min · Use fractions to share real qua\"",
+   "p.mt-0.5.line-clamp-2.text-[0.9375rem] \"8 min · Build mathematical explanations \""
+  ],
+  "clippedCount": 4,
+  "wide": []
+ },
+ {
+  "vw": "zoom200-of-1280",
+  "name": "lesson",
+  "root": "16px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "zoom200-of-1280",
+  "name": "question",
+  "root": "16px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "zoom200-of-1280",
+  "name": "practice",
+  "root": "16px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "zoom200-of-1280",
+  "name": "grown-ups",
+  "root": "16px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "zoom200-of-1280",
+  "name": "specimen",
+  "root": "16px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "reflow-320",
+  "name": "home",
+  "root": "16px",
+  "overflowX": 25,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": [
+   "div.flex.items-center.gap-1.5 right=345",
+   "a.flex.items-center.gap-2 right=345",
+   "span.flex.h-11.items-center right=345",
+   "span.text-lg.font-extrabold.tabular-nums right=331"
+  ]
+ },
+ {
+  "vw": "reflow-320",
+  "name": "map",
+  "root": "16px",
+  "overflowX": 25,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": [
+   "div.flex.items-center.gap-1.5 right=345",
+   "a.flex.items-center.gap-2 right=345",
+   "span.flex.h-11.items-center right=345",
+   "span.text-lg.font-extrabold.tabular-nums right=331"
+  ]
+ },
+ {
+  "vw": "reflow-320",
+  "name": "island",
+  "root": "16px",
+  "overflowX": 25,
+  "clipped": [
+   "p.mt-0.5.line-clamp-2.text-[0.9375rem] \"6 min · What a whole is, and why fair sh\"",
+   "p.mt-0.5.line-clamp-2.text-[0.9375rem] \"8 min · How the two numbers in a fractio\"",
+   "p.mt-0.5.line-clamp-2.text-[0.9375rem] \"7 min · Build your own fractions and che\"",
+   "p.mt-0.5.line-clamp-2.text-[0.9375rem] \"8 min · Which fraction of the same whole\"",
+   "p.mt-0.5.line-clamp-2.text-[0.9375rem] \"8 min · Different names for the same amo\"",
+   "p.mt-0.5.line-clamp-2.text-[0.9375rem] \"6 min · Fractions are numbers with a pla\"",
+   "p.mt-0.5.line-clamp-2.text-[0.9375rem] \"12 min · Use fractions to share real qua\"",
+   "p.mt-0.5.line-clamp-2.text-[0.9375rem] \"8 min · Build mathematical explanations \""
+  ],
+  "clippedCount": 10,
+  "wide": [
+   "div.flex.items-center.gap-1.5 right=345",
+   "a.flex.items-center.gap-2 right=345",
+   "span.flex.h-11.items-center right=345",
+   "span.text-lg.font-extrabold.tabular-nums right=331"
+  ]
+ },
+ {
+  "vw": "reflow-320",
+  "name": "lesson",
+  "root": "16px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "reflow-320",
+  "name": "question",
+  "root": "16px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "reflow-320",
+  "name": "practice",
+  "root": "16px",
+  "overflowX": 25,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": [
+   "div.flex.items-center.gap-1.5 right=345",
+   "a.flex.items-center.gap-2 right=345",
+   "span.flex.h-11.items-center right=345",
+   "span.text-lg.font-extrabold.tabular-nums right=331"
+  ]
+ },
+ {
+  "vw": "reflow-320",
+  "name": "grown-ups",
+  "root": "16px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "reflow-320",
+  "name": "specimen",
+  "root": "16px",
+  "overflowX": 25,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": [
+   "div.flex.items-center.gap-1.5 right=345",
+   "a.flex.items-center.gap-2 right=345",
+   "span.flex.h-11.items-center right=345",
+   "span.text-lg.font-extrabold.tabular-nums right=331"
+  ]
+ }
+]

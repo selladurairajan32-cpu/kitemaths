@@ -137,12 +137,15 @@ export function misconceptionReports(
     if (!seenIn.length) continue;
     const lastSeen = seenIn[seenIn.length - 1].at;
     const after = results.filter((r) => r.at > lastSeen);
+    // MIS-005: success on the question where the misconception showed (or any repeat of it) is not evidence of recovery.
+    const original = new Set(seenIn.map((r) => r.questionId));
     const followUpPassed = after.some(
       (r) => r.context === "followup" && r.targets === def.id && r.correct,
     );
     const laterClean = after.filter(
       (r) =>
         r.context !== "followup" &&
+        !original.has(r.questionId) &&
         def.skills.includes(r.skill) &&
         r.correct &&
         r.firstTry,

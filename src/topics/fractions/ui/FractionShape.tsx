@@ -23,6 +23,7 @@ const CIRCLE_W: Record<ShapeSize, string> = {
 };
 
 const FILL_SHADED = "var(--color-num)";
+const FILL_ADDED = "var(--color-den)";
 const FILL_EMPTY = "#ffffff";
 const FILL_HOVER = "var(--color-num-soft)";
 const STROKE = "var(--color-ink)";
@@ -115,7 +116,10 @@ export function FractionShape({
   }
 
   const parts = diagramParts(diagram);
+  const fontSize = diagram.shape === "circle" ? 22 : diagram.shape === "grid" ? 22 : 26;
   const shaded = new Set(shadedProp ?? diagram.shaded ?? []);
+  const added = new Set(diagram.shape === "bar" || diagram.shape === "circle" ? diagram.added ?? [] : []);
+  const removed = new Set(diagram.shape === "bar" || diagram.shape === "circle" ? diagram.removed ?? [] : []);
   const interactive = !!onToggle;
   const strokeW = size === "xs" ? 3 : 2.5;
 
@@ -137,9 +141,14 @@ export function FractionShape({
   }
 
   const shapeName = diagram.shape === "circle" ? "circle" : diagram.shape === "grid" ? "rectangle" : "bar";
+  const partition = `A ${shapeName} split into ${parts} ${diagram.shape !== "grid" && diagram.sizes ? "unequal" : "equal"} parts`;
   const ariaLabel =
     label ??
-    `A ${shapeName} split into ${parts} ${diagram.shape !== "grid" && diagram.sizes ? "unequal" : "equal"} parts, ${shaded.size} shaded`;
+    (added.size
+      ? `${partition}: ${shaded.size - added.size} shaded, then ${added.size} more added, ${shaded.size} shaded in all`
+      : removed.size
+        ? `${partition}: ${shaded.size + removed.size} were shaded and ${removed.size} taken away, ${shaded.size} shaded now`
+        : `${partition}, ${shaded.size} shaded`);
 
   const move = (to: number) => {
     const next = (to + parts) % parts;
@@ -167,7 +176,6 @@ export function FractionShape({
   };
 
   const widthClass = diagram.shape === "circle" ? CIRCLE_W[size] : MAX_W[size];
-  const fontSize = diagram.shape === "circle" ? 22 : diagram.shape === "grid" ? 22 : 26;
   const pad = 3;
   const isBar = diagram.shape === "bar";
 
@@ -190,7 +198,7 @@ export function FractionShape({
       <g clipPath={`url(#${id}-clip)`}>
         {geometry.map((p) => {
           const isShaded = shaded.has(p.index);
-          const fill = isShaded ? FILL_SHADED : interactive && hover === p.index ? FILL_HOVER : FILL_EMPTY;
+          const fill = isShaded ? (added.has(p.index) ? FILL_ADDED : FILL_SHADED) : interactive && hover === p.index ? FILL_HOVER : FILL_EMPTY;
           const common = (
             <path
               d={p.d}
@@ -201,7 +209,20 @@ export function FractionShape({
               style={{ transition: "fill 160ms ease" }}
             />
           );
-          if (!interactive) return <g key={p.index}>{common}</g>;
+          const g = fontSize * 0.32;
+          if (!interactive)
+            return (
+              <g key={p.index}>
+                {common}
+                {/* FR-009: added parts carry a plus, taken-away parts a cross, so the operation isn't shown by colour alone. */}
+                {added.has(p.index) && (
+                  <path d={`M${p.cx - g},${p.cy} h${2 * g} M${p.cx},${p.cy - g} v${2 * g}`} stroke="white" strokeWidth={4} strokeLinecap="round" data-mark="added" />
+                )}
+                {removed.has(p.index) && (
+                  <path d={`M${p.cx - g},${p.cy - g} l${2 * g},${2 * g} M${p.cx + g},${p.cy - g} l${-2 * g},${2 * g}`} stroke="var(--color-muted)" strokeWidth={4} strokeLinecap="round" data-mark="removed" />
+                )}
+              </g>
+            );
           return (
             <g
               key={p.index}
@@ -227,6 +248,19 @@ export function FractionShape({
               onPointerLeave={() => setHover(null)}
             >
               {common}
+              {/* LAB-007: shading is shown by a tick as well as colour. */}
+              {isShaded && (
+                <path
+                  d={`M${p.cx - fontSize * 0.36},${p.cy + 1} l${fontSize * 0.26},${fontSize * 0.26} l${fontSize * 0.46},${-fontSize * 0.5}`}
+                  fill="none"
+                  stroke="white"
+                  strokeWidth={4}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  pointerEvents="none"
+                  data-testid="shaded-tick"
+                />
+              )}
             </g>
           );
         })}

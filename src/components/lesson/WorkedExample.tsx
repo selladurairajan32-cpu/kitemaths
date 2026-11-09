@@ -109,7 +109,7 @@ export function WorkedExample({ step, onComplete }: { step: Worked; onComplete: 
       <div className="flex flex-wrap items-center gap-2">
         <span
           className={`rounded-full px-3 py-1 text-[0.9375rem] font-semibold ${
-            step.support === "full" ? "bg-den-soft text-den-strong" : "bg-violet-soft text-violet"
+            step.support === "full" ? "bg-den-soft text-den-strong" : "bg-example-soft text-example-ink"
           }`}
         >
           {step.support === "full" ? "Watch me" : "Let's do it together"}

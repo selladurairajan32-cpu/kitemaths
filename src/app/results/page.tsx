@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Full report · Kite Maths" };
 export default function Page() {
   return (
     <ParentGate>
-      <ActiveTopicProvider>
+      <ActiveTopicProvider choosable>
         <ResultsScreen />
       </ActiveTopicProvider>
     </ParentGate>

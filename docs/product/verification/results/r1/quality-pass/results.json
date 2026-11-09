@@ -1,0 +1,802 @@
+{
+ "widths": [
+  {
+   "width": "small-mobile",
+   "px": 320,
+   "page": "home",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 29
+  },
+  {
+   "width": "small-mobile",
+   "px": 320,
+   "page": "map",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 27
+  },
+  {
+   "width": "small-mobile",
+   "px": 320,
+   "page": "island",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 30
+  },
+  {
+   "width": "small-mobile",
+   "px": 320,
+   "page": "lesson-explain",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 6
+  },
+  {
+   "width": "small-mobile",
+   "px": 320,
+   "page": "lesson-worked",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 6
+  },
+  {
+   "width": "small-mobile",
+   "px": 320,
+   "page": "practice",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 6
+  },
+  {
+   "width": "small-mobile",
+   "px": 320,
+   "page": "lab",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 22
+  },
+  {
+   "width": "small-mobile",
+   "px": 320,
+   "page": "check",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 24
+  },
+  {
+   "width": "small-mobile",
+   "px": 320,
+   "page": "grown-ups",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 12
+  },
+  {
+   "width": "small-mobile",
+   "px": 320,
+   "page": "report",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 21
+  },
+  {
+   "width": "small-mobile",
+   "px": 320,
+   "page": "badges",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 8
+  },
+  {
+   "width": "mobile",
+   "px": 375,
+   "page": "home",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 29
+  },
+  {
+   "width": "mobile",
+   "px": 375,
+   "page": "map",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 27
+  },
+  {
+   "width": "mobile",
+   "px": 375,
+   "page": "island",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 30
+  },
+  {
+   "width": "mobile",
+   "px": 375,
+   "page": "lesson-explain",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 6
+  },
+  {
+   "width": "mobile",
+   "px": 375,
+   "page": "lesson-worked",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 6
+  },
+  {
+   "width": "mobile",
+   "px": 375,
+   "page": "practice",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 6
+  },
+  {
+   "width": "mobile",
+   "px": 375,
+   "page": "lab",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 22
+  },
+  {
+   "width": "mobile",
+   "px": 375,
+   "page": "check",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 24
+  },
+  {
+   "width": "mobile",
+   "px": 375,
+   "page": "grown-ups",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 12
+  },
+  {
+   "width": "mobile",
+   "px": 375,
+   "page": "report",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 21
+  },
+  {
+   "width": "mobile",
+   "px": 375,
+   "page": "badges",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 8
+  },
+  {
+   "width": "large-mobile",
+   "px": 430,
+   "page": "home",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 29
+  },
+  {
+   "width": "large-mobile",
+   "px": 430,
+   "page": "map",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 27
+  },
+  {
+   "width": "large-mobile",
+   "px": 430,
+   "page": "island",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 30
+  },
+  {
+   "width": "large-mobile",
+   "px": 430,
+   "page": "lesson-explain",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 6
+  },
+  {
+   "width": "large-mobile",
+   "px": 430,
+   "page": "lesson-worked",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 6
+  },
+  {
+   "width": "large-mobile",
+   "px": 430,
+   "page": "practice",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 6
+  },
+  {
+   "width": "large-mobile",
+   "px": 430,
+   "page": "lab",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 22
+  },
+  {
+   "width": "large-mobile",
+   "px": 430,
+   "page": "check",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 24
+  },
+  {
+   "width": "large-mobile",
+   "px": 430,
+   "page": "grown-ups",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 12
+  },
+  {
+   "width": "large-mobile",
+   "px": 430,
+   "page": "report",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 21
+  },
+  {
+   "width": "large-mobile",
+   "px": 430,
+   "page": "badges",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 8
+  },
+  {
+   "width": "tablet",
+   "px": 768,
+   "page": "home",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 30
+  },
+  {
+   "width": "tablet",
+   "px": 768,
+   "page": "map",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 28
+  },
+  {
+   "width": "tablet",
+   "px": 768,
+   "page": "island",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 31
+  },
+  {
+   "width": "tablet",
+   "px": 768,
+   "page": "lesson-explain",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 7
+  },
+  {
+   "width": "tablet",
+   "px": 768,
+   "page": "lesson-worked",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 7
+  },
+  {
+   "width": "tablet",
+   "px": 768,
+   "page": "practice",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 7
+  },
+  {
+   "width": "tablet",
+   "px": 768,
+   "page": "lab",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 23
+  },
+  {
+   "width": "tablet",
+   "px": 768,
+   "page": "check",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 25
+  },
+  {
+   "width": "tablet",
+   "px": 768,
+   "page": "grown-ups",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 12
+  },
+  {
+   "width": "tablet",
+   "px": 768,
+   "page": "report",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 21
+  },
+  {
+   "width": "tablet",
+   "px": 768,
+   "page": "badges",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 9
+  },
+  {
+   "width": "desktop",
+   "px": 1280,
+   "page": "home",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 30
+  },
+  {
+   "width": "desktop",
+   "px": 1280,
+   "page": "map",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 28
+  },
+  {
+   "width": "desktop",
+   "px": 1280,
+   "page": "island",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 31
+  },
+  {
+   "width": "desktop",
+   "px": 1280,
+   "page": "lesson-explain",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 12
+  },
+  {
+   "width": "desktop",
+   "px": 1280,
+   "page": "lesson-worked",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 12
+  },
+  {
+   "width": "desktop",
+   "px": 1280,
+   "page": "practice",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 7
+  },
+  {
+   "width": "desktop",
+   "px": 1280,
+   "page": "lab",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 23
+  },
+  {
+   "width": "desktop",
+   "px": 1280,
+   "page": "check",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 25
+  },
+  {
+   "width": "desktop",
+   "px": 1280,
+   "page": "grown-ups",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 12
+  },
+  {
+   "width": "desktop",
+   "px": 1280,
+   "page": "report",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 21
+  },
+  {
+   "width": "desktop",
+   "px": 1280,
+   "page": "badges",
+   "overflowX": 0,
+   "clipped": [],
+   "small": [],
+   "smallCount": 0,
+   "overlaps": [],
+   "overlapCount": 0,
+   "controls": 9
+  }
+ ],
+ "axe": [
+  {
+   "px": 375,
+   "page": "home",
+   "violations": []
+  },
+  {
+   "px": 375,
+   "page": "map",
+   "violations": []
+  },
+  {
+   "px": 375,
+   "page": "island",
+   "violations": []
+  },
+  {
+   "px": 375,
+   "page": "lesson-explain",
+   "violations": []
+  },
+  {
+   "px": 375,
+   "page": "lesson-worked",
+   "violations": []
+  },
+  {
+   "px": 375,
+   "page": "practice",
+   "violations": []
+  },
+  {
+   "px": 375,
+   "page": "lab",
+   "violations": []
+  },
+  {
+   "px": 375,
+   "page": "check",
+   "violations": []
+  },
+  {
+   "px": 375,
+   "page": "grown-ups",
+   "violations": []
+  },
+  {
+   "px": 375,
+   "page": "report",
+   "violations": []
+  },
+  {
+   "px": 375,
+   "page": "badges",
+   "violations": []
+  },
+  {
+   "px": 1280,
+   "page": "home",
+   "violations": []
+  },
+  {
+   "px": 1280,
+   "page": "map",
+   "violations": []
+  },
+  {
+   "px": 1280,
+   "page": "island",
+   "violations": []
+  },
+  {
+   "px": 1280,
+   "page": "lesson-explain",
+   "violations": []
+  },
+  {
+   "px": 1280,
+   "page": "lesson-worked",
+   "violations": []
+  },
+  {
+   "px": 1280,
+   "page": "practice",
+   "violations": []
+  },
+  {
+   "px": 1280,
+   "page": "lab",
+   "violations": []
+  },
+  {
+   "px": 1280,
+   "page": "check",
+   "violations": []
+  },
+  {
+   "px": 1280,
+   "page": "grown-ups",
+   "violations": []
+  },
+  {
+   "px": 1280,
+   "page": "report",
+   "violations": []
+  },
+  {
+   "px": 1280,
+   "page": "badges",
+   "violations": []
+  }
+ ],
+ "keyboard": [
+  {
+   "page": "home",
+   "focused": 39,
+   "withoutVisibleFocus": []
+  },
+  {
+   "page": "lesson-worked",
+   "focused": 36,
+   "withoutVisibleFocus": []
+  },
+  {
+   "page": "lab",
+   "focused": 39,
+   "withoutVisibleFocus": []
+  },
+  {
+   "page": "practice",
+   "focused": 35,
+   "withoutVisibleFocus": []
+  }
+ ],
+ "reducedMotion": {
+  "matches": true,
+  "transition": "1e-05s"
+ }
+}

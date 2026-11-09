@@ -1,16 +1,16 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { useId, useMemo, useState } from "react";
+import { useId, useMemo, useReducer, useState } from "react";
+import { NumberLine } from "@/components/math/NumberLine";
 import { FractionNotation } from "@/components/math/FractionNotation";
 import { FractionShape } from "./FractionShape";
 import { RichText } from "@/components/math/RichText";
 import { StackedBars } from "./Visuals";
 import { BulbIcon, CheckIcon } from "@/components/ui/Icons";
 import { challengeFeedback, checkChallenge, LAB_LIMITS, type LabChallenge, type LabMode, type LabSnapshot } from "../lab";
+import { EQUIVALENT_MAX_PARTS, INITIAL_LAB, labReducer, labSnapshot, LINE_MAX_INTERVALS, type ModelId } from "../labState";
 import { compareSymbol, equivalent, simplify, toWords, type Fraction } from "../math";
-
-const range = (n: number) => Array.from({ length: n }, (_, i) => i);
 
 export function Stepper({
   label,
@@ -96,18 +96,6 @@ function Segmented<T extends string>({
   );
 }
 
-interface BarState {
-  parts: number;
-  shaded: number[];
-}
-
-function resize(s: BarState, parts: number): BarState {
-  return { parts, shaded: s.shaded.filter((i) => i < parts) };
-}
-function toggle(s: BarState, i: number): BarState {
-  return { ...s, shaded: s.shaded.includes(i) ? s.shaded.filter((x) => x !== i) : [...s.shaded, i] };
-}
-
 function Readout({ f, words = true }: { f: Fraction; words?: boolean }) {
   return (
     <div className="flex items-center gap-4">
@@ -136,23 +124,12 @@ export function FractionLab({
   onChallengeComplete?: (id: string) => void;
 }) {
   const [mode, setMode] = useState<LabMode>(modes[0]);
-  const [shape, setShape] = useState<"bar" | "circle">("bar");
-  const [build, setBuild] = useState<BarState>({ parts: 4, shaded: [] });
-  const [top, setTop] = useState<BarState>({ parts: 2, shaded: [0] });
-  const [bottom, setBottom] = useState<BarState>({ parts: 4, shaded: [0] });
-  const [eqBase, setEqBase] = useState<Fraction>({ n: 1, d: 2 });
-  const [split, setSplit] = useState(1);
-
-  const snapshot: LabSnapshot = useMemo(
-    () => ({
-      build: { n: build.shaded.length, d: build.parts },
-      compareTop: { n: top.shaded.length, d: top.parts },
-      compareBottom: { n: bottom.shaded.length, d: bottom.parts },
-      equivalentBase: eqBase,
-      equivalentResult: { n: eqBase.n * split, d: eqBase.d * split },
-    }),
-    [build, top, bottom, eqBase, split],
-  );
+  // LAB-001: one state for the whole lab; everything shown below is derived from it.
+  const [lab, dispatch] = useReducer(labReducer, INITIAL_LAB);
+  const snapshot: LabSnapshot = useMemo(() => labSnapshot(lab), [lab]);
+  const { build, shape, base: eqBase, split } = lab;
+  const setParts = (model: ModelId, parts: number) => dispatch({ type: "set-parts", model, parts });
+  const toggle = (model: ModelId, index: number) => dispatch({ type: "toggle", model, index });
 
   const visibleChallenges = challenges.filter((c) => c.mode === mode);
 
@@ -163,7 +140,7 @@ export function FractionLab({
           label="Lab mode"
           value={mode}
           onChange={setMode}
-          options={modes.map((m) => ({ value: m, label: m === "build" ? "Build" : m === "compare" ? "Compare" : "Equivalent" }))}
+          options={modes.map((m) => ({ value: m, label: { build: "Build", compare: "Compare", equivalent: "Equivalent", line: "Number line" }[m] }))}
         />
       )}
 
@@ -174,30 +151,30 @@ export function FractionLab({
               <Segmented
                 label="Shape"
                 value={shape}
-                onChange={setShape}
+                onChange={(v) => dispatch({ type: "set-shape", shape: v })}
                 options={[
                   { value: "bar", label: "Bar" },
                   { value: "circle", label: "Circle" },
                 ]}
               />
-              <Stepper label="Equal parts" value={build.parts} min={LAB_LIMITS.minParts} max={LAB_LIMITS.maxParts} onChange={(p) => setBuild((s) => resize(s, p))} />
+              <Stepper label="Equal parts" value={build.parts} min={LAB_LIMITS.minParts} max={LAB_LIMITS.maxParts} onChange={(p) => setParts("build", p)} />
             </div>
             <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between">
               <div className="flex w-full justify-center md:flex-1">
                 <FractionShape
                   diagram={{ shape, parts: build.parts }}
-                  shaded={build.shaded}
-                  onToggle={(i) => setBuild((s) => toggle(s, i))}
+                  shaded={[...build.shaded]}
+                  onToggle={(i) => toggle("build", i)}
                   size="lg"
                 />
               </div>
               <div className="flex flex-col items-center gap-3 md:w-64 md:items-start">
                 <Readout f={snapshot.build} />
                 <div className="flex gap-2">
-                  <button type="button" className="h-11 rounded-full px-3 text-[0.9375rem] font-medium text-ink-2 hover:bg-sunk" onClick={() => setBuild((s) => ({ ...s, shaded: range(s.parts) }))}>
+                  <button type="button" className="h-11 rounded-full px-3 text-[0.9375rem] font-medium text-ink-2 hover:bg-sunk" onClick={() => dispatch({ type: "shade-all", model: "build" })}>
                     Shade all
                   </button>
-                  <button type="button" className="h-11 rounded-full px-3 text-[0.9375rem] font-medium text-ink-2 hover:bg-sunk" onClick={() => setBuild((s) => ({ ...s, shaded: [] }))}>
+                  <button type="button" className="h-11 rounded-full px-3 text-[0.9375rem] font-medium text-ink-2 hover:bg-sunk" onClick={() => dispatch({ type: "clear", model: "build" })}>
                     Clear
                   </button>
                 </div>
@@ -212,17 +189,20 @@ export function FractionLab({
         {mode === "compare" && (
           <div className="space-y-5">
             {([
-              ["Top bar", top, setTop],
-              ["Bottom bar", bottom, setBottom],
-            ] as const).map(([label, s, set]) => (
+              ["Top bar", "compareTop"],
+              ["Bottom bar", "compareBottom"],
+            ] as const).map(([label, model]) => {
+              const s = lab[model];
+              return (
               <div key={label} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-5">
                 <div className="flex items-center justify-between gap-4 sm:w-56 sm:shrink-0 sm:flex-col sm:items-start">
-                  <Stepper label={`${label} parts`} value={s.parts} min={1} max={LAB_LIMITS.maxParts} onChange={(p) => set((x) => resize(x, p))} />
+                  <Stepper label={`${label} parts`} value={s.parts} min={1} max={LAB_LIMITS.maxParts} onChange={(p) => setParts(model, p)} />
                   <FractionNotation n={s.shaded.length} d={s.parts} size="md" animate />
                 </div>
-                <FractionShape diagram={{ shape: "bar", parts: s.parts }} shaded={s.shaded} onToggle={(i) => set((x) => toggle(x, i))} size="lg" label={`${label}: ${s.parts} equal parts, ${s.shaded.length} shaded`} />
+                <FractionShape diagram={{ shape: "bar", parts: s.parts }} shaded={[...s.shaded]} onToggle={(i) => toggle(model, i)} size="lg" label={`${label}: ${s.parts} equal parts, ${s.shaded.length} shaded`} />
               </div>
-            ))}
+              );
+            })}
             <CompareResult a={snapshot.compareTop} b={snapshot.compareBottom} />
           </div>
         )}
@@ -230,9 +210,9 @@ export function FractionLab({
         {mode === "equivalent" && (
           <div className="space-y-6">
             <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-              <Stepper label="Parts" value={eqBase.d} min={1} max={6} onChange={(d) => setEqBase((f) => ({ d, n: Math.min(f.n, d) }))} />
-              <Stepper label="Shaded" value={eqBase.n} min={0} max={eqBase.d} onChange={(n) => setEqBase((f) => ({ ...f, n }))} tone="num" />
-              <Stepper label="Split each part into" value={split} min={1} max={LAB_LIMITS.maxSplit} onChange={setSplit} tone="ink" />
+              <Stepper label="Parts" value={eqBase.d} min={1} max={EQUIVALENT_MAX_PARTS} onChange={(d) => dispatch({ type: "set-base", base: { d, n: eqBase.n } })} />
+              <Stepper label="Shaded" value={eqBase.n} min={0} max={eqBase.d} onChange={(n) => dispatch({ type: "set-base", base: { ...eqBase, n } })} tone="num" />
+              <Stepper label="Split each part into" value={split} min={1} max={LAB_LIMITS.maxSplit} onChange={(v) => dispatch({ type: "set-split", split: v })} tone="ink" />
             </div>
             <StackedBars rows={[{ f: eqBase }, { f: snapshot.equivalentResult }]} guide />
             <div className="flex flex-wrap items-center justify-center gap-4" aria-live="polite">
@@ -249,6 +229,22 @@ export function FractionLab({
                 ? "Split each part to see a new name for the same amount."
                 : `Every part was split into ${split}, so there are ${split}× as many parts — and ${split}× as many shaded. The amount stays the same.`}
             </p>
+          </div>
+        )}
+
+        {mode === "line" && (
+          <div className="space-y-5">
+            <Stepper label="Equal gaps from 0 to 1" value={lab.line.intervals} min={1} max={LINE_MAX_INTERVALS} onChange={(k) => dispatch({ type: "set-intervals", intervals: k })} />
+            <div className="flex justify-center">
+              <NumberLine intervals={lab.line.intervals} selected={lab.line.marker} onSelect={(i) => dispatch({ type: "move-marker", to: i })} fractionLabels size="lg" />
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-4" aria-live="polite">
+              <FractionNotation n={lab.line.marker} d={lab.line.intervals} size="lg" animate />
+              <p className="text-[0.9375rem] text-ink-2">
+                The marker is {lab.line.marker} of {lab.line.intervals} equal gaps from 0
+                {lab.line.marker === lab.line.intervals ? ": that is 1 whole." : "."}
+              </p>
+            </div>
           </div>
         )}
       </div>

@@ -1,0 +1,226 @@
+[
+ {
+  "vw": "phone",
+  "name": "home",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "phone",
+  "name": "map",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "phone",
+  "name": "island",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "phone",
+  "name": "lesson",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "phone",
+  "name": "question",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "phone",
+  "name": "practice",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "phone",
+  "name": "grown-ups",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "phone",
+  "name": "specimen",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "tablet",
+  "name": "home",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "tablet",
+  "name": "map",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "tablet",
+  "name": "island",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "tablet",
+  "name": "lesson",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "tablet",
+  "name": "question",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "tablet",
+  "name": "practice",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "tablet",
+  "name": "grown-ups",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "tablet",
+  "name": "specimen",
+  "root": "32px",
+  "overflowX": 24,
+  "clipped": [
+   "div.max-w-reading.overflow-hidden.rounded-panel \"Worked example1. Find three quarters34 o\""
+  ],
+  "clippedCount": 1,
+  "wide": [
+   "span. right=792",
+   "span.inline-flex.flex-col.items-center right=792",
+   "span.sr-only right=770",
+   "span.text-[0.92em].leading-[1.05].text-num-strong right=780",
+   "span.block.text-center right=780"
+  ]
+ },
+ {
+  "vw": "desktop",
+  "name": "home",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "desktop",
+  "name": "map",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "desktop",
+  "name": "island",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "desktop",
+  "name": "lesson",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "desktop",
+  "name": "question",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "desktop",
+  "name": "practice",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "desktop",
+  "name": "grown-ups",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ },
+ {
+  "vw": "desktop",
+  "name": "specimen",
+  "root": "32px",
+  "overflowX": 0,
+  "clipped": [],
+  "clippedCount": 0,
+  "wide": []
+ }
+]

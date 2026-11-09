@@ -58,6 +58,10 @@ export interface ItemResult {
   attempts: number;
   hintsUsed: number;
   misconceptions: MisconceptionId[];
+  /** ARCH-005: the last answer the child submitted (the topic's own response object, JSON). Optional for older saves. */
+  response?: unknown;
+  /** ARCH-005: time from showing the question to finishing it, in milliseconds. Optional. */
+  durationMs?: number;
   /** For follow-up questions: the misconception the follow-up was checking. */
   targets?: MisconceptionId;
   at: number;
@@ -71,6 +75,8 @@ export interface MisconceptionDef {
   /** Parent-facing description used on the results screen. */
   description: string;
   explanation: string[];
+  /** Other reasons the same answer can happen, so the signal stays "possible" (MIS-001 AC2). */
+  alternatives?: string[];
   skills: SkillId[];
   followUps: string[];
 }

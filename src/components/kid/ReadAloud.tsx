@@ -35,7 +35,7 @@ export function ReadAloud({
   const speakingId = useSpeakingId();
   if (!hydrated || !speechSupported()) return null;
   const active = speakingId === id;
-  const dims = size === "lg" ? "size-12" : "size-10";
+  const dims = size === "lg" ? "size-12" : "size-11";
   return (
     <button
       type="button"

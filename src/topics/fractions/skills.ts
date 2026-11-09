@@ -38,6 +38,12 @@ export const SKILLS: Skill[] = [
     lessonId: "number-line",
   },
   {
+    id: "fractions.add-same",
+    title: "Adding and subtracting fractions",
+    description: "Adds and subtracts fractions with the same denominator within one whole.",
+    lessonId: "adding",
+  },
+  {
     id: "fractions.fraction-of",
     title: "Fractions of amounts",
     description: "Finds a fraction of a number or quantity, including word problems.",
