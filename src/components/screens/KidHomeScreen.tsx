@@ -9,6 +9,7 @@ import { isPicName, Pic, type PicName } from "@/components/paper/Pic";
 import { ButtonLink } from "@/components/ui/Button";
 import { ArrowRightIcon, CheckIcon, LockIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton, StorageNotice } from "@/components/ui/Screen";
+import { PRACTICE_SESSION_LENGTH } from "@/engine/adaptive";
 import { allLessonEvidence } from "@/engine/evidence";
 import { lessonsEvidenced, recommendNext, reviewSkills } from "@/engine/journey";
 import { activeDays, answeredToday, badgesFor, DAILY_GOAL, dayKey, levelFor, STARS, streakFor, totalStars } from "@/engine/rewards";
@@ -295,7 +296,7 @@ function KidHome() {
           More to explore
         </h2>
         <ul className="mt-5 grid grid-cols-[repeat(auto-fit,minmax(min(100%,16rem),1fr))] gap-4">
-          <MoreCard href={links.practice()} pic="target" tile="bg-tile-green" title="Practice" line="Ten questions, a star for each one." />
+          <MoreCard href={links.practice()} pic="target" tile="bg-tile-green" title="Practice" line={`${PRACTICE_SESSION_LENGTH} questions. Up to 3 stars each, for right first time.`} />
           {topic.ui.FreeLab && <MoreCard href={links.lab()} pic="lab" tile="bg-tile-sky" title="The lab" line="Cut, colour and compare in free play." />}
           <MoreCard href={routes.journey()} pic="map" tile="bg-tile-blue" title="World map" line="Every island on the map. Pick any one to explore." />
         </ul>

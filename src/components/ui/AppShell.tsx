@@ -18,7 +18,7 @@ const KID_NAV = [
   { href: "/journey", label: "Map", Icon: MapIcon },
   { href: "/practice", label: "Practice", Icon: PracticeIcon },
   { href: "/lab", label: "Lab", Icon: BeakerIcon },
-  { href: "/badges", label: "Kites", Icon: KiteIcon },
+  { href: "/badges", label: "Badges", Icon: KiteIcon },
 ];
 
 const PARENT_NAV = [

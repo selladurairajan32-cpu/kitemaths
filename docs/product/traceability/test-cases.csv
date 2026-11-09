@@ -187,7 +187,7 @@ TC-ARCH-005.3.1,ARCH-005,AC3,unit,automated,passing,src/engine/engine.test.ts::r
 TC-ARCH-005.3.2,ARCH-005,AC3,unit,automated,passing,"src/engine/recovery-transfer.test.ts::labels one answer as possible, repeated ones as likely, and keeps the evidence (MIS-003)",
 TC-FR-001.1.1,FR-001,AC1,unit,automated,partial,"src/engine/rewards.test.ts::builds one real question per lesson, matching that lesson",
 TC-FR-001.1.2,FR-001,AC1,document-review,manual,review-pending,,"The warm-up covers equal parts first, then naming, then each later lesson; it has no timer and stops after two misses. Review whether it feels low-pressure (CUR-004)."
-TC-FR-001.2.1,FR-001,AC2,component,automated,passing,"src/components/screens/PlacementScreen.test.tsx::suggests a start and offers the beginning too, without locking anything",
+TC-FR-001.2.1,FR-001,AC2,component,automated,passing,"src/components/screens/PlacementScreen.test.tsx::suggests a start and offers the beginning too, without locking anything","Asserts the warm-up result counts lessons, not topics (CH-042)"
 TC-FR-001.3.1,FR-001,AC3,unit,automated,passing,"src/engine/rewards.test.ts::skips lessons answered correctly before the first gap, and stops after two misses in a row",
 TC-FR-001.3.2,FR-001,AC3,unit,automated,passing,src/engine/rewards.test.ts::marks placed-out lessons done without counting placement towards mastery,
 TC-FR-002.1.1,FR-002,AC1,unit,automated,passing,src/topics/fractions/evaluate.test.ts::flags unequal shapes chosen as equal parts,

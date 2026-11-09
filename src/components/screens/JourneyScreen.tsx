@@ -292,8 +292,11 @@ export function JourneyScreen() {
 
       <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
         <div className="card p-5">
-          <h2 className="font-semibold">How you&apos;ll learn</h2>
-          <p className="mt-1 text-label text-ink-2">Every topic follows the same path, so understanding comes before testing.</p>
+          <h2 className="font-semibold">What the lesson tags mean</h2>
+          <p className="mt-1 text-label text-ink-2">
+            Each lesson is tagged with its main purpose. Lessons move broadly from understanding to mastery, but a purpose can come up more than once, so
+            the tags are not strict steps in order.
+          </p>
           <ol className="mt-4 space-y-3">
             {phaseStatuses(topic, learner).map(({ phase, status }, i) => (
               <li key={phase} className="flex gap-3">

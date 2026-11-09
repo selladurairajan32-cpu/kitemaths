@@ -226,7 +226,7 @@ function Done() {
       </h1>
       <p className="mt-2 text-lg text-ink-2">
         {placedOut.length
-          ? `You already know ${placedOut.length} of the ${topic.placement?.plan.length ?? LESSONS.length} topics — so we'll skip ahead.`
+          ? `You already know ${placedOut.length} of the ${topic.placement?.plan.length ?? LESSONS.length} lessons — so we'll skip ahead.`
           : "We'll start right at the beginning and build up step by step. Every expert starts here!"}
       </p>
       {placedOut.length > 0 && (

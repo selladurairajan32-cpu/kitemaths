@@ -78,7 +78,7 @@ export function ResultsScreen() {
     <div className="space-y-6">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-[0.9375rem] font-bold text-muted">Fractions foundations</p>
+          <p className="text-[0.9375rem] font-bold text-muted">{topic.title}</p>
           <h1 className="display text-3xl font-semibold sm:text-4xl">Mastery results</h1>
           <p className="mt-1 text-ink-2">
             Based on {stats.learningAnswered} lesson & practice answers{last ? " and your latest independent check" : ""}.

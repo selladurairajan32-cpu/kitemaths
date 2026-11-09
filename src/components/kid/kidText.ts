@@ -70,7 +70,7 @@ export function kidNext(rec: Recommendation, topic: TopicModule): KidNext {
         kicker: "Island complete",
         title: `${topic.title}: mastered`,
         line: topic.ui.FreeLab ? "Keep your skills sharp with practice, or build in the lab." : "Keep your skills sharp with practice.",
-        cta: "See my kites",
+        cta: "See my badges",
         href: routes.badges(),
       };
   }

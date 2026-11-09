@@ -17,6 +17,11 @@ import { ActiveTopicProvider } from "@/topics/ActiveTopic";
 import { streakFor, totalStars } from "@/engine/rewards";
 import { setProfile, setSettings } from "@/engine/progress";
 import { updateLearner } from "@/lib/store";
+import { topicById } from "@/topics";
+import { WORLDS } from "@/topics/worlds";
+
+/** The module built first to the full quality standard; every other island is an unaccepted preview (D-001). */
+const REFERENCE_TOPIC = "fractions";
 
 export function ParentScreen() {
   const hydrated = useHydrated();
@@ -50,6 +55,8 @@ function ParentOverview() {
   const stars = totalStars(learner);
   const streak = streakFor(learner, now);
   const placement = t.placement;
+  const world = WORLDS.find((w) => w.islands.some((i) => i.topicId === topic.id));
+  const nextIslands = world ? world.islands.slice(world.islands.findIndex((i) => i.topicId === topic.id) + 1).map((i) => i.title) : [];
 
   return (
     <div className="space-y-6">
@@ -256,11 +263,22 @@ function ParentOverview() {
         <h2 id="roadmap-title" className="font-semibold">
           About this module
         </h2>
-        <p className="mt-1 max-w-3xl text-[0.9375rem] text-ink-2">
-          This prototype covers <strong>fractions foundations</strong> only: fractions of one whole, comparing, equivalence, number lines from 0 to 1 and
-          fractions of amounts. It is not complete 11+ preparation. Planned next modules (not built yet): simplifying fractions, improper fractions and
-          mixed numbers, adding and subtracting fractions, multiplying and dividing fractions, and fractions–decimals–percentages.
-        </p>
+        <div className="mt-1 max-w-3xl space-y-2 text-[0.9375rem] text-ink-2">
+          <p>
+            <strong>{topic.title}</strong>: {topic.subtitle}.
+          </p>
+          <p>
+            {topic.id === REFERENCE_TOPIC
+              ? "This is the module being built first to the full standard: lessons, practice and an independent mastery check. The other islands are early previews: they work, but have not yet been through the same checks."
+              : `This island is an early preview. It works, but it has not yet been through the checks that ${topicById(REFERENCE_TOPIC)?.title ?? "the first module"} is going through.`}{" "}
+            Kite Maths is not yet complete 11+ preparation.
+          </p>
+          {nextIslands.length > 0 && (
+            <p>
+              Next in {world!.title}: {nextIslands.join(", ")}.
+            </p>
+          )}
+        </div>
       </section>
     </div>
   );

@@ -23,7 +23,7 @@ describe("warm-up result (FR-001)", () => {
         <PlacementScreen />
       </TopicProvider>,
     );
-    expect(screen.getByText(/You already know 2 of the 9 topics/)).toBeTruthy();
+    expect(screen.getByText(/You already know 2 of the 9 lessons/)).toBeTruthy();
     const beginning = screen.getByRole("link", { name: /From the beginning: Wholes and equal parts/ });
     expect(beginning.getAttribute("href")).toBe("/t/fractions/lesson/wholes");
     const suggested = screen.getByRole("link", { name: /The suggested lesson: Fraction lab|The suggested lesson:/ });

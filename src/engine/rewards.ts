@@ -171,7 +171,7 @@ export function badgesFor(state: LearnerState, skills: Skill[], lessonCount: num
     { id: "century", title: "Century", description: "Answer 100 questions.", pattern: "stripes", progress: ratio(answered, 100) },
     { id: "all-lessons", title: "Sky scholar", description: "Finish every lesson.", pattern: "checks", progress: ratio(lessonsDone, lessonCount) },
     { id: "streak-7", title: "Super week", description: "Learn 7 days in a row.", pattern: "waves", progress: ratio(streak.best, 7) },
-    { id: "check", title: "Show what you know", description: "Complete the big check.", pattern: "sun", progress: totals.checks > 0 ? 1 : 0 },
+    { id: "check", title: "Show what you know", description: "Finish the big challenge.", pattern: "sun", progress: totals.checks > 0 ? 1 : 0 },
     ...skills.map((s) => {
       const status = skillMastery(s.id, state.results).status;
       const p = status === "mastered" ? 1 : status === "passed-check" || status === "secure" ? 0.66 : status === "developing" ? 0.33 : 0;
