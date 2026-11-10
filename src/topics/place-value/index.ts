@@ -1,4 +1,4 @@
-import { defineTopic, genFor, int, pick } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
 import { num } from "@/topics/kit/evaluate";
 import type { PlaceColumn, Template, Rng } from "@/topics/kit/types";
 import { PLACE, digitIn } from "@/maths/place-value";
@@ -34,7 +34,7 @@ function numberWith(r: Rng, digits: number, allowZeros = true): number {
   return Number(s);
 }
 
-const templates: Template[] = [
+const baseTemplates: Template[] = [
   {
     key: "pv-blocks",
     skill: S.digit,
@@ -274,7 +274,145 @@ const templates: Template[] = [
       };
     },
   },
+  /* D-037 (Phase B): a stretch question for every skill, and a second question maker for more and less. */
+  {
+    key: "pv-digit-stretch",
+    skill: S.digit,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const d = int(r, 1, 7);
+      const digits = [d, (d + int(r, 1, 2)) % 10, d, (d + 3) % 10];
+      const n = Number(digits.join(""));
+      const big = digits[0]! * 1000;
+      const small = digits[2]! * 10;
+      return {
+        kind: "number",
+        prompt: `In **${num(n)}**, the digit ${digits[0]} appears twice. How many **times bigger** is the value of the first ${digits[0]} than the second?`,
+        answer: big / small,
+        traps: [{ value: 1, misconception: M.face, feedback: "The digits look the same, but their columns give them different values." }, { value: 2, misconception: M.column, feedback: `Compare their values: ${num(big)} and ${small}.` }],
+        hint: `What is each ${digits[0]} worth? One is in the thousands column, one in the tens.`,
+        explanation: `${num(big)} ÷ ${small} = **${big / small}**: each column is 10 times the one to its right.`,
+      };
+    },
+  },
+  {
+    key: "pv-words-stretch",
+    skill: S.words,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const th = int(r, 2, 99);
+      const ones = int(r, 1, 9) * pick(r, [1, 10]);
+      const n = th * 1000 + ones;
+      const wrong = Number(`${th}${ones}`);
+      return {
+        kind: "choose",
+        prompt: `Which number is **${numberWords(n)}**?`,
+        options: [{ text: num(n) }, { text: num(wrong), misconception: M.zero, feedback: "There are no hundreds, so zeros must hold the empty places." }, { text: num(th * 1000 + ones * 10), misconception: M.zero, feedback: "Check how many zeros hold the empty places." }, { text: num(th * 100 + ones), misconception: M.column, feedback: `${numberWords(th)} thousand means ${num(th * 1000)}.` }].filter((o, i, all) => all.findIndex((x) => x.text === o.text) === i),
+        answer: 0,
+        hint: "Write the thousands first, then make sure there are three digits after the comma.",
+        explanation: `${numberWords(n)} is **${num(n)}**.`,
+      };
+    },
+  },
+  {
+    key: "pv-partition-stretch",
+    skill: S.part,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const h = int(r, 2, 8);
+      const t = int(r, 11, 19);
+      const o = int(r, 2, 9);
+      const n = h * 100 + t * 10 + o;
+      return {
+        kind: "number",
+        prompt: `**${h} hundreds + ${t} tens + ${o} ones** is the same as which number?`,
+        answer: n,
+        traps: [{ value: Number(`${h}${t}${o}`), misconception: M.concat, feedback: `${t} tens is ${t * 10}, which is more than 100. Don't just write the digits side by side.` }],
+        hint: `${t} tens is ${t * 10}. Add the parts together.`,
+        explanation: `${h * 100} + ${t * 10} + ${o} = **${num(n)}**.`,
+      };
+    },
+  },
+  {
+    key: "pv-compare-stretch",
+    skill: S.compare,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const pool = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+      const uniq: number[] = [];
+      while (uniq.length < 4) uniq.push(pool.splice(int(r, 0, pool.length - 1), 1)[0]!);
+      const desc = [...uniq].sort((a, b) => b - a);
+      const largest = Number(desc.join(""));
+      return {
+        kind: "number",
+        prompt: `Use each of the digits **${uniq.join(", ")}** once. What is the **largest** number you can make?`,
+        answer: largest,
+        traps: [{ value: Number([...desc].reverse().join("")), feedback: "That's the smallest. Put the biggest digit in the biggest column." }, { value: Number(uniq.join("")), misconception: M.column, feedback: "Order the digits from biggest to smallest." }].filter((t) => t.value !== largest),
+        hint: "The biggest digit goes in the thousands column.",
+        explanation: `Biggest digit first: **${num(largest)}**.`,
+      };
+    },
+  },
+  {
+    key: "pv-more-less-word",
+    skill: S.more,
+    difficulties: [1, 2, 3],
+    make: (r, { difficulty }) => {
+      const step = difficulty === 1 ? pick(r, [10, 100]) : pick(r, [100, 1000]);
+      const n = difficulty === 3 ? int(r, 10, 99) * 100 - step + int(r, 1, 9) * 10 : int(r, 120, 9800);
+      const more = r() < 0.5;
+      const answer = more ? n + step : n - step;
+      return {
+        kind: "number",
+        prompt: more ? `A school has **${num(n)} books**. It buys **${num(step)} more**. How many books does it have now?` : `A stadium has **${num(n)} seats**. **${num(step)}** are taken out. How many seats are left?`,
+        answer,
+        traps: [{ value: more ? n - step : n + step, feedback: more ? "Buying more means the number goes up." : "Taking seats out means the number goes down." }],
+        hint: `${num(step)} ${more ? "more" : "less"} changes the ${step === 10 ? "tens" : step === 100 ? "hundreds" : "thousands"} digit.`,
+        explanation: `${num(n)} ${more ? "+" : "−"} ${num(step)} = **${num(answer)}**.`,
+      };
+    },
+  },
+  {
+    key: "pv-more-stretch",
+    skill: S.more,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const n = int(r, 1, 8) * 1000 + 900 + int(r, 50, 99);
+      return {
+        kind: "number",
+        prompt: `What is **1,000 more** than **${num(n)}**, then **100 more** than that?`,
+        answer: n + 1100,
+        traps: [{ value: n + 1000, feedback: "Do both steps: 1,000 more, then 100 more." }, { value: n + 100, feedback: "Do both steps: 1,000 more, then 100 more." }],
+        hint: "The hundreds digit is 9: adding 100 makes it roll over into the thousands.",
+        explanation: `${num(n)} + 1,000 = ${num(n + 1000)}; + 100 = **${num(n + 1100)}**.`,
+      };
+    },
+  },
 ];
+
+const templates = withHints(baseTemplates, {
+  "pv-blocks": () => ["Count the hundreds squares, the tens sticks, then the ones cubes.", "Write each count in its own column."],
+  "pv-digit-value": () => ["Find which column the digit is in.", "The digit's value is the digit times that column: 4 in the hundreds is 400."],
+  "pv-which-digit": () => ["Read the columns from the right: ones, tens, hundreds, thousands…", "Point to the column named in the question."],
+  "pv-words-to-num": () => ["Write the thousands, then the hundreds, tens and ones.", "If a column has nothing, write a zero to hold its place."],
+  "pv-num-to-words": () => ["Read the digits before the comma as thousands.", "Then read the last three digits as a normal number."],
+  "pv-partition": () => ["Each digit is worth its column's value.", "Add or write the parts: thousands + hundreds + tens + ones."],
+  "pv-partition-missing": () => ["Add the parts you know.", "Take that away from the whole number to find the missing part."],
+  "pv-compare": () => ["More digits means a bigger number.", "If they have the same number of digits, compare from the left."],
+  "pv-order": () => ["Line the numbers up by their columns.", "Compare the biggest column first."],
+  "pv-more-less": () => ["Only one column changes, unless a 9 rolls over.", "10 changes the tens, 100 changes the hundreds, 1,000 changes the thousands."],
+  "pv-digit-stretch": () => ["Write the value of each digit.", "Divide the bigger value by the smaller one."],
+  "pv-words-stretch": () => ["After the thousands there are always three more digits.", "Use zeros for the hundreds and tens if the words don't mention them."],
+  "pv-partition-stretch": () => ["More than 9 tens makes extra hundreds.", "Add the hundreds, the tens and the ones as values."],
+  "pv-compare-stretch": () => ["Put the digits in order, biggest first.", "The biggest digit goes in the biggest column."],
+  "pv-more-less-word": () => ["More means add; fewer or taken out means take away.", "Change the right column."],
+  "pv-more-stretch": () => ["Add 1,000 first.", "Then add 100: watch the hundreds roll over."],
+});
 
 export const placeValue = defineTopic({
   id: T,
@@ -323,6 +461,15 @@ export const placeValue = defineTopic({
           steps: [{ text: "Find the 6. It is the second digit." }, { text: "Count the columns from the right: ones, tens, **hundreds**." }, { text: "So the 6 means **6 hundreds**." }],
           conclusion: "The 6 in 3,642 is worth **600**.",
         },
+        {
+          type: "worked",
+          title: "Together: what is the 7 worth?",
+          support: "faded",
+          problem: "What is the **7** worth in **4,732**?",
+          visual: { kind: "pv-chart", value: 4732, columns: ["Th", "H", "T", "O"], highlight: "H" },
+          steps: [{ text: "The 7 is in the **hundreds** column.", blank: { prompt: "What is the 7 worth?", answer: 700, hint: "7 hundreds", traps: [{ value: 7, misconception: M.face, feedback: "The digit is 7, but its value depends on its column: 7 hundreds." }, { value: 70, misconception: M.column, feedback: "Count the columns from the right: ones, tens, hundreds." }], worked: "**700**." } }],
+          conclusion: "In 4,732 the 7 is worth **700**.",
+        },
         { type: "check", title: "Your turn", questionId: gen("pv-blocks", 1, 4) },
         { type: "check", title: "One more", questionId: gen("pv-digit-value", 1, 7) },
       ],
@@ -350,12 +497,22 @@ export const placeValue = defineTopic({
         },
         {
           type: "worked",
+          title: "Watch me: read 30,407",
+          support: "full",
+          problem: "Read **30,407** aloud.",
+          visual: { kind: "pv-chart", value: 30407, columns: ["TTh", "Th", "H", "T", "O"] },
+          steps: [{ text: "Before the comma: **30** thousand." }, { text: "After the comma: **407**: four hundred and seven. The zero in the tens just holds the place." }],
+          conclusion: "30,407 is **thirty thousand, four hundred and seven**.",
+        },
+        {
+          type: "worked",
           title: "Let's do it together",
           support: "faded",
           problem: "Write **six thousand and fifty-one** in digits.",
+          visual: { kind: "pv-chart", value: 6051, columns: ["Th", "H", "T", "O"], hideDigits: true },
           steps: [
             { text: "Six thousand: a 6 in the thousands column." },
-            { text: "No hundreds, so the hundreds column gets a zero.", blank: { prompt: "Which digit goes in the hundreds column?", answer: 0, hint: "There are no hundreds in the words.", worked: "No hundreds, so we write **0**." } },
+            { text: "No hundreds, so the hundreds column gets a zero.", blank: { prompt: "Which digit goes in the hundreds column?", answer: 0, hint: "There are no hundreds in the words.", traps: [{ value: 5, misconception: M.zero, feedback: "The 5 is fifty: it goes in the tens. The hundreds column is empty, so it gets a 0." }], worked: "No hundreds, so we write **0**." } },
             { text: "Fifty-one: 5 tens and 1 one." },
           ],
           conclusion: "Six thousand and fifty-one is **6,051**.",
@@ -375,9 +532,18 @@ export const placeValue = defineTopic({
         {
           type: "explain",
           title: "One number, four parts",
-          body: ["**3,456** is **3,000 + 400 + 50 + 6**. Each part is one digit's value."],
+          body: ["**3,456** is **3,000 + 400 + 50 + 6**. Each part is one digit's value.", "You can also partition in other ways: 3,456 is 34 hundreds and 56 ones, or 3,000 + 456. All these parts add back to the same number.", "A zero digit gives no part: 5,208 is 5,000 + 200 + 8."],
           visual: { kind: "bar", total: "3,456", parts: [{ label: "3,000", size: 3 }, { label: "400", size: 2 }, { label: "50", size: 1.4 }, { label: "6", size: 1 }] },
           tip: "Partitioning makes adding and subtracting in your head much easier.",
+        },
+        {
+          type: "worked",
+          title: "Watch me: partition 7,093",
+          support: "full",
+          problem: "Partition **7,093** into thousands, hundreds, tens and ones.",
+          visual: { kind: "pv-chart", value: 7093, columns: ["Th", "H", "T", "O"] },
+          steps: [{ text: "7 thousands = **7,000**. 0 hundreds = nothing." }, { text: "9 tens = **90**. 3 ones = **3**." }],
+          conclusion: "7,093 = **7,000 + 90 + 3**.",
         },
         {
           type: "worked",
@@ -386,7 +552,7 @@ export const placeValue = defineTopic({
           problem: "**5,208 = 5,000 + ? + 8**",
           steps: [
             { text: "The digits are 5, 2, 0 and 8." },
-            { text: "The 2 is in the hundreds column.", blank: { prompt: "What is the 2 worth?", answer: 200, hint: "It is in the hundreds column.", worked: "The 2 is worth **200**." } },
+            { text: "The 2 is in the hundreds column.", blank: { prompt: "What is the 2 worth?", answer: 200, hint: "It is in the hundreds column.", traps: [{ value: 20, misconception: M.column, feedback: "Count the columns from the right: the 2 is in the hundreds." }, { value: 2, misconception: M.face, feedback: "The digit is 2, but in the hundreds column it is worth 200." }], worked: "The 2 is worth **200**." } },
             { text: "There are no tens, so there is no tens part." },
           ],
           conclusion: "**5,208 = 5,000 + 200 + 8**.",
@@ -406,7 +572,8 @@ export const placeValue = defineTopic({
         {
           type: "explain",
           title: "The crocodile eats the bigger number",
-          body: ["**<** means *is less than* and **>** means *is greater than*. The open side always faces the bigger number.", "**899 < 1,200**, because 1,200 has more digits."],
+          body: ["**<** means *is less than* and **>** means *is greater than*. The open side always faces the bigger number.", "**899 < 1,200**, because 1,200 has more digits.", "If two numbers have the same number of digits, compare them column by column from the left. The first column that is different decides which is bigger."],
+          visual: { kind: "pv-chart", value: 4381, columns: ["Th", "H", "T", "O"], highlight: "T" },
           tip: "More digits means bigger. Same number of digits? Compare the first column.",
         },
         {
@@ -416,6 +583,14 @@ export const placeValue = defineTopic({
           problem: "Which is bigger, **4,381** or **4,318**?",
           steps: [{ text: "Both have 4 digits." }, { text: "Thousands: both 4. Hundreds: both 3." }, { text: "Tens: **8** is more than **1**." }],
           conclusion: "**4,381 > 4,318**.",
+        },
+        {
+          type: "worked",
+          title: "Together: 989 or 1,002?",
+          support: "faded",
+          problem: "Which is bigger: **989** or **1,002**?",
+          steps: [{ text: "Count the digits first.", blank: { prompt: "How many digits does 1,002 have?", answer: 4, hint: "1, 0, 0, 2", traps: [{ value: 3, misconception: M.length, feedback: "Count again: 1,002 has a thousands digit, so it has 4 digits." }], worked: "**4** digits; 989 has only 3." } }],
+          conclusion: "**1,002 > 989**: more digits means bigger, even though 989 has big digits.",
         },
         { type: "check", title: "Your turn", questionId: gen("pv-compare", 1, 3) },
         { type: "check", title: "One more", questionId: gen("pv-compare", 3, 6) },
@@ -432,7 +607,7 @@ export const placeValue = defineTopic({
         {
           type: "explain",
           title: "Jump along the line",
-          body: ["**100 more than 345** changes only the hundreds digit: **445**."],
+          body: ["**100 more than 345** changes only the hundreds digit: **445**.", "10 more changes the tens digit, and 1,000 more changes the thousands digit. Less works the same way, going down."],
           visual: { kind: "line", min: 300, max: 500, step: 100, points: [{ value: 345, label: "345", tone: "brand" }, { value: 445, label: "445" }], jumps: [{ from: 345, to: 445, label: "+100" }] },
         },
         {
@@ -440,6 +615,23 @@ export const placeValue = defineTopic({
           title: "When a 9 rolls over",
           body: ["**100 more than 3,950**: the hundreds digit is 9, so it rolls over to 0 and the thousands go up by one. The answer is **4,050**."],
           tip: "Like a car's mileage counter, a 9 becomes 0 and the next column goes up.",
+        },
+        {
+          type: "worked",
+          title: "Watch me: 1,000 less than 6,250",
+          support: "full",
+          problem: "What is **1,000 less** than **6,250**?",
+          visual: { kind: "line", min: 4000, max: 7000, step: 1000, points: [{ value: 6250, label: "6,250", tone: "brand" }, { value: 5250, label: "5,250" }], jumps: [{ from: 6250, to: 5250, label: "−1,000" }] },
+          steps: [{ text: "1,000 less changes only the **thousands** digit." }, { text: "6 thousands become **5** thousands. The other digits stay." }],
+          conclusion: "1,000 less than 6,250 is **5,250**.",
+        },
+        {
+          type: "worked",
+          title: "Together: 10 more than 2,995",
+          support: "faded",
+          problem: "What is **10 more** than **2,995**?",
+          steps: [{ text: "The tens digit is 9, so it rolls over to 0, and the hundreds go up. The hundreds are 9 too, so they roll over as well.", blank: { prompt: "10 more than 2,995 = ?", answer: 3005, hint: "2,995 + 10", traps: [{ value: 2905, misconception: M.column, feedback: "The 9 tens roll over: the hundreds go up, and they roll over too." }, { value: 3995, misconception: M.column, feedback: "10 more only adds a ten, not a thousand." }], worked: "**3,005**." } }],
+          conclusion: "10 more than 2,995 is **3,005**.",
         },
         { type: "check", title: "Your turn", questionId: gen("pv-more-less", 1, 5) },
         { type: "check", title: "One more", questionId: gen("pv-more-less", 2, 9) },
