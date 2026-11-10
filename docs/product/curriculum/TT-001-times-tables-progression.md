@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Backlog items** | TT-001 (this progression), and the design behind TT-002 to TT-012 (R2) |
-| **Status** | READY FOR QA (D-032). Not accepted. §5 lists proposed thresholds for Product Owner review. |
+| **Status** | READY FOR QA (D-032). Not accepted. §5 thresholds confirmed in D-033. |
 | **Date** | 9 November 2026 |
 | **Acceptance criteria (TT-001)** | <ol><li>Progression covers 2–12 tables, relevant prior number facts, multiplication/division fact families and a year-appropriate sequence.</li><li>Curriculum expectations and the England Year 4 MTC are clearly distinguished from optional extension.</li></ol> |
 | **Sources** | DfE, *National curriculum in England: mathematics programmes of study* (statements as stored in [`evidence/dfe-maths-pos-y2-y6.json`](evidence/dfe-maths-pos-y2-y6.json), retrieved 6 Nov 2026). STA, *Multiplication tables check assessment framework* (extract in [`evidence/mtc-framework-extract.md`](evidence/mtc-framework-extract.md), retrieved 9 Nov 2026). |
@@ -81,5 +81,5 @@ These are new product rules for facts. They don't change MAST-001 skill mastery.
 | TT-010 | Untimed mode in `FactSession.tsx` | `Facts.test.tsx` |
 | TT-011 | `factReport` in `facts.ts`; `FactReportScreen.tsx` at `/parent/facts` | `facts.test.ts`, `Facts.test.tsx` |
 
-**Limits.** This is developer evidence. The thresholds in §5 are proposals. The timed practice copies the published format,
+**Limits.** This is developer evidence. The thresholds in §5 were confirmed in D-033. The timed practice copies the published format,
 but not the official check's software, item pool or access arrangements.
