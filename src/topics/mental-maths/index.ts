@@ -1,5 +1,5 @@
 import { fittingStrategies, fmt, problemText, solve, STRATEGIES, strategyById, type Family, type Problem, type Strategy } from "@/maths/strategies";
-import { defineTopic, genFor, int, pick } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
 import type { Difficulty, KitVisual, Rng, Template } from "@/topics/kit/types";
 
 /**
@@ -192,7 +192,7 @@ const crossTemplate: Template = {
   },
 };
 
-const templates: Template[] = [
+const baseTemplates: Template[] = [
   ...STRATEGIES.map(strategyTemplate),
   crossTemplate,
   squareRecall,
@@ -200,19 +200,206 @@ const templates: Template[] = [
   chooseTemplate("multiply", "mm-choose-multiply"),
   chooseTemplate("doubling", "mm-choose-doubling"),
   chooseTemplate("fdp", "mm-choose-fdp"),
+  /* D-037 (Phase B): a stretch question for every skill. */
+  {
+    key: "mm-bonds-stretch",
+    skill: S.bonds,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const a = int(r, 2, 7) * 1000 - int(r, 1, 3);
+      const b = int(r, 1201, 4899);
+      const up = Math.ceil(a / 1000) * 1000;
+      return {
+        kind: "number",
+        prompt: `Work it out in your head: **${fmt(a)} + ${fmt(b)}**.`,
+        answer: a + b,
+        traps: [{ value: up + b + (up - a), misconception: M.wrongWay, feedback: `${fmt(up)} is ${up - a} more than ${fmt(a)}, so take ${up - a} away at the end.` }, { value: up + b, misconception: M.early, feedback: "Don't forget to adjust." }],
+        hint: `${fmt(a)} is nearly ${fmt(up)}. Add ${fmt(up)}, then adjust.`,
+        explanation: `${fmt(up)} + ${fmt(b)} = ${fmt(up + b)}, then − ${up - a} = **${fmt(a + b)}**.`,
+      };
+    },
+  },
+  {
+    key: "mm-doubling-stretch",
+    skill: S.doubling,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const k = int(r, 3, 9);
+      const a = 4 * k;
+      return {
+        kind: "number",
+        prompt: `Use doubling and halving: **${a} × 25**.`,
+        answer: a * 25,
+        traps: [{ value: (a / 2) * 25, misconception: M.early, feedback: "Halve one number and double the other each time, until it's easy: keep going." }],
+        hint: `Halve ${a} and double 25: ${a / 2} × 50. Do it again: ${a / 4} × 100.`,
+        explanation: `${a} × 25 = ${a / 2} × 50 = ${k} × 100 = **${fmt(a * 25)}**.`,
+      };
+    },
+  },
+  {
+    key: "mm-special-stretch",
+    skill: S.special,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const a = int(r, 13, 89);
+      return {
+        kind: "number",
+        prompt: `Work out **${a} × 999** in your head.`,
+        answer: a * 999,
+        traps: [{ value: a * 1000 + a, misconception: M.wrongWay, feedback: `999 is 1 less than 1,000, so take one ${a} away, don't add it.` }, { value: a * 1000, misconception: M.early, feedback: `Now take away one ${a}.` }],
+        hint: `999 is 1,000 − 1. Work out ${a} × 1,000, then take away ${a}.`,
+        explanation: `${a} × 1,000 = ${fmt(a * 1000)}; − ${a} = **${fmt(a * 999)}**.`,
+      };
+    },
+  },
+  {
+    key: "mm-factors-stretch",
+    skill: S.factors,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const [a, b] = pick(r, [[18, 35], [16, 45], [14, 25], [12, 75], [24, 15]]) as [number, number];
+      return {
+        kind: "number",
+        prompt: `Use factors to work out **${a} × ${b}** in your head.`,
+        answer: a * b,
+        traps: [{ value: a * b + b, feedback: "Check your factor steps: multiply by each factor in turn." }],
+        hint: `Split ${a} into factors so that one of them pairs nicely with ${b}.`,
+        explanation: `${a} × ${b} = **${fmt(a * b)}**, for example ${a} × ${b} = ${a / 2} × ${b * 2}.`,
+      };
+    },
+  },
+  {
+    key: "mm-squares-stretch",
+    skill: S.squares,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const t = int(r, 3, 9);
+      const n = 10 * t + 5;
+      return {
+        kind: "number",
+        prompt: `Work out **${n}²** (${n} × ${n}) in your head.`,
+        answer: n * n,
+        traps: [{ value: t * t * 100 + 25, misconception: M.early, feedback: `Multiply ${t} by the next number up, ${t + 1}, not by itself.` }],
+        hint: `For a number ending in 5: multiply the tens digit (${t}) by the next number (${t + 1}), then write 25 after it.`,
+        explanation: `${t} × ${t + 1} = ${t * (t + 1)}, then 25: **${fmt(n * n)}**.`,
+      };
+    },
+  },
+  {
+    key: "mm-fdp-stretch",
+    skill: S.fdp,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const total = 20 * int(r, 6, 20);
+      const pct = pick(r, [35, 45, 15, 65]);
+      const answer = (total * pct) / 100;
+      return {
+        kind: "number",
+        prompt: `Work out **${pct}% of ${total}** in your head.`,
+        answer,
+        traps: [{ value: total / 10, misconception: M.early, feedback: "That's only 10%. Build up the rest from 10% and 5%." }],
+        hint: `Find 10% (${total / 10}) and 5% (${total / 20}), then build ${pct}%.`,
+        explanation: `${pct}% = ${Math.floor(pct / 10)} × 10% + 5% = ${Math.floor(pct / 10) * (total / 10)} + ${total / 20} = **${answer}**.`,
+      };
+    },
+  },
+  {
+    key: "mm-choose-stretch",
+    skill: S.choose,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const a = int(r, 23, 87);
+      const set = pick(r, [
+        { q: `${a} × 99`, right: "Multiply by 100, then take one away: 99 is one less than 100", wrong: [["Doubling and halving: one number is even", "halving 99 doesn't make it easier."], ["Bridging through ten: one number is near a ten", "bridging is for adding and subtracting, not multiplying."]] },
+        { q: `${a * 4} × 25`, right: "Doubling and halving: 4 × 25 makes 100", wrong: [["Round and adjust: 25 is near 20", "rounding 25 to 20 makes extra work."], ["Count on: the numbers are close together", "counting on is for subtracting nearby numbers."]] },
+        { q: `${a} + 198`, right: "Round and adjust: 198 is two less than 200", wrong: [["Doubling: 198 is nearly double 100", "doubling doesn't help with adding these numbers."], ["Partition into factors: 198 is even", "factors help with multiplying, not adding."]] },
+      ]);
+      return {
+        kind: "choose",
+        prompt: `Which is the **quickest correct** way to work out **${set.q}** in your head?`,
+        options: [{ text: set.right }, ...set.wrong.map(([t, why]) => ({ text: t!, feedback: `Not here: ${why}` }))],
+        answer: 0,
+        hint: "Look at the numbers first: is one near a hundred, or does one pair nicely to make 100?",
+        explanation: `**${set.right}** is quickest and always right for ${set.q}.`,
+      };
+    },
+  },
+  {
+    key: "mm-crosswise-stretch",
+    skill: S.crosswise,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const a = int(r, 2, 9);
+      const b = int(r, 1, 9);
+      const c = int(r, 2, 9);
+      const d = int(r, 1, 9);
+      const x = 10 * a + b;
+      const y = 10 * c + d;
+      const cross = a * d + b * c;
+      return {
+        kind: "number",
+        prompt: `Use vertically and crosswise: **${x} × ${y}**.`,
+        answer: x * y,
+        traps: [{ value: 100 * a * c + b * d, misconception: M.early, feedback: `Don't forget the crosswise step: ${a} × ${d} + ${b} × ${c} = ${cross} tens.` }],
+        hint: `Vertically: ${a} × ${c} hundreds and ${b} × ${d} ones. Crosswise: ${a} × ${d} + ${b} × ${c} tens.`,
+        explanation: `${a * c} hundreds + ${cross} tens + ${b * d} ones = **${fmt(x * y)}**.`,
+      };
+    },
+  },
 ];
+
+const templates = withHints(baseTemplates, {
+  ...Object.fromEntries(STRATEGIES.map((st) => [`mm-${st.id}`, () => [st.why, "Do one step at a time and write down each answer, then check it makes sense."]])),
+  "mm-crosswise-cross": () => ["The crosswise step multiplies tens by ones, twice, and adds them.", "Those two answers are tens."],
+  "mm-square-recall": () => ["A square number is a number times itself.", "Use a times-table fact: 7² is 7 × 7."],
+  "mm-choose-bonds": () => ["Is one number close to a ten or a hundred?", "If so, round it, add, then adjust."],
+  "mm-choose-multiply": () => ["Is one number near 10, 100 or 1,000, or a 5 or a 25?", "Pick the method with the fewest easy steps."],
+  "mm-choose-doubling": () => ["Can you halve one number and double the other to make it easier?", "Doubling and halving works well with 5, 25 and 50."],
+  "mm-choose-fdp": () => ["10% is dividing by 10; 50% is halving; 25% is halving twice.", "Pick the shortcut that fits the percentage."],
+  "mm-bonds-stretch": () => ["Round the number that is nearly a thousand.", "You added too much, so take the extra away."],
+  "mm-doubling-stretch": () => ["Halve the first number and double 25.", "Keep going until you are multiplying by 100."],
+  "mm-special-stretch": () => ["999 is one less than 1,000.", "Multiply by 1,000, then take one lot away."],
+  "mm-factors-stretch": () => ["Look for a factor that makes 10 or 100 with the other number.", "Halve one number and double the other."],
+  "mm-squares-stretch": () => ["Tens digit × the next number up.", "Then write 25 on the end."],
+  "mm-fdp-stretch": () => ["Find 10% and 5% first.", "Add the pieces you need."],
+  "mm-choose-stretch": () => ["Every option must give the right answer.", "Choose the one with the fewest, easiest steps."],
+  "mm-crosswise-stretch": () => ["Work out the hundreds, the crosswise tens and the ones.", "Add them up, carrying if you need to."],
+});
 
 const s = (id: string) => strategyById(id)!;
 
-/** The five parts every strategy lesson has (MM-002), built from one catalogue entry and its first example. */
+/**
+ * The parts every strategy lesson has (MM-002), built from one catalogue entry: when to use it, why it works, a
+ * "watch me" example (its second example, D-037) and a "together" example (its first) whose last blank catches the
+ * common slip of stopping one step early.
+ */
 function strategySteps(id: string, visual?: KitVisual) {
   const st = s(id);
   const ex = st.examples[0];
   const p: Problem = { op: st.op, nums: ex };
   const steps = st.steps(ex);
+  const watchEx = st.examples[1] ?? ex;
+  const watchP: Problem = { op: st.op, nums: watchEx };
+  const early = (i: number) => (i > 0 && steps[i - 1]!.value !== steps[i]!.value ? [{ value: steps[i - 1]!.value, misconception: M.early, feedback: "That's the answer to the step before. Do the last step too." }] : []);
   return [
     { type: "explain" as const, title: `When to use it: ${st.name.toLowerCase()}`, body: [st.when], ...(visual ? { visual } : {}) },
     { type: "explain" as const, title: "Why it works", body: [st.why] },
+    {
+      type: "worked" as const,
+      title: `Watch me: ${problemText(watchP)}`,
+      support: "full" as const,
+      problem: `**${problemText(watchP)}**`,
+      steps: st.steps(watchEx).map((x) => ({ text: x.text })),
+      conclusion: `${problemText(watchP)} = **${fmt(solve(watchP))}**.`,
+    },
     {
       type: "worked" as const,
       title: "Let's do it together",
@@ -220,7 +407,7 @@ function strategySteps(id: string, visual?: KitVisual) {
       problem: `**${problemText(p)}**`,
       steps: steps.map((x, i) =>
         i === steps.length - 1 && steps.length > 1
-          ? { text: x.text.replace(/= [\d,]+/, "= ?"), blank: { prompt: `What is ${x.text.split(" = ")[0]}?`, answer: x.value, hint: "Use the step before.", worked: x.text } }
+          ? { text: x.text.replace(/= [\d,]+/, "= ?"), blank: { prompt: `What is ${x.text.split(" = ")[0]}?`, answer: x.value, hint: "Use the step before.", traps: early(i), worked: x.text } }
           : { text: x.text },
       ),
       conclusion: `${problemText(p)} = **${fmt(solve(p))}**.`,
@@ -301,7 +488,7 @@ export const mentalMaths = defineTopic({
       minutes: 9,
       objectives: ["Multiply by partitioning", "Multiply and divide using factors"],
       steps: [
-        ...strategySteps("factorise"),
+        ...strategySteps("factorise", { kind: "array", rows: 4, cols: 9 }),
         { type: "explain" as const, title: "Dividing works the same way", body: [s("divide-by-factors").why] },
         { type: "check" as const, title: "Your turn", questionId: gen("mm-divide-by-factors", 2, 3) },
         { type: "explain" as const, title: "When not to use it", body: [s("factorise").unsuitable, s("near-hundred").unsuitable] },
@@ -333,6 +520,17 @@ export const mentalMaths = defineTopic({
       steps: [
         ...strategySteps("ten-percent", { kind: "bar", total: "120", parts: Array.from({ length: 10 }, (_, i) => ({ label: i === 0 ? "10% = 12" : "12", size: 1, tone: i === 0 ? ("brand" as const) : ("plain" as const) })) }),
         { type: "explain" as const, title: "Other percentages and fractions", body: [s("five-percent").why, s("quarter-percent").why, s("fraction-of").why] },
+        {
+          type: "worked" as const,
+          title: "Together: 15% of 80",
+          support: "faded" as const,
+          problem: "**15% of 80**",
+          steps: [
+            { text: "10% of 80 is **8**, and 5% is half of that: **4**." },
+            { text: "15% is 10% + 5%.", blank: { prompt: "8 + 4 = ?", answer: 12, hint: "Add the 10% and the 5%.", traps: [{ value: 8, misconception: M.early, feedback: "That's only 10%. Add the 5% too." }], worked: "**12**." } },
+          ],
+          conclusion: "15% of 80 = **12**.",
+        },
         { type: "check" as const, title: "Your turn", questionId: gen("mm-fraction-of", 2, 2) },
         { type: "explain" as const, title: "When not to use it", body: [s("ten-percent").unsuitable, s("fraction-of").unsuitable] },
         { type: "check" as const, title: "One more", questionId: gen("mm-five-percent", 2, 3) },
@@ -346,9 +544,27 @@ export const mentalMaths = defineTopic({
       minutes: 7,
       objectives: ["Choose a method that suits the numbers", "Give a reason for the choice"],
       steps: [
-        { type: "explain" as const, title: "When to use it: look before you calculate", body: ["Before you start, look at the numbers. Is one near a ten or a hundred? Is one a 5, 9, 25 or 99? Do they split into easy factors?"] },
+        { type: "explain" as const, title: "When to use it: look before you calculate", body: ["Before you start, look at the numbers. Is one near a ten or a hundred? Is one a 5, 9, 25 or 99? Do they split into easy factors?"], visual: { kind: "line" as const, min: 90, max: 100, step: 1, labelEvery: 5, points: [{ value: 99, label: "99", tone: "brand" as const }, { value: 100, label: "100", tone: "num" as const }] } },
         { type: "explain" as const, title: "Why it works", body: ["Every method here gives the same answer, because each one is a true rule about numbers. Choosing well just means fewer, easier steps."] },
-        { type: "explain" as const, title: "Let's do it together", body: ["**46 × 99**: 99 is one less than 100, so 46 × 100 = 4,600, take away 46: **4,554**.", "Partitioning would also work, but takes more steps."] },
+        {
+          type: "worked" as const,
+          title: "Watch me: 46 × 99",
+          support: "full" as const,
+          problem: "**46 × 99**",
+          steps: [{ text: "99 is one less than 100: a special multiplier." }, { text: "46 × 100 = 4,600, then take away one 46: **4,554**." }, { text: "Partitioning would also work, but it takes more steps." }],
+          conclusion: "46 × 99 = **4,554**.",
+        },
+        {
+          type: "worked" as const,
+          title: "Let's do it together",
+          support: "faded" as const,
+          problem: "**199 + 245**",
+          steps: [
+            { text: "199 is near 200: round, then adjust. 200 + 245 = **445**." },
+            { text: "You added 1 too many, so take 1 away.", blank: { prompt: "445 − 1 = ?", answer: 444, hint: "Adjust by the 1 you added.", traps: [{ value: 446, misconception: M.wrongWay, feedback: "You added 1 too many, so take 1 away, don't add another." }, { value: 445, misconception: M.early, feedback: "Don't stop yet: adjust for the extra 1." }], worked: "**444**." } },
+          ],
+          conclusion: "199 + 245 = **444**.",
+        },
         { type: "check" as const, title: "Your turn", questionId: gen("mm-choose-multiply", 2, 1) },
         { type: "explain" as const, title: "When not to use it", body: ["A special method is only for the numbers it suits. If no shortcut fits, a standard written method is always a good choice."] },
         { type: "check" as const, title: "One more", questionId: gen("mm-choose-bonds", 3, 2) },
