@@ -55,3 +55,16 @@ describe("reset (MAST-005 AC3)", () => {
     expect(after.topics).toEqual({});
   });
 });
+
+describe("this week and what is stored (PARENT-002, PARENT-001)", () => {
+  it("summarises the last 7 days with time measured honestly, and lists what Kite Maths stores", () => {
+    render(<ParentScreen />);
+    expect(screen.getByRole("heading", { name: "The last 7 days" })).toBeTruthy();
+    for (const label of ["days active", "questions answered", "minutes on questions"]) expect(screen.getAllByText(label).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Time reading lessons isn.t\s+recorded, so it isn.t counted/)).toBeTruthy();
+    expect(screen.getByText("What Kite Maths stores")).toBeTruthy();
+    expect(screen.getByText(/Nothing is sent to a server, and there is no account/)).toBeTruthy();
+    expect(document.body.textContent).not.toMatch(/\b(rank|ranked|percentile|above average|below average|will pass|predicted)\b/i);
+  });
+});
+

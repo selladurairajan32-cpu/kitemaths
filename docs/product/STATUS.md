@@ -198,20 +198,20 @@ only where it is evidence for a backlog item: Times Tables, Mental Maths, 11+ an
 
 | ID | Title | Pri | Rel | QA status | Implementation | Evidence and notes |
 |---|---|---|---|---|---|---|
-| EXAM-001 | Define exam-profile data model | P3 | R5 | SPECIFIED | Not implemented | No exam-profile model. |
-| EXAM-002 | Build exam-format research and verification workflow | P3 | R5 | SPECIFIED | Not implemented | No verification workflow. |
-| EXAM-003 | Create 11+ question taxonomy | P3 | R5 | SPECIFIED | Not implemented | No 11+ taxonomy (skills + difficulty only). |
-| EXAM-004 | Build multi-step and unfamiliar problem practice | P3 | R5 | SPECIFIED | Partial | Problem solving preview island (two-step, working backwards, bar models). |
-| EXAM-005 | Build timed section and mock-test engine | P3 | R5 | SPECIFIED | Partial | Mock exams preview: 12 untimed mixed questions; no timing or configuration. |
-| EXAM-006 | Build post-test analysis | P3 | R5 | SPECIFIED | Not implemented | No post-test analysis. |
+| EXAM-001 | Define exam-profile data model | P3 | R5 | READY FOR QA | Implemented | **R5, D-032 step D, awaiting review; not accepted.** [Profile model](exams/EXAM-001-002-profiles-and-verification.md) (`src/engine/examProfile.ts`): every fact verified with its source or explicitly unknown; no defaults. Only a general practice profile ships; no real school data added. |
+| EXAM-002 | Build exam-format research and verification workflow | P3 | R5 | READY FOR QA | Implemented | **R5, D-032 step D, awaiting review; not accepted.** Validation refuses a fact sourced from another school; dated change log; official-source workflow documented. |
+| EXAM-003 | Create 11+ question taxonomy | P3 | R5 | READY FOR QA | Implemented | **R5, D-032 step D, awaiting review; not accepted.** `src/topics/mock-exams/taxonomy.ts`: skill (with the borrowed origin), reasoning, representation, difficulty, format and profile; curriculum and exam-practice kept apart. |
+| EXAM-004 | Build multi-step and unfamiliar problem practice | P3 | R5 | READY FOR QA | Implemented | **R5, D-032 step D, awaiting review; not accepted.** "Unfamiliar problems" skill and lesson on Mock exams: estimation, patterns, interpretation, multi-step, working backwards, method choice; explanations show reasoning. |
+| EXAM-005 | Build timed section and mock-test engine | P3 | R5 | READY FOR QA | Implemented | **R5, D-032 step D, awaiting review; not accepted.** Practice mock (`/t/mock-exams/mock`): question count, section time, review rule and format; attempts stored for review; verified profile settings used where they exist; labelled practice on every screen. |
+| EXAM-006 | Build post-test analysis | P3 | R5 | READY FOR QA | Implemented | **R5, D-032 step D, awaiting review; not accepted.** Analysis: time pressure, format, careless, knowledge gap, or unclear where evidence doesn't decide; revision plan with practice links; states it predicts no score or admission. |
 
 ### PARENT — Parent experience (future, R5)
 
 | ID | Title | Pri | Rel | QA status | Implementation | Evidence and notes |
 |---|---|---|---|---|---|---|
-| PARENT-001 | Define learner profile and year group | P3 | R5 | SPECIFIED | Partial | Name and year stored (`LearnerProfile`); year not used. |
-| PARENT-002 | Build parent progress summary | P3 | R5 | SPECIFIED | Partial | Grown-ups overview and report, active island only. |
-| PARENT-003 | Build weekly learning plan | P3 | R5 | SPECIFIED | Not implemented | No weekly plan. |
+| PARENT-001 | Define learner profile and year group | P3 | R5 | READY FOR QA | Implemented | **R5, D-032 step D, awaiting review; not accepted.** Year group in the profile; weekly-plan workload in settings (optional fields, so saved data is unchanged); changes keep progress; "What Kite Maths stores" on the Overview. |
+| PARENT-002 | Build parent progress summary | P3 | R5 | READY FOR QA | Implemented | **R5, D-032 step D, awaiting review; not accepted.** Overview "last 7 days": days active, answers, minutes on questions (where recorded, and what isn't counted), islands, skills needing support; weekly comparison on the Full report. |
+| PARENT-003 | Build weekly learning plan | P3 | R5 | READY FOR QA | Implemented | **R5, D-032 step D, awaiting review; not accepted.** `/parent/plan`: days and minutes chosen by the grown-up; review, new learning, times tables, mental maths and problem solving from the evidence, each with its reason; estimates stated. |
 
 ### QA — Quality engineering
 

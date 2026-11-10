@@ -173,6 +173,18 @@ export function SkyMapScreen() {
         </Link>
       )}
 
+      {topic.id === "mock-exams" && (
+        // R5: practice mock tests with analysis (EXAM-005, EXAM-006).
+        <Link href={links.mock()} className="flex items-center gap-4 rounded-[24px] border-2 border-brand bg-surface p-4 shadow-[var(--shadow-card)] transition hover:shadow-[var(--shadow-lift)]">
+          <Pic name="exam" size={48} />
+          <span className="min-w-0 flex-1">
+            <span className="block text-title font-extrabold text-ink">Practice mock</span>
+            <span className="block text-body text-ink-2">Choose the questions, time and format, then see what to work on. Practice made by Kite Maths, not an official paper.</span>
+          </span>
+          <ArrowRightIcon size={20} className="shrink-0 text-ink-2" />
+        </Link>
+      )}
+
       {topic.id === "mental-maths" && (
         // R3: the mental-maths island's methods lab (MM-009 to MM-011).
         <Link href={links.strategies()} className="flex items-center gap-4 rounded-[24px] border-2 border-brand bg-surface p-4 shadow-[var(--shadow-card)] transition hover:shadow-[var(--shadow-lift)]">

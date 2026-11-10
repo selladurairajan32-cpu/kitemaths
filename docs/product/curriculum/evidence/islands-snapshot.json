@@ -1568,6 +1568,11 @@
     "id": "mock-exams.reasoning",
     "title": "Reasoning",
     "description": "Ratio, algebra and multi-step problems, 11+ style."
+   },
+   {
+    "id": "mock-exams.problem-types",
+    "title": "Unfamiliar problems",
+    "description": "Estimate, spot patterns, read tables, work backwards and choose a method for problems you haven't seen before."
    }
   ],
   "lessons": [
@@ -1614,6 +1619,14 @@
     "title": "Show your thinking",
     "objectives": [
      "Use bar models and working backwards in tricky problems"
+    ]
+   },
+   {
+    "id": "problem-types",
+    "title": "Unfamiliar problems",
+    "objectives": [
+     "Plan a multi-step problem before calculating",
+     "Estimate, spot patterns and work backwards"
     ]
    }
   ]

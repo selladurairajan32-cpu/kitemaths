@@ -15,7 +15,8 @@ import { PhasePath, ScreenSkeleton, StorageNotice } from "@/components/ui/Screen
 import { useTopicState } from "@/topics/context";
 import { ActiveTopicProvider } from "@/topics/ActiveTopic";
 import { streakFor, totalStars } from "@/engine/rewards";
-import { setProfile, setSettings } from "@/engine/progress";
+import { DEFAULT_PLAN, setProfile, setSettings } from "@/engine/progress";
+import { weekSummary } from "@/topics/plan";
 import { updateLearner } from "@/lib/store";
 import { topicById } from "@/topics";
 import { WORLDS } from "@/topics/worlds";
@@ -55,6 +56,7 @@ function ParentOverview() {
   const stars = totalStars(learner);
   const streak = streakFor(learner, now);
   const placement = t.placement;
+  const week = weekSummary(learner, now);
   const world = WORLDS.find((w) => w.islands.some((i) => i.topicId === topic.id));
   const nextIslands = world ? world.islands.slice(world.islands.findIndex((i) => i.topicId === topic.id) + 1).map((i) => i.title) : [];
 
@@ -72,6 +74,33 @@ function ParentOverview() {
       </motion.header>
 
       <StorageNotice />
+
+      {/* PARENT-002: the last 7 days, from stored answers only. */}
+      <section className="card p-5 sm:p-7" aria-labelledby="week-title">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 id="week-title" className="text-title font-extrabold">
+            The last 7 days
+          </h2>
+          <Link href={routes.parentPlan()} className="inline-flex min-h-11 items-center text-label font-medium text-den hover:underline">
+            Weekly plan
+          </Link>
+        </div>
+        <dl className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <WeekStat label="days active" value={String(week.daysActive)} />
+          <WeekStat label="questions answered" value={String(week.answers)} />
+          <WeekStat label="minutes on questions" value={week.minutesOnQuestions === null ? "—" : String(week.minutesOnQuestions)} />
+          <WeekStat label={week.islands.length === 1 ? "island" : "islands"} value={String(week.islands.length)} />
+        </dl>
+        <p className="mt-3 text-label text-muted">
+          Minutes are measured from each question appearing to its last answer{week.timedAnswers < week.answers ? `, where recorded (${week.timedAnswers} of ${week.answers} answers)` : ""}. Time reading lessons isn&apos;t
+          recorded, so it isn&apos;t counted.
+        </p>
+        {week.support.length > 0 && (
+          <p className="mt-2 text-body text-ink-2">
+            <span className="font-semibold">Needs support:</span> {week.support.join("; ")}.
+          </p>
+        )}
+      </section>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
         <section className="card min-w-0 overflow-hidden lg:col-span-2" aria-labelledby="topic-title">
@@ -257,7 +286,45 @@ function ParentOverview() {
             on={learner.settings.autoRead}
             onChange={(v) => updateLearner((s) => setSettings(s, { autoRead: v }))}
           />
+          <label className="block text-label">
+            <span className="font-medium">Days a week (weekly plan)</span>
+            <select
+              value={learner.settings.planDays ?? DEFAULT_PLAN.days}
+              onChange={(e) => updateLearner((s) => setSettings(s, { planDays: Number(e.target.value) }))}
+              className="mt-1 h-11 w-full rounded-[16px] border-2 border-line-strong bg-surface px-3"
+            >
+              {[3, 4, 5, 6, 7].map((d) => (
+                <option key={d} value={d}>
+                  {d} days
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="block text-label">
+            <span className="font-medium">Minutes a day (weekly plan)</span>
+            <select
+              value={learner.settings.planMinutes ?? DEFAULT_PLAN.minutes}
+              onChange={(e) => updateLearner((s) => setSettings(s, { planMinutes: Number(e.target.value) }))}
+              className="mt-1 h-11 w-full rounded-[16px] border-2 border-line-strong bg-surface px-3"
+            >
+              {[10, 15, 20, 30].map((m) => (
+                <option key={m} value={m}>
+                  {m} minutes
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
+        {/* PARENT-001: minimal and transparent data. */}
+        <details className="mt-4 text-label text-ink-2">
+          <summary className="inline-flex min-h-11 cursor-pointer items-center font-medium text-den">What Kite Maths stores</summary>
+          <ul className="mt-1 list-disc space-y-1 pl-5">
+            <li>A first name and school year, only if you add them. Both are optional.</li>
+            <li>These settings, and the weekly plan workload.</li>
+            <li>Answers, lesson progress, stars and badges, so progress and reports work.</li>
+            <li>All of it stays in this browser on this device. Nothing is sent to a server, and there is no account.</li>
+          </ul>
+        </details>
       </section>
 
       <section className="rounded-[var(--radius-card)] border-2 border-dashed border-line-strong p-5 sm:p-7" aria-labelledby="roadmap-title">
@@ -281,6 +348,18 @@ function ParentOverview() {
           )}
         </div>
       </section>
+    </div>
+  );
+}
+
+function WeekStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="sr-only">{label}</dt>
+      <dd className="text-heading-2 font-extrabold tabular-nums">{value}</dd>
+      <dd className="text-label text-muted" aria-hidden>
+        {label}
+      </dd>
     </div>
   );
 }

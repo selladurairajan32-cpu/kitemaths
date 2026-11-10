@@ -62,7 +62,12 @@ export interface LearnerSettings {
   sound: boolean;
   /** Read each new question aloud automatically. */
   autoRead: boolean;
+  /** PARENT-001, PARENT-003: the grown-up's chosen weekly workload. Optional; unset means 5 days of 15 minutes. */
+  planDays?: number;
+  planMinutes?: number;
 }
+
+export const DEFAULT_PLAN = { days: 5, minutes: 15 } as const;
 
 export interface PlacementState {
   status: "not-started" | "in-progress" | "complete" | "skipped";

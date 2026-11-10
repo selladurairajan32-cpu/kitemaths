@@ -43,10 +43,11 @@ export interface Evaluation {
 }
 
 /**
- * Where an answer was given. `timed` is the times-tables timed simulator (TT-009): it is kept out of skill mastery and
- * learning statistics, so speed is never read as understanding (TT-010, TT-011).
+ * Where an answer was given. `timed` is a timed practice (TT-009, MM-011) and `mock` a practice mock test (EXAM-005):
+ * both are kept out of skill mastery and learning statistics, so speed and exam conditions are never read as
+ * understanding (TT-010, TT-011).
  */
-export type ResultContext = "lesson" | "practice" | "followup" | "assessment" | "recheck" | "placement" | "timed";
+export type ResultContext = "lesson" | "practice" | "followup" | "assessment" | "recheck" | "placement" | "timed" | "mock";
 
 export const INDEPENDENT_CONTEXTS: ResultContext[] = ["assessment", "recheck"];
 
@@ -76,6 +77,8 @@ export interface ItemResult {
   timed?: boolean;
   /** R3: a method-choice answer (MM-009 compare, MM-010 choose): the method picked and whether it was valid for the numbers. */
   strategy?: StrategyChoice;
+  /** R5: an answer in a practice mock test (EXAM-005), with what post-test analysis needs (EXAM-006). */
+  mock?: MockMeta;
   at: number;
 }
 
@@ -84,6 +87,22 @@ export interface ItemResult {
  * missing: the product (`mul`), a factor (`missing-factor`, a × ? = a·b), or one part of the division fact
  * (`div-quotient` a·b ÷ a = ?, `div-divisor` a·b ÷ ? = b, `div-dividend` ? ÷ a = b).
  */
+/** EXAM-005, EXAM-006: one answer in a mock test. */
+export interface MockMeta {
+  session: string;
+  index: number;
+  total: number;
+  /** The section's time limit, in milliseconds. */
+  sectionMs: number;
+  format: "number" | "multiple-choice";
+  /** Milliseconds from the start of the section to the final answer, or null if the question was never answered. */
+  answeredAtMs: number | null;
+  /** The answer was changed after it was first entered. */
+  changed: boolean;
+  /** Milliseconds from the start of the section to the end of the sitting: equal to `sectionMs` when time ran out. */
+  endedAtMs: number;
+}
+
 /** MM-009, MM-010: which method a child picked for a problem, and how it was judged. */
 export interface StrategyChoice {
   kind: "compare" | "choose";

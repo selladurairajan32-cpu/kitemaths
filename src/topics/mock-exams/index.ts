@@ -5,7 +5,8 @@ import { chartsData } from "@/topics/charts-data";
 import { coordinates } from "@/topics/coordinates";
 import { decimals } from "@/topics/decimals";
 import { fractions2 } from "@/topics/fractions-2";
-import { defineTopic, genFor, pick, templatesOf } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, templatesOf } from "@/topics/kit/define";
+import { mentalMaths } from "@/topics/mental-maths";
 import type { KitQuestion, Template } from "@/topics/kit/types";
 import { money } from "@/topics/money";
 import { multiplyDivide } from "@/topics/multiply-divide";
@@ -27,14 +28,18 @@ import { timesTables } from "@/topics/times-tables";
 
 const T = "mock-exams";
 const gen = genFor(T);
-const S = { number: `${T}.number`, calc: `${T}.calculation`, fdp: `${T}.fdp`, measure: `${T}.measures`, shape: `${T}.shape-data`, reasoning: `${T}.reasoning` };
+const S = { number: `${T}.number`, calc: `${T}.calculation`, fdp: `${T}.fdp`, measure: `${T}.measures`, shape: `${T}.shape-data`, reasoning: `${T}.reasoning`, problems: `${T}.problem-types` };
+export const MOCK_SKILLS = S;
+/** UK number format: 8,000. */
+const fmtN = (n: number) => n.toLocaleString("en-GB");
 
 type Body = ReturnType<Template["make"]>;
 /** Misconceptions belong to the island that found them, so a borrowed question keeps the feedback but not the tag. */
 function untag(body: Body): Body {
   const q = body as KitQuestion;
   if (q.kind === "choose") return { ...q, options: q.options.map((o) => ({ text: o.text, feedback: o.feedback })) } as Body;
-  return { ...q, traps: q.traps?.map((t) => ({ value: t.value, feedback: t.feedback })) } as Body;
+  // DEF-028: a borrowed question can repeat a trap value; keep the first, so every trap's feedback is reachable.
+  return { ...q, traps: q.traps?.filter((t, i, all) => all.findIndex((x) => x.value === t.value) === i).map((t) => ({ value: t.value, feedback: t.feedback })) } as Body;
 }
 
 /** A mock question maker that borrows a level 2 or 3 question from one of these islands. */
@@ -48,12 +53,116 @@ function borrow(key: string, skill: SkillId, islands: { id: string }[]): Templat
       const makers = templatesOf(island.id).filter((t) => t.difficulties.some((d) => d >= 2));
       const t = pick(r, makers);
       const d = t.difficulties.includes(base.difficulty) ? base.difficulty : t.difficulties[t.difficulties.length - 1];
-      return untag(t.make(r, { ...base, difficulty: d }));
+      return { ...untag(t.make(r, { ...base, difficulty: d })), origin: t.skill };
     },
   };
 }
 
+/** EXAM-004: estimation, pattern recognition, interpretation, multi-step problems, working backwards and method choice. */
+const problemTemplates: Template[] = [
+  {
+    key: "mx-estimate",
+    skill: S.problems,
+    difficulties: [2, 3],
+    make: (r, { difficulty }) => {
+      const a = int(r, 3, difficulty === 2 ? 9 : 19) * 100 - int(r, 1, 30);
+      const b = int(r, 2, difficulty === 2 ? 5 : 9) * 10 + pick(r, [-1, 1, 2]);
+      const ra = Math.round(a / 100) * 100;
+      const rb = Math.round(b / 10) * 10;
+      const best = ra * rb;
+      const options = [
+        { text: fmtN(best) },
+        { text: fmtN((ra - 100) * rb), feedback: `That rounds ${fmtN(a)} down too far: it's nearer ${fmtN(ra)}.` },
+        { text: fmtN(ra * (rb + 10)), feedback: `That rounds ${b} up too far: it's nearer ${rb}.` },
+        { text: fmtN(ra + rb), feedback: "That adds the rounded numbers. The question multiplies." },
+      ].filter((o, i, all) => all.findIndex((x) => x.text === o.text) === i);
+      return {
+        kind: "choose",
+        prompt: `Which is the best estimate of **${fmtN(a)} × ${b}**?`,
+        options,
+        answer: 0,
+        hint: "Round each number to one non-zero digit, then multiply.",
+        explanation: `${fmtN(a)} is about ${fmtN(ra)} and ${b} is about ${rb}, so the answer is about ${fmtN(ra)} × ${rb} = **${fmtN(best)}**. The exact answer, ${fmtN(a * b)}, is close to that.`,
+      };
+    },
+  },
+  {
+    key: "mx-pattern",
+    skill: S.problems,
+    difficulties: [2, 3],
+    make: (r, { difficulty }) => {
+      const start = int(r, 2, 30);
+      const step = int(r, 3, 12) * (difficulty === 3 && r() < 0.3 ? -1 : 1);
+      const ask = difficulty === 2 ? 5 : 10;
+      // A falling sequence starts high enough that the term asked for is still positive.
+      const terms = [0, 1, 2, 3].map((i) => start + i * step + (step < 0 ? (ask - 1) * -step : 0));
+      const answer = terms[0] + (ask - 1) * step;
+      return {
+        kind: "number",
+        prompt: `**${terms.join(", ")}, …** What is the ${ask === 5 ? "5th" : "10th"} number in this sequence?`,
+        answer,
+        traps: [{ value: terms[3] + step * (ask - 3), feedback: "Count the terms carefully: the first number is the 1st term." }, { value: terms[0] + ask * step, feedback: `The ${ask}th number is ${ask - 1} steps after the first, not ${ask}.` }].filter((t, i, all) => t.value !== answer && all.findIndex((x) => x.value === t.value) === i),
+        hint: "How much does it change each time? Then count the steps from the first number.",
+        explanation: `The numbers go ${step > 0 ? "up" : "down"} by ${Math.abs(step)} each time. The ${ask === 5 ? "5th" : "10th"} number is ${ask - 1} steps after the first: ${terms[0]} ${step > 0 ? "+" : "−"} ${ask - 1} × ${Math.abs(step)} = **${answer}**.`,
+      };
+    },
+  },
+  {
+    key: "mx-interpret",
+    skill: S.problems,
+    difficulties: [2, 3],
+    make: (r, { difficulty }) => {
+      const items = [["Pencils", int(r, 2, 9) * 5], ["Rulers", int(r, 3, 12) * 10], ["Notebooks", int(r, 5, 19) * 10]] as const;
+      const qty = items.map(() => int(r, 2, difficulty === 2 ? 5 : 9));
+      const [i, j] = pick(r, [[0, 1], [0, 2], [1, 2]] as const);
+      const cost = (k: number) => items[k][1] * qty[k];
+      const answer = cost(i) + cost(j);
+      return {
+        kind: "number",
+        prompt: `The table shows prices and how many of each were bought. How much was spent on **${items[i][0].toLowerCase()} and ${items[j][0].toLowerCase()} together**, in pence?`,
+        visual: { kind: "table", head: ["Item", "Price (p)", "Number bought"], rows: items.map((it, k) => [it[0], String(it[1]), String(qty[k])]) },
+        answer,
+        traps: [{ value: items[i][1] + items[j][1], feedback: "That adds one of each. Multiply each price by how many were bought." }, { value: cost(i), feedback: `That's only the ${items[i][0].toLowerCase()}.` }].filter((t, k, all) => t.value !== answer && all.findIndex((x) => x.value === t.value) === k),
+        hint: "For each item: price × number bought. Then add the two totals.",
+        explanation: `${items[i][0]}: ${items[i][1]} × ${qty[i]} = ${cost(i)}p. ${items[j][0]}: ${items[j][1]} × ${qty[j]} = ${cost(j)}p. Together: ${cost(i)} + ${cost(j)} = **${answer}p**.`,
+      };
+    },
+  },
+  {
+    key: "mx-multistep",
+    skill: S.problems,
+    difficulties: [2, 3],
+    make: (r, { difficulty }) => {
+      const per = pick(r, [12, 24, 36, 48]);
+      const boxes = int(r, 3, difficulty === 2 ? 6 : 12);
+      const total = per * boxes;
+      const out = int(r, Math.ceil(total / 4), total - 5);
+      const answer = total - out;
+      return {
+        kind: "number",
+        prompt: `A box holds **${per} pencils**. A school buys **${boxes} boxes** and gives out **${out}** pencils. How many pencils are left?`,
+        answer,
+        traps: [{ value: total, feedback: "That's how many were bought. Some were given out." }, { value: per * boxes + out, feedback: "Giving pencils out leaves fewer, so take away." }].filter((t) => t.value !== answer),
+        hint: "First find how many pencils were bought. Then take away the ones given out.",
+        explanation: `First, the pencils bought: ${per} × ${boxes} = ${total}. Then take away those given out: ${total} − ${out} = **${answer}** left.`,
+      };
+    },
+  },
+  borrow("mx-backwards", S.problems, [problemSolving]),
+  {
+    key: "mx-method",
+    skill: S.problems,
+    difficulties: [2, 3],
+    make: (r, base) => {
+      const choose = templatesOf(mentalMaths.id).filter((t) => t.key.startsWith("mm-choose"));
+      const t = pick(r, choose);
+      return { ...untag(t.make(r, { ...base, difficulty: base.difficulty })), origin: t.skill };
+    },
+  },
+];
+
 const templates: Template[] = [
+  ...problemTemplates,
   borrow("mx-number", S.number, [placeValue, rounding, negative]),
   borrow("mx-calc", S.calc, [addSubtract, timesTables, multiplyDivide]),
   borrow("mx-fdp", S.fdp, [fractions2, decimals, percentages]),
@@ -77,8 +186,9 @@ export const mockExams = defineTopic({
     { id: S.measure, title: "Measures", description: "Money, time, area and perimeter, 11+ style.", lessonId: "units" },
     { id: S.shape, title: "Shape and data", description: "Shapes, angles, coordinates, charts and tables, 11+ style.", lessonId: "diagrams" },
     { id: S.reasoning, title: "Reasoning", description: "Ratio, algebra and multi-step problems, 11+ style.", lessonId: "reasoning" },
+    { id: S.problems, title: "Unfamiliar problems", description: "Estimate, spot patterns, read tables, work backwards and choose a method for problems you haven't seen before.", lessonId: "problem-types" },
   ],
-  lessonIcons: { read: "book", estimate: "target", units: "ruler", "same-amount": "puzzle", diagrams: "chart", reasoning: "bulb" },
+  lessonIcons: { read: "book", estimate: "target", units: "ruler", "same-amount": "puzzle", diagrams: "chart", reasoning: "bulb", "problem-types": "puzzle" },
   lessons: [
     {
       id: "read",
@@ -188,6 +298,32 @@ export const mockExams = defineTopic({
         { type: "check", title: "And another", questionId: gen("mx-reasoning", 3, 4) },
       ],
     },
+    {
+      id: "problem-types",
+      title: "Unfamiliar problems",
+      phase: "Apply",
+      summary: "Read, plan, estimate and check: a way into problems you haven't seen before.",
+      minutes: 9,
+      objectives: ["Plan a multi-step problem before calculating", "Estimate, spot patterns and work backwards"],
+      steps: [
+        { type: "explain", title: "Read, plan, check", body: ["**Read** the whole question and underline what it asks for.", "**Plan** the steps: what must you find first?", "**Check** the answer against an estimate."] },
+        {
+          type: "worked",
+          title: "Let's do it together",
+          support: "faded",
+          problem: "A box holds **24** pencils. A school buys **7** boxes and gives out **125**. How many are left?",
+          steps: [
+            { text: "First, the pencils bought: 24 × 7 = 168." },
+            { text: "Then take away the ones given out.", blank: { prompt: "What is 168 − 125?", answer: 43, hint: "168 − 100 = 68, then take away 25.", worked: "168 − 125 = **43**." } },
+            { text: "Check: 125 + 43 = 168. ✓" },
+          ],
+          conclusion: "**43** pencils are left.",
+        },
+        { type: "explain", title: "Estimate, then spot the pattern", body: ["Round to estimate first: 389 × 21 is about 400 × 20 = 8,000, so an answer of 816 can't be right.", "In a sequence, find the change each time, then count the steps from the first number."] },
+        { type: "check", title: "Your turn", questionId: gen("mx-pattern", 2, 3) },
+        { type: "check", title: "One more", questionId: gen("mx-interpret", 2, 2) },
+      ],
+    },
   ],
   templates,
   misconceptions: [],
@@ -198,5 +334,6 @@ export const mockExams = defineTopic({
     { lessonId: "same-amount", template: "mx-fdp" },
     { lessonId: "diagrams", template: "mx-shape" },
     { lessonId: "reasoning", template: "mx-reasoning" },
+    { lessonId: "problem-types", template: "mx-multistep" },
   ],
 });

@@ -114,6 +114,8 @@ export interface ChooseOption {
 
 interface KitQuestionCommon extends QuestionBase {
   visual?: KitVisual;
+  /** EXAM-003: the island skill a borrowed mock question came from, so it can be tagged by curriculum skill. */
+  origin?: SkillId;
 }
 
 export interface KitChooseQuestion extends KitQuestionCommon {

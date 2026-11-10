@@ -25,6 +25,7 @@ const PARENT_NAV = [
   { href: routes.parent(), label: "Overview" },
   { href: routes.parentJourney(), label: "Journey detail" },
   { href: routes.results(), label: "Full report" },
+  { href: routes.parentPlan(), label: "Weekly plan" },
   { href: routes.parentFacts(), label: "Times tables" },
   { href: routes.parentStrategies(), label: "Mental maths" },
   { href: routes.parentAbout(), label: "About" },

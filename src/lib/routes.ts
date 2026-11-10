@@ -20,6 +20,8 @@ export const routes = {
   parentFacts: () => "/parent/facts",
   /** Mental-strategy analytics (MM-012). */
   parentStrategies: () => "/parent/strategies",
+  /** The weekly learning plan (PARENT-003). */
+  parentPlan: () => "/parent/plan",
   results: () => "/results",
   review: () => "/results#review",
 };
@@ -47,6 +49,8 @@ export function topicRoutes(topicId: string) {
     /** Mental-strategy activities (R3), only on the mental-maths island. */
     strategies: () => `${base}/strategies`,
     strategiesRun: (mode: "compare" | "choose" | "timed") => `${base}/strategies/${mode}`,
+    /** Practice mock tests (R5), only on the mock-exams island. */
+    mock: () => `${base}/mock`,
   };
 }
 
