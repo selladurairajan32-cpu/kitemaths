@@ -37,11 +37,18 @@ A recheck is offered when, since the check, at least 3 practice answers average 
 
 These rules are tested in `src/engine/engine.test.ts` ("does not award mastery from a single correct item", "awards mastery only for two or more independent items plus secure practice").
 
-## 4. Varied examples (AC1): decision needed
+## 4. Varied examples (AC1): decided (D-033)
 
-The backlog asks for criteria covering **accuracy, varied examples and independent application**. Accuracy (§2 Secure) and independent application (§2 Mastered) are coded. **Varied examples is not a coded criterion.** Practice does vary form and representation (PRACT-007), and the check uses unfamiliar items in several forms (MAST-002), so variety happens in practice, but the rule does not require it.
+A skill is **secure** only if its recent right answers cover at least **2 question forms** (`SECURE_MIN_FORMS = 2`
+in `src/engine/mastery.ts`), as well as the accuracy rule in §2.
 
-**Proposal for the Product Owner:** a skill is secure only if its recent evidence includes at least **2 different question forms** (for example a picture question and a symbols-only question). New constant `SECURE_MIN_FORMS = 2`. This would make some children's skills "developing" for longer. Changing a threshold is a material curriculum change (GOV-004), so it waits for a decision; until then MAST-001 stays BLOCKED.
+- **A form** is a kind of question (`src/engine/forms.ts`): on kit islands, each question maker; on Fractions, the
+  question's kind and picture (for example `shade:circle` or `compare`). Each answer records its form.
+- **Skills with fewer forms.** A skill is never asked for more forms than its questions offer. On 10 Nov 2026, 48 of
+  105 skills, all on preview islands, had one question maker; a test ratchets that number so it can only fall. Every
+  Fractions skill offers two or more.
+- **Older answers.** The rule applies once at least 2 recent answers record a form, so progress saved before forms
+  were recorded keeps its status.
 
 ## 5. Adjusting thresholds (AC3)
 

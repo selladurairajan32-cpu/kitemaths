@@ -18,6 +18,7 @@ import { shapesAngles } from "./shapes-angles";
 import { time } from "./time";
 import { timesTables } from "./times-tables";
 import { mentalMaths } from "./mental-maths";
+import { questionForm, registerSkillForms } from "@/engine/forms";
 import type { Question, TopicModule } from "./types";
 
 /**
@@ -49,6 +50,9 @@ export const TOPICS: TopicModule[] = [
 ];
 
 export const DEFAULT_TOPIC_ID = TOPICS[0].id;
+
+// MAST-001 (D-033): tell the engine how many question forms each skill offers, so "secure" never asks for more.
+for (const t of TOPICS) for (const s of t.skills) registerSkillForms(s.id, new Set(t.practiceQuestions.filter((q) => q.skill === s.id).map(questionForm)).size);
 
 const BY_ID = new Map(TOPICS.map((t) => [t.id, t]));
 

@@ -77,6 +77,11 @@ export interface ItemResult {
   timed?: boolean;
   /** R3: a method-choice answer (MM-009 compare, MM-010 choose): the method picked and whether it was valid for the numbers. */
   strategy?: StrategyChoice;
+  /**
+   * MAST-001 (D-033): the kind of question answered, such as "number:groups" or "shade", so "secure" can require more
+   * than one form. Optional: older answers have none.
+   */
+  form?: string;
   /** R5: an answer in a practice mock test (EXAM-005), with what post-test analysis needs (EXAM-006). */
   mock?: MockMeta;
   at: number;

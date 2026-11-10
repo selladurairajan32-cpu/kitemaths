@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useAnimate, useReducedMotion } from "motion/react";
 import { useEffect, useReducer, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { Confetti, StarPop } from "@/components/kid/Celebrate";
+import { questionForm } from "@/engine/forms";
 import { Kip } from "@/components/kid/Kip";
 import { ReadAloud } from "@/components/kid/ReadAloud";
 import { RichText } from "@/components/math/RichText";
@@ -265,6 +266,7 @@ export function QuestionPlayer({
       skill: q.skill,
       context,
       difficulty: q.difficulty,
+      form: questionForm(q),
       ...s,
       ...(lastResponse.current ? { response: JSON.parse(JSON.stringify(lastResponse.current)) as unknown } : {}),
       ...(durationMs !== undefined ? { durationMs } : {}),

@@ -44,6 +44,7 @@ function choiceResult(session: string, index: number, s: Strategy, choice: Strat
     misconceptions: [],
     durationMs,
     strategy: choice,
+    form: choice.kind,
     at: clock(),
   };
 }

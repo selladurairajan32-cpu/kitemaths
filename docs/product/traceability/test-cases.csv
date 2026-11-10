@@ -366,7 +366,7 @@ TC-MIS-005.3.1,MIS-005,AC3,unit,automated,passing,"src/engine/recovery-transfer.
 TC-MIS-005.3.2,MIS-005,AC3,unit,automated,passing,"src/engine/engine.test.ts::keeps the mastery phase unfinished while a skill needs review, and labels activity separately",
 TC-MAST-001.1.1,MAST-001,AC1,unit,automated,passing,src/engine/engine.test.ts::needs several strong recent results before a skill is secure,
 TC-MAST-001.1.2,MAST-001,AC1,unit,automated,passing,src/engine/engine.test.ts::awards mastery only for two or more independent items plus secure practice,
-TC-MAST-001.1.3,MAST-001,AC1,document-review,manual,failing,,Varied examples is not a coded criterion (MAST-001 §4); a Product Owner decision is needed. MAST-001 is BLOCKED.
+TC-MAST-001.1.3,MAST-001,AC1,unit,automated,passing,src/engine/varied.test.ts::makes it secure once right answers cover two forms,"Varied examples coded (SECURE_MIN_FORMS = 2, D-033); single-form skills asked for the forms they have (CH-056)"
 TC-MAST-001.2.1,MAST-001,AC2,unit,automated,passing,src/engine/engine.test.ts::does not award mastery from a single correct item,
 TC-MAST-001.2.2,MAST-001,AC2,unit,automated,passing,src/engine/engine.test.ts::awards mastery only for two or more independent items plus secure practice,
 TC-MAST-001.3.1,MAST-001,AC3,unit,automated,partial,"src/engine/engine.test.ts::uses the latest independent evidence, and practice cannot clear a needs-review",Thresholds are named constants; not yet documented for the PO

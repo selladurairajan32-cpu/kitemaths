@@ -57,6 +57,7 @@ export function factResult(opts: {
     response: { kind: "number", value: given },
     durationMs: opts.durationMs,
     fact,
+    form: `fact:${fact.form}`,
     ...(kind === "slip" && !correct ? { slip: true } : {}),
     ...(timed ? { timed: true } : {}),
     at: opts.at,

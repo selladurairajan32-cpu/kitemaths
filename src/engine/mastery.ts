@@ -1,3 +1,4 @@
+import { skillFormsAvailable } from "./forms";
 import { INDEPENDENT_CONTEXTS } from "./types";
 import type {
   ItemResult,
@@ -37,6 +38,12 @@ export interface SkillMastery {
 const RECENT_WINDOW = 5;
 export const SECURE_MIN_EVIDENCE = 3;
 export const SECURE_THRESHOLD = 0.75;
+/**
+ * MAST-001 varied examples (D-033): recent right answers must cover at least this many question forms, or every form
+ * the skill offers if it has fewer. Applied once enough recent answers record a form, so answers saved before forms
+ * were recorded are not penalised.
+ */
+export const SECURE_MIN_FORMS = 2;
 export const MASTERY_MIN_INDEPENDENT = 2;
 
 /** First-try without support = 1, correct with support = 0.5, not correct = 0. */
@@ -64,7 +71,10 @@ export function skillMastery(skill: SkillId, results: ItemResult[]): SkillMaster
   const learning = results.filter((r) => r.skill === skill && isLearning(r));
   const recent = learning.slice(-RECENT_WINDOW);
   const score = average(recent);
-  const learningSecure = recent.length >= SECURE_MIN_EVIDENCE && score >= SECURE_THRESHOLD;
+  const needForms = Math.min(SECURE_MIN_FORMS, skillFormsAvailable(skill) ?? SECURE_MIN_FORMS);
+  const formed = recent.filter((r) => r.form);
+  const variedEnough = formed.length < needForms || new Set(formed.filter((r) => r.correct).map((r) => r.form)).size >= needForms;
+  const learningSecure = recent.length >= SECURE_MIN_EVIDENCE && score >= SECURE_THRESHOLD && variedEnough;
 
   const latest = latestIndependent(skill, results);
   const assessed: IndependentEvidence | null = latest.length

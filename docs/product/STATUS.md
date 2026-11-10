@@ -22,7 +22,7 @@ Each item has two separate statuses (D-009).
 
 ## Summary
 
-**QA status (10 Nov 2026):** READY FOR QA: 83, ACCEPTED: 12, READY FOR RETEST: 1 (UX-003), BLOCKED: 1 (MAST-001). No item is
+**QA status (10 Nov 2026):** READY FOR QA: 84, ACCEPTED: 12, READY FOR RETEST: 1 (UX-003). MAST-001 was unblocked by D-033. No item is
 SPECIFIED any more: R2, R3 and R5 were built under D-032 ([release report](reports/D-032-build-report.md)). Nothing built under
 D-032 is accepted.
 
@@ -155,7 +155,7 @@ only where it is evidence for a backlog item: Times Tables, Mental Maths, 11+ an
 
 | ID | Title | Pri | Rel | QA status | Implementation | Evidence and notes |
 |---|---|---|---|---|---|---|
-| MAST-001 | Define skill mastery model | P1 | R1 | BLOCKED | Partial | **R1 steps 10–11 (D-026, `673d57c`), awaiting review.** [Mastery model](curriculum/MAST-001-mastery-model.md) documented: accuracy (secure) and independent application (mastered) are coded with adjustable named thresholds, unchanged (RC-008 Q-B). **Varied examples is not a coded criterion**: a Product Owner decision on the proposed `SECURE_MIN_FORMS = 2` is needed (MAST-001 §4). |
+| MAST-001 | Define skill mastery model | P1 | R1 | READY FOR QA | Implemented | **Unblocked by D-033, awaiting review; not accepted.** [Mastery model](curriculum/MAST-001-mastery-model.md): accuracy, varied examples (2 question forms, `SECURE_MIN_FORMS`, or all a skill offers) and independent application are all coded with named thresholds. |
 | MAST-002 | Build independent Fractions assessment | P1 | R1 | READY FOR QA | Implemented | **R1 steps 10–11 (D-026, `673d57c`), awaiting review.** Two parallel forms sample all five areas with every skill twice (now 18 items each, including adding and subtracting); items are unfamiliar (not in practice, lessons or follow-ups); no hints; the report gives skill-level evidence. |
 | MAST-003 | Build progress dashboard | P1 | R1 | READY FOR QA | Implemented | **R1 steps 10–11 (D-026, `673d57c`), awaiting review.** The grown-ups overview shows lessons done (by evidence), secure, mastered and needs-review skills and the next activity, all derived from recorded attempts (component test compares every number with the engine). An island picker shows any island worked on (DEF-012). |
 | MAST-004 | Build mastery results screen | P1 | R1 | READY FOR QA | Implemented | **R1 steps 10–11 (D-026, `673d57c`), awaiting review.** Results report strengths, next steps, ideas to watch (tentative), and per-skill status; a test checks no ability labels. Whether it is understandable to children and parents needs user review. |
