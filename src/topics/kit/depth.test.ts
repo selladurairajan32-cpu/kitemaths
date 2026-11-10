@@ -13,7 +13,7 @@ import { FACTOR_PUZZLES, uniquePuzzleAnswer } from "@/topics/multiply-divide";
  * Mock exams are exam technique, not teaching lessons, so only the hint rule applies to them.
  */
 const NOT_YET = new Set([
-  "negative", "times-tables", "mental-maths", "money", "time",
+  "times-tables", "mental-maths", "money", "time",
   "shapes-angles", "coordinates", "charts-data", "mock-exams",
 ]);
 const TEACHING_EXEMPT = new Set(["mock-exams"]);
@@ -60,6 +60,16 @@ describe("lesson depth (D-037 Phase B, CUR-003)", () => {
       if (!NOT_YET.has(t.id)) problems.push(...found.map((g) => `${t.id} · ${g}`));
     }
     expect(problems).toEqual([]);
+  });
+
+  it("asks only for answers a worked-example blank can take: whole numbers from 0 to 9,999", () => {
+    // The blank's number box accepts up to four digits and no minus sign or decimal point (components/questions/inputs.tsx).
+    const bad = TOPICS.flatMap((t) =>
+      t.lessons.flatMap((l) =>
+        (l.steps as LessonStep[]).flatMap((s) => (s.type === "worked" ? s.steps.filter((x) => x.blank && !(Number.isInteger(x.blank.answer) && x.blank.answer >= 0 && x.blank.answer <= 9999)).map((x) => `${t.id}/${l.id}: ${x.blank!.answer}`) : [])),
+      ),
+    );
+    expect(bad).toEqual([]);
   });
 
   it("gives each factor puzzle exactly one answer (hand-worked)", () => {

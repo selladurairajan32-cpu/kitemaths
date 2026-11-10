@@ -1,4 +1,4 @@
-import { defineTopic, genFor, int, pick } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
 import { num } from "@/topics/kit/evaluate";
 import type { Template } from "@/topics/kit/types";
 
@@ -11,7 +11,7 @@ const M = { sign: `${T}.lost-sign`, bigger: `${T}.bigger-digit-bigger`, diff: `$
 
 const deg = (n: number) => `${num(n)}°C`;
 
-const templates: Template[] = [
+const baseTemplates: Template[] = [
   {
     key: "ng-thermo",
     skill: S.read,
@@ -149,7 +149,143 @@ const templates: Template[] = [
       };
     },
   },
+  /* D-037 (Phase B): a stretch question for every skill, and a second maker for counting and for differences. */
+  {
+    key: "ng-read-stretch",
+    skill: S.read,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const a = -int(r, 3, 9);
+      const top = a + 2 * int(r, 3, 8);
+      const half = (a + top) / 2;
+      return {
+        kind: "number",
+        prompt: `On a number line, which number is exactly **halfway** between **${num(a)}** and **${num(top)}**?`,
+        visual: { kind: "line", min: a - 1, max: top + 1, step: 1, points: [{ value: a, label: num(a), tone: "num" }, { value: top, label: num(top), tone: "brand" }] },
+        answer: half,
+        negative: true,
+        traps: [{ value: (Math.abs(a) + top) / 2, misconception: M.sign, feedback: "Count the steps between them, then go half of that from one end." }].filter((t) => t.value !== half && Number.isInteger(t.value)),
+        hint: `How many steps are there from ${num(a)} to ${num(top)}? Go half of them.`,
+        explanation: `There are ${top - a} steps; half is ${(top - a) / 2}. ${num(a)} + ${(top - a) / 2} = **${num(half)}**.`,
+      };
+    },
+  },
+  {
+    key: "ng-order-stretch",
+    skill: S.order,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const vals = [-int(r, 7, 12), -int(r, 1, 6), int(r, 0, 3), -int(r, 13, 20)];
+      const asc = [...vals].sort((a, b) => a - b);
+      const show = (l: number[]) => l.map(num).join(", ");
+      const byDigits = [...vals].sort((a, b) => Math.abs(a) - Math.abs(b));
+      return {
+        kind: "choose",
+        prompt: `Put these temperatures in order, **coldest first**: ${vals.map((v) => deg(v)).join(", ")}.`,
+        options: [{ text: show(asc) }, { text: show(byDigits), misconception: M.bigger, feedback: "A bigger number after the minus sign means colder, not warmer." }, { text: show([...asc].reverse()), feedback: "That's warmest first." }].filter((o, i, all) => all.findIndex((x) => x.text === o.text) === i),
+        answer: 0,
+        hint: "On a number line, the coldest is furthest to the left.",
+        explanation: `Coldest first: **${show(asc)}**.`,
+      };
+    },
+  },
+  {
+    key: "ng-count-steps",
+    skill: S.count,
+    difficulties: [1, 2, 3],
+    make: (r, { difficulty }) => {
+      const step = difficulty === 1 ? 1 : pick(r, [2, 5, 10]);
+      const start = difficulty === 1 ? int(r, 1, 4) : step * int(r, 1, 3);
+      const terms = [0, 1, 2, 3, 4].map((i) => start - i * step);
+      return {
+        kind: "number",
+        prompt: `Count back in **${step}s**: **${terms.slice(0, 4).map(num).join(", ")}, ?**`,
+        answer: terms[4]!,
+        negative: true,
+        traps: [{ value: Math.abs(terms[4]!), misconception: M.sign, feedback: "Once you pass zero, the numbers are negative: write the minus sign." }].filter((t) => t.value !== terms[4]),
+        hint: `Take away ${step} from ${num(terms[3]!)}.`,
+        explanation: `${num(terms[3]!)} − ${step} = **${num(terms[4]!)}**.`,
+      };
+    },
+  },
+  {
+    key: "ng-count-stretch",
+    skill: S.count,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const start = int(r, 2, 8);
+      const fall = int(r, 6, 14);
+      const rise = int(r, 2, 9);
+      const end = start - fall + rise;
+      return {
+        kind: "number",
+        prompt: `At noon it was **${deg(start)}**. By midnight it had fallen **${fall} degrees**. By 8 a.m. it had risen **${rise} degrees**. What was the temperature at 8 a.m.?`,
+        unit: "°C",
+        answer: end,
+        negative: true,
+        traps: [{ value: start - fall, feedback: "Don't stop at midnight: it rose again by 8 a.m." }, { value: Math.abs(start - fall) + rise, misconception: M.sign, feedback: "Midnight was below zero. Count up from there." }].filter((t) => t.value !== end),
+        hint: "Find the midnight temperature first. Count through zero carefully.",
+        explanation: `${start} − ${fall} = ${num(start - fall)}°C at midnight; + ${rise} = **${num(end)}°C**.`,
+      };
+    },
+  },
+  {
+    key: "ng-diff-word",
+    skill: S.diff,
+    difficulties: [1, 2, 3],
+    make: (r, { difficulty }) => {
+      const low = -int(r, 2, difficulty === 1 ? 6 : 15);
+      const high = int(r, 1, difficulty === 1 ? 8 : 25);
+      const cityA = pick(r, ["Moscow", "Oslo", "Helsinki"]);
+      return {
+        kind: "number",
+        prompt: `In winter it is **${deg(low)}** in ${cityA} and **${deg(high)}** in London. How many degrees warmer is London?`,
+        unit: "°C",
+        answer: high - low,
+        traps: [{ value: Math.abs(high + low), misconception: M.diff, feedback: `Count up to zero first (${Math.abs(low)} degrees), then on to ${high}: add the two jumps.` }].filter((t) => t.value !== high - low),
+        hint: `From ${deg(low)} up to 0, then from 0 up to ${deg(high)}.`,
+        explanation: `${Math.abs(low)} + ${high} = **${high - low} degrees**.`,
+      };
+    },
+  },
+  {
+    key: "ng-diff-stretch",
+    skill: S.diff,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const a = -int(r, 2, 9);
+      const b = -int(r, 10, 20);
+      return {
+        kind: "number",
+        prompt: `A freezer is at **${deg(b)}**. It warms up to **${deg(a)}**. By how many degrees did it warm up?`,
+        unit: "°C",
+        answer: a - b,
+        traps: [{ value: Math.abs(a) + Math.abs(b), misconception: M.diff, feedback: "Both temperatures are below zero, so don't count through zero: just count up from one to the other." }],
+        hint: `Both are negative. Count up from ${deg(b)} to ${deg(a)}.`,
+        explanation: `From ${num(b)} to ${num(a)} is **${a - b} degrees**.`,
+      };
+    },
+  },
 ];
+
+const templates = withHints(baseTemplates, {
+  "ng-thermo": () => ["Find zero on the thermometer.", "Below zero, the numbers are negative: count down from zero."],
+  "ng-line": () => ["Zero is in the middle. Negatives are to the left.", "Count the steps from zero to the mark."],
+  "ng-compare": () => ["On a number line, numbers get bigger to the right.", "−7 is further left than −3, so it is smaller."],
+  "ng-coldest": () => ["The coldest temperature is the furthest left on the number line.", "A bigger number after the minus sign means colder."],
+  "ng-count": () => ["Count in steps, going through zero.", "After zero, keep counting: −1, −2, −3…"],
+  "ng-diff": () => ["Count the jump up to zero, then the jump from zero.", "Add the two jumps."],
+  "ng-read-stretch": () => ["Count the steps between the two numbers.", "Go half that many steps from the lower number."],
+  "ng-order-stretch": () => ["Draw a number line and place each temperature.", "Read them from left to right."],
+  "ng-count-steps": () => ["Keep taking away the same amount.", "When you pass zero, the numbers become negative."],
+  "ng-count-stretch": () => ["Work out the midnight temperature.", "Then count up from there."],
+  "ng-diff-word": () => ["Count up from the cold city to zero.", "Then from zero to London's temperature. Add the jumps."],
+  "ng-diff-stretch": () => ["Both numbers are negative, so you don't pass zero.", "Count up from the colder one to the warmer one."],
+});
 
 export const negative = defineTopic({
   id: T,
@@ -185,8 +321,29 @@ export const negative = defineTopic({
         {
           type: "explain",
           title: "The number line keeps going",
-          body: ["Numbers to the **left** of zero are negative. **−1** is just left of zero, **−5** is further left."],
+          body: ["Numbers to the **left** of zero are negative. **−1** is just left of zero, **−5** is further left.", "Positive numbers go right from zero and negative numbers go left. The minus sign matters: 5 and −5 are on opposite sides, the same distance from zero."],
           visual: { kind: "line", min: -6, max: 6, step: 1, points: [{ value: -5, label: "−5", tone: "num" }, { value: -1, label: "−1", tone: "brand" }] },
+        },
+        {
+          type: "worked",
+          title: "Watch me: read a thermometer",
+          support: "full",
+          problem: "What temperature does this thermometer show?",
+          visual: { kind: "thermo", min: -10, max: 10, value: -6, step: 2 },
+          steps: [{ text: "Find **0**. The liquid stops **below** it, so the temperature is negative." }, { text: "Count down from 0 in twos: −2, −4, **−6**." }],
+          conclusion: "It shows **−6°C**.",
+        },
+        {
+          type: "worked",
+          title: "Together: falling below zero",
+          support: "faded",
+          problem: "It is **2°C**. The temperature falls **5 degrees**. How cold is it now?",
+          visual: { kind: "line", min: -5, max: 5, step: 1, points: [{ value: 2, label: "2", tone: "brand" }], jumps: [{ from: 2, to: 0, label: "2" }, { from: 0, to: -3, label: "3" }] },
+          steps: [
+            { text: "2 degrees take it down to zero. That leaves 3 more to fall." },
+            { text: "Going below zero gives a negative temperature.", blank: { prompt: "How many degrees below zero is it?", answer: 3, hint: "5 − 2", traps: [{ value: 7, misconception: M.wayround, feedback: "The temperature fell, so count down: 2 to zero, then 3 more." }], worked: "**3** below zero: **−3°C**." } },
+          ],
+          conclusion: "It is now **−3°C**.",
         },
         { type: "check", title: "Your turn", questionId: gen("ng-thermo", 1, 4) },
         { type: "check", title: "One more", questionId: gen("ng-line", 1, 6) },
@@ -203,9 +360,26 @@ export const negative = defineTopic({
         {
           type: "explain",
           title: "Bigger digit, smaller number",
-          body: ["Is −7 bigger than −3? **No!** −7 is further left, so it is **smaller**: **−7 < −3**.", "−7°C is colder than −3°C."],
+          body: ["Is −7 bigger than −3? **No!** −7 is further left, so it is **smaller**: **−7 < −3**.", "−7°C is colder than −3°C.", "Any positive number is bigger than any negative number, and zero is bigger than every negative number."],
           visual: { kind: "line", min: -8, max: 1, step: 1, points: [{ value: -7, label: "−7", tone: "num" }, { value: -3, label: "−3", tone: "brand" }] },
           tip: "Think temperature: minus 7 degrees is colder than minus 3.",
+        },
+        {
+          type: "worked",
+          title: "Watch me: order −2, 4, −8",
+          support: "full",
+          problem: "Put **−2, 4, −8** in order, smallest first.",
+          visual: { kind: "line", min: -9, max: 5, step: 1, points: [{ value: -8, label: "−8", tone: "num" }, { value: -2, label: "−2", tone: "num" }, { value: 4, label: "4", tone: "brand" }] },
+          steps: [{ text: "Place them on the number line." }, { text: "Read from left to right: **−8, −2, 4**." }],
+          conclusion: "Smallest first: **−8, −2, 4**.",
+        },
+        {
+          type: "worked",
+          title: "Together: colder, −1°C or −9°C?",
+          support: "faded",
+          problem: "Which is colder: **−1°C** or **−9°C**?",
+          steps: [{ text: "Colder means further left on the number line: further below zero.", blank: { prompt: "How many degrees below zero is the colder one?", answer: 9, hint: "Which is further from zero, below it?", traps: [{ value: 1, misconception: M.bigger, feedback: "−1 is just below zero. −9 is much further below, so it is colder." }], worked: "**9** below zero: **−9°C**." } }],
+          conclusion: "**−9°C** is colder.",
         },
         { type: "check", title: "Your turn", questionId: gen("ng-compare", 1, 2) },
         { type: "check", title: "One more", questionId: gen("ng-coldest", 2, 5) },
@@ -219,6 +393,12 @@ export const negative = defineTopic({
       minutes: 7,
       objectives: ["Count back through zero", "Count on from a negative number"],
       steps: [
+        {
+          type: "explain",
+          title: "Zero is just another stop",
+          body: ["Counting through zero works like any other counting. Going down from 2: 2, 1, 0, −1, −2.", "Split a big jump at zero. From 4, going down 7: 4 steps take you to zero, then 3 more take you to −3."],
+          visual: { kind: "line", min: -4, max: 5, step: 1, points: [{ value: 4, label: "4", tone: "brand" }, { value: -3, label: "−3", tone: "num" }], jumps: [{ from: 4, to: 0, label: "4" }, { from: 0, to: -3, label: "3" }] },
+        },
         {
           type: "worked",
           title: "Watch me count through zero",
@@ -235,7 +415,7 @@ export const negative = defineTopic({
           problem: "It is **−5°C**. It rises by **8 degrees**.",
           steps: [
             { text: "Count up 5 to reach zero." },
-            { text: "That used 5 of the 8.", blank: { prompt: "How many more to go?", answer: 3, hint: "8 − 5", worked: "**3** more, so it is 3°C." } },
+            { text: "That used 5 of the 8.", blank: { prompt: "How many more to go?", answer: 3, hint: "8 − 5", traps: [{ value: 13, misconception: M.wayround, feedback: "You've used 5 of the 8 steps; 3 are left." }], worked: "**3** more, so it is 3°C." } },
           ],
           conclusion: "−5°C + 8 = **3°C**.",
         },
@@ -254,9 +434,26 @@ export const negative = defineTopic({
         {
           type: "explain",
           title: "Two jumps",
-          body: ["From **−4°C** to **6°C**: 4 degrees up to zero, then 6 more. **4 + 6 = 10 degrees**."],
+          body: ["From **−4°C** to **6°C**: 4 degrees up to zero, then 6 more. **4 + 6 = 10 degrees**.", "When one temperature is below zero and the other is above it, split the jump at zero and add the two parts. If both are below zero, just count from one to the other."],
           visual: { kind: "line", min: -5, max: 7, step: 1, points: [{ value: -4, label: "−4", tone: "brand" }, { value: 6, label: "6", tone: "num" }], jumps: [{ from: -4, to: 0, label: "4" }, { from: 0, to: 6, label: "6" }] },
           tip: "Don't take 4 away from 6: across zero, the jumps add up.",
+        },
+        {
+          type: "worked",
+          title: "Watch me: −7°C to 5°C",
+          support: "full",
+          problem: "How much warmer is **5°C** than **−7°C**?",
+          visual: { kind: "line", min: -8, max: 6, step: 1, points: [{ value: -7, label: "−7", tone: "num" }, { value: 5, label: "5", tone: "brand" }], jumps: [{ from: -7, to: 0, label: "7" }, { from: 0, to: 5, label: "5" }] },
+          steps: [{ text: "Up to zero: **7** degrees." }, { text: "Zero to 5: **5** more. 7 + 5 = **12**." }],
+          conclusion: "5°C is **12 degrees** warmer.",
+        },
+        {
+          type: "worked",
+          title: "Together: −3°C to 8°C",
+          support: "faded",
+          problem: "How many degrees from **−3°C** to **8°C**?",
+          steps: [{ text: "3 up to zero, then 8 more.", blank: { prompt: "3 + 8 = ?", answer: 11, hint: "Add the two jumps.", traps: [{ value: 5, misconception: M.diff, feedback: "8 − 3 ignores the jump through zero. Add the two jumps: 3 + 8." }], worked: "**11** degrees." } }],
+          conclusion: "It is **11 degrees** warmer.",
         },
         { type: "check", title: "Your turn", questionId: gen("ng-diff", 1, 5) },
         { type: "check", title: "One more", questionId: gen("ng-diff", 2, 8) },
