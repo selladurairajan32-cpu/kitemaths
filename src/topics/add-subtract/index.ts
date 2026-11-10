@@ -1,4 +1,4 @@
-import { defineTopic, genFor, int, pick } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
 import { num } from "@/topics/kit/evaluate";
 import type { Rng, Template } from "@/topics/kit/types";
 
@@ -42,7 +42,7 @@ function withExchange(r: Rng, len: number, zeros = false): [number, number] {
   }
 }
 
-const templates: Template[] = [
+const baseTemplates: Template[] = [
   {
     key: "as-bonds",
     skill: S.mental,
@@ -257,7 +257,150 @@ const templates: Template[] = [
       };
     },
   },
+  /* D-037 (Phase B): a stretch question for every skill, and a second word-problem maker. */
+  {
+    key: "as-mental-stretch",
+    skill: S.mental,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const a = int(r, 3, 9) * 100 + int(r, 51, 98);
+      const b = int(r, 1, 4) * 100 - int(r, 1, 4);
+      const answer = a + b;
+      const round = Math.ceil(b / 100) * 100;
+      return {
+        kind: "number",
+        prompt: `Work it out in your head: **${num(a)} + ${num(b)}**.`,
+        answer,
+        traps: [{ value: a + round + (round - b), misconception: M.adjust, feedback: `You added ${round}, which is ${round - b} too many, so take ${round - b} away, not add it.` }],
+        hint: `${num(b)} is close to ${round}. Add ${round}, then adjust.`,
+        explanation: `${num(a)} + ${round} = ${num(a + round)}, then − ${round - b} = **${num(answer)}**.`,
+      };
+    },
+  },
+  {
+    key: "as-add-stretch",
+    skill: S.add,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const [a, b] = withCarry(r, 4, 4);
+      const sum = a + b;
+      const da = String(a).split("");
+      const hide = int(r, 1, 3);
+      const shown = da.map((d, i) => (i === hide ? "?" : d)).join("");
+      return {
+        kind: "number",
+        prompt: `A digit is missing: **${shown} + ${num(b)} = ${num(sum)}**. What is the missing digit?`,
+        answer: Number(da[hide]),
+        traps: [{ value: (Number(da[hide]) + 1) % 10, misconception: M.carry, feedback: "Remember any carried digit from the column to the right." }].filter((t) => t.value !== Number(da[hide])),
+        hint: `Work it out backwards: ${num(sum)} − ${num(b)}.`,
+        explanation: `${num(sum)} − ${num(b)} = ${num(a)}, so the missing digit is **${da[hide]}**.`,
+      };
+    },
+  },
+  {
+    key: "as-sub-stretch",
+    skill: S.sub,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const [a, b] = withExchange(r, 4, true);
+      const right = a - b;
+      const wrong = smallerFromLarger(a, b);
+      return {
+        kind: "choose",
+        prompt: `Ella worked out **${num(a)} − ${num(b)} = ${num(wrong)}**. Which statement is true?`,
+        options: [
+          { text: `Ella is wrong: the answer is ${num(right)}` },
+          { text: "Ella is right", misconception: M.smaller, feedback: `Check with addition: ${num(wrong)} + ${num(b)} isn't ${num(a)}.` },
+          { text: `Ella is wrong: the answer is ${num(right + 100)}`, feedback: "Check your exchanges across the zeros." },
+        ],
+        answer: 0,
+        hint: `Check by adding: does ${num(wrong)} + ${num(b)} make ${num(a)}?`,
+        explanation: `Ella took the smaller digit from the larger in each column. Exchanging properly gives **${num(right)}**.`,
+      };
+    },
+  },
+  {
+    key: "as-inverse-stretch",
+    skill: S.inverse,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const a = int(r, 120, 480);
+      const b = int(r, 120, 480);
+      const c = a + b + int(r, 50, 300);
+      const missing = c - a - b;
+      return {
+        kind: "number",
+        prompt: `**${a} + ? + ${b} = ${c}**. What is the missing number?`,
+        answer: missing,
+        traps: [{ value: c - a, misconception: M.inverse, feedback: `Take away both numbers you know: ${a} and ${b}.` }, { value: c + a + b, misconception: M.inverse, feedback: "Subtraction undoes addition: take the known numbers away." }],
+        hint: `Add the numbers you know, then take that from ${c}.`,
+        explanation: `${a} + ${b} = ${a + b}, and ${c} − ${a + b} = **${missing}**.`,
+      };
+    },
+  },
+  {
+    key: "as-difference",
+    skill: S.problems,
+    difficulties: [1, 2, 3],
+    make: (r, { difficulty }) => {
+      const x = difficulty === 1 ? int(r, 20, 99) : int(r, 900, 2999);
+      const y = int(r, Math.floor(x / 3), x - 5);
+      const mountain = r() < 0.5;
+      return {
+        kind: "number",
+        prompt: mountain ? `A mountain is **${num(x)} m** high and a hill is **${num(y)} m** high. How much higher is the mountain?` : `One school raised **£${num(x)}**. Another raised **£${num(y)}**. How much more did the first school raise?`,
+        unit: mountain ? "m" : "£",
+        answer: x - y,
+        traps: [{ value: x + y, misconception: M.inverse, feedback: "'How much more' means find the difference: subtract." }],
+        hint: "'How much more' or 'how much higher' means find the difference.",
+        explanation: `${num(x)} − ${num(y)} = **${num(x - y)}**.`,
+      };
+    },
+  },
+  {
+    key: "as-problems-stretch",
+    skill: S.problems,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const start = int(r, 300, 900);
+      const off = int(r, 40, 150);
+      const on = int(r, 30, 120);
+      const off2 = int(r, 20, 90);
+      const end = start - off + on - off2;
+      return {
+        kind: "number",
+        prompt: `A train leaves with **${start}** people. At the first stop **${off}** get off and **${on}** get on. At the second stop **${off2}** get off. How many people are on the train now?`,
+        answer: end,
+        traps: [{ value: start - off + on, misconception: M.inverse, feedback: "Don't forget the second stop." }, { value: start - off - on - off2, misconception: M.inverse, feedback: "People getting on make the number go up." }],
+        hint: "Take one stop at a time, writing down the number after each change.",
+        explanation: `${start} − ${off} + ${on} = ${start - off + on}; − ${off2} = **${end}**.`,
+      };
+    },
+  },
 ];
+
+const templates = withHints(baseTemplates, {
+  "as-bonds": () => ["The ones must make 10, so the tens make 9 tens.", "Find the ones first, then the tens."],
+  "as-mental": () => ["Round one number to a friendly ten or hundred.", "Then adjust by the amount you rounded."],
+  "as-col-add": () => ["Line up the columns: ones under ones.", "Add from the right. If a column makes 10 or more, carry the ten into the next column."],
+  "as-add-word": () => ["Altogether or total means add.", "Use column addition and carry when you need to."],
+  "as-col-sub": () => ["Always take the bottom digit from the top digit.", "If the top digit is smaller, exchange from the next column."],
+  "as-sub-word": () => ["Left, fewer or difference means subtract.", "Use column subtraction and exchange when you need to."],
+  "as-missing": () => ["Use the opposite operation.", "Addition undoes subtraction; subtraction undoes addition."],
+  "as-check": () => ["Check a subtraction with an addition.", "Add the answer to the number taken away: you should get the first number."],
+  "as-word": () => ["Draw a bar model: the whole and the parts.", "Which part is missing? That tells you whether to add or subtract."],
+  "as-mental-stretch": () => ["Round the second number up to a hundred.", "You added too much, so take the extra away."],
+  "as-add-stretch": () => ["Work backwards with subtraction.", "Compare your answer with the number with a missing digit."],
+  "as-sub-stretch": () => ["Check with an addition.", "Look for a column where the top digit was smaller."],
+  "as-inverse-stretch": () => ["Add the two numbers you know.", "Take that total away from the answer."],
+  "as-difference": () => ["Difference means subtract.", "Take the smaller number from the bigger one."],
+  "as-problems-stretch": () => ["Write down the number on the train after each change.", "Getting off: subtract. Getting on: add."],
+});
 
 export const addSubtract = defineTopic({
   id: T,
@@ -287,7 +430,7 @@ export const addSubtract = defineTopic({
         {
           type: "explain",
           title: "Bonds to 100",
-          body: ["**37 + 63 = 100**. The ones make a ten (7 + 3), so the tens only need to make 9 tens (3 + 6)."],
+          body: ["**37 + 63 = 100**. The ones make a ten (7 + 3), so the tens only need to make 9 tens (3 + 6).", "Number bonds help with mental sums. To add 99 or 98, add 100 and then take away the extra 1 or 2. To take away 99, take away 100 and add 1 back."],
           visual: { kind: "bar", total: "100", parts: [{ label: "37", size: 37, tone: "brand" }, { label: "63", size: 63, tone: "num" }] },
           tip: "Ones make 10, tens make 9.",
         },
@@ -299,6 +442,17 @@ export const addSubtract = defineTopic({
           visual: { kind: "line", min: 40, max: 80, step: 1, labelEvery: 10, points: [{ value: 46, label: "46", tone: "brand" }], jumps: [{ from: 46, to: 76, label: "+30" }, { from: 76, to: 75, label: "−1" }] },
           steps: [{ text: "29 is nearly **30**." }, { text: "46 + 30 = **76**." }, { text: "I added 1 too many, so take 1 away: **75**." }],
           conclusion: "46 + 29 = **75**.",
+        },
+        {
+          type: "worked",
+          title: "Together: 46 + ? = 100",
+          support: "faded",
+          problem: "**46 + ? = 100**",
+          steps: [
+            { text: "The ones need to make 10: 6 + **4** = 10." },
+            { text: "Then the tens make 9 tens: 4 tens + 5 tens = 9 tens.", blank: { prompt: "So the missing number is?", answer: 54, hint: "5 tens and 4 ones", traps: [{ value: 64, misconception: M.bond, feedback: "Each digit making 10 gives too much: the ones make a ten, so the tens only need to make 9 tens." }], worked: "**54**." } },
+          ],
+          conclusion: "46 + **54** = 100.",
         },
         { type: "check", title: "Your turn", questionId: gen("as-bonds", 1, 3) },
         { type: "check", title: "One more", questionId: gen("as-mental", 1, 6) },
@@ -315,7 +469,7 @@ export const addSubtract = defineTopic({
         {
           type: "explain",
           title: "Line up the columns",
-          body: ["Write the numbers so the ones are under the ones, the tens under the tens. Then add **from the right**."],
+          body: ["Write the numbers so the ones are under the ones, the tens under the tens. Then add **from the right**.", "If a column adds up to 10 or more, write the ones digit and **carry** the ten into the next column, where it is added on.", "Estimate first so you can check: 468 + 357 is about 500 + 350 = 850."],
           visual: { kind: "column", op: "+", a: 358, b: 476 },
         },
         {
@@ -326,10 +480,19 @@ export const addSubtract = defineTopic({
           visual: { kind: "column", op: "+", a: 358, b: 476 },
           steps: [
             { text: "Ones: 8 + 6 = 14. Write 4, carry 1 ten." },
-            { text: "Tens: 5 + 7 + the carried 1.", blank: { prompt: "How many tens is that?", answer: 13, hint: "5 + 7 = 12, plus 1.", worked: "**13** tens: write 3, carry 1 hundred." } },
+            { text: "Tens: 5 + 7 + the carried 1.", blank: { prompt: "How many tens is that?", answer: 13, hint: "5 + 7 = 12, plus 1.", traps: [{ value: 12, misconception: M.carry, feedback: "Don't forget the 1 carried from the ones." }, { value: 2, misconception: M.carry, feedback: "Write 3 and carry the extra ten into the hundreds; the column makes 13 tens." }], worked: "**13** tens: write 3, carry 1 hundred." } },
             { text: "Hundreds: 3 + 4 + the carried 1 = 8." },
           ],
           conclusion: "358 + 476 = **834**.",
+        },
+        {
+          type: "worked",
+          title: "Watch me: 2,486 + 1,357",
+          support: "full",
+          problem: "**2,486 + 1,357**",
+          visual: { kind: "column", op: "+", a: 2486, b: 1357, result: 3843 },
+          steps: [{ text: "Ones: 6 + 7 = 13. Write 3, carry 1." }, { text: "Tens: 8 + 5 + 1 = 14. Write 4, carry 1." }, { text: "Hundreds: 4 + 3 + 1 = 8. Thousands: 2 + 1 = 3." }],
+          conclusion: "2,486 + 1,357 = **3,843**. Check: about 2,500 + 1,400 = 3,900.",
         },
         { type: "check", title: "Your turn", questionId: gen("as-col-add", 1, 4) },
         { type: "check", title: "One more", questionId: gen("as-add-word", 2, 8) },
@@ -359,6 +522,18 @@ export const addSubtract = defineTopic({
           steps: [{ text: "Ones: 3 − 7. No tens or hundreds to give, so go to the thousands." }, { text: "4 thousands becomes 3 thousands, 9 hundreds, 9 tens and 13 ones." }, { text: "13 − 7 = 6, 9 − 6 = 3, 9 − 2 = 7, 3 − 1 = 2." }],
           conclusion: "4,003 − 1,267 = **2,736**.",
         },
+        {
+          type: "worked",
+          title: "Together: 642 − 278",
+          support: "faded",
+          problem: "**642 − 278**",
+          visual: { kind: "column", op: "−", a: 642, b: 278 },
+          steps: [
+            { text: "Ones: 2 − 8 can't be done, so exchange a ten: 4 tens become 3 tens, and the 2 ones become 12.", blank: { prompt: "12 − 8 = ?", answer: 4, hint: "12 − 8", traps: [{ value: 6, misconception: M.smaller, feedback: "8 − 2 takes the smaller digit from the larger. Exchange a ten instead: 12 − 8." }], worked: "**4** ones." } },
+            { text: "Tens: 3 − 7 can't be done either, so exchange a hundred: 13 − 7 = 6. Hundreds: 5 − 2 = 3." },
+          ],
+          conclusion: "642 − 278 = **364**. Check: 364 + 278 = 642.",
+        },
         { type: "check", title: "Your turn", questionId: gen("as-col-sub", 1, 5) },
         { type: "check", title: "One more", questionId: gen("as-col-sub", 2, 9) },
       ],
@@ -374,8 +549,25 @@ export const addSubtract = defineTopic({
         {
           type: "explain",
           title: "Undo it",
-          body: ["**? − 245 = 378**. Something take away 245 leaves 378, so the something is **378 + 245 = 623**.", "Addition undoes subtraction, and subtraction undoes addition."],
+          body: ["**? − 245 = 378**. Something take away 245 leaves 378, so the something is **378 + 245 = 623**.", "Addition undoes subtraction, and subtraction undoes addition.", "You can use this to check any answer: if 623 − 245 = 378, then 378 + 245 must make 623."],
           visual: { kind: "bar", total: "?", parts: [{ label: "245", size: 245, tone: "num" }, { label: "378", size: 378, tone: "brand" }] },
+        },
+        {
+          type: "worked",
+          title: "Watch me: 156 + ? = 400",
+          support: "full",
+          problem: "**156 + ? = 400**",
+          visual: { kind: "bar", parts: [{ label: "156", tone: "brand", size: 156 }, { label: "?", tone: "num", size: 244 }], total: "400" },
+          steps: [{ text: "The bar shows 400 split into 156 and a missing part." }, { text: "Missing part = whole − known part: 400 − 156 = **244**." }],
+          conclusion: "The missing number is **244**. Check: 156 + 244 = 400.",
+        },
+        {
+          type: "worked",
+          title: "Together: ? − 128 = 315",
+          support: "faded",
+          problem: "**? − 128 = 315**",
+          steps: [{ text: "Undo taking away 128 by adding it back.", blank: { prompt: "315 + 128 = ?", answer: 443, hint: "300 + 100, 15 + 28", traps: [{ value: 187, misconception: M.inverse, feedback: "Subtracting again doesn't undo a subtraction. Add 128 back." }], worked: "**443**." } }],
+          conclusion: "The missing number is **443**.",
         },
         { type: "check", title: "Your turn", questionId: gen("as-missing", 1, 2) },
         { type: "check", title: "One more", questionId: gen("as-check", 2, 7) },
@@ -392,8 +584,25 @@ export const addSubtract = defineTopic({
         {
           type: "explain",
           title: "Draw it first",
-          body: ["*Altogether* and *in total* mean add. *How many more*, *how many left* and *difference* mean subtract.", "A **bar model** shows the whole and the parts, so you can see which one is missing."],
+          body: ["*Altogether* and *in total* mean add. *How many more*, *how many left* and *difference* mean subtract.", "A **bar model** shows the whole and the parts, so you can see which one is missing. If the whole is missing, add the parts. If a part is missing, subtract."],
           visual: { kind: "bar", total: "£500", parts: [{ label: "£137", size: 137, tone: "num" }, { label: "£249", size: 249, tone: "num" }, { label: "?", size: 114, tone: "brand" }] },
+        },
+        {
+          type: "worked",
+          title: "Watch me: books in a library",
+          support: "full",
+          problem: "A library has **2,450** books. **385** are lent out. How many are left on the shelves?",
+          visual: { kind: "bar", parts: [{ label: "lent: 385", tone: "num", size: 385 }, { label: "left: ?", tone: "brand", size: 2065 }], total: "2,450" },
+          steps: [{ text: "The whole is 2,450, and one part (385) is lent out. The other part is missing." }, { text: "Missing part: 2,450 − 385 = **2,065**." }],
+          conclusion: "**2,065** books are left.",
+        },
+        {
+          type: "worked",
+          title: "Together: two classes",
+          support: "faded",
+          problem: "One class collected **178** cans and another collected **246**. How many cans altogether?",
+          steps: [{ text: "Both parts are known; the whole is missing, so add.", blank: { prompt: "178 + 246 = ?", answer: 424, hint: "Add the ones, then the tens, carrying.", traps: [{ value: 68, misconception: M.inverse, feedback: "'Altogether' means add the two amounts." }, { value: 314, misconception: M.carry, feedback: "Carry the tens and hundreds when a column makes 10 or more." }], worked: "**424** cans." } }],
+          conclusion: "**424** cans altogether.",
         },
         { type: "check", title: "Your turn", questionId: gen("as-word", 1, 3) },
         { type: "check", title: "Two steps", questionId: gen("as-word", 3, 8) },
