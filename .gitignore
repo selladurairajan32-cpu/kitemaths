@@ -44,3 +44,6 @@ next-env.d.ts
 
 # taste-skill inspector output (screenshots and reports)
 .taste-skill/
+
+# Temporary probes (CLAUDE.md: delete after use)
+/src/tmp/
