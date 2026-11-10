@@ -154,3 +154,16 @@ describe("skill badges follow the islands a learner has started (content audit R
     expect(skillBadges.length).toBe(first.skills.length + other.skills.length);
   });
 });
+
+describe("where a new learner starts (DEF-001, D-033)", () => {
+  it("starts on the first island in map order for their school year, or the start of the map", () => {
+    const fresh = createInitialState();
+    // Hand-checked from worlds.ts: Number Peaks comes first, and Place value covers Years 3 to 6.
+    expect(activeTopic(fresh).id).toBe("place-value");
+    expect(activeTopic({ ...fresh, profile: { ...fresh.profile, year: 6 } }).id).toBe("place-value");
+    // A year Place value doesn't cover moves the start along the map: Year 2 is first covered by Times tables.
+    expect(activeTopic({ ...fresh, profile: { ...fresh.profile, year: 2 } }).id).toBe("times-tables");
+    // A learner already on an island stays there.
+    expect(activeTopic({ ...fresh, currentTopicId: "fractions" }).id).toBe("fractions");
+  });
+});

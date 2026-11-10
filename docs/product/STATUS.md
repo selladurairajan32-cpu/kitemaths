@@ -232,7 +232,7 @@ The defect register is [`traceability/defects.csv`](traceability/defects.csv), s
 
 | Defect | Severity | State | Affects |
 |---|---|---|---|
-| DEF-001 | Medium | Open | UX-005; MAST-003 |
+| DEF-001 | Medium | Fixed, closure not confirmed | UX-005; MAST-003 |
 | DEF-002 | Medium | Fixed, closure not confirmed | UX-005; MAST-003 |
 | DEF-003 | Medium | Fixed, closure not confirmed | UX-005; MAST-003 |
 | DEF-004 | Medium | Fixed, closure not confirmed | UX-005; MAST-003 |
@@ -258,7 +258,7 @@ The defect register is [`traceability/defects.csv`](traceability/defects.csv), s
 | DEF-024 | High | Fixed, closure not confirmed | CUR-002 AC3; CUR-003 |
 | DEF-025 | Medium | Fixed, closure not confirmed | CUR-002 |
 | DEF-026 | Medium | Fixed, closure not confirmed | CUR-003 |
-| DEF-027 | Low | Open | ARCH-003 |
+| DEF-027 | Low | Fixed, closure not confirmed | ARCH-003 |
 | DEF-028 | Low | Fixed, closure not confirmed | ARCH-002 |
 | DEF-029 | High | Closed (verified) | ARCH-003; QA-001 |
 | DEF-030 | High | Closed (verified) | ARCH-001 |
@@ -269,5 +269,5 @@ The defect register is [`traceability/defects.csv`](traceability/defects.csv), s
 | DEF-035 | Medium | Closed (verified) | ARCH-002 |
 | DEF-036 | Low | Closed (verified) | UX-004 |
 | DEF-037 | Medium | Closed (verified) | ARCH-002 |
-| DEF-038 | Medium | Partly fixed (behaviour open) | ARCH-002 |
+| DEF-038 | Medium | Fixed, closure not confirmed | ARCH-002 |
 | DEF-039 | Medium | Fixed, closure not confirmed | PRACT-008; FR-011; UX-005 |

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  partName,
   add,
   assertFraction,
   compare,
@@ -325,5 +326,36 @@ describe("partition mapping (ARCH-003 §4)", () => {
     expect(() => shadedFraction([1, 1], [2])).toThrow(/not a part/);
     expect(() => shadedFraction([1, 1], [0.5])).toThrow(/not a part/);
     expect(() => shadedFraction([1, 1], [1, 1])).toThrow(/repeated/);
+  });
+});
+
+describe("unchecked fraction functions now check their input (DEF-027, D-033)", () => {
+  it("refuses 0/0 and non-integers instead of answering quietly", () => {
+    expect(() => simplify({ n: 0, d: 0 })).toThrow(RangeError);
+    expect(() => simplify({ n: 3, d: 0 })).toThrow(RangeError);
+    expect(() => gcd(1.5, 0.5)).toThrow(RangeError);
+    expect(gcd(12, 18)).toBe(6);
+    expect(simplify({ n: 6, d: 8 })).toEqual({ n: 3, d: 4 });
+  });
+
+  it("compares large unequal fractions exactly (oracle: BigInt cross-multiplication)", () => {
+    const big = Number.MAX_SAFE_INTEGER;
+    const a = { n: big - 1, d: big };
+    const b = { n: big - 2, d: big - 1 };
+    const want = BigInt(a.n) * BigInt(b.d) > BigInt(b.n) * BigInt(a.d) ? 1 : -1;
+    expect(compare(a, b)).toBe(want);
+    expect(compare(a, b)).not.toBe(0);
+    expect(equivalent(a, b)).toBe(false);
+    expect(equivalent({ n: 2, d: 4 }, { n: 1, d: 2 })).toBe(true);
+  });
+
+  it("names denominators in words up to 100 (hand-written oracle)", () => {
+    expect(partName(13)).toBe("thirteenths");
+    expect(partName(20)).toBe("twentieths");
+    expect(partName(21, false)).toBe("twenty-first");
+    expect(partName(32)).toBe("thirty-seconds");
+    expect(partName(100)).toBe("hundredths");
+    expect(partName(4)).toBe("quarters");
+    expect(() => partName(101)).toThrow(RangeError);
   });
 });

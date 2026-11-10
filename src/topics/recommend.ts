@@ -1,6 +1,6 @@
 import { recommendNext } from "@/engine/journey";
 import { topicLearner, type LearnerState } from "@/engine/progress";
-import { DEFAULT_TOPIC_ID, TOPICS, topicById } from "./index";
+import { TOPICS, topicById } from "./index";
 import type { TopicModule } from "./types";
 import { WORLDS } from "./worlds";
 
@@ -11,12 +11,22 @@ export function mapOrder(a: TopicModule, b: TopicModule): number {
 }
 
 /**
+ * DEF-001 (D-033): where a new learner starts: the first island in map order that suits their school year, or the
+ * start of the map when no year is set.
+ */
+export function startTopic(state: LearnerState): TopicModule {
+  const ordered = [...TOPICS].sort(mapOrder);
+  const year = state.profile.year;
+  return (year !== null && ordered.find((t) => t.years.includes(year))) || ordered[0];
+}
+
+/**
  * The island a learner should see on their home screen: the one they were
  * last working in, unless it's finished, in which case the next unfinished
  * island in map order. Prerequisite-aware ordering comes with more topics.
  */
 export function activeTopic(state: LearnerState): TopicModule {
-  const current = topicById(state.currentTopicId ?? DEFAULT_TOPIC_ID) ?? TOPICS[0];
+  const current = (state.currentTopicId ? topicById(state.currentTopicId) : undefined) ?? startTopic(state);
   const finished = (t: TopicModule) => recommendNext(t, topicLearner(state, t.id)).kind === "results";
   if (!finished(current)) return current;
   return [...TOPICS].sort(mapOrder).find((t) => !finished(t)) ?? current;

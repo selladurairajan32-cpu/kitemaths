@@ -1,3 +1,4 @@
+import { numericMatches, roundDomainError } from "@/questions/compare";
 import type { Evaluation } from "@/engine/types";
 import type { KitQuestion, KitResponse } from "./types";
 
@@ -29,9 +30,14 @@ export function evaluate(q: KitQuestion, r: KitResponse): Evaluation {
   return { correct: false, misconceptions: [] };
 }
 
-/** Two numbers are the same answer (decimals compared to the thousandth, so 0.1 + 0.2 = 0.3). */
+/**
+ * Two numbers are the same answer: both rounded to the thousandth, halves away from zero, so 0.1 + 0.2 = 0.3.
+ * DEF-038 (D-033): this is the ARCH-002 comparison contract (`numericMatches`, round to 3 places) with no extra
+ * allowance, so −5.0005 is no longer marked as −5. A number too large to round exactly is simply not the same.
+ */
 export function same(a: number, b: number): boolean {
-  return Math.abs(a - b) < 1e-9 || Math.round(a * 1000) === Math.round(b * 1000);
+  if (roundDomainError(3, a) || roundDomainError(3, b)) return a === b;
+  return numericMatches({ kind: "round", places: 3 }, b, a);
 }
 
 /** Numbers the way UK children read them: 12,345, 0.75 and −5. */

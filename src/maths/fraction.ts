@@ -2,10 +2,11 @@
  * Fractions (ARCH-003). Spec: docs/product/architecture/ARCH-003-maths.md.
  *
  * Two groups of functions:
- *  - Existing functions (gcd, simplify, equivalent, compare, scale, fractionOfAmount, missingNumerator,
- *    missingDenominator, parseFraction, isEqualPartition, toWords …) keep today's behaviour exactly. Their supported
- *    domain is small non-negative integers with products well inside the safe range; they do not check it, so
- *    callers validate first (§5).
+ *  - Existing functions (scale, fractionOfAmount, missingNumerator, missingDenominator, parseFraction,
+ *    isEqualPartition, toWords …) keep today's behaviour; their domain is small non-negative integers (§5). DEF-027
+ *    (D-033): gcd, simplify, equivalent, compare and partName now check their input instead of giving a silent wrong
+ *    answer: gcd and simplify throw RangeError outside safe integers or with a zero denominator, equivalent and compare
+ *    are exact for any safe integers (BigInt cross-multiplication), and partName names denominators 1 to 100.
  *  - Checked functions (assertFraction, add, subtract, multiply, divide, toMixed, fromMixed, shadedFraction) need
  *    safe-integer inputs and a positive denominator, check every intermediate product and sum, and throw RangeError
  *    instead of returning an imprecise or meaningless result. Results are in simplest form with a positive
@@ -23,11 +24,9 @@ export interface Fraction {
 
 export const frac = (n: number, d: number): Fraction => ({ n, d });
 
+/** DEF-027: safe integers only (RangeError otherwise); gcd(1.5, 0.5) no longer answers 0.5. */
 export function gcd(a: number, b: number): number {
-  a = Math.abs(a);
-  b = Math.abs(b);
-  while (b) [a, b] = [b, a % b];
-  return a;
+  return gcdOf(a, b);
 }
 
 export function isValidFraction(f: Fraction): boolean {
@@ -36,7 +35,9 @@ export function isValidFraction(f: Fraction): boolean {
   );
 }
 
+/** DEF-027: needs a positive denominator (RangeError otherwise); 0/0 no longer answers 0/1. */
 export function simplify(f: Fraction): Fraction {
+  assertFraction(f);
   if (f.n === 0) return { n: 0, d: 1 };
   const g = gcd(f.n, f.d);
   return { n: f.n / g, d: f.d / g };
@@ -48,7 +49,15 @@ export function isSimplest(f: Fraction): boolean {
 
 /** Exact equivalence using cross-multiplication (no floating point). */
 export function equivalent(a: Fraction, b: Fraction): boolean {
-  return a.n * b.d === b.n * a.d;
+  return cross(a, b) === 0;
+}
+
+/** Exact sign of a.n·b.d − b.n·a.d for any safe integers (DEF-027: products past 2^53 used to round). */
+function cross(a: Fraction, b: Fraction): -1 | 0 | 1 {
+  for (const [v, name] of [[a.n, "a numerator"], [a.d, "a denominator"], [b.n, "b numerator"], [b.d, "b denominator"]] as const) assertSafeInteger(v, name);
+  const left = BigInt(a.n) * BigInt(b.d);
+  const right = BigInt(b.n) * BigInt(a.d);
+  return left < right ? -1 : left > right ? 1 : 0;
 }
 
 export function sameFraction(a: Fraction, b: Fraction): boolean {
@@ -56,9 +65,7 @@ export function sameFraction(a: Fraction, b: Fraction): boolean {
 }
 
 export function compare(a: Fraction, b: Fraction): -1 | 0 | 1 {
-  const left = a.n * b.d;
-  const right = b.n * a.d;
-  return left < right ? -1 : left > right ? 1 : 0;
+  return cross(a, b);
 }
 
 export type CompareSymbol = "<" | "=" | ">";
@@ -133,8 +140,24 @@ const PART_PLURAL: Record<number, string> = {
   7: "sevenths", 8: "eighths", 9: "ninths", 10: "tenths", 11: "elevenths", 12: "twelfths",
 };
 
+const ONES = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
+const TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
+const ORDINAL_ONES: Record<string, string> = { one: "first", two: "second", three: "third", five: "fifth", eight: "eighth", nine: "ninth", twelve: "twelfth" };
+/** "thirteen" → "thirteenth", "twenty" → "twentieth", "twenty-one" → "twenty-first". */
+function ordinal(n: number): string {
+  if (n === 100) return "hundredth";
+  if (n < 20) return ORDINAL_ONES[ONES[n]] ?? `${ONES[n]}th`;
+  const t = TENS[Math.floor(n / 10)];
+  const o = n % 10;
+  return o === 0 ? `${t.slice(0, -1)}ieth` : `${t}-${ORDINAL_ONES[ONES[o]] ?? `${ONES[o]}th`}`;
+}
+
+/** DEF-027: names denominators 1 to 100 ("thirteenths", not "13ths"); RangeError outside that. */
 export function partName(d: number, plural = true): string {
-  return (plural ? PART_PLURAL[d] : PART_SINGULAR[d]) ?? `${d}ths`;
+  const own = plural ? PART_PLURAL[d] : PART_SINGULAR[d];
+  if (own) return own;
+  if (!Number.isInteger(d) || d < 1 || d > 100) throw new RangeError(`partName names denominators 1 to 100, got ${d}`);
+  return plural ? `${ordinal(d)}s` : ordinal(d);
 }
 
 /** "3/4" → "three quarters", "1/2" → "one half" (UK naming). */

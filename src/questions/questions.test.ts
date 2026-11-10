@@ -426,60 +426,45 @@ describe("rounding is only applied where scaling is exact (DEF-037)", () => {
   });
 });
 
-describe("adapters do NOT reproduce existing kit marking exactly (DEF-038, differential test)", () => {
+describe("kit marking matches the comparison contract exactly (DEF-038 fixed, D-033; differential test)", () => {
   const round3: NumericComparison = { kind: "round", places: 3 };
 
-  it("QA's example: answer −5, response −5.0005. The kit marks it correct; the new comparator does not", () => {
-    expect(same(-5, -5.0005)).toBe(true); // Math.round(-5000.5) = -5000 (round half toward +Infinity)
-    expect(numericMatches(round3, -5, -5.0005)).toBe(false); // half away from zero: −5001 ≠ −5000
-    // The mirror case on the positive side agrees: both round half up there.
+  it("QA's example: answer −5, response −5.0005 is now wrong in the kit too", () => {
+    expect(same(-5, -5.0005)).toBe(false); // half away from zero: −5001 ≠ −5000
+    expect(numericMatches(round3, -5, -5.0005)).toBe(false);
     expect(same(5, 5.0005)).toBe(false);
-    expect(numericMatches(round3, 5, 5.0005)).toBe(false);
+    expect(same(0.1 + 0.2, 0.3)).toBe(true); // ordinary decimals still match at the thousandth
   });
 
-  it("the kit also has an unexplained 1e-9 allowance the new contract deliberately does not: a second known difference", () => {
-    // 0.4999999995 and 0.5000000001 (as thousandths) round to 0 and 1, but differ by only 6e-10.
+  it("has no extra allowance: values straddling a rounding boundary by less than 1e-9 differ, as in the contract", () => {
     const a = 0.0004999999995;
     const b = 0.0005000000001;
-    expect(same(a, b)).toBe(true);
+    expect(same(a, b)).toBe(false);
     expect(numericMatches(round3, a, b)).toBe(false);
   });
 
-  it("agrees on ordinary values, and every disagreement is explained by one of the two known causes", () => {
-    let agree = 0;
-    const causes = { negativeTie: 0, epsilon: 0 };
+  it("agrees with the contract on every value tried, including negative ties", () => {
+    let n = 0;
     const deltas = [0, 0.0004, -0.0004, 0.0005, -0.0005, 0.0006, -0.0006, 0.001, -0.001, 1e-10, -1e-10, 5e-10, -5e-10];
     for (let k = -400; k <= 400; k++) {
       const a = k / 8;
       for (const d of deltas) {
-        const b = a + d;
-        const kit = same(a, b);
-        const now = numericMatches(round3, a, b);
-        if (kit === now) {
-          agree++;
-          continue;
-        }
-        const tie = (x: number) => Math.abs((x * 1000) % 1) === 0.5;
-        if (Math.abs(a - b) < 1e-9) causes.epsilon++;
-        else if ((tie(a) || tie(b)) && (a < 0 || b < 0)) causes.negativeTie++;
-        else throw new Error(`unexplained difference: answer ${a}, response ${b}: kit ${kit}, new ${now}`);
+        expect(same(b(a, d), a), `answer ${a}, response ${a + d}`).toBe(numericMatches(round3, a, a + d));
+        n++;
       }
     }
-    // Pairs straddling a rounding boundary by less than 1e-9: the kit's allowance accepts them, the new contract does not.
-    for (let k = 0; k <= 200; k++) {
-      const a = (k + 0.4999999995) / 1000;
-      const b = (k + 0.5000000001) / 1000;
-      if (same(a, b) !== numericMatches(round3, a, b)) {
-        expect(Math.abs(a - b) < 1e-9).toBe(true);
-        causes.epsilon++;
-      }
+    expect(n).toBeGreaterThan(10000);
+    function b(x: number, d: number) {
+      return x + d;
     }
-    expect(agree).toBeGreaterThan(8000);
-    expect(causes.negativeTie).toBeGreaterThan(0);
-    expect(causes.epsilon).toBeGreaterThan(0);
   });
 
-  it("adapters declare the comparison honestly: round to 3 places, which is NOT the kit's rule", () => {
+  it("marks a number too large to round exactly as different, instead of throwing", () => {
+    expect(same(4, 1e300)).toBe(false);
+    expect(same(1e300, 1e300)).toBe(true);
+  });
+
+  it("adapters declare the comparison honestly: round to 3 places, which is now the kit's rule", () => {
     const d = fromKitQuestion({ id: "g:demo.t:1:1", skill: "s", difficulty: 1, prompt: "p", hint: "h", explanation: "e", kind: "number", answer: 4 } as KitQuestionLike, { level: "unverified" });
     expect(d.interaction === "number-entry" && d.validation.comparison).toEqual(round3);
   });

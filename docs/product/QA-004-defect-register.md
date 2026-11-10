@@ -68,9 +68,9 @@
 | State | Count | Defects |
 |---|---|---|
 | Closed (verified) | 9 | DEF-029, DEF-030, DEF-031, DEF-032, DEF-033, DEF-034, DEF-035, DEF-036, DEF-037 |
-| Fixed, closure not confirmed | 27 | DEF-002, DEF-003, DEF-004, DEF-005, DEF-006, DEF-007, DEF-008, DEF-009, DEF-010, DEF-011, DEF-012, DEF-013, DEF-014, DEF-015, DEF-016, DEF-017, DEF-018, DEF-019, DEF-020, DEF-021, DEF-022, DEF-023, DEF-024, DEF-025, DEF-026, DEF-028, DEF-039 |
-| Partly fixed (behaviour open) | 1 | DEF-038 |
-| Open | 2 | DEF-001, DEF-027 |
+| Fixed, closure not confirmed | 30 | DEF-001, DEF-002, DEF-003, DEF-004, DEF-005, DEF-006, DEF-007, DEF-008, DEF-009, DEF-010, DEF-011, DEF-012, DEF-013, DEF-014, DEF-015, DEF-016, DEF-017, DEF-018, DEF-019, DEF-020, DEF-021, DEF-022, DEF-023, DEF-024, DEF-025, DEF-026, DEF-027, DEF-028, DEF-038, DEF-039 |
+| Partly fixed (behaviour open) | 0 | — |
+| Open | 0 | — |
 | **Total** | **39** | |
 
 | Severity | Open or unconfirmed |
@@ -109,7 +109,7 @@ Columns are shortened here; every field is in the CSV. Severity is as logged; pr
 
 | ID | Title | Sev | Pri | State | Affects | Fix | Retest | Release impact |
 |---|---|---|---|---|---|---|---|---|
-| **DEF-001** | src/topics/index.ts (DEFAULT_TOPIC_ID = TOPICS[0]) | Medium | P2 | Open | UX-005; MAST-003 | — | Not retested | Needs an explicit Product Owner decision before release (backlog §9); scheduled for R1 by D-004 |
+| **DEF-001** | src/topics/index.ts (DEFAULT_TOPIC_ID = TOPICS[0]) | Medium | P2 | Fixed, closure not confirmed | UX-005; MAST-003 | CH-057 | Not retested | Needs an explicit Product Owner decision before release (backlog §9); scheduled for R1 by D-004 |
 | **DEF-002** | KidHomeScreen.tsx hero | Medium | P2 | Fixed, closure not confirmed | UX-005; MAST-003 | `98e46d8` | Not retested | Needs an explicit Product Owner decision before release (backlog §9); scheduled for R1 by D-004 |
 | **DEF-003** | KidHomeScreen.tsx (brandNew ignores lesson progress) | Medium | P2 | Fixed, closure not confirmed | UX-005; MAST-003 | `98e46d8` | Not retested | Needs an explicit Product Owner decision before release (backlog §9); scheduled for R1 by D-004 |
 | **DEF-004** | KidHomeScreen.tsx | Medium | P2 | Fixed, closure not confirmed | UX-005; MAST-003 | `98e46d8` | Not retested | Needs an explicit Product Owner decision before release (backlog §9); scheduled for R1 by D-004 |
@@ -135,7 +135,7 @@ Columns are shortened here; every field is in the CSV. Severity is as logged; pr
 | **DEF-024** | Answers after hints or retries counted as lesson evidence; mastery and placement precedence unclear | High | P1 | Fixed, closure not confirmed | CUR-002 AC3; CUR-003 | `48f7925` | Not retested | Blocks release until fixed (backlog §9); fixed (specification) in `48f7925`; wiring it into the app is R1 |
 | **DEF-025** | The lab needs practice evidence, but the recommendation rules never route to it | Medium | P2 | Fixed, closure not confirmed | CUR-002 | `48f7925` | Not retested | Needs an explicit Product Owner decision before release (backlog §9); specification fixed |
 | **DEF-026** | CUR-003 claimed generated `g:` ids guarantee fresh examples | Medium | P2 | Fixed, closure not confirmed | CUR-003 | `48f7925` | Not retested | Needs an explicit Product Owner decision before release (backlog §9); specification fixed |
-| **DEF-027** | Existing unchecked fraction functions give silent wrong results outside their domain | Low | P3 | Open | ARCH-003 | — | Not retested | Can be scheduled after release if documented (backlog §9); not reachable with today's content |
+| **DEF-027** | Existing unchecked fraction functions give silent wrong results outside their domain | Low | P3 | Fixed, closure not confirmed | ARCH-003 | CH-057 | Not retested | Can be scheduled after release if documented (backlog §9); not reachable with today's content |
 | **DEF-028** | Duplicate trap values in 14 preview-island templates | Low | P3 | Fixed, closure not confirmed | ARCH-002 | CH-054 | Not retested | Can be scheduled after release if documented (backlog §9); preview islands only (D-001) |
 | **DEF-029** | `divmod(2, MAX_SAFE_INTEGER)` returns an unsafe quotient | High | P1 | Closed (verified) | ARCH-003; QA-001 | `759fe71` | Independently verified on `702743a` (D-024) | Blocks release until fixed (backlog §9); fixed and verified |
 | **DEF-030** | Guard misses browser capabilities destructured from `globalThis` | High | P1 | Closed (verified) | ARCH-001 | `c33607d` | Independently verified on `702743a` (D-024) | Blocks release until fixed (backlog §9); fixed and verified |
@@ -146,7 +146,7 @@ Columns are shortened here; every field is in the CSV. Severity is as logged; pr
 | **DEF-035** | Validator doesn't check consistency between interaction data and its model | Medium | P2 | Closed (verified) | ARCH-002 | `e53ec4e` | Independently verified on `702743a` (D-024) | Needs an explicit Product Owner decision before release (backlog §9); fixed and verified |
 | **DEF-036** | Specimen comparison rule says "same numerator (not zero)", which includes negative numerators | Low | P2 | Closed (verified) | UX-004 | `d8ae9c0` | Independently verified on `702743a` (D-024) | Needs an explicit Product Owner decision before release (backlog §9); fixed and verified |
 | **DEF-037** | The `round` comparison loses precision or overflows when scaling | Medium | P2 | Closed (verified) | ARCH-002 | `7ea4cd2` | Independently verified on `112eeb3` (D-025) | Needs an explicit Product Owner decision before release (backlog §9); fixed and verified |
-| **DEF-038** | Adapters do not reproduce existing kit marking exactly | Medium | P2 | Partly fixed (behaviour open) | ARCH-002 | `5162804` (documentation and differential test only) | Documentation independently verified on `112eeb3` (D-025); behaviour not retested because it is not fixed | R1 integration prerequisite: no marking may go through the question schema until it is resolved |
+| **DEF-038** | Adapters do not reproduce existing kit marking exactly | Medium | P2 | Fixed, closure not confirmed | ARCH-002 | `5162804` (documentation and differential test only) | Documentation independently verified on `112eeb3` (D-025); behaviour not retested because it is not fixed | R1 integration prerequisite: no marking may go through the question schema until it is resolved |
 | **DEF-039** | A focused practice session ends with no summary | Medium | P2 | Fixed, closure not confirmed | PRACT-008; FR-011; UX-005 | `673d57c` | Not retested | Needs an explicit Product Owner decision before release (backlog §9); fixed, awaiting independent retest |
 
 ## 7. Detail

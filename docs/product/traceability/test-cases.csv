@@ -126,11 +126,11 @@ TC-ARCH-002.1.5,ARCH-002,AC1,unit,automated,passing,"src/questions/questions.tes
 TC-ARCH-002.1.6,ARCH-002,AC1,unit,automated,passing,"src/questions/questions.test.ts::never invents a year mapping: the caller's level is used, and unverified is explicit",
 TC-ARCH-002.1.7,ARCH-002,AC1,unit,automated,passing,src/architecture.test.ts::A7: keeps the question schema free of UI code and browser access,UI-independent
 TC-ARCH-002.1.8,ARCH-002,AC1,unit,automated,passing,"src/questions/questions.test.ts::adapters set `ask` from the existing data's meaning, and the existing write-fraction questions agree with it",Existing data's own meaning
-TC-ARCH-002.1.9,ARCH-002,AC1,unit,automated,passing,"src/questions/questions.test.ts::QA's example: answer −5, response −5.0005. The kit marks it correct; the new comparator does not",DEF-038 differential: negative ties
-TC-ARCH-002.1.10,ARCH-002,AC1,unit,automated,passing,src/questions/questions.test.ts::the kit also has an unexplained 1e-9 allowance the new contract deliberately does not: a second known difference,DEF-038 differential: the 1e-9 allowance
-TC-ARCH-002.1.11,ARCH-002,AC1,unit,automated,passing,"src/questions/questions.test.ts::agrees on ordinary values, and every disagreement is explained by one of the two known causes",DEF-038 sweep; the difference stays visible
-TC-ARCH-002.1.12,ARCH-002,AC1,unit,automated,passing,"src/questions/questions.test.ts::adapters declare the comparison honestly: round to 3 places, which is NOT the kit's rule",DEF-038
-TC-ARCH-002.1.13,ARCH-002,AC1,unit,planned,planned,,"R1 integration prerequisite (DEF-038): resolve the kit-marking difference (move kit marking to the contract, or add an explicit legacy comparison kind) before any marking goes through the schema — remains planned and open for R1 after D-025: the behavioural difference is not fixed"
+TC-ARCH-002.1.9,ARCH-002,AC1,unit,automated,passing,"src/questions/questions.test.ts::QA's example: answer −5, response −5.0005 is now wrong in the kit too",DEF-038 fixed (CH-057): negative ties now agree
+TC-ARCH-002.1.10,ARCH-002,AC1,unit,automated,passing,src/questions/questions.test.ts::has no extra allowance,DEF-038 fixed (CH-057): no 1e-9 allowance
+TC-ARCH-002.1.11,ARCH-002,AC1,unit,automated,passing,"src/questions/questions.test.ts::agrees with the contract on every value tried, including negative ties",DEF-038 fixed (CH-057): full agreement over the sweep
+TC-ARCH-002.1.12,ARCH-002,AC1,unit,automated,passing,src/questions/questions.test.ts::which is now the kit's rule,DEF-038 fixed (CH-057)
+TC-ARCH-002.1.13,ARCH-002,AC1,unit,automated,passing,"src/questions/questions.test.ts::agrees with the contract on every value tried, including negative ties","DEF-038 resolved by moving kit marking to the contract (D-033, CH-057)"
 TC-ARCH-002.2.1,ARCH-002,AC2,unit,automated,passing,"src/questions/questions.test.ts::rejects invalid definitions for every interaction, naming the field at fault","At least 2 invalid fixtures per interaction with exact error paths; Review 2 adds QA's cases a to e verbatim (DEF-032 to DEF-035), tolerance and rounding traps incl. negatives, overlapping and duplicate traps, ask/model disagreements, duplicate match choices"
 TC-ARCH-002.2.2,ARCH-002,AC2,unit,automated,passing,"src/questions/questions.test.ts::rejects bad common fields: id, level, difficulty, hints, scoring and unknown interactions",
 TC-ARCH-002.2.3,ARCH-002,AC2,content,automated,partial,src/topics/kit/kit.test.ts::makes well-formed questions that mark their own answer right and every trap wrong,Existing content check; runtime validation now in src/questions/validate.ts (not yet used by the app)
@@ -160,7 +160,7 @@ TC-ARCH-003.2.3,ARCH-003,AC2,unit,automated,passing,src/maths/maths.test.ts::thr
 TC-ARCH-003.2.4,ARCH-003,AC2,unit,automated,passing,src/maths/maths.test.ts::rejects mixed numbers outside the rules,
 TC-ARCH-003.2.5,ARCH-003,AC2,unit,automated,passing,"src/maths/maths.test.ts::gives no fraction for unequal parts, and rejects invalid partitions",
 TC-ARCH-003.2.6,ARCH-003,AC2,unit,automated,passing,src/topics/fractions/evaluate.test.ts::treats a zero denominator as an input problem,Existing
-TC-ARCH-003.2.7,ARCH-003,AC2,unit,planned,planned,,"R1 (DEF-027): existing unchecked functions route through the checked versions; out-of-domain inputs (0/0, non-integers, overflowing compare) are rejected"
+TC-ARCH-003.2.7,ARCH-003,AC2,unit,automated,passing,src/maths/maths.test.ts::refuses 0/0 and non-integers instead of answering quietly,"DEF-027 fixed (CH-057, D-033); exact compare and part names tested in the same describe block"
 TC-ARCH-003.2.8,ARCH-003,AC2,unit,automated,passing,"src/maths/maths.test.ts::matches a BigInt oracle for every pair of safe-integer extremes, both divisor signs, zero and negative dividends",DEF-029 regression
 TC-ARCH-003.2.9,ARCH-003,AC2,unit,automated,passing,"src/maths/maths.test.ts::returns the reproduced case exactly: divmod(2, MAX) = { q: 0, r: 2 }",DEF-029 regression
 TC-ARCH-003.3.1,ARCH-003,AC3,content,automated,passing,src/topics/fractions/representations.test.ts::name the fraction: the shaded (or unshaded) count over the parts of an equal-part picture is the answer,Pictures and answers agree; marking checked against hand rules
@@ -523,7 +523,7 @@ TC-QA-003.2.1,QA-003,AC2,e2e,manual,partial,,"All 58 internal links on the main 
 TC-QA-004.1.1,QA-004,AC1,unit,automated,passing,"src/defects.test.ts::gives every defect all the required fields, with valid severity and priority (QA-004 AC1)",Developer evidence: 38 defects with every required field.
 TC-QA-004.1.2,QA-004,AC1,unit,automated,passing,"src/defects.test.ts::has one row per defect, numbered DEF-001 upwards with no gaps or repeats",
 TC-QA-004.1.3,QA-004,AC1,unit,automated,passing,src/defects.test.ts::closes a defect only on independent verification that cites a recorded decision (QA-004 rule 4),
-TC-QA-004.1.4,QA-004,AC1,unit,automated,passing,"src/defects.test.ts::keeps DEF-038 explicit: the documentation is verified, the behaviour is not fixed and is tracked for R1",
+TC-QA-004.1.4,QA-004,AC1,unit,automated,passing,"src/defects.test.ts::keeps DEF-038 explicit: the behaviour is fixed by D-033, not yet retested, and still traced to TC-ARCH-002.1.13",
 TC-QA-004.1.5,QA-004,AC1,unit,automated,passing,"src/defects.test.ts::is mirrored by the STATUS.md index: same ids, severity, state and affected items",
 TC-QA-004.1.6,QA-004,AC1,unit,automated,passing,"src/defects.test.ts::is shown in the generated page with every defect, the rules and the state counts",
 TC-QA-004.1.7,QA-004,AC1,document-review,manual,review-pending,,Product Owner review of the register. DEF-001 to DEF-017 priorities and DEF-018 to DEF-038 fields were assigned in this round from the cited records.

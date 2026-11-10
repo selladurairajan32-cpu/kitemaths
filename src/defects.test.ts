@@ -82,11 +82,12 @@ describe("defect register (QA-004)", () => {
     }
   });
 
-  it("keeps DEF-038 explicit: the documentation is verified, the behaviour is not fixed and is tracked for R1", () => {
+  it("keeps DEF-038 explicit: the behaviour is fixed by D-033, not yet retested, and still traced to TC-ARCH-002.1.13", () => {
     const d = defects.find((x) => x.id === "DEF-038")!;
-    expect(d.fix_status).toMatch(/behavioural difference NOT fixed/);
+    expect(d.fix_status).toBe("Fixed");
+    expect(d.history).toContain("D-033");
     expect(d.deferral).toContain("TC-ARCH-002.1.13");
-    expect(state(d)).toBe("Partly fixed (behaviour open)");
+    expect(state(d)).toBe("Fixed, closure not confirmed");
     const tc = readFileSync(join(DOCS, "traceability/test-cases.csv"), "utf8");
     expect(tc).toContain("TC-ARCH-002.1.13");
   });
