@@ -41,6 +41,8 @@ export interface Strategy {
   years: [number, number];
   /** Evaluated in MM-008 as a Vedic Maths candidate and accepted into the learner curriculum. */
   vedic?: boolean;
+  /** An optional 11+ extension, not part of the national curriculum (D-033). */
+  extension?: boolean;
   op: ProblemOp;
   fits(nums: number[]): boolean;
   steps(nums: number[]): Step[];
@@ -345,6 +347,33 @@ export const STRATEGIES: Strategy[] = [
       return [s1, step(s1.value, "÷", q, `${fmt(s1.value)} ÷ ${q} = ${fmt(s1.value / q)} (${b} = ${p} × ${q})`)];
     },
     examples: [[168, 12], [240, 15], [432, 24]],
+  },
+  {
+    id: "crosswise",
+    name: "Vertically and crosswise",
+    family: "multiply",
+    vedic: true,
+    extension: true,
+    when: "Multiplying two two-digit numbers, as an optional 11+ extension.",
+    why: "(10a + b) × (10c + d) = 100ac + 10(ad + bc) + bd: multiply the tens, the ones, and the two crosses, then put the hundreds, tens and ones together. It is the grid method written in one line.",
+    unsuitable: "When one number is a multiple of 10 or has one digit: a simpler method is clearer. It is not in the national curriculum, so the grid or long multiplication is always fine.",
+    prerequisites: ["Y4.MD.5", "Y5.MD.4"],
+    years: [6, 6],
+    op: "×",
+    fits: ([a, b]) => a >= 11 && a <= 99 && b >= 11 && b <= 99 && a % 10 !== 0 && b % 10 !== 0,
+    steps: ([x, y]) => {
+      const [a, b, c, d] = [Math.floor(x / 10), x % 10, Math.floor(y / 10), y % 10];
+      const ones = step(b, "×", d, `${b} × ${d} = ${b * d} (ones × ones, vertically)`);
+      const c1 = step(a, "×", d, `${a} × ${d} = ${a * d} (crosswise)`);
+      const c2 = step(b, "×", c, `${b} × ${c} = ${b * c} (crosswise)`);
+      const cross = step(c1.value, "+", c2.value, `${a * d} + ${b * c} = ${a * d + b * c} (the crosses, worth tens)`);
+      const tens = step(a, "×", c, `${a} × ${c} = ${a * c} (tens × tens, vertically, worth hundreds)`);
+      const h = step(tens.value, "×", 100);
+      const t = step(cross.value, "×", 10);
+      const ht = step(h.value, "+", t.value);
+      return [ones, c1, c2, cross, tens, h, t, ht, step(ht.value, "+", ones.value)];
+    },
+    examples: [[23, 41], [37, 64], [98, 76]],
   },
   {
     id: "near-hundred",

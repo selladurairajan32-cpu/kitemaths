@@ -664,6 +664,11 @@
     "id": "mental-maths.choose-method",
     "title": "Choosing a method",
     "description": "Pick the method that suits the numbers, and say why."
+   },
+   {
+    "id": "mental-maths.crosswise-extension",
+    "title": "Vertically and crosswise (11+ extension)",
+    "description": "An optional 11+ extension: multiply two two-digit numbers in one line. Not in the national curriculum."
    }
   ],
   "lessons": [
@@ -721,6 +726,14 @@
     "objectives": [
      "Choose a method that suits the numbers",
      "Give a reason for the choice"
+    ]
+   },
+   {
+    "id": "crosswise-extension",
+    "title": "Vertically and crosswise (11+ extension)",
+    "objectives": [
+     "Multiply two two-digit numbers vertically and crosswise",
+     "Explain why it is the grid method in one line"
     ]
    }
   ]

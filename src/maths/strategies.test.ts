@@ -119,7 +119,9 @@ describe("mental-strategy catalogue (MM-001)", () => {
   });
 
   it("includes only the Vedic techniques accepted in MM-008, each with a proof", () => {
-    expect(STRATEGIES.filter((s) => s.vedic).map((s) => s.id).sort()).toEqual(["near-hundred", "square-ending-5"]);
+    expect(STRATEGIES.filter((s) => s.vedic).map((s) => s.id).sort()).toEqual(["crosswise", "near-hundred", "square-ending-5"]);
+    // Vertically and crosswise is accepted only as an optional 11+ extension (D-033).
+    expect(STRATEGIES.filter((s) => s.extension).map((s) => s.id)).toEqual(["crosswise"]);
   });
 
   it("judges a method valid only when it fits and its steps reach the exact answer (MM-009)", () => {

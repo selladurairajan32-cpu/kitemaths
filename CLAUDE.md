@@ -36,7 +36,8 @@ only accepted items may have `accepted` cases. Update `test-cases.csv` in the sa
 ## State (9 Nov 2026)
 
 `docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Last recorded
-decision: D-032 (build every pending item: R2, R3, R5, audit recommendations, DEF-028; CH-050 to CH-054;
+decision: D-033 (Product Owner answers: MAST-001 2 forms, RC-008 to RC-010 confirmed, DEF-001/027/038 fixed, crosswise
+11+ extension, deploy; CH-056 to CH-058). D-032 (build every pending item: R2, R3, R5, audit recommendations, DEF-028; CH-050 to CH-054;
 report `docs/product/reports/D-032-build-report.md`; 83 items READY FOR QA, none accepted, not deployed). D-030 (typography and hierarchy audit, CH-046 to CH-048, in
 `docs/product/design/typography-hierarchy-audit.md`; one-off text sizes ratchet now 24; deployed to production, D-031). D-029 (content
 changes deployed to production; not accepted). D-028 (content differentiation audit and copy changes, CH-042 to CH-044; audit in

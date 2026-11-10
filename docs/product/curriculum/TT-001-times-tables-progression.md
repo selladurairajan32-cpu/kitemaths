@@ -56,7 +56,7 @@ last: the 10s from the 2s and 5s, the 4s and 8s by doubling, the 9s as 10s minus
 - **Answers** are whole numbers checked exactly.
 - **Typing slips** (digits swapped, doubled or dropped) are classed apart and never count as a recall gap (TT-005 AC2).
 
-## 5. Proposed thresholds (for Product Owner review)
+## 5. Fact thresholds (confirmed by the Product Owner in D-033)
 
 These are new product rules for facts. They don't change MAST-001 skill mastery.
 

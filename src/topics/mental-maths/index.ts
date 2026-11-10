@@ -18,6 +18,8 @@ export const MM_SKILLS = {
   squares: `${T}.squares`,
   fdp: `${T}.percent-fraction`,
   choose: `${T}.choose-method`,
+  /** D-033: an optional 11+ extension, outside the national curriculum. */
+  crosswise: `${T}.crosswise-extension`,
 } as const;
 const S = MM_SKILLS;
 const M = { early: `${T}.stopped-early`, wrongWay: `${T}.adjusted-wrong-way` };
@@ -27,7 +29,7 @@ const SKILL_OF: Record<string, string> = {
   "bridge-10": S.bonds, "partition-add": S.bonds, "compensate-add": S.bonds, "compensate-sub": S.bonds, "count-up": S.bonds,
   "near-double": S.doubling, "double-halve": S.doubling, "halve-twice": S.doubling,
   "times-5": S.special, "times-50": S.special, "times-25": S.special, "times-9": S.special, "times-99": S.special, "times-11": S.special,
-  "partition-mult": S.factors, factorise: S.factors, "divide-by-factors": S.factors, "near-hundred": S.factors,
+  "partition-mult": S.factors, factorise: S.factors, "divide-by-factors": S.factors, "near-hundred": S.factors, crosswise: S.crosswise,
   "square-ending-5": S.squares, "next-square": S.squares,
   "ten-percent": S.fdp, "five-percent": S.fdp, "quarter-percent": S.fdp, "fraction-of": S.fdp,
 };
@@ -55,6 +57,7 @@ function candidate(s: Strategy, r: Rng, d: Difficulty): number[] {
       const fixed: Record<string, number> = { "times-5": 5, "times-50": 50, "times-25": 25, "times-9": 9, "times-99": 99, "times-11": 11 };
       if (s.id in fixed) return [s.id === "times-25" ? 4 * int(r, 3, 6 * big + 3) : int(r, 12, 30 * big + 20), fixed[s.id]];
       if (s.id === "near-hundred") return [int(r, 90, 99), int(r, 90, 99)];
+      if (s.id === "crosswise") return [int(r, 11, 99), int(r, 11, d === 2 ? 49 : 99)];
       if (s.id === "double-halve") return [2 * int(r, 2, 9 * big), pick(r, [5, 15, 25, 35, 45])];
       if (s.id === "factorise") return [int(r, 11, 25 * big), pick(r, [12, 15, 16, 18])];
       return [int(r, 11, 99), pick(r, [2, 3, 4, 6, 7, 8])];
@@ -168,8 +171,30 @@ function chooseTemplate(family: Family, key: string): Template {
   };
 }
 
+/** D-033 extension: the crosswise total on its own, the step that makes the method work. */
+const crossTemplate: Template = {
+  key: "mm-crosswise-cross",
+  skill: S.crosswise,
+  difficulties: [2, 3],
+  make: (r) => {
+    const x = int(r, 11, 99);
+    const y = int(r, 11, 99);
+    const [a, b, c, d] = [Math.floor(x / 10), x % 10, Math.floor(y / 10), y % 10];
+    const cross = a * d + b * c;
+    return {
+      kind: "number",
+      prompt: `In **${x} × ${y}**, what is the crosswise total, **${a} × ${d} + ${b} × ${c}**?`,
+      answer: cross,
+      traps: [{ value: a * c + b * d, feedback: "That's the vertical products. Crosswise pairs each tens digit with the other number's ones digit." }].filter((t) => t.value !== cross),
+      hint: `Tens of one number times ones of the other, both ways: ${a} × ${d} and ${b} × ${c}.`,
+      explanation: `${a} × ${d} = ${a * d} and ${b} × ${c} = ${b * c}, so the crosswise total is **${cross}**. It counts tens, so it is worth ${cross * 10}.`,
+    };
+  },
+};
+
 const templates: Template[] = [
   ...STRATEGIES.map(strategyTemplate),
+  crossTemplate,
   squareRecall,
   chooseTemplate("bonds", "mm-choose-bonds"),
   chooseTemplate("multiply", "mm-choose-multiply"),
@@ -219,8 +244,9 @@ export const mentalMaths = defineTopic({
     { id: S.squares, title: "Square patterns", description: "Know squares to 12², square numbers ending in 5, and step from one square to the next.", lessonId: "square-patterns" },
     { id: S.fdp, title: "Percent and fraction shortcuts", description: "Find 10%, 5%, 25% and 50% of an amount, and a fraction of an amount.", lessonId: "percent-fraction" },
     { id: S.choose, title: "Choosing a method", description: "Pick the method that suits the numbers, and say why.", lessonId: "choose-method" },
+    { id: S.crosswise, title: "Vertically and crosswise (11+ extension)", description: "An optional 11+ extension: multiply two two-digit numbers in one line. Not in the national curriculum.", lessonId: "crosswise-extension" },
   ],
-  lessonIcons: { "bridge-compensate": "plus", "double-halve": "dice", "special-multipliers": "times", "partition-factors": "puzzle", "square-patterns": "shapes", "percent-fraction": "percent", "choose-method": "bulb" },
+  lessonIcons: { "bridge-compensate": "plus", "double-halve": "dice", "special-multipliers": "times", "partition-factors": "puzzle", "square-patterns": "shapes", "percent-fraction": "percent", "choose-method": "bulb", "crosswise-extension": "puzzle" },
   lessons: [
     {
       id: "bridge-compensate",
@@ -328,6 +354,20 @@ export const mentalMaths = defineTopic({
         { type: "check" as const, title: "One more", questionId: gen("mm-choose-bonds", 3, 2) },
       ],
     },
+    {
+      id: "crosswise-extension",
+      title: "Vertically and crosswise (11+ extension)",
+      phase: "Master",
+      summary: "Optional, for 11+ practice: two-digit times two-digit in one line. Not in the national curriculum.",
+      minutes: 10,
+      objectives: ["Multiply two two-digit numbers vertically and crosswise", "Explain why it is the grid method in one line"],
+      steps: [
+        { type: "explain" as const, title: "This lesson is optional", body: ["Vertically and crosswise is an extra for 11+ practice. It isn't in the national curriculum, and the grid method or long multiplication always works instead."] },
+        ...strategySteps("crosswise", { kind: "bar", total: "23 × 41", parts: [{ label: "20 × 40 = 800", size: 8, tone: "brand" }, { label: "crosses: 20 + 120 = 140", size: 1.4, tone: "num" }, { label: "3 × 1 = 3", size: 0.4, tone: "ok" }] }),
+        { type: "check" as const, title: "Your turn", questionId: gen("mm-crosswise", 2, 2) },
+        { type: "explain" as const, title: "When not to use it", body: [s("crosswise").unsuitable] },
+      ],
+    },
   ],
   templates,
   misconceptions: [
@@ -342,5 +382,6 @@ export const mentalMaths = defineTopic({
     { lessonId: "square-patterns", template: "mm-square-recall" },
     { lessonId: "percent-fraction", template: "mm-ten-percent" },
     { lessonId: "choose-method", template: "mm-choose-multiply" },
+    { lessonId: "crosswise-extension", template: "mm-crosswise" },
   ],
 });

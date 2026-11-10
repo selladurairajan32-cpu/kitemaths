@@ -8,7 +8,7 @@
 | **Backlog item** | MM-001: research and validate a mental-strategy catalogue (R3) |
 | **Status** | READY FOR QA (D-032). Not accepted. |
 | **Acceptance criteria** | <ol><li>No strategy is taught without a mathematical justification and independently checked examples.</li><li>Claims about speed are not made without measured evidence.</li><li>Vedic techniques are included only where accurate, understandable and useful for the learner.</li></ol> |
-| **Size** | 24 strategies in 5 families. |
+| **Size** | 25 strategies in 5 families. |
 
 ## How each strategy is checked (AC1)
 
@@ -23,7 +23,7 @@ No strategy, lesson or screen claims that a method is faster. The tests reject t
 
 ## Vedic techniques (AC3)
 
-Accepted after evaluation in [MM-008](MM-008-vedic-evaluation.md): **Multiply near 100** and **Square a number ending in 5**. Others were evaluated and left out.
+Accepted after evaluation in [MM-008](MM-008-vedic-evaluation.md): **Vertically and crosswise** and **Multiply near 100** and **Square a number ending in 5**. Others were evaluated and left out.
 
 ## Number bonds, partitioning and place value (MM-003)
 
@@ -183,6 +183,15 @@ Accepted after evaluation in [MM-008](MM-008-vedic-evaluation.md): **Multiply ne
 - **Prerequisites:** Y4.MD.1, Y5.MD.1. **Years:** 5 to 6.
 - **Worked example:** 168 ÷ 12: 168 ÷ 2 = 84; 84 ÷ 6 = 14 (12 = 2 × 6). Answer **14**.
 - **Checked examples:** 168 ÷ 12, 240 ÷ 15, 432 ÷ 24.
+
+### Vertically and crosswise (Vedic, accepted in MM-008)
+
+- **When:** Multiplying two two-digit numbers, as an optional 11+ extension.
+- **Why it works:** (10a + b) × (10c + d) = 100ac + 10(ad + bc) + bd: multiply the tens, the ones, and the two crosses, then put the hundreds, tens and ones together. It is the grid method written in one line.
+- **Not suitable:** When one number is a multiple of 10 or has one digit: a simpler method is clearer. It is not in the national curriculum, so the grid or long multiplication is always fine.
+- **Prerequisites:** Y4.MD.5, Y5.MD.4. **Years:** 6.
+- **Worked example:** 23 × 41: 3 × 1 = 3 (ones × ones, vertically); 2 × 1 = 2 (crosswise); 3 × 4 = 12 (crosswise); 2 + 12 = 14 (the crosses, worth tens); 2 × 4 = 8 (tens × tens, vertically, worth hundreds); 8 × 100 = 800; 14 × 10 = 140; 800 + 140 = 940; 940 + 3 = 943. Answer **943**.
+- **Checked examples:** 23 × 41, 37 × 64, 98 × 76.
 
 ### Multiply near 100 (Vedic, accepted in MM-008)
 
