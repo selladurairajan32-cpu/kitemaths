@@ -36,11 +36,11 @@ describe("compare the methods (MM-009)", () => {
   it("accepts any method that works: the standard one or an efficient alternative", async () => {
     const user = userEvent.setup();
     const first = render(<CompareScreen />);
-    await user.click(screen.getByRole("button", { name: /Standard method/ }));
+    await user.click(screen.getByRole("button", { name: /Written method/ }));
     expect(screen.getByText("That method works")).toBeTruthy();
     first.unmount();
     render(<CompareScreen />);
-    const alternative = screen.getAllByRole("button").find((b) => /Method [A-C]/.test(b.textContent ?? "") && !/Standard method|Another way/.test(b.textContent ?? ""))!;
+    const alternative = screen.getAllByRole("button").find((b) => /Method [A-C]/.test(b.textContent ?? "") && !/Written method|Another way/.test(b.textContent ?? ""))!;
     await user.click(alternative);
     expect(screen.getByText("That method works")).toBeTruthy();
   });
@@ -50,7 +50,7 @@ describe("compare the methods (MM-009)", () => {
     render(<CompareScreen />);
     // Find a round with a flawed method (deterministic for the pinned clock), moving on through the rounds.
     for (let round = 0; round < 5 && !screen.queryByRole("button", { name: /Another way/ }); round++) {
-      await user.click(screen.getByRole("button", { name: /Standard method/ }));
+      await user.click(screen.getByRole("button", { name: /Written method/ }));
       await user.click(screen.getByRole("button", { name: /Next/ }));
     }
     await user.click(screen.getByRole("button", { name: /Another way/ }));

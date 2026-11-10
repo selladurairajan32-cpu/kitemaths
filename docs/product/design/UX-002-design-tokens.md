@@ -49,7 +49,7 @@ Related specifications: [UX-003 typography](UX-003-typography.md) and [UX-004 co
 |---|---|---|
 | `--color-focus` | #2563eb | Keyboard focus ring (5.2:1 on white, 4.9:1 on the page) |
 | `--color-selected` / `--color-selected-soft` | #1b2559 / #e8f0ff | A chosen answer before it is checked |
-| `--color-disabled-ink` / `--color-disabled-soft` | #5d6785 / #edf2fa | Controls that can't be used yet |
+| `--color-disabled-ink` / `--color-disabled-soft` | #5d6785 / #edf2fa (disabled ink unchanged) | Controls that can't be used yet |
 | `--color-correct` / `--color-correct-edge` / `--color-correct-soft` | #167a4b / #22a565 / #e3f8ee | A right answer, marked |
 | `--color-incorrect` / `--color-incorrect-edge` / `--color-incorrect-soft` | #a3361a / #f4623a / #fde5dc | A wrong answer, marked. Always shown with a cross badge and a text label, never by colour alone. |
 

@@ -162,8 +162,8 @@ Minimum is the accessibility requirement. Target is the stronger product goal.
 | `--color-selected` | `--color-selected-soft` | selected: tile label | 15 | 500 | text | 4.5:1 | — | 12.60:1 |
 | `--color-disabled-ink` | `--color-disabled-soft` | disabled: tile and button label | 15 | 500 | text | 4.5:1 | — | 4.98:1 |
 | `--color-ink` | `--color-surface` | card: headings and prompt | 18 | 500 | text | 4.5:1 | 7:1 | 14.42:1 |
-| `--color-ink-2` | `--color-surface` | card: reading text | 18 | 500 | text | 4.5:1 | 7:1 | 7.33:1 |
-| `--color-muted` | `--color-surface` | card: labels and meta | 15 | 600 | text | 4.5:1 | — | 5.60:1 |
+| `--color-ink-2` | `--color-surface` | card: reading text | 18 | 600 | text | 4.5:1 | 7:1 | 9.55:1 |
+| `--color-muted` | `--color-surface` | card: labels and meta | 15 | 600 | text | 4.5:1 | — | 7.37:1 |
 | `--color-on-brand` | `--color-brand` | primary button label | 20 | 800 | text | 3:1 | — | 5.16:1 |
 | `--color-focus` | `--color-surface` | focus ring on a card | 3 | 0 | graphic | 3:1 | — | 5.16:1 |
 | `--color-focus` | `--color-paper` | focus ring on the page | 3 | 0 | graphic | 3:1 | — | 4.86:1 |

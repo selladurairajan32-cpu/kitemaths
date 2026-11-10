@@ -103,7 +103,7 @@ export function SkyMapScreen() {
             ? { href: routes.practice(e.skill), label: e.status === "needs-review" ? "Practise it" : "Finish with practice" }
             : undefined,
         bestAfter: unmet.length
-          ? `Best after “${unmet.map(skillName).join("” and “")}”: this lesson uses ${unmet.length > 1 ? "them" : "it"}. You can still start now.`
+          ? `Best after “${unmet.map(skillName).join("” and “")}”. You can still start.`
           : undefined,
         status: e.status === "evidenced" ? "done" : current ? "current" : "open",
         reward: STARS.lesson,
@@ -117,7 +117,7 @@ export function SkyMapScreen() {
       soft: "var(--color-leaf-soft)",
       kicker: "Practice",
       title: "Mixed practice",
-      line: practiceMet ? "Your skills are strong!" : `Make ${needStrong} skills strong (${strong} so far).`,
+      line: practiceMet ? "Your skills are strong!" : `Make ${needStrong} skills strong. ${strong} so far.`,
       status: practiceMet ? "done" : rec.kind === "practice" && !rec.focusSkill ? "current" : "open",
       reward: 0,
     },
@@ -129,7 +129,7 @@ export function SkyMapScreen() {
       soft: "var(--color-sun-soft)",
       kicker: "Challenge",
       title: "The big challenge",
-      line: a.last ? (review.length ? "Revisit a skill, then recheck it." : "Completed. Brilliant!") : "Show what you know, all by yourself.",
+      line: a.last ? (review.length ? "Practise one skill, then try again." : "Done. Brilliant!") : "Answer on your own to finish the island.",
       status: a.last && review.length === 0 ? "done" : rec.kind === "assessment" || rec.kind === "recheck" ? "current" : "open",
       reward: STARS.check,
     },
@@ -145,7 +145,7 @@ export function SkyMapScreen() {
         pic={isPicName(topic.look.icon) ? topic.look.icon : "map"}
         titleId="island-title"
         title={topic.title}
-        line={`${topic.subtitle}. ${doneCount} of ${stops.length} stops done: each one says what you'll learn.`}
+        line={`${doneCount} of ${stops.length} done.`}
       />
 
       {review.length > 0 && (
@@ -166,7 +166,7 @@ export function SkyMapScreen() {
           <span className="min-w-0 flex-1">
             <span className="block text-title font-extrabold text-ink">My times-table facts</span>
             <span className="block text-body text-ink-2">
-              {factStates(learner.results).filter((x) => x.status === "known").length} of 66 facts known. Practise, check what you know, or try timed practice.
+              {factStates(learner.results).filter((x) => x.status === "known").length} of 66 facts known. Practise or check them.
             </span>
           </span>
           <ArrowRightIcon size={20} className="shrink-0 text-ink-2" />
@@ -179,7 +179,7 @@ export function SkyMapScreen() {
           <Pic name="exam" size={48} />
           <span className="min-w-0 flex-1">
             <span className="block text-title font-extrabold text-ink">Practice mock</span>
-            <span className="block text-body text-ink-2">Choose the questions, time and format, then see what to work on. Practice made by Kite Maths, not an official paper.</span>
+            <span className="block text-body text-ink-2">Practise like a real test, then see what to work on.</span>
           </span>
           <ArrowRightIcon size={20} className="shrink-0 text-ink-2" />
         </Link>
@@ -190,8 +190,8 @@ export function SkyMapScreen() {
         <Link href={links.strategies()} className="flex items-center gap-4 rounded-[24px] border-2 border-brand bg-surface p-4 shadow-[var(--shadow-card)] transition hover:shadow-[var(--shadow-lift)]">
           <Pic name="bulb" size={48} />
           <span className="min-w-0 flex-1">
-            <span className="block text-title font-extrabold text-ink">Methods lab</span>
-            <span className="block text-body text-ink-2">Compare methods, choose one and say why, and try the one-minute challenge.</span>
+            <span className="block text-title font-extrabold text-ink">Mental maths methods</span>
+            <span className="block text-body text-ink-2">Pick the best method, and try the one-minute challenge.</span>
           </span>
           <ArrowRightIcon size={20} className="shrink-0 text-ink-2" />
         </Link>
@@ -217,18 +217,17 @@ export function SkyMapScreen() {
                   </span>
                 </Link>
                 <div className={`min-w-0 flex-1 rounded-[24px] bg-surface p-4 shadow-[var(--shadow-card)] ${s.status === "current" ? "ring-2 ring-brand" : ""}`}>
-                  <p className={`text-label font-bold ${s.status === "current" ? "text-brand-strong" : s.status === "done" ? "text-ok" : "text-muted"}`}>
+                  <p className="flex flex-wrap items-center gap-2 text-label font-bold text-ink-2">
                     {s.kicker}
-                    {s.status === "current" && " · Next!"}
-                    {s.status === "done" && " · Done"}
+                    {s.status === "current" && <span className="rounded-full bg-brand px-2.5 py-0.5 text-on-brand">Next</span>}
+                    {s.status === "done" && <span className="rounded-full bg-ok-soft px-2.5 py-0.5 text-ok">Done</span>}
                   </p>
                   <p className="text-title font-extrabold text-ink">
                     <Link href={s.href} className="hover:underline">
                       {s.title}
                     </Link>
                   </p>
-                  {s.outcome && <p className="text-label font-semibold text-ink-2">You&apos;ll learn: {s.outcome}</p>}
-                  <p className="mt-0.5 text-label text-ink-2">
+                  <p className="mt-0.5 text-body text-ink-2">
                     {/* Lesson summaries can hold fraction markup such as {1/2}. */}
                     <RichText text={s.line} />
                   </p>
@@ -268,7 +267,7 @@ export function SkyMapScreen() {
             return (
               <li key={sk.id}>
                 <Link href={routes.practice(sk.id)} className="flex items-center justify-between gap-3 rounded-[20px] bg-paper px-3 py-2.5 hover:bg-sunk">
-                  <span className="min-w-0 text-label font-medium">{sk.title}</span>
+                  <span className="min-w-0 text-body font-semibold">{sk.title}</span>
                   <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-label font-bold ${st.cls}`}>{st.label}</span>
                 </Link>
               </li>

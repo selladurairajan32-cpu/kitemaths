@@ -139,7 +139,7 @@ const INTRO: Record<FactMode, { title: string; line: string }> = {
   },
   diagnostic: {
     title: "Find out what I know",
-    line: "25 facts from every table, with no help. It shows where to start, not a score to keep: facts change as you practise.",
+    line: "25 facts, no help. It shows where to start. It is not a score.",
   },
   timed: {
     title: "Timed practice",

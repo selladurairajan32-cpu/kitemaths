@@ -162,7 +162,7 @@ function FollowUp({
   };
   return (
     <form onSubmit={submit} className="space-y-5 rounded-[28px] border border-line bg-surface p-5 shadow-[var(--shadow-card)] sm:p-7">
-      <FocusHeading className="text-base text-muted">A quick question to check the idea</FocusHeading>
+      <FocusHeading className="text-body font-semibold text-ink-2">A quick question to check the idea</FocusHeading>
       <QuestionPrompt q={question} />
       <QuestionInput
         question={question}
@@ -362,7 +362,7 @@ export function QuestionPlayer({
               ))}
             </ul>
             {Remedy && <Remedy misconception={suspected[0]!.id} />}
-            <p className="text-base text-muted">One answer can&apos;t tell us for sure what you were thinking, so here&apos;s a quick question to check.</p>
+            <p className="text-body text-ink-2">Let&apos;s check with one more question.</p>
             <Button size="lg" onClick={() => (followUp ? dispatch({ type: "continue" }) : backToQuestion())}>
               {followUp ? "Try a quick question" : "Try the question again"} <ArrowRightIcon size={18} />
             </Button>
@@ -457,7 +457,7 @@ export function QuestionPlayer({
           <p>
             <RichText text={q.explanation} />
           </p>
-          <p className="text-base text-muted">We&apos;ll come back to this idea so you can try it again.</p>
+          <p className="text-body text-ink-2">We&apos;ll come back to this idea so you can try it again.</p>
         </FinishSheet>
       )}
     </div>

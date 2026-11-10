@@ -27,6 +27,8 @@ export const DEFAULT_MOCK: Omit<MockConfig, "profileId"> = { questionCount: 12, 
 /** The label every mock carries (EXAM-005 AC4). */
 export const PRACTICE_LABEL = "Practice mock made by Kite Maths. It is not an official paper or a past paper.";
 /** What post-test analysis never does (EXAM-006 AC3). */
+/** What a child reads under their results (D-037: short and plain); grown-ups can open the full statement below it. */
+export const NO_PREDICTION_CHILD = "This is practice. It can't tell you a test score or a result.";
 export const NO_PREDICTION = "This analysis does not predict a test score, a pass mark, admission or the chance of an offer: there is no model or data that could support that.";
 
 /**

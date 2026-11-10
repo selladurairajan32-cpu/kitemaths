@@ -14,9 +14,9 @@
   --color-sunk: #edf2fa; /* one tone step below the ground: tracks, chips */
   --color-raised: #f8faff; /* hover and quiet panels inside white cards */
   --color-ink: #1b2559;
-  --color-ink-2: #4a5578; /* body text, 7.4:1 on white */
-  --color-muted: #5d6785; /* labels and meta, 5.6:1 on white */
-  --color-line: #e6ecf7; /* card borders */
+  --color-ink-2: #3a4466; /* body text, about 9.4:1 on white (darkened for clarity, D-037) */
+  --color-muted: #4b5573; /* labels and meta, about 7.5:1 on white (darkened for clarity, D-037) */
+  --color-line: #d8e0ee; /* card borders (stronger, D-037) */
   --color-line-strong: #d3dcec; /* control borders */
 
   /* The one action colour: a clear, friendly blue. */
@@ -65,8 +65,8 @@
   --font-display: var(--font-nunito), ui-rounded, ui-sans-serif, system-ui, sans-serif;
 
   --radius-card: 24px;
-  --shadow-card: 0 10px 30px rgba(27, 37, 89, 0.06);
-  --shadow-lift: 0 18px 44px rgba(27, 37, 89, 0.1);
+  --shadow-card: 0 8px 24px rgba(27, 37, 89, 0.1);
+  --shadow-lift: 0 16px 40px rgba(27, 37, 89, 0.14);
 
   /*
    * UX-002 / UX-003 / UX-004 tokens (R0 step 2, D-013). Additive: new names only, so no existing
@@ -176,7 +176,7 @@
   body {
     font-family: var(--font-sans);
     font-size: 1.125rem; /* 18px: easy reading for young readers */
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1.6;
     background: var(--color-paper);
     font-variant-numeric: tabular-nums;

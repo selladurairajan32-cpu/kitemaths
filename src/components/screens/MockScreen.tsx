@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { ArrowRightIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 import { GENERAL_PRACTICE, KNOWN_FIELDS } from "@/engine/examProfile";
-import { analyseMock, configFor, DEFAULT_MOCK, NO_PREDICTION, PRACTICE_LABEL, revisionPlan, type MistakeKind, type MockConfig, type ReviewRule } from "@/engine/mock";
+import { analyseMock, configFor, DEFAULT_MOCK, NO_PREDICTION, NO_PREDICTION_CHILD, PRACTICE_LABEL, revisionPlan, type MistakeKind, type MockConfig, type ReviewRule } from "@/engine/mock";
 import { recordResult } from "@/engine/progress";
 import { hashString, prng } from "@/engine/random";
 import type { ItemResult } from "@/engine/types";
@@ -298,7 +298,11 @@ function MockResults({ session, onAgain }: { session: string; onAgain: () => voi
             ))}
           </ul>
         )}
-        <p className="text-label text-muted">{NO_PREDICTION}</p>
+        <p className="text-body font-semibold text-ink-2">{NO_PREDICTION_CHILD}</p>
+        <details className="text-label text-ink-2">
+          <summary className="inline-flex min-h-11 cursor-pointer items-center font-bold">For grown-ups</summary>
+          <p>{NO_PREDICTION}</p>
+        </details>
       </section>
 
       <section className="card p-5 sm:p-7" aria-labelledby="review-title">

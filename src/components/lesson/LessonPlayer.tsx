@@ -332,10 +332,10 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
               {isLast ? "Finish lesson" : "Continue"} <ArrowRightIcon size={20} />
             </Button>
           )}
-          {step.type === "check" && !checkAlreadyDone && <span className="text-base text-muted">Answer to carry on</span>}
+          {step.type === "check" && !checkAlreadyDone && <span className="text-body font-semibold text-ink-2">Answer to carry on</span>}
         </footer>
-        {!canContinue && step.type === "lab" && <p className="mt-2 text-right text-base text-muted">Finish the activity above to carry on.</p>}
-        {!canContinue && step.type === "worked" && <p className="mt-2 text-right text-base text-muted">Work through every step to carry on.</p>}
+        {!canContinue && step.type === "lab" && <p className="mt-2 text-right text-body font-semibold text-ink-2">Finish the activity above to carry on.</p>}
+        {!canContinue && step.type === "worked" && <p className="mt-2 text-right text-body font-semibold text-ink-2">Work through every step to carry on.</p>}
       </section>
     </div>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import { RichText } from "@/components/math/RichText";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { compareSymbol, toWords, type Fraction } from "../math";
@@ -359,7 +360,11 @@ export function VisualRenderer({ spec }: { spec: VisualSpec }) {
       return (
         <figure className="flex w-full flex-col items-center gap-3">
           <FractionShape key={String(spec.countParts)} diagram={spec.diagram} countParts={spec.countParts} size="md" />
-          {spec.caption && <figcaption className="text-label text-muted">{spec.caption}</figcaption>}
+          {spec.caption && (
+            <figcaption className="text-lg font-semibold text-ink-2">
+              <RichText text={spec.caption} />
+            </figcaption>
+          )}
         </figure>
       );
     case "everyday":

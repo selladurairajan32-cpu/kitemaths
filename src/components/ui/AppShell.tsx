@@ -125,10 +125,10 @@ export function AppShell({ children }: { children: ReactNode }) {
                   updateTopic(tp.topicId, completePracticeSession);
                 }
               }}
-              className="grid size-11 place-items-center rounded-full text-muted hover:bg-sunk hover:text-ink"
+              className="flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-full px-2 text-ink-2 hover:bg-sunk hover:text-ink sm:px-3"
               aria-label="Stop and go back"
             >
-              <CloseIcon size={24} />
+              <CloseIcon size={24} /> <span className="hidden text-body font-bold sm:inline">Exit</span>
             </Link>
             <Logo small />
             <div className="flex items-center gap-1">
@@ -174,7 +174,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 aria-label="Grown-ups"
                 className="ml-1 hidden min-h-11 min-w-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-3 text-label font-semibold text-ink-2 hover:bg-sunk sm:flex"
               >
-                <ParentIcon size={18} /> <span className="hidden xl:inline">Grown-ups</span>
+                <ParentIcon size={18} /> <span className="hidden md:inline">Grown-ups</span>
               </Link>
             </div>
           </div>
@@ -188,8 +188,9 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Logo small />
               <span className="text-label font-semibold text-muted">Grown-ups</span>
             </div>
-            <nav aria-label="Grown-ups" className="order-3 w-full sm:order-none sm:w-auto">
-              <ul className="flex flex-wrap items-center gap-1">
+            <nav aria-label="Grown-ups" className="order-3 w-full min-w-0 sm:order-none sm:w-auto">
+              {/* One row that scrolls sideways, so the sticky header stays short even at 200% text (D-037). */}
+              <ul className="flex items-center gap-1 overflow-x-auto">
                 {PARENT_NAV.map(({ href, label }) => {
                   const active = pathname === href;
                   return (
@@ -197,7 +198,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                       <Link
                         href={navHref(href)}
                         aria-current={active ? "page" : undefined}
-                        className={`flex min-h-11 items-center rounded-full px-4 text-label ${active ? "bg-brand-soft font-bold text-brand-strong" : "font-semibold text-ink-2 hover:bg-sunk hover:text-ink"}`}
+                        className={`flex min-h-11 items-center whitespace-nowrap rounded-full px-4 text-label ${active ? "bg-brand-soft font-bold text-brand-strong" : "font-semibold text-ink-2 hover:bg-sunk hover:text-ink"}`}
                       >
                         {label}
                       </Link>

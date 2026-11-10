@@ -45,7 +45,7 @@ export function Hud({ compact = false }: { compact?: boolean }) {
     <Link
       href={routes.badges()}
       className="flex items-center gap-2 rounded-full"
-      aria-label={`${stars} stars, level ${level.level}${streak.current ? `, ${streak.current} day streak` : ""}. See your kites.`}
+      aria-label={`${stars} stars, level ${level.level}${streak.current ? `, ${streak.current} day streak` : ""}. See your badges.`}
     >
       <span className="relative flex min-h-11 items-center gap-1.5 rounded-full bg-tile-yellow pl-1.5 pr-3.5">
         <motion.span

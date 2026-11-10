@@ -58,12 +58,12 @@ export function StrategyHubScreen() {
   const unlocked = timedUnlocked(learner.results, TOPIC);
   return (
     <div className="space-y-8">
-      <ScreenHero pic="bulb" titleId="strategies-title" title="Methods lab" line="Every method here gives the right answer when it suits the numbers. The skill is choosing well, and seeing why." />
+      <ScreenHero pic="bulb" titleId="strategies-title" title="Mental maths methods" line="Find the quickest way. Then say why it works." />
       <ul className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,16rem),1fr))] gap-4">
-        <Activity href={links.strategiesRun("compare")} title="Compare the methods" line="See two or three ways to work out the same thing. Pick one that works, and spot any that go wrong." />
-        <Activity href={links.strategiesRun("choose")} title="Choose and say why" line="Pick the method that suits the numbers, then choose the reason it works." />
+        <Activity href={links.strategiesRun("compare")} title="Compare the methods" line="See different ways to work it out. Spot the one that goes wrong." />
+        <Activity href={links.strategiesRun("choose")} title="Choose and say why" line="Pick the best method for the numbers, then say why." />
         {unlocked ? (
-          <Activity href={links.strategiesRun("timed")} title="One-minute challenge" line="As many as you can in a minute. Right answers count first; you're only compared with yourself." />
+          <Activity href={links.strategiesRun("timed")} title="One-minute challenge" line="As many as you can in a minute. Beat your own best." />
         ) : (
           <li className="rounded-[22px] border-2 border-dashed border-line-strong bg-surface p-5">
             <span className="block text-title font-extrabold text-ink-2">One-minute challenge</span>
@@ -120,7 +120,7 @@ export function CompareScreen() {
   const flaw = rand() < 0.6 ? flawedSteps(s.steps(p.nums)) : null;
   const methods: Method[] = seededShuffle(
     [
-      { id: "standard", name: "Standard method", steps: standardSteps(p)!, valid: true },
+      { id: "standard", name: "Written method", steps: standardSteps(p)!, valid: true },
       { id: s.id, name: s.name, steps: s.steps(p.nums), valid: true },
       ...(flaw ? [{ id: "flawed", name: "Another way", steps: flaw.steps, valid: false, broken: flaw.broken }] : []),
     ],
@@ -265,7 +265,7 @@ export function ChooseScreen() {
         </fieldset>
       )}
       {chosen && chosen.id === s.id && reason !== null && (
-        <Feedback ok={reasons[reason] === s.why} title={reasons[reason] === s.why ? "Right method, right reason" : "Right method, but not that reason"}>
+        <Feedback ok={reasons[reason] === s.why} title={reasons[reason] === s.why ? "Right method, right reason" : "Good method! But not that reason"}>
           {reasons[reason] === s.why ? "" : `The reason is: ${s.why} `}
           {s.steps(p.nums).map((x) => x.text).join(". ")}.
           <NextButton onClick={() => { setMethod(null); setReason(null); setRound((x) => x + 1); shownAt.current = clock(); }} />
@@ -317,7 +317,7 @@ export function TimedStrategyScreen() {
 
   if (!hydrated) return <ScreenSkeleton />;
   if (!timedUnlocked(learner.results, TOPIC))
-    return <ActivitySummary title="Not open yet" line={`The one-minute challenge opens after ${TIMED_UNLOCK.answers} mental-maths answers without a timer, with at least ${Math.round(TIMED_UNLOCK.accuracy * 100)}% right.`} />;
+    return <ActivitySummary title="Not open yet" line={`Answer ${TIMED_UNLOCK.answers} questions without a timer first, getting most right.`} />;
 
   if (done && session) {
     const cmp = compareWithLast(timedRuns(learner.results, TOPIC));

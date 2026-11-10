@@ -564,3 +564,4 @@ TC-CUR-002.2.8,CUR-002,AC2,component,automated,passing,src/topics/multiply-divid
 TC-CUR-002.2.9,CUR-002,AC2,component,automated,passing,src/topics/multiply-divide/explain/LongMultiplicationLab.test.tsx::shows the finished try-it when it was done before,(CH-061)
 TC-CUR-002.2.10,CUR-002,AC2,component,automated,passing,"src/topics/multiply-divide/explain/LongMultiplicationLab.test.tsx::builds the try-it parts for 34 × 12, each with the step to show again",(CH-061)
 TC-MIS-004.1.3,MIS-004,AC1,component,automated,passing,src/topics/multiply-divide/explain/LongMultiplicationLab.test.tsx::shows how × 10 works after a tens-place slip in practice,A different representation after the tens-place misconception (CH-061)
+TC-FR-009.3.3,FR-009,AC3,component,automated,passing,"src/topics/fractions/ui/Visuals.test.tsx::draws a diagram caption's fractions as fractions, not braces",The adding lesson's caption showed raw {2/7} markup; now drawn as fractions (CH-062)

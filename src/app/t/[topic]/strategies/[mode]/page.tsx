@@ -15,7 +15,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps<"/t/[topic]/strategies/[mode]">): Promise<Metadata> {
   const { mode } = await params;
-  return { title: `${MODES[mode] ?? "Methods lab"} · Kite Maths` };
+  return { title: `${MODES[mode] ?? "Mental maths methods"} · Kite Maths` };
 }
 
 export default async function Page({ params }: PageProps<"/t/[topic]/strategies/[mode]">) {
