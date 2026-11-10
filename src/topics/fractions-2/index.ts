@@ -1,4 +1,4 @@
-import { defineTopic, genFor, int, pick } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
 import type { ChooseOption, Template } from "@/topics/kit/types";
 import { gcd, toMixed } from "@/maths/fraction";
 
@@ -42,7 +42,7 @@ function opts(right: string, rightValue: number, wrong: Wrong[]): ChooseOption[]
   return out.slice(0, 4);
 }
 
-const templates: Template[] = [
+const baseTemplates: Template[] = [
   {
     key: "f2-simplify",
     skill: S.simplify,
@@ -290,7 +290,137 @@ const templates: Template[] = [
       };
     },
   },
+
+  /* D-037 (Phase B): a stretch question for every skill. */
+  {
+    key: "f2-simplify-stretch",
+    skill: S.simplify,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const [a, b] = pick(r, [[1, 2], [2, 3], [3, 4], [2, 5], [3, 5], [5, 6]]) as [number, number];
+      const ks = [2, 3, 4, 5].sort(() => r() - 0.5).slice(0, 3);
+      const odd = { text: f(a * ks[0]! + 1, b * ks[0]!), misconception: M.subtract, feedback: "Check by dividing: it doesn't simplify to the same fraction." };
+      return {
+        kind: "choose",
+        prompt: `Three of these are equal to **${f(a, b)}**. Which one is **not**?`,
+        options: [odd, ...ks.map((k) => ({ text: f(a * k, b * k), feedback: `That one is equal: divide the top and bottom by ${k} to get ${f(a, b)}.` }))],
+        answer: 0,
+        hint: `Simplify each one. Which doesn't become ${f(a, b)}?`,
+        explanation: `${f(a * ks[0]! + 1, b * ks[0]!)} can't be simplified to ${f(a, b)}, so it is the odd one out.`,
+      };
+    },
+  },
+  {
+    key: "f2-mixed-stretch",
+    skill: S.mixed,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const d = pick(r, [3, 4, 5]);
+      const w = int(r, 1, 3);
+      const values = [w * d + 1, w * d + d - 1, (w + 1) * d + 1].sort(() => r() - 0.5);
+      const big = Math.max(...values);
+      const shown = values.map((n, i) => (i % 2 === 0 ? best(n, d) : f(n, d)));
+      const right = shown[values.indexOf(big)]!;
+      return {
+        kind: "choose",
+        prompt: `Which amount is the **biggest**?`,
+        options: [{ text: right }, ...shown.filter((x) => x !== right).map((x) => ({ text: x, misconception: M.mixed, feedback: "Write them all the same way first, as mixed numbers or all as improper fractions." }))],
+        answer: 0,
+        hint: `Write each amount as ${PART[d] ?? `parts of ${d}`}.`,
+        explanation: `As ${PART[d] ?? "parts"}: ${values.map((n) => f(n, d)).join(", ")}. The biggest is **${right}**.`,
+      };
+    },
+  },
+  {
+    key: "f2-add-same-stretch",
+    skill: S.addSame,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const d = pick(r, [7, 8, 9, 10, 12]);
+      const a = int(r, 1, Math.floor(d / 3));
+      const b = int(r, 1, Math.floor(d / 3));
+      const left = d - a - b;
+      return {
+        kind: "choose",
+        prompt: `A pizza is cut into **${d} equal slices**. Mia eats **${f(a, d)}** and Tom eats **${f(b, d)}**. What fraction of the pizza is **left**?`,
+        visual: { kind: "fraction", parts: d, shaded: a + b, shape: "circle" },
+        options: opts(best(left, d), left / d, [
+          { text: best(a + b, d), value: (a + b) / d, feedback: "That's how much they ate. Take it away from the whole pizza." },
+          { text: f(left, d * 2), value: left / (d * 2), misconception: M.addDen, feedback: "The slices are still the same size: keep the bottom number." },
+          { text: f(d - a, d), value: (d - a) / d, feedback: "Take away both Mia's and Tom's slices." },
+        ]),
+        answer: 0,
+        hint: `The whole pizza is ${f(d, d)}. Take away the slices they ate.`,
+        explanation: `${f(d, d)} − ${f(a, d)} − ${f(b, d)} = **${best(left, d)}**.`,
+      };
+    },
+  },
+  {
+    key: "f2-related-stretch",
+    skill: S.addRelated,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const [d1, d2, d3] = pick(r, [[2, 4, 8], [3, 6, 12], [2, 6, 12], [5, 10, 20]]) as [number, number, number];
+      const n = d3 / d1 + d3 / d2 + 1;
+      return {
+        kind: "choose",
+        prompt: `Work out **${f(1, d1)} + ${f(1, d2)} + ${f(1, d3)}**.`,
+        options: opts(best(n, d3), n / d3, [
+          { text: f(3, d1 + d2 + d3), value: 3 / (d1 + d2 + d3), misconception: M.addDen, feedback: "Don't add the bottoms. Make every part the same size first." },
+          { text: f(3, d3), value: 3 / d3, misconception: M.noCommon, feedback: `${f(1, d1)} and ${f(1, d2)} are bigger than ${f(1, d3)}: change them into ${PART[d3] ?? "the smallest parts"} first.` },
+          { text: best(n + 1, d3), value: (n + 1) / d3, feedback: "Count the parts again after changing them." },
+        ]),
+        answer: 0,
+        hint: `Change every fraction into ${PART[d3] ?? `parts of ${d3}`}.`,
+        explanation: `${f(d3 / d1, d3)} + ${f(d3 / d2, d3)} + ${f(1, d3)} = **${best(n, d3)}**.`,
+      };
+    },
+  },
+  {
+    key: "f2-multiply-stretch",
+    skill: S.multiply,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const total = 12 * int(r, 2, 6);
+      const pets = (total * 3) / 4;
+      const dogs = pets / 3;
+      return {
+        kind: "number",
+        prompt: `There are **${total} children**. **${f(3, 4)}** of them have a pet. **${f(1, 3)}** of the children with a pet have a dog. How many children have a dog?`,
+        answer: dogs,
+        traps: [
+          { value: pets, feedback: "That's the children with a pet. Now find a third of them." },
+          { value: total / 3, feedback: `A third of the children **with a pet**, not of all ${total}.` },
+        ],
+        hint: `First find ${f(3, 4)} of ${total}.`,
+        explanation: `${f(3, 4)} of ${total} = ${pets}, and ${f(1, 3)} of ${pets} = **${dogs}**.`,
+      };
+    },
+  },
 ];
+
+const templates = withHints(baseTemplates, {
+  "f2-simplify": () => ["Try dividing both numbers by 2, then 3, then 5.", "Keep going until no number (except 1) divides both."],
+  "f2-equivalent": () => ["Whatever you do to the bottom, do the same to the top.", "Work out what the bottom was multiplied by, then multiply the top by that too."],
+  "f2-to-mixed": () => ["How many whole groups of the bottom number fit into the top?", "The number of wholes comes first; what's left over goes on top of the same bottom number."],
+  "f2-to-improper": () => ["Each whole has as many parts as the bottom number.", "Multiply the wholes by the bottom number, then add the top."],
+  "f2-add-same": () => ["Same-size parts: add the tops.", "Keep the bottom the same, then simplify if you can."],
+  "f2-sub-same": () => ["Same-size parts: take away the tops.", "One whole is the bottom number over itself, like 5 fifths."],
+  "f2-add-related": () => ["Make the parts the same size first.", "Change the fraction with the smaller bottom number so both match, then add the tops."],
+  "f2-common": () => ["Multiply the top and bottom by the same number.", "What do you multiply the smaller bottom number by to get the bigger one?"],
+  "f2-times-whole": () => ["Lots of a fraction: multiply the top only.", "The parts stay the same size, so the bottom number doesn't change. Then turn it into a mixed number."],
+  "f2-of-amount": () => ["Divide by the bottom number to find one part.", "Then multiply by the top number."],
+  "f2-simplify-stretch": () => ["Divide the top and bottom of each one by the same number.", "Three of them become the same fraction. The odd one out doesn't."],
+  "f2-mixed-stretch": () => ["Change the mixed numbers into improper fractions.", "Now compare the tops: the bottoms are the same."],
+  "f2-add-same-stretch": () => ["Add what they ate first.", "Then take that away from the whole pizza."],
+  "f2-related-stretch": () => ["Use the biggest bottom number for every fraction.", "Then add the tops."],
+  "f2-multiply-stretch": () => ["Find how many have a pet first: divide by 4, multiply by 3.", "Then find a third of that number."],
+});
 
 export const fractions2 = defineTopic({
   id: T,
@@ -320,9 +450,22 @@ export const fractions2 = defineTopic({
         {
           type: "explain",
           title: "Same size, bigger pieces",
-          body: ["**{6/8}** and **{3/4}** cover exactly the same amount. {3/4} uses fewer, bigger pieces.", "To simplify, divide the top **and** the bottom by the same number: 6 ÷ 2 = 3, 8 ÷ 2 = 4."],
+          body: ["**{6/8}** and **{3/4}** cover exactly the same amount. {3/4} uses fewer, bigger pieces.", "To simplify, divide the top **and** the bottom by the same number: 6 ÷ 2 = 3, 8 ÷ 2 = 4.", "Never take the same amount off the top and the bottom: that changes the size of the fraction."],
           visual: { kind: "fraction", parts: 8, shaded: 6, label: "6 of 8 is the same as 3 of 4" },
           tip: "Simplest form: nothing else divides both the top and the bottom.",
+        },
+        {
+          type: "worked",
+          title: "Watch me: simplify {18/24}",
+          support: "full",
+          problem: "Simplify **{18/24}**.",
+          visual: { kind: "fraction", parts: 24, shaded: 18 },
+          steps: [
+            { text: "Both numbers are even, so divide by 2: {18/24} = {9/12}." },
+            { text: "9 and 12 are both in the 3 times table, so divide by 3: {9/12} = {3/4}." },
+            { text: "Nothing divides both 3 and 4 except 1, so we stop." },
+          ],
+          conclusion: "{18/24} = **{3/4}**. Dividing by 6 straight away gives the same answer.",
         },
         {
           type: "worked",
@@ -331,7 +474,7 @@ export const fractions2 = defineTopic({
           problem: "Simplify **{12/16}**.",
           steps: [
             { text: "Both 12 and 16 are in the 4 times table." },
-            { text: "12 ÷ 4 = 3.", blank: { prompt: "What is 16 ÷ 4?", answer: 4, hint: "4 × 4 = 16", worked: "16 ÷ 4 = **4**." } },
+            { text: "12 ÷ 4 = 3.", blank: { prompt: "What is 16 ÷ 4?", answer: 4, hint: "4 × 4 = 16", traps: [{ value: 12, misconception: M.subtract, feedback: "That takes 4 away. Divide the bottom by 4, just like the top." }], worked: "16 ÷ 4 = **4**." } },
             { text: "Nothing else divides 3 and 4, so we're done." },
           ],
           conclusion: "{12/16} = **{3/4}**.",
@@ -351,9 +494,21 @@ export const fractions2 = defineTopic({
         {
           type: "explain",
           title: "More than one whole",
-          body: ["**{11/4}** means 11 quarters. Four quarters make a whole, so 11 quarters is **2 wholes and 3 quarters**: **2 {3/4}**."],
+          body: ["**{11/4}** means 11 quarters. Four quarters make a whole, so 11 quarters is **2 wholes and 3 quarters**: **2 {3/4}**.", "A fraction whose top is bigger than its bottom is called **improper**. A whole number with a fraction, like 2 {3/4}, is a **mixed number**. They are two ways of writing the same amount."],
           visual: { kind: "fraction", parts: 4, shaded: 11, wholes: 3, shape: "circle" },
           tip: "Divide the top by the bottom: the answer is the wholes, the remainder is the new top.",
+        },
+        {
+          type: "worked",
+          title: "Watch me: {17/5} as a mixed number",
+          support: "full",
+          problem: "Write **{17/5}** as a mixed number.",
+          visual: { kind: "fraction", parts: 5, shaded: 17, wholes: 4 },
+          steps: [
+            { text: "5 fifths make a whole. How many fives fit into 17? **3**, which uses 15 fifths." },
+            { text: "17 − 15 = **2** fifths are left over." },
+          ],
+          conclusion: "{17/5} = **3 {2/5}**.",
         },
         {
           type: "worked",
@@ -362,7 +517,7 @@ export const fractions2 = defineTopic({
           problem: "**2 {3/5}** as fifths",
           steps: [
             { text: "Each whole is 5 fifths." },
-            { text: "2 wholes are 10 fifths.", blank: { prompt: "Add the 3 extra fifths: how many fifths?", answer: 13, hint: "10 + 3", worked: "**13** fifths." } },
+            { text: "2 wholes are 10 fifths.", blank: { prompt: "Add the 3 extra fifths: how many fifths?", answer: 13, hint: "10 + 3", traps: [{ value: 10, misconception: M.mixed, feedback: "That's just the 2 wholes. Add the 3 extra fifths too." }, { value: 6, misconception: M.mixed, feedback: "Each whole is 5 fifths, not 1: 2 wholes are 10 fifths." }], worked: "**13** fifths." } },
           ],
           conclusion: "2 {3/5} = **{13/5}**.",
         },
@@ -381,9 +536,29 @@ export const fractions2 = defineTopic({
         {
           type: "explain",
           title: "Count the parts",
-          body: ["**{2/7} + {3/7}**: 2 sevenths and 3 sevenths make **5 sevenths**: {5/7}.", "The bottom stays 7: the parts are still sevenths."],
+          body: ["**{2/7} + {3/7}**: 2 sevenths and 3 sevenths make **5 sevenths**: {5/7}.", "The bottom stays 7: the parts are still sevenths. The bottom number tells you the size of the parts, and adding doesn't change their size.", "Taking away works the same way: {6/7} − {2/7} = {4/7}."],
           visual: { kind: "fraction", parts: 7, shaded: 5 },
           tip: "Never add the bottoms: 2 sevenths + 3 sevenths aren't 5 fourteenths!",
+        },
+        {
+          type: "worked",
+          title: "Watch me: 1 − {3/8}",
+          support: "full",
+          problem: "**1 − {3/8}**",
+          visual: { kind: "fraction", parts: 8, shaded: 5 },
+          steps: [{ text: "One whole is **8 eighths**: {8/8}." }, { text: "{8/8} − {3/8} = {5/8}: take away the tops, keep the bottom." }],
+          conclusion: "1 − {3/8} = **{5/8}**.",
+        },
+        {
+          type: "worked",
+          title: "Together: {2/9} + {5/9}",
+          support: "faded",
+          problem: "**{2/9} + {5/9}**",
+          steps: [
+            { text: "Add the tops: 2 + 5 = **7**." },
+            { text: "Now the bottom number.", blank: { prompt: "What is the bottom number?", answer: 9, hint: "Are the parts still ninths?", traps: [{ value: 18, misconception: M.addDen, feedback: "The parts are still ninths, so the bottom stays 9. Don't add the bottoms." }], worked: "**9**: the answer is {7/9}." } },
+          ],
+          conclusion: "{2/9} + {5/9} = **{7/9}**.",
         },
         { type: "check", title: "Your turn", questionId: gen("f2-add-same", 1, 2) },
         { type: "check", title: "One more", questionId: gen("f2-sub-same", 2, 9) },
@@ -398,6 +573,12 @@ export const fractions2 = defineTopic({
       objectives: ["Add fractions where one denominator is a multiple of the other"],
       steps: [
         {
+          type: "explain",
+          title: "Make the parts match",
+          body: ["You can only add parts that are the **same size**. A half and a quarter are different sizes, so first turn the half into quarters: {1/2} = {2/4}.", "Then add the quarters: {2/4} + {1/4} = **{3/4}**. Change the fraction with the smaller bottom number, by multiplying its top and bottom by the same number."],
+          visual: { kind: "fraction", parts: 4, shaded: 2, label: "One half is two quarters" },
+        },
+        {
           type: "worked",
           title: "Watch me: a half plus a quarter",
           support: "full",
@@ -405,6 +586,17 @@ export const fractions2 = defineTopic({
           visual: { kind: "fraction", parts: 4, shaded: 3, label: "2 quarters + 1 quarter" },
           steps: [{ text: "Halves and quarters are different sizes." }, { text: "One half is the same as **2 quarters**: {1/2} = {2/4}." }, { text: "{2/4} + {1/4} = **{3/4}**." }],
           conclusion: "{1/2} + {1/4} = **{3/4}**.",
+        },
+        {
+          type: "worked",
+          title: "Together: {1/3} + {1/6}",
+          support: "faded",
+          problem: "**{1/3} + {1/6}**",
+          steps: [
+            { text: "Sixths are smaller than thirds. Change the third into sixths: multiply the top and bottom by 2.", blank: { prompt: "{1/3} is how many sixths?", answer: 2, hint: "1 × 2", traps: [{ value: 1, misconception: M.noCommon, feedback: "A third is bigger than a sixth: one third is 2 sixths." }], worked: "{1/3} = **{2/6}**." } },
+            { text: "{2/6} + {1/6} = {3/6}, which simplifies to {1/2}." },
+          ],
+          conclusion: "{1/3} + {1/6} = **{1/2}**.",
         },
         { type: "check", title: "Your turn", questionId: gen("f2-common", 1, 5) },
         { type: "check", title: "One more", questionId: gen("f2-add-related", 2, 8) },
@@ -421,8 +613,28 @@ export const fractions2 = defineTopic({
         {
           type: "explain",
           title: "Lots of",
-          body: ["**{3/5} × 4** means 4 lots of 3 fifths: **12 fifths**. That is {12/5} = **2 {2/5}**.", "The parts stay fifths, so only the top is multiplied."],
+          body: ["**{3/5} × 4** means 4 lots of 3 fifths: **12 fifths**. That is {12/5} = **2 {2/5}**.", "The parts stay fifths, so only the top is multiplied.", "To find a fraction **of** an amount, like {2/5} of 30, divide by the bottom to find one part (30 ÷ 5 = 6), then multiply by the top (6 × 2 = 12)."],
           visual: { kind: "fraction", parts: 5, shaded: 12, wholes: 3 },
+        },
+        {
+          type: "worked",
+          title: "Watch me: {2/5} of 30",
+          support: "full",
+          problem: "**{2/5} of 30**",
+          visual: { kind: "bar", total: "30", parts: [{ label: "6", tone: "brand" }, { label: "6", tone: "brand" }, { label: "6", tone: "plain" }, { label: "6", tone: "plain" }, { label: "6", tone: "plain" }] },
+          steps: [{ text: "Split 30 into 5 equal parts: 30 ÷ 5 = **6** in each." }, { text: "Two of those parts: 6 × 2 = **12**." }],
+          conclusion: "{2/5} of 30 = **12**.",
+        },
+        {
+          type: "worked",
+          title: "Together: 4 × {2/9}",
+          support: "faded",
+          problem: "**4 × {2/9}**",
+          steps: [
+            { text: "4 lots of 2 ninths: 4 × 2 = **8** ninths." },
+            { text: "Now the bottom number.", blank: { prompt: "What is the bottom number?", answer: 9, hint: "Are the parts still ninths?", traps: [{ value: 36, misconception: M.timesBoth, feedback: "Only the top is multiplied: the parts are still ninths." }], worked: "**9**: 4 × {2/9} = {8/9}." } },
+          ],
+          conclusion: "4 × {2/9} = **{8/9}**.",
         },
         { type: "check", title: "Your turn", questionId: gen("f2-of-amount", 1, 4) },
         { type: "check", title: "One more", questionId: gen("f2-times-whole", 2, 7) },
