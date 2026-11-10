@@ -1,4 +1,4 @@
-import { defineTopic, genFor, int, pick } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
 import type { Difficulty, Rng, Template } from "@/topics/kit/types";
 
 /** Times tables up to 12 × 12, learned by family with the patterns that make them stick, plus division facts. */
@@ -337,7 +337,7 @@ const familyTemplates: Template[] = [
   },
 ];
 
-const templates: Template[] = [
+const baseTemplates: Template[] = [
   ...meaningTemplates,
   ...lawTemplates,
   ...familyTemplates,
@@ -409,7 +409,195 @@ const templates: Template[] = [
       };
     },
   },
+  /* D-037 (Phase B): a stretch question for every skill. */
+  {
+    key: "tt-easy-stretch",
+    skill: S.easy,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const k = int(r, 2, 8);
+      return {
+        kind: "number",
+        prompt: `I am in the **2 times table**, the **5 times table** and the **10 times table**. I am between **${10 * k + 1}** and **${10 * k + 12}**. What number am I?`,
+        answer: 10 * (k + 1),
+        traps: [{ value: 10 * k + 5, feedback: "That is in the 5 times table, but not the 2s or 10s." }],
+        hint: "Numbers in the 10 times table are also in the 2s and the 5s.",
+        explanation: `The only multiple of 10 in that range is **${10 * (k + 1)}**.`,
+      };
+    },
+  },
+  {
+    key: "tt-doubling-stretch",
+    skill: S.doubling,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const n = int(r, 3, 9);
+      return {
+        kind: "number",
+        prompt: `**4 × ${n} = ${4 * n}**. Use doubling to work out **16 × ${n}**.`,
+        answer: 16 * n,
+        traps: [{ value: 8 * n, misconception: M.step, feedback: `Double once gives 8 × ${n}. Double again for 16 × ${n}.` }, { value: 4 * n + 12, misconception: M.added, feedback: "16 is 4 doubled twice, so double the answer twice." }],
+        hint: "16 is 4 doubled, and doubled again.",
+        explanation: `4 × ${n} = ${4 * n}; 8 × ${n} = ${8 * n}; 16 × ${n} = **${16 * n}**.`,
+      };
+    },
+  },
+  {
+    key: "tt-tricky-stretch",
+    skill: S.tricky,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const rows = pick(r, [6, 7, 9]);
+      const cols = pick(r, [6, 7, 8, 9]);
+      const eaten = int(r, 3, 9);
+      return {
+        kind: "number",
+        prompt: `A box holds **${rows} rows of ${cols} chocolates**. **${eaten}** are eaten. How many are left?`,
+        visual: { kind: "array", rows, cols },
+        answer: rows * cols - eaten,
+        traps: [{ value: rows * cols, feedback: `That's the full box. Take away the ${eaten} eaten.` }, { value: rows + cols - eaten, misconception: M.added, feedback: "Rows of chocolates: multiply, don't add." }].filter((t) => t.value > 0),
+        hint: `First find ${rows} × ${cols}.`,
+        explanation: `${rows} × ${cols} = ${rows * cols}; ${rows * cols} − ${eaten} = **${rows * cols - eaten}**.`,
+      };
+    },
+  },
+  {
+    key: "tt-big-stretch",
+    skill: S.big,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const t = pick(r, [11, 12]);
+      const n = int(r, 9, 12);
+      return {
+        kind: "number",
+        prompt: `**${t} × ${n} = ${t * n}**. What is **${t} × ${n + 1}**?`,
+        answer: t * (n + 1),
+        traps: [{ value: t * n + 1, misconception: M.added, feedback: `One more lot of ${t}, not one more.` }],
+        hint: `${t} × ${n + 1} is one more ${t} than ${t} × ${n}.`,
+        explanation: `${t * n} + ${t} = **${t * (n + 1)}**.`,
+      };
+    },
+  },
+  {
+    key: "tt-division-stretch",
+    skill: S.division,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const kids = int(r, 3, 9);
+      const each = 2 * int(r, 2, 6);
+      return {
+        kind: "number",
+        prompt: `**${kids * each} stickers** are shared equally between **${kids} children**. Each child then shares their stickers equally with a friend. How many stickers does each friend get?`,
+        answer: each / 2,
+        traps: [{ value: each, misconception: M.step, feedback: "Each child shares again with a friend: halve it." }, { value: kids * each * kids, misconception: M.divMult, feedback: "Sharing means dividing." }],
+        hint: `First work out ${kids * each} ÷ ${kids}.`,
+        explanation: `${kids * each} ÷ ${kids} = ${each}; half of ${each} is **${each / 2}**.`,
+      };
+    },
+  },
+  {
+    key: "tt-meaning-stretch",
+    skill: S.meaning,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const [a, b] = pick(r, [[4, 6], [3, 8], [6, 2], [5, 4]]) as [number, number];
+      const other = [[3, 8], [4, 6], [2, 6], [4, 5]].find(([x, y]) => x * y === a * b && !(x === a && y === b) && !(x === b && y === a)) ?? [a * b, 1];
+      return {
+        kind: "choose",
+        prompt: `Which of these is **not** the same as **${a} × ${b}**?`,
+        options: [
+          { text: `${a} + ${b}`, misconception: M.added, feedback: "Adding the numbers isn't the same as multiplying them." },
+          { text: Array.from({ length: a }, () => b).join(" + "), feedback: `${a} lots of ${b} is ${a} × ${b}.` },
+          { text: Array.from({ length: b }, () => a).join(" + "), feedback: `${b} lots of ${a} is also ${a * b}.` },
+          { text: `${other[0]} × ${other[1]}`, feedback: `${other[0]} × ${other[1]} is also ${a * b}.` },
+        ],
+        answer: 0,
+        hint: `Work out each one. Which doesn't make ${a * b}?`,
+        explanation: `${a} × ${b} = ${a * b}, but **${a} + ${b}** = ${a + b}.`,
+      };
+    },
+  },
+  {
+    key: "tt-laws-stretch",
+    skill: S.laws,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const a = int(r, 6, 9);
+      const b = pick(r, [12, 13, 14, 15]);
+      return {
+        kind: "choose",
+        prompt: `Which calculation gives the same answer as **${a} × ${b}**?`,
+        options: [
+          { text: `${a} × 10 + ${a} × ${b - 10}` },
+          { text: `${a} × 10 + ${b - 10}`, misconception: M.added, feedback: `Multiply both parts by ${a}: the ${b - 10} as well as the 10.` },
+          { text: `${a} + ${b}`, misconception: M.added, feedback: "Adding isn't the same as multiplying." },
+          { text: `${a} × ${b - 10} × 10`, feedback: "Split the number into parts and add the two answers." },
+        ],
+        answer: 0,
+        hint: `Split ${b} into 10 and ${b - 10}. Multiply each part by ${a}.`,
+        explanation: `${a} × ${b} = ${a} × 10 + ${a} × ${b - 10} = ${a * 10} + ${a * (b - 10)} = **${a * b}**.`,
+      };
+    },
+  },
+  {
+    key: "tt-families-stretch",
+    skill: S.families,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const a = int(r, 3, 9);
+      const b = int(r, 3, 9);
+      return {
+        kind: "number",
+        prompt: `**${a} × ${b} = ${a * b}**. Use this to work out **${a * b * 10} ÷ ${a}**.`,
+        answer: b * 10,
+        traps: [{ value: b, feedback: `${a * b * 10} is 10 times ${a * b}, so the answer is 10 times bigger.` }, { value: a * b * 10 * a, misconception: M.divMult, feedback: "Divide, don't multiply." }],
+        hint: `${a * b * 10} is ten times ${a * b}.`,
+        explanation: `${a * b} ÷ ${a} = ${b}, so ${a * b * 10} ÷ ${a} = **${b * 10}**.`,
+      };
+    },
+  },
 ];
+
+const templates = withHints(baseTemplates, {
+  "tt-groups": () => ["Count how many groups, and how many in each.", "Groups × number in each group."],
+  "tt-repeat": () => ["The same number added again and again is multiplication.", "Count how many times it is added."],
+  "tt-jumps": () => ["Count the jumps and the size of each jump.", "Jumps × size of each jump."],
+  "tt-scale": () => ["'Times as long' means multiply.", "Multiply the length by how many times bigger."],
+  "tt-commute": () => ["You can multiply in either order.", "Turn it round to a fact you know."],
+  "tt-split": () => ["Split one number into parts you know.", "Multiply each part, then add."],
+  "tt-split-total": () => ["Work out each part.", "Add the parts together."],
+  "tt-share": () => ["Sharing equally means dividing.", "How many does each one get?"],
+  "tt-group": () => ["Grouping means dividing.", "How many groups of that size fit?"],
+  "tt-family-odd": () => ["A fact family uses the same three numbers.", "Which fact uses a different number?"],
+  "tt-family-why": () => ["Division undoes multiplication.", "If a × b = c, then c ÷ a = b."],
+  "tt-easy": () => ["Count in 2s, 5s or 10s.", "The 5s end in 5 or 0; the 10s end in 0."],
+  "tt-easy-row": () => ["Count up in that table.", "Each step adds the same amount."],
+  "tt-array": () => ["Count the rows and the dots in each row.", "Rows × dots in a row."],
+  "tt-doubling": () => ["Double your 2s to get the 4s.", "Double the 4s to get the 8s."],
+  "tt-doubling-row": () => ["Each 4s answer is double the 2s answer.", "Each 8s answer is double the 4s answer."],
+  "tt-tricky": () => ["Use a fact you know nearby, like 5 × or 10 ×.", "Add or take away one more lot."],
+  "tt-tricky-missing": () => ["Count up in the table until you reach the answer.", "Or divide the answer by the number you know."],
+  "tt-big": () => ["11s: up to 9, the digit repeats.", "12 × n = 10 × n + 2 × n."],
+  "tt-big-missing": () => ["Count up in 11s or 12s.", "Or use 10 × and add on."],
+  "tt-div": () => ["Think of the times fact.", "Which number times the divisor gives the answer?"],
+  "tt-div-family": () => ["Use the three numbers of the fact family.", "Division undoes multiplication."],
+  "tt-easy-stretch": () => ["Numbers in the 10s are also in the 2s and the 5s.", "Find the multiple of 10 in the range."],
+  "tt-doubling-stretch": () => ["Double 4 × to get 8 ×.", "Double 8 × to get 16 ×."],
+  "tt-tricky-stretch": () => ["Find how many chocolates in a full box.", "Take away the ones eaten."],
+  "tt-big-stretch": () => ["One more lot of the table.", "Add the table number to the answer you know."],
+  "tt-division-stretch": () => ["Share between the children first.", "Then halve each share."],
+  "tt-meaning-stretch": () => ["Times can be repeated adding, either way round.", "Look for the one that adds the two numbers."],
+  "tt-laws-stretch": () => ["Split the bigger number into 10 and the rest.", "Both parts must be multiplied."],
+  "tt-families-stretch": () => ["Use the times fact backwards.", "Ten times bigger in, ten times bigger out."],
+});
 
 export const timesTables = defineTopic({
   id: T,
@@ -458,6 +646,23 @@ export const timesTables = defineTopic({
           visual: { kind: "bar", parts: [{ label: "4 cm", size: 1, tone: "brand" }, { label: "4 cm", size: 1, tone: "brand" }, { label: "4 cm", size: 1, tone: "brand" }], total: "3 × 4 cm = 12 cm" },
           tip: "Groups, adding, jumps and scaling are four ways of seeing the same fact.",
         },
+        {
+          type: "worked",
+          title: "Watch me: 5 bags of 4 apples",
+          support: "full",
+          problem: "**5 bags** with **4 apples** in each. How many apples?",
+          visual: { kind: "groups", groups: 5, each: 4, label: "5 groups of 4" },
+          steps: [{ text: "Every bag has the same number: 4. That makes it a multiplication." }, { text: "5 groups of 4: 4 + 4 + 4 + 4 + 4 = **20**, or 5 × 4 = **20**." }],
+          conclusion: "There are **20** apples.",
+        },
+        {
+          type: "worked",
+          title: "Together: 3 jumps of 5",
+          support: "faded",
+          problem: "Jump in **5s** from 0, three times. Where do you land?",
+          steps: [{ text: "Three jumps of 5 is 3 × 5.", blank: { prompt: "3 × 5 = ?", answer: 15, hint: "5, 10, 15", traps: [{ value: 8, misconception: M.added, feedback: "3 + 5 adds the numbers. Three jumps of 5 is 5 + 5 + 5." }], worked: "**15**." } }],
+          conclusion: "You land on **15**.",
+        },
         { type: "check", title: "Your turn", questionId: gen("tt-groups", 1, 2) },
         { type: "check", title: "One more", questionId: gen("tt-jumps", 2, 4) },
       ],
@@ -483,6 +688,23 @@ export const timesTables = defineTopic({
           visual: { kind: "times-row", table: 5, upTo: 10 },
           tip: "Count in 5s on your fingers, or think half of the 10s.",
         },
+        {
+          type: "worked",
+          title: "Watch me: 7 × 5",
+          support: "full",
+          problem: "Work out **7 × 5**.",
+          visual: { kind: "times-row", table: 5, upTo: 7 },
+          steps: [{ text: "Count in 5s seven times: 5, 10, 15, 20, 25, 30, **35**." }, { text: "Check: the 5s end in 5 or 0, and 35 does." }],
+          conclusion: "7 × 5 = **35**.",
+        },
+        {
+          type: "worked",
+          title: "Together: 6 × 10",
+          support: "faded",
+          problem: "Work out **6 × 10**.",
+          steps: [{ text: "Count in 10s six times: 10, 20, 30…", blank: { prompt: "6 × 10 = ?", answer: 60, hint: "The 10s end in 0.", traps: [{ value: 16, misconception: M.added, feedback: "6 + 10 adds them. 6 lots of 10 is 60." }], worked: "**60**." } }],
+          conclusion: "6 × 10 = **60**.",
+        },
         { type: "check", title: "Your turn", questionId: gen("tt-array", 1, 3) },
         { type: "check", title: "One more", questionId: gen("tt-easy", 1, 7) },
       ],
@@ -498,7 +720,7 @@ export const timesTables = defineTopic({
         {
           type: "explain",
           title: "Double, double",
-          body: ["**2 × 6 = 12**. Double it: **4 × 6 = 24**. Double again: **8 × 6 = 48**.", "If you know your 2s, you can always work out the 4s and 8s."],
+          body: ["**2 × 6 = 12**. Double it: **4 × 6 = 24**. Double again: **8 × 6 = 48**.", "If you know your 2s, you can always work out the 4s and 8s.", "The 3s are a skip count too: 3, 6, 9, 12… and 3 × a number is double it plus one more."],
           visual: { kind: "times-row", table: 4, upTo: 10 },
         },
         {
@@ -508,10 +730,19 @@ export const timesTables = defineTopic({
           problem: "**8 × 7**",
           steps: [
             { text: "2 × 7 = 14." },
-            { text: "Double it for 4 × 7.", blank: { prompt: "What is 4 × 7?", answer: 28, hint: "Double 14.", worked: "4 × 7 = **28**." } },
+            { text: "Double it for 4 × 7.", blank: { prompt: "What is 4 × 7?", answer: 28, hint: "Double 14.", traps: [{ value: 16, misconception: M.added, feedback: "Double 14 is 28: 14 + 14." }], worked: "4 × 7 = **28**." } },
             { text: "Double again for 8 × 7: 56." },
           ],
           conclusion: "8 × 7 = **56**.",
+        },
+        {
+          type: "worked",
+          title: "Watch me: 8 × 9",
+          support: "full",
+          problem: "Work out **8 × 9** by doubling.",
+          visual: { kind: "times-row", table: 8, upTo: 9 },
+          steps: [{ text: "2 × 9 = **18**." }, { text: "Double: 4 × 9 = **36**. Double again: 8 × 9 = **72**." }],
+          conclusion: "8 × 9 = **72**.",
         },
         { type: "check", title: "Your turn", questionId: gen("tt-doubling", 1, 4) },
         { type: "check", title: "One more", questionId: gen("tt-doubling-row", 2, 8) },
@@ -544,10 +775,19 @@ export const timesTables = defineTopic({
           problem: "**8 × 7**",
           steps: [
             { text: "Split 8 into 5 and 3." },
-            { text: "5 × 7 = 35.", blank: { prompt: "What is 3 × 7?", answer: 21, hint: "Count in 7s three times.", worked: "3 × 7 = **21**." } },
+            { text: "5 × 7 = 35.", blank: { prompt: "What is 3 × 7?", answer: 21, hint: "Count in 7s three times.", traps: [{ value: 10, misconception: M.added, feedback: "3 + 7 adds them. 3 lots of 7 is 21." }], worked: "3 × 7 = **21**." } },
             { text: "Add the parts: 35 + 21 = 56." },
           ],
           conclusion: "8 × 7 = **56**.",
+        },
+        {
+          type: "worked",
+          title: "Watch me: 4 × 9 or 9 × 4?",
+          support: "full",
+          problem: "Is **4 × 9** the same as **9 × 4**?",
+          visual: { kind: "array", rows: 4, cols: 9 },
+          steps: [{ text: "4 rows of 9 is 36 dots." }, { text: "Turn the array round: 9 rows of 4, still **36**." }],
+          conclusion: "4 × 9 = 9 × 4 = **36**.",
         },
         { type: "check", title: "Your turn", questionId: gen("tt-commute", 1, 3) },
         { type: "check", title: "One more", questionId: gen("tt-split", 2, 5) },
@@ -573,6 +813,23 @@ export const timesTables = defineTopic({
           title: "Use a fact you know",
           body: ["Stuck on **6 × 7**? You know 5 × 7 = 35. Add one more 7: **42**.", "Stuck on **7 × 8**? Remember **5, 6, 7, 8**: 56 = 7 × 8."],
         },
+        {
+          type: "worked",
+          title: "Watch me: 9 × 6",
+          support: "full",
+          problem: "Work out **9 × 6** with the 9s trick.",
+          visual: { kind: "times-row", table: 9, upTo: 6 },
+          steps: [{ text: "10 × 6 = **60**." }, { text: "9 × 6 is one 6 fewer: 60 − 6 = **54**." }],
+          conclusion: "9 × 6 = **54**. Check: 5 + 4 = 9.",
+        },
+        {
+          type: "worked",
+          title: "Together: 6 × 8",
+          support: "faded",
+          problem: "Work out **6 × 8** from 5 × 8.",
+          steps: [{ text: "5 × 8 = 40. Add one more 8.", blank: { prompt: "40 + 8 = ?", answer: 48, hint: "One more lot of 8", traps: [{ value: 46, misconception: M.step, feedback: "Add a whole 8, not 6." }], worked: "**48**." } }],
+          conclusion: "6 × 8 = **48**.",
+        },
         { type: "check", title: "Your turn", questionId: gen("tt-tricky", 2, 3) },
         { type: "check", title: "One more", questionId: gen("tt-tricky-missing", 2, 9) },
       ],
@@ -591,6 +848,23 @@ export const timesTables = defineTopic({
           body: ["Up to 9, the **11s** just repeat the digit: 11 × 4 = **44**, 11 × 7 = **77**.", "**12 × n = 10 × n + 2 × n**. So 12 × 7 = 70 + 14 = **84**."],
           visual: { kind: "bar", total: "12 × 7", parts: [{ label: "10 × 7 = 70", size: 10, tone: "brand" }, { label: "2 × 7 = 14", size: 2.6, tone: "num" }] },
         },
+        {
+          type: "worked",
+          title: "Watch me: 12 × 8",
+          support: "full",
+          problem: "Work out **12 × 8**.",
+          visual: { kind: "bar", total: "12 × 8", parts: [{ label: "10 × 8 = 80", size: 10, tone: "brand" }, { label: "2 × 8 = 16", size: 2, tone: "num" }] },
+          steps: [{ text: "Split 12 into 10 and 2." }, { text: "10 × 8 = 80 and 2 × 8 = 16. 80 + 16 = **96**." }],
+          conclusion: "12 × 8 = **96**.",
+        },
+        {
+          type: "worked",
+          title: "Together: 11 × 6",
+          support: "faded",
+          problem: "Work out **11 × 6**.",
+          steps: [{ text: "Up to 9, the 11s repeat the digit.", blank: { prompt: "11 × 6 = ?", answer: 66, hint: "Repeat the 6.", traps: [{ value: 17, misconception: M.added, feedback: "11 + 6 adds them. 11 lots of 6 is 66." }], worked: "**66**." } }],
+          conclusion: "11 × 6 = **66**.",
+        },
         { type: "check", title: "Your turn", questionId: gen("tt-big", 1, 5) },
         { type: "check", title: "One more", questionId: gen("tt-big", 3, 8) },
       ],
@@ -606,9 +880,26 @@ export const timesTables = defineTopic({
         {
           type: "explain",
           title: "Undo the times",
-          body: ["**6 × 4 = 24** means 24 can be split into 6 groups of 4. So **24 ÷ 6 = 4** and **24 ÷ 4 = 6**."],
+          body: ["**6 × 4 = 24** means 24 can be split into 6 groups of 4. So **24 ÷ 6 = 4** and **24 ÷ 4 = 6**.", "Every times fact gives you two division facts. When you divide, ask yourself: which number times the divisor makes the number I started with?"],
           visual: { kind: "groups", groups: 6, each: 4, label: "24 in 6 groups of 4" },
           tip: "To divide, ask: what times this number makes the big one?",
+        },
+        {
+          type: "worked",
+          title: "Watch me: 56 ÷ 7",
+          support: "full",
+          problem: "Work out **56 ÷ 7**.",
+          visual: { kind: "groups", groups: 7, each: 8, label: "56 in 7 groups" },
+          steps: [{ text: "Think: 7 × what = 56?" }, { text: "7 × 8 = 56, so 56 ÷ 7 = **8**." }],
+          conclusion: "56 ÷ 7 = **8**.",
+        },
+        {
+          type: "worked",
+          title: "Together: 45 ÷ 5",
+          support: "faded",
+          problem: "Work out **45 ÷ 5**.",
+          steps: [{ text: "5 × 9 = 45.", blank: { prompt: "45 ÷ 5 = ?", answer: 9, hint: "Which number times 5 is 45?", traps: [{ value: 225, misconception: M.divMult, feedback: "That multiplies. Division undoes multiplication: 45 ÷ 5 = 9." }], worked: "**9**." } }],
+          conclusion: "45 ÷ 5 = **9**.",
         },
         { type: "check", title: "Your turn", questionId: gen("tt-div", 1, 6) },
         { type: "check", title: "One more", questionId: gen("tt-div-family", 2, 2) },
@@ -639,6 +930,23 @@ export const timesTables = defineTopic({
           title: "A fact family",
           body: ["**3, 4 and 12** make four facts: 3 × 4 = 12, 4 × 3 = 12, 12 ÷ 3 = 4 and 12 ÷ 4 = 3.", "Division undoes multiplication, so one fact gives you all four."],
           tip: "Division facts always start with the biggest number of the family.",
+        },
+        {
+          type: "worked",
+          title: "Watch me: one fact, four facts",
+          support: "full",
+          problem: "Write the fact family for **5, 6 and 30**.",
+          visual: { kind: "array", rows: 5, cols: 6 },
+          steps: [{ text: "5 × 6 = 30 and 6 × 5 = 30." }, { text: "30 ÷ 5 = 6 and 30 ÷ 6 = 5." }],
+          conclusion: "Four facts from **5, 6 and 30**.",
+        },
+        {
+          type: "worked",
+          title: "Together: boxes of 4",
+          support: "faded",
+          problem: "**20 pens** go into boxes of **4**. How many boxes?",
+          steps: [{ text: "Grouping: how many 4s make 20?", blank: { prompt: "20 ÷ 4 = ?", answer: 5, hint: "4 × 5 = 20", traps: [{ value: 80, misconception: M.divMult, feedback: "That multiplies. Grouping is dividing: 20 ÷ 4." }], worked: "**5** boxes." } }],
+          conclusion: "You fill **5** boxes.",
         },
         { type: "check", title: "Your turn", questionId: gen("tt-share", 1, 4) },
         { type: "check", title: "One more", questionId: gen("tt-family-why", 3, 1) },
