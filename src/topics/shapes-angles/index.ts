@@ -1,4 +1,4 @@
-import { defineTopic, genFor, int, pick } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
 import type { ChooseOption, ShapeName, Template } from "@/topics/kit/types";
 
 /** Shapes and angles: naming 2D and 3D shapes, types of angle, turns and degrees, and angle facts. */
@@ -77,7 +77,7 @@ const article = (word: string) => (/^[aeiou]/i.test(word) ? "An" : "A");
 const typeOf = (d: number) => (d < 90 ? "Acute" : d === 90 ? "Right angle" : d < 180 ? "Obtuse" : "Reflex");
 const TYPE_RULE = "Acute: less than 90°. Right angle: exactly 90°. Obtuse: between 90° and 180°. Reflex: more than 180°.";
 
-const templates: Template[] = [
+const baseTemplates: Template[] = [
   {
     key: "sa-name",
     skill: S.shapes,
@@ -277,7 +277,141 @@ const templates: Template[] = [
       };
     },
   },
+  /* D-037 (Phase B): a stretch question for every skill, and a second maker for angle types and turns. */
+  {
+    key: "sa-shapes-stretch",
+    skill: S.shapes,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const solid = pick(r, SOLIDS);
+      const sum = solid.faces + solid.vertices - solid.edges;
+      return {
+        kind: "number",
+        prompt: `A **${solid.name}** has ${solid.faces} faces and ${solid.vertices} vertices. How many **edges** does it have?`,
+        answer: solid.edges,
+        traps: [{ value: solid.faces + solid.vertices, misconception: M.parts, feedback: "Edges are where two faces meet: count the lines, not faces plus corners." }],
+        hint: "Picture it: count the straight lines where two faces meet.",
+        explanation: `A ${solid.name} has **${solid.edges}** edges. (Faces + vertices − edges = ${sum}, which is true for every one of these solids.)`,
+      };
+    },
+  },
+  {
+    key: "sa-type-word",
+    skill: S.types,
+    difficulties: [1, 2, 3],
+    make: (r, { difficulty }) => {
+      const d = difficulty === 1 ? pick(r, [30, 60, 90, 120, 150]) : difficulty === 2 ? int(r, 10, 175) : int(r, 181, 350);
+      const right = typeOf(d);
+      return {
+        kind: "choose",
+        prompt: `What type of angle is **${d}°**?`,
+        options: unique(right, ["Acute", "Right angle", "Obtuse", "Reflex"].filter((x) => x !== right).map((x) => ({ text: x, misconception: M.size, feedback: TYPE_RULE }))),
+        answer: 0,
+        fixedOrder: true,
+        hint: "Compare it with 90° and 180°.",
+        explanation: `${d}° is **${right.toLowerCase()}**. ${TYPE_RULE}`,
+      };
+    },
+  },
+  {
+    key: "sa-types-stretch",
+    skill: S.types,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const h = pick(r, [1, 2, 4, 5, 7, 8, 10, 11]);
+      const deg = Math.min(h * 30, 360 - h * 30);
+      const right = typeOf(deg);
+      return {
+        kind: "choose",
+        prompt: `At **${h} o'clock**, what type of angle do the clock hands make (the smaller angle between them)?`,
+        visual: { kind: "clock", hours: h, minutes: 0 },
+        options: unique(right, ["Acute", "Right angle", "Obtuse"].filter((x) => x !== right).map((x) => ({ text: x, misconception: M.size, feedback: "Each hour mark is 30° apart. Count the hours between the hands." }))),
+        answer: 0,
+        fixedOrder: true,
+        hint: "The 12 numbers split 360° into 12 equal parts: 30° each.",
+        explanation: `The hands are ${Math.min(h, 12 - h)} hours apart: ${Math.min(h, 12 - h)} × 30° = ${deg}°, which is **${right.toLowerCase()}**.`,
+      };
+    },
+  },
+  {
+    key: "sa-turn-degrees",
+    skill: S.turns,
+    difficulties: [1, 2, 3],
+    make: (r, { difficulty }) => {
+      const quarters = difficulty === 1 ? int(r, 1, 2) : int(r, 1, 3);
+      const words = ["", "a quarter turn", "a half turn", "three quarters of a turn"][quarters]!;
+      return {
+        kind: "number",
+        prompt: `How many degrees is **${words}**?`,
+        unit: "°",
+        answer: quarters * 90,
+        traps: [{ value: quarters * 100, misconception: M.total, feedback: "A full turn is 360°, so a quarter turn is 90°, not 100°." }],
+        hint: "A full turn is 360°. Divide it into quarters.",
+        explanation: `${quarters} × 90° = **${quarters * 90}°**.`,
+      };
+    },
+  },
+  {
+    key: "sa-turns-stretch",
+    skill: S.turns,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const dirs = ["North", "East", "South", "West"];
+      const start = int(r, 0, 3);
+      const a = int(r, 1, 3);
+      const b = int(r, 1, 3);
+      const end = (start + a - b + 8) % 4;
+      return {
+        kind: "choose",
+        prompt: `Sam faces **${dirs[start]}**. Sam turns **${a * 90}° clockwise**, then **${b * 90}° anticlockwise**. Which way does Sam face now?`,
+        options: [{ text: dirs[end]! }, ...dirs.filter((_, i) => i !== end).map((d) => ({ text: d, misconception: M.direction, feedback: "Clockwise goes North → East → South → West; anticlockwise goes the other way." }))],
+        answer: 0,
+        fixedOrder: true,
+        hint: "Each 90° turn moves one compass point. Do the clockwise turn first.",
+        explanation: `${a} quarter turns clockwise, then ${b} back: Sam faces **${dirs[end]}**.`,
+      };
+    },
+  },
+  {
+    key: "sa-facts-stretch",
+    skill: S.facts,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const a = int(r, 50, 120);
+      const b = int(r, 40, 300 - a - 40);
+      const c = 360 - a - b;
+      return {
+        kind: "number",
+        prompt: `Three angles meet at a point. Two of them are **${a}°** and **${b}°**. What is the third angle?`,
+        visual: { kind: "angle-split", parts: [a, b, c], labels: [`${a}°`, `${b}°`, "?"] },
+        unit: "°",
+        answer: c,
+        traps: [{ value: 180 - a - b > 0 ? 180 - a - b : 180 + a - b, misconception: M.total, feedback: "Angles around a point add up to 360°, not 180°." }].filter((t) => t.value !== c && t.value > 0),
+        hint: "Angles all the way round a point make a full turn.",
+        explanation: `360° − ${a}° − ${b}° = **${c}°**.`,
+      };
+    },
+  },
 ];
+
+const templates = withHints(baseTemplates, {
+  "sa-name": () => ["Count the sides and corners.", "Check the sides' lengths and any right angles or parallel sides."],
+  "sa-props": () => ["Faces are the flat surfaces, edges are the lines, vertices are the corners.", "Picture the shape and count one kind at a time."],
+  "sa-type": () => ["Compare the angle with a square corner (90°).", "Smaller than 90°: acute. Between 90° and 180°: obtuse. More than 180°: reflex."],
+  "sa-turns": () => ["A full turn is 360°, a half turn 180°, a quarter turn 90°.", "Clockwise goes North, East, South, West."],
+  "sa-line": () => ["Angles on a straight line add up to 180°.", "Take the angle you know away from 180°."],
+  "sa-triangle": () => ["The angles in a triangle add up to 180°.", "Add the two you know, then take that from 180°."],
+  "sa-shapes-stretch": () => ["Edges are the lines where faces meet.", "Count the edges round the top, round the bottom, and the ones joining them."],
+  "sa-type-word": () => ["Is it less than 90°, exactly 90°, or more?", "More than 180° is reflex."],
+  "sa-types-stretch": () => ["Each hour gap is 30°.", "Count the hour gaps between the hands and multiply by 30."],
+  "sa-turn-degrees": () => ["A full turn is 360°.", "A quarter turn is 360 ÷ 4."],
+  "sa-turns-stretch": () => ["Draw the compass and follow each turn.", "90° clockwise moves one point round to the right."],
+  "sa-facts-stretch": () => ["Angles around a point add up to 360°.", "Take both angles away from 360."],
+});
 
 export const shapesAngles = defineTopic({
   id: T,
@@ -316,6 +450,23 @@ export const shapesAngles = defineTopic({
           visual: { kind: "shape", name: "rhombus" },
           tip: "3D shapes have faces (flat sides), edges (where faces meet) and vertices (corners). A cube has 6, 12 and 8.",
         },
+        {
+          type: "worked",
+          title: "Watch me: name this shape",
+          support: "full",
+          problem: "A shape has 4 sides. Opposite sides are parallel and equal, but there are no right angles and the sides aren't all equal. What is it?",
+          visual: { kind: "shape", name: "parallelogram" },
+          steps: [{ text: "4 sides: a quadrilateral." }, { text: "No right angles rules out a square and a rectangle. Sides not all equal rules out a rhombus." }, { text: "Two pairs of parallel sides: a **parallelogram**." }],
+          conclusion: "It's a **parallelogram**.",
+        },
+        {
+          type: "worked",
+          title: "Together: faces of a cube",
+          support: "faded",
+          problem: "How many **faces** does a cube have?",
+          steps: [{ text: "Count the flat surfaces: top and bottom, front and back, left and right.", blank: { prompt: "How many faces?", answer: 6, hint: "3 pairs", traps: [{ value: 8, misconception: M.parts, feedback: "8 is the number of vertices (corners). Faces are the flat squares." }, { value: 12, misconception: M.parts, feedback: "12 is the number of edges. Faces are the flat squares." }], worked: "**6** faces." } }],
+          conclusion: "A cube has **6** faces, 12 edges and 8 vertices.",
+        },
         { type: "check", title: "Your turn", questionId: gen("sa-name", 2, 4) },
         { type: "check", title: "One more", questionId: gen("sa-props", 3, 2) },
       ],
@@ -341,6 +492,24 @@ export const shapesAngles = defineTopic({
           visual: { kind: "angle", degrees: 130, label: "130°" },
           tip: "Acute is small and sharp, like a cute little angle!",
         },
+        {
+          type: "worked",
+          title: "Watch me: is 200° obtuse?",
+          support: "full",
+          problem: "What type of angle is **200°**?",
+          visual: { kind: "angle", degrees: 200, label: "200°" },
+          steps: [{ text: "A straight line is 180°. 200° is **more** than that." }, { text: "Angles more than 180° are **reflex**." }],
+          conclusion: "200° is a **reflex** angle, not obtuse.",
+        },
+        {
+          type: "worked",
+          title: "Together: how much more than a right angle?",
+          support: "faded",
+          problem: "An angle is **135°**. How much bigger than a right angle is it?",
+          visual: { kind: "angle", degrees: 135, label: "135°" },
+          steps: [{ text: "A right angle is 90°.", blank: { prompt: "135 − 90 = ?", answer: 45, hint: "135 − 90", traps: [{ value: 35, misconception: M.size, feedback: "A right angle is 90°, not 100°." }], worked: "**45°** more, so it's obtuse." } }],
+          conclusion: "135° is **45°** more than a right angle: **obtuse**.",
+        },
         { type: "check", title: "Your turn", questionId: gen("sa-type", 1, 3) },
         { type: "check", title: "One more", questionId: gen("sa-type", 2, 5) },
       ],
@@ -356,8 +525,25 @@ export const shapesAngles = defineTopic({
         {
           type: "explain",
           title: "Turning",
-          body: ["A **full turn** is **360°**. A half turn is **180°** and a quarter turn is **90°**.", "**Clockwise** turns the same way as a clock's hands: North → East → South → West."],
+          body: ["A **full turn** is **360°**. A half turn is **180°** and a quarter turn is **90°**.", "**Clockwise** turns the same way as a clock's hands: North → East → South → West.", "**Anticlockwise** goes the other way: North → West → South → East. Each quarter turn moves you one compass point."],
           visual: { kind: "angle-split", parts: [90, 90, 90, 90], labels: ["90°", "90°", "90°", "90°"] },
+        },
+        {
+          type: "worked",
+          title: "Watch me: West, then 270° clockwise",
+          support: "full",
+          problem: "You face **West** and turn **270° clockwise**. Which way do you face?",
+          visual: { kind: "angle-split", parts: [90, 90, 90, 90], labels: ["N", "E", "S", "W"] },
+          steps: [{ text: "270° is three quarter turns." }, { text: "Clockwise from West: **North**, **East**, **South**." }],
+          conclusion: "You face **South**.",
+        },
+        {
+          type: "worked",
+          title: "Together: a half turn",
+          support: "faded",
+          problem: "How many degrees is a **half turn**?",
+          steps: [{ text: "A full turn is 360°.", blank: { prompt: "360 ÷ 2 = ?", answer: 180, hint: "Half of 360", traps: [{ value: 90, misconception: M.total, feedback: "90° is a quarter turn. A half turn is half of 360°." }], worked: "**180°**." } }],
+          conclusion: "A half turn is **180°**.",
         },
         { type: "check", title: "Your turn", questionId: gen("sa-turns", 1, 2) },
         { type: "check", title: "One more", questionId: gen("sa-turns", 2, 6) },
@@ -371,6 +557,12 @@ export const shapesAngles = defineTopic({
       minutes: 8,
       objectives: ["Find missing angles on a straight line and around a point", "Find missing angles in a triangle"],
       steps: [
+        {
+          type: "explain",
+          title: "Three totals to know",
+          body: ["Angles on a **straight line** add up to **180°**. Angles **around a point** add up to **360°**. The angles inside a **triangle** add up to **180°**.", "To find a missing angle, add the angles you know and take that away from the total."],
+          visual: { kind: "angle-split", parts: [125, 55], labels: ["125°", "55°"] },
+        },
         {
           type: "worked",
           title: "Watch me: a straight line",
@@ -388,7 +580,7 @@ export const shapesAngles = defineTopic({
           visual: { kind: "triangle", angles: [70, 40, 70], labels: ["70°", "40°", "?"] },
           steps: [
             { text: "Angles in a triangle add up to 180°." },
-            { text: "Add the two you know.", blank: { prompt: "What is 70 + 40?", answer: 110, hint: "70 + 40.", worked: "70 + 40 = **110**." } },
+            { text: "Add the two you know.", blank: { prompt: "What is 70 + 40?", answer: 110, hint: "70 + 40.", traps: [{ value: 140, misconception: M.total, feedback: "Add the two angles you know: 70 + 40." }], worked: "70 + 40 = **110**." } },
             { text: "180 − 110 = 70." },
           ],
           conclusion: "The missing angle is **70°**.",
