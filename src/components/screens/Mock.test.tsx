@@ -1,10 +1,12 @@
-import { act, render, screen, within } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { DEFAULT_MOCK } from "@/engine/mock";
 import { createInitialState } from "@/engine/progress";
 import type { ItemResult } from "@/engine/types";
-import { updateLearner } from "@/lib/store";
-import { MockScreen } from "./MockScreen";
+import { getLearner, updateLearner } from "@/lib/store";
+import type { KitQuestion } from "@/topics/kit/types";
+import { buildPaper, MockScreen, sectionBounds } from "./MockScreen";
 import { PlanScreen } from "./PlanScreen";
 
 /** R5 screens in jsdom: practice mocks (EXAM-005, EXAM-006) and the weekly plan (PARENT-003). */
@@ -69,6 +71,81 @@ describe("post-test analysis on screen (EXAM-006)", () => {
     await user.click(screen.getByRole("button", { name: "Set up another mock" }));
     expect(screen.getByRole("heading", { name: "Your mocks" })).toBeTruthy();
     expect(screen.getByRole("button", { name: /0 of 6/ })).toBeTruthy();
+  });
+});
+
+describe("mock formats from verified profiles (D-037)", () => {
+  afterEach(() => vi.useRealTimers());
+
+  it("shows a chosen provider's verified facts with their source, and unknown for the rest", async () => {
+    const user = userEvent.setup();
+    render(<MockScreen />);
+    await user.click(screen.getByRole("button", { name: /^ISEB Common Pre-Tests/ }));
+    const facts = screen.getByRole("heading", { name: "Which test?" }).closest("section")!;
+    expect(within(facts).getByText(/40 minutes/)).toBeTruthy();
+    expect(within(facts).getAllByRole("link", { name: "ISEB" })[0].getAttribute("href")).toMatch(/^https:\/\/iseb\.co\.uk\//);
+    expect(within(facts).getByText(/Calculators:/).parentElement!.textContent).toMatch(/Calculators: unknown/);
+    expect(screen.getByText(/Timing: 40 minutes, from ISEB/)).toBeTruthy();
+  });
+
+  it("shares questions out between timed sections (hand-worked)", () => {
+    expect(sectionBounds(12, 3)).toEqual([[0, 4], [4, 8], [8, 12]]);
+    expect(sectionBounds(7, 2)).toEqual([[0, 3], [3, 7]]);
+    expect(sectionBounds(6, 1)).toEqual([[0, 6]]);
+  });
+
+  it("builds an answer-sheet paper of lettered options and a two-part paper of linked (a) and (b) pairs", () => {
+    const sheet = buildPaper("s1", { ...DEFAULT_MOCK, format: "answer-sheet", questionCount: 12, profileId: "general" });
+    expect(sheet.every((q) => q.kind === "choose")).toBe(true);
+    const lettered = sheet.filter((q) => q.kind === "choose" && q.options.length === 5);
+    expect(lettered.length).toBeGreaterThan(0);
+    for (const q of lettered) if (q.kind === "choose") expect(q.options.map((o) => o.text.slice(0, 4))).toEqual(["(A) ", "(B) ", "(C) ", "(D) ", "(E) "]);
+
+    const parts = buildPaper("s2", { ...DEFAULT_MOCK, format: "two-part", questionCount: 12, profileId: "general" });
+    const key = (q: KitQuestion) => q.id.split(":")[1].split(".")[1];
+    expect(parts.length).toBe(12);
+    expect(parts.map(key).filter((k) => k.startsWith("mx-twopart")).length).toBe(8);
+    parts.forEach((q, i) => {
+      if (key(q) !== "mx-twopart-a") return;
+      expect(key(parts[i + 1])).toBe("mx-twopart-b");
+      expect(parts[i + 1].id.replace("mx-twopart-b", "mx-twopart-a")).toBe(q.id);
+    });
+  });
+
+  it("gives each section its own clock, moves on when it runs out, never goes back, and records the section", () => {
+    vi.useFakeTimers();
+    render(<MockScreen />);
+    fireEvent.click(screen.getByRole("button", { name: "6" }));
+    fireEvent.click(screen.getByRole("button", { name: "10 min" }));
+    fireEvent.click(screen.getByRole("button", { name: "2 sections" }));
+    fireEvent.click(screen.getByRole("button", { name: /Start the mock/ }));
+    expect(screen.getByText(/Section 1 of 2 · Question 1 of 6/)).toBeTruthy();
+    expect(screen.getByRole("timer").textContent).toBe("5:00");
+    expect(within(screen.getByRole("navigation", { name: "Questions" })).getAllByRole("button").map((b) => b.textContent)).toEqual(["1", "2", "3"]);
+    act(() => { vi.advanceTimersByTime(5 * 60_000 + 600); });
+    expect(screen.getByText(/Section 2 of 2 · Question 4 of 6/)).toBeTruthy();
+    expect(screen.getByRole("timer").textContent).toMatch(/^[45]:\d\d$/);
+    expect(within(screen.getByRole("navigation", { name: "Questions" })).getAllByRole("button").map((b) => b.textContent)).toEqual(["4", "5", "6"]);
+    expect(screen.queryByRole("button", { name: "Back" })).toBeNull();
+    act(() => { vi.advanceTimersByTime(5 * 60_000 + 600); });
+    expect(screen.getByRole("heading", { name: "0 of 6 right" })).toBeTruthy();
+    const metas = getLearner().results.filter((r) => r.mock).map((r) => r.mock!);
+    expect(metas.map((m) => m.section)).toEqual([0, 0, 0, 1, 1, 1]);
+    expect(metas.every((m) => m.sectionMs === 5 * 60_000 && m.endedAtMs === 5 * 60_000)).toBe(true);
+  });
+
+  it("lets the child end a section early with Start the next section", async () => {
+    const user = userEvent.setup();
+    render(<MockScreen />);
+    await user.click(screen.getByRole("button", { name: "6" }));
+    await user.click(screen.getByRole("button", { name: "3 sections" }));
+    await user.click(screen.getByRole("button", { name: /Start the mock/ }));
+    expect(screen.getByText(/can't come back to it/)).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "Start the next section" }));
+    expect(screen.getByText(/Section 2 of 3 · Question 3 of 6/)).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "Start the next section" }));
+    await user.click(screen.getByRole("button", { name: "Finish the mock" }));
+    expect(screen.getByRole("heading", { name: "0 of 6 right" })).toBeTruthy();
   });
 });
 

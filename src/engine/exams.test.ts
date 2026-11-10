@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { GENERAL_PRACTICE, KNOWN_FIELDS, recordChange, validateProfile, type ExamProfile, type SourceRef } from "./examProfile";
+import { CSSE_ESSEX, EXAM_PROFILES, GENERAL_PRACTICE, ISEB_PRE_TEST, KNOWN_FIELDS, recordChange, validateProfile, type ExamProfile, type SourceRef } from "./examProfile";
 import { analyseMock, configFor, DEFAULT_MOCK, NO_PREDICTION, PRACTICE_LABEL, revisionPlan } from "./mock";
 import type { ItemResult, MockMeta } from "./types";
 
@@ -9,7 +9,7 @@ const src = (about: string, retrieved = "2026-09-01"): SourceRef => ({ url: "htt
 const profile = (over: Partial<ExamProfile> = {}): ExamProfile => ({ ...GENERAL_PRACTICE, id: "example-school", name: "Example School", admissionsYear: "2027 entry", ...over });
 
 describe("exam profiles (EXAM-001)", () => {
-  it("ships only general practice, with every exam fact explicitly unknown", () => {
+  it("keeps general practice with every exam fact explicitly unknown", () => {
     for (const f of KNOWN_FIELDS) expect(GENERAL_PRACTICE[f].status, f).toBe("unknown");
     expect(GENERAL_PRACTICE.sourceDate).toBeNull();
     expect(validateProfile(GENERAL_PRACTICE)).toEqual([]);
@@ -20,6 +20,45 @@ describe("exam profiles (EXAM-001)", () => {
     expect(validateProfile(ok)).toEqual([]);
     const noDate = profile({ mathsMinutes: { status: "verified", value: 50, source: { ...src("example-school"), retrieved: "Sept" } }, sourceDate: "Sept" });
     expect(validateProfile(noDate).join()).toMatch(/retrieval date/);
+  });
+});
+
+describe("verified provider profiles (D-037)", () => {
+  it("validates every shipped profile, each verified fact quoting the provider's own https page for that profile", () => {
+    expect(EXAM_PROFILES.map((p) => p.id)).toEqual(["general", "iseb", "gl", "csse", "seag"]);
+    for (const p of EXAM_PROFILES) {
+      expect(validateProfile(p), p.id).toEqual([]);
+      for (const f of KNOWN_FIELDS) {
+        const k = p[f];
+        if (k.status !== "verified") continue;
+        expect(k.source.about, `${p.id}.${f}`).toBe(p.id);
+        expect(k.source.url, `${p.id}.${f}`).toMatch(/^https:\/\//);
+        expect((k.source.quote ?? "").length, `${p.id}.${f}`).toBeGreaterThan(5);
+      }
+    }
+    // Hand-checked against docs/product/exams/evidence/official-sources-2026-11-10.md.
+    expect(ISEB_PRE_TEST.mathsMinutes).toMatchObject({ status: "verified", value: 40 });
+    expect(ISEB_PRE_TEST.questionFormats).toMatchObject({ status: "verified", value: "multiple-choice" });
+    expect(CSSE_ESSEX.mathsMinutes).toMatchObject({ status: "verified", value: 60 });
+    expect(CSSE_ESSEX.questionFormats.status).toBe("unknown");
+    expect(EXAM_PROFILES.every((p) => p.calculators.status === "unknown")).toBe(true);
+  });
+
+  it("applies ISEB's 40 minutes and multiple choice, keeping an answer sheet, and CSSE's 60 minutes with the format left to the child", () => {
+    expect(configFor(ISEB_PRE_TEST, { ...DEFAULT_MOCK, sectionMinutes: 15, format: "number" }).config).toMatchObject({ sectionMinutes: 40, format: "multiple-choice", profileId: "iseb" });
+    expect(configFor(ISEB_PRE_TEST, { ...DEFAULT_MOCK, format: "answer-sheet" }).config.format).toBe("answer-sheet");
+    const csse = configFor(CSSE_ESSEX, { ...DEFAULT_MOCK, sectionMinutes: 15, format: "two-part" });
+    expect(csse.config).toMatchObject({ sectionMinutes: 60, format: "two-part", profileId: "csse" });
+    expect(csse.notes.join(" ")).toMatch(/Format: not known for this test/);
+  });
+
+  it("splits a mock into 1 to 4 timed sections, saying it is a practice choice", () => {
+    const three = configFor(GENERAL_PRACTICE, { ...DEFAULT_MOCK, sectionMinutes: 15, sections: 3 });
+    expect(three.config.sections).toBe(3);
+    expect(three.notes.join(" ")).toMatch(/3 timed sections, each with 5 min .*practice choice, not a rule of any test/);
+    expect(configFor(GENERAL_PRACTICE, { ...DEFAULT_MOCK, sections: 9 }).config.sections).toBe(4);
+    expect(configFor(GENERAL_PRACTICE, { ...DEFAULT_MOCK, sections: 0 }).config.sections).toBe(1);
+    expect(configFor(GENERAL_PRACTICE, DEFAULT_MOCK).notes.join(" ")).not.toMatch(/timed sections/);
   });
 });
 

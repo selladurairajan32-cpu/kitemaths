@@ -463,7 +463,7 @@ TC-MM-012.1.1,MM-012,AC1,unit,automated,passing,"src/engine/strategyStats.test.t
 TC-MM-012.2.1,MM-012,AC2,component,automated,passing,src/components/screens/Strategies.test.tsx::warns when a faster run hides lower accuracy,(CH-052)
 TC-MM-012.3.1,MM-012,AC3,unit,automated,passing,"src/engine/strategyStats.test.ts::recommends the weakest skills first, then skills not tried yet",(CH-052)
 TC-EXAM-001.1.1,EXAM-001,AC1,unit,automated,passing,"src/engine/exams.test.ts::accepts a verified fact only with an https source, publisher, date and the same profile",Model: exams/EXAM-001-002-profiles-and-verification.md (CH-053)
-TC-EXAM-001.2.1,EXAM-001,AC2,unit,automated,passing,"src/engine/exams.test.ts::ships only general practice, with every exam fact explicitly unknown",(CH-053)
+TC-EXAM-001.2.1,EXAM-001,AC2,unit,automated,passing,src/engine/exams.test.ts::keeps general practice with every exam fact explicitly unknown,(CH-053; title updated CH-065)
 TC-EXAM-002.1.1,EXAM-002,AC1,document-review,manual,review-pending,,"Review of the official-source rules and workflow, EXAM-001-002 doc §2–§3 (CH-053)"
 TC-EXAM-002.2.1,EXAM-002,AC2,unit,automated,passing,src/engine/exams.test.ts::refuses a format inferred from a nearby school,(CH-053)
 TC-EXAM-002.3.1,EXAM-002,AC3,unit,automated,passing,src/engine/exams.test.ts::date-stamps every change and keeps the source date current,(CH-053)
@@ -569,3 +569,13 @@ TC-CUR-003.1.9,CUR-003,AC1,content,automated,passing,"src/topics/kit/depth.test.
 TC-CUR-003.1.10,CUR-003,AC1,unit,automated,passing,src/topics/kit/depth.test.ts::gives each factor puzzle exactly one answer (hand-worked),Stretch puzzle answers checked against a hand-worked list (CH-063)
 TC-FR-010.3.3,FR-010,AC3,unit,automated,passing,"src/engine/engine.test.ts::shows more hints one at a time, each counted (D-037 fading hints)",Hints fade in one at a time; each extra hint counts as help (CH-063)
 TC-CUR-003.1.11,CUR-003,AC1,content,automated,passing,"src/topics/kit/depth.test.ts::asks only for answers a worked-example blank can take: whole numbers from 0 to 9,999","Every worked-example blank, on every island, can be answered with the four-digit number box (CH-063)"
+TC-EXAM-001.1.2,EXAM-001,AC1,unit,automated,passing,"src/engine/exams.test.ts::validates every shipped profile, each verified fact quoting the provider's own https page for that profile","ISEB, GL, CSSE and SEAG profiles from official pages read 10 Nov 2026; values hand-checked against the evidence file (CH-065)"
+TC-EXAM-005.3.2,EXAM-005,AC3,unit,automated,passing,"src/engine/exams.test.ts::applies ISEB's 40 minutes and multiple choice, keeping an answer sheet, and CSSE's 60 minutes with the format left to the child",Verified timing and format applied; unknown format left to the child (CH-065)
+TC-EXAM-005.1.2,EXAM-005,AC1,unit,automated,passing,"src/engine/exams.test.ts::splits a mock into 1 to 4 timed sections, saying it is a practice choice",Short timed sections are a practice setting (CH-065)
+TC-EXAM-005.1.3,EXAM-005,AC1,content,automated,passing,"src/topics/mock-exams/mock-exams.test.ts::gives an answer sheet up to five different options lettered (A) to (E) in order, with exactly the right one marked right",5-option answer-sheet format (CH-065)
+TC-EXAM-004.1.2,EXAM-004,AC1,content,automated,passing,"src/topics/mock-exams/mock-exams.test.ts::sets two linked parts that share one story, 1 mark each, with answers worked from the story's own numbers",Oracle reads the numbers back from the prompt text (CH-065)
+TC-EXAM-001.1.3,EXAM-001,AC1,component,automated,passing,"src/components/screens/Mock.test.tsx::shows a chosen provider's verified facts with their source, and unknown for the rest",Profile selector on the mock screen (CH-065)
+TC-EXAM-005.1.4,EXAM-005,AC1,component,automated,passing,src/components/screens/Mock.test.tsx::shares questions out between timed sections (hand-worked),(CH-065)
+TC-EXAM-005.1.5,EXAM-005,AC1,component,automated,passing,src/components/screens/Mock.test.tsx::builds an answer-sheet paper of lettered options and a two-part paper of linked (a) and (b) pairs,(CH-065)
+TC-EXAM-005.1.6,EXAM-005,AC1,component,automated,passing,"src/components/screens/Mock.test.tsx::gives each section its own clock, moves on when it runs out, never goes back, and records the section",Fake clock (CH-065)
+TC-EXAM-005.1.7,EXAM-005,AC1,component,automated,passing,src/components/screens/Mock.test.tsx::lets the child end a section early with Start the next section,(CH-065)

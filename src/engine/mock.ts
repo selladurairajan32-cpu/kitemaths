@@ -10,7 +10,11 @@ import { skillMastery } from "./mastery";
 import type { ItemResult } from "./types";
 
 export type ReviewRule = "anytime" | "end" | "none";
-export type MockFormat = "number" | "multiple-choice" | "mixed";
+/**
+ * number: write the answer. multiple-choice: 4 options. mixed: alternate. answer-sheet (D-037): 5 options, A to E,
+ * marked on a separate answer sheet. two-part (D-037): written answers in linked parts (a) and (b), 1 mark each.
+ */
+export type MockFormat = "number" | "multiple-choice" | "mixed" | "answer-sheet" | "two-part";
 
 export interface MockConfig {
   questionCount: number;
@@ -18,11 +22,13 @@ export interface MockConfig {
   /** anytime: move back and forth and change answers; end: review only after the last question; none: no going back. */
   review: ReviewRule;
   format: MockFormat;
+  /** D-037: the paper split into this many short timed sections, each with an equal share of questions and time. */
+  sections: number;
   profileId: string;
 }
 
-export const MOCK_LIMITS = { questions: [5, 40], minutes: [5, 60] } as const;
-export const DEFAULT_MOCK: Omit<MockConfig, "profileId"> = { questionCount: 12, sectionMinutes: 15, review: "anytime", format: "mixed" };
+export const MOCK_LIMITS = { questions: [5, 40], minutes: [5, 60], sections: [1, 4] } as const;
+export const DEFAULT_MOCK: Omit<MockConfig, "profileId"> = { questionCount: 12, sectionMinutes: 15, review: "anytime", format: "mixed", sections: 1 };
 
 /** The label every mock carries (EXAM-005 AC4). */
 export const PRACTICE_LABEL = "Practice mock made by Kite Maths. It is not an official paper or a past paper.";
@@ -45,10 +51,14 @@ export function configFor(profile: ExamProfile, chosen: Omit<MockConfig, "profil
     notes.push(`Timing: ${profile.mathsMinutes.value} minutes, from ${profile.mathsMinutes.source.publisher} (read ${profile.mathsMinutes.source.retrieved}).`);
   } else notes.push("Timing: not known for this test, so your choice is used.");
   if (profile.questionFormats.status === "verified") {
-    format = profile.questionFormats.value === "standard" ? "number" : profile.questionFormats.value;
+    // A verified multiple-choice test keeps an answer-sheet choice (both are multiple choice); the option count is never claimed.
+    const stated = profile.questionFormats.value === "standard" ? "number" : profile.questionFormats.value;
+    format = stated === "multiple-choice" && chosen.format === "answer-sheet" ? "answer-sheet" : stated;
     notes.push(`Format: ${profile.questionFormats.value}, from ${profile.questionFormats.source.publisher} (read ${profile.questionFormats.source.retrieved}).`);
   } else notes.push("Format: not known for this test, so your choice is used.");
-  return { config: { questionCount: clamp(chosen.questionCount, MOCK_LIMITS.questions), sectionMinutes: minutes, review: chosen.review, format, profileId: profile.id }, notes };
+  const sections = clamp(chosen.sections ?? 1, MOCK_LIMITS.sections);
+  if (sections > 1) notes.push(`Sections: ${sections} timed sections, each with ${+(minutes / sections).toFixed(1)} min and its share of the questions. This is a practice choice, not a rule of any test.`);
+  return { config: { questionCount: clamp(chosen.questionCount, MOCK_LIMITS.questions), sectionMinutes: minutes, review: chosen.review, format, sections, profileId: profile.id }, notes };
 }
 
 export type MistakeKind = "knowledge" | "careless" | "timing" | "format" | "unclear";

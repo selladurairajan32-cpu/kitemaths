@@ -1,3 +1,4 @@
+import { hashString, prng } from "@/engine/random";
 import type { SkillId } from "@/engine/types";
 import { addSubtract } from "@/topics/add-subtract";
 import { areaPerimeter } from "@/topics/area-perimeter";
@@ -171,8 +172,72 @@ const techniqueTemplates = withHints(problemTemplates, {
   "mx-method": () => ["Look at the numbers before you choose.", "Pick the method with the fewest easy steps that still works."],
 });
 
+/**
+ * D-037: a written question in two linked parts, as some 11+ papers set them (the format is not claimed for any one
+ * test). Part (a) and part (b) with the same difficulty and seed share one story, so a paper can set them together;
+ * each is still a whole question on its own.
+ */
+function story(id: string, difficulty: number) {
+  const r = prng(hashString(`twopart:${difficulty}:${/:(\d+)$/.exec(id)![1]}`));
+  const which = int(r, 0, 2);
+  if (which === 0) {
+    const price = 5 * int(r, 24, 40);
+    const k = int(r, 2, difficulty === 3 ? 4 : 3);
+    const drink = 5 * int(r, 12, 24);
+    const cost = price * k;
+    return {
+      text: `A café sells sandwiches for **${price}p** each and drinks for **${drink}p** each.`,
+      a: { ask: `How much do **${k} sandwiches** cost, in pence?`, answer: cost, trap: price + k, hints: ["Each sandwich costs the same: multiply.", `${price} × ${k}.`], why: `${price} × ${k} = **${cost}p**.` },
+      b: { ask: `Sam buys ${k} sandwiches and one drink, and pays with a **£10** note. How much change does Sam get, in pence?`, answer: 1000 - cost - drink, trap: 1000 - cost, hints: ["£10 is 1,000p. Find the total spent first.", `Total spent: ${cost} + ${drink}. Then take it from 1,000.`], why: `Spent: ${cost} + ${drink} = ${cost + drink}p. Change: 1,000 − ${cost + drink} = **${1000 - cost - drink}p**.` },
+    };
+  }
+  if (which === 1) {
+    const seats = pick(r, [32, 45, 52]);
+    const buses = int(r, 3, difficulty === 3 ? 7 : 5);
+    const pupils = seats * (buses - 1) + int(r, 1, seats - 1);
+    return {
+      text: `A school trip has **${fmtN(pupils)} pupils**. Each coach holds **${seats}** pupils.`,
+      a: { ask: "How many coaches are needed so that every pupil has a seat?", answer: buses, trap: buses - 1, hints: ["Divide the pupils by the seats on one coach.", "If there is a remainder, those pupils still need a coach: round up."], why: `${fmtN(pupils)} ÷ ${seats} = ${buses - 1} remainder ${pupils - seats * (buses - 1)}. The pupils left over need one more coach: **${buses}** coaches.` },
+      b: { ask: "How many empty seats are there when every coach needed is used?", answer: seats * buses - pupils, trap: pupils - seats * (buses - 1), hints: ["Find how many seats the coaches have altogether.", `Seats: ${seats} × ${buses}. Take away the pupils.`], why: `Seats: ${seats} × ${buses} = ${fmtN(seats * buses)}. Empty: ${fmtN(seats * buses)} − ${fmtN(pupils)} = **${seats * buses - pupils}**.` },
+    };
+  }
+  const long = int(r, 6, difficulty === 3 ? 15 : 10);
+  const wide = int(r, 3, long - 1);
+  const perM = int(r, 3, 9);
+  const round = 2 * (long + wide);
+  return {
+    text: `A rectangular garden is **${long} m** long and **${wide} m** wide.`,
+    a: { ask: "What is the area of the garden, in square metres?", answer: long * wide, trap: round, hints: ["Area of a rectangle: length × width.", `${long} × ${wide}.`], why: `${long} × ${wide} = **${long * wide} m²**.` },
+    b: { ask: `A fence goes all the way round the edge. Fencing costs **£${perM}** a metre. How much does the fence cost, in pounds?`, answer: round * perM, trap: (long + wide) * perM, hints: ["First find the distance all the way round: the perimeter.", `Perimeter: ${long} + ${wide} + ${long} + ${wide} = ${round} m. Then × £${perM}.`], why: `Perimeter: 2 × (${long} + ${wide}) = ${round} m. Cost: ${round} × £${perM} = **£${round * perM}**.` },
+  };
+}
+
+function twoPart(part: "a" | "b"): Template {
+  return {
+    key: `mx-twopart-${part}`,
+    skill: S.problems,
+    difficulties: [2, 3],
+    make: (_r, { id, difficulty }) => {
+      const s = story(id, difficulty);
+      const p = s[part];
+      return {
+        kind: "number",
+        prompt: `${s.text} **(${part})** ${p.ask} (1 mark)`,
+        answer: p.answer,
+        traps: p.trap !== p.answer && p.trap >= 0 ? [{ value: p.trap, feedback: part === "a" ? "Read the question again: which operation does it need?" : "That misses a step. Check every step of the story." }] : [],
+        hint: p.hints[0],
+        hints: p.hints.slice(1),
+        explanation: p.why,
+      };
+    },
+  };
+}
+export const TWO_PART_KEYS = ["mx-twopart-a", "mx-twopart-b"] as const;
+
 const templates: Template[] = [
   ...techniqueTemplates,
+  twoPart("a"),
+  twoPart("b"),
   borrow("mx-number", S.number, [placeValue, rounding, negative]),
   borrow("mx-calc", S.calc, [addSubtract, timesTables, multiplyDivide]),
   borrow("mx-fdp", S.fdp, [fractions2, decimals, percentages]),

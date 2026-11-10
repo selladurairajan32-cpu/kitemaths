@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { TOPICS, topicById } from "@/topics";
 import type { KitQuestion } from "@/topics/kit/types";
+import { genId } from "@/topics/kit/define";
 import { MOCK_SKILLS } from "./index";
 import { asMultipleChoice, tagQuestion } from "./taxonomy";
 
@@ -42,7 +43,8 @@ describe("11+ question taxonomy (EXAM-003)", () => {
 describe("multi-step and unfamiliar problems (EXAM-004)", () => {
   it("covers multi-step arithmetic, word problems, interpretation, working backwards, estimation, patterns and method choice", () => {
     const types = new Set(pool.filter((q) => q.skill === MOCK_SKILLS.problems).map((q) => tagQuestion(q).reasoning));
-    expect([...types].sort()).toEqual(["estimation", "interpretation", "method-selection", "multi-step", "pattern", "working-backwards"]);
+    // Part (a) of a two-part question (D-037) is a one-step "apply" question; the six demands must all be there.
+    expect([...types].sort()).toEqual(["apply", "estimation", "interpretation", "method-selection", "multi-step", "pattern", "working-backwards"]);
     expect(pool.filter((q) => q.skill === MOCK_SKILLS.problems && tagQuestion(q).representation === "word").length).toBeGreaterThan(5);
   });
 
@@ -68,5 +70,54 @@ describe("multiple-choice versions for mocks (EXAM-005)", () => {
       n++;
     }
     expect(n).toBeGreaterThan(20);
+  });
+});
+
+describe("answer sheets and two-part questions (D-037)", () => {
+  it("gives an answer sheet up to five different options lettered (A) to (E) in order, with exactly the right one marked right", () => {
+    let five = 0;
+    for (const q of pool) {
+      if (q.kind !== "number") continue;
+      const mc = asMultipleChoice(q, 5);
+      const texts = mc.options.map((o) => o.text);
+      expect(new Set(texts).size, q.id).toBe(texts.length);
+      expect(texts.length >= 2 && texts.length <= 5, q.id).toBe(true);
+      texts.forEach((t, i) => expect(t.startsWith(`(${"ABCDE"[i]}) `), `${q.id}: ${t}`).toBe(true));
+      mc.options.forEach((_, i) => expect(mock.questions.evaluate(mc, { kind: "choose", choice: i } as never).correct, `${q.id} option ${i}`).toBe(i === mc.answer));
+      if (texts.length === 5) five++;
+    }
+    expect(five).toBeGreaterThan(20);
+  });
+
+  it("sets two linked parts that share one story, 1 mark each, with answers worked from the story's own numbers", () => {
+    const num = (s: string) => Number(s.replace(/,/g, ""));
+    const stories = new Set<string>();
+    for (const d of [2, 3] as const) {
+      for (let seed = 1; seed <= 40; seed++) {
+        const [a, b] = ["a", "b"].map((p) => mock.questionById(genId("mock-exams", `mx-twopart-${p}`, d, seed)) as KitQuestion);
+        const [storyA, storyB] = [a.prompt.split(" **(a)** ")[0], b.prompt.split(" **(b)** ")[0]];
+        expect(storyB, `${d}:${seed}`).toBe(storyA);
+        expect(a.prompt.endsWith("(1 mark)") && b.prompt.endsWith("(1 mark)")).toBe(true);
+        if (a.kind !== "number" || b.kind !== "number") throw new Error("two-part questions are written answers");
+        // Independent oracle: read the numbers back out of the story text and work the answers by hand.
+        let m: RegExpExecArray | null;
+        if ((m = /sandwiches for \*\*(\d+)p\*\* each and drinks for \*\*(\d+)p/.exec(storyA))) {
+          const k = num(/\*\*(\d+) sandwiches\*\*/.exec(a.prompt)![1]);
+          expect([a.answer, b.answer]).toEqual([num(m[1]) * k, 1000 - num(m[1]) * k - num(m[2])]);
+          stories.add("cafe");
+        } else if ((m = /\*\*([\d,]+) pupils\*\*\. Each coach holds \*\*(\d+)\*\*/.exec(storyA))) {
+          const [p, s] = [num(m[1]), num(m[2])];
+          expect([a.answer, b.answer]).toEqual([Math.ceil(p / s), Math.ceil(p / s) * s - p]);
+          stories.add("coach");
+        } else if ((m = /\*\*(\d+) m\*\* long and \*\*(\d+) m\*\* wide/.exec(storyA))) {
+          const [l, w] = [num(m[1]), num(m[2])];
+          const c = num(/costs \*\*£(\d+)\*\* a metre/.exec(b.prompt)![1]);
+          expect([a.answer, b.answer]).toEqual([l * w, 2 * (l + w) * c]);
+          stories.add("garden");
+        } else throw new Error(`unrecognised story: ${storyA}`);
+        expect(a.answer > 0 && b.answer >= 0).toBe(true);
+      }
+    }
+    expect([...stories].sort()).toEqual(["cafe", "coach", "garden"]);
   });
 });

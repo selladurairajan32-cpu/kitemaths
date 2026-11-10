@@ -110,3 +110,66 @@ export function recordChange<F extends KnownField>(p: ExamProfile, field: F, nex
   dates.sort();
   return { ...updated, sourceDate: dates.length ? dates[dates.length - 1] : null };
 }
+
+/* D-037: profiles from official pages read on 10 Nov 2026 (docs/product/exams/evidence/official-sources-2026-11-10.md). */
+const READ = "2026-11-10";
+const src = (about: string, publisher: string, url: string, quote: string): SourceRef => ({ url, publisher, about, retrieved: READ, quote });
+
+const ISEB_FAMILIES = "https://iseb.co.uk/families-hub/pre-tests-admissions-toolkit/preparing-for-the-pre-tests/what-are-the-iseb-common-pre-tests-11-and-how-do-they-work";
+export const ISEB_PRE_TEST: ExamProfile = {
+  id: "iseb",
+  name: "ISEB Common Pre-Tests (many independent schools)",
+  admissionsYear: "as published by ISEB, read 10 Nov 2026",
+  subjects: { status: "verified", value: ["English", "mathematics", "verbal reasoning", "non-verbal reasoning"], source: src("iseb", "ISEB", ISEB_FAMILIES, "through four tests: English, mathematics, verbal reasoning (VR) and non-verbal reasoning (NVR).") },
+  provider: { status: "verified", value: "ISEB", source: src("iseb", "ISEB", ISEB_FAMILIES, "The Pre-Tests are multiple choice, online tests.") },
+  questionFormats: { status: "verified", value: "multiple-choice", source: src("iseb", "ISEB", ISEB_FAMILIES, "The Pre-Tests are multiple choice, online tests.") },
+  mathsMinutes: { status: "verified", value: 40, source: src("iseb", "ISEB", ISEB_FAMILIES, "Mathematics: 40 minutes") },
+  calculators: unknown("Not stated on the pages read."),
+  sourceDate: READ,
+  changes: [],
+};
+
+const GL_FREE = "https://11plus.gl-assessment.co.uk/free-materials/";
+export const GL_GENERAL: ExamProfile = {
+  id: "gl",
+  name: "GL Assessment 11+ (general: local tests differ)",
+  admissionsYear: "as published by GL Assessment, read 10 Nov 2026",
+  subjects: unknown("Each area or school chooses its subjects from verbal reasoning, non-verbal reasoning, English and maths."),
+  provider: { status: "verified", value: "GL Assessment", source: src("gl", "GL Assessment", GL_FREE, "We recommend children familiarise themselves with the multiple-choice layout of the test") },
+  questionFormats: { status: "verified", value: "multiple-choice", source: src("gl", "GL Assessment", GL_FREE, "We recommend children familiarise themselves with the multiple-choice layout of the test") },
+  mathsMinutes: unknown("GL says: The exact timings for, and number of questions in, your local 11+ test may differ."),
+  calculators: unknown("Not stated on the page read."),
+  sourceDate: READ,
+  changes: [],
+};
+
+const CSSE_HOME = "https://www.csse.org.uk/";
+export const CSSE_ESSEX: ExamProfile = {
+  id: "csse",
+  name: "CSSE (Consortium of Selective Schools in Essex)",
+  admissionsYear: "as published by CSSE, read 10 Nov 2026",
+  subjects: { status: "verified", value: ["English", "Mathematics"], source: src("csse", "CSSE", CSSE_HOME, "The candidates sit two tests. One in English and one in Mathematics.") },
+  provider: { status: "verified", value: "CSSE", source: src("csse", "CSSE", CSSE_HOME, "The candidates sit two tests. One in English and one in Mathematics.") },
+  questionFormats: unknown("Not stated on the CSSE home page; tutoring sites disagree, so it isn't assumed."),
+  mathsMinutes: { status: "verified", value: 60, source: src("csse", "CSSE", CSSE_HOME, "The Mathematics paper will last sixty minutes.") },
+  calculators: unknown("Not stated on the page read."),
+  sourceDate: READ,
+  changes: [],
+};
+
+const SEAG_GUIDE = "https://www.seagni.co.uk/guidance/assessment-guide";
+export const SEAG_NI: ExamProfile = {
+  id: "seag",
+  name: "SEAG Entrance Assessment (Northern Ireland)",
+  admissionsYear: "as published by SEAG, read 10 Nov 2026",
+  subjects: { status: "verified", value: ["English (or Gaeilge)", "Mathematics"], source: src("seag", "SEAG", SEAG_GUIDE, "English (or Gaeilge) and Mathematics.") },
+  provider: { status: "verified", value: "SEAG", source: src("seag", "SEAG", SEAG_GUIDE, "The SEAG Entrance Assessment consists of two Papers: Paper 1 and Paper 2.") },
+  questionFormats: unknown("Not stated on the assessment guide page."),
+  mathsMinutes: unknown("Each 60-minute Main Test covers English (or Gaeilge) and maths together (28 questions each), so there is no separate maths time."),
+  calculators: unknown("Not stated on the page read."),
+  sourceDate: READ,
+  changes: [],
+};
+
+/** Every profile the app offers: general practice first, then the verified ones. */
+export const EXAM_PROFILES: ExamProfile[] = [GENERAL_PRACTICE, ISEB_PRE_TEST, GL_GENERAL, CSSE_ESSEX, SEAG_NI];

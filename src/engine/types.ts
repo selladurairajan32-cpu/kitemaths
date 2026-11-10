@@ -108,6 +108,10 @@ export interface MockMeta {
   changed: boolean;
   /** Milliseconds from the start of the section to the end of the sitting: equal to `sectionMs` when time ran out. */
   endedAtMs: number;
+  /** D-037: how many answer options were shown (5 on an answer sheet); absent means 4. */
+  options?: number;
+  /** D-037: which timed section (from 0) the question was in, when the mock had more than one. */
+  section?: number;
 }
 
 /** MM-009, MM-010: which method a child picked for a problem, and how it was judged. */
