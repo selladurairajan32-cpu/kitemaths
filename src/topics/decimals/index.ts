@@ -1,4 +1,4 @@
-import { defineTopic, genFor, int, pick } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
 import { num } from "@/topics/kit/evaluate";
 import type { ChooseOption, Template } from "@/topics/kit/types";
 
@@ -19,7 +19,7 @@ function unique(right: string, wrong: ChooseOption[]): ChooseOption[] {
   return out.slice(0, 4);
 }
 
-const templates: Template[] = [
+const baseTemplates: Template[] = [
   {
     key: "dc-grid",
     skill: S.place,
@@ -273,7 +273,158 @@ const templates: Template[] = [
       };
     },
   },
+
+  /* D-037 (Phase B): a third question maker for × and ÷, and a stretch question for every skill. */
+  {
+    key: "dc-times-missing",
+    skill: S.tens,
+    difficulties: [1, 2, 3],
+    make: (r, { difficulty }) => {
+      const by = difficulty === 3 ? 100 : 10;
+      const hundredths = int(r, 11, 99);
+      const n = fromH(hundredths);
+      const product = fromH(hundredths * by);
+      return {
+        kind: "number",
+        prompt: `**? × ${by} = ${num(product)}**`,
+        answer: n,
+        decimals: 3,
+        traps: [{ value: fromH(hundredths * by * by), misconception: M.place, feedback: `Undo × ${by} by dividing: move every digit ${by === 10 ? "one place" : "two places"} to the right.` }],
+        hint: `Work backwards: ${num(product)} ÷ ${by}.`,
+        explanation: `${num(n)} × ${by} = ${num(product)}, so the missing number is **${num(n)}**.`,
+      };
+    },
+  },
+  {
+    key: "dc-tens-stretch",
+    skill: S.tens,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const grams = pick(r, [125, 250, 375, 450, 75]);
+      const kg = grams / 1000;
+      return {
+        kind: "number",
+        prompt: `A bag of rice weighs **${num(kg)} kg**. How many kilograms do **100 bags** weigh?`,
+        unit: "kg",
+        answer: Math.round(kg * 100 * 1000) / 1000,
+        decimals: 2,
+        traps: [{ value: Math.round(kg * 10 * 1000) / 1000, misconception: M.place, feedback: "× 100 moves the digits two places, not one." }],
+        hint: `It's ${num(kg)} × 100.`,
+        explanation: `${num(kg)} × 100 = **${num(Math.round(kg * 100 * 1000) / 1000)}** kg.`,
+      };
+    },
+  },
+  {
+    key: "dc-place-stretch",
+    skill: S.place,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const ones = int(r, 1, 9);
+      const tenths = int(r, 1, 9);
+      let hundredths = int(r, 1, 9);
+      if (hundredths === tenths) hundredths = (hundredths % 9) + 1;
+      const answer = fromH(ones * 100 + tenths * 10 + hundredths);
+      return {
+        kind: "number",
+        prompt: `I have **${ones} ones**, **${hundredths} hundredths** and **${tenths} tenths**. What number am I?`,
+        answer,
+        decimals: 2,
+        traps: [{ value: fromH(ones * 100 + hundredths * 10 + tenths), misconception: M.place, feedback: "Tenths come straight after the point, then hundredths, whatever order they are said in." }],
+        hint: "Draw a place-value chart: ones, then a point, then tenths, then hundredths.",
+        explanation: `${ones} ones, ${tenths} tenths and ${hundredths} hundredths make **${num(answer)}**.`,
+      };
+    },
+  },
+  {
+    key: "dc-fraction-stretch",
+    skill: S.fractions,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const set = pick(r, [
+        { d: "0.5", same: ["{1/2}", "{5/10}", "{50/100}"], odd: "{1/5}" },
+        { d: "0.25", same: ["{1/4}", "{25/100}", "{2/8}"], odd: "{2/5}" },
+        { d: "0.75", same: ["{3/4}", "{75/100}", "{6/8}"], odd: "{7/5}" },
+        { d: "0.2", same: ["{1/5}", "{2/10}", "{20/100}"], odd: "{1/2}" },
+      ]);
+      return {
+        kind: "choose",
+        prompt: `Three of these are equal to **${set.d}**. Which one is **not**?`,
+        options: [{ text: set.odd, misconception: M.place, feedback: `Turn it into tenths or hundredths: it isn't ${set.d}.` }, ...set.same.map((x) => ({ text: x, feedback: `That one is equal to ${set.d}.` }))],
+        answer: 0,
+        hint: `Write ${set.d} as hundredths, then compare.`,
+        explanation: `${set.same.join(", ")} all equal ${set.d}; **${set.odd}** does not.`,
+      };
+    },
+  },
+  {
+    key: "dc-order-stretch",
+    skill: S.compare,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const t = int(r, 2, 8);
+      const nums = [t / 10, (t * 10 - int(r, 1, 9)) / 100, (t * 100 + int(r, 1, 9)) / 1000];
+      const asc = [...nums].sort((a, b) => a - b);
+      const show = (l: number[]) => l.map(num).join(", ");
+      const byLength = [...nums].sort((a, b) => String(a).length - String(b).length || a - b);
+      return {
+        kind: "choose",
+        prompt: `Which list is in order, **smallest first**?`,
+        options: unique(show(asc), [
+          { text: show([...asc].reverse()), feedback: "That's biggest first." },
+          { text: show(byLength), misconception: M.longer, feedback: "More digits doesn't mean bigger: compare the tenths first, then the hundredths." },
+          { text: show([asc[1]!, asc[0]!, asc[2]!]), feedback: "Line up the decimal points and compare place by place." },
+        ]),
+        answer: 0,
+        hint: "Give every number the same number of decimal places, then compare.",
+        explanation: `In order: **${show(asc)}**.`,
+      };
+    },
+  },
+  {
+    key: "dc-change-stretch",
+    skill: S.addSub,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const a = int(r, 105, 399);
+      const b = int(r, 105, 399);
+      const pay = a + b < 900 ? 1000 : 2000;
+      const change = pay - a - b;
+      return {
+        kind: "number",
+        prompt: `A book costs **£${num(fromH(a))}** and a pen costs **£${num(fromH(b))}**. You pay with **£${pay / 100}**. How much change do you get?`,
+        unit: "£",
+        answer: fromH(change),
+        decimals: 2,
+        traps: [{ value: fromH(a + b), feedback: "That's the total cost. Take it away from what you paid." }],
+        hint: `Add the two prices first.`,
+        explanation: `£${num(fromH(a))} + £${num(fromH(b))} = £${num(fromH(a + b))}; £${pay / 100} − £${num(fromH(a + b))} = **£${num(fromH(change))}**.`,
+      };
+    },
+  },
 ];
+
+const templates = withHints(baseTemplates, {
+  "dc-grid": () => ["Each row of the grid is one tenth; each small square is one hundredth.", "Count the full rows (tenths), then the extra squares (hundredths)."],
+  "dc-digit-value": () => ["The first place after the point is tenths, the second is hundredths.", "Say the digit's name with its place: for example, 3 tenths."],
+  "dc-to-fraction": () => ["One decimal place means tenths; two places mean hundredths.", "Write the digits over 10 or 100, then simplify if you can."],
+  "dc-from-fraction": () => ["Make the bottom number 10 or 100.", "Tenths have one decimal place; hundredths have two."],
+  "dc-compare": () => ["Line up the decimal points.", "Compare the tenths first. Only if they match, compare the hundredths."],
+  "dc-round": () => ["Look at the digit just after the place you're rounding to.", "5 or more rounds up; 4 or less stays the same."],
+  "dc-add": () => ["Line up the decimal points, one under the other.", "Fill any gaps with zeros, then add from the right, carrying as usual."],
+  "dc-money": () => ["Pounds and pence: line up the points.", "Add the pence first, then the pounds."],
+  "dc-times-ten": () => ["The decimal point stays still; the digits move.", "× makes the number bigger (digits move left); ÷ makes it smaller (digits move right)."],
+  "dc-times-missing": () => ["Divide to undo the multiplication.", "Move every digit to the right: one place for 10, two places for 100."],
+  "dc-tens-stretch": () => ["Multiplying by 100 moves each digit two places to the left.", "0.25 × 100 is 25, for example."],
+  "dc-place-stretch": () => ["Write the ones, then the point.", "Put the tenths digit first after the point, then the hundredths."],
+  "dc-fraction-stretch": () => ["Change each fraction into tenths or hundredths.", "One of them won't match the decimal."],
+  "dc-order-stretch": () => ["Write each number with three decimal places.", "Now compare them like whole numbers."],
+  "dc-change-stretch": () => ["Find the total cost first.", "Then count on from the total to what you paid."],
+});
 
 export const decimals = defineTopic({
   id: T,
@@ -313,6 +464,27 @@ export const decimals = defineTopic({
           visual: { kind: "pv-chart", value: 4.37, columns: ["O", "t", "h"], highlight: "t" },
           tip: "The decimal point sits between the ones and the tenths.",
         },
+        {
+          type: "worked",
+          title: "Watch me: read 2.58",
+          support: "full",
+          problem: "What is each digit of **2.58** worth?",
+          visual: { kind: "pv-chart", value: 2.58, columns: ["O", "t", "h"] },
+          steps: [{ text: "The **2** is before the point: **2 ones**." }, { text: "The **5** is the first place after the point: **5 tenths** (0.5)." }, { text: "The **8** is the second place: **8 hundredths** (0.08)." }],
+          conclusion: "2.58 = 2 + 0.5 + 0.08. We say \"two point five eight\".",
+        },
+        {
+          type: "worked",
+          title: "Together: hundredths in 0.4",
+          support: "faded",
+          problem: "How many hundredths make **0.4**?",
+          visual: { kind: "grid100", shaded: 40 },
+          steps: [
+            { text: "0.4 is **4 tenths**: 4 full rows of the grid." },
+            { text: "Each row has 10 hundredths.", blank: { prompt: "How many hundredths?", answer: 40, hint: "4 rows of 10", traps: [{ value: 4, misconception: M.place, feedback: "4 is the number of tenths. Each tenth is 10 hundredths." }], worked: "**40** hundredths: 0.4 = 0.40." } },
+          ],
+          conclusion: "0.4 = **0.40**: 4 tenths are 40 hundredths.",
+        },
         { type: "check", title: "Your turn", questionId: gen("dc-grid", 1, 3) },
         { type: "check", title: "One more", questionId: gen("dc-digit-value", 1, 6) },
       ],
@@ -328,8 +500,28 @@ export const decimals = defineTopic({
         {
           type: "explain",
           title: "Same amount, two ways",
-          body: ["**0.3 = {3/10}**, and **0.25 = {25/100} = {1/4}**.", "Learn these by heart: **0.5 = {1/2}**, **0.25 = {1/4}**, **0.75 = {3/4}**."],
+          body: ["**0.3 = {3/10}**, and **0.25 = {25/100} = {1/4}**. One decimal place means tenths; two decimal places mean hundredths.", "Learn these by heart: **0.5 = {1/2}**, **0.25 = {1/4}**, **0.75 = {3/4}**.", "To turn a fraction into a decimal, make its bottom number 10 or 100 first."],
           visual: { kind: "grid100", shaded: 25 },
+        },
+        {
+          type: "worked",
+          title: "Watch me: 0.75 as a fraction",
+          support: "full",
+          problem: "Write **0.75** as a fraction in its simplest form.",
+          visual: { kind: "grid100", shaded: 75 },
+          steps: [{ text: "Two decimal places: hundredths. 0.75 = **{75/100}**." }, { text: "Divide the top and bottom by 25: {75/100} = **{3/4}**." }],
+          conclusion: "0.75 = **{3/4}**.",
+        },
+        {
+          type: "worked",
+          title: "Together: {3/5} as a decimal",
+          support: "faded",
+          problem: "Write **{3/5}** as a decimal.",
+          steps: [
+            { text: "Make the bottom 10: multiply the top and bottom by 2.", blank: { prompt: "{3/5} is how many tenths?", answer: 6, hint: "3 × 2", traps: [{ value: 3, misconception: M.place, feedback: "Fifths are bigger than tenths: multiply the top by 2 as well as the bottom." }], worked: "{3/5} = **{6/10}**." } },
+            { text: "6 tenths is written **0.6**." },
+          ],
+          conclusion: "{3/5} = **0.6**.",
         },
         { type: "check", title: "Your turn", questionId: gen("dc-to-fraction", 1, 2) },
         { type: "check", title: "One more", questionId: gen("dc-from-fraction", 2, 9) },
@@ -346,9 +538,29 @@ export const decimals = defineTopic({
         {
           type: "explain",
           title: "Which is bigger: 0.7 or 0.45?",
-          body: ["It's tempting to say 0.45, because 45 is more than 7. But **0.7 is 0.70**: 70 hundredths, more than 45 hundredths.", "So **0.7 > 0.45**."],
+          body: ["It's tempting to say 0.45, because 45 is more than 7. But **0.7 is 0.70**: 70 hundredths, more than 45 hundredths.", "So **0.7 > 0.45**.", "To **round** to the nearest whole number, look at the tenths digit: 5 or more rounds up, 4 or less rounds down. 3.6 rounds to 4; 3.4 rounds to 3."],
           visual: { kind: "line", min: 0, max: 1, step: 0.1, labelEvery: 5, points: [{ value: 0.45, label: "0.45", tone: "brand" }, { value: 0.7, label: "0.7", tone: "num" }] },
           tip: "Line up the decimal points and compare the tenths first.",
+        },
+        {
+          type: "worked",
+          title: "Watch me: round 3.47 to one decimal place",
+          support: "full",
+          problem: "Round **3.47** to one decimal place.",
+          visual: { kind: "line", min: 3.4, max: 3.5, step: 0.01, labelEvery: 5, points: [{ value: 3.47, label: "3.47", tone: "num" }] },
+          steps: [{ text: "One decimal place means tenths: 3.47 is between **3.4** and **3.5**." }, { text: "Look at the hundredths digit: **7**, which is 5 or more, so round up." }],
+          conclusion: "3.47 rounds to **3.5**.",
+        },
+        {
+          type: "worked",
+          title: "Together: 0.6 or 0.56?",
+          support: "faded",
+          problem: "Which is bigger: **0.6** or **0.56**?",
+          steps: [
+            { text: "Give both numbers two decimal places.", blank: { prompt: "0.6 is how many hundredths?", answer: 60, hint: "0.6 = 0.60", traps: [{ value: 6, misconception: M.longer, feedback: "0.6 means 6 tenths, which is 60 hundredths." }], worked: "0.6 = **0.60**: 60 hundredths." } },
+            { text: "60 hundredths is more than 56 hundredths." },
+          ],
+          conclusion: "**0.6 > 0.56**, even though 0.56 has more digits.",
         },
         { type: "check", title: "Your turn", questionId: gen("dc-compare", 2, 4) },
         { type: "check", title: "One more", questionId: gen("dc-round", 1, 7) },
@@ -363,12 +575,29 @@ export const decimals = defineTopic({
       objectives: ["Add and subtract decimals", "Add amounts of money"],
       steps: [
         {
+          type: "explain",
+          title: "Points in a line",
+          body: ["To add or take away decimals, write them in columns with the **decimal points lined up**. Then tenths are under tenths and hundredths under hundredths.", "If one number has fewer decimal places, fill the gap with a zero: 2.8 is the same as 2.80. Then add or subtract as normal, and put the point straight down in the answer."],
+          visual: { kind: "pv-chart", value: 2.8, columns: ["O", "t", "h"] },
+        },
+        {
           type: "worked",
           title: "Watch me line them up",
           support: "full",
           problem: "**3.45 + 2.8**",
           steps: [{ text: "Line up the points. Write 2.8 as **2.80** so both have hundredths." }, { text: "Hundredths: 5 + 0 = 5. Tenths: 4 + 8 = 12: write 2, carry 1." }, { text: "Ones: 3 + 2 + 1 = 6." }],
           conclusion: "3.45 + 2.8 = **6.25**.",
+        },
+        {
+          type: "worked",
+          title: "Together: 5.6 − 2.35",
+          support: "faded",
+          problem: "**5.6 − 2.35**",
+          steps: [
+            { text: "Line up the points and fill the gap: 5.6 is **5.60**.", blank: { prompt: "How many hundredths is 5.60?", answer: 560, hint: "5 ones = 500 hundredths, 6 tenths = 60", traps: [{ value: 56, misconception: M.align, feedback: "5.6 has 6 tenths, which is 60 hundredths: 5.60 is 560 hundredths." }], worked: "**560** hundredths." } },
+            { text: "560 − 235 = 325 hundredths, which is **3.25**." },
+          ],
+          conclusion: "5.6 − 2.35 = **3.25**.",
         },
         { type: "check", title: "Your turn", questionId: gen("dc-add", 1, 3) },
         { type: "check", title: "One more", questionId: gen("dc-money", 1, 8) },
@@ -385,8 +614,25 @@ export const decimals = defineTopic({
         {
           type: "explain",
           title: "Digits move, the point stays",
-          body: ["**3.6 × 10 = 36**: every digit moves one place to the left.", "**36 ÷ 100 = 0.36**: every digit moves two places to the right."],
+          body: ["**3.6 × 10 = 36**: every digit moves one place to the left.", "**36 ÷ 100 = 0.36**: every digit moves two places to the right.", "The decimal point never moves. Count the zeros: 10 has one zero, so digits move one place; 100 has two zeros, so they move two places."],
           visual: { kind: "pv-chart", value: 0.36, columns: ["O", "t", "h"] },
+        },
+        {
+          type: "worked",
+          title: "Watch me: 4.7 × 100",
+          support: "full",
+          problem: "**4.7 × 100**",
+          visual: { kind: "pv-chart", value: 470, columns: ["H", "T", "O", "t"] },
+          steps: [{ text: "100 has two zeros: every digit moves **two places** left." }, { text: "The 4 ones become 4 hundreds; the 7 tenths become 7 tens." }, { text: "A zero holds the empty ones place: **470**." }],
+          conclusion: "4.7 × 100 = **470**.",
+        },
+        {
+          type: "worked",
+          title: "Together: 3.6 × 10",
+          support: "faded",
+          problem: "**3.6 × 10**",
+          steps: [{ text: "× 10 moves every digit **one place** left.", blank: { prompt: "3.6 × 10 = ?", answer: 36, hint: "The 3 ones become 3 tens.", traps: [{ value: 360, misconception: M.place, feedback: "That moved the digits two places, which is × 100." }], worked: "**36**." } }],
+          conclusion: "3.6 × 10 = **36**.",
         },
         { type: "check", title: "Your turn", questionId: gen("dc-times-ten", 1, 2) },
         { type: "check", title: "One more", questionId: gen("dc-times-ten", 3, 9) },

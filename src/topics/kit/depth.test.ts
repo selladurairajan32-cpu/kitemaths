@@ -13,7 +13,7 @@ import { FACTOR_PUZZLES, uniquePuzzleAnswer } from "@/topics/multiply-divide";
  * Mock exams are exam technique, not teaching lessons, so only the hint rule applies to them.
  */
 const NOT_YET = new Set([
-  "place-value", "rounding", "negative", "add-subtract", "times-tables", "mental-maths", "decimals", "percentages", "money", "time",
+  "place-value", "rounding", "negative", "add-subtract", "times-tables", "mental-maths", "percentages", "money", "time",
   "area-perimeter", "shapes-angles", "coordinates", "charts-data", "ratio-algebra", "problem-solving", "mock-exams",
 ]);
 const TEACHING_EXEMPT = new Set(["mock-exams"]);
