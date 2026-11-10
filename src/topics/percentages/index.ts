@@ -1,4 +1,4 @@
-import { defineTopic, genFor, int, pick } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
 import { num } from "@/topics/kit/evaluate";
 import type { ChooseOption, KitVisual, Template } from "@/topics/kit/types";
 
@@ -46,7 +46,7 @@ function howTo(p: number, amount: number): string {
   return `10% of ${num(amount)} is ${num(ten)}, so ${tens * 10}% is ${num(ten * tens)}. 5% is half of 10%: ${num(five)}. ${p}% = ${num(ten * tens)} + ${num(five)} = **${num(answer)}**.`;
 }
 
-const templates: Template[] = [
+const baseTemplates: Template[] = [
   {
     key: "pc-grid",
     skill: S.meaning,
@@ -250,7 +250,153 @@ const templates: Template[] = [
       };
     },
   },
+  /* D-037 (Phase B): more question makers for meaning and amounts, and a stretch question for every skill. */
+  {
+    key: "pc-rest-word",
+    skill: S.meaning,
+    difficulties: [1, 2, 3],
+    make: (r) => {
+      const walk = int(r, 12, 88);
+      const ctx = pick(r, [
+        { who: "children in a school survey", did: "walk to school", didnt: "do not walk" },
+        { who: "people asked", did: "have a pet", didnt: "do not have a pet" },
+      ]);
+      return {
+        kind: "number",
+        prompt: `**${walk}%** of the ${ctx.who} ${ctx.did}. What percentage ${ctx.didnt}?`,
+        unit: "%",
+        answer: 100 - walk,
+        traps: [{ value: walk, misconception: M.whole, feedback: "That's the ones who do. Everyone together is 100%." }].filter((t) => t.value !== 100 - walk),
+        hint: "Everyone together is 100%.",
+        explanation: `100% − ${walk}% = **${100 - walk}%**.`,
+      };
+    },
+  },
+  {
+    key: "pc-meaning-stretch",
+    skill: S.meaning,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const total = pick(r, [20, 25, 50]);
+      const part = int(r, 2, total - 2);
+      const pct = (part * 100) / total;
+      return {
+        kind: "number",
+        prompt: `**${part}** out of **${total}** sweets in a bag are red. What **percentage** are red?`,
+        unit: "%",
+        answer: pct,
+        traps: [{ value: part, misconception: M.denominator, feedback: `Per cent means out of 100, not out of ${total}. Scale ${total} up to 100.` }],
+        hint: `How many ${total}s make 100? Multiply the red sweets by that too.`,
+        explanation: `${part} out of ${total} is ${pct} out of 100: **${pct}%**.`,
+      };
+    },
+  },
+  {
+    key: "pc-convert-stretch",
+    skill: S.convert,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const set = pick(r, [
+        [["0.4", 40], ["38%", 38], ["{3/8}", 37.5]],
+        [["0.65", 65], ["{2/3}", 200 / 3], ["60%", 60]],
+        [["{1/5}", 20], ["0.25", 25], ["22%", 22]],
+        [["0.7", 70], ["{3/4}", 75], ["72%", 72]],
+      ]) as [string, number][];
+      const sorted = [...set].sort((a, b) => b[1] - a[1]);
+      return {
+        kind: "choose",
+        prompt: `Which is the **biggest**: ${set.map(([t]) => `**${t}**`).join(", ")}?`,
+        options: [{ text: sorted[0]![0] }, ...sorted.slice(1).map(([t]) => ({ text: t, misconception: M.place, feedback: "Change them all into percentages first, then compare." }))],
+        answer: 0,
+        hint: "Change each one into a percentage.",
+        explanation: `As percentages: ${set.map(([t, v]) => `${t} is ${Number.isInteger(v) ? "" : "about "}${Math.round(v * 10) / 10}%`).join(", ")}. The biggest is **${sorted[0]![0]}**.`,
+      };
+    },
+  },
+  {
+    key: "pc-amount-word",
+    skill: S.amounts,
+    difficulties: [1, 2, 3],
+    make: (r, { difficulty }) => {
+      const pct = difficulty === 1 ? pick(r, [50, 25, 10]) : difficulty === 2 ? pick(r, [20, 30, 75]) : pick(r, [15, 35, 45]);
+      const total = 20 * int(r, 3, 15);
+      const answer = (total * pct) / 100;
+      return {
+        kind: "number",
+        prompt: `A school has **${total} children**. **${pct}%** of them bring a packed lunch. How many children is that?`,
+        answer,
+        traps: [{ value: total - answer, feedback: "That's the children who don't. Find the percentage asked for." }].filter((t) => t.value !== answer),
+        hint: `Find 10% of ${total} first.`,
+        explanation: `10% of ${total} is ${total / 10}, so ${pct}% is **${answer}**.`,
+      };
+    },
+  },
+  {
+    key: "pc-amount-stretch",
+    skill: S.amounts,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const [p1, a1, p2, a2] = pick(r, [
+        [30, 70, 40, 50],
+        [25, 80, 15, 120],
+        [20, 90, 35, 60],
+        [45, 40, 10, 200],
+      ]) as [number, number, number, number];
+      const v1 = (p1 * a1) / 100;
+      const v2 = (p2 * a2) / 100;
+      const right = v1 > v2 ? `${p1}% of ${a1}` : `${p2}% of ${a2}`;
+      const wrong = v1 > v2 ? `${p2}% of ${a2}` : `${p1}% of ${a1}`;
+      return {
+        kind: "choose",
+        prompt: `Which is **more**: ${p1}% of ${a1}, or ${p2}% of ${a2}?`,
+        options: [{ text: right }, { text: wrong, feedback: `Work both out: ${p1}% of ${a1} = ${v1} and ${p2}% of ${a2} = ${v2}.` }, { text: "They are the same", feedback: `${v1} and ${v2} are different.` }],
+        answer: 0,
+        hint: "Work out each one. Start with 10% of each amount.",
+        explanation: `${p1}% of ${a1} = ${v1}; ${p2}% of ${a2} = ${v2}. So **${right}** is more.`,
+      };
+    },
+  },
+  {
+    key: "pc-problems-stretch",
+    skill: S.problems,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const price = 10 * int(r, 2, 9);
+      const up = price + price / 10;
+      const down = Math.round((up - up / 10) * 100) / 100;
+      return {
+        kind: "number",
+        prompt: `A game costs **£${price}**. The price goes **up 10%**. Later the new price goes **down 10%**. What does the game cost now?`,
+        unit: "£",
+        answer: down,
+        decimals: 2,
+        traps: [{ value: price, misconception: M.discount, feedback: `The 10% off is 10% of the new, higher price (£${up}), so it doesn't go back to £${price}.` }],
+        hint: `First find the price after it goes up: 10% of £${price} is £${price / 10}.`,
+        explanation: `Up: £${price} + £${price / 10} = £${up}. Down: 10% of £${up} is £${num(up / 10)}, so £${up} − £${num(up / 10)} = **£${num(down)}**.`,
+      };
+    },
+  },
 ];
+
+const templates = withHints(baseTemplates, {
+  "pc-grid": () => ["Count the shaded squares: there are 100 altogether.", "The number of shaded squares is the percentage."],
+  "pc-rest-word": () => ["The two groups together make 100%.", "Take the percentage given away from 100."],
+  "pc-meaning-stretch": () => ["Scale the total up to 100.", "Multiply the top number by the same amount."],
+  "pc-fraction": () => ["A percentage is a fraction out of 100.", "Write it over 100, then simplify."],
+  "pc-decimal": () => ["Percent to decimal: divide by 100.", "Decimal to percent: multiply by 100. 0.4 is 40%, not 4%."],
+  "pc-convert-stretch": () => ["0.4 = 40%, and a fraction can be made out of 100.", "Compare the percentages."],
+  "pc-of-amount": () => ["10% is the amount divided by 10.", "Build the percentage from 10% and 5% pieces."],
+  "pc-amount-word": () => ["Find 10% by dividing by 10.", "Then build up: 20% is two lots of 10%, 5% is half of 10%."],
+  "pc-amount-stretch": () => ["Work out both amounts.", "Compare the two answers."],
+  "pc-sale": () => ["Find the discount first.", "Then take the discount away from the price."],
+  "pc-rest": () => ["The whole is 100%.", "Find what's left, then work out that percentage of the amount."],
+  "pc-biggest": () => ["Work each one out.", "Compare the answers, not the percentages."],
+  "pc-problems-stretch": () => ["Work out the new price after the rise.", "Then find 10% of that new price and take it off."],
+});
 
 export const percentages = defineTopic({
   id: T,
@@ -279,9 +425,27 @@ export const percentages = defineTopic({
         {
           type: "explain",
           title: "Out of 100",
-          body: ["**Per cent** means **out of 100**. This square has 100 small squares.", "**45** are shaded, so **45%** is shaded. The rest is **55%**, because the whole is **100%**."],
+          body: ["**Per cent** means **out of 100**. This square has 100 small squares.", "**45** are shaded, so **45%** is shaded. The rest is **55%**, because the whole is **100%**.", "Something out of 10 or out of 50 can be scaled up to out of 100: 7 out of 10 is 70 out of 100, which is 70%."],
           visual: { kind: "grid100", shaded: 45 },
           tip: "45% + 55% = 100%: the whole thing.",
+        },
+        {
+          type: "worked",
+          title: "Watch me: 7 out of 10 as a percentage",
+          support: "full",
+          problem: "**7 out of 10** children ate fruit. What percentage is that?",
+          visual: { kind: "grid100", shaded: 70 },
+          steps: [{ text: "Per cent means out of 100. 10 × 10 = 100, so multiply both numbers by 10." }, { text: "7 out of 10 = **70 out of 100**." }],
+          conclusion: "7 out of 10 = **70%**.",
+        },
+        {
+          type: "worked",
+          title: "Together: the rest",
+          support: "faded",
+          problem: "**30%** of a garden is grass. What percentage is not grass?",
+          visual: { kind: "grid100", shaded: 30 },
+          steps: [{ text: "The whole garden is **100%**.", blank: { prompt: "What percentage is not grass?", answer: 70, hint: "100 − 30", traps: [{ value: 30, misconception: M.whole, feedback: "That's the grass. The rest is 100% take away 30%." }], worked: "**70%**." } }],
+          conclusion: "70% of the garden is not grass.",
         },
         { type: "check", title: "Your turn", questionId: gen("pc-grid", 1, 3) },
         { type: "check", title: "One more", questionId: gen("pc-grid", 3, 8) },
@@ -307,6 +471,26 @@ export const percentages = defineTopic({
           body: ["To change a decimal to a percentage, **× 100**: 0.37 = **37%**, and 0.4 = **40%**.", "To change a percentage to a decimal, **÷ 100**: 7% = **0.07**."],
           tip: "0.4 is 40%, not 4%.",
         },
+        {
+          type: "worked",
+          title: "Watch me: 0.08 as a percentage",
+          support: "full",
+          problem: "Write **0.08** as a percentage.",
+          visual: { kind: "grid100", shaded: 8 },
+          steps: [{ text: "0.08 is **8 hundredths**: 8 out of 100." }, { text: "Out of 100 is per cent, so it is **8%**." }],
+          conclusion: "0.08 = **8%**, not 80%.",
+        },
+        {
+          type: "worked",
+          title: "Together: 40% as a fraction",
+          support: "faded",
+          problem: "Write **40%** as a fraction in its simplest form.",
+          steps: [
+            { text: "40% = {40/100}. Divide the top and bottom by 10: {4/10}." },
+            { text: "Divide by 2 again.", blank: { prompt: "{4/10} is how many fifths?", answer: 2, hint: "4 ÷ 2", traps: [{ value: 4, misconception: M.denominator, feedback: "{4/10} can be simplified more: divide the top and bottom by 2." }], worked: "**{2/5}**." } },
+          ],
+          conclusion: "40% = **{2/5}**.",
+        },
         { type: "check", title: "Your turn", questionId: gen("pc-fraction", 1, 4) },
         { type: "check", title: "One more", questionId: gen("pc-decimal", 1, 6) },
       ],
@@ -319,6 +503,12 @@ export const percentages = defineTopic({
       minutes: 8,
       objectives: ["Find 50%, 25% and 10% of an amount", "Build other percentages from 10% and 5%"],
       steps: [
+        {
+          type: "explain",
+          title: "Start with 10%",
+          body: ["**10%** is one tenth, so divide by 10: 10% of 80 is 8.", "Build other percentages from it: 20% is double 10%, 5% is half of 10%, and 15% is 10% + 5%.", "Some are worth knowing straight away: **50%** is half and **25%** is a quarter."],
+          visual: percentBar(10, 80),
+        },
         {
           type: "worked",
           title: "Watch me: 30% of 80",
@@ -335,7 +525,7 @@ export const percentages = defineTopic({
           problem: "What is **15% of 60**?",
           steps: [
             { text: "10% of 60 is 6." },
-            { text: "5% is half of 10%.", blank: { prompt: "What is 5% of 60?", answer: 3, hint: "Halve 6.", worked: "Half of 6 is **3**." } },
+            { text: "5% is half of 10%.", blank: { prompt: "What is 5% of 60?", answer: 3, hint: "Halve 6.", traps: [{ value: 12, misconception: M.divide, feedback: "5% is half of 10%, so halve 6. Doubling gives 20%." }], worked: "Half of 6 is **3**." } },
             { text: "15% = 10% + 5% = 6 + 3." },
           ],
           conclusion: "15% of 60 = **9**.",
@@ -353,12 +543,30 @@ export const percentages = defineTopic({
       objectives: ["Work out sale prices", "Find the rest of a whole"],
       steps: [
         {
+          type: "explain",
+          title: "Read what the question wants",
+          body: ["Most percentage problems have **two steps**: find the percentage, then decide what to do with it.", "**Off** or **discount**: take it away from the price. **More** or **increase**: add it on. **The rest**: the whole is 100%, so find what is left first."],
+          visual: percentBar(20, 60),
+        },
+        {
           type: "worked",
           title: "Watch me: 20% off",
           support: "full",
           problem: "A coat costs **£60**. In a sale it is **20% off**. What is the sale price?",
           steps: [{ text: "10% of £60 is **£6**, so 20% is **£12**." }, { text: "20% off means take £12 away: **£60 − £12**." }],
           conclusion: "The sale price is **£48**.",
+        },
+        {
+          type: "worked",
+          title: "Together: 25% off £80",
+          support: "faded",
+          problem: "Trainers cost **£80**. They are **25% off**. What is the sale price?",
+          visual: percentBar(25, 80),
+          steps: [
+            { text: "25% is a quarter: £80 ÷ 4 = **£20** off." },
+            { text: "Take the discount away from the price.", blank: { prompt: "What is the sale price in pounds?", answer: 60, hint: "80 − 20", traps: [{ value: 20, misconception: M.discount, feedback: "£20 is the discount. Take it away from £80." }], worked: "**£60**." } },
+          ],
+          conclusion: "The sale price is **£60**.",
         },
         { type: "check", title: "Your turn", questionId: gen("pc-sale", 1, 5) },
         { type: "check", title: "One more", questionId: gen("pc-rest", 2, 3) },
