@@ -22,16 +22,17 @@ Each item has two separate statuses (D-009).
 
 ## Summary
 
-**QA status:** SPECIFIED: 84, QA FAILED: 1, ACCEPTED: 12.
+**QA status (10 Nov 2026):** READY FOR QA: 83, ACCEPTED: 12, READY FOR RETEST: 1 (UX-003), BLOCKED: 1 (MAST-001). No item is
+SPECIFIED any more: R2, R3 and R5 were built under D-032 ([release report](reports/D-032-build-report.md)). Nothing built under
+D-032 is accepted.
 
 - **Twelve** items are ACCEPTED: GOV-001 (D-005); GOV-002, GOV-003 and UX-001 (D-011); CUR-002, CUR-003 and UX-002 (D-023,
   R0 specification or token scope); ARCH-001, ARCH-003, QA-001 and UX-004 (D-024, delivered R0 scope; UX-004 for
   specification and specimen scope); and ARCH-002 (D-025, delivered R0 schema, validator and adapter scope). Their R1
   obligations and the browser-evidence limitations are unchanged.
-- **UX-003 stays QA FAILED** (AC3 unmet, D-021). It is the only item in QA FAILED.
+- **UX-003 is READY FOR RETEST** after its R1 fixes; DEF-020 was re-fixed on 9 Nov (CH-047).
 - **Open R1 prerequisite:** the kit-marking difference (DEF-038) is **not fixed** and is tracked as `TC-ARCH-002.1.13`.
-- Every other item is SPECIFIED: it has acceptance criteria in backlog v1.0 but hasn't been refined to
-  the Definition of Ready (D-009).
+- Every other item is READY FOR QA: built, with developer evidence, awaiting independent review (D-022).
 
 **Implementation evidence by epic:**
 
