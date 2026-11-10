@@ -1,3 +1,4 @@
+import { KitLabStep, KitRemedy, isKitLabDone } from "./explainers";
 import type { ComponentType } from "react";
 import { hashString, prng } from "@/engine/random";
 import type { ItemResult, MisconceptionDef, Phase } from "@/engine/types";
@@ -187,7 +188,7 @@ export function defineTopic(spec: TopicSpec): TopicModule<KitQuestion> {
         return spec.placement.slice(0, prefix).map((p) => p.lessonId);
       },
     },
-    ui: { Visual: MathVisual as ComponentType<{ spec: unknown }> },
+    ui: { Visual: MathVisual as ComponentType<{ spec: unknown }>, LabStep: KitLabStep, isLabStepDone: isKitLabDone, Remedy: KitRemedy },
   };
 }
 

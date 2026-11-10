@@ -165,6 +165,16 @@ export interface KitMisconception {
   followUpTemplates: string[];
 }
 
+/**
+ * Extra fields of a kit lab step: which animated explainer to show (a name in `kit/explainers.tsx`), its numbers, and
+ * the challenge ids that finish it (ANIM-001).
+ */
+export interface KitLab {
+  explainer: string;
+  numbers: number[];
+  challenges: string[];
+}
+
 export interface TopicSpec {
   id: string;
   title: string;
@@ -175,7 +185,7 @@ export interface TopicSpec {
   icon: IconName;
   skills: { id: SkillId; title: string; description: string; lessonId: string }[];
   /** Lessons; check steps name a question with `gen(template, difficulty, seed)`. */
-  lessons: Lesson<KitVisual>[];
+  lessons: Lesson<KitVisual, KitLab>[];
   lessonIcons: Record<string, IconName>;
   templates: Template[];
   misconceptions: KitMisconception[];

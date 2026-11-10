@@ -1,0 +1,22 @@
+{
+ "errors": [],
+ "axe": {
+  "phone": [],
+  "tablet": [],
+  "desk": []
+ },
+ "keyboard": {
+  "tabAfterArrow": "Picture itAn area model",
+  "captionAfterTwoNext": "Step 3 of 5. Each piece is an easy multiplication: 20 × 10 =",
+  "focusStyle": "solid none",
+  "done": true
+ },
+ "reduced": {
+  "totalShownAt80ms": true,
+  "runningAnimations": 0
+ },
+ "shots": 58,
+ "phoneContinueEnabled": true,
+ "tabletContinueEnabled": true,
+ "deskContinueEnabled": true
+}

@@ -143,3 +143,14 @@ export const KiteIcon = (p: IconProps) => (
     <path d="M12 19c-1.5 1.2 1.5 2 0 3" />
   </svg>
 );
+export const PlayIcon = (p: IconProps) => (
+  <svg {...base(p)}>
+    <path d="M8 5.5v13l10.5-6.5z" fill="currentColor" />
+  </svg>
+);
+export const PauseIcon = (p: IconProps) => (
+  <svg {...base(p)}>
+    <rect x="6.5" y="5.5" width="3.6" height="13" rx="1" fill="currentColor" />
+    <rect x="13.9" y="5.5" width="3.6" height="13" rx="1" fill="currentColor" />
+  </svg>
+);

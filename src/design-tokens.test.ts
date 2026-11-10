@@ -162,7 +162,8 @@ describe("design tokens (UX-002, UX-003, UX-004)", () => {
 
   it("uses only the documented motion timings and respects reduced motion (UX-006)", () => {
     const allowed = new Set([0, 0.15, 0.18, 0.2, 0.22, 0.25, 0.35, 0.4, 0.6, 0.8, 1.1, 1.3, 5]);
-    const tsx = files("src", (n) => n.endsWith(".tsx")).filter((f) => !f.startsWith("src/architecture/fixtures/") && !/\.test\.tsx$/.test(f));
+    // .ts files too since CH-060: shared motion tokens (src/components/explain/motionTokens.ts) live in a .ts file.
+    const tsx = files("src", (n) => /\.tsx?$/.test(n)).filter((f) => !f.startsWith("src/architecture/fixtures/") && !/\.test\.tsx?$/.test(f));
     const used = tsx.flatMap((f) => [...readFileSync(join(ROOT, f), "utf8").matchAll(/duration: ([\d.]+)/g)].map((m) => ({ f, d: Number(m[1]) })));
     expect(used.length).toBeGreaterThan(10);
     expect(used.filter((u) => !allowed.has(u.d))).toEqual([]);

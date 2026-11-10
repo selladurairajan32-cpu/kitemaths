@@ -13,6 +13,7 @@ pull requests and on pushes to `main` only, so it has not run on the development
 | `pixel-diff.py` | Compares two capture folders pixel by pixel (Pillow) | `python3 docs/product/verification/pixel-diff.py <baseline> <head>` |
 | `specimen-audit.cjs` | Contrast and layout of the design specimen; see below | `node docs/product/verification/specimen-audit.cjs <outDir> [baseUrl]` |
 | `text-scaling.cjs` | UX-003 AC3: sideways scroll and clipped text on 8 pages at 200% text, browser-zoom width (640px) and 320px reflow | `node docs/product/verification/text-scaling.cjs <outDir> 200%` |
+| `anim-pilot.cjs` | ANIM-001 pilot: every method and step at 390, 768 and 1280px, try-it feedback, a keyboard-only run, reduced motion, axe-core and console errors | `node docs/product/verification/anim-pilot.cjs <outDir> <port>` |
 | `compare-generated-questions.mjs` | ARCH-003: every generated question is identical before and after the maths extraction (step 3) | see the script header |
 
 **`capture-screens.cjs` setup.** It captures 19 screens and states at both 1280×900 and 390×844, in Chromium, with

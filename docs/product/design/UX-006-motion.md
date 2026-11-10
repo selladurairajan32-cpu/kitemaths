@@ -17,6 +17,8 @@ Every animation uses one of these. Easing is `easeOut` (things arrive and settle
 | Emphasis | 0.35–0.4 s | Star count going up, the gentle shake on a wrong answer | "You earned this" / "not yet" |
 | Build-up | 0.6–0.8 s | A picture being split into parts in a lesson; the kite rising on the home scene as progress grows | How the whole is split; progress |
 | Celebration | 1.1–1.3 s | Confetti and the level-up badge after a right answer | Success; never blocks the next action |
+| Explainer movement (ANIM-001) | spring (stiffness 260, damping 30; no fixed duration, not measured); appear 0.25 s; staggers of 0.18 s | Pieces splitting, rows sliding, digits dropping into place in an animated explanation | A mathematical change: this part moves here, and why |
+| Explainer pacing (ANIM-001) | 4.2 s per step, only while the child has pressed Play | Moving to the next explanation step | Time to read the caption; the child can pause, go back or step on at any time |
 | Ambient | 5 s | Kip's sway, **off by default** since R1 | (Decoration: only where a screen opts in) |
 
 ## 2. Rules
