@@ -1,4 +1,4 @@
-import { defineTopic, genFor, int, pick } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
 import { num } from "@/topics/kit/evaluate";
 import type { Template } from "@/topics/kit/types";
 
@@ -29,7 +29,7 @@ function roundingTraps(n: number, p: number) {
   return traps;
 }
 
-const templates: Template[] = [
+const baseTemplates: Template[] = [
   {
     key: "rd-10",
     skill: S.ten,
@@ -189,7 +189,118 @@ const templates: Template[] = [
       };
     },
   },
+  /* D-037 (Phase B): a stretch question for every skill, and a word-problem maker for hundreds and thousands. */
+  {
+    key: "rd-ten-stretch",
+    skill: S.ten,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const ten = int(r, 3, 9) * 10;
+      return {
+        kind: "number",
+        prompt: `A whole number rounds to **${ten}** to the nearest ten. What is the **biggest** number it could be?`,
+        answer: ten + 4,
+        traps: [{ value: ten + 5, misconception: M.half, feedback: `${ten + 5} is halfway, and halfway rounds up to ${ten + 10}.` }, { value: ten + 9, misconception: M.down, feedback: `${ten + 9} is nearer to ${ten + 10}.` }],
+        hint: `Which numbers round to ${ten}? Think about the numbers just above ${ten}.`,
+        explanation: `${ten - 5} to ${ten + 4} round to ${ten}. ${ten + 5} rounds up, so the biggest is **${ten + 4}**.`,
+      };
+    },
+  },
+  {
+    key: "rd-100-word",
+    skill: S.hundred,
+    difficulties: [1, 2, 3],
+    make: (r, { difficulty }) => {
+      const p = difficulty === 3 ? 1000 : 100;
+      const n = difficulty === 1 ? int(r, 120, 980) : int(r, 1050, 9950);
+      const answer = roundTo(n, p);
+      return {
+        kind: "number",
+        prompt: `A football match had **${num(n)}** fans. A newspaper rounds this to the nearest **${num(p)}**. What number does it print?`,
+        answer,
+        traps: roundingTraps(n, p),
+        hint: `Look at the digit to the right of the ${PLACE_WORD[p]}s.`,
+        explanation: `${num(n)} to the nearest ${num(p)} is **${num(answer)}**.`,
+      };
+    },
+  },
+  {
+    key: "rd-hundred-stretch",
+    skill: S.hundred,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const n = int(r, 1, 8) * 1000 + int(r, 450, 549);
+      const to100 = roundTo(n, 100);
+      const to1000 = roundTo(n, 1000);
+      return {
+        kind: "number",
+        prompt: `Round **${num(n)}** to the nearest 100, and to the nearest 1,000. What is the **difference** between your two answers?`,
+        answer: Math.abs(to1000 - to100),
+        traps: [{ value: Math.abs(to1000 - n), feedback: "Find the difference between the two rounded numbers, not the original." }].filter((t) => t.value !== Math.abs(to1000 - to100)),
+        hint: "Round twice: once to the nearest 100, once to the nearest 1,000.",
+        explanation: `${num(n)} → ${num(to100)} (nearest 100) and ${num(to1000)} (nearest 1,000). The difference is **${num(Math.abs(to1000 - to100))}**.`,
+      };
+    },
+  },
+  {
+    key: "rd-big-stretch",
+    skill: S.big,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const n = int(r, 101, 989) * 1000 + int(r, 0, 999);
+      const p = pick(r, [10000, 100000]);
+      const answer = roundTo(n, p);
+      const options = [num(answer), num(roundTo(n, p / 10)), num(roundTo(n, p * 10)), num(Math.floor(n / p) * p === answer ? answer + p : Math.floor(n / p) * p)].filter((x, i, all) => all.indexOf(x) === i);
+      return {
+        kind: "choose",
+        prompt: `A city has **${num(n)}** people. Which is the population to the nearest **${num(p)}**?`,
+        options: options.map((t, i) => (i === 0 ? { text: t } : { text: t, misconception: M.place, feedback: "Find the right column first, then look at the digit to its right." })),
+        answer: 0,
+        hint: `Find the ${PLACE_WORD[p]}s digit. Look at the digit just to its right.`,
+        explanation: `${num(n)} to the nearest ${num(p)} is **${num(answer)}**.`,
+      };
+    },
+  },
+  {
+    key: "rd-estimate-stretch",
+    skill: S.estimate,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const a = int(r, 3, 9) * 100 - int(r, 1, 9);
+      const b = int(r, 2, 9) * 10 + int(r, 1, 4);
+      const exact = a * b;
+      const est = roundTo(a, 100) * roundTo(b, 10);
+      const options = [num(exact), num(exact * 10), num(Math.round(exact / 10)), num(exact + 1000)];
+      return {
+        kind: "choose",
+        prompt: `Without working it out exactly, which answer to **${a} × ${b}** is right?`,
+        options: options.filter((x, i, all) => all.indexOf(x) === i).map((t, i) => (i === 0 ? { text: t } : { text: t, misconception: M.exact, feedback: `Estimate: about ${num(roundTo(a, 100))} × ${roundTo(b, 10)} = ${num(est)}. This answer is too far away.` })),
+        answer: 0,
+        hint: `Round: ${a} is about ${num(roundTo(a, 100))}, ${b} is about ${roundTo(b, 10)}.`,
+        explanation: `The estimate is ${num(est)}, so the answer must be about that: **${num(exact)}**.`,
+      };
+    },
+  },
 ];
+
+const templates = withHints(baseTemplates, {
+  "rd-10": () => ["Find the two tens it sits between.", "Look at the ones digit: 5 or more rounds up, 4 or less rounds down."],
+  "rd-which": () => ["Picture the number line between the two tens.", "Which ten is it closer to? Halfway goes up."],
+  "rd-100": () => ["Look at the tens digit to round to the nearest hundred.", "For the nearest thousand, look at the hundreds digit."],
+  "rd-100-word": () => ["Find the right column first.", "Look at the digit to its right to decide up or down."],
+  "rd-big": () => ["Underline the digit in the column you're rounding to.", "Look at the next digit. Everything after it becomes zero."],
+  "rd-big-choose": () => ["Find the column, then look one digit to the right.", "5 or more: round up. 4 or less: round down."],
+  "rd-estimate": () => ["Round each number to something easy, like a ten or hundred.", "Work out the easy calculation in your head."],
+  "rd-sensible": () => ["Estimate first.", "The exact answer should be close to your estimate."],
+  "rd-ten-stretch": () => ["Numbers from 5 below to 4 above round to that ten.", "Halfway (5) rounds up to the next ten."],
+  "rd-hundred-stretch": () => ["Write both rounded numbers.", "Subtract the smaller from the bigger."],
+  "rd-big-stretch": () => ["Find the right column.", "Look at the digit to its right, then fill the rest with zeros."],
+  "rd-estimate-stretch": () => ["Round both numbers and multiply.", "The real answer must be near your estimate."],
+});
 
 export const rounding = defineTopic({
   id: T,
@@ -218,7 +329,7 @@ export const rounding = defineTopic({
         {
           type: "explain",
           title: "Which ten is nearer?",
-          body: ["**37** is between 30 and 40. It is only 3 away from 40, so **37 rounds to 40**."],
+          body: ["**37** is between 30 and 40. It is only 3 away from 40, so **37 rounds to 40**.", "A quick rule: look at the ones digit. If it is 5 or more, round up to the next ten. If it is 4 or less, round down to the ten below."],
           visual: { kind: "line", min: 30, max: 40, step: 1, labelEvery: 5, points: [{ value: 37, label: "37", tone: "num" }] },
           tip: "Only the ones digit decides: 0 to 4 rounds down, 5 to 9 rounds up.",
         },
@@ -227,6 +338,23 @@ export const rounding = defineTopic({
           title: "Halfway goes up",
           body: ["**35** is exactly halfway between 30 and 40. The rule is: halfway always rounds **up**, so 35 rounds to **40**."],
           visual: { kind: "line", min: 30, max: 40, step: 1, labelEvery: 5, points: [{ value: 35, label: "35", tone: "brand" }] },
+        },
+        {
+          type: "worked",
+          title: "Watch me: round 263 to the nearest ten",
+          support: "full",
+          problem: "Round **263** to the nearest ten.",
+          visual: { kind: "line", min: 260, max: 270, step: 1, labelEvery: 5, points: [{ value: 263, label: "263", tone: "brand" }] },
+          steps: [{ text: "263 is between **260** and **270**." }, { text: "The ones digit is **3**: 4 or less, so round down." }],
+          conclusion: "263 rounds to **260**.",
+        },
+        {
+          type: "worked",
+          title: "Together: round 85",
+          support: "faded",
+          problem: "Round **85** to the nearest ten.",
+          steps: [{ text: "85 is exactly halfway between 80 and 90.", blank: { prompt: "85 rounds to?", answer: 90, hint: "Halfway always goes up.", traps: [{ value: 80, misconception: M.half, feedback: "85 is halfway, and halfway always rounds up." }], worked: "**90**." } }],
+          conclusion: "85 rounds to **90**.",
         },
         { type: "check", title: "Your turn", questionId: gen("rd-10", 1, 3) },
         { type: "check", title: "One more", questionId: gen("rd-which", 1, 6) },
@@ -243,17 +371,27 @@ export const rounding = defineTopic({
         {
           type: "explain",
           title: "Look one digit to the right",
-          body: ["To round **4,762** to the nearest hundred, look at the **tens** digit: 6. That is 5 or more, so round up: **4,800**."],
+          body: ["To round **4,762** to the nearest hundred, look at the **tens** digit: 6. That is 5 or more, so round up: **4,800**.", "To the nearest thousand, look at the **hundreds** digit instead: 7, so 4,762 rounds up to **5,000**. The digits after the one you round to all become zeros."],
           visual: { kind: "line", min: 4700, max: 4800, step: 10, labelEvery: 5, points: [{ value: 4762, label: "4,762", tone: "num" }] },
+        },
+        {
+          type: "worked",
+          title: "Watch me: round 3,481 to the nearest 1,000",
+          support: "full",
+          problem: "Round **3,481** to the nearest thousand.",
+          visual: { kind: "line", min: 3000, max: 4000, step: 100, labelEvery: 5, points: [{ value: 3481, label: "3,481", tone: "brand" }] },
+          steps: [{ text: "It's between **3,000** and **4,000**." }, { text: "Look at the hundreds digit: **4**, so round down." }],
+          conclusion: "3,481 rounds to **3,000**.",
         },
         {
           type: "worked",
           title: "Let's do it together",
           support: "faded",
           problem: "Round **9,960** to the nearest hundred.",
+          visual: { kind: "line", min: 9900, max: 10000, step: 10, labelEvery: 5, points: [{ value: 9960, label: "9,960", tone: "brand" }] },
           steps: [
             { text: "The hundreds digit is 9. The tens digit is 6, so we round up." },
-            { text: "9 hundreds plus one more hundred is 10 hundreds: the 9 rolls over to 0 and the thousands go up.", blank: { prompt: "How many thousands now?", answer: 10, hint: "9 thousands, plus one more thousand from the rollover.", worked: "**10** thousands." } },
+            { text: "9 hundreds plus one more hundred is 10 hundreds: the 9 rolls over to 0 and the thousands go up.", blank: { prompt: "How many thousands now?", answer: 10, hint: "9 thousands, plus one more thousand from the rollover.", traps: [{ value: 9, misconception: M.down, feedback: "The hundreds roll over, so the thousands go up by one: 10 thousands." }], worked: "**10** thousands." } },
           ],
           conclusion: "9,960 to the nearest hundred is **10,000**.",
         },
@@ -272,8 +410,25 @@ export const rounding = defineTopic({
         {
           type: "explain",
           title: "Same rule, bigger numbers",
-          body: ["Round **368,421** to the nearest 10,000: the ten-thousands digit is 6, and the digit to its right is 8. Round up: **370,000**."],
+          body: ["Round **368,421** to the nearest 10,000: the ten-thousands digit is 6, and the digit to its right is 8. Round up: **370,000**.", "Big numbers use the same rule: find the column you are rounding to, look at the digit just to its right, then turn every digit after your column into a zero."],
           visual: { kind: "pv-chart", value: 368421, columns: ["HTh", "TTh", "Th", "H", "T", "O"], highlight: "TTh" },
+        },
+        {
+          type: "worked",
+          title: "Watch me: round 2,647,300 to the nearest 100,000",
+          support: "full",
+          problem: "Round **2,647,300** to the nearest hundred thousand.",
+          visual: { kind: "pv-chart", value: 2647300, columns: ["M", "HTh", "TTh", "Th", "H", "T", "O"], highlight: "HTh" },
+          steps: [{ text: "The hundred-thousands digit is **6**." }, { text: "The digit to its right is **4**: round down, keeping the 6." }],
+          conclusion: "2,647,300 rounds to **2,600,000**.",
+        },
+        {
+          type: "worked",
+          title: "Together: 45,550 to the nearest 1,000",
+          support: "faded",
+          problem: "Round **45,550** to the nearest thousand.",
+          steps: [{ text: "The thousands digit is 5; the digit to its right is 5, so round up.", blank: { prompt: "45,550 rounds to? (in thousands)", answer: 46, hint: "45 thousand goes up one.", traps: [{ value: 45, misconception: M.down, feedback: "The next digit is 5, so round up to 46 thousand." }], worked: "**46** thousand: 46,000." } }],
+          conclusion: "45,550 rounds to **46,000**.",
         },
         { type: "check", title: "Your turn", questionId: gen("rd-big", 2, 4) },
         { type: "check", title: "One more", questionId: gen("rd-big-choose", 2, 9) },
@@ -290,7 +445,8 @@ export const rounding = defineTopic({
         {
           type: "explain",
           title: "A quick answer in your head",
-          body: ["**397 + 512** is about **400 + 500 = 900**. The exact answer, 909, is close, so it makes sense."],
+          body: ["**397 + 512** is about **400 + 500 = 900**. The exact answer, 909, is close, so it makes sense.", "Estimating means rounding to easy numbers and working out the answer in your head. Do it before you calculate, then compare: if your exact answer is far away from the estimate, check again."],
+          visual: { kind: "line", min: 800, max: 1000, step: 50, points: [{ value: 900, label: "estimate 900" }, { value: 909, label: "909", tone: "brand" }] },
           tip: "Estimating catches big mistakes, like a missing or extra zero.",
         },
         {
@@ -300,6 +456,14 @@ export const rounding = defineTopic({
           problem: "Estimate **49 × 21**.",
           steps: [{ text: "49 is about **50**." }, { text: "21 is about **20**." }, { text: "50 × 20 = **1,000**." }],
           conclusion: "49 × 21 is about **1,000** (the exact answer is 1,029).",
+        },
+        {
+          type: "worked",
+          title: "Together: is 6,321 sensible?",
+          support: "faded",
+          problem: "Jo says **712 − 389 = 6,321**. Is that sensible?",
+          steps: [{ text: "Estimate: 700 − 400.", blank: { prompt: "700 − 400 = ?", answer: 300, hint: "7 hundreds − 4 hundreds", traps: [{ value: 1100, misconception: M.exact, feedback: "Subtract, don't add: 700 − 400." }], worked: "**300**." } }, { text: "6,321 is nowhere near 300, so Jo has made a mistake. The exact answer is 323." }],
+          conclusion: "Not sensible: the answer should be about **300**.",
         },
         { type: "check", title: "Your turn", questionId: gen("rd-estimate", 1, 2) },
         { type: "check", title: "One more", questionId: gen("rd-sensible", 2, 7) },
