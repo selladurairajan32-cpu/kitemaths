@@ -352,7 +352,7 @@ const baseTemplates: Template[] = [
       return {
         kind: "choose",
         prompt: `Three of these are equal to **${set.d}**. Which one is **not**?`,
-        options: [{ text: set.odd, misconception: M.place, feedback: `Turn it into tenths or hundredths: it isn't ${set.d}.` }, ...set.same.map((x) => ({ text: x, feedback: `That one is equal to ${set.d}.` }))],
+        options: [{ text: set.odd }, ...set.same.map((x) => ({ text: x, feedback: `That one is equal to ${set.d}.` }))],
         answer: 0,
         hint: `Write ${set.d} as hundredths, then compare.`,
         explanation: `${set.same.join(", ")} all equal ${set.d}; **${set.odd}** does not.`,

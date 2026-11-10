@@ -47,8 +47,11 @@ describe("secure needs more than one question form (MAST-001, D-033)", () => {
     }
     // Every Fractions (R1) skill offers at least two forms.
     for (const s of TOPICS.find((t) => t.id === "fractions")!.skills) expect(skillFormsAvailable(s.id)!, s.id).toBeGreaterThanOrEqual(2);
-    // Ratchet (10 Nov 2026): 48 of 105 skills, all on preview islands, have a single question maker, so the rule asks
-    // them for one form. Adding question types lowers this; it may only shrink.
-    expect(total - multi).toBeLessThanOrEqual(48);
+    // Ratchet: 48 of 105 skills had a single question maker on 10 Nov 2026. After D-037 Phase B every teaching skill
+    // has at least two forms; the only single-form skills are the six mock-exam areas, each a single maker that borrows
+    // island questions. It may only shrink.
+    const single = TOPICS.flatMap((t) => t.skills.filter((s) => (skillFormsAvailable(s.id) ?? 0) < 2).map((s) => s.id));
+    expect(single.every((id) => id.startsWith("mock-exams.")), single.join(", ")).toBe(true);
+    expect(total - multi).toBeLessThanOrEqual(6);
   });
 });

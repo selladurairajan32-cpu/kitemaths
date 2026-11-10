@@ -300,7 +300,7 @@ const baseTemplates: Template[] = [
     make: (r) => {
       const [a, b] = pick(r, [[1, 2], [2, 3], [3, 4], [2, 5], [3, 5], [5, 6]]) as [number, number];
       const ks = [2, 3, 4, 5].sort(() => r() - 0.5).slice(0, 3);
-      const odd = { text: f(a * ks[0]! + 1, b * ks[0]!), misconception: M.subtract, feedback: "Check by dividing: it doesn't simplify to the same fraction." };
+      const odd = { text: f(a * ks[0]! + 1, b * ks[0]!) };
       return {
         kind: "choose",
         prompt: `Three of these are equal to **${f(a, b)}**. Which one is **not**?`,

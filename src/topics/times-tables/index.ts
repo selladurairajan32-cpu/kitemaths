@@ -512,7 +512,7 @@ const baseTemplates: Template[] = [
         kind: "choose",
         prompt: `Which of these is **not** the same as **${a} × ${b}**?`,
         options: [
-          { text: `${a} + ${b}`, misconception: M.added, feedback: "Adding the numbers isn't the same as multiplying them." },
+          { text: `${a} + ${b}` },
           { text: Array.from({ length: a }, () => b).join(" + "), feedback: `${a} lots of ${b} is ${a} × ${b}.` },
           { text: Array.from({ length: b }, () => a).join(" + "), feedback: `${b} lots of ${a} is also ${a * b}.` },
           { text: `${other[0]} × ${other[1]}`, feedback: `${other[0]} × ${other[1]} is also ${a * b}.` },

@@ -5,7 +5,7 @@ import { chartsData } from "@/topics/charts-data";
 import { coordinates } from "@/topics/coordinates";
 import { decimals } from "@/topics/decimals";
 import { fractions2 } from "@/topics/fractions-2";
-import { defineTopic, genFor, int, pick, templatesOf } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, templatesOf, withHints } from "@/topics/kit/define";
 import { mentalMaths } from "@/topics/mental-maths";
 import type { KitQuestion, Template } from "@/topics/kit/types";
 import { money } from "@/topics/money";
@@ -161,8 +161,18 @@ const problemTemplates: Template[] = [
   },
 ];
 
+/** D-037: each exam-technique maker gives a second, more helpful hint; borrowed questions keep their island's hints. */
+const techniqueTemplates = withHints(problemTemplates, {
+  "mx-estimate": () => ["Round each number to something easy first.", "Pick the option closest to your rounded answer."],
+  "mx-pattern": () => ["Find what changes from one term to the next.", "Use the same rule to continue the pattern."],
+  "mx-interpret": () => ["Read the labels and the scale before the numbers.", "Find exactly the row, bar or value the question asks about."],
+  "mx-multistep": () => ["Plan the steps: what do you need to find first?", "Write down each step's answer before the next."],
+  "mx-backwards": () => ["Start from the end and undo each step.", "Undo the last step first, with the opposite operation."],
+  "mx-method": () => ["Look at the numbers before you choose.", "Pick the method with the fewest easy steps that still works."],
+});
+
 const templates: Template[] = [
-  ...problemTemplates,
+  ...techniqueTemplates,
   borrow("mx-number", S.number, [placeValue, rounding, negative]),
   borrow("mx-calc", S.calc, [addSubtract, timesTables, multiplyDivide]),
   borrow("mx-fdp", S.fdp, [fractions2, decimals, percentages]),

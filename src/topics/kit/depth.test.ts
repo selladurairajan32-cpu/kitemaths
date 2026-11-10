@@ -12,10 +12,8 @@ import { FACTOR_PUZZLES, uniquePuzzleAnswer } from "@/topics/multiply-divide";
  * Islands still being deepened are listed in NOT_YET; the list may only shrink, and an island leaves it once it passes.
  * Mock exams are exam technique, not teaching lessons, so only the hint rule applies to them.
  */
-const NOT_YET = new Set([
- 
-  "mock-exams",
-]);
+/** Every island now passes (D-037 Phase B, 10 Nov 2026). Keep this empty: a new island must pass before it ships. */
+const NOT_YET = new Set<string>([]);
 const TEACHING_EXEMPT = new Set(["mock-exams"]);
 const kit = TOPICS.filter((t) => t.id !== "fractions");
 

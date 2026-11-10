@@ -363,8 +363,9 @@ const baseTemplates: Template[] = [
     difficulties: [1, 2, 3],
     make: (r, { difficulty }) => {
       const step = difficulty === 1 ? pick(r, [10, 100]) : pick(r, [100, 1000]);
-      const n = difficulty === 3 ? int(r, 10, 99) * 100 - step + int(r, 1, 9) * 10 : int(r, 120, 9800);
       const more = r() < 0.5;
+      // Taking away never goes below zero: the starting number is always bigger than the step.
+      const n = difficulty === 3 ? int(r, 20, 99) * 100 - step + int(r, 1, 9) * 10 : int(r, step + 20, 9800);
       const answer = more ? n + step : n - step;
       return {
         kind: "number",
