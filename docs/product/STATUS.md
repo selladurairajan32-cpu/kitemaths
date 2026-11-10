@@ -258,7 +258,7 @@ The defect register is [`traceability/defects.csv`](traceability/defects.csv), s
 | DEF-025 | Medium | Fixed, closure not confirmed | CUR-002 |
 | DEF-026 | Medium | Fixed, closure not confirmed | CUR-003 |
 | DEF-027 | Low | Open | ARCH-003 |
-| DEF-028 | Low | Open | ARCH-002 |
+| DEF-028 | Low | Fixed, closure not confirmed | ARCH-002 |
 | DEF-029 | High | Closed (verified) | ARCH-003; QA-001 |
 | DEF-030 | High | Closed (verified) | ARCH-001 |
 | DEF-031 | High | Closed (verified) | ARCH-001 |

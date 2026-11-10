@@ -225,7 +225,8 @@ describe("question schema (ARCH-002)", () => {
     expect(n).toBeGreaterThan(5000);
     expect(problems.slice(0, 10)).toEqual([]);
     // Ratchet: the templates with duplicate traps found on 5 Nov (seeds 0–149). The set may only shrink.
-    const KNOWN = ["place-value.pv-which-digit", "add-subtract.as-add-word", "add-subtract.as-sub-word", "add-subtract.as-word", "area-perimeter.ap-count", "area-perimeter.ap-compound", "shapes-angles.sa-props", "ratio-algebra.ra-missing", "problem-solving.ps-measure", "problem-solving.ps-sum-diff", "problem-solving.ps-counting", "mock-exams.mx-number", "mock-exams.mx-shape", "mock-exams.mx-reasoning"];
+    // DEF-028 fixed 10 Nov 2026 (CH-054): the kit drops repeated trap values, so the set shrank from 14 templates to none.
+    const KNOWN: string[] = [];
     expect([...duplicateTraps].filter((t) => !KNOWN.includes(t))).toEqual([]);
   });
 

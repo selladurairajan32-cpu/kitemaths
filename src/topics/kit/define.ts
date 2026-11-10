@@ -5,7 +5,7 @@ import type { AssessmentKit, Look, QuestionInputProps, TopicModule } from "@/top
 import { answerText, evaluate, inputProblem, isComplete, responseText } from "./evaluate";
 import { KitQuestionInput } from "./Input";
 import { MathVisual } from "./visuals";
-import type { Difficulty, KitQuestion, KitResponse, Template, TopicSpec } from "./types";
+import type { Difficulty, KitQuestion, KitResponse, NumericTrap, Template, TopicSpec } from "./types";
 
 /**
  * Turns an island's content (skills, lessons, question makers, misconceptions, warm-up plan)
@@ -53,7 +53,11 @@ export function defineTopic(spec: TopicSpec): TopicModule<KitQuestion> {
     if (!t || !t.difficulties.includes(d)) return null;
     const rng = prng(hashString(`${spec.id}:${t.key}:${d}:${m[4]}`));
     const body = t.make(rng, { id, skill: t.skill, difficulty: d });
-    return { ...body, id, skill: t.skill, difficulty: d } as KitQuestion;
+    // DEF-028: a generator can emit two traps with the same value; only the first's feedback could ever show, so the
+    // repeat is dropped. No answer, option or visible feedback changes.
+    const raw = body.kind === "number" ? (body as { traps?: NumericTrap[] }).traps : undefined;
+    const traps = raw ? raw.filter((x, i, all) => all.findIndex((y) => y.value === x.value) === i) : undefined;
+    return { ...body, ...(traps ? { traps } : {}), id, skill: t.skill, difficulty: d } as KitQuestion;
   }
 
   function questionById(id: string): KitQuestion {
