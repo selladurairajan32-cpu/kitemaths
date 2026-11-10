@@ -12,7 +12,5 @@ export const MOVE: Transition = { type: "spring", stiffness: 260, damping: 30, m
 export const APPEAR: Transition = { duration: 0.25, ease: [0.22, 1, 0.36, 1] };
 /** Delay between items revealed one after another inside a step (cells filling, digits written). */
 export const STAGGER = 0.18;
-/** How long Play waits on each step before moving on, in milliseconds. */
-export const STEP_MS = 4200;
 /** The transition to use: nothing when the learner asked for reduced motion. */
 export const motionOr = (reduce: boolean | null, t: Transition): Transition => (reduce ? { duration: 0 } : t);

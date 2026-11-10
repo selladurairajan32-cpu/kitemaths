@@ -1,22 +1,40 @@
 {
  "errors": [],
  "axe": {
-  "phone": [],
-  "tablet": [],
-  "desk": []
+  "phone-watch": [],
+  "phone-try": [],
+  "tablet-watch": [],
+  "tablet-try": [],
+  "desk-watch": [],
+  "desk-try": []
+ },
+ "drags": {
+  "phone-scissors": true,
+  "phone-zero": true,
+  "tablet-scissors": true,
+  "tablet-zero": true,
+  "desk-scissors": true,
+  "desk-zero": true
  },
  "keyboard": {
-  "tabAfterArrow": "Picture itAn area model",
-  "captionAfterTwoNext": "Step 3 of 5. Each piece is an easy multiplication: 20 × 10 =",
-  "focusStyle": "solid none",
-  "done": true
+  "steps": 14,
+  "finished": true,
+  "focusRing": "Watched it all: outline solid 3px"
  },
  "reduced": {
-  "totalShownAt80ms": true,
+  "joinedAt80ms": true,
   "runningAnimations": 0
  },
- "shots": 58,
+ "steps": {
+  "phone": 14,
+  "tablet": 14,
+  "desk": 14
+ },
+ "shots": 92,
  "phoneContinueEnabled": true,
+ "phoneTryContinueEnabled": true,
  "tabletContinueEnabled": true,
- "deskContinueEnabled": true
+ "tabletTryContinueEnabled": true,
+ "deskContinueEnabled": true,
+ "deskTryContinueEnabled": true
 }

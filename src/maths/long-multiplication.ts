@@ -96,3 +96,38 @@ export function longMultiplication(a: number, b: number): LongMultiplication {
   if (rows.reduce((s, r) => checkedAdd(s, r.product), 0) !== total) throw new Error("long multiplication rows do not add up");
   return { a, b, aParts, bParts, cells, rows, sum, total };
 }
+
+/** Base-ten blocks: how many hundreds flats, tens rods and ones cubes. */
+export interface PlaceCounts {
+  hundreds: number;
+  tens: number;
+  ones: number;
+}
+
+/** The value the blocks show. */
+export function blocksValue(c: PlaceCounts): number {
+  return checkedAdd(checkedAdd(checkedMultiply(c.hundreds, 100), checkedMultiply(c.tens, 10)), c.ones);
+}
+
+/** `rows` copies of a (below 1,000) laid out as blocks, before any swapping: 23 × 4 rows → 8 tens and 12 ones. */
+export function rowsAsBlocks(a: number, rows: number): PlaceCounts {
+  assertSafeInteger(a, "a");
+  assertSafeInteger(rows, "rows");
+  if (a < 1 || a > 999 || rows < 0) throw new RangeError(`rowsAsBlocks needs 1 ≤ a ≤ 999 and rows ≥ 0, got ${a}, ${rows}`);
+  return { hundreds: checkedMultiply(Math.floor(a / 100), rows), tens: checkedMultiply(Math.floor(a / 10) % 10, rows), ones: checkedMultiply(a % 10, rows) };
+}
+
+/**
+ * Swap ten ones for a ten, then ten tens for a hundred, as many times as possible (what a carry is).
+ * Returns how many swaps of each kind were made and the blocks left; the value never changes.
+ */
+export function regroup(c: PlaceCounts): { onesToTens: number; tensToHundreds: number; result: PlaceCounts } {
+  for (const k of ["hundreds", "tens", "ones"] as const) {
+    assertSafeInteger(c[k], k);
+    if (c[k] < 0) throw new RangeError(`${k} must not be negative, got ${c[k]}`);
+  }
+  const onesToTens = Math.floor(c.ones / 10);
+  const tens = checkedAdd(c.tens, onesToTens);
+  const tensToHundreds = Math.floor(tens / 10);
+  return { onesToTens, tensToHundreds, result: { hundreds: checkedAdd(c.hundreds, tensToHundreds), tens: tens % 10, ones: c.ones % 10 } };
+}

@@ -26,7 +26,8 @@ Each item has two separate statuses (D-009).
 SPECIFIED any more: R2, R3 and R5 were built under D-032 ([release report](reports/D-032-build-report.md)). Nothing built under
 D-032 is accepted.
 
-**Animated explanations (D-035, CH-060):** pilot built on Long multiplication, READY FOR QA, not deployed. See
+**Animated explanations (D-035, D-036; CH-060, CH-061):** pilot v2 built on Long multiplication (blocks, picture and
+numbers, with a move for the child in each), READY FOR QA, not deployed to production. See
 [ANIM-001](design/ANIM-001-animation-pattern.md). It serves UX-006, CUR-002 AC2 and MIS-004 AC1 and is not a backlog item of
 its own. The D-034 phases (UI clarity, content depth, 11+ coverage and format research) are planned, not built.
 

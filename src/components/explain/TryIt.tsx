@@ -1,12 +1,15 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useState, type FormEvent } from "react";
+import { KipSays } from "@/components/kid/Kip";
 import { RichText } from "@/components/math/RichText";
 import { NumberInput } from "@/components/questions/inputs";
 import { Button } from "@/components/ui/Button";
-import { BulbIcon, CheckIcon } from "@/components/ui/Icons";
+import { CheckIcon, RefreshIcon } from "@/components/ui/Icons";
+import { playSound } from "@/lib/sound";
 import { APPEAR, motionOr } from "./motionTokens";
+import { useInstant } from "./timeline";
 
 export interface TryItBlank {
   /** What to work out, e.g. "**34 × 2** =". */
@@ -19,21 +22,11 @@ export interface TryItBlank {
 }
 
 /**
- * Try it yourself (ANIM-001 §2): the learner works each part in turn. A wrong answer gets a kind, specific nudge and
- * the offer of another way to see it; a right one reveals the next part.
+ * Try it yourself (ANIM-001 §2): one part at a time, in big type. A wrong answer gets Kip's kind, specific nudge and a
+ * "Show me again" button; a right one ticks the part off and shows the next.
  */
-export function TryIt({
-  blanks,
-  onComplete,
-  onExplainDifferently,
-  done = false,
-}: {
-  blanks: TryItBlank[];
-  onComplete: () => void;
-  onExplainDifferently?: () => void;
-  done?: boolean;
-}) {
-  const reduce = useReducedMotion();
+export function TryIt({ blanks, onComplete, onShowMe, done = false }: { blanks: TryItBlank[]; onComplete: () => void; onShowMe?: (blank: number) => void; done?: boolean }) {
+  const instant = useInstant();
   const [solved, setSolved] = useState(done ? blanks.length : 0);
   const [value, setValue] = useState<number | null>(null);
   const [wrong, setWrong] = useState<number | null>(null);
@@ -47,25 +40,27 @@ export function TryIt({
       setSolved(next);
       setValue(null);
       setWrong(null);
+      playSound("correct");
       if (next === blanks.length) onComplete();
     } else {
       setWrong(value);
+      playSound("tryAgain");
     }
   };
   const trap = current?.traps?.find((t) => t.value === wrong);
 
   return (
     <div className="space-y-3">
-      <ol className="space-y-2">
+      <ol className="space-y-2" aria-label="Parts done">
         {blanks.slice(0, solved).map((b) => (
           <motion.li
             key={b.prompt}
-            initial={reduce ? false : { opacity: 0, y: 6 }}
+            initial={instant ? false : { opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={motionOr(reduce, APPEAR)}
-            className="flex items-center gap-2 rounded-[16px] bg-ok-soft px-4 py-2.5 text-lg font-semibold text-ink"
+            transition={motionOr(instant, APPEAR)}
+            className="flex items-center gap-2 rounded-[16px] bg-ok-soft px-4 py-2.5 text-xl font-bold text-ink"
           >
-            <CheckIcon size={20} className="shrink-0 text-ok" />
+            <CheckIcon size={22} className="shrink-0 text-ok" />
             <span>
               <RichText text={b.prompt} /> <strong>{b.answer.toLocaleString("en-GB")}</strong>
             </span>
@@ -74,33 +69,28 @@ export function TryIt({
       </ol>
 
       {current ? (
-        <form onSubmit={submit} className="space-y-3 rounded-[20px] border-2 border-brand bg-surface p-4">
-          <div className="flex flex-wrap items-center gap-3 text-xl font-bold text-ink">
+        <form onSubmit={submit} className="space-y-3 rounded-[22px] border-2 border-brand bg-surface p-4 sm:p-5">
+          <p className="text-label font-bold text-ink-2">
+            Part {solved + 1} of {blanks.length}
+          </p>
+          <div className="flex flex-wrap items-center gap-3 text-2xl font-extrabold text-ink">
             <RichText text={current.prompt} />
-            <NumberInput value={value} onValue={setValue} locked={false} label={current.prompt.replace(/\*/g, "")} size="md" />
-            <Button type="submit" disabled={value === null}>
-              Check
-            </Button>
+            <NumberInput value={value} onValue={setValue} locked={false} label={current.prompt.replace(/\*/g, "")} size="lg" />
           </div>
+          <Button type="submit" size="lg" disabled={value === null} className="w-full sm:w-auto">
+            Check
+          </Button>
           <AnimatePresence>
             {wrong !== null && (
-              <motion.div
-                key={wrong}
-                role="status"
-                initial={reduce ? false : { opacity: 0, x: -8 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={motionOr(reduce, APPEAR)}
-                className="space-y-2 rounded-[16px] bg-hint-soft p-3 text-lg text-hint-ink"
-              >
-                <p className="flex gap-2 font-semibold">
-                  <BulbIcon size={20} className="mt-1 shrink-0" />
-                  <span>
+              <motion.div key={wrong} role="status" initial={instant ? false : { opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={motionOr(instant, APPEAR)} className="space-y-3">
+                <KipSays mood="think" tone="sun" size={48}>
+                  <span className="text-lg font-bold text-ink">
                     Not quite. <RichText text={trap?.feedback ?? current.hint} />
                   </span>
-                </p>
-                {onExplainDifferently && (
-                  <Button variant="secondary" onClick={onExplainDifferently}>
-                    Explain it differently
+                </KipSays>
+                {onShowMe && (
+                  <Button variant="secondary" onClick={() => onShowMe(solved)}>
+                    <RefreshIcon size={18} /> Show me again
                   </Button>
                 )}
               </motion.div>
@@ -108,9 +98,11 @@ export function TryIt({
           </AnimatePresence>
         </form>
       ) : (
-        <p role="status" className="flex items-center gap-2 text-lg font-bold text-ok">
-          <CheckIcon size={20} /> You did it! Every part is right.
-        </p>
+        <KipSays mood="cheer" tone="sky" size={52}>
+          <span role="status" className="text-lg font-bold text-ink">
+            You did it! Every part is right.
+          </span>
+        </KipSays>
       )}
     </div>
   );

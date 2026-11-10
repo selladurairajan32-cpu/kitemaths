@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { columnSum, longMultiplication, placeParts } from "./long-multiplication";
+import { blocksValue, columnSum, longMultiplication, placeParts, regroup, rowsAsBlocks } from "./long-multiplication";
 
 /**
  * ANIM-001 maths model. Oracles: BigInt products and sums, and hand-worked tables (never the function under test).
@@ -117,4 +117,38 @@ describe("long multiplication model (ANIM-001)", () => {
     expect(() => longMultiplication(Number.MAX_SAFE_INTEGER, 3)).toThrow(RangeError);
     expect(() => placeParts(0)).toThrow(RangeError);
   });
+
+  it("lays rows out as blocks and swaps ten for one, as worked by hand", () => {
+    // 4 rows of 23: 8 tens and 12 ones; swapping 10 ones for a ten leaves 9 tens and 2 ones (92).
+    expect(rowsAsBlocks(23, 4)).toEqual({ hundreds: 0, tens: 8, ones: 12 });
+    expect(regroup({ hundreds: 0, tens: 8, ones: 12 })).toEqual({ onesToTens: 1, tensToHundreds: 0, result: { hundreds: 0, tens: 9, ones: 2 } });
+    // 10 rows of 23: 20 tens and 30 ones, which become 2 hundreds and 3 tens (230).
+    expect(rowsAsBlocks(23, 10)).toEqual({ hundreds: 0, tens: 20, ones: 30 });
+    expect(regroup({ hundreds: 0, tens: 20, ones: 30 })).toEqual({ onesToTens: 3, tensToHundreds: 2, result: { hundreds: 2, tens: 3, ones: 0 } });
+    // Together: 2 hundreds, 12 tens, 2 ones; ten tens become one more hundred (322).
+    expect(regroup({ hundreds: 2, tens: 12, ones: 2 })).toEqual({ onesToTens: 0, tensToHundreds: 1, result: { hundreds: 3, tens: 2, ones: 2 } });
+  });
+
+  it("never changes the value when it regroups (BigInt oracle)", () => {
+    for (let a = 1; a <= 999; a += 37) {
+      for (let rows = 0; rows <= 25; rows++) {
+        const raw = rowsAsBlocks(a, rows);
+        const label = `${a} × ${rows} rows`;
+        expect(BigInt(raw.hundreds) * BigInt(100) + BigInt(raw.tens) * BigInt(10) + BigInt(raw.ones), label).toBe(BigInt(a) * BigInt(rows));
+        const { result } = regroup(raw);
+        expect(BigInt(blocksValue(result)), label).toBe(BigInt(a) * BigInt(rows));
+        expect(result.tens, label).toBeLessThan(10);
+        expect(result.ones, label).toBeLessThan(10);
+      }
+    }
+  });
+
+  it("refuses block counts outside its domain with RangeError", () => {
+    expect(() => rowsAsBlocks(0, 3)).toThrow(RangeError);
+    expect(() => rowsAsBlocks(1000, 3)).toThrow(RangeError);
+    expect(() => rowsAsBlocks(23, -1)).toThrow(RangeError);
+    expect(() => regroup({ hundreds: 0, tens: -1, ones: 0 })).toThrow(RangeError);
+    expect(() => regroup({ hundreds: 0, tens: 0.5, ones: 0 })).toThrow(RangeError);
+  });
+
 });

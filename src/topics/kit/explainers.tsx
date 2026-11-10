@@ -13,7 +13,8 @@ import type { KitLab } from "./types";
 const Loading = () => <div className="min-h-[24rem] animate-pulse rounded-[22px] bg-sunk" aria-hidden />;
 
 const LABS: Record<string, ComponentType<LabStepProps>> = {
-  "long-multiplication": dynamic(() => import("@/topics/multiply-divide/explain/LongMultiplicationLab"), { loading: Loading }),
+  "long-multiplication-watch": dynamic(() => import("@/topics/multiply-divide/explain/LongMultiplicationLab").then((m) => m.LongMultiplicationWatch), { loading: Loading }),
+  "long-multiplication-try": dynamic(() => import("@/topics/multiply-divide/explain/LongMultiplicationLab").then((m) => m.LongMultiplicationTry), { loading: Loading }),
 };
 
 const REMEDIES: Record<string, ComponentType> = {

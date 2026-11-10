@@ -334,7 +334,7 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
           )}
           {step.type === "check" && !checkAlreadyDone && <span className="text-base text-muted">Answer to carry on</span>}
         </footer>
-        {!canContinue && step.type === "lab" && <p className="mt-2 text-right text-base text-muted">Check each challenge to carry on.</p>}
+        {!canContinue && step.type === "lab" && <p className="mt-2 text-right text-base text-muted">Finish the activity above to carry on.</p>}
         {!canContinue && step.type === "worked" && <p className="mt-2 text-right text-base text-muted">Work through every step to carry on.</p>}
       </section>
     </div>
