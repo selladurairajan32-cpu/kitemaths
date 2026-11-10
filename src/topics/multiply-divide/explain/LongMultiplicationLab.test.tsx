@@ -64,8 +64,10 @@ describe("long multiplication story (ANIM-001 v2)", () => {
 });
 
 describe("long multiplication lesson wiring (ANIM-001 v2)", () => {
-  it("adds a watch step and a try step after the worked example, keeping the checks", () => {
+  it("adds a watch step and a try step after the worked examples, keeping the checks", () => {
     expect(lesson.steps.map((s) => (s.type === "lab" ? (s as unknown as { explainer: string }).explainer : s.type))).toEqual([
+      "explain",
+      "worked",
       "worked",
       "long-multiplication-watch",
       "long-multiplication-try",

@@ -87,6 +87,17 @@ describe("misconception recovery flow", () => {
     expect(s.hintsUsed).toBe(1);
   });
 
+  it("shows more hints one at a time, each counted (D-037 fading hints)", () => {
+    let s = recoveryReducer(initialRecovery, { type: "more-hint" }, options);
+    expect(s).toBe(initialRecovery);
+    s = recoveryReducer(s, { type: "request-hint" }, options);
+    expect(s).toMatchObject({ hintVisible: true, hintLevel: 1, hintsUsed: 1 });
+    s = recoveryReducer(s, { type: "more-hint" }, options);
+    expect(s).toMatchObject({ hintLevel: 2, hintsUsed: 2 });
+    s = recoveryReducer(s, wrong(), options);
+    expect(s).toMatchObject({ hintLevel: 2, hintsUsed: 2, retrying: true });
+  });
+
   it("reveals the worked answer after the final attempt", () => {
     let s = recoveryReducer(initialRecovery, wrong(), options);
     s = recoveryReducer(s, wrong([M.SWAP]), options);

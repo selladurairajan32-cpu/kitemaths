@@ -32,7 +32,7 @@ export type KitQuestionLike = {
 const tags = (...lists: ({ misconception?: string }[] | undefined)[]) => [...new Set(lists.flatMap((l) => (l ?? []).map((x) => x.misconception).filter((m): m is string => !!m)))];
 const strip = <T extends object>(o: T): T => Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined)) as T;
 
-function common(q: { id: string; skill: string; difficulty: 1 | 2 | 3; prompt: string; hint: string; explanation: string }, meta: AdaptMeta, misconceptions: string[], model?: Model) {
+function common(q: { id: string; skill: string; difficulty: 1 | 2 | 3; prompt: string; hint: string; hints?: string[]; explanation: string }, meta: AdaptMeta, misconceptions: string[], model?: Model) {
   return strip({
     id: q.id,
     skill: q.skill,
@@ -40,7 +40,7 @@ function common(q: { id: string; skill: string; difficulty: 1 | 2 | 3; prompt: s
     difficulty: q.difficulty,
     prompt: q.prompt,
     explanation: q.explanation,
-    hints: q.hint.trim() ? [q.hint] : [],
+    hints: [q.hint, ...(q.hints ?? [])].filter((h) => h.trim()),
     misconceptions,
     scoring: { marks: meta.marks ?? 1 },
     model,

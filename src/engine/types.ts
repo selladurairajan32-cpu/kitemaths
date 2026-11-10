@@ -33,6 +33,8 @@ export interface QuestionBase {
   difficulty: 1 | 2 | 3;
   prompt: string;
   hint: string;
+  /** Further hints, each giving more help than the last (D-037): shown one at a time after `hint`. */
+  hints?: string[];
   explanation: string;
 }
 

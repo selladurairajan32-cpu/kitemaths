@@ -22,6 +22,8 @@ export interface RecoveryState {
   attempts: number;
   hintsUsed: number;
   hintVisible: boolean;
+  /** How many hints are showing (D-037: hints fade in one at a time). */
+  hintLevel: number;
   retrying: boolean;
   misconceptions: MisconceptionId[];
   suspected: MisconceptionId[];
@@ -34,7 +36,9 @@ export type RecoveryEvent =
   | { type: "submit"; evaluation: Evaluation }
   | { type: "continue" }
   | { type: "followup-submit"; evaluation: Evaluation }
-  | { type: "request-hint" };
+  | { type: "request-hint" }
+  /** Show the next, more helpful hint. The player offers it only while more remain. */
+  | { type: "more-hint" };
 
 export interface RecoveryOptions {
   maxAttempts?: number;
@@ -51,6 +55,7 @@ export const initialRecovery: RecoveryState = {
   attempts: 0,
   hintsUsed: 0,
   hintVisible: false,
+  hintLevel: 0,
   retrying: false,
   misconceptions: [],
   suspected: [],
@@ -64,7 +69,11 @@ export function recoveryReducer(state: RecoveryState, event: RecoveryEvent, opti
   switch (event.type) {
     case "request-hint": {
       if (state.stage !== "answering" || state.hintVisible) return state;
-      return { ...state, hintVisible: true, hintsUsed: state.hintsUsed + 1 };
+      return { ...state, hintVisible: true, hintLevel: 1, hintsUsed: state.hintsUsed + 1 };
+    }
+    case "more-hint": {
+      if (state.stage !== "answering" || !state.hintVisible) return state;
+      return { ...state, hintLevel: state.hintLevel + 1, hintsUsed: state.hintsUsed + 1 };
     }
     case "submit": {
       if (state.stage !== "answering") return state;
@@ -97,6 +106,7 @@ export function recoveryReducer(state: RecoveryState, event: RecoveryEvent, opti
         stage: "answering",
         retrying: true,
         hintVisible: true,
+        hintLevel: Math.max(state.hintLevel, 1),
         hintsUsed: state.hintVisible ? state.hintsUsed : state.hintsUsed + 1,
       };
     }

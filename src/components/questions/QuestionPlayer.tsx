@@ -275,6 +275,7 @@ export function QuestionPlayer({
 
   const followUp = state.followUpId ? questionById(state.followUpId) : null;
   const suspected = state.suspected.map((id) => misconceptionById(id)).filter((m) => !!m);
+  const hintList = [q.hint, ...(q.hints ?? [])].filter((h) => h.trim());
   const earned = state.stage === "correct" ? (state.attempts === 1 && state.hintsUsed === 0 ? 3 : 2) : state.stage === "revealed" ? 1 : 0;
   const showsStars = context === "practice" || context === "lesson";
 
@@ -308,9 +309,17 @@ export function QuestionPlayer({
                       <RichText text={state.lastFeedback} />
                     </p>
                   )}
-                  <p>
-                    <RichText text={q.hint} />
-                  </p>
+                  {hintList.slice(0, Math.max(state.hintLevel, 1)).map((h, i) => (
+                    <p key={h} className={i > 0 ? "border-t border-warn-bright/40 pt-1.5" : undefined}>
+                      {hintList.length > 1 && <strong className="text-ink">Hint {i + 1}: </strong>}
+                      <RichText text={h} />
+                    </p>
+                  ))}
+                  {state.hintLevel < hintList.length && (
+                    <Button variant="quiet" onClick={() => dispatch({ type: "more-hint" })} className="-ml-2 mt-1">
+                      <BulbIcon size={18} /> Another hint
+                    </Button>
+                  )}
                 </div>
               </div>
             )}

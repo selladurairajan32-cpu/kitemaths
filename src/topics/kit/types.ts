@@ -151,6 +151,8 @@ export interface Template {
   key: string;
   skill: SkillId;
   difficulties: Difficulty[];
+  /** A stretch question (D-037): multi-step, reasoning or 11+ style, beyond the lesson's core. */
+  stretch?: boolean;
   make: (rng: Rng, base: { id: string; skill: SkillId; difficulty: Difficulty }) => Omit<KitQuestion, "id" | "skill" | "difficulty">;
 }
 

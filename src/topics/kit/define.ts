@@ -192,6 +192,25 @@ export function defineTopic(spec: TopicSpec): TopicModule<KitQuestion> {
   };
 }
 
+/**
+ * Adds further hints to question makers (D-037: hints fade in one at a time), each giving more help than the last.
+ * The extra hints are made from the finished question, so the questions themselves (and their ids) don't change.
+ */
+export type MadeQuestion = ReturnType<Template["make"]>;
+export function withHints(templates: Template[], extra: Record<string, (q: MadeQuestion) => string[]>): Template[] {
+  return templates.map((t) => {
+    const more = extra[t.key];
+    if (!more) return t;
+    return { ...t, make: (r, base) => { const q = t.make(r, base); return { ...q, hints: [...(q.hints ?? []), ...more(q)] }; } };
+  });
+}
+
+/** The right answer as words a hint can use: the number, or the right option's text. */
+export function answerOf(q: MadeQuestion): string {
+  const made = q as KitQuestion;
+  return made.kind === "choose" ? made.options[made.answer]!.text : made.answer.toLocaleString("en-GB");
+}
+
 /* Helpers for writing question makers. */
 export const int = (r: () => number, lo: number, hi: number) => lo + Math.floor(r() * (hi - lo + 1));
 export const pick = <T,>(r: () => number, items: readonly T[]): T => items[Math.floor(r() * items.length)];

@@ -11,6 +11,9 @@ const OUT = process.argv[2]; const BASE = 'http://localhost:' + (process.argv[3]
 fs.mkdirSync(OUT, { recursive: true });
 const AXE = fs.readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
 const LESSON = '/t/multiply-divide/lesson/long/';
+// The lesson's steps: explain, watch me, together, then the animated watch step and the try step (1-based URLs).
+const WATCH = 4;
+const TRY = 5;
 const NEXT = /^(Next|I've got it!)$/;
 
 async function open(p, step) {
@@ -65,7 +68,7 @@ async function doTask(p, report, vw) {
     const p = await ctx.newPage();
     p.on('pageerror', (e) => report.errors.push(`${vw} pageerror ${e.message}`));
     p.on('console', (m) => m.type() === 'error' && report.errors.push(`${vw}: ${m.text()}`));
-    await open(p, 2);
+    await open(p, WATCH);
     const card = p.locator('main');
     const shot = async (n) => { await card.screenshot({ path: `${OUT}/${vw}-${n}.png` }); report.shots++; };
     let i = 0;
@@ -87,7 +90,7 @@ async function doTask(p, report, vw) {
     report.axe[vw + '-watch'] = await p.evaluate(async () => (await window.axe.run(document.querySelector('main'))).violations.map((v) => `${v.id} (${v.impact}): ${v.nodes.length}`));
 
     // Try it yourself: a missing-zero slip, "Show me again", then the right answers.
-    await open(p, 3);
+    await open(p, TRY);
     const answer = async (v) => { await p.getByRole('textbox').fill(v); await p.getByRole('button', { name: 'Check' }).click(); await p.waitForTimeout(500); };
     await answer('68'); await answer('34');
     await p.getByRole('button', { name: /Show me again/ }).click();
@@ -106,7 +109,7 @@ async function doTask(p, report, vw) {
   {
     const ctx = await b.newContext({ viewport: { width: 1280, height: 900 } });
     const p = await ctx.newPage();
-    await open(p, 2);
+    await open(p, WATCH);
     const next = p.getByRole('button', { name: /^(Next|I've got it!|Your turn first)$/ });
     await next.focus();
     let steps = 0;
@@ -130,7 +133,7 @@ async function doTask(p, report, vw) {
   {
     const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
     const p = await ctx.newPage();
-    await open(p, 2);
+    await open(p, WATCH);
     for (let i = 0; i < 3; i++) await p.getByRole('button', { name: NEXT }).click();
     await p.waitForTimeout(80);
     report.reduced.joinedAt80ms = await p.getByText('= 230').count() > 0;
