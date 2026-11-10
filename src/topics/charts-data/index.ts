@@ -1,4 +1,4 @@
-import { defineTopic, genFor, int, pick } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
 import { num } from "@/topics/kit/evaluate";
 import type { ChooseOption, Template } from "@/topics/kit/types";
 
@@ -33,7 +33,7 @@ const DAY: Record<string, string> = { Mon: "Monday", Tue: "Tuesday", Wed: "Wedne
 /** "the Library", but "Park Road". */
 const at = (stop: string) => (stop === "Park Road" ? stop : `the ${stop}`);
 
-const templates: Template[] = [
+const baseTemplates: Template[] = [
   {
     key: "cd-picto",
     skill: S.picto,
@@ -282,7 +282,238 @@ const templates: Template[] = [
       };
     },
   },
+  /* D-037 (Phase B): two more question makers per skill, one of them a stretch question. */
+  {
+    key: "cd-picto-total",
+    skill: S.picto,
+    difficulties: [1, 2, 3],
+    make: (r, { difficulty }) => {
+      const s = pick(r, SURVEYS);
+      const key = difficulty === 1 ? 2 : pick(r, [4, 10]);
+      const cats = some(r, s.cats, 3);
+      const rows = cats.map((label) => ({ label, value: key * int(r, 1, 5) + (difficulty === 3 ? key / 2 : 0) }));
+      const total = rows.reduce((t, x) => t + x.value, 0);
+      return {
+        kind: "number",
+        prompt: `How many ${s.who} are shown **altogether**?`,
+        visual: { kind: "pictogram", rows, key, keyLabel: `${key} ${s.who}` },
+        answer: total,
+        traps: [{ value: rows.reduce((t, x) => t + x.value / key, 0), misconception: M.key, feedback: `Each picture stands for ${key}, not 1.` }],
+        hint: `Each picture is worth ${key}. Work out each row, then add.`,
+        explanation: `${rows.map((x) => x.value).join(" + ")} = **${total}**.`,
+      };
+    },
+  },
+  {
+    key: "cd-picto-stretch",
+    skill: S.picto,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const s = pick(r, SURVEYS);
+      const key = pick(r, [4, 8]);
+      const value = key * int(r, 2, 5) + key / 4;
+      return {
+        kind: "number",
+        prompt: `In a pictogram, one picture stands for **${key} ${s.who}**. How many pictures show **${value} ${s.who}**? (Give your answer as a decimal, like 2.5.)`,
+        answer: value / key,
+        decimals: 2,
+        traps: [{ value, misconception: M.key, feedback: `Divide by the key: each picture is ${key}.` }],
+        hint: `Divide ${value} by ${key}.`,
+        explanation: `${value} ÷ ${key} = **${value / key}** pictures: a quarter picture is ${key / 4}.`,
+      };
+    },
+  },
+  {
+    key: "cd-bar-total",
+    skill: S.bar,
+    difficulties: [1, 2, 3],
+    make: (r, { difficulty }) => {
+      const step = difficulty === 1 ? 2 : difficulty === 2 ? 5 : 10;
+      const bars = DAYS.slice(0, 4).map((label) => ({ label, value: step * int(r, 1, 8) }));
+      const total = bars.reduce((t, b) => t + b.value, 0);
+      return {
+        kind: "number",
+        prompt: "How many books were borrowed **altogether** on these four days?",
+        visual: { kind: "barchart", bars, max: step * 8, step, axis: "Books" },
+        answer: total,
+        traps: [{ value: bars.reduce((t, b) => t + b.value / step, 0), misconception: M.scale, feedback: `The scale goes up in ${step}s: read each bar's value from the axis.` }].filter((t) => t.value !== total),
+        hint: `Read each bar on the scale (it goes up in ${step}s), then add.`,
+        explanation: `${bars.map((b) => b.value).join(" + ")} = **${total}**.`,
+      };
+    },
+  },
+  {
+    key: "cd-bar-stretch",
+    skill: S.bar,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const bars = DAYS.map((label) => ({ label, value: 5 * int(r, 1, 12) }));
+      // Every bar is a multiple of 5, so the total of five bars divides exactly by 5.
+      const fixed = bars;
+      const t2 = bars.reduce((t, b) => t + b.value, 0);
+      return {
+        kind: "number",
+        prompt: "What is the **mean** number of visitors per day?",
+        visual: { kind: "barchart", bars: fixed, max: 70, step: 5, axis: "Visitors" },
+        answer: t2 / 5,
+        decimals: 1,
+        traps: [{ value: t2, misconception: M.mean, feedback: "Share the total equally between the 5 days: divide by 5." }],
+        hint: "Add all five bars, then divide by 5.",
+        explanation: `Total ${t2} ÷ 5 days = **${t2 / 5}**.`,
+      };
+    },
+  },
+  {
+    key: "cd-two-way",
+    skill: S.tables,
+    difficulties: [1, 2, 3],
+    make: (r, { difficulty }) => {
+      const a = [int(r, 3, 15), int(r, 3, 15)];
+      const b = [int(r, 3, 15), int(r, 3, 15)];
+      const askTotal = difficulty > 1;
+      return {
+        kind: "number",
+        prompt: askTotal ? "How many children **chose football** altogether (boys and girls)?" : "How many **girls** chose netball?",
+        visual: { kind: "table", head: ["", "Football", "Netball"], rows: [["Boys", String(a[0]), String(b[0])], ["Girls", String(b[1]), String(a[1])]] },
+        answer: askTotal ? a[0]! + b[1]! : a[1]!,
+        traps: [{ value: askTotal ? a[0]! + b[0]! : b[1]!, misconception: M.row, feedback: "Find the right row and the right column, then read where they meet." }].filter((t) => t.value !== (askTotal ? a[0]! + b[1]! : a[1]!)),
+        hint: askTotal ? "Read the Football column for both rows and add." : "Find the Girls row and the Netball column.",
+        explanation: askTotal ? `${a[0]} + ${b[1]} = **${a[0]! + b[1]!}**.` : `Girls and Netball meet at **${a[1]}**.`,
+      };
+    },
+  },
+  {
+    key: "cd-tables-stretch",
+    skill: S.tables,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const leave = [8 * 60 + 5 * int(r, 0, 5), 8 * 60 + 30 + 5 * int(r, 0, 5)];
+      const travel = 5 * int(r, 3, 7);
+      const arrive = leave.map((t) => t + travel);
+      const need = arrive[1]! - 5 * int(r, 1, 3);
+      return {
+        kind: "choose",
+        prompt: `You need to be at the Library by **${clock(need)}**. Which bus should you catch from the Station?`,
+        visual: { kind: "table", head: ["Stop", "Bus A", "Bus B"], rows: [["Station", clock(leave[0]!), clock(leave[1]!)], ["Library", clock(arrive[0]!), clock(arrive[1]!)]] },
+        options: [{ text: `Bus A, leaving at ${clock(leave[0]!)}` }, { text: `Bus B, leaving at ${clock(leave[1]!)}`, feedback: `Bus B arrives at ${clock(arrive[1]!)}, which is after ${clock(need)}.` }],
+        answer: 0,
+        fixedOrder: true,
+        hint: "Look at the Library row: which bus arrives in time?",
+        explanation: `Bus A arrives at ${clock(arrive[0]!)}, in time. Bus B arrives at ${clock(arrive[1]!)}, too late. Catch **Bus A**.`,
+      };
+    },
+  },
+  {
+    key: "cd-line-change",
+    skill: S.line,
+    difficulties: [1, 2, 3],
+    make: (r, { difficulty }) => {
+      const labels = ["8:00", "10:00", "12:00", "14:00", "16:00"];
+      const step = difficulty === 1 ? 2 : 5;
+      const vals = labels.map(() => step * int(r, 1, 6));
+      const i = int(r, 0, 2);
+      const j = i + int(r, 1, 2);
+      const change = vals[j]! - vals[i]!;
+      return {
+        kind: "number",
+        prompt: `By how much did the temperature **change** from **${labels[i]}** to **${labels[j]}**? (If it fell, still give the size of the change.)`,
+        visual: { kind: "linegraph", points: labels.map((label, k) => ({ label, value: vals[k]! })), min: 0, max: step * 6, step, axis: "°C" },
+        unit: "°C",
+        answer: Math.abs(change),
+        traps: [{ value: vals[j]!, misconception: M.op, feedback: "That's the temperature at the end. Find the difference between the two readings." }].filter((t) => t.value !== Math.abs(change)),
+        hint: `Read both temperatures, then find the difference.`,
+        explanation: `${vals[i]}°C to ${vals[j]}°C is a change of **${Math.abs(change)}°C**.`,
+      };
+    },
+  },
+  {
+    key: "cd-line-stretch",
+    skill: S.line,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+      const vals = labels.map((_, k) => 2 * (int(r, 2, 6) + k));
+      let best = 1;
+      for (let k = 1; k < vals.length; k++) if (vals[k]! - vals[k - 1]! > vals[best]! - vals[best - 1]!) best = k;
+      const rises = vals.slice(1).map((v, k) => v - vals[k]!);
+      const biggest = Math.max(...rises);
+      const count = rises.filter((x) => x === biggest).length;
+      const fix = count === 1;
+      return {
+        kind: "choose",
+        prompt: "Between which two months did the plant grow the **most**?",
+        visual: { kind: "linegraph", points: labels.map((label, k) => ({ label, value: vals[k]! })), min: 0, max: 30, step: 2, axis: "Height (cm)" },
+        options: fix
+          ? [{ text: `${labels[best - 1]} and ${labels[best]}` }, ...labels.slice(1).map((l, k) => `${labels[k]} and ${l}`).filter((t) => t !== `${labels[best - 1]} and ${labels[best]}`).slice(0, 3).map((t) => ({ text: t, feedback: "Find where the line is steepest: the biggest rise from one month to the next." }))]
+          : [{ text: "Two pairs of months tie for the biggest rise" }, { text: `${labels[0]} and ${labels[1]}`, feedback: "Compare every rise from month to month." }],
+        answer: 0,
+        hint: "The steepest part of the line shows the biggest rise.",
+        explanation: fix ? `The biggest rise is ${biggest} cm, between **${labels[best - 1]} and ${labels[best]}**.` : "Two pairs of months tie for the biggest rise.",
+      };
+    },
+  },
+  {
+    key: "cd-mean-word",
+    skill: S.mean,
+    difficulties: [1, 2, 3],
+    make: (r, { difficulty }) => {
+      const n = difficulty === 1 ? 3 : difficulty === 2 ? 4 : 5;
+      const mean = int(r, 4, 20);
+      const vals = Array.from({ length: n - 1 }, () => mean + int(r, -3, 3));
+      vals.push(mean * n - vals.reduce((t, v) => t + v, 0));
+      const total = mean * n;
+      return {
+        kind: "number",
+        prompt: `In ${n} games, a team scored **${vals.join(", ")}** points. What is the **mean** score?`,
+        answer: mean,
+        traps: [{ value: total, misconception: M.mean, feedback: `That's the total. Share it between the ${n} games.` }],
+        hint: `Add the scores, then divide by ${n}.`,
+        explanation: `${vals.join(" + ")} = ${total}; ${total} ÷ ${n} = **${mean}**.`,
+      };
+    },
+  },
+  {
+    key: "cd-mean-stretch",
+    skill: S.mean,
+    difficulties: [3],
+    stretch: true,
+    make: (r) => {
+      const mean = int(r, 6, 15);
+      const known = [mean + int(r, -4, 4), mean + int(r, -4, 4), mean + int(r, -4, 4)];
+      const missing = mean * 4 - known.reduce((t, v) => t + v, 0);
+      return {
+        kind: "number",
+        prompt: `The mean of **four** numbers is **${mean}**. Three of them are **${known.join(", ")}**. What is the fourth?`,
+        answer: missing,
+        traps: [{ value: mean, misconception: M.mean, feedback: "The mean isn't the missing number. The four numbers must add to 4 × the mean." }].filter((t) => t.value !== missing),
+        hint: `If the mean of four numbers is ${mean}, they add up to 4 × ${mean}.`,
+        explanation: `4 × ${mean} = ${mean * 4}; ${mean * 4} − ${known.reduce((t, v) => t + v, 0)} = **${missing}**.`,
+      };
+    },
+  },
 ];
+
+const templates = withHints(baseTemplates, {
+  "cd-picto": () => ["Read the key: what is one picture worth?", "Count the pictures and multiply by the key. A half picture is half the key."],
+  "cd-bar": () => ["Check the scale: what does each line on the axis stand for?", "Go across from the top of the bar to the axis and read the number."],
+  "cd-table": () => ["Find the right row and the right column.", "Read the number where they meet."],
+  "cd-line": () => ["Find the time on the bottom axis.", "Go up to the line, then across to read the value."],
+  "cd-mean": () => ["Add all the numbers.", "Divide the total by how many numbers there are."],
+  "cd-picto-total": () => ["Work out each row using the key.", "Add the rows together."],
+  "cd-picto-stretch": () => ["Divide the number by what one picture is worth.", "A quarter of a picture is a quarter of the key."],
+  "cd-bar-total": () => ["Read each bar's value on the scale.", "Add the four values."],
+  "cd-bar-stretch": () => ["Find the total of all five bars.", "Divide by 5 to share it equally between the days."],
+  "cd-two-way": () => ["Each row is a group, each column is a choice.", "Read the cell where your row and column meet."],
+  "cd-tables-stretch": () => ["Read the arrival times at the Library.", "Choose a bus that arrives before you need to be there."],
+  "cd-line-change": () => ["Read the temperature at each time.", "Subtract the smaller from the larger."],
+  "cd-line-stretch": () => ["Look for the steepest part of the line.", "Work out each month-to-month rise and compare them."],
+  "cd-mean-word": () => ["Add up all the scores.", "Divide by the number of games."],
+  "cd-mean-stretch": () => ["Work out what the four numbers must add up to.", "Take away the three you know."],
+});
 
 export const chartsData = defineTopic({
   id: T,
@@ -312,9 +543,27 @@ export const chartsData = defineTopic({
         {
           type: "explain",
           title: "Read the key",
-          body: ["In this pictogram, **each circle stands for 2 children**. Half a circle is 1 child.", "Bananas has 3 circles and a half: 2 + 2 + 2 + 1 = **7 children**."],
+          body: ["In this pictogram, **each circle stands for 2 children**. Half a circle is 1 child.", "Bananas has 3 circles and a half: 2 + 2 + 2 + 1 = **7 children**.", "Always read the key first: if each circle stood for 10, the same row would mean 35."],
           visual: { kind: "pictogram", rows: [{ label: "Apples", value: 4 }, { label: "Bananas", value: 7 }, { label: "Grapes", value: 10 }], key: 2, keyLabel: "2 children" },
           tip: "Look at the key before you count anything.",
+        },
+        {
+          type: "worked",
+          title: "Watch me: a key of 4",
+          support: "full",
+          problem: "Each picture stands for **4 pets**. A row has **5 pictures and a half**. How many pets?",
+          visual: { kind: "pictogram", rows: [{ label: "Dogs", value: 22 }], key: 4, keyLabel: "4 pets" },
+          steps: [{ text: "5 whole pictures: 5 × 4 = **20**." }, { text: "Half a picture is half of 4: **2**. 20 + 2 = **22**." }],
+          conclusion: "The row shows **22** pets.",
+        },
+        {
+          type: "worked",
+          title: "Together: a key of 10",
+          support: "faded",
+          problem: "Each picture stands for **10 children**. A row has **3 pictures**. How many children?",
+          visual: { kind: "pictogram", rows: [{ label: "Walk", value: 30 }], key: 10, keyLabel: "10 children" },
+          steps: [{ text: "Multiply the pictures by the key.", blank: { prompt: "3 × 10 = ?", answer: 30, hint: "3 lots of 10", traps: [{ value: 3, misconception: M.key, feedback: "Each picture stands for 10 children, not 1." }], worked: "**30** children." } }],
+          conclusion: "The row shows **30** children.",
         },
         { type: "check", title: "Your turn", questionId: gen("cd-picto", 1, 3) },
         { type: "check", title: "One more", questionId: gen("cd-picto", 2, 6) },
@@ -331,8 +580,26 @@ export const chartsData = defineTopic({
         {
           type: "explain",
           title: "Check the scale",
-          body: ["This scale goes up in **5s**. The Wednesday bar reaches **25**.", "A bar that stops halfway between 20 and 30 on a scale of 10s is **25**."],
+          body: ["This scale goes up in **5s**. The Wednesday bar reaches **25**.", "A bar that stops halfway between 20 and 30 on a scale of 10s is **25**.", "Before reading any bar, work out what each line on the scale is worth. To compare two bars, read both values and subtract."],
           visual: { kind: "barchart", bars: [{ label: "Mon", value: 15 }, { label: "Tue", value: 20 }, { label: "Wed", value: 25 }, { label: "Thu", value: 10 }], max: 30, step: 5, axis: "Number" },
+        },
+        {
+          type: "worked",
+          title: "Watch me: how many more?",
+          support: "full",
+          problem: "How many more on Tuesday than on Thursday?",
+          visual: { kind: "barchart", bars: [{ label: "Mon", value: 15 }, { label: "Tue", value: 20 }, { label: "Wed", value: 25 }, { label: "Thu", value: 10 }], max: 30, step: 5, axis: "Number" },
+          steps: [{ text: "Tuesday's bar reaches **20**. Thursday's reaches **10**." }, { text: "How many more: 20 − 10 = **10**." }],
+          conclusion: "**10** more on Tuesday.",
+        },
+        {
+          type: "worked",
+          title: "Together: read Monday",
+          support: "faded",
+          problem: "What does Monday's bar show?",
+          visual: { kind: "barchart", bars: [{ label: "Mon", value: 15 }, { label: "Tue", value: 20 }, { label: "Wed", value: 25 }, { label: "Thu", value: 10 }], max: 30, step: 5, axis: "Number" },
+          steps: [{ text: "The scale goes up in 5s. Monday stops at the third line.", blank: { prompt: "What is Monday's value?", answer: 15, hint: "5, 10, 15", traps: [{ value: 3, misconception: M.scale, feedback: "Count in 5s, not 1s: each line is worth 5." }], worked: "**15**." } }],
+          conclusion: "Monday's bar shows **15**.",
         },
         { type: "check", title: "Your turn", questionId: gen("cd-bar", 1, 2) },
         { type: "check", title: "One more", questionId: gen("cd-bar", 2, 7) },
@@ -349,9 +616,27 @@ export const chartsData = defineTopic({
         {
           type: "explain",
           title: "Rows and columns",
-          body: ["In a timetable, each **column** is one bus and each **row** is one stop.", "Bus B gets to the Library at **9:02**. It left the Station at **8:40**."],
+          body: ["In a timetable, each **column** is one bus and each **row** is one stop.", "Bus B gets to the Library at **9:02**. It left the Station at **8:40**.", "To find how long a journey takes, find the two times in the same column and count on from one to the other."],
           visual: { kind: "table", head: ["Stop", "Bus A", "Bus B"], rows: [["Station", "8:10", "8:40"], ["Park Road", "8:18", "8:48"], ["Library", "8:32", "9:02"]] },
           tip: "Keep your finger in one column so you don't jump to another bus.",
+        },
+        {
+          type: "worked",
+          title: "Watch me: how long on Bus A?",
+          support: "full",
+          problem: "How long does Bus A take from the Station to the Library?",
+          visual: { kind: "table", head: ["Stop", "Bus A", "Bus B"], rows: [["Station", "8:10", "8:40"], ["Park Road", "8:18", "8:48"], ["Library", "8:32", "9:02"]] },
+          steps: [{ text: "Bus A's column: Station **8:10**, Library **8:32**." }, { text: "8:10 to 8:32 is **22 minutes**." }],
+          conclusion: "Bus A takes **22 minutes**.",
+        },
+        {
+          type: "worked",
+          title: "Together: Park Road",
+          support: "faded",
+          problem: "What time does Bus B reach Park Road?",
+          visual: { kind: "table", head: ["Stop", "Bus A", "Bus B"], rows: [["Station", "8:10", "8:40"], ["Park Road", "8:18", "8:48"], ["Library", "8:32", "9:02"]] },
+          steps: [{ text: "Find the Park Road row and the Bus B column.", blank: { prompt: "How many minutes past 8?", answer: 48, hint: "Where they meet", traps: [{ value: 18, misconception: M.row, feedback: "8:18 is Bus A. Use the Bus B column." }], worked: "**8:48**." } }],
+          conclusion: "Bus B reaches Park Road at **8:48**.",
         },
         { type: "check", title: "Your turn", questionId: gen("cd-table", 1, 4) },
         { type: "check", title: "One more", questionId: gen("cd-table", 2, 3) },
@@ -371,6 +656,23 @@ export const chartsData = defineTopic({
           body: ["A line graph shows how something changes, like the temperature during a day.", "At 12:00, go up to the line, then across: it was **18°C**. From 8:00 to 12:00 it rose by 18 − 8 = **10°C**."],
           visual: { kind: "linegraph", points: [{ label: "8:00", value: 8 }, { label: "10:00", value: 12 }, { label: "12:00", value: 18 }, { label: "14:00", value: 20 }, { label: "16:00", value: 16 }], min: 0, max: 30, step: 2, axis: "°C" },
         },
+        {
+          type: "worked",
+          title: "Watch me: when was it warmest?",
+          support: "full",
+          problem: "When was it warmest, and how warm?",
+          visual: { kind: "linegraph", points: [{ label: "8:00", value: 8 }, { label: "10:00", value: 12 }, { label: "12:00", value: 18 }, { label: "14:00", value: 20 }, { label: "16:00", value: 16 }], min: 0, max: 30, step: 2, axis: "°C" },
+          steps: [{ text: "Find the highest point on the line: above **14:00**." }, { text: "Go across to the axis: **20°C**." }],
+          conclusion: "It was warmest at **14:00**: **20°C**.",
+        },
+        {
+          type: "worked",
+          title: "Together: how much did it fall?",
+          support: "faded",
+          problem: "How much did the temperature fall from 14:00 to 16:00?",
+          steps: [{ text: "14:00: 20°C. 16:00: 16°C.", blank: { prompt: "20 − 16 = ?", answer: 4, hint: "Find the difference.", traps: [{ value: 16, misconception: M.op, feedback: "16°C is the temperature at 16:00. The fall is the difference: 20 − 16." }], worked: "**4°C**." } }],
+          conclusion: "It fell by **4°C**.",
+        },
         { type: "check", title: "Your turn", questionId: gen("cd-line", 1, 5) },
         { type: "check", title: "One more", questionId: gen("cd-line", 2, 2) },
       ],
@@ -384,12 +686,26 @@ export const chartsData = defineTopic({
       objectives: ["Find the mean of a set of numbers", "Find a missing number from the mean"],
       steps: [
         {
+          type: "explain",
+          title: "Share it out evenly",
+          body: ["The **mean** is a kind of average. Imagine sharing everything out so each one has the same amount.", "To find it, **add** all the numbers, then **divide** by how many numbers there are. The mean of 2, 3 and 7 is 12 ÷ 3 = **4**."],
+          visual: { kind: "barchart", bars: [{ label: "A", value: 2 }, { label: "B", value: 3 }, { label: "C", value: 7 }], max: 8, step: 1, axis: "Sweets" },
+        },
+        {
+          type: "worked",
+          title: "Watch me: the mean of 10, 14 and 12",
+          support: "full",
+          problem: "Find the mean of **10, 14 and 12**.",
+          steps: [{ text: "Add: 10 + 14 + 12 = **36**." }, { text: "There are 3 numbers: 36 ÷ 3 = **12**." }],
+          conclusion: "The mean is **12**.",
+        },
+        {
           type: "worked",
           title: "Let's do it together",
           support: "faded",
           problem: "Find the mean of **4, 9, 5 and 6**.",
           steps: [
-            { text: "Add them all up.", blank: { prompt: "What is 4 + 9 + 5 + 6?", answer: 24, hint: "4 + 6 = 10 and 9 + 5 = 14.", worked: "4 + 9 + 5 + 6 = **24**." } },
+            { text: "Add them all up.", blank: { prompt: "What is 4 + 9 + 5 + 6?", answer: 24, hint: "4 + 6 = 10 and 9 + 5 = 14.", traps: [{ value: 6, misconception: M.mean, feedback: "Add all the numbers first; dividing comes next." }], worked: "4 + 9 + 5 + 6 = **24**." } },
             { text: "There are 4 numbers, so share the total equally: 24 ÷ 4 = 6." },
           ],
           conclusion: "The mean is **6**: as if every number were 6.",

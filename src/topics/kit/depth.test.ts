@@ -14,7 +14,7 @@ import { FACTOR_PUZZLES, uniquePuzzleAnswer } from "@/topics/multiply-divide";
  */
 const NOT_YET = new Set([
   "times-tables", "mental-maths",
-  "charts-data", "mock-exams",
+  "mock-exams",
 ]);
 const TEACHING_EXEMPT = new Set(["mock-exams"]);
 const kit = TOPICS.filter((t) => t.id !== "fractions");
