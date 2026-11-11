@@ -16,6 +16,7 @@ pull requests and on pushes to `main` only, so it has not run on the development
 | `anim-pilot.cjs` | ANIM-001 pilot v2: all 14 steps at 390, 768 and 1280px with each task done by real pointer drags, the try-it with Show me again, a keyboard-only run, reduced motion, axe-core and console errors | `node docs/product/verification/anim-pilot.cjs <outDir> <port>` |
 | `new-topics.cjs` | D-037 Phase C: the first step of all 18 new lessons and the practice mock (ISEB profile, answer sheet, 2 timed sections, two-part questions) at 390 and 1280px, with axe-core, console errors and sideways overflow | `node docs/product/verification/new-topics.cjs <outDir> <port>` |
 | `live-check.cjs` | D-037 deployment: five pages on the live site at 390 and 1280px, with cache-busting loads, HTTP status, a content check per page and console errors | `node docs/product/verification/live-check.cjs <outDir>` |
+| `draw-tool.cjs` | D-039 (Y6.GPS.1): the drawing lab by real pointer drags at 390 and 1280px, by keyboard only and with reduced motion; axe-core at every stage and console errors | `node docs/product/verification/draw-tool.cjs <outDir> <port>` |
 | `compare-generated-questions.mjs` | ARCH-003: every generated question is identical before and after the maths extraction (step 3) | see the script header |
 
 **`capture-screens.cjs` setup.** It captures 19 screens and states at both 1280×900 and 390×844, in Chromium, with
@@ -46,6 +47,10 @@ reduced motion and a device scale of 1. They are:
 possible screen, state or behaviour is unchanged.
 
 ## Results
+
+`results/d039/` holds the runs on 11 Nov 2026 for D-039: the drawing lab drawn by pointer at both widths and by keyboard
+with exact values, 0 axe violations, 0 console errors, no animations under reduced motion (`draw-tool/report.json`);
+new-topics and text-scaling clean.
 
 `results/d038-live/` holds the production check on 11 Nov 2026 after the D-038 deployment (`main` at `02d023b`): 12 page loads, all 200 with the expected content, 0 console errors.
 

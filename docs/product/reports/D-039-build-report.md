@@ -34,7 +34,23 @@ The finished triangle shows its third side, worked out by the law of cosines (`s
 addressed 0 (desk judgement).
 
 ## 2. Checks run (developer evidence)
-The results are recorded in section 4 once they have run.
+
+| Check | Result |
+|---|---|
+| `npm test` | 565 passed, 0 failed |
+| `npm run lint`, type check, `npm run build` | passed |
+| `draw-tool.cjs`: real pointer drags at 390 and 1280px | both triangles drawn with exact values (6, 50°, 4 and 5, 110°, 7); Continue enabled afterwards |
+| `draw-tool.cjs`: keyboard only | both triangles drawn; focus ends on the result message |
+| `draw-tool.cjs`: reduced motion | 0 running animations |
+| `draw-tool.cjs`: axe-core at every stage | 0 violations; 0 console errors |
+| `new-topics.cjs` | 56 shots, 0 axe violations, 0 errors, 0 overflow |
+| `text-scaling.cjs` | overflow 0, clipped 0 |
+
+The results are in `verification/results/d039/`.
+
+**Corrections found by these checks and fixed (CH-076):**
+- keyboard focus fell to the page when a stage's control disappeared; it now moves to the next control;
+- the live second-side reading sat under the ruler; it now sits beside the handle.
 
 ## 3. Limits
 - **Drawing is on screen,** with tools that snap to half-centimetres and whole degrees. It is not pencil-and-paper

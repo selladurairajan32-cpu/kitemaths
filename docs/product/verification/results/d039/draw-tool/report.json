@@ -1,0 +1,54 @@
+{
+ "errors": [],
+ "axe": {
+  "phone-t1-protractor": [],
+  "phone-t1-ruler2": [],
+  "phone-t1-done": [],
+  "phone-t2-protractor": [],
+  "phone-t2-ruler2": [],
+  "phone-t2-done": [],
+  "desk-t1-protractor": [],
+  "desk-t1-ruler2": [],
+  "desk-t1-done": [],
+  "desk-t2-protractor": [],
+  "desk-t2-ruler2": [],
+  "desk-t2-done": []
+ },
+ "pointer": {
+  "phone-t1": {
+   "base": "6",
+   "angle": "50",
+   "side": "4",
+   "done": true
+  },
+  "phone-t2": {
+   "base": "5",
+   "angle": "110",
+   "side": "7",
+   "done": true
+  },
+  "phone-continueEnabled": true,
+  "desk-t1": {
+   "base": "6",
+   "angle": "50",
+   "side": "4",
+   "done": true
+  },
+  "desk-t2": {
+   "base": "5",
+   "angle": "110",
+   "side": "7",
+   "done": true
+  },
+  "desk-continueEnabled": true
+ },
+ "keyboard": {
+  "t1": true,
+  "t2": true,
+  "focusRing": "P \"Done: 5 cm, 7 cm and 110° between them. The third side measures about 9.9 cm.\": outline none 3px"
+ },
+ "reduced": {
+  "runningAnimations": 0
+ },
+ "shots": 20
+}

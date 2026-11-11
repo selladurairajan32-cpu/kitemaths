@@ -46,8 +46,11 @@ describe("drawing to size (Y6.GPS.1, D-039)", () => {
     expect(screen.getByRole("slider", { name: "Ruler: length of the second side" })).toBeTruthy();
     moveTo(4, 0.5);
     expect(screen.queryByRole("slider")).toBeNull();
+    // The slider has gone, so focus moves to the next control instead of falling to the page.
+    expect(document.activeElement).toBe(screen.getByRole("button", { name: "Join the ends" }));
     await user.click(screen.getByRole("button", { name: "Join the ends" }));
     expect(done).toHaveBeenCalledWith("shapes-angles.construct-draw-1");
+    expect(document.activeElement).toBe(screen.getByRole("button", { name: "Draw the next triangle" }));
     // Third side by the law of cosines: √(36 + 16 − 48 cos 50°) ≈ 4.6 cm (hand-worked: 48 × 0.643 = 30.9; √21.1 = 4.6).
     expect(screen.getByText(/The third side measures about 4\.6 cm/)).toBeTruthy();
   });

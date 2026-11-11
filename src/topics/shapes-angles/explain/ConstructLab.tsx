@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type KeyboardEvent, type PointerEvent } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 import { Button } from "@/components/ui/Button";
 import { endPoint, snap, triangleFromSides } from "@/maths/geometry";
 import type { KitLab } from "@/topics/kit/types";
@@ -45,6 +45,16 @@ function Drawing({ target, number, total, startDone, onDrawn, onNext }: { target
   const [misses, setMisses] = useState(0);
   const [nudge, setNudge] = useState<string | null>(null);
   const [dragging, setDragging] = useState<Key | null>(null);
+  // When a stage's control disappears, keyboard focus moves to the next control rather than falling to the page.
+  const [acted, setActed] = useState(false);
+  const joinButton = useRef<HTMLButtonElement>(null);
+  const nextButton = useRef<HTMLButtonElement>(null);
+  const message = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    if (!acted) return;
+    if (stage === "join") joinButton.current?.focus();
+    else if (stage === "done") (nextButton.current ?? message.current)?.focus();
+  }, [stage, acted]);
 
   const set = (k: Key, v: number) => setValue((old) => ({ ...old, [k]: clamp(k, snap(v, LIMITS[k][2])) }));
   const next: Record<Key, Stage> = { base: "angle", angle: "side", side: "join" };
@@ -52,6 +62,7 @@ function Drawing({ target, number, total, startDone, onDrawn, onNext }: { target
 
   const check = (k: Key) => {
     if (value[k] === target[k]) {
+      setActed(true);
       setStage(next[k]);
       setMisses(0);
       setNudge(null);
@@ -62,11 +73,13 @@ function Drawing({ target, number, total, startDone, onDrawn, onNext }: { target
   };
   const doItForMe = (k: Key) => {
     setValue((old) => ({ ...old, [k]: target[k] }));
+    setActed(true);
     setStage(next[k]);
     setMisses(0);
     setNudge(null);
   };
   const join = () => {
+    setActed(true);
     setStage("done");
     onDrawn();
   };
@@ -232,14 +245,20 @@ function Drawing({ target, number, total, startDone, onDrawn, onNext }: { target
             {value.angle}°
           </text>
         )}
-        {showSide && (
+        {/* While the ruler lies along the second side, its reading sits beside the handle, clear of the ruler. */}
+        {stage === "side" && (
+          <text x={C.x + 26} y={C.y + 6} fontSize={17} className="fill-ink font-extrabold">
+            {cm(value.side)}
+          </text>
+        )}
+        {(stage === "join" || stage === "done") && (
           <text x={endPoint(O, (value.side * U) / 2, value.angle).x - 14} y={endPoint(O, (value.side * U) / 2, value.angle).y - 8} textAnchor="end" fontSize={17} className="fill-ink font-extrabold">
             {cm(value.side)}
           </text>
         )}
       </svg>
 
-      <p aria-live="polite" className={`min-h-7 text-center text-lg font-bold ${nudge ? "text-warn" : "text-ink-2"}`}>
+      <p ref={message} tabIndex={-1} aria-live="polite" className={`min-h-7 text-center text-lg font-bold outline-none ${nudge ? "text-warn" : "text-ink-2"}`}>
         {nudge ?? instruction[stage]}
       </p>
       <div className="flex flex-wrap justify-center gap-3">
@@ -249,8 +268,16 @@ function Drawing({ target, number, total, startDone, onDrawn, onNext }: { target
             Do this step for me
           </Button>
         )}
-        {stage === "join" && <Button onClick={join}>Join the ends</Button>}
-        {stage === "done" && onNext && <Button onClick={onNext}>Draw the next triangle</Button>}
+        {stage === "join" && (
+          <Button ref={joinButton} onClick={join}>
+            Join the ends
+          </Button>
+        )}
+        {stage === "done" && onNext && (
+          <Button ref={nextButton} onClick={onNext}>
+            Draw the next triangle
+          </Button>
+        )}
       </div>
     </div>
   );
