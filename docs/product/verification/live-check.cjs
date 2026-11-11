@@ -1,6 +1,7 @@
 // Usage: node docs/product/verification/live-check.cjs <outDir>
 // D-037 deployment check on https://kitemaths.vercel.app with cache-busting loads: Home, the Measures island, the Long
-// multiplication animated step 4, a Measures lesson and the mock with the ISEB profile, at 390 and 1280px. Records the
+// multiplication animated step 4, a Measures lesson, the D-038 thousandths lesson and the mock with the ISEB profile, at
+// 390 and 1280px. Records the
 // HTTP status, one content check per page and console errors. Developer evidence, not independent QA.
 const { chromium } = require('playwright');
 const OUT = process.argv[2]; const BASE = 'https://kitemaths.vercel.app';
@@ -20,6 +21,8 @@ const cb = () => `?cb=${Date.now()}`;
     await p.evaluate(() => { const s = JSON.parse(localStorage.getItem('kite-maths:v2')); s.topics['multiply-divide'].lessons.long = { step: 3, furthestStep: 3, completed: false }; localStorage.setItem('kite-maths:v2', JSON.stringify(s)); });
     await go('pilot-step4', '/t/multiply-divide/lesson/long/4', async () => (await p.getByRole('button', { name: /^(Next|Replay|Pause)/ }).count()) > 0);
     await go('measures-volume', '/t/measures/lesson/volume/1', async () => (await p.getByText('Layers of cubes').count()) > 0 && (await p.locator('figure[aria-label*="cuboid"]').count()) > 0);
+    // D-038: one of the last 7 objectives (thousandths), with its new two-column table.
+    await go('decimals-thousandths', '/t/decimals/lesson/thousandths/1', async () => (await p.getByText('Three places after the point').count()) > 0 && (await p.getByText('6 thousandths = 0.006').count()) > 0);
     await go('mock', '/t/mock-exams/mock', async () => { await p.getByRole('button', { name: /^ISEB Common Pre-Tests/ }).click(); return (await p.getByText(/40 minutes/).count()) > 0 && (await p.getByRole('button', { name: 'Answer sheet (A to E)' }).count()) > 0; });
   }
   require('fs').writeFileSync(`${OUT}/report.json`, JSON.stringify(report, null, 1));
