@@ -1,4 +1,5 @@
-import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withExtras, withHints } from "@/topics/kit/define";
+import { areaExtra } from "./extra";
 import type { KitVisual, Template } from "@/topics/kit/types";
 
 /** Area and perimeter: perimeter of rectangles and L-shapes, area by counting and by multiplying, and missing sides. */
@@ -416,7 +417,7 @@ const templates = withHints(baseTemplates, {
   "ap-missing-stretch": () => ["Same area: work out the square's area first.", "Then divide by the rectangle's length."],
 });
 
-export const areaPerimeter = defineTopic({
+export const areaPerimeter = defineTopic(withExtras({
   id: T,
   title: "Area and perimeter",
   subtitle: "Perimeter all the way round, area inside: counting, multiplying, L-shapes and missing sides",
@@ -638,4 +639,4 @@ export const areaPerimeter = defineTopic({
     { lessonId: "compound", template: "ap-compound" },
     { lessonId: "missing", template: "ap-missing" },
   ],
-});
+}, areaExtra));

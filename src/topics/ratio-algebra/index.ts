@@ -1,4 +1,5 @@
-import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withExtras, withHints } from "@/topics/kit/define";
+import { twoUnknowns } from "./extra";
 import type { ChooseOption, Template } from "@/topics/kit/types";
 import { gcd } from "@/maths/fraction";
 
@@ -469,7 +470,7 @@ const templates = withHints(baseTemplates, {
   "ra-sequences-stretch": () => ["Take the first number away from the target.", "Divide by the step to count jumps, then add 1 for the position."],
 });
 
-export const ratioAlgebra = defineTopic({
+export const ratioAlgebra = defineTopic(withExtras({
   id: T,
   title: "Ratio and algebra",
   subtitle: "Ratio and sharing, scaling recipes, missing numbers, formulas and sequences",
@@ -687,4 +688,4 @@ export const ratioAlgebra = defineTopic({
     { lessonId: "formulas", template: "ra-formula" },
     { lessonId: "sequences", template: "ra-sequence" },
   ],
-});
+}, twoUnknowns));

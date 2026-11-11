@@ -190,6 +190,95 @@ function CircleParts({ v }: { v: Extract<ExtraVisualSpec, { kind: "circle" }> })
   );
 }
 
+function BaseHeight({ v }: { v: Extract<ExtraVisualSpec, { kind: "base-height" }> }) {
+  const tri = v.shape === "triangle";
+  const pts = tri ? "50,180 250,180 170,40" : "50,180 210,180 270,40 110,40";
+  const [hx, top] = tri ? [170, 40] : [110, 40];
+  return (
+    <Frame label={`A ${v.shape} with base ${v.base} and perpendicular height ${v.height}${v.slant ? `; a slanted side is ${v.slant}` : ""}`}>
+      <svg viewBox="0 0 320 230" className="h-auto w-full max-w-[20rem]" aria-hidden>
+        <polygon points={pts} fill={FILL.brand} stroke={INK} strokeWidth="4" strokeLinejoin="round" />
+        <line x1={hx} y1={top} x2={hx} y2={180} stroke={CORAL} strokeWidth="3.5" strokeDasharray="9 6" />
+        <path d={`M ${hx} 164 h 16 v 16`} fill="none" stroke={CORAL} strokeWidth="3" />
+        <text x={tri ? 150 : 130} y={210} textAnchor="middle" fontSize="19" fontWeight="800" fill={BRAND}>
+          {v.base}
+        </text>
+        <text x={hx + 10} y={118} fontSize="19" fontWeight="800" fill={CORAL}>
+          {v.height}
+        </text>
+        {v.slant && (
+          <text x={tri ? 92 : 296} y={tri ? 104 : 114} textAnchor={tri ? "end" : "start"} fontSize="19" fontWeight="800" fill={INK}>
+            {v.slant}
+          </text>
+        )}
+      </svg>
+    </Frame>
+  );
+}
+
+const LINE_TONES = [BRAND, CORAL, GREEN, INK];
+
+function Lines({ v }: { v: Extract<ExtraVisualSpec, { kind: "lines" }> }) {
+  const c = 36;
+  const at = (p: [number, number]) => [20 + p[0] * c, 20 + p[1] * c] as const;
+  return (
+    <Frame label={`Lines on a squared grid: ${v.segments.map((s) => `line ${s.label} from (${s.from.join(", ")}) to (${s.to.join(", ")})`).join("; ")}`}>
+      <svg viewBox={`0 0 ${8 * c + 40} ${6 * c + 40}`} className="h-auto w-full max-w-[22rem]" aria-hidden>
+        {Array.from({ length: 9 }, (_, i) => <line key={`x${i}`} x1={20 + i * c} y1={20} x2={20 + i * c} y2={20 + 6 * c} stroke={INK} strokeWidth="1" opacity="0.25" />)}
+        {Array.from({ length: 7 }, (_, i) => <line key={`y${i}`} x1={20} y1={20 + i * c} x2={20 + 8 * c} y2={20 + i * c} stroke={INK} strokeWidth="1" opacity="0.25" />)}
+        {v.segments.map((s, i) => {
+          const [x1, y1] = at(s.from);
+          const [x2, y2] = at(s.to);
+          return <line key={`s${i}`} x1={x1} y1={y1} x2={x2} y2={y2} stroke={LINE_TONES[i % 4]} strokeWidth="5" strokeLinecap="round" />;
+        })}
+        {v.segments.map((s, i) => {
+          const [x1, y1] = at(s.from);
+          const [x2, y2] = at(s.to);
+          return (
+            <g key={`l${i}`}>
+              <circle cx={(x1 + x2) / 2} cy={(y1 + y2) / 2} r="14" fill={FILL.plain} stroke={LINE_TONES[i % 4]} strokeWidth="3" />
+              <text x={(x1 + x2) / 2} y={(y1 + y2) / 2 + 6} textAnchor="middle" fontSize="17" fontWeight="800" fill={INK}>
+                {s.label}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+    </Frame>
+  );
+}
+
+function DrawnTriangle({ v }: { v: Extract<ExtraVisualSpec, { kind: "drawn-triangle" }> }) {
+  const unit = v.unit ?? "cm";
+  // Side a along the bottom from the corner; side b at the given angle above it. Scaled to fit.
+  const rad = (v.angle * Math.PI) / 180;
+  const raw = { bx: v.a, cx: v.b * Math.cos(rad), cy: v.b * Math.sin(rad) };
+  const minX = Math.min(0, raw.cx);
+  const maxX = Math.max(raw.bx, raw.cx);
+  const s = Math.min(220 / (maxX - minX), 140 / raw.cy);
+  const ox = 50 - minX * s;
+  const oy = 180;
+  const B = [ox + raw.bx * s, oy] as const;
+  const C = [ox + raw.cx * s, oy - raw.cy * s] as const;
+  return (
+    <Frame label={`A triangle drawn with sides of ${v.a} ${unit} and ${v.b} ${unit} and an angle of ${v.angle} degrees between them`}>
+      <svg viewBox="0 0 320 230" className="h-auto w-full max-w-[20rem]" aria-hidden>
+        <polygon points={`${ox},${oy} ${B[0]},${B[1]} ${C[0]},${C[1]}`} fill={FILL.ok} stroke={INK} strokeWidth="4" strokeLinejoin="round" />
+        <path d={`M ${ox + 34} ${oy} A 34 34 0 0 0 ${ox + 34 * Math.cos(rad)} ${oy - 34 * Math.sin(rad)}`} fill="none" stroke={CORAL} strokeWidth="3.5" />
+        <text x={ox + 44 * Math.cos(rad / 2) + 4} y={oy - 44 * Math.sin(rad / 2) + 4} fontSize="17" fontWeight="800" fill={CORAL}>
+          {v.angle}°
+        </text>
+        <text x={(ox + B[0]) / 2} y={oy + 28} textAnchor="middle" fontSize="19" fontWeight="800" fill={BRAND}>
+          {v.a} {unit}
+        </text>
+        <text x={(ox + C[0]) / 2 - 10} y={(oy + C[1]) / 2} textAnchor="end" fontSize="19" fontWeight="800" fill={BRAND}>
+          {v.b} {unit}
+        </text>
+      </svg>
+    </Frame>
+  );
+}
+
 export function ExtraVisual({ v }: { v: ExtraVisualSpec }) {
   switch (v.kind) {
     case "pie":
@@ -202,5 +291,11 @@ export function ExtraVisual({ v }: { v: ExtraVisualSpec }) {
       return <Symmetry v={v} />;
     case "circle":
       return <CircleParts v={v} />;
+    case "base-height":
+      return <BaseHeight v={v} />;
+    case "lines":
+      return <Lines v={v} />;
+    case "drawn-triangle":
+      return <DrawnTriangle v={v} />;
   }
 }

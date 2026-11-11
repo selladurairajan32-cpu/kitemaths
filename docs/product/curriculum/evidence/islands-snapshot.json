@@ -1269,6 +1269,11 @@
     "id": "area-perimeter.missing-sides",
     "title": "Missing sides",
     "description": "Find a missing side from the area or perimeter."
+   },
+   {
+    "id": "area-perimeter.triangles-parallelograms",
+    "title": "Triangles and parallelograms",
+    "description": "Find their area from the base and the perpendicular height."
    }
   ],
   "lessons": [
@@ -1308,6 +1313,14 @@
     "objectives": [
      "Find a missing side from the perimeter",
      "Find a missing side from the area"
+    ]
+   },
+   {
+    "id": "triangles",
+    "title": "Triangles and parallelograms",
+    "objectives": [
+     "Find the area of a parallelogram",
+     "Find the area of a triangle"
     ]
    }
   ]
@@ -1712,6 +1725,11 @@
     "id": "ratio-algebra.sequences",
     "title": "Sequences",
     "description": "Continue sequences and find any term."
+   },
+   {
+    "id": "ratio-algebra.two-unknowns",
+    "title": "Two unknowns",
+    "description": "Find pairs of numbers that fit an equation like a + b = 10 or 2a + b = 12."
    }
   ],
   "lessons": [
@@ -1751,6 +1769,14 @@
     "objectives": [
      "Continue a sequence",
      "Find the nth term"
+    ]
+   },
+   {
+    "id": "two-unknowns",
+    "title": "Two unknowns",
+    "objectives": [
+     "Find b when you know a",
+     "Find every whole-number pair that fits"
     ]
    }
   ]

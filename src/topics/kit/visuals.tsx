@@ -543,6 +543,9 @@ export function MathVisual({ spec }: { spec: unknown }) {
     case "net":
     case "symmetry":
     case "circle":
+    case "base-height":
+    case "lines":
+    case "drawn-triangle":
       return <ExtraVisual v={v} />;
     default:
       return <ShapeVisual v={v} />;
