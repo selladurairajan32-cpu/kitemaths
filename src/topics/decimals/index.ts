@@ -1,4 +1,5 @@
-import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withExtras, withHints } from "@/topics/kit/define";
+import { decimalsExtra } from "./extra";
 import { num } from "@/topics/kit/evaluate";
 import type { ChooseOption, Template } from "@/topics/kit/types";
 
@@ -426,7 +427,7 @@ const templates = withHints(baseTemplates, {
   "dc-change-stretch": () => ["Find the total cost first.", "Then count on from the total to what you paid."],
 });
 
-export const decimals = defineTopic({
+export const decimals = defineTopic(withExtras({
   id: T,
   title: "Decimals",
   subtitle: "Tenths and hundredths, decimals as fractions, comparing, rounding and calculating with decimals",
@@ -654,4 +655,4 @@ export const decimals = defineTopic({
     { lessonId: "add-sub", template: "dc-add" },
     { lessonId: "times-ten", template: "dc-times-ten" },
   ],
-});
+}, decimalsExtra));

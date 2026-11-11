@@ -941,6 +941,21 @@
     "id": "decimals.times-ten",
     "title": "× and ÷ by 10 and 100",
     "description": "Multiply and divide decimals by 10 and 100."
+   },
+   {
+    "id": "decimals.thousandths",
+    "title": "Thousandths",
+    "description": "Read, write and order decimals with three places."
+   },
+   {
+    "id": "decimals.multiply-decimals",
+    "title": "Decimals × whole numbers",
+    "description": "Multiply a decimal with up to 2 places by a whole number."
+   },
+   {
+    "id": "decimals.divide-decimals",
+    "title": "Dividing to decimals",
+    "description": "Keep dividing past the point, so answers can have 2 decimal places."
    }
   ],
   "lessons": [
@@ -981,6 +996,30 @@
     "title": "× and ÷ by 10 and 100",
     "objectives": [
      "Multiply and divide decimals by 10 and 100"
+    ]
+   },
+   {
+    "id": "thousandths",
+    "title": "Thousandths",
+    "objectives": [
+     "Know the value of each digit up to thousandths",
+     "Write thousandths as decimals and order them"
+    ]
+   },
+   {
+    "id": "multiply-decimals",
+    "title": "Decimals × whole numbers",
+    "objectives": [
+     "Multiply a decimal by a whole number",
+     "Use it for money and measures"
+    ]
+   },
+   {
+    "id": "divide-decimals",
+    "title": "Dividing to decimals",
+    "objectives": [
+     "Divide with answers to 2 decimal places",
+     "Share money exactly"
     ]
    }
   ]

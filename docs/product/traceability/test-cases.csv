@@ -587,3 +587,6 @@ TC-CUR-001.1.14,CUR-001,AC1,unit,automated,passing,src/maths/roman-primes.test.t
 TC-CUR-001.1.15,CUR-001,AC1,unit,automated,passing,src/maths/roman-primes.test.ts::finds square and cube numbers (hand-worked),(CH-066)
 TC-EXAM-005.1.8,EXAM-005,AC1,component,automated,passing,src/components/screens/Mock.test.tsx::stores an answer-sheet mock as such and reviews it with the same lettered options,(CH-068)
 TC-EXAM-005.1.9,EXAM-005,AC1,content,automated,passing,"src/topics/mock-exams/mock-exams.test.ts::letters an already multiple-choice question for an answer sheet, keeping the same right option and the same order every time",(CH-068)
+TC-CUR-001.1.16,CUR-001,AC1,unit,automated,passing,src/maths/decimal.test.ts::writes scaled decimals with the right places (hand-worked),Thousandths for Y5.FRAC.7 (CH-070)
+TC-CUR-001.1.17,CUR-001,AC1,unit,automated,passing,"src/maths/decimal.test.ts::multiplies a decimal by a whole number exactly, matching BigInt",Y6.FRAC.8 (CH-070)
+TC-CUR-001.1.18,CUR-001,AC1,unit,automated,passing,"src/maths/decimal.test.ts::divides by written division to at most 2 places, saying when it is exact (BigInt oracle)",Y6.FRAC.9 (CH-070)
