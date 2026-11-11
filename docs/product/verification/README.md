@@ -47,6 +47,11 @@ possible screen, state or behaviour is unchanged.
 
 ## Results
 
+`results/d038/` holds the runs on 11 Nov 2026 for D-038, on a production build after the CH-073 corrections:
+- **New topics and mock formats** (`new-topics.cjs`, now with the 7 D-038 lessons): 56 shots, 0 axe violations, 0 console
+  errors, 0 sideways overflow (`new-topics/report.json`).
+- **Text scaling:** 8 pages, sideways overflow 0 and clipped text 0 in every condition (`text-scaling/`).
+
 `results/d037-live/` holds the production check on 11 Nov 2026 after the D-037 deployment (`main` at `4cfd95e`): 10 page loads, all 200 with the expected content, 0 console errors.
 
 `results/d037-final/` holds the runs on 11 Nov 2026 for D-037, on a production build of the D-037 head:

@@ -45,8 +45,22 @@ Each new skill follows the D-037 shape:
 | Not addressed | 7 | 0 |
 
 ## 2. Checks run (developer evidence)
-These are recorded in section 4 once they have run. The four CI commands and the browser scripts are listed there with
-their results.
+
+| Check | Result |
+|---|---|
+| `npm test` | 557 passed, 0 failed |
+| `npm run lint` | 0 problems |
+| `npx next typegen && npx tsc --noEmit -p .` | passed |
+| `npm run build` | passed |
+| `new-topics.cjs` (25 lessons and 3 mock set-ups, 390 and 1280px) | 56 shots, 0 axe violations, 0 console errors, 0 sideways overflow |
+| `text-scaling.cjs` | 8 pages: overflow 0, clipped 0 |
+
+The results are in `verification/results/d038/`.
+
+**Corrections found by the browser check and fixed (CH-073):**
+- the parallelogram's slanted-side label was clipped;
+- a triangle side label sat on its line;
+- the thousandths table wrapped its headings on a phone.
 
 ## 3. Limits
 - **Y6.GPS.1 is partial.** The child checks drawings and works out angles, but does not draw. Drawing needs an on-screen

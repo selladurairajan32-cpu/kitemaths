@@ -207,7 +207,7 @@ function BaseHeight({ v }: { v: Extract<ExtraVisualSpec, { kind: "base-height" }
           {v.height}
         </text>
         {v.slant && (
-          <text x={tri ? 92 : 296} y={tri ? 104 : 114} textAnchor={tri ? "end" : "start"} fontSize="19" fontWeight="800" fill={INK}>
+          <text x={tri ? 92 : 252} y={tri ? 104 : 116} textAnchor={tri ? "end" : "start"} fontSize="19" fontWeight="800" fill={INK}>
             {v.slant}
           </text>
         )}
@@ -271,7 +271,7 @@ function DrawnTriangle({ v }: { v: Extract<ExtraVisualSpec, { kind: "drawn-trian
         <text x={(ox + B[0]) / 2} y={oy + 28} textAnchor="middle" fontSize="19" fontWeight="800" fill={BRAND}>
           {v.a} {unit}
         </text>
-        <text x={(ox + C[0]) / 2 - 10} y={(oy + C[1]) / 2} textAnchor="end" fontSize="19" fontWeight="800" fill={BRAND}>
+        <text x={(ox + C[0]) / 2 - 26 * Math.sin(rad)} y={(oy + C[1]) / 2 - 26 * Math.cos(rad) + 6} textAnchor="end" fontSize="19" fontWeight="800" fill={BRAND}>
           {v.b} {unit}
         </text>
       </svg>

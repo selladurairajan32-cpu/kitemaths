@@ -1,5 +1,5 @@
 // Usage: node docs/product/verification/new-topics.cjs <outDir> [port]
-// D-037 Phase C: opens the first step of every new lesson and the practice mock (ISEB profile, answer sheet, two
+// D-037 Phase C and D-038: opens the first step of every new lesson and the practice mock (ISEB profile, answer sheet, two
 // timed sections, then two-part questions) on a running production build, at 390px and 1280px. It captures each
 // screen, runs axe-core on <main>, and records console errors and horizontal overflow. Developer evidence, not QA.
 const { chromium } = require('playwright');
@@ -12,6 +12,8 @@ const LESSONS = [
   ['place-value', 'roman'], ['multiply-divide', 'long-division'], ['multiply-divide', 'primes'], ['multiply-divide', 'squares-cubes'], ['multiply-divide', 'order'],
   ['fractions-2', 'times-fractions'], ['fractions-2', 'divide-fractions'], ['measures', 'convert'], ['measures', 'miles'], ['measures', 'volume'], ['measures', 'speed'],
   ['shapes-angles', 'symmetry'], ['shapes-angles', 'nets'], ['shapes-angles', 'circles'], ['shapes-angles', 'estimate'], ['charts-data', 'pie'], ['charts-data', 'averages'], ['charts-data', 'probability'],
+  // D-038
+  ['decimals', 'thousandths'], ['decimals', 'multiply-decimals'], ['decimals', 'divide-decimals'], ['ratio-algebra', 'two-unknowns'], ['area-perimeter', 'triangles'], ['shapes-angles', 'lines'], ['shapes-angles', 'construct'],
 ];
 (async () => {
   const b = await chromium.launch();

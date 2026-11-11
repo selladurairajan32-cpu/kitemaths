@@ -274,7 +274,7 @@ export const decimalsExtra: TopicExtra = {
             "Split a hundredth into ten equal parts and each part is a **thousandth**: {1/1000}, written **0.001**. In **2.456** the 4 is worth 4 tenths, the 5 is 5 hundredths and the 6 is **6 thousandths**.",
             "So {7/1000} is **0.007**: zeros hold the tenths and hundredths places. To compare decimals, line up the points and compare the tenths first. 0.5 is bigger than 0.456, even though 0.456 has more digits.",
           ],
-          visual: { kind: "table", head: ["Ones", "Tenths", "Hundredths", "Thousandths"], rows: [["2", "4", "5", "6"]] },
+          visual: { kind: "table", head: ["Digit in 2.456", "Worth"], rows: [["2", "2 ones"], ["4", "4 tenths = 0.4"], ["5", "5 hundredths = 0.05"], ["6", "6 thousandths = 0.006"]] },
           tip: "Write numbers with the same number of places to compare them: 0.5 = 0.500.",
         },
         {
