@@ -1,4 +1,5 @@
-import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withExtras, withHints } from "@/topics/kit/define";
+import { shapesAnglesExtra } from "./extra";
 import type { ChooseOption, ShapeName, Template } from "@/topics/kit/types";
 
 /** Shapes and angles: naming 2D and 3D shapes, types of angle, turns and degrees, and angle facts. */
@@ -413,7 +414,7 @@ const templates = withHints(baseTemplates, {
   "sa-facts-stretch": () => ["Angles around a point add up to 360°.", "Take both angles away from 360."],
 });
 
-export const shapesAngles = defineTopic({
+export const shapesAngles = defineTopic(withExtras({
   id: T,
   title: "Shapes and angles",
   subtitle: "Name 2D and 3D shapes, sort angles, turn by degrees and use angle facts",
@@ -604,4 +605,4 @@ export const shapesAngles = defineTopic({
     { lessonId: "turns", template: "sa-turns" },
     { lessonId: "facts", template: "sa-line" },
   ],
-});
+}, shapesAnglesExtra));

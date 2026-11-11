@@ -27,6 +27,7 @@ export const ISLAND_PREREQUISITES: Graph = {
   money: ["add-subtract"],
   time: ["add-subtract"],
   "area-perimeter": ["add-subtract", "times-tables"],
+  measures: ["multiply-divide", "decimals"],
   "shapes-angles": ["add-subtract"],
   coordinates: ["negative"],
   "charts-data": ["add-subtract", "multiply-divide"],

@@ -7,6 +7,7 @@ import { decimals } from "./decimals";
 import { fractions2 } from "./fractions-2";
 import { mockExams } from "./mock-exams";
 import { multiplyDivide } from "./multiply-divide";
+import { measures } from "./measures";
 import { money } from "./money";
 import { negative } from "./negative";
 import { percentages } from "./percentages";
@@ -41,6 +42,7 @@ export const TOPICS: TopicModule[] = [
   money as unknown as TopicModule,
   time as unknown as TopicModule,
   areaPerimeter as unknown as TopicModule,
+  measures as unknown as TopicModule,
   shapesAngles as unknown as TopicModule,
   coordinates as unknown as TopicModule,
   chartsData as unknown as TopicModule,

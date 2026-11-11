@@ -233,6 +233,16 @@ export const OBJECTIVES: CurriculumObjective[] = [
     ]
   },
   {
+    "id": "Y3.MEAS.1",
+    "year": 3,
+    "strand": "Measurement",
+    "status": "statutory",
+    "outcome": "Measures, compares, adds and subtracts lengths (m/cm/mm), mass (kg/g) and capacity (l/ml).",
+    "skills": [
+      "measures.convert"
+    ]
+  },
+  {
     "id": "Y3.MEAS.2",
     "year": 3,
     "strand": "Measurement",
@@ -434,6 +444,16 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "skills": [
       "place-value.more-less",
       "rounding.estimate"
+    ]
+  },
+  {
+    "id": "Y4.NPV.9",
+    "year": 4,
+    "strand": "Number: place value",
+    "status": "statutory",
+    "outcome": "Reads Roman numerals to 100 (I to C) and knows the numeral system changed over time to include 0 and place value.",
+    "skills": [
+      "place-value.roman"
     ]
   },
   {
@@ -718,6 +738,26 @@ export const OBJECTIVES: CurriculumObjective[] = [
     ]
   },
   {
+    "id": "Y4.GPS.3",
+    "year": 4,
+    "strand": "Geometry: properties of shapes",
+    "status": "statutory",
+    "outcome": "Identifies lines of symmetry in 2-D shapes in different orientations.",
+    "skills": [
+      "shapes-angles.symmetry"
+    ]
+  },
+  {
+    "id": "Y4.GPS.4",
+    "year": 4,
+    "strand": "Geometry: properties of shapes",
+    "status": "statutory",
+    "outcome": "Completes a simple symmetric figure with respect to a specific line of symmetry.",
+    "skills": [
+      "shapes-angles.symmetry"
+    ]
+  },
+  {
     "id": "Y4.GPD.1",
     "year": 4,
     "strand": "Geometry: position and direction",
@@ -829,6 +869,16 @@ export const OBJECTIVES: CurriculumObjective[] = [
     ]
   },
   {
+    "id": "Y5.NPV.6",
+    "year": 5,
+    "strand": "Number: place value",
+    "status": "statutory",
+    "outcome": "Reads Roman numerals to 1,000 (M) and recognises years written in Roman numerals.",
+    "skills": [
+      "place-value.roman"
+    ]
+  },
+  {
     "id": "Y5.AS.1",
     "year": 5,
     "strand": "Number: addition and subtraction",
@@ -879,6 +929,26 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "outcome": "Identifies multiples and factors, including all factor pairs of a number and common factors of 2 numbers.",
     "skills": [
       "multiply-divide.factors"
+    ]
+  },
+  {
+    "id": "Y5.MD.2",
+    "year": 5,
+    "strand": "Number: multiplication and division",
+    "status": "statutory",
+    "outcome": "Knows and uses the vocabulary of prime numbers, prime factors and composite numbers.",
+    "skills": [
+      "multiply-divide.primes"
+    ]
+  },
+  {
+    "id": "Y5.MD.3",
+    "year": 5,
+    "strand": "Number: multiplication and division",
+    "status": "statutory",
+    "outcome": "Establishes whether a number up to 100 is prime and recalls primes up to 19.",
+    "skills": [
+      "multiply-divide.primes"
     ]
   },
   {
@@ -933,7 +1003,8 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "status": "statutory",
     "outcome": "Recognises and uses square and cube numbers and the notation ² and ³.",
     "skills": [
-      "mental-maths.squares"
+      "mental-maths.squares",
+      "multiply-divide.squares-cubes"
     ]
   },
   {
@@ -1085,6 +1156,26 @@ export const OBJECTIVES: CurriculumObjective[] = [
     ]
   },
   {
+    "id": "Y5.MEAS.1",
+    "year": 5,
+    "strand": "Measurement",
+    "status": "statutory",
+    "outcome": "Converts between metric units of measure.",
+    "skills": [
+      "measures.convert"
+    ]
+  },
+  {
+    "id": "Y5.MEAS.2",
+    "year": 5,
+    "strand": "Measurement",
+    "status": "statutory",
+    "outcome": "Understands and uses approximate equivalences between metric and common imperial units.",
+    "skills": [
+      "measures.miles-km"
+    ]
+  },
+  {
     "id": "Y5.MEAS.3",
     "year": 5,
     "strand": "Measurement",
@@ -1105,6 +1196,16 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "skills": [
       "area-perimeter.area-rectangles",
       "area-perimeter.compound"
+    ]
+  },
+  {
+    "id": "Y5.MEAS.5",
+    "year": 5,
+    "strand": "Measurement",
+    "status": "statutory",
+    "outcome": "Estimates volume and capacity.",
+    "skills": [
+      "measures.volume"
     ]
   },
   {
@@ -1148,6 +1249,16 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "skills": [
       "shapes-angles.angle-types",
       "shapes-angles.turns"
+    ]
+  },
+  {
+    "id": "Y5.GPS.3",
+    "year": 5,
+    "strand": "Geometry: properties of shapes",
+    "status": "statutory",
+    "outcome": "Draws given angles and measures them in degrees.",
+    "skills": [
+      "shapes-angles.estimate-angles"
     ]
   },
   {
@@ -1245,6 +1356,16 @@ export const OBJECTIVES: CurriculumObjective[] = [
     ]
   },
   {
+    "id": "Y6.ASMD.2",
+    "year": 6,
+    "strand": "Number: addition, subtraction, multiplication and division",
+    "status": "statutory",
+    "outcome": "Divides numbers up to 4 digits by a 2-digit number using long division, interpreting remainders as whole numbers, fractions or by rounding.",
+    "skills": [
+      "multiply-divide.long-division"
+    ]
+  },
+  {
     "id": "Y6.ASMD.3",
     "year": 6,
     "strand": "Number: addition, subtraction, multiplication and division",
@@ -1274,6 +1395,16 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "outcome": "Identifies common factors, common multiples and prime numbers.",
     "skills": [
       "multiply-divide.factors"
+    ]
+  },
+  {
+    "id": "Y6.ASMD.6",
+    "year": 6,
+    "strand": "Number: addition, subtraction, multiplication and division",
+    "status": "statutory",
+    "outcome": "Uses the order of operations to carry out calculations with the 4 operations.",
+    "skills": [
+      "multiply-divide.order-ops"
     ]
   },
   {
@@ -1338,6 +1469,26 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "outcome": "Adds and subtracts fractions with different denominators and mixed numbers, using equivalent fractions.",
     "skills": [
       "fractions-2.add-related"
+    ]
+  },
+  {
+    "id": "Y6.FRAC.4",
+    "year": 6,
+    "strand": "Number: fractions (including decimals and percentages)",
+    "status": "statutory",
+    "outcome": "Multiplies simple pairs of proper fractions, writing the answer in its simplest form.",
+    "skills": [
+      "fractions-2.multiply-fractions"
+    ]
+  },
+  {
+    "id": "Y6.FRAC.5",
+    "year": 6,
+    "strand": "Number: fractions (including decimals and percentages)",
+    "status": "statutory",
+    "outcome": "Divides proper fractions by whole numbers.",
+    "skills": [
+      "fractions-2.divide-whole"
     ]
   },
   {
@@ -1467,6 +1618,16 @@ export const OBJECTIVES: CurriculumObjective[] = [
     ]
   },
   {
+    "id": "Y6.MEAS.1",
+    "year": 6,
+    "strand": "Measurement",
+    "status": "statutory",
+    "outcome": "Solves problems involving calculation and conversion of units of measure, with decimal notation up to 3 decimal places.",
+    "skills": [
+      "measures.convert"
+    ]
+  },
+  {
     "id": "Y6.MEAS.2",
     "year": 6,
     "strand": "Measurement",
@@ -1474,6 +1635,16 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "outcome": "Uses, reads, writes and converts between standard units of length, mass, volume and time, small to large and vice versa, with decimal notation.",
     "skills": [
       "time.units"
+    ]
+  },
+  {
+    "id": "Y6.MEAS.3",
+    "year": 6,
+    "strand": "Measurement",
+    "status": "statutory",
+    "outcome": "Converts between miles and kilometres.",
+    "skills": [
+      "measures.miles-km"
     ]
   },
   {
@@ -1498,13 +1669,24 @@ export const OBJECTIVES: CurriculumObjective[] = [
     ]
   },
   {
+    "id": "Y6.MEAS.7",
+    "year": 6,
+    "strand": "Measurement",
+    "status": "statutory",
+    "outcome": "Calculates, estimates and compares the volume of cubes and cuboids in standard units.",
+    "skills": [
+      "measures.volume"
+    ]
+  },
+  {
     "id": "Y6.GPS.2",
     "year": 6,
     "strand": "Geometry: properties of shapes",
     "status": "statutory",
     "outcome": "Recognises, describes and builds simple 3-D shapes, including making nets.",
     "skills": [
-      "shapes-angles.shapes"
+      "shapes-angles.shapes",
+      "shapes-angles.nets"
     ]
   },
   {
@@ -1516,6 +1698,16 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "skills": [
       "shapes-angles.shapes",
       "shapes-angles.angle-facts"
+    ]
+  },
+  {
+    "id": "Y6.GPS.4",
+    "year": 6,
+    "strand": "Geometry: properties of shapes",
+    "status": "statutory",
+    "outcome": "Illustrates and names parts of circles, including radius, diameter and circumference; knows the diameter is twice the radius.",
+    "skills": [
+      "shapes-angles.circles"
     ]
   },
   {
@@ -1555,7 +1747,8 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "status": "statutory",
     "outcome": "Interprets and constructs pie charts and line graphs and uses them to solve problems.",
     "skills": [
-      "charts-data.line-graphs"
+      "charts-data.line-graphs",
+      "charts-data.pie-charts"
     ]
   },
   {
@@ -1626,6 +1819,36 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "outcome": "Compass directions.",
     "skills": [
       "shapes-angles.turns"
+    ]
+  },
+  {
+    "id": "E11.7",
+    "year": null,
+    "strand": "Extension candidate",
+    "status": "11+-extension-candidate",
+    "outcome": "Speed, distance and time.",
+    "skills": [
+      "measures.speed"
+    ]
+  },
+  {
+    "id": "E11.8",
+    "year": null,
+    "strand": "Extension candidate",
+    "status": "11+-extension-candidate",
+    "outcome": "Mode, median and range.",
+    "skills": [
+      "charts-data.averages"
+    ]
+  },
+  {
+    "id": "E11.9",
+    "year": null,
+    "strand": "Extension candidate",
+    "status": "11+-extension-candidate",
+    "outcome": "Simple probability as words and fractions.",
+    "skills": [
+      "charts-data.probability"
     ]
   }
 ];

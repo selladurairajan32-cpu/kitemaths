@@ -7,6 +7,7 @@ import { coordinates } from "@/topics/coordinates";
 import { decimals } from "@/topics/decimals";
 import { fractions2 } from "@/topics/fractions-2";
 import { defineTopic, genFor, int, pick, templatesOf, withHints } from "@/topics/kit/define";
+import { measures } from "@/topics/measures";
 import { mentalMaths } from "@/topics/mental-maths";
 import type { KitQuestion, Template } from "@/topics/kit/types";
 import { money } from "@/topics/money";
@@ -241,7 +242,7 @@ const templates: Template[] = [
   borrow("mx-number", S.number, [placeValue, rounding, negative]),
   borrow("mx-calc", S.calc, [addSubtract, timesTables, multiplyDivide]),
   borrow("mx-fdp", S.fdp, [fractions2, decimals, percentages]),
-  borrow("mx-measure", S.measure, [money, time, areaPerimeter]),
+  borrow("mx-measure", S.measure, [money, time, areaPerimeter, measures]),
   borrow("mx-shape", S.shape, [shapesAngles, coordinates, chartsData]),
   borrow("mx-reasoning", S.reasoning, [ratioAlgebra, problemSolving]),
 ];

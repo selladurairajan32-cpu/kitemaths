@@ -70,6 +70,7 @@ export const WORLDS: World[] = [
       { title: "Money", icon: "coin", topicId: "money" },
       { title: "Time", icon: "clock", topicId: "time" },
       { title: "Area and perimeter", icon: "area", topicId: "area-perimeter" },
+      { title: "Measures", icon: "ruler", topicId: "measures" },
     ],
   },
   {

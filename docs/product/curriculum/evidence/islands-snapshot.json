@@ -1274,6 +1274,73 @@
   ]
  },
  {
+  "id": "measures",
+  "title": "Measures",
+  "world": "measure",
+  "years": [
+   3,
+   4,
+   5,
+   6
+  ],
+  "skills": [
+   {
+    "id": "measures.convert",
+    "title": "Converting units",
+    "description": "Change between mm, cm, m and km, g and kg, ml and l."
+   },
+   {
+    "id": "measures.miles-km",
+    "title": "Miles and kilometres",
+    "description": "Use 5 miles ≈ 8 km to convert between miles and kilometres."
+   },
+   {
+    "id": "measures.volume",
+    "title": "Volume of cuboids",
+    "description": "Count cubes and use length × width × height."
+   },
+   {
+    "id": "measures.speed",
+    "title": "Speed (11+ extension)",
+    "description": "Optional, beyond the national curriculum: distance, speed and time."
+   }
+  ],
+  "lessons": [
+   {
+    "id": "convert",
+    "title": "Converting units",
+    "objectives": [
+     "Know how many mm, cm and m make the next unit, and grams in a kilogram and ml in a litre",
+     "Convert in both directions, including decimals"
+    ]
+   },
+   {
+    "id": "miles",
+    "title": "Miles and kilometres",
+    "objectives": [
+     "Know that 5 miles is about 8 km",
+     "Convert between miles and km in both directions"
+    ]
+   },
+   {
+    "id": "volume",
+    "title": "Volume of cuboids",
+    "objectives": [
+     "Find volume by counting centimetre cubes",
+     "Use length × width × height, in cm³"
+    ]
+   },
+   {
+    "id": "speed",
+    "title": "Speed (11+ extension)",
+    "objectives": [
+     "Find a distance from a speed and a time",
+     "Find a time from a distance and a speed"
+    ]
+   }
+  ]
+ },
+ {
   "id": "shapes-angles",
   "title": "Shapes and angles",
   "world": "shape",
@@ -1303,6 +1370,26 @@
     "id": "shapes-angles.angle-facts",
     "title": "Angle facts",
     "description": "Find missing angles on a line, around a point and in a triangle."
+   },
+   {
+    "id": "shapes-angles.symmetry",
+    "title": "Symmetry",
+    "description": "Find lines of symmetry and complete reflections."
+   },
+   {
+    "id": "shapes-angles.nets",
+    "title": "Nets of 3-D shapes",
+    "description": "Tell which flat nets fold into cubes, prisms and pyramids."
+   },
+   {
+    "id": "shapes-angles.circles",
+    "title": "Parts of a circle",
+    "description": "Name the radius, diameter, centre and circumference; the diameter is twice the radius."
+   },
+   {
+    "id": "shapes-angles.estimate-angles",
+    "title": "Estimating angles",
+    "description": "Estimate angles in degrees, and find angles on a clock face."
    }
   ],
   "lessons": [
@@ -1335,6 +1422,38 @@
     "objectives": [
      "Find missing angles on a straight line and around a point",
      "Find missing angles in a triangle"
+    ]
+   },
+   {
+    "id": "symmetry",
+    "title": "Lines of symmetry",
+    "objectives": [
+     "Find lines of symmetry in 2-D shapes",
+     "Complete a shape by reflecting it in a mirror line"
+    ]
+   },
+   {
+    "id": "nets",
+    "title": "Nets of 3-D shapes",
+    "objectives": [
+     "Tell whether 6 squares fold into a cube",
+     "Match nets to prisms and pyramids"
+    ]
+   },
+   {
+    "id": "circles",
+    "title": "Parts of a circle",
+    "objectives": [
+     "Name the centre, radius, diameter and circumference",
+     "Use diameter = 2 × radius"
+    ]
+   },
+   {
+    "id": "estimate",
+    "title": "Estimating angles",
+    "objectives": [
+     "Estimate angles in degrees",
+     "Find the angle between clock hands"
     ]
    }
   ]
@@ -1437,6 +1556,21 @@
     "id": "charts-data.mean",
     "title": "The mean",
     "description": "Find the mean (average) of a set of numbers."
+   },
+   {
+    "id": "charts-data.pie-charts",
+    "title": "Pie charts",
+    "description": "Read and work out the slices of a pie chart."
+   },
+   {
+    "id": "charts-data.averages",
+    "title": "Mode, median and range (11+ extension)",
+    "description": "Optional, beyond the national curriculum: the most common, the middle, and the spread."
+   },
+   {
+    "id": "charts-data.probability",
+    "title": "Probability (11+ extension)",
+    "description": "Optional, beyond the national curriculum: how likely something is, as words and fractions."
    }
   ],
   "lessons": [
@@ -1478,6 +1612,30 @@
     "objectives": [
      "Find the mean of a set of numbers",
      "Find a missing number from the mean"
+    ]
+   },
+   {
+    "id": "pie",
+    "title": "Pie charts",
+    "objectives": [
+     "Read a pie chart as fractions of a total",
+     "Work out the angle of a slice"
+    ]
+   },
+   {
+    "id": "averages",
+    "title": "Mode, median and range (11+ extension)",
+    "objectives": [
+     "Find the mode and the median",
+     "Find the range"
+    ]
+   },
+   {
+    "id": "probability",
+    "title": "Probability (11+ extension)",
+    "objectives": [
+     "Describe how likely something is in words",
+     "Write a probability as a fraction"
     ]
    }
   ]

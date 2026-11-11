@@ -1,4 +1,5 @@
-import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withExtras, withHints } from "@/topics/kit/define";
+import { chartsDataExtra } from "./extra";
 import { num } from "@/topics/kit/evaluate";
 import type { ChooseOption, Template } from "@/topics/kit/types";
 
@@ -515,7 +516,7 @@ const templates = withHints(baseTemplates, {
   "cd-mean-stretch": () => ["Work out what the four numbers must add up to.", "Take away the three you know."],
 });
 
-export const chartsData = defineTopic({
+export const chartsData = defineTopic(withExtras({
   id: T,
   title: "Charts and data",
   subtitle: "Read pictograms, bar charts, tables, timetables and line graphs, and find the mean",
@@ -730,4 +731,4 @@ export const chartsData = defineTopic({
     { lessonId: "line-graphs", template: "cd-line" },
     { lessonId: "mean", template: "cd-mean" },
   ],
-});
+}, chartsDataExtra));
