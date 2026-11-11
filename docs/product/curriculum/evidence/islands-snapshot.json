@@ -1530,7 +1530,8 @@
     "id": "construct",
     "title": "Drawing to size",
     "objectives": [
-     "Check a triangle drawn from two sides and the angle between them",
+     "Draw a triangle from two sides and the angle between them",
+     "Check a drawing against what was asked",
      "Work out the angles a drawing will show"
     ]
    }

@@ -36,7 +36,9 @@ only accepted items may have `accepted` cases. Update `test-cases.csv` in the sa
 ## State (11 Nov 2026)
 
 `docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Last recorded
-decision: D-038 (the last 7 untaught Year 3–6 objectives built: thousandths, decimal × and ÷, two unknowns,
+decision: D-039 (on-screen ruler-and-protractor drawing tool for Y6.GPS.1, `shapes-angles/explain/ConstructLab.tsx`,
+kit lab `triangle-construct`, `maths/geometry.ts`; Y6.GPS.1 addressed; CH-075; report
+`docs/product/reports/D-039-build-report.md`; READY FOR QA, nothing accepted). D-038 (the last 7 untaught Year 3–6 objectives built: thousandths, decimal × and ÷, two unknowns,
 triangle and parallelogram area, lines, drawing to size (recognition only, partial); no statutory objective is
 untaught; `maths/decimal.ts` for exact decimals; CH-070 to CH-072; report `docs/product/reports/D-038-build-report.md`;
 READY FOR QA, nothing accepted; deployed to production 11 Nov, CH-074). D-037 (Product Owner: "do all": UI clarity, depth on every island, 11+ coverage, then deploy; CH-062 to CH-068;

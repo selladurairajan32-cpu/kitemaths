@@ -72,8 +72,8 @@ Each objective names one or more kinds. Every kind assumes the CUR-002 §4 contr
 | 3 | 33 | 20 | 13 | 0 |
 | 4 | 42 | 29 | 13 | 0 |
 | 5 | 47 | 25 | 22 | 0 |
-| 6 | 49 | 23 | 26 | 0 |
-| **All** | **171** | **97** | **74** | **0** |
+| 6 | 49 | 24 | 25 | 0 |
+| **All** | **171** | **98** | **73** | **0** |
 
 ### 4.2 Fractions R1 dependencies
 
@@ -543,7 +543,7 @@ Source: <https://www.gov.uk/government/publications/national-curriculum-in-engla
 
 | Objective | Outcome | Prerequisites | Vocabulary | Examples | Mastery evidence | Maps to | Coverage and gap |
 |---|---|---|---|---|---|---|---|
-| Y6.GPS.1<br>draw 2-D shapes using given dimensions and angles | Draws 2-D shapes using given dimensions and angles. | Y5.GPS.3 | draw, dimension, protractor | Draw a triangle with sides 5 cm and 6 cm and angle 40° between them | **P** Procedure | `shapes-angles.construct` | **Partial**. Recognition only (D-038, the Product Owner's choice): the child checks drawings against given sides and angles and works out the angles a drawing will show, but does not draw. Drawing needs an on-screen ruler and protractor interaction, which is not built. |
+| Y6.GPS.1<br>draw 2-D shapes using given dimensions and angles | Draws 2-D shapes using given dimensions and angles. | Y5.GPS.3 | draw, dimension, protractor | Draw a triangle with sides 5 cm and 6 cm and angle 40° between them | **P** Procedure | `shapes-angles.construct` | **Addressed**. Drawing is on screen with a ruler and protractor that snap to half-centimetres and whole degrees (D-039), not with pencil and paper. |
 | Y6.GPS.2<br>recognise, describe and build simple 3-D shapes, including making nets | Recognises, describes and builds simple 3-D shapes, including making nets. | Y5.GPS.1 | net, 3-D shape, face | Which net makes a cube? | **R** Representation and concept | `shapes-angles.shapes`<br>`shapes-angles.nets` | **Partial**. Nets are recognised and matched to solids (D-037); building shapes cannot be done on screen. |
 | Y6.GPS.3<br>compare and classify geometric shapes based on their properties and sizes and find unknown angles in any triangles, quadrilaterals, and regular polygons | Compares and classifies shapes by properties and sizes and finds unknown angles in triangles, quadrilaterals and regular polygons. | Y4.GPS.1; Y5.GPS.4 | classify, polygon, angle, regular polygon | Angles in a quadrilateral sum to 360° | **P** Procedure | `shapes-angles.shapes`<br>`shapes-angles.angle-facts` | **Partial**. Triangles are covered; quadrilaterals and regular polygons are not confirmed. |
 | Y6.GPS.4<br>illustrate and name parts of circles, including radius, diameter and circumference and know that the diameter is twice the radius | Illustrates and names parts of circles, including radius, diameter and circumference; knows the diameter is twice the radius. | Y4.GPS.1 | radius, diameter, circumference | Diameter of a circle with radius 4 cm | **V** Vocabulary, reading and writing | `shapes-angles.circles` | **Addressed** |
@@ -594,7 +594,7 @@ Objectives **not addressed** by any existing skill, grouped by strand. These are
 | Strand | Not addressed |
 |---|---|
 
-**Totals:** 0 not addressed, 74 partial, 97 addressed, of 171. Topics with nothing taught: measuring and converting length, mass and capacity, volume, symmetry, circles, primes, squares and cubes, order of operations, Roman numerals, long division, fraction multiplication and division, and measuring angles with a protractor.
+**Totals:** 0 not addressed, 73 partial, 98 addressed, of 171. Topics with nothing taught: measuring and converting length, mass and capacity, volume, symmetry, circles, primes, squares and cubes, order of operations, Roman numerals, long division, fraction multiplication and division, and measuring angles with a protractor.
 
 ## 8. Decisions needed
 

@@ -15,6 +15,8 @@ const Loading = () => <div className="min-h-[24rem] animate-pulse rounded-[22px]
 const LABS: Record<string, ComponentType<LabStepProps>> = {
   "long-multiplication-watch": dynamic(() => import("@/topics/multiply-divide/explain/LongMultiplicationLab").then((m) => m.LongMultiplicationWatch), { loading: Loading }),
   "long-multiplication-try": dynamic(() => import("@/topics/multiply-divide/explain/LongMultiplicationLab").then((m) => m.LongMultiplicationTry), { loading: Loading }),
+  // D-039 (Y6.GPS.1): draw a triangle with an on-screen ruler and protractor.
+  "triangle-construct": dynamic(() => import("@/topics/shapes-angles/explain/ConstructLab").then((m) => m.ConstructLab), { loading: Loading }),
 };
 
 const REMEDIES: Record<string, ComponentType> = {

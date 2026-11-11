@@ -3,8 +3,8 @@ import type { ChooseOption, Rng, ShapeName, Template } from "@/topics/kit/types"
 
 /**
  * D-038: horizontal, vertical, parallel and perpendicular lines (Y3.GPS.4), and checking shapes drawn to given sizes and
- * angles (Y6.GPS.1, recognition only by the Product Owner's choice: the child checks and reasons about drawings but
- * does not draw).
+ * angles (Y6.GPS.1). D-039 adds drawing: the construct lesson's lab step draws triangles with an on-screen ruler and
+ * protractor (`explain/ConstructLab.tsx`).
  */
 
 const T = "shapes-angles";
@@ -235,16 +235,16 @@ export const linesAndConstruction: TopicExtra = {
       id: "construct",
       title: "Drawing to size",
       phase: "Apply",
-      summary: "Check every side and angle against what was asked.",
+      summary: "Draw a triangle with a ruler and protractor, and check every side and angle.",
       minutes: 8,
-      objectives: ["Check a triangle drawn from two sides and the angle between them", "Work out the angles a drawing will show"],
+      objectives: ["Draw a triangle from two sides and the angle between them", "Check a drawing against what was asked", "Work out the angles a drawing will show"],
       steps: [
         {
           type: "explain",
           title: "Ruler, then protractor",
           body: [
             "To draw a triangle with sides of **5 cm** and **6 cm** and an angle of **40°** between them: draw the 5 cm line with a ruler, put the protractor's centre on one end and mark 40°, then draw the 6 cm line through that mark. Join the ends to finish the triangle.",
-            "Kite Maths can't check your drawing on screen, so here you check drawings and work out what they must show. Check **all three** measurements: a drawing with the right sides but the wrong angle is a different triangle. The angles of any triangle still add up to 180°.",
+            "In this lesson you draw on screen with a ruler and a protractor, one step at a time, then check drawings and work out what they must show. Check **all three** measurements: a drawing with the right sides but the wrong angle is a different triangle. The angles of any triangle still add up to 180°.",
           ],
           visual: { kind: "drawn-triangle", a: 5, b: 6, angle: 40 },
           tip: "Measure the angle from the line you drew first.",
@@ -266,6 +266,14 @@ export const linesAndConstruction: TopicExtra = {
           visual: { kind: "triangle", angles: [50, 60, 70], labels: ["50°", "60°", "?"] },
           steps: [{ text: "The angles add up to 180°. 50° + 60° = 110°.", blank: { prompt: "Third angle in degrees?", answer: 70, hint: "180 − 110.", traps: [{ value: 250, feedback: "Triangles have 180°, not 360°: 180 − 110." }], worked: "180° − 110° = **70**°." } }],
           conclusion: "The third angle is **70°**.",
+        },
+        {
+          type: "lab",
+          title: "Draw it yourself",
+          body: [],
+          explainer: "triangle-construct",
+          numbers: [6, 4, 50, 5, 7, 110],
+          challenges: [`${T}.construct-draw-1`, `${T}.construct-draw-2`],
         },
         { type: "check", title: "Your turn", questionId: gen("sa-construct-check", 1, 3) },
         { type: "check", title: "One more", questionId: gen("sa-construct-angle", 2, 5) },
