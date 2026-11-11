@@ -55,7 +55,7 @@ function Cuboid({ v }: { v: Extract<ExtraVisualSpec, { kind: "cuboid" }> }) {
   // Scale so the drawing fits; depth is drawn at half length, slanted up and right.
   const s = Math.min(26, 190 / (v.l + v.w * 0.5), 150 / (v.h + v.w * 0.5));
   const [L, H, D] = [v.l * s, v.h * s, v.w * s * 0.5];
-  const [x0, y0] = [40, 30 + D + H];
+  const [x0, y0] = [84, 30 + D + H];
   const front = `M ${x0} ${y0} h ${L} v ${-H} h ${-L} Z`;
   const top = `M ${x0} ${y0 - H} l ${D} ${-D} h ${L} l ${-D} ${D} Z`;
   const side = `M ${x0 + L} ${y0} l ${D} ${-D} v ${-H} l ${-D} ${D} Z`;
@@ -179,7 +179,7 @@ function CircleParts({ v }: { v: Extract<ExtraVisualSpec, { kind: "circle" }> })
         {v.radius && (
           <>
             <line x1={cx} y1={cy} x2={cx + r * 0.71} y2={cy - r * 0.71} stroke={CORAL} strokeWidth="4" />
-            <text x={cx + 44} y={cy - 18} fontSize="19" fontWeight="800" fill={INK}>
+            <text x={cx + 26} y={cy - 46} textAnchor="end" fontSize="19" fontWeight="800" fill={INK}>
               {v.radius}
             </text>
           </>

@@ -336,7 +336,7 @@ export const measures = defineTopic({
             "Road signs in the UK use **miles**; most other countries use **kilometres**. A mile is longer than a km. A handy fact: **5 miles is about 8 km**, so 10 miles ≈ 16 km and 50 miles ≈ 80 km.",
             "To change miles to km, find how many lots of 5 miles there are, then multiply by 8. To change km to miles, find how many lots of 8 km, then multiply by 5. The answers are approximate, written with ≈.",
           ],
-          visual: { kind: "table", head: ["Miles", "5", "10", "15", "20"], rows: [["Km (about)", "8", "16", "24", "32"]] },
+          visual: { kind: "table", head: ["Miles", "Km (about)"], rows: [["5", "8"], ["10", "16"], ["15", "24"], ["20", "32"]] },
           tip: "There are always more km than miles for the same distance.",
         },
         {
@@ -419,7 +419,7 @@ export const measures = defineTopic({
             "This lesson is an **optional 11+ extension**: speed isn't in the primary national curriculum, but some 11+ papers include it. **60 miles per hour** means the car goes 60 miles in every hour.",
             "So in 3 hours it goes **60 × 3 = 180 miles**: **distance = speed × time**. To find the time, divide: 180 miles at 60 mph takes 180 ÷ 60 = **3 hours**. Watch out for minutes: half an hour is 30 minutes, not 0.5 of 100.",
           ],
-          visual: { kind: "table", head: ["Time", "1 hour", "2 hours", "3 hours"], rows: [["Distance at 60 mph", "60 miles", "120 miles", "180 miles"]] },
+          visual: { kind: "table", head: ["Time at 60 mph", "Distance"], rows: [["1 hour", "60 miles"], ["2 hours", "120 miles"], ["3 hours", "180 miles"]] },
           tip: "15 minutes is a quarter of an hour, so the distance is a quarter too.",
         },
         {

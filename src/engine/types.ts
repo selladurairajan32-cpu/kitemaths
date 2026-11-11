@@ -110,6 +110,8 @@ export interface MockMeta {
   endedAtMs: number;
   /** D-037: how many answer options were shown (5 on an answer sheet); absent means 4. */
   options?: number;
+  /** D-037: the question was asked on an answer sheet (lettered options), so review rebuilds it the same way. */
+  sheet?: boolean;
   /** D-037: which timed section (from 0) the question was in, when the mock had more than one. */
   section?: number;
 }

@@ -96,3 +96,16 @@ export function asMultipleChoice(q: KitNumberQuestion, optionCount: 4 | 5 = 4): 
     answer: ordered.findIndex((v) => v.value === q.answer),
   };
 }
+
+/**
+ * D-037: any question as it appears on an answer sheet. A written-answer question gets 5 lettered options; a question
+ * that is already multiple choice keeps its options, in an order shuffled once from its id (so the right one isn't
+ * always first), lettered (A), (B) and so on. The same question always comes out the same, so results can rebuild it.
+ */
+export function asAnswerSheet(q: KitQuestion): KitChooseQuestion {
+  if (q.kind === "number") return asMultipleChoice(q, 5);
+  if (q.fixedOrder) return { ...q, options: q.options.map((o, i) => ({ ...o, text: `(${"ABCDE"[i]}) ${o.text}` })) };
+  const rand = prng(hashString(`sheet:${q.id}`));
+  const order = q.options.map((_, i) => ({ i, k: rand() })).sort((a, b) => a.k - b.k).map((x) => x.i);
+  return { ...q, fixedOrder: true, options: order.map((i, n) => ({ ...q.options[i]!, text: `(${"ABCDE"[n]}) ${q.options[i]!.text}` })), answer: order.indexOf(q.answer) };
+}

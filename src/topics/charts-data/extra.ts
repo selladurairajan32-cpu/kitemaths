@@ -303,7 +303,7 @@ export const chartsDataExtra: TopicExtra = {
             "This lesson is an **optional 11+ extension**: the mean is in the national curriculum, but some 11+ papers also ask for these. The **mode** is the number that appears **most often**. The **median** is the **middle** number once the numbers are **in order**.",
             "The **range** is the **biggest take away the smallest**: it shows how spread out the numbers are. For 3, 7, 7, 9, 14: the mode is 7, the median is 7, and the range is 14 − 3 = 11.",
           ],
-          visual: { kind: "table", head: ["Numbers", "Mode", "Median", "Range"], rows: [["3, 7, 7, 9, 14", "7", "7", "11"]] },
+          visual: { kind: "table", head: ["For 3, 7, 7, 9, 14", "Answer"], rows: [["Mode (most often)", "7"], ["Median (middle)", "7"], ["Range (biggest − smallest)", "11"]] },
           tip: "Always put the numbers in order before finding the median.",
         },
         {

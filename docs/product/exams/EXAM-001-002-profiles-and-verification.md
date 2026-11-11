@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Backlog items** | EXAM-001 (exam-profile data model) and EXAM-002 (exam-format research and verification workflow), R5 |
-| **Status** | READY FOR QA (D-032). Not accepted. |
+| **Status** | READY FOR QA (D-032; profiles added under D-037). Not accepted. |
 | **Date** | 9 November 2026 |
 | **Code** | `src/engine/examProfile.ts` (model, validation, change log); tests in `src/engine/exams.test.ts` |
 
@@ -51,7 +51,27 @@ A verified fact's source records the **URL** (https), the **publisher** (school,
 
 ## 4. What the app ships today
 
-**Only one profile: general practice, with every exam fact unknown.** No real school's or consortium's details have
-been verified for this release, so none are included, and nothing is guessed. The mock-test screen says this plainly
-and uses the settings the child chooses (EXAM-005). Adding real profiles needs the workflow above and a Product Owner
-decision on which schools to cover.
+Updated 11 November 2026 (D-037, CH-065). The app ships **five profiles**. Each verified fact quotes the provider's own
+public page, read on 10 November 2026; the quotes and URLs are in
+[`evidence/official-sources-2026-11-10.md`](evidence/official-sources-2026-11-10.md). Anything those pages don't state
+is **unknown**, and the mock uses the child's own setting for it.
+
+| Profile (id) | Subjects | Provider | Question format | Maths timing | Calculators |
+|---|---|---|---|---|---|
+| General 11+ practice (`general`) | unknown | unknown | unknown | unknown | unknown |
+| ISEB Common Pre-Tests (`iseb`) | English, mathematics, verbal reasoning, non-verbal reasoning | ISEB | multiple choice | 40 minutes | unknown |
+| GL Assessment, general (`gl`) | unknown | GL Assessment | multiple choice | unknown (GL says timings may differ) | unknown |
+| CSSE, Essex (`csse`) | English, Mathematics | CSSE | unknown | 60 minutes | unknown |
+| SEAG, Northern Ireland (`seag`) | English (or Gaeilge), Mathematics | SEAG | unknown | unknown | unknown |
+
+**Not included.** There is no CEM profile: no official CEM page could be read (the page tried returned an error), so
+nothing about CEM-style tests is claimed. There is no AQE profile either. GL's local tests are run by many different
+areas; the GL profile states only what GL says about its tests in general.
+
+**What the mock does with a profile** (EXAM-005): a verified timing replaces the child's choice; a verified
+multiple-choice format makes the mock multiple choice (the 5-option answer sheet counts as multiple choice). The
+answer sheet, two-part questions and short timed sections are practice formats: none is claimed as any test's format.
+Every mock carries the practice label (EXAM-005 AC4).
+
+**Limits.** Facts can change each year; each profile needs re-reading against the provider's page before each
+admissions round. The verification was a single developer read, not an independent check.

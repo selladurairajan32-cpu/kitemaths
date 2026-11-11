@@ -14,6 +14,7 @@ pull requests and on pushes to `main` only, so it has not run on the development
 | `specimen-audit.cjs` | Contrast and layout of the design specimen; see below | `node docs/product/verification/specimen-audit.cjs <outDir> [baseUrl]` |
 | `text-scaling.cjs` | UX-003 AC3: sideways scroll and clipped text on 8 pages at 200% text, browser-zoom width (640px) and 320px reflow | `node docs/product/verification/text-scaling.cjs <outDir> 200%` |
 | `anim-pilot.cjs` | ANIM-001 pilot v2: all 14 steps at 390, 768 and 1280px with each task done by real pointer drags, the try-it with Show me again, a keyboard-only run, reduced motion, axe-core and console errors | `node docs/product/verification/anim-pilot.cjs <outDir> <port>` |
+| `new-topics.cjs` | D-037 Phase C: the first step of all 18 new lessons and the practice mock (ISEB profile, answer sheet, 2 timed sections, two-part questions) at 390 and 1280px, with axe-core, console errors and sideways overflow | `node docs/product/verification/new-topics.cjs <outDir> <port>` |
 | `compare-generated-questions.mjs` | ARCH-003: every generated question is identical before and after the maths extraction (step 3) | see the script header |
 
 **`capture-screens.cjs` setup.** It captures 19 screens and states at both 1280×900 and 390×844, in Chromium, with
@@ -44,6 +45,15 @@ reduced motion and a device scale of 1. They are:
 possible screen, state or behaviour is unchanged.
 
 ## Results
+
+`results/d037-final/` holds the runs on 11 Nov 2026 for D-037, on a production build of the D-037 head:
+- **Screen capture:** 38 shots, 0 console errors (`screens/`). No baseline comparison: D-037 changes child-facing
+  screens on purpose.
+- **Text scaling:** 8 pages, sideways overflow 0 and clipped text 0 in every condition (`text-scaling/`).
+- **Animated pilot:** 14 steps at each width, every drag worked, keyboard-only run finished, reduced motion shows the end
+  state with no running animations, 0 axe violations, 0 console errors (`anim-pilot/report.json`).
+- **New topics and mock formats:** 42 shots, 0 axe violations, 0 console errors, 0 sideways overflow
+  (`new-topics/report.json`).
 
 `results/step2-correction/` holds the runs on 5 Nov 2026 for the step-2 corrections. Baseline `6050e3c`, head
 `48f7925`:

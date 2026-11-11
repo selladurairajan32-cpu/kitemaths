@@ -113,7 +113,7 @@ export const romanNumerals: TopicExtra = {
             "The Romans used seven letters for numbers: **I = 1, V = 5, X = 10, L = 50, C = 100, D = 500, M = 1,000**. There is no zero and no place value: you add the symbols up, biggest first. **XVI** is 10 + 5 + 1 = 16.",
             "One trick: a smaller symbol just **before** a bigger one is taken away. **IV** is 5 − 1 = 4, **IX** is 9, **XL** is 40, **XC** is 90, **CD** is 400 and **CM** is 900. That is why you never see four of the same symbol in a row.",
           ],
-          visual: { kind: "table", head: ["I", "V", "X", "L", "C", "D", "M"], rows: [["1", "5", "10", "50", "100", "500", "1,000"]] },
+          visual: { kind: "table", head: ["Symbol", "Value"], rows: [["I", "1"], ["V", "5"], ["X", "10"], ["L", "50"], ["C", "100"], ["D", "500"], ["M", "1,000"]] },
           tip: "Split a number into thousands, hundreds, tens and ones, and write each part.",
         },
         {

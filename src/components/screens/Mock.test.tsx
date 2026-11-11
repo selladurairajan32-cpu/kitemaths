@@ -100,6 +100,8 @@ describe("mock formats from verified profiles (D-037)", () => {
     const lettered = sheet.filter((q) => q.kind === "choose" && q.options.length === 5);
     expect(lettered.length).toBeGreaterThan(0);
     for (const q of lettered) if (q.kind === "choose") expect(q.options.map((o) => o.text.slice(0, 4))).toEqual(["(A) ", "(B) ", "(C) ", "(D) ", "(E) "]);
+    // Questions that were already multiple choice are lettered too, in a fixed order.
+    for (const q of sheet) if (q.kind === "choose") expect(q.fixedOrder && q.options.every((o, i) => o.text.startsWith(`(${"ABCDE"[i]}) `)), q.id).toBe(true);
 
     const parts = buildPaper("s2", { ...DEFAULT_MOCK, format: "two-part", questionCount: 12, profileId: "general" });
     const key = (q: KitQuestion) => q.id.split(":")[1].split(".")[1];
@@ -132,6 +134,19 @@ describe("mock formats from verified profiles (D-037)", () => {
     const metas = getLearner().results.filter((r) => r.mock).map((r) => r.mock!);
     expect(metas.map((m) => m.section)).toEqual([0, 0, 0, 1, 1, 1]);
     expect(metas.every((m) => m.sectionMs === 5 * 60_000 && m.endedAtMs === 5 * 60_000)).toBe(true);
+  });
+
+  it("stores an answer-sheet mock as such and reviews it with the same lettered options", async () => {
+    const user = userEvent.setup();
+    render(<MockScreen />);
+    await user.click(screen.getByRole("button", { name: "6" }));
+    await user.click(screen.getByRole("button", { name: "Answer sheet (A to E)" }));
+    await user.click(screen.getByRole("button", { name: /Start the mock/ }));
+    expect(screen.getByText(/Answer sheet: choose one letter, A to [D-E]\./)).toBeTruthy();
+    await user.click(screen.getByRole("button", { name: "Finish the mock" }));
+    expect(getLearner().results.filter((r) => r.mock).every((r) => r.mock!.sheet === true && r.mock!.format === "multiple-choice")).toBe(true);
+    const review = screen.getByRole("heading", { name: "Question by question" }).closest("section")!;
+    expect(within(review).getAllByText(/^\(A\) /).length).toBe(6);
   });
 
   it("lets the child end a section early with Start the next section", async () => {

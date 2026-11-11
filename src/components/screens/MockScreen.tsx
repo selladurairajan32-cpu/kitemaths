@@ -18,7 +18,7 @@ import { topicById, topicOf } from "@/topics";
 import { genId } from "@/topics/kit/define";
 import type { KitQuestion, KitResponse } from "@/topics/kit/types";
 import { TWO_PART_KEYS } from "@/topics/mock-exams";
-import { asMultipleChoice } from "@/topics/mock-exams/taxonomy";
+import { asAnswerSheet, asMultipleChoice } from "@/topics/mock-exams/taxonomy";
 
 const T = "mock-exams";
 const clock = () => Date.now();
@@ -74,7 +74,7 @@ export function buildPaper(session: string, config: MockConfig): KitQuestion[] {
       continue;
     }
     const base = topic.questionById(genId(T, keys[i % keys.length], d, seed)) as KitQuestion;
-    if (config.format === "answer-sheet") out.push(base.kind === "number" ? asMultipleChoice(base, 5) : base);
+    if (config.format === "answer-sheet") out.push(asAnswerSheet(base));
     else {
       const mc = config.format === "multiple-choice" || (config.format === "mixed" && i % 2 === 1);
       out.push(mc && base.kind === "number" ? asMultipleChoice(base) : base);
@@ -233,6 +233,7 @@ function MockSitting({ session, config, paper, startedAt, onFinish }: { session:
           mock: {
             session, index: i, total: paper.length, sectionMs, format: q.kind === "choose" ? "multiple-choice" : "number", answeredAtMs: answeredAt.current[i], changed: changed.current[i], endedAtMs: endedAt.current[s],
             ...(q.kind === "choose" ? { options: q.options.length } : {}),
+            ...(config.format === "answer-sheet" ? { sheet: true } : {}),
             ...(many ? { section: s } : {}),
           },
         } satisfies ItemResult;
@@ -271,7 +272,7 @@ function MockSitting({ session, config, paper, startedAt, onFinish }: { session:
   const lastSection = section === bounds.length - 1;
   const mins = Math.max(0, Math.floor(left / 60_000));
   const secs = Math.max(0, Math.floor((left % 60_000) / 1000));
-  const sheet = q.kind === "choose" && q.options.length === 5;
+  const sheet = config.format === "answer-sheet";
 
   return (
     <div className="mx-auto max-w-3xl space-y-4">
@@ -295,7 +296,7 @@ function MockSitting({ session, config, paper, startedAt, onFinish }: { session:
         <h1 className="text-prompt-sm font-extrabold text-ink sm:text-prompt">
           <RichText text={q.prompt} />
         </h1>
-        {sheet && <p className="text-body font-semibold text-ink-2">Answer sheet: choose one letter, A to E.</p>}
+        {sheet && q.kind === "choose" && <p className="text-body font-semibold text-ink-2">Answer sheet: choose one letter, A to {"ABCDE"[q.options.length - 1]}.</p>}
         <Input
           question={q}
           response={answers[index]}
@@ -342,7 +343,8 @@ function MockResults({ session, onAgain }: { session: string; onAgain: () => voi
   const skillTitle = (id: string) => topicOf(id)?.skills.find((s) => s.id === id)?.title ?? id;
   const question = (r: ItemResult): KitQuestion => {
     const base = topic.questionById(r.questionId) as KitQuestion;
-    return r.mock!.format === "multiple-choice" && base.kind === "number" ? asMultipleChoice(base, r.mock!.options === 5 ? 5 : 4) : base;
+    if (r.mock!.sheet) return asAnswerSheet(base);
+    return r.mock!.format === "multiple-choice" && base.kind === "number" ? asMultipleChoice(base) : base;
   };
 
   return (

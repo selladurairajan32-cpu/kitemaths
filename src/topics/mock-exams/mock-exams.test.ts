@@ -3,7 +3,7 @@ import { TOPICS, topicById } from "@/topics";
 import type { KitQuestion } from "@/topics/kit/types";
 import { genId } from "@/topics/kit/define";
 import { MOCK_SKILLS } from "./index";
-import { asMultipleChoice, tagQuestion } from "./taxonomy";
+import { asAnswerSheet, asMultipleChoice, tagQuestion } from "./taxonomy";
 
 /** R5 content: the question taxonomy (EXAM-003) and multi-step, unfamiliar problem practice (EXAM-004). */
 
@@ -119,5 +119,20 @@ describe("answer sheets and two-part questions (D-037)", () => {
       }
     }
     expect([...stories].sort()).toEqual(["cafe", "coach", "garden"]);
+  });
+
+  it("letters an already multiple-choice question for an answer sheet, keeping the same right option and the same order every time", () => {
+    let n = 0;
+    for (const q of pool) {
+      if (q.kind !== "choose") continue;
+      const sheet = asAnswerSheet(q);
+      expect(sheet).toEqual(asAnswerSheet(q));
+      expect(sheet.fixedOrder).toBe(true);
+      sheet.options.forEach((o, i) => expect(o.text.startsWith(`(${"ABCDE"[i]}) `), `${q.id}: ${o.text}`).toBe(true));
+      expect(sheet.options[sheet.answer]!.text.slice(4)).toBe(q.options[q.answer]!.text);
+      expect(sheet.options.map((o) => o.text.slice(4)).sort()).toEqual(q.options.map((o) => o.text).sort());
+      n++;
+    }
+    expect(n).toBeGreaterThan(10);
   });
 });

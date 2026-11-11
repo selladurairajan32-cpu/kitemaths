@@ -585,3 +585,5 @@ TC-CUR-001.1.12,CUR-001,AC1,unit,automated,passing,src/maths/roman-primes.test.t
 TC-CUR-001.1.13,CUR-001,AC1,unit,automated,passing,src/maths/roman-primes.test.ts::knows the primes to 100 (hand-worked list),Primes for Y5.MD.2 and Y5.MD.3 (CH-066)
 TC-CUR-001.1.14,CUR-001,AC1,unit,automated,passing,src/maths/roman-primes.test.ts::breaks numbers into prime factors (hand-worked),(CH-066)
 TC-CUR-001.1.15,CUR-001,AC1,unit,automated,passing,src/maths/roman-primes.test.ts::finds square and cube numbers (hand-worked),(CH-066)
+TC-EXAM-005.1.8,EXAM-005,AC1,component,automated,passing,src/components/screens/Mock.test.tsx::stores an answer-sheet mock as such and reviews it with the same lettered options,(CH-068)
+TC-EXAM-005.1.9,EXAM-005,AC1,content,automated,passing,"src/topics/mock-exams/mock-exams.test.ts::letters an already multiple-choice question for an answer sheet, keeping the same right option and the same order every time",(CH-068)
