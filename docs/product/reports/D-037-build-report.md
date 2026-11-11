@@ -122,4 +122,6 @@ depended on the randomly drawn paper. `e1bb43a` fixed the test, and the full sui
 - **No pixel comparison** was made against the earlier screens, because D-037 changes child-facing screens on purpose.
 - **Defects:** no defect status changed. DEF-001, DEF-027, DEF-028 and DEF-038 remain "fixed, closure not confirmed"
   in the STATUS.md defect index, awaiting independent retest.
-- **Deployment:** the production deployment is recorded separately in `DECISIONS.md` once it has been verified.
+- **Deployment (CH-069):** `main` was fast-forwarded to `4cfd95e` after CI passed, and Vercel served it within about two
+  minutes. The live check (`verification/live-check.cjs`) loaded five pages at two widths: all returned 200 with the
+  expected content and no console errors. Deploying is not acceptance.

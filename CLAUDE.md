@@ -7,7 +7,7 @@ breaking changes, so read the relevant guide in `node_modules/next/dist/docs/` b
 ## Working rules (from the Product Owner, D-002, D-006, D-012)
 
 - **Development branch only:** `claude/pensive-pasteur-bs5979`. No pull request, merge or deployment unless the Product
-  Owner explicitly asks. Production is https://kitemaths.vercel.app (Vercel deploys `main`). R1 was merged to `main` and deployed on 9 Nov 2026 at the Product Owner's explicit request (D-027), the content differentiation changes the same day (D-029), and the typography changes (D-031); any further deployment still needs an explicit request.
+  Owner explicitly asks. Production is https://kitemaths.vercel.app (Vercel deploys `main`). R1 was merged to `main` and deployed on 9 Nov 2026 at the Product Owner's explicit request (D-027), the content differentiation changes the same day (D-029), the typography changes (D-031), and the D-037 build (CH-069); any further deployment still needs an explicit request.
 - **No change to existing child-facing screens** (appearance or behaviour) unless an item says so. Screen migration, the
   accessibility layout fixes and wiring new specs into the app are R1 work.
 - **Preserve the architecture; no broad rewrites.** Additive foundations and behaviour-preserving extraction only.
@@ -39,7 +39,7 @@ only accepted items may have `accepted` cases. Update `test-cases.csv` in the sa
 decision: D-037 (Product Owner: "do all": UI clarity, depth on every island, 11+ coverage, then deploy; CH-062 to CH-068;
 report `docs/product/reports/D-037-build-report.md`; kit lessons guarded by `src/topics/kit/depth.test.ts`; new islands add
 content through `withExtras` and `<island>/extra.ts`; new Measures island; exam profiles ISEB/GL/CSSE/SEAG quote official
-pages, the rest unknown; READY FOR QA, nothing accepted). D-036 (animated explanations v2: blocks, picture and numbers with a child move in each, `Stage` in
+pages, the rest unknown; READY FOR QA, nothing accepted; deployed to production 11 Nov at the Product Owner's request, CH-069). D-036 (animated explanations v2: blocks, picture and numbers with a child move in each, `Stage` in
 `src/components/explain/`, ANIM-001; CH-061; not deployed). D-035 (pilot authorised; CH-060). D-034 (inspection answers: UI clarity, then depth, then 11+ with format research; simplify Home; planned). D-033 (Product Owner answers: MAST-001 2 forms, RC-008 to RC-010 confirmed, DEF-001/027/038 fixed, crosswise
 11+ extension, deploy; CH-056 to CH-058). D-032 (build every pending item: R2, R3, R5, audit recommendations, DEF-028; CH-050 to CH-054;
 report `docs/product/reports/D-032-build-report.md`; 83 items READY FOR QA, none accepted, not deployed). D-030 (typography and hierarchy audit, CH-046 to CH-048, in
