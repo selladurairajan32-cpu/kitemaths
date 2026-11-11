@@ -146,7 +146,10 @@ describe("mock formats from verified profiles (D-037)", () => {
     await user.click(screen.getByRole("button", { name: "Finish the mock" }));
     expect(getLearner().results.filter((r) => r.mock).every((r) => r.mock!.sheet === true && r.mock!.format === "multiple-choice")).toBe(true);
     const review = screen.getByRole("heading", { name: "Question by question" }).closest("section")!;
-    expect(within(review).getAllByText(/^\(A\) /).length).toBe(6);
+    // Every reviewed question shows its options lettered, starting at (A).
+    const items = within(review).getAllByRole("listitem");
+    expect(items.length).toBe(6);
+    for (const li of items) expect(within(li).getAllByText(/^\(A\) /).length).toBeGreaterThanOrEqual(1);
   });
 
   it("lets the child end a section early with Start the next section", async () => {
