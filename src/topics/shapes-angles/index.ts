@@ -1,5 +1,6 @@
 import { defineTopic, genFor, int, pick, withExtras, withHints } from "@/topics/kit/define";
 import { shapesAnglesExtra } from "./extra";
+import { linesAndConstruction } from "./lines";
 import type { ChooseOption, ShapeName, Template } from "@/topics/kit/types";
 
 /** Shapes and angles: naming 2D and 3D shapes, types of angle, turns and degrees, and angle facts. */
@@ -605,4 +606,4 @@ export const shapesAngles = defineTopic(withExtras({
     { lessonId: "turns", template: "sa-turns" },
     { lessonId: "facts", template: "sa-line" },
   ],
-}, shapesAnglesExtra));
+}, shapesAnglesExtra, linesAndConstruction));

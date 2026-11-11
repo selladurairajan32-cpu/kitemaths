@@ -97,7 +97,7 @@ export type ExtraVisualSpec =
   | { kind: "circle"; radius?: string; diameter?: string; centre?: boolean }
   /** D-038: a triangle or parallelogram with its base and dashed perpendicular height labelled, and maybe a slanted side. */
   | { kind: "base-height"; shape: "triangle" | "parallelogram"; base: string; height: string; slant?: string }
-  /** D-038: labelled straight lines on a squared grid (points are grid corners, 0 to 8 across and 0 to 6 down). */
+  /** D-038: labelled straight lines on a squared grid (points in grid squares, 0 to 8 across and 0 to 6 down). */
   | { kind: "lines"; segments: { from: [number, number]; to: [number, number]; label: string }[] }
   /** D-038: a triangle drawn to scale from two sides and the angle between them, with those three measurements labelled. */
   | { kind: "drawn-triangle"; a: number; b: number; angle: number; unit?: string };

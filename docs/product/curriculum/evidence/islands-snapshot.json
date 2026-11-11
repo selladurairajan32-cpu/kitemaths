@@ -1442,6 +1442,16 @@
     "id": "shapes-angles.estimate-angles",
     "title": "Estimating angles",
     "description": "Estimate angles in degrees, and find angles on a clock face."
+   },
+   {
+    "id": "shapes-angles.lines",
+    "title": "Lines",
+    "description": "Spot horizontal and vertical lines, and parallel and perpendicular pairs."
+   },
+   {
+    "id": "shapes-angles.construct",
+    "title": "Drawing to size",
+    "description": "Check shapes drawn from given sides and angles, and work out what the drawing will show."
    }
   ],
   "lessons": [
@@ -1506,6 +1516,22 @@
     "objectives": [
      "Estimate angles in degrees",
      "Find the angle between clock hands"
+    ]
+   },
+   {
+    "id": "lines",
+    "title": "Parallel and perpendicular",
+    "objectives": [
+     "Spot horizontal and vertical lines",
+     "Find parallel and perpendicular pairs"
+    ]
+   },
+   {
+    "id": "construct",
+    "title": "Drawing to size",
+    "objectives": [
+     "Check a triangle drawn from two sides and the angle between them",
+     "Work out the angles a drawing will show"
     ]
    }
   ]

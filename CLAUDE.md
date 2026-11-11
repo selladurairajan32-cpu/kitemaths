@@ -36,7 +36,10 @@ only accepted items may have `accepted` cases. Update `test-cases.csv` in the sa
 ## State (11 Nov 2026)
 
 `docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Last recorded
-decision: D-037 (Product Owner: "do all": UI clarity, depth on every island, 11+ coverage, then deploy; CH-062 to CH-068;
+decision: D-038 (the last 7 untaught Year 3–6 objectives built: thousandths, decimal × and ÷, two unknowns,
+triangle and parallelogram area, lines, drawing to size (recognition only, partial); no statutory objective is
+untaught; `maths/decimal.ts` for exact decimals; CH-070 to CH-072; report `docs/product/reports/D-038-build-report.md`;
+READY FOR QA, nothing accepted). D-037 (Product Owner: "do all": UI clarity, depth on every island, 11+ coverage, then deploy; CH-062 to CH-068;
 report `docs/product/reports/D-037-build-report.md`; kit lessons guarded by `src/topics/kit/depth.test.ts`; new islands add
 content through `withExtras` and `<island>/extra.ts`; new Measures island; exam profiles ISEB/GL/CSSE/SEAG quote official
 pages, the rest unknown; READY FOR QA, nothing accepted; deployed to production 11 Nov at the Product Owner's request, CH-069). D-036 (animated explanations v2: blocks, picture and numbers with a child move in each, `Stage` in

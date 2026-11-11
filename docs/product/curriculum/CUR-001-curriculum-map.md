@@ -69,11 +69,11 @@ Each objective names one or more kinds. Every kind assumes the CUR-002 §4 contr
 
 | Year | Objectives | Addressed | Partial | Not addressed |
 |---|---:|---:|---:|---:|
-| 3 | 33 | 19 | 13 | 1 |
+| 3 | 33 | 20 | 13 | 0 |
 | 4 | 42 | 29 | 13 | 0 |
-| 5 | 47 | 24 | 22 | 1 |
-| 6 | 49 | 19 | 25 | 5 |
-| **All** | **171** | **91** | **73** | **7** |
+| 5 | 47 | 25 | 22 | 0 |
+| 6 | 49 | 23 | 26 | 0 |
+| **All** | **171** | **97** | **74** | **0** |
 
 ### 4.2 Fractions R1 dependencies
 
@@ -109,7 +109,7 @@ The R1 Fractions island has 8 skills: `fractions.equal-parts`, `.name`, `.repres
 | Y5.FRAC.4 | 5 | add and subtract fractions with the same denominator, and denominators that are multiples of the same number | **builds-on** | `fractions-2.add-same`<br>`fractions-2.add-related` | Addressed |
 | Y5.FRAC.5 | 5 | multiply proper fractions and mixed numbers by whole numbers, supported by materials and diagrams | **builds-on** | `fractions-2.multiply` | Partial. The preview multiplies a fraction by a whole number; mixed numbers are not confirmed. |
 | Y5.FRAC.6 | 5 | read and write decimal numbers as fractions [for example, 0.71 = 71/100 ] | **builds-on** | `decimals.as-fractions` | Addressed |
-| Y5.FRAC.7 | 5 | recognise and use thousandths and relate them to tenths, hundredths and decimal equivalents | **builds-on** | — | Not addressed. Thousandths are not taught. |
+| Y5.FRAC.7 | 5 | recognise and use thousandths and relate them to tenths, hundredths and decimal equivalents | **builds-on** | `decimals.thousandths` | Addressed |
 | Y5.FRAC.8 | 5 | round decimals with 2 decimal places to the nearest whole number and to 1 decimal place | **builds-on** | `decimals.compare-round` | Addressed |
 | Y5.FRAC.9 | 5 | read, write, order and compare numbers with up to 3 decimal places | **builds-on** | `decimals.compare-round`<br>`decimals.tenths-hundredths` | Partial. The decimals island covers tenths and hundredths, not 3 decimal places. |
 | Y5.MD.11 | 5 | solve problems involving multiplication and division, including scaling by simple fractions and problems involving simple rates | **builds-on** | `ratio-algebra.scaling`<br>`problem-solving.fractions-in-context` | Partial |
@@ -122,8 +122,8 @@ The R1 Fractions island has 8 skills: `fractions.equal-parts`, `.name`, `.repres
 | Y6.FRAC.5 | 6 | divide proper fractions by whole numbers [for example, 1/3 ÷ 2 = 1/6] | **builds-on** | `fractions-2.divide-whole` | Addressed |
 | Y6.FRAC.6 | 6 | associate a fraction with division and calculate decimal fraction equivalents [for example, 0.375] for a simple fraction [for example, 3/8] | **builds-on** | `decimals.as-fractions` | Partial. Fractions as division is not specifically taught. |
 | Y6.FRAC.7 | 6 | identify the value of each digit in numbers given to 3 decimal places and multiply and divide numbers by 10, 100 and 1,000 giving answers up to 3 decimal places | **builds-on** | `decimals.times-ten`<br>`decimals.tenths-hundredths` | Partial. Up to 2 decimal places and ×÷ by 10 and 100. |
-| Y6.FRAC.8 | 6 | multiply one-digit numbers with up to 2 decimal places by whole numbers | **builds-on** | — | Not addressed. Not taught. |
-| Y6.FRAC.9 | 6 | use written division methods in cases where the answer has up to 2 decimal places | **builds-on** | — | Not addressed. Not taught. |
+| Y6.FRAC.8 | 6 | multiply one-digit numbers with up to 2 decimal places by whole numbers | **builds-on** | `decimals.multiply-decimals` | Addressed |
+| Y6.FRAC.9 | 6 | use written division methods in cases where the answer has up to 2 decimal places | **builds-on** | `decimals.divide-decimals` | Addressed |
 
 **Reading this table.**
 - The island teaches 9 objectives, all from the Number: fractions strand (Y3.FRAC.2, Y3.FRAC.3, Y3.FRAC.4, Y3.FRAC.5, Y3.FRAC.6, Y3.FRAC.7, Y4.FRAC.1, Y4.FRAC.3, Y5.FRAC.2).
@@ -237,7 +237,7 @@ Source: <https://www.gov.uk/government/publications/national-curriculum-in-engla
 | Y3.GPS.1<br>draw 2-D shapes and make 3-D shapes using modelling materials; recognise 3-D shapes in different orientations and describe them | Draws 2-D shapes and makes 3-D shapes; recognises 3-D shapes in different orientations and describes them. | Y2.GPS.1; Y2.GPS.2 | 2-D, 3-D, face, edge, vertex, sides | Name a cuboid turned on its side | **R** Representation and concept | `shapes-angles.shapes` | **Partial**. Drawing and making shapes with modelling materials is a practical activity the screens can't deliver. |
 | Y3.GPS.2<br>recognise angles as a property of shape or a description of a turn | Recognises angles as a property of shape or a description of a turn. | Y2.GPD.2 rotation vocabulary | angle, turn, corner | The corner of a square; a quarter turn | **R** Representation and concept | `shapes-angles.turns`<br>`shapes-angles.angle-types` | **Addressed** |
 | Y3.GPS.3<br>identify right angles, recognise that 2 right angles make a half-turn, 3 make three-quarters of a turn and 4 a complete turn; identify whether angles are greater than or less than a right angle | Identifies right angles; knows 2 right angles make a half-turn, 3 three-quarters and 4 a full turn; says whether an angle is greater or less than a right angle. | Y3.GPS.2 | right angle, half turn, quarter turn, three-quarter turn, full turn | Is this angle bigger or smaller than a right angle? | **R** Representation and concept | `shapes-angles.turns`<br>`shapes-angles.angle-types` | **Addressed** |
-| Y3.GPS.4<br>identify horizontal and vertical lines and pairs of perpendicular and parallel lines | Identifies horizontal and vertical lines and pairs of perpendicular and parallel lines. | Y2.GPD.2 | horizontal, vertical, perpendicular, parallel | Which two edges of a window are parallel? | **V** Vocabulary, reading and writing | — | **Not addressed**. Line relationships are not taught by any island. |
+| Y3.GPS.4<br>identify horizontal and vertical lines and pairs of perpendicular and parallel lines | Identifies horizontal and vertical lines and pairs of perpendicular and parallel lines. | Y2.GPD.2 | horizontal, vertical, perpendicular, parallel | Which two edges of a window are parallel? | **V** Vocabulary, reading and writing | `shapes-angles.lines` | **Addressed** |
 
 #### Year 3 · Statistics
 
@@ -404,7 +404,7 @@ Source: <https://www.gov.uk/government/publications/national-curriculum-in-engla
 | Y5.FRAC.4<br>**R1: builds-on**<br>add and subtract fractions with the same denominator, and denominators that are multiples of the same number | Adds and subtracts fractions with the same denominator and with denominators that are multiples of the same number. | Y4.FRAC.4; Y5.FRAC.1 | same denominator, multiple, add, subtract | 1/2 + 3/8 = 7/8 | **P** Procedure | `fractions-2.add-same`<br>`fractions-2.add-related` | **Addressed** |
 | Y5.FRAC.5<br>**R1: builds-on**<br>multiply proper fractions and mixed numbers by whole numbers, supported by materials and diagrams | Multiplies proper fractions and mixed numbers by whole numbers, supported by materials and diagrams. | Y4.FRAC.3; Y5.FRAC.3 | multiply, whole number, mixed number, diagram | 3 × 2/5 = 6/5 = 1 1/5 | **P** Procedure | `fractions-2.multiply` | **Partial**. The preview multiplies a fraction by a whole number; mixed numbers are not confirmed. |
 | Y5.FRAC.6<br>**R1: builds-on**<br>read and write decimal numbers as fractions [for example, 0.71 = 71/100 ] | Reads and writes decimal numbers as fractions. | Y4.FRAC.5 | decimal, fraction, hundredths | 0.71 = 71/100 | **R** Representation and concept | `decimals.as-fractions` | **Addressed** |
-| Y5.FRAC.7<br>**R1: builds-on**<br>recognise and use thousandths and relate them to tenths, hundredths and decimal equivalents | Recognises and uses thousandths and relates them to tenths, hundredths and decimal equivalents. | Y4.FRAC.2 | thousandth, decimal place | 0.007 = 7/1,000 | **R** Representation and concept | — | **Not addressed**. Thousandths are not taught. |
+| Y5.FRAC.7<br>**R1: builds-on**<br>recognise and use thousandths and relate them to tenths, hundredths and decimal equivalents | Recognises and uses thousandths and relates them to tenths, hundredths and decimal equivalents. | Y4.FRAC.2 | thousandth, decimal place | 0.007 = 7/1,000 | **R** Representation and concept | `decimals.thousandths` | **Addressed** |
 | Y5.FRAC.8<br>**R1: builds-on**<br>round decimals with 2 decimal places to the nearest whole number and to 1 decimal place | Rounds decimals with 2 decimal places to the nearest whole number and to 1 decimal place. | Y4.FRAC.8 | round, decimal place | 3.76 to 1 d.p. is 3.8 | **P** Procedure | `decimals.compare-round` | **Addressed** |
 | Y5.FRAC.9<br>**R1: builds-on**<br>read, write, order and compare numbers with up to 3 decimal places | Reads, writes, orders and compares numbers with up to 3 decimal places. | Y4.FRAC.9 | order, compare, decimal places | Order 0.505, 0.55, 0.5 | **R** Representation and concept | `decimals.compare-round`<br>`decimals.tenths-hundredths` | **Partial**. The decimals island covers tenths and hundredths, not 3 decimal places. |
 | Y5.FRAC.10<br>**R1: builds-on**<br>solve problems involving number up to 3 decimal places | Solves problems involving numbers up to 3 decimal places. | Y5.FRAC.9 | decimal, problem | Add lengths 1.250 m and 0.375 m | **W** Problems in context | `decimals.add-subtract` | **Partial** |
@@ -495,8 +495,8 @@ Source: <https://www.gov.uk/government/publications/national-curriculum-in-engla
 | Y6.FRAC.5<br>**R1: builds-on**<br>divide proper fractions by whole numbers [for example, 1/3 ÷ 2 = 1/6] | Divides proper fractions by whole numbers. | Y6.FRAC.4 | divide, proper fraction | 1/3 ÷ 2 = 1/6 | **P** Procedure | `fractions-2.divide-whole` | **Addressed** |
 | Y6.FRAC.6<br>**R1: builds-on**<br>associate a fraction with division and calculate decimal fraction equivalents [for example, 0.375] for a simple fraction [for example, 3/8] | Associates a fraction with division and calculates decimal equivalents of simple fractions. | Y4.FRAC.6; Y5.FRAC.6 | fraction as division, decimal equivalent | 3/8 = 3 ÷ 8 = 0.375 | **R** Representation and concept + **P** Procedure | `decimals.as-fractions` | **Partial**. Fractions as division is not specifically taught. |
 | Y6.FRAC.7<br>**R1: builds-on**<br>identify the value of each digit in numbers given to 3 decimal places and multiply and divide numbers by 10, 100 and 1,000 giving answers up to 3 decimal places | Identifies the value of each digit in numbers given to 3 decimal places and multiplies and divides by 10, 100 and 1,000 with answers up to 3 decimal places. | Y5.MD.7; Y5.FRAC.9 | decimal places, multiply, divide | 0.047 × 100 = 4.7 | **R** Representation and concept | `decimals.times-ten`<br>`decimals.tenths-hundredths` | **Partial**. Up to 2 decimal places and ×÷ by 10 and 100. |
-| Y6.FRAC.8<br>**R1: builds-on**<br>multiply one-digit numbers with up to 2 decimal places by whole numbers | Multiplies 1-digit numbers with up to 2 decimal places by whole numbers. | Y5.FRAC.10 | multiply, decimal | 0.35 × 6 = 2.1 | **P** Procedure | — | **Not addressed**. Not taught. |
-| Y6.FRAC.9<br>**R1: builds-on**<br>use written division methods in cases where the answer has up to 2 decimal places | Uses written division methods where the answer has up to 2 decimal places. | Y6.ASMD.3 | divide, decimal answer | 7 ÷ 4 = 1.75 | **P** Procedure | — | **Not addressed**. Not taught. |
+| Y6.FRAC.8<br>**R1: builds-on**<br>multiply one-digit numbers with up to 2 decimal places by whole numbers | Multiplies 1-digit numbers with up to 2 decimal places by whole numbers. | Y5.FRAC.10 | multiply, decimal | 0.35 × 6 = 2.1 | **P** Procedure | `decimals.multiply-decimals` | **Addressed** |
+| Y6.FRAC.9<br>**R1: builds-on**<br>use written division methods in cases where the answer has up to 2 decimal places | Uses written division methods where the answer has up to 2 decimal places. | Y6.ASMD.3 | divide, decimal answer | 7 ÷ 4 = 1.75 | **P** Procedure | `decimals.divide-decimals` | **Addressed** |
 | Y6.FRAC.10<br>**R1: builds-on**<br>solve problems which require answers to be rounded to specified degrees of accuracy | Solves problems requiring answers rounded to specified degrees of accuracy. | Y5.FRAC.8; Y6.NPV.2 | round, degree of accuracy | 'Give your answer to 1 decimal place' | **W** Problems in context | `decimals.compare-round` | **Partial** |
 | Y6.FRAC.11<br>**R1: builds-on**<br>recall and use equivalences between simple fractions, decimals and percentages, including in different contexts | Recalls and uses equivalences between simple fractions, decimals and percentages, including in different contexts. | Y5.FRAC.12 | equivalent, fraction, decimal, percentage | 1/8 = 0.125 = 12.5% | **F** Fluency and recall + **W** Problems in context | `percentages.convert`<br>`decimals.as-fractions` | **Addressed** |
 
@@ -520,7 +520,7 @@ Source: <https://www.gov.uk/government/publications/national-curriculum-in-engla
 | Y6.ALG.1<br>use simple formulae | Uses simple formulae. | Y5.MD.10 | formula, substitute, variable | Cost = 3n + 2 when n = 4 | **R** Representation and concept | `ratio-algebra.formulas` | **Addressed** |
 | Y6.ALG.2<br>generate and describe linear number sequences | Generates and describes linear number sequences. | Y5.NPV.2 | sequence, term, rule, linear | Describe 3, 7, 11, 15 … | **R** Representation and concept | `ratio-algebra.sequences` | **Addressed**. The island also finds the nth term, which is beyond the statutory text (extension section). |
 | Y6.ALG.3<br>express missing number problems algebraically | Expresses missing number problems algebraically. | Y3.AS.4 | missing number, algebraic, unknown | □ + 7 = 15 as n + 7 = 15 | **R** Representation and concept | `ratio-algebra.equations` | **Addressed** |
-| Y6.ALG.4<br>find pairs of numbers that satisfy an equation with 2 unknowns | Finds pairs of numbers that satisfy an equation with 2 unknowns. | Y6.ALG.3 | equation, unknown, pair | a + b = 10 | **R** Representation and concept | — | **Not addressed**. Not taught. |
+| Y6.ALG.4<br>find pairs of numbers that satisfy an equation with 2 unknowns | Finds pairs of numbers that satisfy an equation with 2 unknowns. | Y6.ALG.3 | equation, unknown, pair | a + b = 10 | **R** Representation and concept | `ratio-algebra.two-unknowns` | **Addressed** |
 | Y6.ALG.5<br>enumerate possibilities of combinations of 2 variables | Enumerates possibilities of combinations of 2 variables. | Y3.MD.3 | combination, possibility, enumerate | List all ways to pay 10p with 1p, 2p and 5p coins | **W** Problems in context | `problem-solving.counting` | **Addressed** |
 
 #### Year 6 · Measurement
@@ -534,7 +534,7 @@ Source: <https://www.gov.uk/government/publications/national-curriculum-in-engla
 | Y6.MEAS.3<br>convert between miles and kilometres | Converts between miles and kilometres. | Y5.MEAS.2 | mile, kilometre, approximately | 5 miles is about 8 km | **F** Fluency and recall | `measures.miles-km` | **Addressed** |
 | Y6.MEAS.4<br>recognise that shapes with the same areas can have different perimeters and vice versa | Recognises that shapes with the same area can have different perimeters and vice versa. | Y5.MEAS.3; Y5.MEAS.4 | area, perimeter | Two rectangles with area 12 cm² and different perimeters | **X** Reasoning and explanation | `area-perimeter.compound`<br>`area-perimeter.missing-sides` | **Partial**. Not stated as a concept. |
 | Y6.MEAS.5<br>recognise when it is possible to use formulae for area and volume of shapes | Recognises when it is possible to use formulae for area and volume of shapes. | Y5.MEAS.4 | formula, area, volume | When can I use length × width? | **X** Reasoning and explanation | `area-perimeter.area-rectangles` | **Partial** |
-| Y6.MEAS.6<br>calculate the area of parallelograms and triangles | Calculates the area of parallelograms and triangles. | Y5.MEAS.4 | parallelogram, triangle, base, height | Triangle with base 8 cm and height 5 cm: 20 cm² | **P** Procedure | — | **Not addressed**. Not taught. |
+| Y6.MEAS.6<br>calculate the area of parallelograms and triangles | Calculates the area of parallelograms and triangles. | Y5.MEAS.4 | parallelogram, triangle, base, height | Triangle with base 8 cm and height 5 cm: 20 cm² | **P** Procedure | `area-perimeter.triangles-parallelograms` | **Addressed** |
 | Y6.MEAS.7<br>calculate, estimate and compare volume of cubes and cuboids using standard units, including cubic centimetres (cm³) and cubic metres (m³), and extending to other units [for example, mm³ and km³] | Calculates, estimates and compares the volume of cubes and cuboids in standard units. | Y5.MEAS.5 | volume, cubic centimetre, cuboid | 3 × 4 × 5 = 60 cm³ | **P** Procedure | `measures.volume` | **Partial**. Volume of cuboids in cm³ is calculated (D-037); comparing and estimating volumes, and cubic metres, are not practised. |
 
 #### Year 6 · Geometry: properties of shapes
@@ -543,7 +543,7 @@ Source: <https://www.gov.uk/government/publications/national-curriculum-in-engla
 
 | Objective | Outcome | Prerequisites | Vocabulary | Examples | Mastery evidence | Maps to | Coverage and gap |
 |---|---|---|---|---|---|---|---|
-| Y6.GPS.1<br>draw 2-D shapes using given dimensions and angles | Draws 2-D shapes using given dimensions and angles. | Y5.GPS.3 | draw, dimension, protractor | Draw a triangle with sides 5 cm and 6 cm and angle 40° between them | **P** Procedure | — | **Not addressed**. Not taught. |
+| Y6.GPS.1<br>draw 2-D shapes using given dimensions and angles | Draws 2-D shapes using given dimensions and angles. | Y5.GPS.3 | draw, dimension, protractor | Draw a triangle with sides 5 cm and 6 cm and angle 40° between them | **P** Procedure | `shapes-angles.construct` | **Partial**. Recognition only (D-038, the Product Owner's choice): the child checks drawings against given sides and angles and works out the angles a drawing will show, but does not draw. Drawing needs an on-screen ruler and protractor interaction, which is not built. |
 | Y6.GPS.2<br>recognise, describe and build simple 3-D shapes, including making nets | Recognises, describes and builds simple 3-D shapes, including making nets. | Y5.GPS.1 | net, 3-D shape, face | Which net makes a cube? | **R** Representation and concept | `shapes-angles.shapes`<br>`shapes-angles.nets` | **Partial**. Nets are recognised and matched to solids (D-037); building shapes cannot be done on screen. |
 | Y6.GPS.3<br>compare and classify geometric shapes based on their properties and sizes and find unknown angles in any triangles, quadrilaterals, and regular polygons | Compares and classifies shapes by properties and sizes and finds unknown angles in triangles, quadrilaterals and regular polygons. | Y4.GPS.1; Y5.GPS.4 | classify, polygon, angle, regular polygon | Angles in a quadrilateral sum to 360° | **P** Procedure | `shapes-angles.shapes`<br>`shapes-angles.angle-facts` | **Partial**. Triangles are covered; quadrilaterals and regular polygons are not confirmed. |
 | Y6.GPS.4<br>illustrate and name parts of circles, including radius, diameter and circumference and know that the diameter is twice the radius | Illustrates and names parts of circles, including radius, diameter and circumference; knows the diameter is twice the radius. | Y4.GPS.1 | radius, diameter, circumference | Diameter of a circle with radius 4 cm | **V** Vocabulary, reading and writing | `shapes-angles.circles` | **Addressed** |
@@ -593,12 +593,8 @@ Objectives **not addressed** by any existing skill, grouped by strand. These are
 
 | Strand | Not addressed |
 |---|---|
-| Geometry: properties of shapes | Y3.GPS.4, Y6.GPS.1 |
-| Number: fractions (including decimals and percentages) | Y5.FRAC.7, Y6.FRAC.8, Y6.FRAC.9 |
-| Algebra | Y6.ALG.4 |
-| Measurement | Y6.MEAS.6 |
 
-**Totals:** 7 not addressed, 73 partial, 91 addressed, of 171. Topics with nothing taught: measuring and converting length, mass and capacity, volume, symmetry, circles, primes, squares and cubes, order of operations, Roman numerals, long division, fraction multiplication and division, and measuring angles with a protractor.
+**Totals:** 0 not addressed, 74 partial, 97 addressed, of 171. Topics with nothing taught: measuring and converting length, mass and capacity, volume, symmetry, circles, primes, squares and cubes, order of operations, Roman numerals, long division, fraction multiplication and division, and measuring angles with a protractor.
 
 ## 8. Decisions needed
 

@@ -339,6 +339,16 @@ export const OBJECTIVES: CurriculumObjective[] = [
     ]
   },
   {
+    "id": "Y3.GPS.4",
+    "year": 3,
+    "strand": "Geometry: properties of shapes",
+    "status": "statutory",
+    "outcome": "Identifies horizontal and vertical lines and pairs of perpendicular and parallel lines.",
+    "skills": [
+      "shapes-angles.lines"
+    ]
+  },
+  {
     "id": "Y3.STAT.1",
     "year": 3,
     "strand": "Statistics",
@@ -1104,6 +1114,16 @@ export const OBJECTIVES: CurriculumObjective[] = [
     ]
   },
   {
+    "id": "Y5.FRAC.7",
+    "year": 5,
+    "strand": "Number: fractions (including decimals and percentages)",
+    "status": "statutory",
+    "outcome": "Recognises and uses thousandths and relates them to tenths, hundredths and decimal equivalents.",
+    "skills": [
+      "decimals.thousandths"
+    ]
+  },
+  {
     "id": "Y5.FRAC.8",
     "year": 5,
     "strand": "Number: fractions (including decimals and percentages)",
@@ -1513,6 +1533,26 @@ export const OBJECTIVES: CurriculumObjective[] = [
     ]
   },
   {
+    "id": "Y6.FRAC.8",
+    "year": 6,
+    "strand": "Number: fractions (including decimals and percentages)",
+    "status": "statutory",
+    "outcome": "Multiplies 1-digit numbers with up to 2 decimal places by whole numbers.",
+    "skills": [
+      "decimals.multiply-decimals"
+    ]
+  },
+  {
+    "id": "Y6.FRAC.9",
+    "year": 6,
+    "strand": "Number: fractions (including decimals and percentages)",
+    "status": "statutory",
+    "outcome": "Uses written division methods where the answer has up to 2 decimal places.",
+    "skills": [
+      "decimals.divide-decimals"
+    ]
+  },
+  {
     "id": "Y6.FRAC.10",
     "year": 6,
     "strand": "Number: fractions (including decimals and percentages)",
@@ -1608,6 +1648,16 @@ export const OBJECTIVES: CurriculumObjective[] = [
     ]
   },
   {
+    "id": "Y6.ALG.4",
+    "year": 6,
+    "strand": "Algebra",
+    "status": "statutory",
+    "outcome": "Finds pairs of numbers that satisfy an equation with 2 unknowns.",
+    "skills": [
+      "ratio-algebra.two-unknowns"
+    ]
+  },
+  {
     "id": "Y6.ALG.5",
     "year": 6,
     "strand": "Algebra",
@@ -1669,6 +1719,16 @@ export const OBJECTIVES: CurriculumObjective[] = [
     ]
   },
   {
+    "id": "Y6.MEAS.6",
+    "year": 6,
+    "strand": "Measurement",
+    "status": "statutory",
+    "outcome": "Calculates the area of parallelograms and triangles.",
+    "skills": [
+      "area-perimeter.triangles-parallelograms"
+    ]
+  },
+  {
     "id": "Y6.MEAS.7",
     "year": 6,
     "strand": "Measurement",
@@ -1676,6 +1736,16 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "outcome": "Calculates, estimates and compares the volume of cubes and cuboids in standard units.",
     "skills": [
       "measures.volume"
+    ]
+  },
+  {
+    "id": "Y6.GPS.1",
+    "year": 6,
+    "strand": "Geometry: properties of shapes",
+    "status": "statutory",
+    "outcome": "Draws 2-D shapes using given dimensions and angles.",
+    "skills": [
+      "shapes-angles.construct"
     ]
   },
   {
