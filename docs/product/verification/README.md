@@ -48,6 +48,8 @@ possible screen, state or behaviour is unchanged.
 
 ## Results
 
+`results/d039-live/` holds the production check on 11 Nov 2026 after the D-039 deployment (`main` at `dc4324e`): 14 page loads including the drawing lab, all 200 with the expected content, 0 console errors.
+
 `results/d039/` holds the runs on 11 Nov 2026 for D-039: the drawing lab drawn by pointer at both widths and by keyboard
 with exact values, 0 axe violations, 0 console errors, no animations under reduced motion (`draw-tool/report.json`);
 new-topics and text-scaling clean.

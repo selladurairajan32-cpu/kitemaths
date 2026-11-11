@@ -52,6 +52,10 @@ The results are in `verification/results/d039/`.
 - keyboard focus fell to the page when a stage's control disappeared; it now moves to the next control;
 - the live second-side reading sat under the ruler; it now sits beside the handle.
 
+**Deployment (CH-077):** `main` was fast-forwarded to `dc4324e` after CI passed. The live check made 14 loads (7 pages
+at 2 widths), including the drawing lab: all returned 200 with the expected content and no console errors. Deploying is
+not acceptance.
+
 ## 3. Limits
 - **Drawing is on screen,** with tools that snap to half-centimetres and whole degrees. It is not pencil-and-paper
   accuracy, and it doesn't teach holding a real protractor.

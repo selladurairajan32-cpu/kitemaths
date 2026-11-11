@@ -7,7 +7,7 @@ breaking changes, so read the relevant guide in `node_modules/next/dist/docs/` b
 ## Working rules (from the Product Owner, D-002, D-006, D-012)
 
 - **Development branch only:** `claude/pensive-pasteur-bs5979`. No pull request, merge or deployment unless the Product
-  Owner explicitly asks. Production is https://kitemaths.vercel.app (Vercel deploys `main`). R1 was merged to `main` and deployed on 9 Nov 2026 at the Product Owner's explicit request (D-027), the content differentiation changes the same day (D-029), the typography changes (D-031), the D-037 build (CH-069) and the D-038 build (CH-074); any further deployment still needs an explicit request.
+  Owner explicitly asks. Production is https://kitemaths.vercel.app (Vercel deploys `main`). R1 was merged to `main` and deployed on 9 Nov 2026 at the Product Owner's explicit request (D-027), the content differentiation changes the same day (D-029), the typography changes (D-031), the D-037 build (CH-069), the D-038 build (CH-074) and the D-039 build (CH-077); any further deployment still needs an explicit request.
 - **No change to existing child-facing screens** (appearance or behaviour) unless an item says so. Screen migration, the
   accessibility layout fixes and wiring new specs into the app are R1 work.
 - **Preserve the architecture; no broad rewrites.** Additive foundations and behaviour-preserving extraction only.
@@ -38,7 +38,7 @@ only accepted items may have `accepted` cases. Update `test-cases.csv` in the sa
 `docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Last recorded
 decision: D-039 (on-screen ruler-and-protractor drawing tool for Y6.GPS.1, `shapes-angles/explain/ConstructLab.tsx`,
 kit lab `triangle-construct`, `maths/geometry.ts`; Y6.GPS.1 addressed; CH-075; report
-`docs/product/reports/D-039-build-report.md`; READY FOR QA, nothing accepted). D-038 (the last 7 untaught Year 3–6 objectives built: thousandths, decimal × and ÷, two unknowns,
+`docs/product/reports/D-039-build-report.md`; READY FOR QA, nothing accepted; deployed 11 Nov, CH-077). D-038 (the last 7 untaught Year 3–6 objectives built: thousandths, decimal × and ÷, two unknowns,
 triangle and parallelogram area, lines, drawing to size (recognition only, partial); no statutory objective is
 untaught; `maths/decimal.ts` for exact decimals; CH-070 to CH-072; report `docs/product/reports/D-038-build-report.md`;
 READY FOR QA, nothing accepted; deployed to production 11 Nov, CH-074). D-037 (Product Owner: "do all": UI clarity, depth on every island, 11+ coverage, then deploy; CH-062 to CH-068;
