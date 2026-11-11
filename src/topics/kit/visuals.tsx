@@ -1,3 +1,4 @@
+import { ExtraVisual } from "./visuals-extra";
 import { num } from "./evaluate";
 import { BRAND, CORAL, Frame, INK, TONE } from "./frame";
 import { ShapeVisual } from "./visuals-shape";
@@ -537,6 +538,12 @@ export function MathVisual({ spec }: { spec: unknown }) {
       return <CoinsVisual v={v} />;
     case "rect":
       return <RectVisual v={v} />;
+    case "pie":
+    case "cuboid":
+    case "net":
+    case "symmetry":
+    case "circle":
+      return <ExtraVisual v={v} />;
     default:
       return <ShapeVisual v={v} />;
   }

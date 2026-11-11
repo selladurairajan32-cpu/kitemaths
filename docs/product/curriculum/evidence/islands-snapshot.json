@@ -167,6 +167,11 @@
     "id": "place-value.more-less",
     "title": "10, 100 and 1,000 more or less",
     "description": "Find 10, 100, 1,000 or 10,000 more or less than a number."
+   },
+   {
+    "id": "place-value.roman",
+    "title": "Roman numerals",
+    "description": "Read and write Roman numerals to 1,000, and years."
    }
   ],
   "lessons": [
@@ -208,6 +213,14 @@
     "objectives": [
      "Find 10, 100 or 1,000 more or less than a number",
      "Handle a 9 that rolls over"
+    ]
+   },
+   {
+    "id": "roman",
+    "title": "Roman numerals",
+    "objectives": [
+     "Read Roman numerals to 1,000",
+     "Write numbers and years in Roman numerals"
     ]
    }
   ]
@@ -576,6 +589,26 @@
     "id": "multiply-divide.factors",
     "title": "Factors and multiples",
     "description": "Find factors and multiples, and count the factors of a number."
+   },
+   {
+    "id": "multiply-divide.long-division",
+    "title": "Long division",
+    "description": "Divide by a 2-digit number, and decide what to do with a remainder."
+   },
+   {
+    "id": "multiply-divide.primes",
+    "title": "Prime numbers",
+    "description": "Spot primes to 100 and split numbers into prime factors."
+   },
+   {
+    "id": "multiply-divide.squares-cubes",
+    "title": "Square and cube numbers",
+    "description": "Work out squares and cubes, written with ² and ³."
+   },
+   {
+    "id": "multiply-divide.order-ops",
+    "title": "Order of operations",
+    "description": "Brackets first, then × and ÷, then + and −."
    }
   ],
   "lessons": [
@@ -615,6 +648,38 @@
     "objectives": [
      "Find the factors of a number",
      "Recognise multiples"
+    ]
+   },
+   {
+    "id": "long-division",
+    "title": "Long division",
+    "objectives": [
+     "Divide up to 4 digits by a 2-digit number",
+     "Decide what a remainder means in a problem"
+    ]
+   },
+   {
+    "id": "primes",
+    "title": "Prime numbers",
+    "objectives": [
+     "Know the primes up to 19 and find primes to 100",
+     "Write a number as a product of primes"
+    ]
+   },
+   {
+    "id": "squares-cubes",
+    "title": "Square and cube numbers",
+    "objectives": [
+     "Work out square numbers, written with ²",
+     "Work out cube numbers, written with ³"
+    ]
+   },
+   {
+    "id": "order",
+    "title": "Order of operations",
+    "objectives": [
+     "Use brackets first",
+     "Multiply and divide before adding and taking away"
     ]
    }
   ]
@@ -772,6 +837,16 @@
     "id": "fractions-2.multiply",
     "title": "Multiply fractions",
     "description": "Multiply a fraction by a whole number and find fractions of amounts."
+   },
+   {
+    "id": "fractions-2.multiply-fractions",
+    "title": "Fraction × fraction",
+    "description": "Multiply two proper fractions and simplify the answer."
+   },
+   {
+    "id": "fractions-2.divide-whole",
+    "title": "Fraction ÷ whole number",
+    "description": "Divide a proper fraction by a whole number."
    }
   ],
   "lessons": [
@@ -812,6 +887,22 @@
     "objectives": [
      "Multiply a fraction by a whole number",
      "Find a fraction of an amount"
+    ]
+   },
+   {
+    "id": "times-fractions",
+    "title": "Multiply two fractions",
+    "objectives": [
+     "Multiply two proper fractions",
+     "Write the answer in its simplest form"
+    ]
+   },
+   {
+    "id": "divide-fractions",
+    "title": "Divide a fraction by a whole number",
+    "objectives": [
+     "Divide a proper fraction by a whole number",
+     "Use it to share a fraction equally"
     ]
    }
   ]

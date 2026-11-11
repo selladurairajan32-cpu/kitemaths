@@ -1,4 +1,5 @@
-import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withExtras, withHints } from "@/topics/kit/define";
+import { fractions2Extra } from "./extra";
 import type { ChooseOption, Template } from "@/topics/kit/types";
 import { gcd, toMixed } from "@/maths/fraction";
 
@@ -422,7 +423,7 @@ const templates = withHints(baseTemplates, {
   "f2-multiply-stretch": () => ["Find how many have a pet first: divide by 4, multiply by 3.", "Then find a third of that number."],
 });
 
-export const fractions2 = defineTopic({
+export const fractions2 = defineTopic(withExtras({
   id: T,
   title: "Fractions 2",
   subtitle: "Simplest form, mixed numbers, adding and subtracting, and multiplying fractions",
@@ -657,4 +658,4 @@ export const fractions2 = defineTopic({
     { lessonId: "add-related", template: "f2-add-related" },
     { lessonId: "multiply", template: "f2-times-whole" },
   ],
-});
+}, fractions2Extra));

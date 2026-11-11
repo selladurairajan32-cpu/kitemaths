@@ -80,7 +80,21 @@ export type ShapeVisualSpec =
   /** A table with a header row. */
   | { kind: "table"; head: string[]; rows: string[][] }
   /** A line graph. */
-  | { kind: "linegraph"; points: { label: string; value: number }[]; min: number; max: number; step: number; axis?: string };
+  | { kind: "linegraph"; points: { label: string; value: number }[]; min: number; max: number; step: number; axis?: string }
+  | ExtraVisualSpec;
+
+/** D-037 pictures for the new KS2 topics (drawn in `visuals-extra.tsx`). */
+export type ExtraVisualSpec =
+  /** A pie chart: each slice's share of the total, labelled. */
+  | { kind: "pie"; slices: { label: string; value: number }[]; total?: string }
+  /** A cuboid drawn in 3-D with its edges labelled; `cubes` draws the unit cubes on the visible faces. */
+  | { kind: "cuboid"; l: number; w: number; h: number; unit?: string; cubes?: boolean }
+  /** Squares joined edge to edge on a grid (column, row): a net of a cube, or not. Or the net of a named solid. */
+  | { kind: "net"; cells?: [number, number][]; solid?: "square-pyramid" | "triangular-prism" | "tetrahedron" }
+  /** A squared grid with shaded cells and a dashed mirror line; `reflected` also shades the reflection. */
+  | { kind: "symmetry"; size: number; cells: [number, number][]; mirror: "vertical" | "horizontal"; reflected?: boolean }
+  /** A circle with its centre and, if asked, a radius and a diameter, labelled. */
+  | { kind: "circle"; radius?: string; diameter?: string; centre?: boolean };
 
 export type ShapeName =
   | "square"

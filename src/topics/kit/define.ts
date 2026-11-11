@@ -221,3 +221,21 @@ export function withAnswer<T>(r: () => number, right: T, wrong: T[]): { options:
   options.splice(answer, 0, right);
   return { options, answer };
 }
+
+/** New skills, lessons and question makers added to an island in their own file (D-037: missing KS2 topics). */
+export type TopicExtra = Pick<TopicSpec, "skills" | "lessons" | "lessonIcons" | "templates" | "misconceptions" | "placement">;
+/** An island's spec with extra content appended after its own, in order. */
+export function withExtras(spec: TopicSpec, ...extras: TopicExtra[]): TopicSpec {
+  return extras.reduce<TopicSpec>(
+    (s, e) => ({
+      ...s,
+      skills: [...s.skills, ...e.skills],
+      lessons: [...s.lessons, ...e.lessons],
+      lessonIcons: { ...s.lessonIcons, ...e.lessonIcons },
+      templates: [...s.templates, ...e.templates],
+      misconceptions: [...s.misconceptions, ...e.misconceptions],
+      placement: [...s.placement, ...e.placement],
+    }),
+    spec,
+  );
+}

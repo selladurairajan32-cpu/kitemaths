@@ -1,4 +1,5 @@
-import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withExtras, withHints } from "@/topics/kit/define";
+import { romanNumerals } from "./extra";
 import { num } from "@/topics/kit/evaluate";
 import type { PlaceColumn, Template, Rng } from "@/topics/kit/types";
 import { PLACE, digitIn } from "@/maths/place-value";
@@ -415,7 +416,7 @@ const templates = withHints(baseTemplates, {
   "pv-more-stretch": () => ["Add 1,000 first.", "Then add 100: watch the hundreds roll over."],
 });
 
-export const placeValue = defineTopic({
+export const placeValue = defineTopic(withExtras({
   id: T,
   title: "Place value",
   subtitle: "What every digit is worth: reading, writing, partitioning and comparing numbers up to a million",
@@ -694,4 +695,4 @@ export const placeValue = defineTopic({
     { lessonId: "compare", template: "pv-compare" },
     { lessonId: "more-less", template: "pv-more-less" },
   ],
-});
+}, romanNumerals));

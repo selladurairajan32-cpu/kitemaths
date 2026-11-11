@@ -1,4 +1,5 @@
-import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withExtras, withHints } from "@/topics/kit/define";
+import { multiplyDivideExtra } from "./extra";
 import { num } from "@/topics/kit/evaluate";
 import type { Template } from "@/topics/kit/types";
 import { factors, gcdOf } from "@/maths/integer";
@@ -517,7 +518,7 @@ const templates = withHints(baseTemplates, {
   "md-factor-stretch": () => ["Cross out the multiples that don't divide the second number exactly.", "Only one number should be left."],
 });
 
-export const multiplyDivide = defineTopic({
+export const multiplyDivide = defineTopic(withExtras({
   id: T,
   title: "Multiply and divide",
   subtitle: "Multiply and divide by 10, 100 and 1,000, short and long multiplication, division and factors",
@@ -798,4 +799,4 @@ export const multiplyDivide = defineTopic({
     { lessonId: "divide", template: "md-div" },
     { lessonId: "factors", template: "md-factor" },
   ],
-});
+}, multiplyDivideExtra));
