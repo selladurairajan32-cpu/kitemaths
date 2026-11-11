@@ -1,7 +1,7 @@
 // Usage: node docs/product/verification/live-check.cjs <outDir>
 // D-037 deployment check on https://kitemaths.vercel.app with cache-busting loads: Home, the Measures island, the Long
-// multiplication animated step 4, a Measures lesson, the D-038 thousandths lesson and the mock with the ISEB profile, at
-// 390 and 1280px. Records the
+// multiplication animated step 4, a Measures lesson, the D-038 thousandths lesson, the D-039 drawing lab and the mock
+// with the ISEB profile, at 390 and 1280px. Records the
 // HTTP status, one content check per page and console errors. Developer evidence, not independent QA.
 const { chromium } = require('playwright');
 const OUT = process.argv[2]; const BASE = 'https://kitemaths.vercel.app';
@@ -23,6 +23,10 @@ const cb = () => `?cb=${Date.now()}`;
     await go('measures-volume', '/t/measures/lesson/volume/1', async () => (await p.getByText('Layers of cubes').count()) > 0 && (await p.locator('figure[aria-label*="cuboid"]').count()) > 0);
     // D-038: one of the last 7 objectives (thousandths), with its new two-column table.
     await go('decimals-thousandths', '/t/decimals/lesson/thousandths/1', async () => (await p.getByText('Three places after the point').count()) > 0 && (await p.getByText('6 thousandths = 0.006').count()) > 0);
+    // D-039: the drawing lab (Drawing to size, step 4) shows its ruler handle.
+    await p.goto(BASE + '/t/shapes-angles/lesson/construct/1' + cb(), { waitUntil: 'networkidle' });
+    await p.evaluate(() => { const s = JSON.parse(localStorage.getItem('kite-maths:v2')); s.topics['shapes-angles'].lessons.construct = { step: 3, furthestStep: 3, completed: false }; localStorage.setItem('kite-maths:v2', JSON.stringify(s)); });
+    await go('draw-tool', '/t/shapes-angles/lesson/construct/4', async () => (await p.getByRole('slider', { name: 'Ruler: length of the base' }).count()) > 0);
     await go('mock', '/t/mock-exams/mock', async () => { await p.getByRole('button', { name: /^ISEB Common Pre-Tests/ }).click(); return (await p.getByText(/40 minutes/).count()) > 0 && (await p.getByRole('button', { name: 'Answer sheet (A to E)' }).count()) > 0; });
   }
   require('fs').writeFileSync(`${OUT}/report.json`, JSON.stringify(report, null, 1));
