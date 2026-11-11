@@ -62,6 +62,10 @@ The results are in `verification/results/d038/`.
 - a triangle side label sat on its line;
 - the thousandths table wrapped its headings on a phone.
 
+**Deployment (CH-074):** `main` was fast-forwarded to `02d023b` after CI passed. The live check
+(`verification/live-check.cjs`) made 12 loads (6 pages at 2 widths): all returned 200 with the expected content and no
+console errors. Deploying is not acceptance.
+
 ## 3. Limits
 - **Y6.GPS.1 is partial.** The child checks drawings and works out angles, but does not draw. Drawing needs an on-screen
   ruler and protractor, which is not built.

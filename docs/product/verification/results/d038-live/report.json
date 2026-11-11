@@ -1,0 +1,53 @@
+{
+ "errors": [],
+ "checks": {
+  "phone-home": {
+   "status": 200,
+   "ok": true
+  },
+  "phone-island": {
+   "status": 200,
+   "ok": true
+  },
+  "phone-pilot-step4": {
+   "status": 200,
+   "ok": true
+  },
+  "phone-measures-volume": {
+   "status": 200,
+   "ok": true
+  },
+  "phone-decimals-thousandths": {
+   "status": 200,
+   "ok": true
+  },
+  "phone-mock": {
+   "status": 200,
+   "ok": true
+  },
+  "desk-home": {
+   "status": 200,
+   "ok": true
+  },
+  "desk-island": {
+   "status": 200,
+   "ok": true
+  },
+  "desk-pilot-step4": {
+   "status": 200,
+   "ok": true
+  },
+  "desk-measures-volume": {
+   "status": 200,
+   "ok": true
+  },
+  "desk-decimals-thousandths": {
+   "status": 200,
+   "ok": true
+  },
+  "desk-mock": {
+   "status": 200,
+   "ok": true
+  }
+ }
+}

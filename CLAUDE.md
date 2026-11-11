@@ -7,7 +7,7 @@ breaking changes, so read the relevant guide in `node_modules/next/dist/docs/` b
 ## Working rules (from the Product Owner, D-002, D-006, D-012)
 
 - **Development branch only:** `claude/pensive-pasteur-bs5979`. No pull request, merge or deployment unless the Product
-  Owner explicitly asks. Production is https://kitemaths.vercel.app (Vercel deploys `main`). R1 was merged to `main` and deployed on 9 Nov 2026 at the Product Owner's explicit request (D-027), the content differentiation changes the same day (D-029), the typography changes (D-031), and the D-037 build (CH-069); any further deployment still needs an explicit request.
+  Owner explicitly asks. Production is https://kitemaths.vercel.app (Vercel deploys `main`). R1 was merged to `main` and deployed on 9 Nov 2026 at the Product Owner's explicit request (D-027), the content differentiation changes the same day (D-029), the typography changes (D-031), the D-037 build (CH-069) and the D-038 build (CH-074); any further deployment still needs an explicit request.
 - **No change to existing child-facing screens** (appearance or behaviour) unless an item says so. Screen migration, the
   accessibility layout fixes and wiring new specs into the app are R1 work.
 - **Preserve the architecture; no broad rewrites.** Additive foundations and behaviour-preserving extraction only.
@@ -39,7 +39,7 @@ only accepted items may have `accepted` cases. Update `test-cases.csv` in the sa
 decision: D-038 (the last 7 untaught Year 3–6 objectives built: thousandths, decimal × and ÷, two unknowns,
 triangle and parallelogram area, lines, drawing to size (recognition only, partial); no statutory objective is
 untaught; `maths/decimal.ts` for exact decimals; CH-070 to CH-072; report `docs/product/reports/D-038-build-report.md`;
-READY FOR QA, nothing accepted). D-037 (Product Owner: "do all": UI clarity, depth on every island, 11+ coverage, then deploy; CH-062 to CH-068;
+READY FOR QA, nothing accepted; deployed to production 11 Nov, CH-074). D-037 (Product Owner: "do all": UI clarity, depth on every island, 11+ coverage, then deploy; CH-062 to CH-068;
 report `docs/product/reports/D-037-build-report.md`; kit lessons guarded by `src/topics/kit/depth.test.ts`; new islands add
 content through `withExtras` and `<island>/extra.ts`; new Measures island; exam profiles ISEB/GL/CSSE/SEAG quote official
 pages, the rest unknown; READY FOR QA, nothing accepted; deployed to production 11 Nov at the Product Owner's request, CH-069). D-036 (animated explanations v2: blocks, picture and numbers with a child move in each, `Stage` in
