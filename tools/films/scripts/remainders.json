@@ -1,0 +1,110 @@
+{
+ "note": "Generated from the explanation script by src/topics/kit/explainScripts.test.ts. Do not edit.",
+ "topicId": "multiply-divide",
+ "concept": "remainders",
+ "title": "Remainders in real life",
+ "cues": [
+  {
+   "id": "hook",
+   "start": 0,
+   "end": 8,
+   "caption": "Fifty children are going to the zoo. Each minibus holds twelve. How many minibuses do they need?",
+   "say": "Fifty children are going to the zoo. Each minibus holds twelve. How many minibuses do they need?"
+  },
+  {
+   "id": "predict",
+   "start": 8,
+   "end": 14.5,
+   "caption": "What do you think? Have a go in your head.",
+   "say": "What do you think? Have a go in your head. [think]"
+  },
+  {
+   "id": "divide",
+   "start": 14.5,
+   "end": 24.5,
+   "caption": "Fifty divided by twelve is four, remainder two. Four minibuses are full, and two children are left over.",
+   "say": "Fifty divided by twelve is four, remainder two. [pause] Four minibuses are full. And two children are left over."
+  },
+  {
+   "id": "mistake",
+   "start": 24.5,
+   "end": 31.5,
+   "caption": "Some people say four minibuses. But then two children stay behind!",
+   "say": "Some people say four minibuses. [pause] But then two children would stay behind!"
+  },
+  {
+   "id": "up",
+   "start": 31.5,
+   "end": 38.5,
+   "caption": "They need one more minibus. So the answer is five. We round up.",
+   "say": "They need one more minibus. [pause] So the answer is five. We round up."
+  },
+  {
+   "id": "down",
+   "start": 38.5,
+   "end": 54,
+   "caption": "But in a different story, pens come in packs of twelve. With fifty pens, we can make four full packs. The two extra pens aren't a pack, so we round down.",
+   "say": "But here's a different story. Pens come in packs of twelve. With fifty pens, we can make four full packs. [pause] The two extra pens aren't a pack. So this time, we round down."
+  },
+  {
+   "id": "left",
+   "start": 54,
+   "end": 61.5,
+   "caption": "And if the question asks how many are left over, the answer is the remainder: two.",
+   "say": "And if the question asks how many are left over? [pause] The answer is the remainder. Two."
+  },
+  {
+   "id": "rule",
+   "start": 61.5,
+   "end": 72,
+   "caption": "The rule: divide, then ask what the remainder means. Round up, round down, or the remainder is the answer.",
+   "say": "So here's the rule. Divide, then ask what the remainder means. [pause] Round up, round down, or the remainder is the answer."
+  },
+  {
+   "id": "your-turn",
+   "start": 72,
+   "end": 90,
+   "caption": "Your turn: 26 eggs go in boxes of 6. How many boxes are needed? Twenty-six divided by six is four, remainder two. The two eggs need a box too, so five boxes.",
+   "say": "Your turn. Twenty six eggs go in boxes of six. How many boxes are needed? [think] Twenty six divided by six is four, remainder two. [pause] The two eggs need a box too. So five boxes. Well done!"
+  },
+  {
+   "id": "recap",
+   "start": 90,
+   "end": 97,
+   "caption": "Remember: after you divide, think about what the remainder means in the story.",
+   "say": "Remember. After you divide, think about what the remainder means in the story. Great work!"
+  }
+ ],
+ "beats": [
+  {
+   "id": "hook",
+   "seconds": 11.5,
+   "say": "Fifty children are going to the zoo. Each minibus holds twelve children. How many minibuses do they need? [think]"
+  },
+  {
+   "id": "divide",
+   "seconds": 11,
+   "say": "Fifty divided by twelve is four, remainder two. [pause] Four minibuses are full. And two children are left over."
+  },
+  {
+   "id": "up",
+   "seconds": 11,
+   "say": "So is the answer four? No! The two children can't stay behind. [pause] They need one more minibus. Five minibuses!"
+  },
+  {
+   "id": "down",
+   "seconds": 18,
+   "say": "Now a different story. Pens come in packs of twelve, and we have fifty pens. How many full packs can we make? [pause] Four. The two extra pens aren't a full pack. So this time, we round down."
+  },
+  {
+   "id": "left",
+   "seconds": 9.5,
+   "say": "And if the question asks how many pens are left over? [pause] Then the answer is the remainder. Two."
+  },
+  {
+   "id": "rule",
+   "seconds": 12,
+   "say": "So here's the rule. Divide, then ask what the remainder means. [pause] Round up, round down, or the remainder is the answer."
+  }
+ ]
+}

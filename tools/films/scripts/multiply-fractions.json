@@ -1,0 +1,110 @@
+{
+ "note": "Generated from the explanation script by src/topics/kit/explainScripts.test.ts. Do not edit.",
+ "topicId": "fractions-2",
+ "concept": "multiply-fractions",
+ "title": "Multiplying fractions",
+ "cues": [
+  {
+   "id": "hook",
+   "start": 0,
+   "end": 8.5,
+   "caption": "Half a chocolate bar is left. Mo eats one third of what's left. How much of the whole bar does Mo eat?",
+   "say": "Half a chocolate bar is left. Mo eats one third of what's left. How much of the whole bar does Mo eat?"
+  },
+  {
+   "id": "predict",
+   "start": 8.5,
+   "end": 15,
+   "caption": "What do you think? Have a go in your head.",
+   "say": "What do you think? Have a go in your head. [think]"
+  },
+  {
+   "id": "mistake",
+   "start": 15,
+   "end": 24.5,
+   "caption": "Some people think multiplying always makes things bigger. But a third of a half must be less than a half!",
+   "say": "Some people think multiplying always makes things bigger. [pause] But a third of a half must be less than a half!"
+  },
+  {
+   "id": "half",
+   "start": 24.5,
+   "end": 32.5,
+   "caption": "Here's the whole bar. Half of it is left, so we shade one of the two halves.",
+   "say": "Here's the whole bar. Half of it is left. [pause] So we shade one of the two halves."
+  },
+  {
+   "id": "third",
+   "start": 32.5,
+   "end": 41,
+   "caption": "Now cut the bar into thirds the other way. One third of the half is just one small piece.",
+   "say": "Now cut the bar into thirds, the other way. [pause] One third of the half is just one small piece."
+  },
+  {
+   "id": "count",
+   "start": 41,
+   "end": 50,
+   "caption": "The whole bar is now two times three: six pieces. Mo eats one of them. One sixth!",
+   "say": "The whole bar is now two times three. Six pieces. [pause] Mo eats one of them. One sixth!"
+  },
+  {
+   "id": "rule",
+   "start": 50,
+   "end": 60.5,
+   "caption": "So one half times one third is one sixth. Multiply the tops, one times one. Multiply the bottoms, two times three.",
+   "say": "So one half times one third is one sixth. [pause] Multiply the tops. One times one. Multiply the bottoms. Two times three."
+  },
+  {
+   "id": "smaller",
+   "start": 60.5,
+   "end": 69,
+   "caption": "One sixth is smaller than both. Multiplying by a fraction less than one makes it smaller.",
+   "say": "One sixth is smaller than both! [pause] Multiplying by a fraction less than one makes it smaller."
+  },
+  {
+   "id": "your-turn",
+   "start": 69,
+   "end": 86.5,
+   "caption": "Your turn: what is two thirds times one quarter? Two times one is two. Three times four is twelve. Two twelfths, which is one sixth.",
+   "say": "Your turn. What is two thirds times one quarter? [think] Two times one is two. Three times four is twelve. [pause] Two twelfths. And that's the same as one sixth. Well done!"
+  },
+  {
+   "id": "recap",
+   "start": 86.5,
+   "end": 94.5,
+   "caption": "Remember: times a fraction means a fraction of it. Multiply the tops, multiply the bottoms.",
+   "say": "Remember. Times a fraction means a fraction of it. Multiply the tops. Multiply the bottoms. Great work!"
+  }
+ ],
+ "beats": [
+  {
+   "id": "hook",
+   "seconds": 11.5,
+   "say": "Half a chocolate bar is left. Mo eats one third of what's left. How much of the whole bar does Mo eat? [think]"
+  },
+  {
+   "id": "half",
+   "seconds": 9,
+   "say": "Here's the whole bar. Half of it is left. [pause] So we shade one of the two halves."
+  },
+  {
+   "id": "third",
+   "seconds": 9.5,
+   "say": "Now cut the bar into thirds, the other way. [pause] One third of the half is just one small piece."
+  },
+  {
+   "id": "count",
+   "seconds": 10.5,
+   "say": "The whole bar is now two times three. Six pieces. [pause] Mo eats one of them. One sixth of the bar!"
+  },
+  {
+   "id": "rule",
+   "seconds": 13.5,
+   "say": "So one half times one third is one sixth. [pause] Multiply the tops. One times one is one. Multiply the bottoms. Two times three is six."
+  },
+  {
+   "id": "smaller",
+   "seconds": 12.5,
+   "say": "And look. One sixth is smaller than a half, and smaller than a third. [pause] Multiplying by a fraction less than one makes it smaller."
+  }
+ ]
+}

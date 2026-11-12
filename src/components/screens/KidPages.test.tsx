@@ -7,7 +7,7 @@ import { topicLearner } from "@/engine/progress";
 import type { ItemResult } from "@/engine/types";
 import { getLearner, resetLearner, updateLearner } from "@/lib/store";
 import { TOPICS, topicById } from "@/topics";
-import { journeyFor } from "@/topics/kit/journeys";
+import { journeyFor, JOURNEYS } from "@/topics/kit/journeys";
 import { activeTopic } from "@/topics/recommend";
 import { WORLDS } from "@/topics/worlds";
 import { KidHomeScreen } from "./KidHomeScreen";
@@ -57,7 +57,7 @@ describe("kid pages (D-043 step 3)", () => {
     expect(screen.getByText(/Fractions 2 · Step 3 of 5: Apply/)).toBeTruthy();
     expect(screen.getByRole("link", { name: /^Continue/ }).getAttribute("href")).toBe("/t/fractions-2/learn/add-different");
     expect(screen.getByRole("heading", { name: "Today's plan" })).toBeTruthy();
-    expect(within(screen.getByRole("heading", { name: "Learn a new idea with Emma" }).parentElement!).getAllByRole("link")).toHaveLength(2);
+    expect(within(screen.getByRole("heading", { name: "Learn a new idea with Emma" }).parentElement!).getAllByRole("link")).toHaveLength(JOURNEYS.length);
   });
 
   it("shows every topic in a grid with its progress, filtered by world", async () => {

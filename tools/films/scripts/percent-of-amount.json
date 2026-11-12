@@ -1,0 +1,115 @@
+{
+ "note": "Generated from the explanation script by src/topics/kit/explainScripts.test.ts. Do not edit.",
+ "topicId": "percentages",
+ "concept": "percent-of-amount",
+ "title": "Percentages of amounts",
+ "cues": [
+  {
+   "id": "hook",
+   "start": 0,
+   "end": 8,
+   "caption": "A bike costs eighty pounds. In the sale, it has 35% off. How much money is that?",
+   "say": "A bike costs eighty pounds. In the sale, it has thirty five percent off. How much money is that?"
+  },
+  {
+   "id": "predict",
+   "start": 8,
+   "end": 14.5,
+   "caption": "What do you think? Have a go in your head.",
+   "say": "What do you think? Have a go in your head. [think]"
+  },
+  {
+   "id": "mistake",
+   "start": 14.5,
+   "end": 26,
+   "caption": "Some people divide eighty by thirty-five. That's only about two pounds. Far too small! Per cent means out of every hundred.",
+   "say": "Some people divide eighty by thirty five. That's only about two pounds. Far too small! [pause] Per cent means out of every hundred."
+  },
+  {
+   "id": "bar",
+   "start": 26,
+   "end": 37,
+   "caption": "Let's draw the eighty pounds as a bar: one hundred percent. Cut it into ten equal parts. Each part is ten percent.",
+   "say": "Let's draw the eighty pounds as a bar. One hundred percent. [pause] Cut it into ten equal parts. Each part is ten percent."
+  },
+  {
+   "id": "ten",
+   "start": 37,
+   "end": 45,
+   "caption": "Ten percent of eighty is eighty divided by ten. That's eight pounds in each part.",
+   "say": "Ten percent of eighty is eighty divided by ten. [pause] That's eight pounds in each part."
+  },
+  {
+   "id": "build",
+   "start": 45,
+   "end": 56,
+   "caption": "Thirty-five percent is three parts and half a part. Three eights are twenty-four. Half of eight is four.",
+   "say": "Thirty five percent is three parts, and half a part. [pause] Three eights are twenty four. And half of eight is four."
+  },
+  {
+   "id": "total",
+   "start": 56,
+   "end": 66,
+   "caption": "Twenty-four plus four is twenty-eight. So 35% of eighty pounds is twenty-eight pounds off!",
+   "say": "Twenty four plus four is twenty eight. [pause] So thirty five percent of eighty pounds is twenty eight pounds off!"
+  },
+  {
+   "id": "rule",
+   "start": 66,
+   "end": 74.5,
+   "caption": "The rule: find ten percent by dividing by ten. Then build the percentage you need.",
+   "say": "So here's the rule. Find ten percent by dividing by ten. [pause] Then build the percentage you need."
+  },
+  {
+   "id": "your-turn",
+   "start": 74.5,
+   "end": 90.5,
+   "caption": "Your turn: what is 15% of sixty? Ten percent is six. Five percent is three. So fifteen percent is nine.",
+   "say": "Your turn. What is fifteen percent of sixty? [think] Ten percent is six. Five percent is half of that, three. [pause] So fifteen percent is nine. Well done!"
+  },
+  {
+   "id": "recap",
+   "start": 90.5,
+   "end": 97.5,
+   "caption": "Remember: per cent means out of every hundred. Find ten percent first.",
+   "say": "Remember. Per cent means out of every hundred. Find ten percent first. Great work!"
+  }
+ ],
+ "beats": [
+  {
+   "id": "hook",
+   "seconds": 11.5,
+   "say": "A bike costs eighty pounds. In the sale, it has thirty five percent off. How much money is that? [think]"
+  },
+  {
+   "id": "mistake",
+   "seconds": 13,
+   "say": "Some people work out eighty divided by thirty five. That's only about two pounds. Far too small! [pause] Per cent means out of every hundred."
+  },
+  {
+   "id": "bar",
+   "seconds": 12,
+   "say": "Let's draw the eighty pounds as a bar. That's one hundred percent. [pause] Cut it into ten equal parts. Each part is ten percent."
+  },
+  {
+   "id": "ten",
+   "seconds": 10,
+   "say": "Ten percent of eighty is eighty divided by ten. That's eight. [pause] So each part is eight pounds."
+  },
+  {
+   "id": "build",
+   "seconds": 16.5,
+   "say": "Thirty five percent is three ten percent parts, and half a part. [pause] Thirty percent is three times eight. Twenty four pounds. And five percent is half of eight. Four pounds."
+  },
+  {
+   "id": "total",
+   "seconds": 11,
+   "say": "Twenty four plus four is twenty eight. [pause] So thirty five percent of eighty pounds is twenty eight pounds off!"
+  },
+  {
+   "id": "rule",
+   "seconds": 9.5,
+   "say": "So here's the rule. Find ten percent by dividing by ten. [pause] Then build the percentage you need."
+  }
+ ]
+}

@@ -55,7 +55,7 @@ export function CheckpointCard<S>({ chapters, state, dispatch }: { chapters: Cha
         <label htmlFor={`${id}-input`} className="sr-only">Your answer</label>
         <input
           id={`${id}-input`}
-          inputMode="numeric"
+          inputMode="decimal"
           autoComplete="off"
           value={value}
           onChange={(e) => setValue(e.target.value.replace(/[^\d]/g, "").slice(0, 5))}

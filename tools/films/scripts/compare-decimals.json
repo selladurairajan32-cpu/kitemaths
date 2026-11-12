@@ -1,0 +1,110 @@
+{
+ "note": "Generated from the explanation script by src/topics/kit/explainScripts.test.ts. Do not edit.",
+ "topicId": "decimals",
+ "concept": "compare-decimals",
+ "title": "Comparing decimals",
+ "cues": [
+  {
+   "id": "hook",
+   "start": 0,
+   "end": 9,
+   "caption": "Amy's bean plant grew 0.4 metres. Ben's grew 0.35 metres. Whose plant grew more?",
+   "say": "Amy's bean plant grew nought point four metres. Ben's grew nought point three five metres. Whose plant grew more?"
+  },
+  {
+   "id": "predict",
+   "start": 9,
+   "end": 15.5,
+   "caption": "What do you think? Have a go in your head.",
+   "say": "What do you think? Have a go in your head. [think]"
+  },
+  {
+   "id": "mistake",
+   "start": 15.5,
+   "end": 25,
+   "caption": "Ben says his grew more, because 35 is bigger than 4. But is a longer number always bigger?",
+   "say": "Ben says his grew more, because thirty five is bigger than four. [pause] But is a longer number always bigger?"
+  },
+  {
+   "id": "columns",
+   "start": 25,
+   "end": 36,
+   "caption": "Let's use place-value columns. 0.4 has 4 tenths. 0.35 has 3 tenths and 5 hundredths.",
+   "say": "Let's use place-value columns. Nought point four has four tenths. [pause] Nought point three five has three tenths, and five hundredths."
+  },
+  {
+   "id": "tenths",
+   "start": 36,
+   "end": 46.5,
+   "caption": "Compare the biggest place first: the tenths. 4 tenths is more than 3 tenths. So 0.4 is bigger!",
+   "say": "Compare the biggest place first. That's the tenths. [pause] Four tenths is more than three tenths. So nought point four is bigger!"
+  },
+  {
+   "id": "zero",
+   "start": 46.5,
+   "end": 60.5,
+   "caption": "Here's a trick: fill the gap with a zero. 0.4 is the same as 0.40: forty hundredths. 0.35 is thirty-five hundredths.",
+   "say": "Here's a trick. Fill the gap with a zero. Nought point four is the same as nought point four nought. That's forty hundredths. [pause] Nought point three five is thirty five hundredths."
+  },
+  {
+   "id": "grid",
+   "start": 60.5,
+   "end": 71.5,
+   "caption": "On a hundred square, 0.4 fills forty squares, and 0.35 fills thirty-five. Amy's plant grew more!",
+   "say": "On a hundred square, nought point four fills forty squares. And nought point three five fills thirty five. [pause] Amy's plant grew more!"
+  },
+  {
+   "id": "rule",
+   "start": 71.5,
+   "end": 80,
+   "caption": "The rule: line up the points, fill gaps with zeros, then compare from the left.",
+   "say": "So here's the rule. Line up the points. Fill gaps with zeros. [pause] Then compare from the left."
+  },
+  {
+   "id": "your-turn",
+   "start": 80,
+   "end": 98.5,
+   "caption": "Your turn: which is bigger, 0.6 or 0.58? 0.6 is 0.60: sixty hundredths. That's more than fifty-eight hundredths, so 0.6 is bigger.",
+   "say": "Your turn. Which is bigger, nought point six, or nought point five eight? [think] Nought point six is nought point six nought. Sixty hundredths. [pause] That's more than fifty eight hundredths. So nought point six is bigger. Well done!"
+  },
+  {
+   "id": "recap",
+   "start": 98.5,
+   "end": 106,
+   "caption": "Remember: a longer decimal isn't always bigger. Compare the tenths first.",
+   "say": "Remember. A longer decimal isn't always bigger. Compare the tenths first. Great work!"
+  }
+ ],
+ "beats": [
+  {
+   "id": "hook",
+   "seconds": 16,
+   "say": "Amy's bean plant grew nought point four metres. Ben's grew nought point three five metres. Ben says his grew more, because thirty five is bigger than four. Is he right? [think]"
+  },
+  {
+   "id": "columns",
+   "seconds": 12,
+   "say": "Let's put both numbers in place-value columns. Nought point four has four tenths. [pause] Nought point three five has three tenths, and five hundredths."
+  },
+  {
+   "id": "tenths",
+   "seconds": 11.5,
+   "say": "Always compare the biggest place first. That's the tenths. [pause] Four tenths is more than three tenths. So nought point four is bigger!"
+  },
+  {
+   "id": "zero",
+   "seconds": 16,
+   "say": "Here's a trick. Give them the same number of places. Nought point four is the same as nought point four nought. That's forty hundredths. [pause] And nought point three five is thirty five hundredths."
+  },
+  {
+   "id": "grid",
+   "seconds": 12.5,
+   "say": "On a hundred square, nought point four fills forty squares. Nought point three five fills thirty five. [pause] So Amy's plant grew more!"
+  },
+  {
+   "id": "rule",
+   "seconds": 10.5,
+   "say": "So here's the rule. Line up the decimal points. Fill any gaps with zeros. [pause] Then compare from the left."
+  }
+ ]
+}
