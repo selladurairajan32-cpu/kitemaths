@@ -32,15 +32,24 @@ past its cue. Voice models download on first use into `tools/films/voices/` (not
    `self.until("<cue id>")` at the end of each part.
 3. Run `build.py <concept>`, look at a few frames, and commit the media with the code.
 
+## Teaching voice (D-043)
+
+Write each voice line the way a teacher talks to one child: a real situation, a question and time to think, then
+discover, name the rule, a "your turn" and a recap. In `say`, `[pause]` (0.9 s) marks a beat after a point and
+`[think]` (2.2 s) gives time to think after a question; they are recorded as silence and never shown in captions.
+Run `build.py <concept> --measure` to see how long each line takes, and give each cue or step at least that long.
+`build.py --common` records the shared checkpoint feedback ("Yes! That's right.", "Not quite…").
+
 ## Voices and licences
 
-| Voice | Model | Training data | Licence |
+| Voice | Engine | Training data | Licence |
 |---|---|---|---|
-| **cori** (default) | `en_GB-cori-high` | Cori Samuel's LibriVox readings | Public domain |
-| alba | `en_GB-alba-medium` | Alba, CSTR, University of Edinburgh | CC BY 4.0: credit the dataset |
-| male | `en_GB-vctk-medium`, speaker p232 | VCTK corpus, CSTR, University of Edinburgh | CC BY 4.0: credit the dataset |
+| **emma** (default, chosen by the Product Owner, D-043) | Kokoro-82M, voice `bf_emma` | Permissively licensed audio only | Apache-2.0 model |
+| cori | Piper `en_GB-cori-high` | Cori Samuel's LibriVox readings | Public domain |
+| alba | Piper `en_GB-alba-medium` | Alba, CSTR, University of Edinburgh | CC BY 4.0: credit the dataset |
+| male | Piper `en_GB-vctk-medium`, speaker p232 | VCTK corpus, CSTR, University of Edinburgh | CC BY 4.0: credit the dataset |
 
-Piper (the speech engine) and Manim are MIT licensed. Voices with non-commercial or unclear terms (for example
+Kokoro, Piper and Manim are free to use commercially. Voices with non-commercial or unclear terms (for example Piper's
 `semaine`, `jenny_dioco`, `alan`) and share-alike ones (`southern_english_female`, `northern_english_male`) are not used.
 
 ## Hosting

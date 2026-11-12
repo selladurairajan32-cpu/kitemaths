@@ -2,6 +2,8 @@
 
     python tools/films/build.py <concept> [--voice cori|alba|male] [--quality h|m|l]
     python tools/films/build.py --samples          # one sentence in each voice, to choose a voice
+    python tools/films/build.py <concept> --measure  # how long each line takes to say, to set the script's timings
+    python tools/films/build.py --common            # the spoken feedback lines shared by every Step through
 
 For <concept> it:
   1. renders the Manim scene tools/films/scenes/<concept with _>.py (timed by scripts/<concept>.json);
@@ -10,10 +12,12 @@ For <concept> it:
   4. records each Step through beat to public/voice/<concept>/<beat>.mp3, checking it fits the beat;
   5. writes tools/films/out/<concept>-report.json.
 It stops with an error if any recording is longer than its time. Development only: never run in CI or the app.
-Needs Python with manim 0.19 and piper-tts (requirements.txt), ffmpeg, and the voice model (downloaded on first use).
+Needs Python with manim 0.19, kokoro-onnx and piper-tts (requirements.txt), ffmpeg, and the voice models (downloaded on
+first use). Voice lines may hold teaching pauses, `[pause]` and `[think]` (D-043), recorded as silence.
 """
 import argparse
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -27,14 +31,23 @@ OUT = HERE / "out"
 VOICE_DIR = HERE / "voices"
 HF = "https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_GB"
 
-# Voices whose training data allows commercial use. Cori: LibriVox recordings, public domain. Alba and VCTK: CC BY 4.0
-# (credit the dataset). Piper itself is MIT. See README.md.
+# Voices whose training data allows commercial use (README.md). D-043: Emma (Kokoro-82M, Apache-2.0, trained only on
+# permissively licensed audio) is the default, chosen by the Product Owner. The Piper voices stay as fallbacks.
 VOICES = {
-    "cori": {"model": "en_GB-cori-high", "path": "cori/high", "speaker": None, "length": "0.95", "credit": "Cori Samuel (LibriVox), public domain"},
-    "alba": {"model": "en_GB-alba-medium", "path": "alba/medium", "speaker": None, "length": "0.95", "credit": "Alba, CSTR University of Edinburgh, CC BY 4.0"},
-    "male": {"model": "en_GB-vctk-medium", "path": "vctk/medium", "speaker": "p232", "length": "1.45", "credit": "VCTK corpus speaker p232, CSTR University of Edinburgh, CC BY 4.0"},
+    "emma": {"engine": "kokoro", "voice": "bf_emma", "speed": 0.92, "credit": "Kokoro-82M (Apache-2.0), voice bf_emma"},
+    "cori": {"engine": "piper", "model": "en_GB-cori-high", "path": "cori/high", "speaker": None, "length": "0.95", "credit": "Cori Samuel (LibriVox), public domain"},
+    "alba": {"engine": "piper", "model": "en_GB-alba-medium", "path": "alba/medium", "speaker": None, "length": "0.95", "credit": "Alba, CSTR University of Edinburgh, CC BY 4.0"},
+    "male": {"engine": "piper", "model": "en_GB-vctk-medium", "path": "vctk/medium", "speaker": "p232", "length": "1.45", "credit": "VCTK corpus speaker p232, CSTR University of Edinburgh, CC BY 4.0"},
 }
-DEFAULT_VOICE = "cori"
+DEFAULT_VOICE = "emma"
+KOKORO = "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0"
+PAUSES = {"[pause]": 0.9, "[think]": 2.2}
+GAP = 0.3  # between sentences inside one line
+# D-043: short spoken feedback shared by every Step through checkpoint.
+COMMON = {
+    "right": "Yes! That's right. Well done.",
+    "wrong": "Not quite. Let's look at it again.",
+}
 
 
 def run(cmd, **kw):
@@ -46,24 +59,67 @@ def duration(path):
     return float(out.stdout.strip())
 
 
-def model(name):
-    v = VOICES[name]
-    VOICE_DIR.mkdir(parents=True, exist_ok=True)
-    onnx = VOICE_DIR / f"{v['model']}.onnx"
-    for f in (onnx, Path(f"{onnx}.json")):
-        if not f.exists():
-            print(f"downloading {f.name}")
-            urllib.request.urlretrieve(f"{HF}/{v['path']}/{f.name}", f)
+def fetch(url, dest):
+    if not dest.exists():
+        VOICE_DIR.mkdir(parents=True, exist_ok=True)
+        print(f"downloading {dest.name}")
+        urllib.request.urlretrieve(url, dest)
+    return dest
+
+
+def piper_model(v):
+    onnx = fetch(f"{HF}/{v['path']}/{v['model']}.onnx", VOICE_DIR / f"{v['model']}.onnx")
+    fetch(f"{HF}/{v['path']}/{v['model']}.onnx.json", Path(f"{onnx}.json"))
     return onnx
 
 
+_kokoro = None
+
+
+def kokoro():
+    global _kokoro
+    if _kokoro is None:
+        from kokoro_onnx import Kokoro
+        _kokoro = Kokoro(str(fetch(f"{KOKORO}/kokoro-v1.0.onnx", VOICE_DIR / "kokoro-v1.0.onnx")), str(fetch(f"{KOKORO}/voices-v1.0.bin", VOICE_DIR / "voices-v1.0.bin")))
+    return _kokoro
+
+
+def segments(text):
+    """Splits a voice line into spoken parts and pauses: [("say", text) | ("pause", seconds)]."""
+    out = []
+    for part in re.split(r"(\[pause\]|\[think\])", text):
+        part = part.strip()
+        if part in PAUSES:
+            out.append(("pause", PAUSES[part]))
+        elif part:
+            out.append(("say", part))
+    return out
+
+
 def speak(text, wav, voice):
+    """Records one voice line to a WAV file, with its teaching pauses as silence."""
+    import numpy as np
+    import soundfile as sf
     v = VOICES[voice]
-    cmd = [sys.executable, "-m", "piper", "-m", str(model(voice)), "--length-scale", v["length"], "--sentence-silence", "0.25", "-f", str(wav)]
-    if v["speaker"] is not None:
-        speakers = json.loads(Path(f"{model(voice)}.json").read_text())["speaker_id_map"]
-        cmd += ["-s", str(speakers[v["speaker"]])]
-    run(cmd, input=text.encode(), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    parts, rate = [], 24000
+    for kind, value in segments(text):
+        if kind == "pause":
+            parts.append(np.zeros(int(rate * value), dtype=np.float32))
+            continue
+        if v["engine"] == "kokoro":
+            audio, rate = kokoro().create(value, voice=v["voice"], speed=v["speed"], lang="en-gb")
+        else:
+            with tempfile.TemporaryDirectory() as t:
+                tmp = Path(t) / "p.wav"
+                cmd = [sys.executable, "-m", "piper", "-m", str(piper_model(v)), "--length-scale", v["length"], "-f", str(tmp)]
+                if v["speaker"] is not None:
+                    cmd += ["-s", str(json.loads(Path(f"{piper_model(v)}.json").read_text())["speaker_id_map"][v["speaker"]])]
+                run(cmd, input=value.encode(), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                audio, rate = sf.read(tmp, dtype="float32")
+        parts += [np.asarray(audio, dtype=np.float32), np.zeros(int(rate * GAP), dtype=np.float32)]
+    if parts and kind != "pause":
+        parts.pop()  # no gap after the last words
+    sf.write(wav, np.concatenate(parts), rate)
 
 
 def render(concept, quality):
@@ -118,10 +174,34 @@ def build(concept, voice, quality):
             report["beats"].append({"id": b["id"], "speech": round(d, 2), "room": b["seconds"]})
             if d > b["seconds"] - 0.2:
                 sys.exit(f"{concept}: beat '{b['id']}' takes {d:.2f} s to say but lasts {b['seconds']} s")
-            run(["ffmpeg", "-loglevel", "error", "-y", "-i", str(wav), "-af", "loudnorm=I=-16:TP=-1.5", "-ac", "1", "-ar", "22050", "-b:a", "48k", str(voices / f"{b['id']}.mp3")])
+            run(["ffmpeg", "-loglevel", "error", "-y", "-i", str(wav), "-af", "loudnorm=I=-16:TP=-1.5", "-ac", "1", "-ar", "24000", "-b:a", "48k", str(voices / f"{b['id']}.mp3")])
     OUT.mkdir(exist_ok=True)
     (OUT / f"{concept}-report.json").write_text(json.dumps(report, indent=1))
     print(json.dumps({k: report[k] for k in ("concept", "voice", "film_seconds", "film_bytes")}))
+
+
+def measure(concept, voice):
+    """Prints how long each film cue and step takes to say, against the time the script gives it."""
+    script = json.loads((HERE / "scripts" / f"{concept}.json").read_text())
+    with tempfile.TemporaryDirectory() as tmp:
+        for kind, items in (("cue", script["cues"]), ("beat", script["beats"])):
+            for x in items:
+                wav = Path(tmp) / "m.wav"
+                speak(x["say"], wav, voice)
+                room = (x["end"] - x["start"]) if kind == "cue" else x["seconds"]
+                d = duration(wav)
+                print(f"{kind:4} {x['id']:14} speech {d:5.2f} s  room {room:5.2f} s  {'OK' if d <= room - (0.1 if kind == 'cue' else 0.2) else 'TOO LONG'}")
+
+
+def common(voice):
+    out = REPO / "public" / "voice" / "common"
+    out.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory() as tmp:
+        for name, line in COMMON.items():
+            wav = Path(tmp) / f"{name}.wav"
+            speak(line, wav, voice)
+            run(["ffmpeg", "-loglevel", "error", "-y", "-i", str(wav), "-af", "loudnorm=I=-16:TP=-1.5", "-ac", "1", "-ar", "24000", "-b:a", "48k", str(out / f"{name}.mp3")])
+            print(out / f"{name}.mp3")
 
 
 def samples():
@@ -142,11 +222,17 @@ if __name__ == "__main__":
     p.add_argument("--voice", default=DEFAULT_VOICE, choices=sorted(VOICES))
     p.add_argument("--quality", default="h", choices=["h", "m", "l"])
     p.add_argument("--samples", action="store_true")
+    p.add_argument("--measure", action="store_true")
+    p.add_argument("--common", action="store_true")
     a = p.parse_args()
     if not shutil.which("ffmpeg"):
         sys.exit("ffmpeg is needed")
     if a.samples:
         samples()
+    elif a.common:
+        common(a.voice)
+    elif a.concept and a.measure:
+        measure(a.concept, a.voice)
     elif a.concept:
         build(a.concept, a.voice, a.quality)
     else:

@@ -7,105 +7,105 @@
   {
    "id": "intro",
    "start": 0,
-   "end": 5.5,
-   "caption": "What does a ratio like 2 to 3 mean? Let's find out.",
-   "say": "What does a ratio like 2 to 3 mean? Let's find out."
+   "end": 7,
+   "caption": "What does a ratio like 2 to 3 mean? Let's find out together.",
+   "say": "Hello! What does a ratio like two to three mean? [pause] Let's find out together."
   },
   {
    "id": "group",
-   "start": 5.5,
-   "end": 13,
+   "start": 7,
+   "end": 17,
    "caption": "2 blue cubes and 3 orange cubes make one group. For every 2 blue, there are 3 orange.",
-   "say": "2 blue cubes and 3 orange cubes make one group. For every 2 blue, there are 3 orange."
+   "say": "Here are two blue cubes and three orange cubes. That's one group. [pause] For every two blue, there are three orange."
   },
   {
    "id": "more",
-   "start": 13,
-   "end": 22,
+   "start": 17,
+   "end": 28,
    "caption": "Add more groups: 4 blue and 6 orange, then 6 blue and 9 orange. Every group is still 2 to 3.",
-   "say": "Add more groups: 4 blue and 6 orange, then 6 blue and 9 orange. Every group is still 2 to 3."
+   "say": "Let's add more groups. Four blue and six orange. Then six blue and nine orange. [pause] Every group is still two to three."
   },
   {
    "id": "share",
-   "start": 22,
-   "end": 27,
-   "caption": "Now share 35 sweets in the ratio 2 to 3.",
-   "say": "Now share 35 sweets in the ratio 2 to 3."
+   "start": 28,
+   "end": 37,
+   "caption": "Now share 35 sweets in the ratio 2 to 3. How would you do it?",
+   "say": "Now, here are 35 sweets. How would you share them in the ratio two to three? [think]"
   },
   {
    "id": "parts",
-   "start": 27,
-   "end": 36,
+   "start": 37,
+   "end": 48,
    "caption": "Each group takes 2 plus 3, which is 5 sweets. 35 divided by 5 is 7, so there are 7 groups.",
-   "say": "Each group takes 2 plus 3, which is 5 sweets. 35 divided by 5 is 7, so there are 7 groups."
+   "say": "Each group takes two plus three. That's 5 sweets. [pause] 35 divided by 5 is 7. So there are 7 groups."
   },
   {
    "id": "jars",
-   "start": 36,
-   "end": 44,
+   "start": 48,
+   "end": 59,
    "caption": "Blue gets 2 parts: 2 times 7 is 14. Orange gets 3 parts: 3 times 7 is 21.",
-   "say": "Blue gets 2 parts: 2 times 7 is 14. Orange gets 3 parts: 3 times 7 is 21."
+   "say": "Blue gets two from every group. Two times 7 is 14. [pause] Orange gets three from every group. Three times 7 is 21."
   },
   {
    "id": "check",
-   "start": 44,
-   "end": 49,
+   "start": 59,
+   "end": 66,
    "caption": "14 plus 21 is 35, so nothing is left over.",
-   "say": "14 plus 21 is 35, so nothing is left over."
+   "say": "Let's check. 14 plus 21 is 35. Nothing is left over. Brilliant!"
   },
   {
    "id": "remember",
-   "start": 49,
-   "end": 56.5,
+   "start": 66,
+   "end": 74.5,
    "caption": "Remember: add the parts, divide to find one part, then multiply for each share.",
-   "say": "Remember: add the parts, divide to find one part, then multiply for each share."
+   "say": "Remember. Add the parts. Divide to find one part. Then multiply for each share. Great work!"
   }
  ],
  "beats": [
   {
    "id": "one-group",
    "seconds": 10.1,
-   "say": "2 blue cubes and 3 orange cubes make one group. The ratio is 2 to 3: for every 2 blue, there are 3 orange."
+   "say": "Two blue cubes and three orange cubes make one group. So the ratio is two to three. [pause] For every two blue, there are three orange."
   },
   {
    "id": "two-groups",
    "seconds": 6.7,
-   "say": "Add another group. Now there are 4 blue and 6 orange, still 2 to 3."
+   "say": "Let's add another group. Now there are four blue and six orange. Still two to three!"
   },
   {
    "id": "three-groups",
-   "seconds": 7.5,
-   "say": "Three groups: 6 blue and 9 orange. However many groups, every group has 2 blue and 3 orange."
+   "seconds": 8.8,
+   "say": "Three groups. Six blue and nine orange. [pause] However many groups there are, every group has two blue and three orange."
   },
   {
    "id": "pile",
-   "seconds": 4.4,
-   "say": "Share 35 sweets in the ratio 2 to 3."
+   "seconds": 7.2,
+   "say": "Now let's share 35 sweets in the ratio two to three. [think]"
   },
   {
    "id": "groups",
    "seconds": 9,
-   "say": "Each group takes 2 + 3 = 5 sweets. 35 divided by 5 = 7 groups, so one part is 7."
+   "say": "Each group takes two plus three. That's five sweets. Thirty five divided by five is seven. So one part is seven."
   },
   {
    "id": "jars",
-   "seconds": 7.8,
-   "say": "Blue gets 2 parts: 2 times 7 = 14. Orange gets 3 parts: 3 times 7 = 21."
+   "seconds": 9.2,
+   "say": "Blue gets two parts. Two times seven is fourteen. [pause] Orange gets three parts. Three times seven is twenty one."
   },
   {
    "id": "bar",
    "seconds": 7.8,
-   "say": "As a bar: 5 equal parts of 7. 14 + 21 = 35, so nothing is left over."
+   "say": "As a bar, that's five equal parts of seven. Fourteen plus twenty one is thirty five. Nothing is left over!"
   },
   {
    "id": "recipe-4",
    "seconds": 5.2,
-   "say": "Pancakes for 4 people need 2 eggs and 300 ml of milk."
+   "say": "Pancakes for four people need two eggs and three hundred millilitres of milk."
   },
   {
    "id": "recipe-6",
-   "seconds": 9.4,
-   "say": "For 6 people, that is 1.5 times as many: 3 eggs and 450 ml of milk. Every amount scales by the same number."
+   "seconds": 11.4,
+   "say": "For six people, we need one and a half times as much. Three eggs, and four hundred and fifty millilitres of milk. [pause] Every amount scales by the same number."
   }
  ]
 }

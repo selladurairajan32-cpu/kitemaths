@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { filmLength, isExplainMode, neededMs, scriptProblems, spokenWords, timedCues, type ExplainScript } from "./explainScript";
+import { filmLength, isExplainMode, neededMs, scriptProblems, spokenWords, timedCues, withoutPauses, type ExplainScript } from "./explainScript";
 
 /** D-041: the explanation script and its checks, against hand-worked values. */
 
@@ -19,7 +19,15 @@ describe("explanation scripts (D-041)", () => {
     expect(spokenWords("3 × 4 = 12 equal parts")).toBe(7);
     // 35 divided by 5 is 7; the ratio 2 to 3: 6 + 5.
     expect(spokenWords("35 ÷ 5 is 7; the ratio 2 : 3")).toBe(11);
-    expect(neededMs("One two three.")).toBe(3 * 380 + 400);
+    expect(neededMs("One two three.")).toBe(3 * 340 + 400);
+  });
+
+  it("counts teaching pauses as time, not words, and keeps them out of captions (hand-worked)", () => {
+    // 6 words (What do you think? Look again.) + a think (2,200 ms) + a pause (900 ms): 6 × 340 + 400 + 3,100.
+    expect(neededMs("What do you think? [think] Look again. [pause]")).toBe(6 * 340 + 400 + 3100);
+    expect(withoutPauses("Wait. [pause] Look.")).toBe("Wait. Look.");
+    const bad: ExplainScript<null> = { ...ok, film: { ...ok.film, cues: [{ id: "a", text: "Think [think]", s: 9 }] , chapters: [{ title: "A", cue: "a" }] } };
+    expect(scriptProblems(bad)).toEqual(["a: a pause marker in the caption"]);
   });
 
   it("times the film cues one after another", () => {
@@ -36,10 +44,10 @@ describe("explanation scripts (D-041)", () => {
     };
     expect(scriptProblems(bad)).toEqual([
       "ch: replay beat out of range",
-      "b1: 1000 ms is too short to say it (needs 5340)",
+      "b1: 1000 ms is too short to say it (needs 4820)",
       "b1: beat id used twice",
       "b1: no caption",
-      "a: 1 s is too short to say it (needs 3.82)",
+      "a: 1 s is too short to say it (needs 3.46)",
       'film chapter "X": no cue z',
       "film: the first chapter must start at the first cue",
     ]);

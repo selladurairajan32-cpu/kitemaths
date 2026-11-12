@@ -44,6 +44,12 @@ class ScriptScene(Scene):
         data = json.loads((SCRIPTS / f"{self.concept}.json").read_text())
         self.cues = {c["id"]: c for c in data["cues"]}
 
+    def at(self, cue_id, offset):
+        """Waits until `offset` seconds into a cue (to line a picture up with a word or a thinking pause)."""
+        left = self.cues[cue_id]["start"] + offset - self.renderer.time
+        if left > 0.01:
+            self.wait(left)
+
     def until(self, cue_id):
         """Waits until the cue ends. Fails if the animation for it ran longer than the cue."""
         end = self.cues[cue_id]["end"]

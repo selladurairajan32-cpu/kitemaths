@@ -5,97 +5,111 @@
  "title": "Adding fractions with different denominators",
  "cues": [
   {
-   "id": "question",
+   "id": "hook",
    "start": 0,
-   "end": 4.5,
-   "caption": "How do we add one third and one quarter?",
-   "say": "How do we add one third and one quarter?"
+   "end": 9,
+   "caption": "Sam ate one third of a pizza. Zara ate one quarter of the same pizza. How much did they eat altogether?",
+   "say": "Sam ate one third of a pizza. Zara ate one quarter of the same pizza. How much did they eat altogether?"
+  },
+  {
+   "id": "predict",
+   "start": 9,
+   "end": 15.5,
+   "caption": "What do you think? Have a go in your head.",
+   "say": "What do you think? Have a go in your head. [think]"
   },
   {
    "id": "mistake",
-   "start": 4.5,
-   "end": 11.5,
-   "caption": "A common mistake: add the tops and add the bottoms to get two sevenths. That's wrong.",
-   "say": "A common mistake: add the tops and add the bottoms to get two sevenths. That's wrong."
+   "start": 15.5,
+   "end": 26,
+   "caption": "Lots of people say two sevenths. But two sevenths is smaller than one third on its own! That can't be right.",
+   "say": "Lots of people say two sevenths. But wait. [pause] Two sevenths is smaller than one third on its own! That can't be right, can it?"
   },
   {
-   "id": "pictures",
-   "start": 11.5,
-   "end": 20.1,
-   "caption": "Here is one third, and here is one quarter. The pieces are different sizes, so we can't just count them together.",
-   "say": "Here is one third, and here is one quarter. The pieces are different sizes, so we can't just count them together."
+   "id": "slices",
+   "start": 26,
+   "end": 36,
+   "caption": "Look at the slices. A third is a big slice. A quarter is a smaller slice. They're different sizes, so we can't count them together yet.",
+   "say": "Look at the slices. A third is a big slice. A quarter is a smaller slice. They're different sizes, so we can't count them together. Not yet!"
   },
   {
-   "id": "cut",
-   "start": 20.1,
-   "end": 28.7,
-   "caption": "The trick: cut both into the same size pieces. Cut the third into 4 rows, and the quarter into 3 columns.",
-   "say": "The trick: cut both into the same size pieces. Cut the third into 4 rows, and the quarter into 3 columns."
-  },
-  {
-   "id": "twelve",
-   "start": 28.7,
-   "end": 34.2,
-   "caption": "Now each whole has 3 times 4, which is 12 equal parts.",
-   "say": "Now each whole has 3 times 4, which is 12 equal parts."
+   "id": "trick",
+   "start": 36,
+   "end": 46.5,
+   "caption": "Here's the trick: cut both pizzas into slices of the same size. Three times four is twelve, so let's cut them into twelfths.",
+   "say": "Here's the trick. Let's cut both pizzas into slices of the same size. [pause] Three times four is twelve. So let's cut them into twelfths."
   },
   {
    "id": "count",
-   "start": 34.2,
-   "end": 41.7,
-   "caption": "Count the shaded parts. One third is four twelfths. One quarter is three twelfths.",
-   "say": "Count the shaded parts. One third is four twelfths. One quarter is three twelfths."
+   "start": 46.5,
+   "end": 57,
+   "caption": "Count with me. One third is one, two, three, four twelfths. One quarter is one, two, three twelfths.",
+   "say": "Count with me. One third is one, two, three, four twelfths. [pause] And one quarter is one, two, three twelfths."
   },
   {
    "id": "add",
-   "start": 41.7,
-   "end": 50.2,
-   "caption": "Now the pieces match, so we can add them: 4 twelfths and 3 twelfths make 7 twelfths.",
-   "say": "Now the pieces match, so we can add them: 4 twelfths and 3 twelfths make 7 twelfths."
+   "start": 57,
+   "end": 68.5,
+   "caption": "Now the slices match. Four twelfths plus three twelfths makes seven twelfths. So one third plus one quarter is seven twelfths!",
+   "say": "Now the slices match. Four twelfths, plus three twelfths, makes seven twelfths. [pause] So one third plus one quarter is seven twelfths. Brilliant!"
   },
   {
-   "id": "remember",
-   "start": 50.2,
-   "end": 59.2,
-   "caption": "Remember: make the denominators the same first, then add the numerators. One third plus one quarter is seven twelfths.",
-   "say": "Remember: make the denominators the same first, then add the numerators. One third plus one quarter is seven twelfths."
+   "id": "rule",
+   "start": 68.5,
+   "end": 78,
+   "caption": "Here's the rule: make the slices the same size first, then add the tops. The bottom number stays the same.",
+   "say": "So here's the rule. Make the slices the same size first. Then add the tops. [pause] The bottom number stays the same."
+  },
+  {
+   "id": "your-turn",
+   "start": 78,
+   "end": 95,
+   "caption": "Your turn: what is one sixth plus one third? One third is two sixths. One sixth plus two sixths is three sixths, which is the same as one half.",
+   "say": "Your turn. What is one sixth plus one third? [think] One third is two sixths. One sixth plus two sixths is three sixths. [pause] And three sixths is the same as one half. Well done!"
+  },
+  {
+   "id": "recap",
+   "start": 95,
+   "end": 103,
+   "caption": "Remember: same size slices, add the tops, and check your answer makes sense.",
+   "say": "Remember. Same size slices. Add the tops. And check your answer makes sense. Great work!"
   }
  ],
  "beats": [
   {
-   "id": "question",
-   "seconds": 4.2,
-   "say": "How do we add one third and one quarter?"
+   "id": "hook",
+   "seconds": 10.6,
+   "say": "Sam ate one third of a pizza. Zara ate one quarter of the same pizza. How much did they eat altogether? [think]"
   },
   {
    "id": "mistake",
-   "seconds": 10.4,
-   "say": "Adding the tops and the bottoms gives two sevenths. But two sevenths is smaller than one third on its own, so that can't be right."
+   "seconds": 11.4,
+   "say": "Lots of people say two sevenths. But wait. [pause] Two sevenths is smaller than one third on its own! So that can't be right, can it?"
   },
   {
-   "id": "pictures",
-   "seconds": 8.6,
-   "say": "Here is one third and one quarter. The shaded pieces are different sizes, so we can't count them together yet."
+   "id": "slices",
+   "seconds": 10.8,
+   "say": "Look at the slices. A third is a big slice. A quarter is a smaller slice. They're different sizes, so we can't count them together. Not yet!"
   },
   {
    "id": "cut",
-   "seconds": 7.8,
-   "say": "Cut both into the same size pieces: cut the third into 4 rows and the quarter into 3 columns."
+   "seconds": 10.8,
+   "say": "Here's the trick. Let's cut both pizzas into slices of the same size. Three times four is twelve. So we cut them into twelfths."
   },
   {
    "id": "count",
-   "seconds": 9.2,
-   "say": "Now each whole has 3 times 4 = 12 equal pieces. One third is 4 twelfths, and one quarter is 3 twelfths."
+   "seconds": 11,
+   "say": "Count with me. One third is one, two, three, four twelfths. [pause] And one quarter is one, two, three twelfths."
   },
   {
    "id": "combine",
-   "seconds": 10.2,
-   "say": "The pieces match, so put them together: 4 twelfths and 3 twelfths make 7 twelfths. one third + one quarter = seven twelfths."
+   "seconds": 12.4,
+   "say": "Now the slices match. Four twelfths, plus three twelfths, makes seven twelfths. [pause] So one third plus one quarter is seven twelfths. Brilliant!"
   },
   {
-   "id": "summary",
-   "seconds": 7.4,
-   "say": "Remember: make the pieces the same size first, then add the tops. The bottom stays the same."
+   "id": "rule",
+   "seconds": 10.2,
+   "say": "So here's the rule. Make the slices the same size first. Then add the tops. [pause] The bottom number stays the same."
   }
  ]
 }

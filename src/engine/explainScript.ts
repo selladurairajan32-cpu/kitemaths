@@ -55,11 +55,21 @@ export function timedCues(film: FilmScript): TimedCue[] {
 export const filmLength = (film: FilmScript) => timedCues(film).at(-1)?.end ?? 0;
 
 /**
+ * D-043: teaching pauses in a voice line. `[pause]` is a short beat after a point; `[think]` gives the child time to
+ * think after a question. They are silence in the recording and never appear in a caption.
+ */
+export const PAUSE_MS = { "[pause]": 900, "[think]": 2200 } as const;
+const PAUSES = /\[(pause|think)\]/g;
+export const pauseMs = (text: string) => (text.match(PAUSES) ?? []).reduce((n, m) => n + PAUSE_MS[m as keyof typeof PAUSE_MS], 0);
+/** A voice line without its pause markers. */
+export const withoutPauses = (text: string) => text.replace(PAUSES, " ").replace(/\s+/g, " ").trim();
+
+/**
  * Words as they are spoken: a fraction in markup is two words ("one third"), a sign is a word ("plus", "equals"; "÷" is
  * two, "divided by"), a ratio colon is a word ("to"), and markup itself is silent.
  */
 export function spokenWords(text: string): number {
-  return text
+  return withoutPauses(text)
     .replace(/\{\d+\/\d+\}/g, " w w ")
     .replace(/÷/g, " w w ")
     .replace(/[+=×−]|(?<=\d\s*):(?=\s*\d)/g, " w ")
@@ -69,10 +79,11 @@ export function spokenWords(text: string): number {
 }
 
 /**
- * The least time a line needs to be spoken: 380 ms a word plus 400 ms to breathe. Measured on the chosen voices at
- * their set speed, which manage about 2.9 words a second; the film pipeline also checks the real recordings.
+ * The least time a line needs to be spoken: 340 ms a word plus 400 ms to breathe, plus its teaching pauses. Measured on
+ * the chosen voice (Emma, D-043) at its set speed, about 3 words a second; the film pipeline also checks the real
+ * recordings and refuses any that run over.
  */
-export const neededMs = (text: string) => spokenWords(text) * 380 + 400;
+export const neededMs = (text: string) => spokenWords(text) * 340 + 400 + pauseMs(text);
 
 /** Everything wrong with a script, in words; empty when it is fit to use. */
 export function scriptProblems<S>(script: ExplainScript<S>): string[] {
@@ -85,6 +96,8 @@ export function scriptProblems<S>(script: ExplainScript<S>): string[] {
       if (ids.has(b.id)) out.push(`${b.id}: beat id used twice`);
       ids.add(b.id);
       if (!b.caption.trim()) out.push(`${b.id}: no caption`);
+      if (PAUSES.test(b.caption)) out.push(`${b.id}: a pause marker in the caption`);
+      PAUSES.lastIndex = 0;
       const need = neededMs(b.say ?? b.caption);
       if (b.ms < need) out.push(`${b.id}: ${b.ms} ms is too short to say it (needs ${need})`);
     }
@@ -94,6 +107,8 @@ export function scriptProblems<S>(script: ExplainScript<S>): string[] {
     if (cueIds.has(c.id)) out.push(`${c.id}: cue id used twice`);
     cueIds.add(c.id);
     if (!c.text.trim()) out.push(`${c.id}: no caption`);
+    if (PAUSES.test(c.text)) out.push(`${c.id}: a pause marker in the caption`);
+    PAUSES.lastIndex = 0;
     const need = neededMs(c.say ?? c.text) / 1000;
     if (c.s < need) out.push(`${c.id}: ${c.s} s is too short to say it (needs ${need})`);
   }
