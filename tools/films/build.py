@@ -164,7 +164,9 @@ def build(concept, voice, quality):
         run(["ffmpeg", "-loglevel", "error", "-y", "-i", str(silent), *inputs, "-filter_complex",
              f"{filt}{mix}amix=inputs={len(delays)}:normalize=0,apad,loudnorm=I=-16:TP=-1.5,aresample=44100[a]",
              "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "96k", "-shortest", "-movflags", "+faststart", str(film)])
-        run(["ffmpeg", "-loglevel", "error", "-y", "-ss", f"{length * 0.62:.2f}", "-i", str(film), "-frames:v", "1", "-q:v", "4", str(films / "poster.jpg")])
+        # The poster is the end of the first cue: the question, before anything is explained (D-043).
+        first = script["cues"][0]
+        run(["ffmpeg", "-loglevel", "error", "-y", "-ss", f"{max(0.5, first['end'] - 0.4):.2f}", "-i", str(film), "-frames:v", "1", "-q:v", "4", str(films / "poster.jpg")])
         report["film_bytes"] = film.stat().st_size
 
         for b in script["beats"]:

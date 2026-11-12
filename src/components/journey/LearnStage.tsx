@@ -76,7 +76,7 @@ export function LearnStage({ modes, minutes = {} }: LearnStageProps) {
   return (
     <WrongContext.Provider value={() => setWrong((n) => n + 1)}>
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_19rem] lg:gap-6">
-        <aside className="flex flex-col gap-3 lg:order-last" aria-label="Ways to learn">
+        <div className="flex flex-col gap-3 lg:order-last">
           <h2 id="mode-question" className="text-title font-extrabold text-ink">Choose how you want to learn</h2>
           <div role="tablist" aria-labelledby="mode-question" aria-orientation="vertical" className="grid grid-cols-3 gap-2 lg:grid-cols-1 lg:gap-3">
             {available.map((m, i) => (
@@ -124,7 +124,7 @@ export function LearnStage({ modes, minutes = {} }: LearnStageProps) {
               <p className="text-body font-semibold">Pick the way you like best. You can switch at any time.</p>
             </KipSays>
           )}
-        </aside>
+        </div>
         <div role="tabpanel" id="mode-panel" aria-labelledby={`mode-${mode}`} className="min-w-0 rounded-[28px] border border-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-6">
           {modes[mode]}
         </div>

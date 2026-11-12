@@ -36,7 +36,11 @@ only accepted items may have `accepted` cases. Update `test-cases.csv` in the sa
 ## State (12 Nov 2026)
 
 `docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Last recorded
-decision: D-041 (every explanation offers three ways to learn and the child chooses: Watch a narrated film, Step through
+decision: D-043 (a teaching flow, not a page: the topic journey `/t/[topic]/learn/[concept]` (Learn → Practise →
+Apply → Check → Complete; `components/journey/`, `engine/topicJourney.ts`, data in `kit/journeys.ts`, saved as
+`LearnerState.journeys`; `/explain` redirects); Emma's voice (Kokoro) with teacher scripts and `[pause]`/`[think]`; pizza
+pictures; Check is the unchanged MAST-001 recheck; CH-087 to CH-090; report `docs/product/reports/D-043-step-2-report.md`;
+READY FOR QA, not deployed; next: step 3 kid pages (navigation Home, Topics, Practice, Tests, Progress)). D-041 (every explanation offers three ways to learn and the child chooses: Watch a narrated film, Step through
 with a recorded voice, Try it by hand; shell in `src/components/explain/modes/`, one script per concept
 (`engine/explainScript.ts`, listed in `kit/explainScripts.ts`); pilot `/t/fractions-2/explain/add-different` with a new
 lesson `fractions-2/different.ts` (Y6.FRAC.3 still partial); ratio page retrofitted; films and voices made by

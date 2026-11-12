@@ -85,7 +85,7 @@ export function QuestionStage({ def, list, done, startedAt, kind, onAnswered }: 
         ))}
       </div>
       {help === "method" && (
-        <ol className="m-0 flex flex-col gap-1.5 rounded-[18px] bg-sky-soft p-4 pl-9 text-body font-semibold text-ink">
+        <ol className="m-0 flex list-decimal flex-col gap-1.5 rounded-[18px] bg-sky-soft p-4 pl-9 text-body font-semibold text-ink">
           {def.method.map((m) => <li key={m}>{m}</li>)}
         </ol>
       )}

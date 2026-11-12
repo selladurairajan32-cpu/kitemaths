@@ -1,6 +1,7 @@
 // Usage: node docs/product/verification/ratio-3d.cjs <outDir> [port]
 // D-040 Phase 1: the ratio explanation page (/t/ratio-algebra/explain/ratio) on a running production build. D-041: the
-// story is now the Step through way to learn (#step), and Try it is a way to learn rather than a tab.
+// story is now the Step through way to learn (#step), and Try it is a way to learn rather than a tab. D-043: the page is
+// the Learn stage of the topic journey; step by step, the real-life example and key notes are in the Notes panel.
 // At 390, 768 and 1280px: WebGL draws (the stage changes between beats and after a drag), every chapter plays through
 // to its checkpoint and is answered (one wrong first, to see the replay and hint), the table turns by drag, Try it is
 // done by keyboard, and axe-core runs on every tab. Also: reduced motion draws the 2.5D picture with no canvas; the
@@ -12,7 +13,7 @@ const path = require('path');
 const OUT = process.argv[2]; const BASE = 'http://localhost:' + (process.argv[3] || '3123');
 fs.mkdirSync(OUT, { recursive: true });
 const AXE = fs.readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
-const PAGE = '/t/ratio-algebra/explain/ratio';
+const PAGE = '/t/ratio-algebra/learn/ratio';
 const ANSWERS = [9, 15, 600];
 
 (async () => {
@@ -67,12 +68,16 @@ const ANSWERS = [9, 15, 600];
     const axe = async (name) => { report.axe[`${vw}-${name}`] = await p.evaluate(async () => (await window.axe.run(document.querySelector('main'))).violations.map((v) => `${v.id} (${v.impact}): ${v.nodes.length}`)); };
     await axe('story');
 
-    // The other tabs.
+    // The other tabs, in the Notes panel.
+    await p.getByRole('button', { name: 'Notes', exact: true }).click();
+    const notes = p.getByRole('dialog', { name: 'Notes' });
+    await notes.waitFor(); await p.waitForTimeout(800);
     for (const [tab, name] of [['Step by step', 'steps'], ['Real-life example', 'real-life'], ['Key notes', 'notes']]) {
-      await p.getByRole('tab', { name: tab }).click(); await p.waitForTimeout(600);
+      await notes.getByRole('tab', { name: tab }).click(); await p.waitForTimeout(600);
       await axe(name);
-      await shot(`6-${name}`, p.locator('main'));
+      await shot(`6-${name}`, notes);
     }
+    await p.keyboard.press('Escape');
     // Try it, by keyboard only.
     await p.getByRole('tab', { name: /^Try it/ }).click();
     await p.waitForTimeout(1200);

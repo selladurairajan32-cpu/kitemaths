@@ -111,7 +111,10 @@ export function JourneyScreen({ concept }: { concept: string }) {
         })}
       </ol>
 
-      <section aria-label={LABEL[stage]}>
+      <section aria-labelledby="stage-title">
+        <h2 id="stage-title" className={stage === "practise" || stage === "apply" || stage === "check" ? "mb-3 text-title font-extrabold text-ink" : "sr-only"}>
+          {{ learn: "Learn it", practise: "Practise", apply: "Use it in real life", check: "Check your understanding", complete: "Complete" }[stage]}
+        </h2>
         {stage === "learn" && <ConceptLearn topicId={topic.id} concept={concept} />}
         {stage === "practise" && <QuestionStage def={def} list={def.practise} done={p.practised} startedAt={p.startedAt} kind="practise" onAnswered={() => set(countPractised)} />}
         {stage === "apply" && <QuestionStage def={def} list={def.apply} done={p.applied} startedAt={p.startedAt} kind="apply" onAnswered={() => set(countApplied)} />}
@@ -119,8 +122,10 @@ export function JourneyScreen({ concept }: { concept: string }) {
         {stage === "complete" && <CompleteStage def={def} progress={p} onReview={() => set((x) => openStage(x, 0), true)} onPractise={() => set((x) => ({ ...openStage(x, 1), practised: 0 }), true)} />}
       </section>
 
-      {stage !== "complete" && (
-        <div className="sticky bottom-3 z-10 flex justify-end">
+      {/* One way on. Sticky only on Learn: question stages have their own sticky Check bar, so the button joins the
+          page flow there, once the child can move on. */}
+      {stage !== "complete" && (stage === "learn" || ready) && (
+        <div className={`${stage === "learn" ? "sticky bottom-3 z-10" : ""} flex justify-end`}>
           <Button variant="go" size="xl" disabled={!ready} onClick={() => set(finishStage, true)} className="shadow-[var(--shadow-lift)]">
             {nextLabel} <ArrowRightIcon size={20} />
           </Button>

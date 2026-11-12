@@ -45,7 +45,7 @@ describe("topic journey: Learn, Practise, Apply, Check, Complete (D-043)", () =>
     expect(stageButton(/^2\. Practise$/).getAttribute("aria-current")).toBe("step");
     expect(screen.getByRole("list", { name: "Practice levels" })).toBeTruthy();
     expect((stageButton(/^1\. Learn, done/) as HTMLButtonElement).disabled).toBe(false);
-    expect((screen.getByRole("button", { name: /Next: Apply/ }) as HTMLButtonElement).disabled).toBe(true);
+    expect(screen.queryByRole("button", { name: /Next: Apply/ })).toBeNull();
   });
 
   it("practises one question at a time at the Guided level, with Method and Why to hand, and counts each answer", async () => {
