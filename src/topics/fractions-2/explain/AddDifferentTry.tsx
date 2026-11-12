@@ -87,7 +87,7 @@ export function AddDifferentTry() {
           <Cutter kind="quarter" value={cols} onChange={setCols} reduce={reduce} />
         </div>
         <p role="status" className={`min-h-12 rounded-[16px] px-4 py-3 text-body font-bold ${matched ? "bg-ok-soft text-ink" : "bg-sunk text-ink-2"}`}>
-          {matched ? <RichText text={`Same size pieces: both wholes have ${3 * rows} equal pieces (twelfths). {1/3} = {${rows}/${3 * rows}} and {1/4} = {${cols}/${4 * cols}}.`} /> : cutNote}
+          {matched ? `Same size pieces: both wholes have ${3 * rows} equal pieces (twelfths). One third is ${rows} twelfths and one quarter is ${cols} twelfths.` : cutNote}
         </p>
       </section>
 
@@ -107,7 +107,7 @@ export function AddDifferentTry() {
                   );
                 })}
               </div>
-              <div className="grid grid-cols-2 gap-3" aria-label="Pieces to place">
+              {!done && <div role="group" className="grid grid-cols-2 gap-3" aria-label="Pieces to place">
                 {TILES.map((c, i) =>
                   placed.includes(i) ? (
                     <span key={i} className="h-12 w-20" aria-hidden />
@@ -139,7 +139,7 @@ export function AddDifferentTry() {
                     </motion.button>
                   ),
                 )}
-              </div>
+              </div>}
             </div>
             <p role="status" className={`min-h-12 rounded-[16px] px-4 py-3 text-body font-bold ${done ? "bg-ok-soft text-ink" : "bg-sunk text-ink-2"}`}>
               {note || "7 pieces to place."}
