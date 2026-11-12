@@ -6,13 +6,13 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
 
 | | Commit | What it holds |
 |---|---|---|
-| `claude/practical-knuth-9126wx` | `b6e9d1a` | **Latest work.** Everything below, pushed. Start new work from here. |
-| `main` (production, https://kitemaths.vercel.app) | `6c99e79` | D-040 and D-041 Phase 1, deployed on request (D-042). **Not** the D-043 journey. |
+| `claude/practical-knuth-9126wx` | same as `main` | **Latest work.** Everything below, pushed. Start new work from here. |
+| `main` (production, https://kitemaths.vercel.app) | `0fedc65` + this record | Everything up to D-043 step 2, deployed on request (D-044, CH-091): the journey is live. |
 
 - A new session gets its own `claude/…` branch from the platform. Base it on `claude/practical-knuth-9126wx`
   (`git fetch origin claude/practical-knuth-9126wx && git checkout -b <new-branch> FETCH_HEAD`), or ask the Product Owner.
 - **No deployment, merge or PR without an explicit request.** The D-040 rule stands: production waits until sign-in works
-  end to end; D-042 was a one-off. A deployment means fast-forwarding `main` after CI is green, then running
+  end to end; D-042 and D-044 were one-offs. A deployment means fast-forwarding `main` after CI is green, then running
   `verification/live-check.cjs` and recording a CH entry.
 
 ## Where the redesign is (D-040 → D-041 → D-043)

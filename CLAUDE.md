@@ -8,7 +8,7 @@ breaking changes, so read the relevant guide in `node_modules/next/dist/docs/` b
 
 - **Development branch only.** The latest work is on `claude/practical-knuth-9126wx` (see `docs/product/HANDOFF.md`); a new
   session works on the branch it is given, based on that one. No pull request, merge or deployment unless the Product
-  Owner explicitly asks. Production is https://kitemaths.vercel.app (Vercel deploys `main`). R1 was merged to `main` and deployed on 9 Nov 2026 at the Product Owner's explicit request (D-027), the content differentiation changes the same day (D-029), the typography changes (D-031), the D-037 build (CH-069), the D-038 build (CH-074), the D-039 build (CH-077) and D-040/D-041 Phase 1 (D-042, CH-086, a one-off exception to the sign-in rule); any further deployment still needs an explicit request.
+  Owner explicitly asks. Production is https://kitemaths.vercel.app (Vercel deploys `main`). R1 was merged to `main` and deployed on 9 Nov 2026 at the Product Owner's explicit request (D-027), the content differentiation changes the same day (D-029), the typography changes (D-031), the D-037 build (CH-069), the D-038 build (CH-074), the D-039 build (CH-077) D-040/D-041 Phase 1 (D-042, CH-086) and D-043 step 2 (D-044, CH-091), each a one-off exception to the sign-in rule; any further deployment still needs an explicit request.
 - **No change to existing child-facing screens** (appearance or behaviour) unless an item says so. Screen migration, the
   accessibility layout fixes and wiring new specs into the app are R1 work.
 - **Preserve the architecture; no broad rewrites.** Additive foundations and behaviour-preserving extraction only.
@@ -43,7 +43,7 @@ decision: D-043 (a teaching flow, not a page: the topic journey `/t/[topic]/lear
 Apply → Check → Complete; `components/journey/`, `engine/topicJourney.ts`, data in `kit/journeys.ts`, saved as
 `LearnerState.journeys`; `/explain` redirects); Emma's voice (Kokoro) with teacher scripts and `[pause]`/`[think]`; pizza
 pictures; Check is the unchanged MAST-001 recheck; CH-087 to CH-090; report `docs/product/reports/D-043-step-2-report.md`;
-READY FOR QA, not deployed; next: step 3 kid pages (navigation Home, Topics, Practice, Tests, Progress)). D-041 (every explanation offers three ways to learn and the child chooses: Watch a narrated film, Step through
+READY FOR QA; deployed 12 Nov at the Product Owner's request, D-044, CH-091; next: step 3 kid pages (navigation Home, Topics, Practice, Tests, Progress)). D-041 (every explanation offers three ways to learn and the child chooses: Watch a narrated film, Step through
 with a recorded voice, Try it by hand; shell in `src/components/explain/modes/`, one script per concept
 (`engine/explainScript.ts`, listed in `kit/explainScripts.ts`); pilot `/t/fractions-2/explain/add-different` with a new
 lesson `fractions-2/different.ts` (Y6.FRAC.3 still partial); ratio page retrofitted; films and voices made by

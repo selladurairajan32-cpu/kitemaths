@@ -4,7 +4,7 @@
 |---|---|
 | **Decision** | D-043 (12 Nov 2026): a teaching flow, not a page. Step 1 was choosing a voice; the Product Owner chose **Emma**. |
 | **Changes** | CH-087 to CH-090 in `DECISIONS.md` |
-| **Status** | READY FOR QA. **Nothing is accepted. Not deployed** (D-040 sign-in rule; deployment only on request). |
+| **Status** | READY FOR QA. **Nothing is accepted.** Deployed to production on 12 Nov 2026 at the Product Owner's request (D-044, CH-091). |
 | **Date** | 12 November 2026 |
 
 ## 1. What the Product Owner reported, and what changed
