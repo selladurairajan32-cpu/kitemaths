@@ -36,7 +36,7 @@ const STRANDS: Record<Strand, { label: string; blurb: string; pic: PicName }> = 
 /** D-046: beside the check, what it looks for (concept images). */
 function HowWeCheck() {
   return (
-    <section className="glass flex flex-col gap-3 self-start rounded-[24px] p-4" aria-labelledby="how-check-title">
+    <section className="panel flex flex-col gap-3 self-start rounded-[24px] p-4" aria-labelledby="how-check-title">
       <h3 id="how-check-title" className="text-body font-extrabold text-ink">How we check your understanding</h3>
       <ul className="m-0 flex list-none flex-col gap-2 p-0">
         {(Object.keys(STRANDS) as Strand[]).map((k) => (
@@ -56,7 +56,7 @@ function HowWeCheck() {
 function CheckLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_19rem]">
-      <div className="glass min-w-0 rounded-[28px] p-4 sm:p-6">{children}</div>
+      <div className="panel min-w-0 rounded-[28px] p-4 sm:p-6">{children}</div>
       <HowWeCheck />
     </div>
   );
@@ -81,11 +81,11 @@ export function QuestionStage({ def, list, done, startedAt, kind, onAnswered }: 
   const q = topic.questionById(journeyQuestionId(def, list, done, startedAt, kind === "apply" ? 500 : 0));
   const strand = def.strands[item.key];
   const usedFollowUps = learner.results.filter((r) => r.context === "followup").map((r) => r.questionId);
-  // D-046: the question on glass, with numbered progress and a side panel for Method and Why (concept images).
+  // D-046: the question on panel, with numbered progress and a side panel for Method and Why (concept images).
   return (
     <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_19rem]">
       <div className="flex min-w-0 flex-col gap-4">
-        <div className="glass flex flex-col gap-3 rounded-[24px] p-3 sm:p-4">
+        <div className="panel flex flex-col gap-3 rounded-[24px] p-3 sm:p-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             {kind === "practise" ? (
               <ol className="m-0 flex list-none flex-wrap gap-2 p-0" aria-label="Practice levels">
@@ -113,7 +113,7 @@ export function QuestionStage({ def, list, done, startedAt, kind, onAnswered }: 
             ))}
           </ol>
         </div>
-        <section className="glass rounded-[28px] p-4 sm:p-6" aria-label={`Question ${done + 1}`}>
+        <section aria-label={`Question ${done + 1}`}>
           <QuestionPlayer
             key={q.id}
             question={q}
@@ -129,7 +129,7 @@ export function QuestionStage({ def, list, done, startedAt, kind, onAnswered }: 
           />
         </section>
       </div>
-      <section className="glass flex flex-col gap-3 self-start rounded-[24px] p-4" aria-label="Help">
+      <section className="panel flex flex-col gap-3 self-start rounded-[24px] p-4" aria-label="Help">
         <div className="flex flex-wrap items-center gap-2">
           {strand && <span className="rounded-full bg-sky-soft px-3 py-1 text-label font-bold text-ink">{STRANDS[strand].label}</span>}
           <span className="text-label font-semibold text-ink-2">{strand ? STRANDS[strand].blurb : ""}</span>
@@ -251,7 +251,7 @@ export function CompleteStage({ def, progress, onReview, onPractise }: { def: Jo
         <p className="text-lg font-bold text-ink-2">{def.title}</p>
       </div>
       <div className="grid w-full max-w-3xl gap-4 sm:grid-cols-2">
-        <section aria-labelledby="level-title" className="glass flex flex-col items-center gap-3 rounded-[24px] p-5">
+        <section aria-labelledby="level-title" className="panel flex flex-col items-center gap-3 rounded-[24px] p-5">
           <h3 id="level-title" className="text-title font-extrabold text-ink">Your level</h3>
           <ProgressRing value={m.score} size={120} label="Recent practice score">
             <span className="display text-heading-2 leading-none text-ink">{Math.round(m.score * 100)}%</span>
@@ -263,7 +263,7 @@ export function CompleteStage({ def, progress, onReview, onPractise }: { def: Jo
             <Pic name="star" size={22} /> {stars} XP earned
           </p>
         </section>
-        <section aria-labelledby="strand-title" className="glass flex flex-col gap-3 rounded-[24px] p-5 text-left">
+        <section aria-labelledby="strand-title" className="panel flex flex-col gap-3 rounded-[24px] p-5 text-left">
           <h3 id="strand-title" className="text-title font-extrabold text-ink">How well you understand it</h3>
           <ul className="m-0 flex list-none flex-col gap-2 p-0">
             {(Object.keys(STRANDS) as Strand[]).filter((k) => strands[k]).map((k) => {

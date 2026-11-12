@@ -160,6 +160,13 @@ describe("design tokens (UX-002, UX-003, UX-004)", () => {
     expect(doc.replace(/\s+/g, " ")).toContain("same positive numerator and positive denominators, and the wholes are the same size");
   });
 
+  it("gives every colour field readable text: white at 4.5:1 or more, and ink on yellow (D-052)", () => {
+    for (const f of ["blue", "green", "orange", "teal", "pink", "sky", "navy"]) expect(contrast(hex(`color-field-${f}`), "#ffffff"), f).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(hex("color-field-yellow"), hex("color-ink"))).toBeGreaterThanOrEqual(7);
+    // The yellow "go" button stands out from a blue field as a shape (3:1 for graphics).
+    expect(contrast(hex("color-cta"), hex("color-field-blue"))).toBeGreaterThanOrEqual(3);
+  });
+
   it("uses only the documented motion timings and respects reduced motion (UX-006)", () => {
     const allowed = new Set([0, 0.15, 0.18, 0.2, 0.22, 0.25, 0.35, 0.4, 0.6, 0.8, 1.1, 1.3, 5]);
     // .ts files too since CH-060: shared motion tokens (src/components/explain/motionTokens.ts) live in a .ts file.

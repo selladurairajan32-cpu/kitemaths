@@ -13,7 +13,7 @@ import { WrongContext } from "./wrong";
  * wide screen the player is on the left and "Choose how you want to learn" on the right; on a phone the choice comes
  * first, in one row. The choice is remembered (and can be linked with #watch, #step or #try). After two wrong answers
  * in one way, Kip offers the others. D-046: the three ways are big cards across the top with 3D pictures, the lesson
- * sits on glass below, and the concept's Key idea is beside it.
+ * sits on panel below, and the concept's Key idea is beside it.
  */
 
 export const MODE_INFO: Record<ExplainMode, { label: string; blurb: string; pic: PicName }> = {
@@ -95,7 +95,7 @@ export function LearnStage({ modes, minutes = {}, keyIdea }: LearnStageProps) {
                 tabIndex={on ? 0 : -1}
                 onClick={() => choose(m)}
                 onKeyDown={(e) => onKey(e, i)}
-                className={`relative flex min-h-24 flex-col items-center justify-center gap-1 rounded-[24px] p-2 text-center transition sm:flex-row sm:justify-start sm:gap-4 sm:p-4 sm:text-left ${on ? "glass-selected text-on-brand" : "glass text-ink hover:-translate-y-0.5"}`}
+                className={`relative flex min-h-24 flex-col items-center justify-center gap-1 rounded-[24px] p-2 text-center transition sm:flex-row sm:justify-start sm:gap-4 sm:p-4 sm:text-left ${on ? "panel-selected text-on-brand" : "panel text-ink hover:-translate-y-0.5"}`}
               >
                 <span className={`grid size-12 shrink-0 place-items-center rounded-full sm:size-16 ${on ? "bg-surface" : "bg-brand-soft"}`}>
                   <Pic name={MODE_INFO[m].pic} size={40} />
@@ -128,7 +128,7 @@ export function LearnStage({ modes, minutes = {}, keyIdea }: LearnStageProps) {
           </KipSays>
         )}
         <div className={`grid gap-4 ${keyIdea ? "xl:grid-cols-[minmax(0,1fr)_17rem]" : ""}`}>
-          <div role="tabpanel" id="mode-panel" aria-labelledby={`mode-${mode}`} className="glass min-w-0 rounded-[28px] p-3 sm:p-5">
+          <div role="tabpanel" id="mode-panel" aria-labelledby={`mode-${mode}`} className="panel min-w-0 rounded-[28px] p-3 sm:p-5">
             {modes[mode]}
           </div>
           {keyIdea}

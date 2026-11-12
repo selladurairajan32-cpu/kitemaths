@@ -61,7 +61,7 @@ TC-UX-002.1.2,UX-002,AC1,unit,automated,passing,src/design-tokens.test.ts::defin
 TC-UX-002.1.3,UX-002,AC1,unit,automated,passing,src/design-tokens.test.ts::keeps state colours readable and the focus ring visible,
 TC-UX-002.1.4,UX-002,AC1,unit,automated,passing,"src/design-tokens.test.ts::meets the contrast minimum for every supported pairing at its real size and weight, without rounding",52 pairings in UX-004 §2.3; corrected 5 Nov (DEF-022)
 TC-UX-002.1.5,UX-002,AC1,unit,automated,passing,"src/design-tokens.test.ts::adds no violet token (D-013: the undefined violet classes are fixed in R1, DEF-009)",
-TC-UX-002.1.6,UX-002,AC1,unit,automated,passing,"src/design.test.ts::keeps violet out of the stylesheet, and gradients and glass only in the sky and glass styles (D-046)",Palette rule; narrowed by D-046 (sky and glass styles only)
+TC-UX-002.1.6,UX-002,AC1,unit,automated,passing,src/design.test.ts::keeps violet and gradients out of the stylesheet,Palette rule (narrowed by D-046; restored by D-052)
 TC-UX-002.1.7,UX-002,AC1,visual-a11y-qa,manual,review-pending,,"Specimen /design-specimen at 390px and 1280px, with a browser contrast audit of computed colours (docs/product/verification/)"
 TC-UX-002.2.1,UX-002,AC2,unit,automated,passing,src/design-tokens.test.ts::does not let one-off text sizes or hex colours grow (ratchet),"Baselines on 4 Nov: 224 one-off text sizes, 15 .tsx files with hex (RC-006); one-off text sizes lowered to 24 on 9 Nov when screens adopted the type tokens (CH-046)"
 TC-UX-002.2.2,UX-002,AC2,unit,automated,passing,src/design.test.ts::names only paper icons that exist,Icons come from one registry
@@ -682,3 +682,4 @@ TC-UX-006.1.62,UX-006,AC1,unit,automated,passing,"src/topics/hardConceptScripts.
 TC-UX-006.1.63,UX-006,AC1,unit,automated,passing,"src/topics/hardConceptScripts.test.ts::has the right checkpoint answers (hand-worked)",Teaching scripts for the hard concepts (D-050)
 TC-UX-006.1.64,UX-006,AC1,unit,automated,passing,"src/topics/hardConceptScripts.test.ts::says the numbers the pictures show",Teaching scripts for the hard concepts (D-050)
 TC-UX-006.1.65,UX-006,AC1,unit,automated,passing,"src/topics/hardConceptScripts.test.ts::teaches: it asks before it tells, names the mistake, and ends with a turn for the child and a recap",Teaching scripts for the hard concepts (D-050)
+TC-UX-004.1.6,UX-004,AC1,unit,automated,passing,"src/design-tokens.test.ts::gives every colour field readable text: white at 4.5:1 or more, and ink on yellow (D-052)",Colour fields (D-052)

@@ -16,6 +16,7 @@ import { useHydrated, useLearner, useNow } from "@/lib/store";
 import { topicById } from "@/topics";
 import { topicOverviews } from "@/topics/overview";
 import { activeTopic } from "@/topics/recommend";
+import { FIELDS } from "@/components/kid/fields";
 
 /**
  * D-043 step 3: the Practice tab. Before, `/practice` went straight into the current island's practice (DEF-014); now it
@@ -40,8 +41,8 @@ export function PracticeHubScreen() {
 
   return (
     <div className="space-y-10">
-      <ScreenHero pic="target" titleId="practice-title" title="Practice" line={`${today} of ${DAILY_GOAL} questions done today. Practice makes each skill stronger, and it counts towards mastery.`}>
-        <ButtonLink href={topicRoutes(active.id).practice()} size="xl">
+      <ScreenHero pic="target" field={FIELDS.green} titleId="practice-title" title="Practice" line={`${today} of ${DAILY_GOAL} questions done today. Practice makes each skill stronger, and it counts towards mastery.`}>
+        <ButtonLink href={topicRoutes(active.id).practice()} variant="cta" size="xl">
           {resuming ? "Carry on" : "Practise"} {active.title} <ArrowRightIcon size={20} />
         </ButtonLink>
       </ScreenHero>
@@ -54,7 +55,7 @@ export function PracticeHubScreen() {
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
             {review.map(({ topic, skill }) => (
               <li key={skill} className="flex">
-                <Link href={topicRoutes(topic.id).practice(skill)} className="glass rounded-[24px] flex flex-1 items-center justify-between gap-3 p-4 hover:-translate-y-0.5">
+                <Link href={topicRoutes(topic.id).practice(skill)} className="panel rounded-[24px] flex flex-1 items-center justify-between gap-3 p-4 hover:-translate-y-0.5">
                   <span className="min-w-0">
                     <span className="block font-extrabold text-ink">{topic.skillById(skill).title}</span>
                     <span className="block text-label font-semibold text-ink-2">{topic.title}</span>
@@ -75,7 +76,7 @@ export function PracticeHubScreen() {
           <ul className="mt-4 grid gap-3 sm:grid-cols-3">
             {quick.map((q) => (
               <li key={q.id} className="flex">
-                <Link href={q.href} className="glass rounded-[24px] flex flex-1 items-center gap-3 p-4 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
+                <Link href={q.href} className="panel rounded-[24px] flex flex-1 items-center gap-3 p-4 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
                   <span className="grid size-14 shrink-0 place-items-center rounded-[18px] bg-tile-green" aria-hidden>
                     <Pic name={q.pic} size={40} />
                   </span>
@@ -97,7 +98,7 @@ export function PracticeHubScreen() {
         <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {mine.map(({ topic, o }) => (
             <li key={topic.id} className="flex">
-              <Link href={topicRoutes(topic.id).practice()} className="glass rounded-[24px] flex flex-1 flex-col gap-3 p-4 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
+              <Link href={topicRoutes(topic.id).practice()} className="panel rounded-[24px] flex flex-1 flex-col gap-3 p-4 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
                 <span className="flex items-center gap-3">
                   <span className="grid size-12 shrink-0 place-items-center rounded-[16px] bg-tile-blue" aria-hidden>
                     <PaperIcon name={topic.look.icon} size={34} />

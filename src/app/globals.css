@@ -5,12 +5,11 @@
  * A calm white base, one friendly font (Nunito) at easy reading sizes, one blue action,
  * white cards with soft shadows, and the fun carried by 3D pictures (public/3d).
  * Fractions keep their data colours: coral numerator, blue denominator.
- * No violet. D-046: gradients and frosted glass only in the sky and glass styles below (.sky-*, .glass*), for the
- * sky-and-glass look the Product Owner asked for; everything else stays flat.
+ * No gradients and no violet. D-052: white everywhere (the D-046 sky and glass were withdrawn).
  */
 @theme static {
   /* Ground, surfaces and ink: a calm, clean base (the "Crystal" look). */
-  --color-paper: #f6f8fd; /* page ground */
+  --color-paper: #ffffff; /* page ground: white everywhere (D-052; was #f6f8fd) */
   --color-surface: #ffffff; /* cards */
   --color-sunk: #edf2fa; /* one tone step below the ground: tracks, chips */
   --color-raised: #f8faff; /* hover and quiet panels inside white cards */
@@ -62,12 +61,20 @@
   --color-leaf-soft: #dcf3e5;
   --color-fire: #ff7a2f;
 
-  /* D-046: the sky the kid pages sit in, its hills, and the yellow "go" button of the concept images. */
-  --color-sky-top: #a9d4ff;
-  --color-sky-mid: #d6ebff;
-  --color-sky-low: #eef7ff;
-  --color-hill: #b8e39c;
-  --color-hill-far: #d3efc0;
+  /*
+   * D-052 "colour fields": flat, saturated blocks that say what kind of thing a child is looking at: a journey stage,
+   * a world of topics, the one thing to do next. White text on each is at least 5:1; yellow and the yellow "go"
+   * button take the ink (9.3:1). Checked in design-tokens.test.ts.
+   */
+  --color-field-blue: #2563eb;
+  --color-field-green: #16794a;
+  --color-field-orange: #c2410c;
+  --color-field-teal: #0f766e;
+  --color-field-pink: #be185d;
+  --color-field-sky: #0369a1;
+  --color-field-navy: #1b2559;
+  --color-field-yellow: #ffc83d;
+  /* D-046: the yellow "go" button of the concept images. */
   --color-cta: #ffc83d; /* ink on it is about 10:1 */
   --color-cta-strong: #d99a00;
 
@@ -75,8 +82,9 @@
   --font-display: var(--font-nunito), ui-rounded, ui-sans-serif, system-ui, sans-serif;
 
   --radius-card: 24px;
-  --shadow-card: 0 8px 24px rgba(27, 37, 89, 0.1);
-  --shadow-lift: 0 16px 40px rgba(27, 37, 89, 0.14);
+  /* D-052: a faint lift only; edges come from a 1px line (a border or a shadow, not both at full strength). */
+  --shadow-card: 0 1px 2px rgba(27, 37, 89, 0.06);
+  --shadow-lift: 0 8px 20px rgba(27, 37, 89, 0.08);
 
   /*
    * UX-002 / UX-003 / UX-004 tokens (R0 step 2, D-013). Additive: new names only, so no existing
@@ -188,8 +196,7 @@
     font-size: 1.125rem; /* 18px: easy reading for young readers */
     font-weight: 600;
     line-height: 1.6;
-    /* D-046: transparent, so the kid pages' sky (fixed behind the content) shows; the page ground stays on html. */
-    background: transparent;
+    background: var(--color-paper);
     font-variant-numeric: tabular-nums;
     /* UX-003 AC3: a word wider than its box breaks rather than pushing the page sideways at large text sizes. */
     overflow-wrap: anywhere;
@@ -214,34 +221,17 @@
 @layer components {
   /* A paper panel: white on the sky, separated by tone, never by a shadow. */
   /*
-   * D-046: the sky behind the kid pages (soft clouds over a blue that fades towards the hills), and frosted glass for
-   * panels on it. Text never sits on the sky's gradient alone below the header: it sits on glass or white cards.
+   * D-052: white everywhere. A panel is a solid white surface with a thin line and a soft shadow (no glass, no
+   * gradient); the selected way to learn is the solid brand blue.
    */
-  .sky-backdrop {
-    background:
-      radial-gradient(60rem 18rem at 12% 8%, rgb(255 255 255 / 0.75), transparent 70%),
-      radial-gradient(48rem 14rem at 88% 22%, rgb(255 255 255 / 0.6), transparent 70%),
-      linear-gradient(180deg, var(--color-sky-top) 0%, var(--color-sky-mid) 38%, var(--color-sky-low) 100%);
+  .panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
   }
-  .glass {
-    background: rgb(255 255 255 / 0.74);
-    border: 1px solid rgb(255 255 255 / 0.9);
-    box-shadow: 0 12px 32px rgb(37 99 235 / 0.12);
-    backdrop-filter: blur(14px) saturate(1.2);
-    -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  }
-  /* A stronger glass for the header and the bottom bar, so their text keeps full contrast. */
-  .glass-strong {
-    background: rgb(255 255 255 / 0.9);
-    border: 1px solid rgb(255 255 255 / 0.95);
-    box-shadow: 0 10px 28px rgb(37 99 235 / 0.14);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-  }
-  /* The selected way to learn: the brand blue, a little deeper at the bottom. */
-  .glass-selected {
-    background: linear-gradient(180deg, var(--color-brand) 0%, var(--color-brand-strong) 100%); /* white text: 5.2:1 or more */
-    box-shadow: 0 14px 30px rgb(37 99 235 / 0.35);
+  .panel-selected {
+    background: var(--color-brand);
+    border: 1px solid var(--color-brand-strong);
+    box-shadow: 0 8px 20px rgb(37 99 235 / 0.22);
   }
   .card {
     background: var(--color-surface);

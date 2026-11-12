@@ -327,7 +327,8 @@ export function QuestionPlayer({
         )}
 
         {answering && (
-          <div className="sticky bottom-0 z-10 -mx-5 flex flex-wrap items-center justify-between gap-3 rounded-b-[28px] border-t border-line bg-surface px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 sm:static sm:mx-0 sm:rounded-none sm:border-0 sm:p-0">
+          // D-052: Hint and Check answer in a bar fixed to the bottom of the screen while the question is open, as in the references.
+          <div className="sticky bottom-0 z-10 -mx-5 -mb-5 flex flex-wrap items-center justify-between gap-3 rounded-b-[28px] border-t border-line bg-surface px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 sm:-mx-8 sm:-mb-8 sm:px-8 sm:pb-6">
             {q.hint && !state.hintVisible ? (
               <Button variant="quiet" size="lg" onClick={() => dispatch({ type: "request-hint" })} className="shrink-0">
                 <BulbIcon size={20} /> Hint
@@ -336,7 +337,7 @@ export function QuestionPlayer({
               <span />
             )}
             {/* D-048: the yellow "Check answer" of the concept images, everywhere a question is answered. */}
-            <Button type="submit" variant="cta" size="xl" disabled={!complete} className="min-w-0 flex-1 sm:min-w-48 sm:flex-none">
+            <Button type="submit" variant="cta" size="xl" disabled={!complete} className="min-w-0 flex-1 whitespace-nowrap sm:min-w-48 sm:flex-none">
               {state.attempts > 0 ? "Check again" : "Check answer"}
             </Button>
           </div>

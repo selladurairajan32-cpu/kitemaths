@@ -48,15 +48,11 @@ describe("design system", () => {
     expect(existsSync("public/3d/LICENSE-fluentui-emoji.txt")).toBe(true);
   });
 
-  it("keeps violet out of the stylesheet, and gradients and glass only in the sky and glass styles (D-046)", () => {
+  it("keeps violet and gradients out of the stylesheet", () => {
     const css = readFileSync("src/app/globals.css", "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
-    expect(css).not.toMatch(/violet|indigo/i);
-    // Every rule that uses a gradient or frosted glass is one of the named sky or glass styles.
-    const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({ selector: m[1]!.trim(), body: m[2]! }));
-    const fancy = rules.filter((r) => /gradient\(|backdrop-filter/.test(r.body)).map((r) => r.selector);
-    expect(fancy.length).toBeGreaterThan(0);
-    for (const sel of fancy) expect(sel, sel).toMatch(/^\.(sky-[a-z-]+|glass(-[a-z]+)?)$/);
-    // ...and nothing in the components reaches for them another way.
+    expect(css).not.toMatch(/gradient\(/);
+    expect(css).not.toMatch(/violet|indigo|backdrop-filter/i);
+    // D-052: white everywhere, so no component reaches for a gradient or frosted glass another way either.
     const tsx = readdirSync("src", { recursive: true }).map(String).filter((f) => /\.tsx$/.test(f) && !/\.test\.tsx$/.test(f));
     for (const f of tsx) expect(readFileSync(join("src", f), "utf8"), f).not.toMatch(/bg-gradient|backdrop-blur|linear-gradient\(|radial-gradient\(/);
   });

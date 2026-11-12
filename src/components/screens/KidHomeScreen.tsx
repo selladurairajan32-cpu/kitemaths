@@ -14,6 +14,7 @@ import { lessonsEvidenced, recommendNext, reviewSkills } from "@/engine/journey"
 import { answeredToday, DAILY_GOAL, levelFor, STARS, streakFor, totalStars } from "@/engine/rewards";
 import { JOURNEY_STAGES, STAGE_LABEL } from "@/engine/topicJourney";
 import { STAGE_PIC } from "@/components/journey/JourneyChrome";
+import { CYCLE } from "@/components/kid/fields";
 import { ProgressBar, ProgressRing } from "@/components/ui/Progress";
 import { DEFAULT_PLAN } from "@/engine/progress";
 import { routes, topicRoutes } from "@/lib/routes";
@@ -83,7 +84,7 @@ function KidHome() {
         <div className="flex items-end gap-4">
           <Pic name="guide-wave" size={128} priority className="hidden shrink-0 sm:block" />
           <div className="min-w-0">
-            <h1 id="hello-title" className="display flex flex-wrap items-center gap-2 text-heading-1 sm:text-display-2">
+            <h1 id="hello-title" className="display flex flex-wrap items-center gap-2 text-heading-2 sm:text-heading-1">
               Hi{name ? ` ${name}` : " there"}! <Pic name="waving" size={44} />
             </h1>
             <p className="mt-1 text-lg font-semibold text-ink-2">
@@ -94,23 +95,23 @@ function KidHome() {
             </p>
           </div>
         </div>
-        <Link href={routes.progress()} className="glass flex items-center gap-4 rounded-[28px] p-3 pr-6 hover:-translate-y-0.5" aria-label={`Level ${level.level}: ${stars} XP, ${level.needed - level.into} XP to level ${level.level + 1}. See your progress.`}>
+        <Link href={routes.progress()} className="flex items-center gap-4 rounded-[28px] bg-field-yellow p-3 pr-6 text-ink transition hover:-translate-y-0.5" aria-label={`Level ${level.level}: ${stars} XP, ${level.needed - level.into} XP to level ${level.level + 1}. See your progress.`}>
           <ProgressRing value={level.into / level.needed} size={84} label={`Level ${level.level}`}>
             <span className="display text-title leading-none text-ink">{level.level}</span>
           </ProgressRing>
           <span>
             <span className="block text-title font-extrabold text-ink">Level {level.level}</span>
             <span className="block text-label font-bold text-ink-2">{level.title}</span>
-            <span className="block text-label font-bold text-brand-strong">{level.needed - level.into} XP to level {level.level + 1}</span>
+            <span className="block text-label font-bold text-ink">{level.needed - level.into} XP to level {level.level + 1}</span>
           </span>
         </Link>
       </section>
 
       {/* Continue Learning: the one thing to do next, with one yellow button (D-037, D-043 step 3). */}
-      <section className="glass relative overflow-hidden rounded-[32px] px-5 py-6 sm:px-8 sm:py-8" aria-labelledby="next-title">
+      <section className="relative overflow-hidden rounded-[32px] bg-field-blue px-5 py-6 text-white sm:px-8 sm:py-8" aria-labelledby="next-title">
         <div className="flex items-center gap-6">
           <div className="min-w-0 flex-1">
-            <p className="flex items-center gap-2 text-label font-extrabold uppercase tracking-wide text-brand-strong">
+            <p className="flex items-center gap-2 text-body font-extrabold">
               <Pic name="play" size={24} /> {brandNew ? "Let's begin" : "Continue learning"}
             </p>
             <h2 id="next-title" className="display mt-2 text-heading-2 sm:text-heading-1">
@@ -118,7 +119,7 @@ function KidHome() {
             </h2>
             {cont ? (
               <>
-                <p className="mt-2 max-w-xl text-lg text-ink">
+                <p className="mt-2 max-w-xl text-lg">
                   {contTopic?.title ?? cont.def.topicId} · Step {cont.progress.reached + 1} of {JOURNEY_STAGES.length}: {STAGE_LABEL[JOURNEY_STAGES[cont.progress.reached]]}
                 </p>
                 <ol className="mt-4 flex max-w-xl items-center gap-1 sm:gap-2" aria-label={`Your learning path: step ${cont.progress.reached + 1} of ${JOURNEY_STAGES.length}`}>
@@ -126,16 +127,16 @@ function KidHome() {
                     const doneStage = i < cont.progress.reached;
                     const here = i === cont.progress.reached;
                     return (
-                      <li key={st} className={`flex min-w-0 flex-1 flex-col items-center gap-1 rounded-[16px] px-1 py-2 ${here ? "bg-brand-soft ring-2 ring-brand" : ""}`}>
+                      <li key={st} className={`flex min-w-0 flex-1 flex-col items-center gap-1 rounded-[16px] px-1 py-2 ${here ? "bg-surface text-field-blue" : ""}`}>
                         <span className="relative">
-                          <Pic name={STAGE_PIC[st]} size={30} muted={!doneStage && !here} />
+                          <span className="grid size-11 place-items-center rounded-full bg-surface"><Pic name={STAGE_PIC[st]} size={28} muted={!doneStage && !here} /></span>
                           {doneStage && (
                             <span className="absolute -bottom-1 -right-1 grid size-4 place-items-center rounded-full bg-ok-bright text-white ring-2 ring-white" aria-hidden>
                               <CheckIcon size={9} strokeWidth={4} />
                             </span>
                           )}
                         </span>
-                        <span className={`whitespace-nowrap text-label leading-tight [overflow-wrap:normal] ${here ? "font-extrabold text-brand-strong" : "font-semibold text-ink-2"}`}>{STAGE_LABEL[st]}</span>
+                        <span className={`whitespace-nowrap text-label leading-tight [overflow-wrap:normal] ${here ? "font-extrabold" : "font-semibold"}`}>{STAGE_LABEL[st]}</span>
                         <span className="sr-only">{doneStage ? ", done" : here ? ", up next" : ""}</span>
                       </li>
                     );
@@ -143,11 +144,11 @@ function KidHome() {
                 </ol>
                 <div className="mt-3 flex max-w-xl items-center gap-3">
                   <ProgressBar value={cont.progress.reached / JOURNEY_STAGES.length} tone="ok" label="Journey progress" className="h-3" />
-                  <span className="whitespace-nowrap text-label font-bold text-ink-2">{cont.progress.reached} of {JOURNEY_STAGES.length} steps</span>
+                  <span className="whitespace-nowrap text-label font-bold">{cont.progress.reached} of {JOURNEY_STAGES.length} steps</span>
                 </div>
               </>
             ) : (
-              <p className="mt-2 max-w-xl text-lg text-ink">
+              <p className="mt-2 max-w-xl text-lg">
                 {brandNew ? <>A short warm-up game finds the right {topic.title} lesson for you.</> : <RichText text={next.line} />}
               </p>
             )}
@@ -155,7 +156,7 @@ function KidHome() {
               {brandNew ? "Play the warm-up" : cont ? "Continue" : next.cta} <ArrowRightIcon size={20} />
             </ButtonLink>
             {!brandNew && !cont && nextIndex >= 0 && (
-              <p className="mt-4 text-body font-semibold text-ink-2">
+              <p className="mt-4 text-body font-semibold">
                 Lesson {nextIndex + 1} of {topic.lessons.length} · about {topic.lessons[nextIndex].minutes} minutes
               </p>
             )}
@@ -164,7 +165,7 @@ function KidHome() {
             {brandNew || !cont ? (
               <Kip mood={brandNew ? "cheer" : "happy"} size={150} />
             ) : (
-              <span className="grid size-40 place-items-center rounded-full bg-surface shadow-[var(--shadow-lift)]">
+              <span className="grid size-40 place-items-center rounded-full bg-surface">
                 {isPicName(cont.def.pic) ? <Pic name={cont.def.pic} size={112} /> : <PaperIcon name={contTopic?.look.icon ?? "bulb"} size={104} />}
               </span>
             )}
@@ -199,8 +200,8 @@ function KidHome() {
           <ol className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {plan.items.map((it, i) => (
               <li key={it.href + i} className="flex">
-                <Link href={it.href} className="glass flex flex-1 items-center gap-3 rounded-[24px] p-4 transition hover:-translate-y-0.5">
-                  <span className="grid size-10 shrink-0 place-items-center rounded-full bg-brand-soft text-lg font-extrabold text-brand-strong" aria-hidden>
+                <Link href={it.href} className="panel flex flex-1 items-center gap-3 rounded-[24px] p-4 transition hover:-translate-y-0.5">
+                  <span className={`grid size-10 shrink-0 place-items-center rounded-full text-lg font-extrabold ${CYCLE[i % CYCLE.length]!.bg} ${CYCLE[i % CYCLE.length]!.text}`} aria-hidden>
                     {i + 1}
                   </span>
                   <span className="min-w-0">
@@ -223,18 +224,18 @@ function KidHome() {
             Learn a new idea with Emma
           </h2>
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-            {journeys.map(({ def, progress }) => {
+            {journeys.map(({ def, progress }, ji) => {
               const finished = !!progress && progress.reached >= JOURNEY_STAGES.length - 1;
               const state = !progress ? `Year ${def.year} · watch, step through or try it` : finished ? "Done · watch again any time" : `Step ${progress.reached + 1} of ${JOURNEY_STAGES.length}: ${STAGE_LABEL[JOURNEY_STAGES[progress.reached]]}`;
               return (
                 <li key={`${def.topicId}/${def.concept}`} className="flex">
-                  <Link href={topicRoutes(def.topicId).learn(def.concept)} className="glass flex flex-1 items-center gap-3 rounded-[24px] p-4 transition hover:-translate-y-0.5">
-                    <span className="grid size-14 shrink-0 place-items-center rounded-[18px] bg-sun-soft" aria-hidden>
+                  <Link href={topicRoutes(def.topicId).learn(def.concept)} className={`flex flex-1 items-center gap-3 rounded-[24px] p-4 transition hover:-translate-y-0.5 ${CYCLE[ji % CYCLE.length]!.bg} ${CYCLE[ji % CYCLE.length]!.text}`}>
+                    <span className="grid size-14 shrink-0 place-items-center rounded-full bg-surface" aria-hidden>
                       {isPicName(def.pic) ? <Pic name={def.pic} size={40} /> : <PaperIcon name={topicById(def.topicId)?.look.icon ?? "bulb"} size={38} />}
                     </span>
                     <span className="min-w-0">
-                      <span className="block font-extrabold leading-snug text-ink">{def.title}</span>
-                      <span className={`mt-0.5 flex items-center gap-1 text-label font-bold ${finished ? "text-ok" : "text-ink-2"}`}>
+                      <span className="block font-extrabold leading-snug">{def.title}</span>
+                      <span className="mt-0.5 flex items-center gap-1 text-label font-bold">
                         {finished && <CheckIcon size={15} strokeWidth={3} />}
                         {state}
                       </span>

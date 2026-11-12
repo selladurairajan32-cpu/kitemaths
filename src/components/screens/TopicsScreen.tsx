@@ -13,8 +13,8 @@ import { JOURNEYS } from "@/topics/kit/journeys";
 import { topicOverviews } from "@/topics/overview";
 import { activeTopic } from "@/topics/recommend";
 import { WORLDS } from "@/topics/worlds";
+import { FIELDS, WORLD_FIELD } from "@/components/kid/fields";
 
-const TILES = ["bg-tile-blue", "bg-tile-green", "bg-tile-orange", "bg-tile-pink", "bg-tile-sky", "bg-tile-yellow"];
 
 /**
  * D-043 step 3: every topic in one grid, with progress. Filter by world or by the child's school year; each card opens
@@ -41,11 +41,12 @@ export function TopicsScreen() {
     <div className="space-y-8">
       <ScreenHero
         guide
+        field={FIELDS.blue}
         titleId="topics-title"
         title="Topics"
         line={`${all.length} topics to explore. You have started ${started}. Pick one to see its lessons, or carry on where you are.`}
       >
-        <Link href={routes.journey()} className="inline-flex min-h-11 items-center gap-1.5 text-lg font-bold text-brand-strong underline underline-offset-4">
+        <Link href={routes.journey()} className="inline-flex min-h-11 items-center gap-1.5 text-lg font-bold text-white underline underline-offset-4">
           See them on the world map <ArrowRightIcon size={18} />
         </Link>
       </ScreenHero>
@@ -73,7 +74,7 @@ export function TopicsScreen() {
         <p className="rounded-[24px] bg-sunk p-6 text-body text-ink-2">No topics here for Year {year}. Untick &ldquo;Only Year {year} topics&rdquo; to see them all.</p>
       ) : (
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-label="Topics">
-          {shown.map(({ topic, o }, i) => {
+          {shown.map(({ topic, o }) => {
             const isHere = topic.id === here;
             const finished = o.skills > 0 && o.mastered === o.skills;
             const journeys = JOURNEYS.filter((j) => j.topicId === topic.id).length;
@@ -81,25 +82,26 @@ export function TopicsScreen() {
               <li key={topic.id} className="flex">
                 <Link
                   href={topicRoutes(topic.id).island()}
-                  className={`glass flex flex-1 flex-col gap-4 rounded-[24px] p-4 transition hover:-translate-y-0.5 sm:p-5 ${isHere ? "ring-2 ring-brand" : ""}`}
+                  className={`panel flex flex-1 flex-col overflow-hidden rounded-[24px] transition hover:-translate-y-0.5 ${isHere ? "ring-4 ring-brand" : ""}`}
                 >
-                  <span className="flex items-start gap-3">
-                    <span className={`relative grid size-16 shrink-0 place-items-center rounded-[20px] ${TILES[i % TILES.length]}`} aria-hidden>
-                      <PaperIcon name={topic.look.icon} size={44} />
+                  {/* D-052: the topic's world colour, so a child can tell the worlds apart at a glance. */}
+                  <span className={`flex items-center gap-3 px-4 py-3 sm:px-5 ${(WORLD_FIELD[topic.world] ?? FIELDS.blue).bg} ${(WORLD_FIELD[topic.world] ?? FIELDS.blue).text}`}>
+                    <span className="relative grid size-14 shrink-0 place-items-center rounded-full bg-surface" aria-hidden>
+                      <PaperIcon name={topic.look.icon} size={38} />
                       {finished && (
                         <span className="absolute -bottom-1 -right-1 grid size-6 place-items-center rounded-full bg-ok-bright text-white ring-2 ring-white">
                           <CheckIcon size={12} strokeWidth={3} />
                         </span>
                       )}
                     </span>
-                    <span className="min-w-0">
-                      <span className="flex items-center justify-between gap-2 text-title font-extrabold leading-snug text-ink">
-                        {topic.title} <ArrowRightIcon size={20} className="shrink-0 text-brand-strong" />
-                      </span>
-                      <span className="block text-label text-ink-2">{topic.subtitle}</span>
-                      <span className="mt-1 block text-label font-semibold text-muted">{yearsText(topic.years)}</span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-title font-extrabold leading-snug">{topic.title}</span>
+                      <span className="block text-label font-bold">{yearsText(topic.years)}</span>
                     </span>
+                    <ArrowRightIcon size={22} className="shrink-0" />
                   </span>
+                  <span className="flex flex-1 flex-col gap-3 p-4 sm:p-5">
+                    <span className="block text-label text-ink-2">{topic.subtitle}</span>
                   <span className="mt-auto block space-y-2">
                     <TopicBar o={o} label={topic.title} />
                     <span className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-label font-semibold text-ink-2">
@@ -116,6 +118,7 @@ export function TopicsScreen() {
                         {journeys > 0 && <span className="rounded-full bg-sun-soft px-3 py-0.5 text-label font-bold text-ink">Learn with Emma</span>}
                       </span>
                     )}
+                  </span>
                   </span>
                 </Link>
               </li>

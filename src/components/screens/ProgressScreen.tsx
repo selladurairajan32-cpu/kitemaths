@@ -37,7 +37,7 @@ export function ProgressScreen() {
 
   return (
     <div className="space-y-8">
-      <section className="glass rounded-[32px] px-5 py-7 sm:px-10 sm:py-10" aria-labelledby="progress-title">
+      <section className="rounded-[32px] bg-tile-sky px-5 py-7 sm:px-10 sm:py-10" aria-labelledby="progress-title">
         <div className="flex flex-col items-center gap-8 sm:flex-row">
           <MasteryRing s={ring} />
           <div className="min-w-0 flex-1">
@@ -56,7 +56,7 @@ export function ProgressScreen() {
 
       <section aria-label="XP, level and streak">
         <ul className="grid gap-3 sm:grid-cols-3">
-          <li className="glass rounded-[24px] flex items-center gap-3 p-4">
+          <li className="panel rounded-[24px] flex items-center gap-3 p-4">
             <Pic name="star" size={40} />
             <span className="min-w-0 flex-1">
               <span className="block text-title font-extrabold text-ink">
@@ -70,7 +70,7 @@ export function ProgressScreen() {
               </span>
             </span>
           </li>
-          <li className="glass rounded-[24px] flex items-center gap-3 p-4">
+          <li className="panel rounded-[24px] flex items-center gap-3 p-4">
             <Pic name="flame" size={40} muted={!streak.activeToday} />
             <span>
               <span className="block text-title font-extrabold text-ink">
@@ -80,7 +80,7 @@ export function ProgressScreen() {
             </span>
           </li>
           <li className="flex">
-            <Link href={routes.badges()} className="glass rounded-[24px] flex flex-1 items-center gap-3 p-4 hover:-translate-y-0.5">
+            <Link href={routes.badges()} className="panel rounded-[24px] flex flex-1 items-center gap-3 p-4 hover:-translate-y-0.5">
               <Pic name="medal" size={40} />
               <span className="min-w-0 flex-1">
                 <span className="block text-title font-extrabold text-ink">
@@ -100,7 +100,7 @@ export function ProgressScreen() {
         <ul className="mt-4 space-y-3">
           {mine.map(({ topic, o }) => (
             <li key={topic.id}>
-              <Link href={topicRoutes(topic.id).island()} className="glass rounded-[24px] grid grid-cols-[3.5rem_1fr] items-center gap-x-4 gap-y-2 p-4 hover:-translate-y-0.5 sm:grid-cols-[3.5rem_14rem_1fr]">
+              <Link href={topicRoutes(topic.id).island()} className="panel rounded-[24px] grid grid-cols-[3.5rem_1fr] items-center gap-x-4 gap-y-2 p-4 hover:-translate-y-0.5 sm:grid-cols-[3.5rem_14rem_1fr]">
                 <span className="grid size-14 place-items-center rounded-[18px] bg-tile-blue" aria-hidden>
                   <PaperIcon name={topic.look.icon} size={38} />
                 </span>
@@ -125,7 +125,7 @@ export function ProgressScreen() {
             </li>
           ))}
         </ul>
-        <div className="glass mt-6 flex flex-col items-start gap-4 rounded-[28px] p-5 sm:flex-row sm:items-center">
+        <div className="panel mt-6 flex flex-col items-start gap-4 rounded-[28px] p-5 sm:flex-row sm:items-center">
           <Pic name="guide-point" size={96} className="shrink-0" />
           <div className="min-w-0 flex-1">
             <h3 className="text-title font-extrabold text-ink">How well do you really understand?</h3>

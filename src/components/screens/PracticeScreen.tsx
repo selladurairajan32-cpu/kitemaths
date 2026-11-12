@@ -28,6 +28,7 @@ import { useTopicState } from "@/topics/context";
 import type { TopicModule } from "@/topics/types";
 import { ScreenHero } from "@/components/kid/ScreenHero";
 import { Pic } from "@/components/paper/Pic";
+import { ProgressBar } from "@/components/ui/Progress";
 
 function pickNext(topic: TopicModule, s: TopicLearner): TopicLearner {
   if (s.practice.sessionResults >= PRACTICE_SESSION_LENGTH) return completePracticeSession(s);
@@ -252,32 +253,26 @@ export function PracticeScreen({ focusSkill = null }: { focusSkill?: string | nu
     const sessionStars = sessionResults(learner).reduce((n, r) => n + starsForResult(r), 0);
     const done = practice.sessionResults;
     return (
-      <div className="mx-auto max-w-3xl space-y-4">
-        <div className="flex items-center gap-3">
-          <span className="grid size-11 shrink-0 place-items-center rounded-[20px] text-xl" style={{ background: topic.lessonLook(topic.skillById(current!.skill).lessonId).soft }} aria-hidden>
-            <PaperIcon name={topic.lessonLook(topic.skillById(current!.skill).lessonId).icon} size={32} />
-          </span>
-          <div className="min-w-0 flex-1">
-            <h1 id="practice-heading" className="flex items-center justify-between gap-2 text-label font-semibold text-muted">
-              <span className="min-w-0">
-                <span className="text-ink">{topic.skillById(current!.skill).title}</span>
-                <span className="sr-only">
-                  {" "}
-                  · Question {Math.min(done + 1, PRACTICE_SESSION_LENGTH)} of {PRACTICE_SESSION_LENGTH}
-                </span>
+      <div className="mx-auto max-w-3xl space-y-5">
+        {/* D-052: as in the references: what this is, "Question N of M", and one full progress bar. */}
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between gap-3">
+            <span className="flex min-w-0 items-center gap-2">
+              <span className="grid size-9 shrink-0 place-items-center rounded-full" style={{ background: topic.lessonLook(topic.skillById(current!.skill).lessonId).soft }} aria-hidden>
+                <PaperIcon name={topic.lessonLook(topic.skillById(current!.skill).lessonId).icon} size={24} />
               </span>
-              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-sun-soft px-2.5 py-0.5 font-bold text-ink">
-                {sessionStars} <Pic name="star" size={21} />
-              </span>
-            </h1>
-            <ol className="mt-1.5 flex gap-1" aria-hidden>
-              {Array.from({ length: PRACTICE_SESSION_LENGTH }, (_, i) => (
-                <li key={i} className={`h-2.5 flex-1 rounded-full transition-colors ${i < done ? "bg-ok-bright" : i === done ? "bg-brand" : "bg-line"}`} />
-              ))}
-            </ol>
+              <span className="min-w-0 text-label font-bold text-ink-2">{topic.skillById(current!.skill).title}</span>
+            </span>
+            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-sun-soft px-2.5 py-0.5 text-label font-bold text-ink">
+              {sessionStars} <Pic name="star" size={20} /> <span className="sr-only">XP</span>
+            </span>
           </div>
+          <h1 id="practice-heading" className="text-center text-title font-extrabold text-ink">
+            Question {Math.min(done + 1, PRACTICE_SESSION_LENGTH)} <span className="font-bold text-ink-2">of {PRACTICE_SESSION_LENGTH}</span>
+          </h1>
+          <ProgressBar value={done / PRACTICE_SESSION_LENGTH} tone="den" label={`${done} of ${PRACTICE_SESSION_LENGTH} questions done`} className="h-2.5" />
         </div>
-        <section className="card p-5 sm:p-8" aria-labelledby="practice-heading">
+        <section aria-labelledby="practice-heading">
           <AnimatePresence mode="wait">
             <motion.div key={current!.id} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.22 }}>
               {practice.currentReason === "transfer" && (

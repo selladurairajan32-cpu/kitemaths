@@ -16,6 +16,7 @@ import { routes, topicRoutes } from "@/lib/routes";
 import { useHydrated, useLearner } from "@/lib/store";
 import { topicById } from "@/topics";
 import { activeTopic, startedTopics } from "@/topics/recommend";
+import { FIELDS } from "@/components/kid/fields";
 
 const MOCK_TOPIC = "mock-exams";
 
@@ -40,7 +41,7 @@ export function TestsScreen() {
 
   return (
     <div className="space-y-10">
-      <ScreenHero pic="trophy" titleId="tests-title" title="Tests" line="Show what you know. A big challenge checks a whole topic; a practice mock is like a real 11+ paper." />
+      <ScreenHero pic="trophy" field={FIELDS.orange} titleId="tests-title" title="Tests" line="Show what you know. A big challenge checks a whole topic; a practice mock is like a real 11+ paper." />
 
       {rechecks.length > 0 && (
         <section aria-labelledby="recheck-title">
@@ -53,7 +54,7 @@ export function TestsScreen() {
               const ready = readyForRecheck(m);
               const links = topicRoutes(t.id);
               return (
-                <li key={s.id} className="glass rounded-[24px] flex flex-wrap items-center justify-between gap-3 p-4">
+                <li key={s.id} className="panel rounded-[24px] flex flex-wrap items-center justify-between gap-3 p-4">
                   <span className="min-w-0">
                     <span className="block font-extrabold text-ink">{s.title}</span>
                     <span className="block text-label font-semibold text-ink-2">{t.title}</span>
