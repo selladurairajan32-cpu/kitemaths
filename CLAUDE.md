@@ -38,7 +38,10 @@ only accepted items may have `accepted` cases. Update `test-cases.csv` in the sa
 
 **New session? Read `docs/product/HANDOFF.md` first:** branches, what is done, what is next, and how to rebuild films.
 
-`docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Latest: D-050 batch 1
+`docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Latest: D-052/D-053 built (white and
+clean with colour fields per stage, world and banner, `kid/fields.ts`, `--color-field-*`; no gradients or glass, the
+original palette guard restored; question screens as one sheet with "Question N of M"; CH-105, CH-106; READY FOR QA,
+not deployed). Before that: D-050 batch 1
 built (journeys for comparing decimals, percentages of amounts, multiplying fractions, remainders; makers in
 `<island>/journey.ts`; CH-101 to CH-103; `reports/D-050-batch-1-report.md`; READY FOR QA; deployed 12 Nov on request, D-051, CH-104; 6 hard concepts
 to go; next asked: a whole-app readability pass, D-051). Before that: D-046 phase 2

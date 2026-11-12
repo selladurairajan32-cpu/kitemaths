@@ -42,6 +42,10 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
   `<X>Stage.tsx`, `<X>Try.tsx`, `<X>Page.tsx`; entries in `kit/journeys.ts`, `kit/explanationIndex.ts`,
   `kit/explanations.tsx`, `kit/explainScripts.ts`; a scene in `tools/films/scenes/`; then the film steps below.
 
+- **D-052/D-053** (built, READY FOR QA, not deployed): white and clean with colour fields (`components/kid/fields.ts`:
+  stage, world and peer colours; `--color-field-*` tokens, white text at 5:1 or more). No gradients or glass anywhere
+  (`design.test.ts`). CH-105, CH-106.
+
 **Next (D-043 plan, in order):**
 1. **The ten hardest concepts on the journey** (4 done in batch 1; 6 to go), in batches of 4. Each one needs:
    - a script;
