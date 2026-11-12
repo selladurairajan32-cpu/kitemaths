@@ -61,6 +61,8 @@ export function topicRoutes(topicId: string) {
     explain: (concept: string) => `${base}/explain/${concept}`,
     // D-043: the topic journey (Learn, Practise, Apply, Check, Complete); /explain redirects here.
     learn: (concept: string) => `${base}/learn/${concept}`,
+    // D-054 pilot: the topic learning page (sub-topics, practice stops, topic test).
+    study: (part?: string) => (part ? `${base}/study/${part}` : `${base}/study`),
   };
 }
 

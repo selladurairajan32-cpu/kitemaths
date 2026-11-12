@@ -10,6 +10,7 @@ import { ScreenSkeleton } from "@/components/ui/Screen";
 import { routes, topicRoutes } from "@/lib/routes";
 import { useHydrated, useLearner } from "@/lib/store";
 import { JOURNEYS } from "@/topics/kit/journeys";
+import { hasStudyPlan } from "@/topics/kit/study";
 import { topicOverviews } from "@/topics/overview";
 import { activeTopic } from "@/topics/recommend";
 import { WORLDS } from "@/topics/worlds";
@@ -81,7 +82,7 @@ export function TopicsScreen() {
             return (
               <li key={topic.id} className="flex">
                 <Link
-                  href={topicRoutes(topic.id).island()}
+                  href={hasStudyPlan(topic.id) ? topicRoutes(topic.id).study() : topicRoutes(topic.id).island()}
                   className={`panel flex flex-1 flex-col overflow-hidden rounded-[24px] transition hover:-translate-y-0.5 ${isHere ? "ring-4 ring-brand" : ""}`}
                 >
                   {/* D-052: the topic's world colour, so a child can tell the worlds apart at a glance. */}

@@ -341,7 +341,7 @@ function FractionPicture({ v }: { v: Extract<KitVisual, { kind: "fraction" }> })
               })}
             </svg>
           ) : (
-            <div key={w} className="flex h-14 w-full max-w-md overflow-hidden rounded-[12px] border-[3px] border-ink">
+            <div key={w} className="flex h-14 w-[min(28rem,70vw)] overflow-hidden rounded-[12px] border-[3px] border-ink">
               {Array.from({ length: v.parts }, (_, i) => (
                 <span key={i} className="flex-1 border-r-[3px] border-ink last:border-r-0" style={{ background: i < shaded ? CORAL : "#fff" }} />
               ))}
