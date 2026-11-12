@@ -1,5 +1,6 @@
 import { defineTopic, genFor, int, pick, withExtras, withHints } from "@/topics/kit/define";
 import { multiplyJourneyExtra } from "./multiplyJourney";
+import { deepExtra } from "./deep";
 import { addDifferentExtra, ADD_DIFFERENT } from "./different";
 import { fractions2Extra } from "./extra";
 import type { ChooseOption, Template } from "@/topics/kit/types";
@@ -660,4 +661,4 @@ export const fractions2 = defineTopic(withExtras({
     { lessonId: "add-related", template: "f2-add-related" },
     { lessonId: "multiply", template: "f2-times-whole" },
   ],
-}, fractions2Extra, addDifferentExtra, multiplyJourneyExtra));
+}, fractions2Extra, addDifferentExtra, multiplyJourneyExtra, deepExtra));

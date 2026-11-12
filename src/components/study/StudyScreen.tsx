@@ -21,6 +21,8 @@ import { useTopicState } from "@/topics/context";
 import { EXPLAIN_SCRIPTS } from "@/topics/kit/explainScripts";
 import { JOURNEYS } from "@/topics/kit/journeys";
 import { studyPages, studyPlan, type StudyItem } from "@/topics/kit/study";
+import { deepFor } from "@/topics/kit/deepIndex";
+import { DEEP_PAGES, DeepPage, LevelChip } from "./DeepSubTopic";
 
 /**
  * D-054 pilot: the topic learning page. The topic's sub-topics down the left (a drawer on a phone), practice stops after
@@ -110,6 +112,7 @@ function TopicList({ plan, current, done, total, compact = false }: { plan: Stud
             );
           return (
             <li key={i.part}>
+              {i.kind === "sub" && i.partTitle && <p className="mb-1 mt-4 px-2.5 text-label font-extrabold uppercase tracking-wide text-ink-2 first:mt-0">{i.partTitle}</p>}
               <Link
                 href={links.study(i.part)}
                 aria-current={here ? "page" : undefined}
@@ -118,10 +121,11 @@ function TopicList({ plan, current, done, total, compact = false }: { plan: Stud
                 }`}
               >
                 {mark}
-                <span className="min-w-0">
+                <span className="min-w-0 flex-1">
                   {label}
                   {finished && <span className="sr-only"> (done)</span>}
                 </span>
+                {i.kind === "sub" && deepFor(topic.id, i.lesson.id) && <span className="shrink-0 rounded-full bg-field-navy px-2 py-0.5 text-label font-extrabold text-white">GCSE</span>}
               </Link>
             </li>
           );
@@ -145,9 +149,10 @@ const itemTitle = (i: StudyItem) => (i.kind === "sub" ? i.lesson.title : i.kind 
 function SubTopic({ item, plan }: { item: Extract<StudyItem, { kind: "sub" }>; plan: StudyItem[] }) {
   const { topic, learner, update, links } = useTopicState();
   const lesson: Lesson = item.lesson;
-  const pages = studyPages(lesson);
+  const deep = deepFor(topic.id, lesson.id);
+  const pages = deep ? DEEP_PAGES.map((label) => ({ label, step: null })) : studyPages(lesson);
   const saved = learner.lessons[lesson.id];
-  const [page, setPage] = useState(() => (saved?.completed ? 0 : Math.min(saved?.step ?? 0, lesson.steps.length - 1)));
+  const [page, setPage] = useState(() => (deep || saved?.completed ? 0 : Math.min(saved?.step ?? 0, lesson.steps.length - 1)));
   const heading = useRef<HTMLHeadingElement>(null);
   const moved = useRef(false);
   const subs = plan.filter((i) => i.kind === "sub").length;
@@ -163,7 +168,7 @@ function SubTopic({ item, plan }: { item: Extract<StudyItem, { kind: "sub" }>; p
   const go = (p: number) => {
     moved.current = true;
     setPage(p);
-    if (p < lesson.steps.length) update((s) => goToStep(s, lesson.id, p));
+    if (!deep && p < lesson.steps.length) update((s) => goToStep(s, lesson.id, p));
     window.scrollTo({ top: 0 });
   };
   const finish = () => update((s) => completeLesson(s, lesson.id, Date.now()));
@@ -173,37 +178,56 @@ function SubTopic({ item, plan }: { item: Extract<StudyItem, { kind: "sub" }>; p
   };
 
   const p = pages[page];
-  const step = p.step === null ? null : lesson.steps[p.step];
+  const step = deep || p.step === null ? null : lesson.steps[p.step];
+  const lastPage = page === pages.length - 1;
   const tips = lesson.steps.flatMap((s) => (s.type === "explain" && s.tip ? [s.tip] : []));
 
   return (
     <article aria-labelledby="sub-title" className="space-y-6">
       <header className="space-y-4">
-        <p className="text-label font-bold text-ink-2">
-          Sub-topic {item.number} of {subs} · about {lesson.minutes} minutes
-        </p>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+          <p className="text-label font-bold text-ink-2">
+            Sub-topic {item.number} of {subs} · about {deep ? lesson.minutes + 10 : lesson.minutes} minutes
+          </p>
+          {deep && (
+            <span className="flex gap-1.5">
+              <LevelChip level="Core" />
+              <LevelChip level="11+" />
+              <LevelChip level="GCSE" />
+            </span>
+          )}
+        </div>
         <h1 id="sub-title" className="display text-heading-1 sm:text-display-2">
           {lesson.title}
         </h1>
-        <p className="max-w-2xl text-lg text-ink-2">{lesson.summary}</p>
-        <ol className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0" aria-label={`Page ${page + 1} of ${pages.length}`}>
+        <p className="max-w-2xl text-body-lg text-ink-2">{lesson.summary}</p>
+        <ol className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 pt-2 sm:mx-0 sm:px-0" aria-label={`Page ${page + 1} of ${pages.length}`}>
           {pages.map((pg, i) => (
-            <li key={i}>
+            <li key={i} className="min-w-[6.5rem] flex-1">
               <button
                 type="button"
                 onClick={() => go(i)}
                 aria-current={i === page ? "step" : undefined}
-                className={`flex min-h-10 items-center gap-2 whitespace-nowrap rounded-full px-3.5 text-label font-bold transition-colors ${
-                  i === page ? "bg-ink text-white" : i < page ? "bg-ok-soft text-ok" : "border border-line-strong text-ink-2 hover:bg-sunk"
-                }`}
+                className="group flex min-h-11 w-full flex-col items-start gap-2 text-left"
               >
-                <span className="tabular-nums">{i + 1}</span> {pg.label}
+                <span className={`h-1.5 w-full rounded-full transition-colors ${i === page ? "bg-ink" : i < page ? "bg-ok-bright" : "bg-line group-hover:bg-line-strong"}`} />
+                <span className={`whitespace-nowrap text-label font-bold ${i === page ? "text-ink" : "text-ink-2"}`}>
+                  <span className="tabular-nums">{i + 1}</span>. {pg.label}
+                </span>
               </button>
             </li>
           ))}
         </ol>
       </header>
 
+      {deep ? (
+        <section aria-labelledby="page-title" className="space-y-5">
+          <h2 id="page-title" ref={heading} tabIndex={-1} className="text-heading-2 font-extrabold leading-tight text-ink outline-none">
+            {p.label}
+          </h2>
+          <DeepPage deep={deep} page={page} onDone={() => go(page + 1)} />
+        </section>
+      ) : (
       <section aria-labelledby="page-title" className="panel space-y-6 rounded-[28px] p-5 sm:p-8">
         <div className="flex items-start justify-between gap-3">
           <h2 id="page-title" ref={heading} tabIndex={-1} className="text-heading-2 font-extrabold leading-tight text-ink outline-none">
@@ -286,14 +310,15 @@ function SubTopic({ item, plan }: { item: Extract<StudyItem, { kind: "sub" }>; p
           </div>
         )}
       </section>
+      )}
 
       <nav aria-label="Pages" className="flex items-center justify-between gap-3">
         <Button variant="secondary" size="lg" onClick={() => go(page - 1)} disabled={page === 0}>
           <ArrowLeftIcon size={18} /> Previous
         </Button>
-        {step !== null ? (
+        {!lastPage ? (
           <Button variant="cta" size="lg" onClick={() => go(page + 1)}>
-            {step.type === "check" ? "Skip for now" : "Next page"} <ArrowRightIcon size={18} />
+            {step?.type === "check" || (deep && page === 4) ? "Skip for now" : "Next page"} <ArrowRightIcon size={18} />
           </Button>
         ) : (
           next && (

@@ -683,3 +683,7 @@ TC-UX-006.1.63,UX-006,AC1,unit,automated,passing,"src/topics/hardConceptScripts.
 TC-UX-006.1.64,UX-006,AC1,unit,automated,passing,"src/topics/hardConceptScripts.test.ts::says the numbers the pictures show",Teaching scripts for the hard concepts (D-050)
 TC-UX-006.1.65,UX-006,AC1,unit,automated,passing,"src/topics/hardConceptScripts.test.ts::teaches: it asks before it tells, names the mistake, and ends with a turn for the child and a recap",Teaching scripts for the hard concepts (D-050)
 TC-UX-004.1.6,UX-004,AC1,unit,automated,passing,"src/design-tokens.test.ts::gives every colour field readable text: white at 4.5:1 or more, and ink on yellow (D-052)",Colour fields (D-052)
+TC-CUR-001.1.46,CUR-001,AC1,unit,automated,passing,"src/topics/fractions-2/deep.test.ts::gives the hand-worked answer for every item, and reaches every item",Exam-standard Fractions 2 questions (D-055)
+TC-CUR-001.1.47,CUR-001,AC1,unit,automated,passing,"src/topics/fractions-2/deep.test.ts::never marks a right answer wrong: a wrong option has another value, or is equal but not simplified",Exam-standard Fractions 2 questions (D-055)
+TC-CUR-001.1.48,CUR-001,AC1,unit,automated,passing,"src/topics/fractions-2/deep.test.ts::between: the right option lies strictly between the two fractions and the others don't",Exam-standard Fractions 2 questions (D-055)
+TC-CUR-001.1.49,CUR-001,AC1,unit,automated,passing,"src/topics/fractions-2/deep.test.ts::every deep sub-topic names a real lesson and skill, and its exercise questions exist",Exam-standard Fractions 2 questions (D-055)
