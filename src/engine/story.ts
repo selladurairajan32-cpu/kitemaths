@@ -60,6 +60,8 @@ export type StoryEvent =
   | { type: "restart" }
   | { type: "seek"; chapter: number; beat: number }
   | { type: "next" }
+  /** Jump to the start of the next beat; from the last beat, go straight to the checkpoint. */
+  | { type: "skip" }
   | { type: "answer"; value: number }
   | { type: "showMe" }
   | { type: "speed"; speed: Speed };
@@ -110,6 +112,14 @@ export function storyReducer<S>(chapters: Chapter<S>[], state: StoryState, event
       const target = chapters[event.chapter]!;
       const beat = Math.max(0, Math.min(event.beat, target.beats.length - 1));
       return { ...state, chapter: event.chapter, beat, elapsed: 0, atEnd: false, replaying: false, wrong: event.chapter === state.chapter ? state.wrong : 0, shown: false };
+    }
+    case "skip": {
+      if (state.atEnd) return state;
+      if (state.replaying || state.beat === ch.beats.length - 1) {
+        const last = ch.beats.length - 1;
+        return { ...state, beat: last, elapsed: ch.beats[last]!.ms, playing: false, atEnd: true, replaying: false };
+      }
+      return { ...state, beat: state.beat + 1, elapsed: 0 };
     }
     case "next": {
       if (state.chapter >= chapters.length - 1 || !state.passed.includes(state.chapter)) return state;

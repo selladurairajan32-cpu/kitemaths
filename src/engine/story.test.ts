@@ -64,6 +64,14 @@ describe("story machine (D-040)", () => {
     expect(s.passed).toEqual([]);
   });
 
+  it("skips to the next beat, and from the last beat straight to the checkpoint", () => {
+    let s = run([{ type: "play" }, { type: "tick", ms: 400 }, { type: "skip" }]);
+    expect([s.beat, s.elapsed]).toEqual([1, 0]);
+    s = run([{ type: "skip" }], s);
+    expect(s).toMatchObject({ atEnd: true, playing: false });
+    expect(checkpointStatus(s)).toBe("asking");
+  });
+
   it("restarts the current chapter from its first beat", () => {
     const s = run([{ type: "play" }, { type: "tick", ms: 1500 }, { type: "restart" }]);
     expect([s.chapter, s.beat, s.elapsed, s.playing]).toEqual([0, 0, 0, true]);
