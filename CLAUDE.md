@@ -38,7 +38,10 @@ only accepted items may have `accepted` cases. Update `test-cases.csv` in the sa
 
 **New session? Read `docs/product/HANDOFF.md` first:** branches, what is done, what is next, and how to rebuild films.
 
-`docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Latest: D-043 step 3
+`docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Latest: D-046 phase 1
+built (the two journeys in the sky-and-glass look; XP instead of stars; 2D pizzas kept; `.sky-*`/`.glass*` are the only
+places for gradients and frosted glass; CH-095, CH-096; `reports/D-046-phase-1-report.md`; READY FOR QA, not deployed;
+next: phase 2, the same look on the kid pages). Before that: D-043 step 3
 built (kid pages: navigation Home, Topics, Practice, Tests, Progress; `/topics`, `/practice` hub, `/tests`, `/progress`;
 CH-092, CH-093; `reports/D-043-step-3-report.md`; READY FOR QA; deployed 12 Nov at the Product Owner's request, D-045, CH-094; work on `claude/clever-cori-42fmz0`). Last recorded
 decision: D-043 (a teaching flow, not a page: the topic journey `/t/[topic]/learn/[concept]` (Learn → Practise →

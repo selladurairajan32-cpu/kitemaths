@@ -30,6 +30,10 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
   level bar; Home with Continue Learning and today's plan; `/topics`, `/practice` (now a hub), `/tests`, `/progress`
   (mastery ring and topic bars). Report: `reports/D-043-step-3-report.md` (CH-092, CH-093).
 
+- **D-046 phase 1** (built, READY FOR QA, not deployed): the two journeys in the sky-and-glass look of the concept
+  images; stars are called XP; 2D pizzas kept (the Product Owner's choice). Report: `reports/D-046-phase-1-report.md`
+  (CH-095, CH-096). **Next: D-046 phase 2**, the same look on Home, Topics, Practice, Tests and Progress.
+
 **Next (D-043 plan, in order):**
 1. **The ten hardest concepts on the journey,** in batches of 4. Each one needs:
    - a script;
@@ -41,6 +45,8 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
 3. **Supabase accounts** (parent logins, children as profiles), then one production launch.
 
 **Open questions for the Product Owner:**
+- Confirm the narrowed palette rule (gradients and glass only in the sky and glass styles; D-046 report section 3).
+- Make the in-question Check button the yellow "Check answer" everywhere?
 - XP: keep stars with a level bar, or call them XP? Should today's plan tick items off? Keep `/practice` as a hub?
 - Lengthen the Check stage (the concept images show about 8 questions; it is 2 today, and changing it changes MAST-001)?
 - A reasoning question for ratio.
@@ -85,6 +91,7 @@ Browser checks (production build on a port; Playwright's Chromium is preinstalle
 - `node docs/product/verification/journey.cjs <out> 3123`
 - `node docs/product/verification/ratio-3d.cjs <out> 3123`
 - `node docs/product/verification/kid-pages.cjs <out> 3123`
+- `node docs/product/verification/journey-look.cjs <out>` (screenshots of every journey stage, for the Product Owner)
 
 Stop old servers with `pkill -f next-server`: the server renames itself, and a stale one serves the old build.
 

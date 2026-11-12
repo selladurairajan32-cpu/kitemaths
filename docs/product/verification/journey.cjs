@@ -80,7 +80,7 @@ async function answer(p, nextName) {
     await shot('3-learn-try'); await axe(p, `${vw}-learn-try`);
 
     // Practise.
-    await next(/I'm ready: Practise/).click();
+    await next(/Practise this/).click();
     await p.getByRole('list', { name: 'Practice levels' }).waitFor();
     await p.getByRole('button', { name: 'Method' }).click();
     await shot('4-practise'); await measure(p, `${vw}-practise`); await axe(p, `${vw}-practise`);
@@ -129,7 +129,7 @@ async function answer(p, nextName) {
     const p = await ctx.newPage();
     await p.goto(BASE + LEARN, { waitUntil: 'networkidle' });
     const learn = await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-    await p.getByRole('button', { name: /I'm ready: Practise/ }).click();
+    await p.getByRole('button', { name: /Practise this/ }).click();
     await p.waitForTimeout(600);
     report.narrow = { learn, practise: await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth) };
     await ctx.close();
