@@ -36,8 +36,14 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
 - **D-046 phase 2** (built, READY FOR QA, deployed on request, D-049, CH-100; D-048): the same look on Home, Topics, Practice, Tests and
   Progress; yellow Check answer in every question. Report: `reports/D-046-phase-2-report.md` (CH-098, CH-099).
 
+- **D-050 batch 1** (built, READY FOR QA, not deployed): journeys for comparing decimals, percentages of amounts,
+  multiplying fractions and remainders in real life (six journeys in all). Report: `reports/D-050-batch-1-report.md`
+  (CH-101 to CH-103). Pattern for a new concept: makers in `<island>/journey.ts`; `<island>/explain/<x>Script.ts`,
+  `<X>Stage.tsx`, `<X>Try.tsx`, `<X>Page.tsx`; entries in `kit/journeys.ts`, `kit/explanationIndex.ts`,
+  `kit/explanations.tsx`, `kit/explainScripts.ts`; a scene in `tools/films/scenes/`; then the film steps below.
+
 **Next (D-043 plan, in order):**
-1. **The ten hardest concepts on the journey,** in batches of 4. Each one needs:
+1. **The ten hardest concepts on the journey** (4 done in batch 1; 6 to go), in batches of 4. Each one needs:
    - a script;
    - a Manim scene;
    - `build.py`;
@@ -91,6 +97,7 @@ Browser checks (production build on a port; Playwright's Chromium is preinstalle
 - `node docs/product/verification/journey.cjs <out> 3123`
 - `node docs/product/verification/ratio-3d.cjs <out> 3123`
 - `node docs/product/verification/kid-pages.cjs <out> 3123`
+- `node docs/product/verification/journeys-batch1.cjs <out> 3123` (the four batch 1 journeys)
 - `node docs/product/verification/journey-look.cjs <out>` (screenshots of every journey stage, for the Product Owner)
 
 Stop old servers with `pkill -f next-server`: the server renames itself, and a stale one serves the old build.
