@@ -10,7 +10,7 @@ import { useStory } from "@/components/explain/story/useStory";
 import { setSettings } from "@/engine/progress";
 import type { Chapter, StoryState } from "@/engine/story";
 import { updateLearner, useLearner } from "@/lib/store";
-import { useReportWrong } from "./ExplainShell";
+import { useReportWrong } from "@/components/journey/wrong";
 
 /**
  * D-041 *Step through*: an animated picture for each beat of the story, its caption, a recorded voice reading it, and

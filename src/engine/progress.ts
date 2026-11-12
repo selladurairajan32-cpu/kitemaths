@@ -1,3 +1,4 @@
+import type { JourneyProgress } from "./topicJourney";
 import type { Evaluation, ItemResult, SkillId } from "./types";
 
 export const STATE_VERSION = 2;
@@ -113,6 +114,8 @@ export interface LearnerState {
   topics: Record<string, TopicProgress>;
   /** Every answer, in every topic. Skill and question ids are namespaced by topic. */
   results: ItemResult[];
+  /** D-043: topic journeys in progress or done, keyed "<topic>/<concept>". Optional: older saves have none. */
+  journeys?: Record<string, JourneyProgress>;
 }
 
 export function createTopicProgress(): TopicProgress {
@@ -197,6 +200,7 @@ export function hydrateState(raw: unknown): LearnerState {
     currentTopicId: typeof data.currentTopicId === "string" ? data.currentTopicId : null,
     topics,
     results,
+    ...(isRecord(data.journeys) ? { journeys: data.journeys as Record<string, JourneyProgress> } : {}),
   };
 }
 

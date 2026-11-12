@@ -2,16 +2,24 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { resetLearner } from "@/lib/store";
-import { RatioExplanation } from "./RatioExplanation";
+import { RatioLearn, RatioNotes } from "./RatioExplanation";
+
+/** D-043: the journey shows Learn as a stage and the Notes in a panel; here both are on one page. */
+const RatioExplanation = () => (
+  <>
+    <RatioLearn />
+    <RatioNotes />
+  </>
+);
 
 /** D-040, D-041: the ratio explanation page in jsdom, on the 2.5D picture (no WebGL here), in the three-way shell. */
 
-vi.mock("next/navigation", () => ({ useRouter: () => ({ push: () => {}, replace: () => {} }), usePathname: () => "/t/ratio-algebra/explain/ratio" }));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ push: () => {}, replace: () => {} }), usePathname: () => "/t/ratio-algebra/learn/ratio" }));
 
 beforeEach(() => {
   resetLearner();
   // Most tests use Step through, the story; the first checks the default.
-  history.replaceState(null, "", "/t/ratio-algebra/explain/ratio#step");
+  history.replaceState(null, "", "/t/ratio-algebra/learn/ratio#step");
 });
 
 /** The checkpoint's own answer box (the final check below has one too). */
@@ -27,9 +35,9 @@ async function toCheckpoint(user: ReturnType<typeof userEvent.setup>) {
 describe("ratio explanation page (D-040)", () => {
   it("opens on Watch with the ratio film, and Step through has the story with a caption, controls and locked chapters", async () => {
     const user = userEvent.setup();
-    history.replaceState(null, "", "/t/ratio-algebra/explain/ratio");
+    history.replaceState(null, "", "/t/ratio-algebra/learn/ratio");
     render(<RatioExplanation />);
-    expect(screen.getByRole("heading", { level: 1, name: /Ratio and proportion/ })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Choose how you want to learn" })).toBeTruthy();
     expect(screen.getByRole("tab", { name: /^Watch/, selected: true })).toBeTruthy();
     expect(document.querySelector("video")!.getAttribute("src")).toBe("/films/ratio/film.mp4");
     await user.click(screen.getByRole("tab", { name: /^Step through/ }));

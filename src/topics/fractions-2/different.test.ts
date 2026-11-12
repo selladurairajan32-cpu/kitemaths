@@ -90,6 +90,36 @@ describe("add and subtract with different denominators (D-041, Y6.FRAC.3)", () =
     }
   });
 
+  it("sets real-life problems (D-043 Apply): adding stories at level 2, taking away at level 3", () => {
+    for (const s of SEEDS) {
+      const add2 = q("f2-diff-apply", 2, s);
+      const [a, b] = operands(add2.prompt);
+      checkChoice(add2, plus(a!, b!));
+      const take = q("f2-diff-apply", 3, s);
+      const [c, d] = operands(take.prompt);
+      expect(take.prompt).toMatch(/left\?$/);
+      checkChoice(take, minus(c!, d!));
+    }
+  });
+
+  it("asks why the classic mistake is wrong (D-043 reasoning), with that mistake as a tagged option", () => {
+    for (const s of SEEDS) {
+      const x = q("f2-diff-why", 2, s);
+      if (x.kind !== "choose") throw new Error("expected a choice");
+      const [a, b] = operands(x.prompt);
+      const wrongSum = x.prompt.match(/= \{(\d+)\/(\d+)\}/)!;
+      // Ben's answer is the tops added over the bottoms added.
+      expect([Number(wrongSum[1]), Number(wrongSum[2])]).toEqual([Number(a!.n + b!.n), Number(a!.d + b!.d)]);
+      expect(x.options[x.answer]!.text).toMatch(/^The slices are different sizes/);
+      expect(x.options.some((o) => o.misconception === "fractions-2.add-denominators")).toBe(true);
+      const sum = plus(a!, b!);
+      const whole = sum.n / sum.d;
+      const rest = sum.n % sum.d;
+      // Written as a mixed number when it is more than one (hand rule: 13/10 is 1 3/10).
+      expect(x.explanation).toContain(whole >= BigInt(1) ? `**${whole} {${rest}/${sum.d}}**` : `**{${sum.n}/${sum.d}}**`);
+    }
+  });
+
   it("names the classic mistakes: adding the bottoms, and adding before the pieces match", () => {
     const x = q("f2-add-diff", 2, 1);
     if (x.kind !== "choose") throw new Error("expected a choice");

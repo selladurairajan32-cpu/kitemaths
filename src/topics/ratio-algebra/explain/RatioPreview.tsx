@@ -13,8 +13,8 @@ export function RatioPreview() {
         <RatioSceneSvg scene={{ kind: "share", total: 35, a: 2, b: 3, stage: "bar" }} />
       </div>
       <p className="text-center text-lg font-bold text-ink">Watch 35 sweets shared in the ratio 2 : 3, in 3D, with a quick check after each part.</p>
-      <ButtonLink href={topicRoutes("ratio-algebra").explain("ratio")} size="lg">
-        See it in 3D <ArrowRightIcon size={20} />
+      <ButtonLink href={topicRoutes("ratio-algebra").learn("ratio")} size="lg">
+        Start learning <ArrowRightIcon size={20} />
       </ButtonLink>
       <p className="text-center text-body text-ink-2">You can come back to this lesson at any time.</p>
     </div>

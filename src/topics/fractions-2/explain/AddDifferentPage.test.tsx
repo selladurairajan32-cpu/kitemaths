@@ -2,9 +2,9 @@ import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getLearner, resetLearner } from "@/lib/store";
-import { AddDifferentPage } from "./AddDifferentPage";
+import { AddDifferentLearn } from "./AddDifferentPage";
 
-/** D-041 pilot page in jsdom: three ways to learn, the remembered choice, Kip's offer, and Try it by keyboard. */
+/** D-041, D-043: the Learn stage of the fractions journey in jsdom: three ways to learn, the remembered choice, Kip's offer, and Try it by keyboard. */
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: () => {}, replace: () => {} }), usePathname: () => "/t/fractions-2/explain/add-different" }));
 
@@ -20,10 +20,11 @@ async function toCheckpoint(user: ReturnType<typeof userEvent.setup>) {
   while (!(skip as HTMLButtonElement).disabled) await user.click(skip);
 }
 
-describe("three ways to learn: adding fractions with different denominators (D-041)", () => {
-  it("offers Watch, Step through and Try it, opens on Watch with the film, captions source and transcript", () => {
-    render(<AddDifferentPage />);
-    expect(screen.getByRole("heading", { level: 1, name: "Adding fractions with different denominators" })).toBeTruthy();
+describe("three ways to learn: adding fractions with different denominators (D-041, D-043)", () => {
+  it("offers Watch, Step through and Try it with their times, and opens on Watch with the film and transcript", () => {
+    render(<AddDifferentLearn />);
+    expect(screen.getByRole("heading", { name: "Choose how you want to learn" })).toBeTruthy();
+    expect(screen.getByText("about 2 min")).toBeTruthy();
     expect(screen.getAllByRole("tab").map((t) => t.textContent)).toEqual([expect.stringMatching(/^Watch/), expect.stringMatching(/^Step through/), expect.stringMatching(/^Try it/)]);
     expect(tab("Watch").getAttribute("aria-selected")).toBe("true");
     const video = document.querySelector("video")!;
@@ -37,7 +38,7 @@ describe("three ways to learn: adding fractions with different denominators (D-0
 
   it("remembers the chosen way for next time, and moves between ways with the arrow keys", async () => {
     const user = userEvent.setup();
-    const { unmount } = render(<AddDifferentPage />);
+    const { unmount } = render(<AddDifferentLearn />);
     await user.click(tab("Step through"));
     expect(getLearner().settings.explainMode).toBe("step");
     expect(window.location.hash).toBe("#step");
@@ -47,14 +48,14 @@ describe("three ways to learn: adding fractions with different denominators (D-0
     expect(tab("Try it").getAttribute("aria-selected")).toBe("true");
     unmount();
     history.replaceState(null, "", "/t/fractions-2/explain/add-different");
-    render(<AddDifferentPage />);
+    render(<AddDifferentLearn />);
     expect(tab("Try it").getAttribute("aria-selected")).toBe("true");
   });
 
   it("steps through with a voice switch, and after two wrong answers Kip offers another way", async () => {
     const user = userEvent.setup();
     history.replaceState(null, "", "/t/fractions-2/explain/add-different#step");
-    render(<AddDifferentPage />);
+    render(<AddDifferentLearn />);
     const voice = screen.getByRole("button", { name: /Voice on/ });
     await user.click(voice);
     expect(getLearner().settings.explainVoice).toBe(false);
@@ -74,7 +75,7 @@ describe("three ways to learn: adding fractions with different denominators (D-0
   it("does Try it by keyboard: cut the pizzas until the slices match, then place all seven twelfths", async () => {
     const user = userEvent.setup();
     history.replaceState(null, "", "/t/fractions-2/explain/add-different#try");
-    render(<AddDifferentPage />);
+    render(<AddDifferentLearn />);
     const sam = screen.getByLabelText(/Sam's cutter/);
     const zara = screen.getByLabelText(/Zara's cutter/);
     fireEvent.change(sam, { target: { value: "2" } });
@@ -92,15 +93,4 @@ describe("three ways to learn: adding fractions with different denominators (D-0
     expect(screen.getByRole("img", { name: "The whole pizza: 7 of 12 slices" })).toBeTruthy();
   });
 
-  it("ends every way with the same island question, marked by the island", async () => {
-    const user = userEvent.setup();
-    render(<AddDifferentPage />);
-    const final = within(screen.getByText("Mini-checkpoint").closest("section")!);
-    expect(final.getByRole("heading", { name: /Work out/ })).toBeTruthy();
-    const options = final.getAllByRole("radio");
-    expect(options.length).toBeGreaterThanOrEqual(3);
-    await user.click(options[0]!);
-    await user.click(final.getByRole("button", { name: "Check" }));
-    expect(final.getByRole("status").textContent).toMatch(/^(Correct!|Not yet\.)/);
-  });
 });

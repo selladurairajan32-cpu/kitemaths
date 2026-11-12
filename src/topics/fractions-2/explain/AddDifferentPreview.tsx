@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { MODE_INFO } from "@/components/explain/modes/ExplainShell";
+import { MODE_INFO } from "@/components/journey/LearnStage";
 import { topicRoutes } from "@/lib/routes";
 import { EXPLAIN_MODES } from "@/engine/explainScript";
 import { FracStageView } from "./FracStage";
 
 /** D-041: the lesson step that opens the three-way explanation of ⅓ + ¼, straight into the way the child picks. */
 export function AddDifferentPreview() {
-  const href = topicRoutes("fractions-2").explain("add-different");
+  const href = topicRoutes("fractions-2").learn("add-different");
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="w-full rounded-[24px] bg-linear-to-b from-sky-soft to-brand-soft p-3">

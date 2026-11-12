@@ -81,6 +81,34 @@ function addQuestion(r: Rng, a: Fraction, b: Fraction, d: number, prompt: string
   };
 }
 
+/** Two fractions, the first bigger (never equal), so taking away gives a positive answer. */
+function biggerFirst(r: Rng, difficulty: 2 | 3) {
+  let { a, b, d } = pair(r, difficulty);
+  while (a.n * b.d === b.n * a.d) ({ a, b, d } = pair(r, difficulty));
+  if (a.n * b.d < b.n * a.d) [a, b] = [b, a];
+  return { a, b, d };
+}
+
+function subtractQuestion(r: Rng, a: Fraction, b: Fraction, d: number, prompt: string) {
+  const right = subtract(a, b);
+  const s = steps(a, b, d, "−");
+  const { options: opts, answer } = options(r, right, [
+    { x: { n: Math.abs(a.n - b.n) || 1, d: Math.abs(a.d - b.d) || 1 }, misconception: M.addDen, feedback: "That takes away the bottoms too. Make the pieces the same size first." },
+    { x: { n: Math.abs(a.n - b.n) || 1, d }, misconception: M.noCommon, feedback: `Change both into ${PART[d] ?? "the same pieces"} first: ${f(a)} = ${f({ n: s.an, d })}.` },
+    { x: { n: s.top + 1, d }, feedback: `Check the tops: ${s.an} − ${s.bn}.` },
+    { x: { n: s.an + s.bn, d }, feedback: "That adds. Take away the second fraction." },
+  ]);
+  return {
+    kind: "choose" as const,
+    prompt,
+    options: opts,
+    answer,
+    hint: `Cut both into ${PART[d] ?? `pieces of ${d}`} first.`,
+    hints: [`${f(a)} = ${f({ n: s.an, d })} and ${f(b)} = ${f({ n: s.bn, d })}.`, "Now take away the tops. The bottom stays the same."],
+    explanation: `${s.text}, so the answer is **${best(right)}**.`,
+  };
+}
+
 const templates: Template[] = [
   {
     key: "f2-add-diff",
@@ -136,26 +164,51 @@ const templates: Template[] = [
     skill: ADD_DIFFERENT,
     difficulties: [2, 3],
     make: (r, { difficulty }) => {
-      // Retry until the first fraction is the bigger one (never equal), so the answer is positive.
-      let { a, b, d } = pair(r, difficulty === 3 ? 3 : 2);
-      while (a.n * b.d === b.n * a.d) ({ a, b, d } = pair(r, difficulty === 3 ? 3 : 2));
-      if (a.n * b.d < b.n * a.d) [a, b] = [b, a];
-      const right = subtract(a, b);
-      const s = steps(a, b, d, "−");
-      const { options: opts, answer } = options(r, right, [
-        { x: { n: Math.abs(a.n - b.n) || 1, d: Math.abs(a.d - b.d) || 1 }, misconception: M.addDen, feedback: "That takes away the bottoms too. Make the pieces the same size first." },
-        { x: { n: Math.abs(a.n - b.n) || 1, d }, misconception: M.noCommon, feedback: `Change both into ${PART[d] ?? "the same pieces"} first: ${f(a)} = ${f({ n: s.an, d })}.` },
-        { x: { n: s.top + 1, d }, feedback: `Check the tops: ${s.an} − ${s.bn}.` },
-        { x: { n: s.an + s.bn, d }, feedback: "That adds. Take away the second fraction." },
+      const { a, b, d } = biggerFirst(r, difficulty === 3 ? 3 : 2);
+      return subtractQuestion(r, a, b, d, `Work out **${f(a)} − ${f(b)}**. Give the answer in its simplest form.`);
+    },
+  },
+  {
+    key: "f2-diff-apply",
+    skill: ADD_DIFFERENT,
+    difficulties: [2, 3],
+    make: (r, { difficulty }) => {
+      if (difficulty === 3) {
+        const { a, b, d } = biggerFirst(r, 3);
+        const [who, thing] = pick(r, [["Amy", "cake"], ["Kofi", "pizza"], ["Lena", "chocolate bar"]]);
+        return { ...subtractQuestion(r, a, b, d, `${who} has ${f(a)} of a ${thing}. ${who} gives ${f(b)} of the whole ${thing} to a friend. What fraction of the ${thing} is left?`), hint: `Take away: ${f(a)} − ${f(b)}. Cut both into ${PART[d] ?? "the same pieces"} first.` };
+      }
+      const { a, b, d } = pair(r, 2);
+      const prompt = pick(r, [
+        `A ribbon is cut into two pieces: one is ${f(a)} of a metre and the other is ${f(b)} of a metre. How long was the ribbon, in metres?`,
+        `A jug has ${f(a)} of a litre of juice in it. Ben pours in another ${f(b)} of a litre. How much juice is in the jug now, in litres?`,
+        `${f(a)} of a garden is grass and ${f(b)} is flowers. What fraction of the garden is grass or flowers?`,
+      ]);
+      return addQuestion(r, a, b, d, prompt);
+    },
+  },
+  {
+    key: "f2-diff-why",
+    skill: ADD_DIFFERENT,
+    difficulties: [2],
+    make: (r) => {
+      const { a, b, d } = pair(r, 2);
+      const right = add(a, b);
+      const wrongSum = { n: a.n + b.n, d: a.d + b.d };
+      const correct: ChooseOption = { text: `The slices are different sizes. He must change both into ${PART[d] ?? "the same size pieces"} before adding the tops.` };
+      const { options: opts, answer } = withAnswer(r, correct, [
+        { text: "He is right: add the tops and add the bottoms.", misconception: M.addDen, feedback: `Check: ${f(wrongSum)} is smaller than ${f(a.n * b.d > b.n * a.d ? a : b)} on its own, so adding can't give it.` },
+        { text: "He should have multiplied the tops and the bottoms.", feedback: "Multiplying finds a fraction of a fraction. Here we are adding two amounts." },
+        { text: "He should have taken the bottoms away from each other.", feedback: "The bottom number is the size of the pieces. We make the sizes match, not take them away." },
       ]);
       return {
         kind: "choose" as const,
-        prompt: `Work out **${f(a)} − ${f(b)}**. Give the answer in its simplest form.`,
+        prompt: `Ben says **${f(a)} + ${f(b)} = ${f(wrongSum)}**. Why is he wrong?`,
         options: opts,
         answer,
-        hint: `Cut both into ${PART[d] ?? `pieces of ${d}`} first.`,
-        hints: [`${f(a)} = ${f({ n: s.an, d })} and ${f(b)} = ${f({ n: s.bn, d })}.`, "Now take away the tops. The bottom stays the same."],
-        explanation: `${s.text}, so the answer is **${best(right)}**.`,
+        hint: "What does the bottom number of a fraction tell you?",
+        hints: [`Is ${f(wrongSum)} bigger than ${f(a)}? Adding should make more.`],
+        explanation: `The pieces must match first: ${steps(a, b, d, "+").text}, so ${f(a)} + ${f(b)} = **${best(right)}**, not ${f(wrongSum)}.`,
       };
     },
   },

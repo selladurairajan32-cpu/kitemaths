@@ -1,25 +1,22 @@
 "use client";
 
 import { useState, type ComponentType, type KeyboardEvent, type ReactNode } from "react";
-import { ExplainShell } from "@/components/explain/modes/ExplainShell";
 import { FilmPlayer } from "@/components/explain/modes/FilmPlayer";
-import { FinalCheck } from "@/components/explain/modes/FinalCheck";
 import { StepThrough } from "@/components/explain/modes/StepThrough";
+import { LearnStage } from "@/components/journey/LearnStage";
 import { RichText } from "@/components/math/RichText";
 import { Button } from "@/components/ui/Button";
 import { ArrowRightIcon, CheckIcon } from "@/components/ui/Icons";
 import { scaleAmount, shareInRatio } from "@/maths/ratio";
-import { topicRoutes } from "@/lib/routes";
-import { genId } from "@/topics/kit/define";
+import { journeyFor } from "@/topics/kit/journeys";
 import { RATIO_SCRIPT, RECIPE, type RatioScene } from "./ratioStory";
 import { RatioSceneSvg } from "./RatioSceneSvg";
 
 /**
- * D-040: the ratio and proportion explanation page. D-041: in the shared three-way shell: *Watch* the ratio film,
- * *Step through* the story stage (3D where the device can, otherwise the 2.5D picture) with a voice, captions and
- * chapter checkpoints, or *Try it* by sharing sweets by hand. Below: step by step, a real-life example and key notes; a
- * side rail with the common mistake, fading hints and why it works; and the final check. Everything the stage shows
- * is also in words.
+ * D-040: the ratio and proportion explanation. D-043: its parts in the topic journey: Learn (*Watch* the ratio film,
+ * *Step through* the story stage, 3D where the device can, otherwise the 2.5D picture, with a voice, captions and
+ * chapter checkpoints, or *Try it* by sharing sweets by hand) and the Notes (step by step, a real-life example, key
+ * notes, the common mistake, fading hints and why it works). Everything the stage shows is also in words.
  */
 
 export type StageProps = { scene: RatioScene; label: string };
@@ -29,7 +26,6 @@ const MORE = [
   { id: "notes", label: "Key notes" },
 ] as const;
 type MoreId = (typeof MORE)[number]["id"];
-const TOPIC = "ratio-algebra";
 
 /** The stage: the 3D scene passed in, or the 2.5D picture. */
 function Stage({ scene, label, Stage3D }: StageProps & { Stage3D?: ComponentType<StageProps> }) {
@@ -257,30 +253,35 @@ function More({ Stage3D }: { Stage3D?: ComponentType<StageProps> }) {
   );
 }
 
-export function RatioExplanation({ Stage3D }: { Stage3D?: ComponentType<StageProps> }) {
+/** D-043 stage 1, Learn: watch the film, step through the story (3D where the device can) or try it by hand. */
+export function RatioLearn({ Stage3D }: { Stage3D?: ComponentType<StageProps> }) {
   const S = RATIO_SCRIPT;
   return (
-    <ExplainShell
-      title={S.title}
-      tile="a : b"
-      back={{ href: topicRoutes(TOPIC).island(), label: "Back to Ratio and algebra" }}
+    <LearnStage
+      minutes={journeyFor(S.topicId, S.concept)?.minutes}
       modes={{
         watch: <FilmPlayer concept={S.concept} film={S.film} title={S.title} />,
         step: <StepThrough story={S.story} stage={(scene, label, still) => (Stage3D && !still ? <Stage3D scene={scene} label={label} /> : <RatioSceneSvg scene={scene} />)} voiceBase={`/voice/${S.concept}`} label="Ratio story" />,
         try: <TryPanel Stage3D={Stage3D} />,
       }}
-      rail={<Rail />}
-    >
-      <More Stage3D={Stage3D} />
-      <section aria-labelledby="takeaway-title" className="flex flex-col gap-2 rounded-[24px] bg-ok-soft p-5">
-        <h2 id="takeaway-title" className="text-title font-extrabold text-ink">Key takeaway</h2>
+    />
+  );
+}
+
+/** D-043: what the Notes button opens at any stage: help, more about ratio (drawn in 2.5D) and the key takeaway. */
+export function RatioNotes() {
+  return (
+    <div className="flex flex-col gap-4">
+      <Rail />
+      <More />
+      <section aria-labelledby="takeaway-title" className="flex flex-col gap-2 rounded-[20px] bg-ok-soft p-4">
+        <h3 id="takeaway-title" className="text-body font-extrabold text-ink">Key takeaway</h3>
         <ul className="m-0 flex flex-col gap-1.5 pl-0">
           {["Add the parts to find how many in each group.", "Divide the total by that to find one part.", "Multiply one part by each number in the ratio."].map((t) => (
             <li key={t} className="flex gap-2 text-body font-semibold text-ink"><span className="mt-1 text-ok"><CheckIcon size={18} strokeWidth={3} /></span>{t}</li>
           ))}
         </ul>
       </section>
-      <FinalCheck topicId={TOPIC} questionId={genId(TOPIC, "ra-ratio", 2, 4)} orderKey="ratio-final" />
-    </ExplainShell>
+    </div>
   );
 }

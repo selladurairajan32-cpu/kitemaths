@@ -161,12 +161,12 @@ export function SkyMapScreen() {
       )}
 
       {explanationsFor(topic.id).map((e) => (
-        // D-040, D-041: an explanation of this island's hardest idea: watch it, step through it or try it.
-        <Link key={e.id} href={links.explain(e.id)} className="flex items-center gap-4 rounded-[24px] border-2 border-brand bg-linear-to-r from-brand-soft to-sky-soft p-4 shadow-[var(--shadow-card)] transition hover:shadow-[var(--shadow-lift)]">
+        // D-040, D-041, D-043: a topic journey for this island's hardest idea: learn three ways, practise, apply, check.
+        <Link key={e.id} href={links.learn(e.id)} className="flex items-center gap-4 rounded-[24px] border-2 border-brand bg-linear-to-r from-brand-soft to-sky-soft p-4 shadow-[var(--shadow-card)] transition hover:shadow-[var(--shadow-lift)]">
           <Pic name="lab" size={48} />
           <span className="min-w-0 flex-1">
-            <span className="block text-title font-extrabold text-ink">See it explained: {e.title}</span>
-            <span className="block text-body text-ink-2">Watch it, step through it or try it yourself, with quick checks along the way.</span>
+            <span className="block text-title font-extrabold text-ink">Learn it: {e.title}</span>
+            <span className="block text-body text-ink-2">Watch, step through or try it, then practise, apply and check what you know.</span>
           </span>
           <ArrowRightIcon size={20} className="shrink-0 text-ink-2" />
         </Link>

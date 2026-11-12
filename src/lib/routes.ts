@@ -53,6 +53,8 @@ export function topicRoutes(topicId: string) {
     mock: () => `${base}/mock`,
     /** Animated topic explanations (D-040), where the island has one. */
     explain: (concept: string) => `${base}/explain/${concept}`,
+    // D-043: the topic journey (Learn, Practise, Apply, Check, Complete); /explain redirects here.
+    learn: (concept: string) => `${base}/learn/${concept}`,
   };
 }
 
