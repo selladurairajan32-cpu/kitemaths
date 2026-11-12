@@ -7,7 +7,7 @@ breaking changes, so read the relevant guide in `node_modules/next/dist/docs/` b
 ## Working rules (from the Product Owner, D-002, D-006, D-012)
 
 - **Development branch only:** `claude/pensive-pasteur-bs5979`. No pull request, merge or deployment unless the Product
-  Owner explicitly asks. Production is https://kitemaths.vercel.app (Vercel deploys `main`). R1 was merged to `main` and deployed on 9 Nov 2026 at the Product Owner's explicit request (D-027), the content differentiation changes the same day (D-029), the typography changes (D-031), the D-037 build (CH-069), the D-038 build (CH-074) and the D-039 build (CH-077); any further deployment still needs an explicit request.
+  Owner explicitly asks. Production is https://kitemaths.vercel.app (Vercel deploys `main`). R1 was merged to `main` and deployed on 9 Nov 2026 at the Product Owner's explicit request (D-027), the content differentiation changes the same day (D-029), the typography changes (D-031), the D-037 build (CH-069), the D-038 build (CH-074), the D-039 build (CH-077) and D-040/D-041 Phase 1 (D-042, CH-086, a one-off exception to the sign-in rule); any further deployment still needs an explicit request.
 - **No change to existing child-facing screens** (appearance or behaviour) unless an item says so. Screen migration, the
   accessibility layout fixes and wiring new specs into the app are R1 work.
 - **Preserve the architecture; no broad rewrites.** Additive foundations and behaviour-preserving extraction only.
@@ -43,7 +43,7 @@ lesson `fractions-2/different.ts` (Y6.FRAC.3 still partial); ratio page retrofit
 `tools/films/build.py` (Manim + Piper, free; media in `public/films`, `public/voice`; after changing a script run
 `UPDATE_DOCS=1 npx vitest run src/topics/kit/explainScripts.test.ts`, then `build.py <concept>`); free tiers only;
 replan: Phase 2 kid pages, 3 ten hardest concepts, 4 homepage and dashboards, 5 Supabase then one launch; CH-082 to
-CH-085; report `docs/product/reports/D-041-phase-1-report.md`; READY FOR QA, not deployed). D-040 (premium redesign from reference images; Phase 1 built: a WebGL 3D ratio explanation page at
+CH-085; report `docs/product/reports/D-041-phase-1-report.md`; READY FOR QA; deployed 12 Nov with D-040 Phase 1 as a one-off exception, D-042, CH-086). D-040 (premium redesign from reference images; Phase 1 built: a WebGL 3D ratio explanation page at
 `/t/ratio-algebra/explain/ratio`, three.js + React Three Fiber in `ratio-algebra/explain/RatioStage3D.tsx` with a 2.5D
 SVG fallback, story machine `engine/story.ts`, registry `kit/explanationIndex.ts` + `kit/explanations.tsx`; CH-078 to
 CH-081; later phases: kid pages, public homepage and dashboards, Supabase accounts; **no production deployment until

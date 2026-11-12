@@ -4,7 +4,7 @@
 |---|---|
 | **Decision** | D-041 (12 Nov 2026): every topic explanation offers three ways to learn (Watch, Step through, Try it), and the child chooses. Free tools and free tiers only. The redesign is replanned around it (Phases 1 to 5). |
 | **Changes** | CH-082 to CH-085 in `DECISIONS.md` |
-| **Status** | READY FOR QA. **Nothing is accepted. Not deployed:** production waits until everything, including sign-in, works end to end (D-040, D-041). |
+| **Status** | READY FOR QA. **Nothing is accepted.** Deployed to production on 12 Nov 2026 at the Product Owner's request (D-042, CH-086), a one-off exception: the sign-in rule stands for later phases. |
 | **Date** | 12 November 2026 |
 
 ## 1. What was built
