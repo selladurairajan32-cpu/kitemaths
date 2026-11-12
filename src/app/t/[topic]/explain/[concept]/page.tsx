@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { explanationById, explanationsFor } from "@/topics/kit/explanationIndex";
+import { EXPLANATIONS, explanationById } from "@/topics/kit/explanationIndex";
 import { ExplanationScreen } from "@/topics/kit/explanations";
 
 export const instant = false;
 
-/** Only the topic comes from the layout, so this lists that topic's explanation pages. */
-export function generateStaticParams({ params }: { params: { topic: string } }) {
-  return explanationsFor(params.topic).map((e) => ({ concept: e.id }));
+/**
+ * Cache Components needs at least one result for every island, so every concept id is listed for every island; the page
+ * returns "not found" where a concept doesn't belong to the island.
+ */
+export function generateStaticParams() {
+  return [...new Set(EXPLANATIONS.map((e) => e.id))].map((concept) => ({ concept }));
 }
 
 export async function generateMetadata({ params }: PageProps<"/t/[topic]/explain/[concept]">): Promise<Metadata> {

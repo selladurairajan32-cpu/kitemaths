@@ -12,7 +12,9 @@ export type RatioScene =
   /** Sharing `total` sweets in a : b, in stages: a pile, sorted into groups of a + b, poured into two jars, then a bar. */
   | { kind: "share"; total: number; a: number; b: number; stage: "pile" | "groups" | "jars" | "bar" }
   /** A recipe for `people`, scaled from a base of 4. */
-  | { kind: "recipe"; people: number; eggs: number; milk: number };
+  | { kind: "recipe"; people: number; eggs: number; milk: number }
+  /** Try it: `dealt` groups of a + b taken from a pile of `total` and dealt into two jars. */
+  | { kind: "deal"; total: number; a: number; b: number; dealt: number };
 
 export const RATIO = { a: 2, b: 3, total: 35 } as const;
 export const RECIPE = { base: 4, eggs: 2, milk: 300 } as const;

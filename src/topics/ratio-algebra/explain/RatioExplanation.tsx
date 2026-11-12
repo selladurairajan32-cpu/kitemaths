@@ -156,7 +156,7 @@ const TRY_PROBLEMS = [
 ] as const;
 
 /** Share sweets in a ratio by hand: say the group size, deal out groups until none are left, then read a share. */
-function TryPanel() {
+function TryPanel({ Stage3D }: { Stage3D?: ComponentType<StageProps> }) {
   const [index, setIndex] = useState(0);
   const [stage, setStage] = useState<"size" | "deal" | "share" | "done">("size");
   const [dealt, setDealt] = useState(0);
@@ -182,6 +182,7 @@ function TryPanel() {
       <h2 className="text-title font-extrabold text-ink">
         Problem {index + 1} of {TRY_PROBLEMS.length}: share {p.total} sweets between {p.who[0]} and {p.who[1]} in the ratio {p.a} : {p.b}
       </h2>
+      <Stage scene={{ kind: "deal", total: p.total, a: p.a, b: p.b, dealt }} label={`${left} sweets left; ${p.who[0]} has ${dealt * p.a}; ${p.who[1]} has ${dealt * p.b}.`} Stage3D={Stage3D} />
       <div className="grid gap-3 sm:grid-cols-3">
         {[
           { name: "Sweets left", count: left, tone: "bg-sunk" },
@@ -325,7 +326,7 @@ export function RatioExplanation({ Stage3D }: { Stage3D?: ComponentType<StagePro
     story: <StoryPanel Stage3D={Stage3D} />,
     steps: <StepsPanel />,
     "real-life": <RealLifePanel Stage3D={Stage3D} />,
-    try: <TryPanel />,
+    try: <TryPanel Stage3D={Stage3D} />,
     notes: <NotesPanel />,
   };
 

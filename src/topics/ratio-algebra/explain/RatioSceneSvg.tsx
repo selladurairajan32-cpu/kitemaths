@@ -171,6 +171,18 @@ function Recipe({ v, reduce }: { v: Extract<RatioScene, { kind: "recipe" }>; red
   );
 }
 
+function Deal({ v }: { v: Extract<RatioScene, { kind: "deal" }> }) {
+  const left = v.total - v.dealt * (v.a + v.b);
+  return (
+    <>
+      {Array.from({ length: left }, (_, i) => <circle key={i} cx={40 + (i % 6) * 18} cy={290 - Math.floor(i / 6) * 18} r={8} className="fill-ink-2" />)}
+      <Label x={85} y={334} size={18}>Left: {left}</Label>
+      <Jar x={200} count={v.dealt * v.a} tone="blue" label="Jar A" />
+      <Jar x={400} count={v.dealt * v.b} tone="orange" label="Jar B" />
+    </>
+  );
+}
+
 export function RatioSceneSvg({ scene, compact = false }: { scene: RatioScene; compact?: boolean }) {
   const reduce = !!useReducedMotion();
   return (
@@ -178,6 +190,7 @@ export function RatioSceneSvg({ scene, compact = false }: { scene: RatioScene; c
       {scene.kind === "groups" && <Groups v={scene} reduce={reduce} />}
       {scene.kind === "share" && <Share v={scene} reduce={reduce} />}
       {scene.kind === "recipe" && <Recipe v={scene} reduce={reduce} />}
+      {scene.kind === "deal" && <Deal v={scene} />}
     </svg>
   );
 }
