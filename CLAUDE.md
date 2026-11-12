@@ -36,7 +36,14 @@ only accepted items may have `accepted` cases. Update `test-cases.csv` in the sa
 ## State (12 Nov 2026)
 
 `docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Last recorded
-decision: D-040 (premium redesign from reference images; Phase 1 built: a WebGL 3D ratio explanation page at
+decision: D-041 (every explanation offers three ways to learn and the child chooses: Watch a narrated film, Step through
+with a recorded voice, Try it by hand; shell in `src/components/explain/modes/`, one script per concept
+(`engine/explainScript.ts`, listed in `kit/explainScripts.ts`); pilot `/t/fractions-2/explain/add-different` with a new
+lesson `fractions-2/different.ts` (Y6.FRAC.3 still partial); ratio page retrofitted; films and voices made by
+`tools/films/build.py` (Manim + Piper, free; media in `public/films`, `public/voice`; after changing a script run
+`UPDATE_DOCS=1 npx vitest run src/topics/kit/explainScripts.test.ts`, then `build.py <concept>`); free tiers only;
+replan: Phase 2 kid pages, 3 ten hardest concepts, 4 homepage and dashboards, 5 Supabase then one launch; CH-082 to
+CH-085; report `docs/product/reports/D-041-phase-1-report.md`; READY FOR QA, not deployed). D-040 (premium redesign from reference images; Phase 1 built: a WebGL 3D ratio explanation page at
 `/t/ratio-algebra/explain/ratio`, three.js + React Three Fiber in `ratio-algebra/explain/RatioStage3D.tsx` with a 2.5D
 SVG fallback, story machine `engine/story.ts`, registry `kit/explanationIndex.ts` + `kit/explanations.tsx`; CH-078 to
 CH-081; later phases: kid pages, public homepage and dashboards, Supabase accounts; **no production deployment until

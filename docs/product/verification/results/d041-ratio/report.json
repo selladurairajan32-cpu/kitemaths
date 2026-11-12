@@ -1,0 +1,65 @@
+{
+ "errors": [],
+ "axe": {
+  "phone-story": [],
+  "phone-steps": [],
+  "phone-real-life": [],
+  "phone-notes": [],
+  "phone-try": [],
+  "tablet-story": [],
+  "tablet-steps": [],
+  "tablet-real-life": [],
+  "tablet-notes": [],
+  "tablet-try": [],
+  "desk-story": [],
+  "desk-steps": [],
+  "desk-real-life": [],
+  "desk-notes": [],
+  "desk-try": []
+ },
+ "webgl": {
+  "phone": {
+   "canvas": 1,
+   "changesBetweenBeats": true
+  },
+  "tablet": {
+   "canvas": 1,
+   "changesBetweenBeats": true
+  },
+  "desk": {
+   "canvas": 1,
+   "changesBetweenBeats": true
+  }
+ },
+ "chapters": {
+  "hintAfterWrong": true,
+  "phone-1": true,
+  "phone-2": true,
+  "phone-3": true,
+  "tablet-1": true,
+  "tablet-2": true,
+  "tablet-3": true,
+  "desk-1": true,
+  "desk-2": true,
+  "desk-3": true
+ },
+ "orbit": {
+  "phone": true,
+  "tablet": true,
+  "desk": true
+ },
+ "tryIt": {
+  "phone": true,
+  "tablet": true,
+  "desk": true
+ },
+ "reduced": {
+  "canvas": 0,
+  "svgStage": 1
+ },
+ "fps": {
+  "phone4x": 60
+ },
+ "homeLoads3D": false,
+ "shots": 30
+}

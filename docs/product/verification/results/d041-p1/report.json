@@ -1,0 +1,127 @@
+{
+ "errors": [],
+ "axe": {
+  "phone-watch": [],
+  "phone-step": [],
+  "phone-try": [],
+  "tablet-watch": [],
+  "tablet-step": [],
+  "tablet-try": [],
+  "desk-watch": [],
+  "desk-step": [],
+  "desk-try": []
+ },
+ "watch": {
+  "phone": {
+   "duration": 59.2,
+   "tracks": 1,
+   "cues": 8,
+   "mode": "showing",
+   "autoplay": false,
+   "paused": true,
+   "selected": "true",
+   "jumpedTo": 42.8,
+   "playingAfterJump": true
+  },
+  "tablet": {
+   "duration": 59.2,
+   "tracks": 1,
+   "cues": 8,
+   "mode": "showing",
+   "autoplay": false,
+   "paused": true,
+   "selected": "true",
+   "jumpedTo": 42.8,
+   "playingAfterJump": true
+  },
+  "desk": {
+   "duration": 59.2,
+   "tracks": 1,
+   "cues": 8,
+   "mode": "showing",
+   "autoplay": false,
+   "paused": true,
+   "selected": "true",
+   "jumpedTo": 42.8,
+   "playingAfterJump": true
+  }
+ },
+ "step": {
+  "phone": {
+   "stageChanges": true,
+   "checkpoint1": true,
+   "checkpoint2": true,
+   "voicesFetched": [
+    "combine",
+    "question"
+   ]
+  },
+  "tablet": {
+   "stageChanges": true,
+   "checkpoint1": true,
+   "checkpoint2": true,
+   "voicesFetched": [
+    "combine",
+    "question"
+   ]
+  },
+  "desk": {
+   "stageChanges": true,
+   "checkpoint1": true,
+   "checkpoint2": true,
+   "voicesFetched": [
+    "combine",
+    "question"
+   ]
+  }
+ },
+ "tryIt": {
+  "phone": {
+   "matched": true,
+   "placedByDrag": 4,
+   "done": true
+  },
+  "tablet": {
+   "matched": true,
+   "placedByDrag": 4,
+   "done": true
+  },
+  "desk": {
+   "matched": true,
+   "placedByDrag": 4,
+   "done": true
+  }
+ },
+ "remembered": {
+  "phone": "true",
+  "tablet": "true",
+  "desk": "true"
+ },
+ "overflow": {
+  "phone-watch": 0,
+  "phone-step": 0,
+  "phone-try": 0,
+  "tablet-watch": 0,
+  "tablet-step": 0,
+  "tablet-try": 0,
+  "desk-watch": 0,
+  "desk-step": 0,
+  "desk-try": 0
+ },
+ "ratioFilm": {
+  "duration": 56.5,
+  "cues": 8
+ },
+ "narrow": {
+  "ratio": 0,
+  "Watch": 0,
+  "Step through": 0,
+  "Try it": 0
+ },
+ "reduced": {
+  "stage": 1,
+  "tryDone": true
+ },
+ "fps": 49,
+ "shots": 18
+}

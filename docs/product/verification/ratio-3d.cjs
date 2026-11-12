@@ -1,5 +1,6 @@
 // Usage: node docs/product/verification/ratio-3d.cjs <outDir> [port]
-// D-040 Phase 1: the ratio explanation page (/t/ratio-algebra/explain/ratio) on a running production build.
+// D-040 Phase 1: the ratio explanation page (/t/ratio-algebra/explain/ratio) on a running production build. D-041: the
+// story is now the Step through way to learn (#step), and Try it is a way to learn rather than a tab.
 // At 390, 768 and 1280px: WebGL draws (the stage changes between beats and after a drag), every chapter plays through
 // to its checkpoint and is answered (one wrong first, to see the replay and hint), the table turns by drag, Try it is
 // done by keyboard, and axe-core runs on every tab. Also: reduced motion draws the 2.5D picture with no canvas; the
@@ -22,7 +23,7 @@ const ANSWERS = [9, 15, 600];
     const p = await ctx.newPage();
     p.on('pageerror', (e) => report.errors.push(`${vw} pageerror ${e.message}`));
     p.on('console', (m) => m.type() === 'error' && report.errors.push(`${vw}: ${m.text()}`));
-    await p.goto(BASE + PAGE, { waitUntil: 'networkidle' });
+    await p.goto(BASE + PAGE + '#step', { waitUntil: 'networkidle' });
     await p.addStyleTag({ content: 'header, nav[aria-label="Main"] { position: static !important; }' });
     const stage = p.locator('[data-stage="webgl"]');
     await stage.waitFor({ timeout: 15000 });
@@ -73,7 +74,7 @@ const ANSWERS = [9, 15, 600];
       await shot(`6-${name}`, p.locator('main'));
     }
     // Try it, by keyboard only.
-    await p.getByRole('tab', { name: 'Try it' }).click();
+    await p.getByRole('tab', { name: /^Try it/ }).click();
     await p.waitForTimeout(1200);
     await p.getByLabel('How many sweets are in one group?').focus();
     await p.keyboard.type('4'); await p.keyboard.press('Enter');
@@ -96,7 +97,7 @@ const ANSWERS = [9, 15, 600];
     const ctx = await b.newContext({ viewport: { width: 390, height: 844 } });
     const p = await ctx.newPage();
     const cdp = await ctx.newCDPSession(p);
-    await p.goto(BASE + PAGE, { waitUntil: 'networkidle' });
+    await p.goto(BASE + PAGE + '#step', { waitUntil: 'networkidle' });
     await p.locator('[data-stage="webgl"]').waitFor();
     await p.waitForTimeout(2000);
     await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
@@ -109,7 +110,7 @@ const ANSWERS = [9, 15, 600];
   {
     const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
     const p = await ctx.newPage();
-    await p.goto(BASE + PAGE, { waitUntil: 'networkidle' });
+    await p.goto(BASE + PAGE + '#step', { waitUntil: 'networkidle' });
     await p.waitForTimeout(2000);
     report.reduced = { canvas: await p.locator('canvas').count(), svgStage: await p.locator('main svg[viewBox="0 0 600 360"]').count() };
     await ctx.close();
