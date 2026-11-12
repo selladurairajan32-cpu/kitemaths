@@ -9,6 +9,8 @@ export interface Beat<S> {
   id: string;
   /** What the beat shows, in words: the caption is the text equivalent of the picture. */
   caption: string;
+  /** D-041: what the voice says, when it should differ from the caption (for example a symbol said in words). */
+  say?: string;
   /** How long the beat plays at normal speed, in milliseconds. */
   ms: number;
   scene: S;

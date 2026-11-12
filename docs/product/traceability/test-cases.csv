@@ -628,3 +628,11 @@ TC-UX-006.1.29,UX-006,AC1,unit,automated,passing,"src/topics/ratio-algebra/expla
 TC-UX-006.1.30,UX-006,AC1,unit,automated,passing,"src/topics/ratio-algebra/explain/stageLayout.test.ts::draws three groups of 2 blue and 3 orange cubes, with the running count",(CH-080)
 TC-UX-006.1.31,UX-006,AC1,unit,automated,passing,"src/topics/ratio-algebra/explain/stageLayout.test.ts::shows the scaled recipe: 3 eggs and a 450 ml jug for 6 people",(CH-080)
 TC-UX-006.1.32,UX-006,AC1,unit,automated,passing,"src/topics/ratio-algebra/explain/stageLayout.test.ts::deals Try it groups into the jars and leaves the rest in the pile (hand-worked: 20 in 3 : 1, 2 groups dealt)",(CH-080)
+TC-CUR-001.1.34,CUR-001,AC1,unit,automated,passing,"src/topics/fractions-2/different.test.ts::adds correctly, in simplest form, with no wrong option worth the answer","Different denominators lesson, Y6.FRAC.3 (D-041)"
+TC-CUR-001.1.35,CUR-001,AC1,unit,automated,passing,"src/topics/fractions-2/different.test.ts::subtracts correctly, and the answer is always positive","Different denominators lesson, Y6.FRAC.3 (D-041)"
+TC-CUR-001.1.36,CUR-001,AC1,unit,automated,passing,"src/topics/fractions-2/different.test.ts::asks for the right number of common pieces, and the smallest common denominator","Different denominators lesson, Y6.FRAC.3 (D-041)"
+TC-CUR-001.1.37,CUR-001,AC1,unit,automated,passing,"src/topics/fractions-2/different.test.ts::names the classic mistakes: adding the bottoms, and adding before the pieces match","Different denominators lesson, Y6.FRAC.3 (D-041)"
+TC-UX-006.1.33,UX-006,AC1,unit,automated,passing,"src/engine/explainScript.test.ts::counts spoken words: a fraction is two words, markup is silent",Explanation scripts for the three ways to learn (D-041)
+TC-UX-006.1.34,UX-006,AC1,unit,automated,passing,src/engine/explainScript.test.ts::times the film cues one after another,Explanation scripts for the three ways to learn (D-041)
+TC-UX-006.1.35,UX-006,AC1,unit,automated,passing,src/engine/explainScript.test.ts::accepts a fit script and reports every problem in a broken one,Explanation scripts for the three ways to learn (D-041)
+TC-UX-006.1.36,UX-006,AC1,unit,automated,passing,src/engine/explainScript.test.ts::knows the three modes,Explanation scripts for the three ways to learn (D-041)

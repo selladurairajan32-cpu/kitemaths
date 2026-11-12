@@ -65,6 +65,10 @@ export interface LearnerSettings {
   /** PARENT-001, PARENT-003: the grown-up's chosen weekly workload. Optional; unset means 5 days of 15 minutes. */
   planDays?: number;
   planMinutes?: number;
+  /** D-041: the way to learn an explanation the child chose last ("watch", "step" or "try"); unset means none yet. */
+  explainMode?: string;
+  /** D-041: whether Step through speaks each step. Unset means on. */
+  explainVoice?: boolean;
 }
 
 export const DEFAULT_PLAN = { days: 5, minutes: 15 } as const;

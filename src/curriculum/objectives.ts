@@ -1488,7 +1488,8 @@ export const OBJECTIVES: CurriculumObjective[] = [
     "status": "statutory",
     "outcome": "Adds and subtracts fractions with different denominators and mixed numbers, using equivalent fractions.",
     "skills": [
-      "fractions-2.add-related"
+      "fractions-2.add-related",
+      "fractions-2.add-different"
     ]
   },
   {

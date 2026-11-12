@@ -1,9 +1,10 @@
 import { defineTopic, genFor, int, pick, withExtras, withHints } from "@/topics/kit/define";
+import { addDifferentExtra, ADD_DIFFERENT } from "./different";
 import { fractions2Extra } from "./extra";
 import type { ChooseOption, Template } from "@/topics/kit/types";
 import { gcd, toMixed } from "@/maths/fraction";
 
-/** Fractions 2: simplest form, mixed numbers, adding and subtracting, related denominators, multiplying by a whole. */
+/** Fractions 2: simplest form, mixed numbers, adding and subtracting (same, related and different denominators), multiplying by a whole. */
 
 const T = "fractions-2";
 const gen = genFor(T);
@@ -644,10 +645,10 @@ export const fractions2 = defineTopic(withExtras({
   ],
   templates,
   misconceptions: [
-    { id: M.addDen, name: "Adding the denominators", possibleCause: "It looks like the bottom numbers were added too.", description: "Writes 2/7 + 3/7 = 5/14.", explanation: ["The bottom number is the size of the parts.", "Adding sevenths gives sevenths: 2/7 + 3/7 = 5/7."], skills: [S.addSame, S.addRelated], followUpTemplates: ["f2-add-same", "f2-add-related"] },
+    { id: M.addDen, name: "Adding the denominators", possibleCause: "It looks like the bottom numbers were added too.", description: "Writes 2/7 + 3/7 = 5/14.", explanation: ["The bottom number is the size of the parts.", "Adding sevenths gives sevenths: 2/7 + 3/7 = 5/7."], skills: [S.addSame, S.addRelated, ADD_DIFFERENT], followUpTemplates: ["f2-add-same", "f2-add-related", "f2-add-diff"] },
     { id: M.notSimplest, name: "Not simplified all the way", possibleCause: "It looks like the fraction could be simplified a bit more.", description: "Stops at an equivalent fraction that isn't the simplest, e.g. 4/8 for 1/2.", explanation: ["Keep dividing while a number divides both.", "4/8 → 2/4 → 1/2."], skills: [S.simplify], followUpTemplates: ["f2-simplify"] },
     { id: M.subtract, name: "Taking the same away from top and bottom", possibleCause: "It looks like the same number was taken off the top and the bottom.", description: "Thinks 6/8 = 5/7 or 4/6.", explanation: ["Taking away changes the size of a fraction.", "Equivalent fractions multiply or divide both by the same number."], skills: [S.simplify], followUpTemplates: ["f2-simplify", "f2-equivalent"] },
-    { id: M.noCommon, name: "Adding before the parts match", possibleCause: "It looks like the fractions were added before the parts were the same size.", description: "Adds 1/2 + 1/4 as 2/4.", explanation: ["Change 1/2 into quarters first: 2/4.", "Then 2/4 + 1/4 = 3/4."], skills: [S.addRelated], followUpTemplates: ["f2-common", "f2-add-related"] },
+    { id: M.noCommon, name: "Adding before the parts match", possibleCause: "It looks like the fractions were added before the parts were the same size.", description: "Adds 1/2 + 1/4 as 2/4.", explanation: ["Change 1/2 into quarters first: 2/4.", "Then 2/4 + 1/4 = 3/4."], skills: [S.addRelated, ADD_DIFFERENT], followUpTemplates: ["f2-common", "f2-add-related", "f2-diff-common"] },
     { id: M.mixed, name: "Mixing up wholes and parts", possibleCause: "It looks like the wholes and the leftover parts got mixed up.", description: "Converts 11/4 to 3 3/4, or 2 3/5 to 6/5.", explanation: ["Each whole is d parts.", "11 quarters: 2 wholes (8 quarters) and 3 quarters left = 2 3/4."], skills: [S.mixed], followUpTemplates: ["f2-to-mixed", "f2-to-improper"] },
     { id: M.timesBoth, name: "Multiplying the top and the bottom", possibleCause: "It looks like the bottom number was multiplied too.", description: "Works out 3/5 × 4 as 12/20.", explanation: ["4 lots of 3 fifths are 12 fifths.", "The parts stay fifths: 12/5."], skills: [S.multiply], followUpTemplates: ["f2-times-whole"] },
   ],
@@ -658,4 +659,4 @@ export const fractions2 = defineTopic(withExtras({
     { lessonId: "add-related", template: "f2-add-related" },
     { lessonId: "multiply", template: "f2-times-whole" },
   ],
-}, fractions2Extra));
+}, fractions2Extra, addDifferentExtra));
