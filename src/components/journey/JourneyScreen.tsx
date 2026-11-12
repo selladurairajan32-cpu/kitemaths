@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
 import { ArrowRightIcon, CheckIcon, CloseIcon, HomeIcon, LockIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton } from "@/components/ui/Screen";
-import { countApplied, countPractised, finishStage, JOURNEY_STAGES, openStage, startJourney, type JourneyProgress } from "@/engine/topicJourney";
+import { countApplied, countPractised, finishStage, JOURNEY_STAGES, openStage, STAGE_LABEL, startJourney, type JourneyProgress } from "@/engine/topicJourney";
 import { routes } from "@/lib/routes";
 import { updateLearner, useHydrated, useLearner } from "@/lib/store";
 import { useTopicState } from "@/topics/context";
@@ -19,7 +19,6 @@ import { CheckStage, checkDone, CompleteStage, QuestionStage } from "./stages";
  * panel at any stage. Progress is saved per concept, so the child can come back to the same place.
  */
 
-const LABEL = { learn: "Learn", practise: "Practise", apply: "Apply", check: "Check", complete: "Complete" } as const;
 
 function NotesPanel({ onClose, children }: { onClose: () => void; children: ReactNode }) {
   const close = useRef<HTMLButtonElement>(null);
@@ -100,12 +99,12 @@ export function JourneyScreen({ concept }: { concept: string }) {
                 disabled={!open}
                 onClick={() => set((x) => openStage(x, i), true)}
                 aria-current={current ? "step" : undefined}
-                aria-label={`${i + 1}. ${LABEL[s]}${done ? ", done" : open ? "" : ", locked"}`}
+                aria-label={`${i + 1}. ${STAGE_LABEL[s]}${done ? ", done" : open ? "" : ", locked"}`}
                 className={`grid size-11 place-items-center rounded-full text-body font-extrabold transition sm:size-12 ${current ? "bg-brand text-on-brand shadow-[var(--shadow-lift)]" : done ? "bg-ok text-on-brand" : open ? "bg-surface text-ink ring-2 ring-line" : "bg-sunk text-ink-2"} disabled:cursor-not-allowed`}
               >
                 {done && !current ? <CheckIcon size={18} strokeWidth={3} /> : !open ? <LockIcon size={14} /> : i + 1}
               </button>
-              <span className={`text-center text-label font-bold ${current ? "text-brand-strong" : "text-ink-2"}`}>{LABEL[s]}</span>
+              <span className={`text-center text-label font-bold ${current ? "text-brand-strong" : "text-ink-2"}`}>{STAGE_LABEL[s]}</span>
             </li>
           );
         })}

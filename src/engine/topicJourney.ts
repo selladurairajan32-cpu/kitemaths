@@ -8,6 +8,8 @@ import type { ItemResult } from "./types";
 
 export const JOURNEY_STAGES = ["learn", "practise", "apply", "check", "complete"] as const;
 export type JourneyStage = (typeof JOURNEY_STAGES)[number];
+/** What each stage is called on screen: the journey bar, and Continue Learning on Home (D-043 step 3). */
+export const STAGE_LABEL: Record<JourneyStage, string> = { learn: "Learn", practise: "Practise", apply: "Apply", check: "Check", complete: "Complete" };
 export type Strand = "concept" | "application" | "reasoning";
 
 export interface JourneyProgress {

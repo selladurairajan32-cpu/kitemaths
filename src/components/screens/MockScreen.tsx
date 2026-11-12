@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { ArrowRightIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 import { EXAM_PROFILES, KNOWN_FIELDS, type ExamProfile, type KnownField } from "@/engine/examProfile";
+import { mockSessions } from "@/engine/overview";
 import { analyseMock, configFor, DEFAULT_MOCK, NO_PREDICTION, NO_PREDICTION_CHILD, PRACTICE_LABEL, revisionPlan, type MistakeKind, type MockConfig, type ReviewRule } from "@/engine/mock";
 import { recordResult } from "@/engine/progress";
 import { hashString, prng } from "@/engine/random";
@@ -184,16 +185,6 @@ function Choice<V extends string | number>({ label, value, options, show, onChan
       </div>
     </fieldset>
   );
-}
-
-/** Past mocks, from stored answers: one per session. */
-function mockSessions(results: ItemResult[]) {
-  const by = new Map<string, ItemResult[]>();
-  for (const r of results.filter((x) => x.mock)) {
-    if (!by.has(r.mock!.session)) by.set(r.mock!.session, []);
-    by.get(r.mock!.session)!.push(r);
-  }
-  return [...by.entries()].map(([session, rs]) => ({ session, at: Math.min(...rs.map((r) => r.at)), total: rs[0].mock!.total, correct: rs.filter((r) => r.correct).length })).sort((a, b) => a.at - b.at);
 }
 
 function MockSitting({ session, config, paper, startedAt, onFinish }: { session: string; config: MockConfig; paper: KitQuestion[]; startedAt: number; onFinish: (r: ItemResult[]) => void }) {

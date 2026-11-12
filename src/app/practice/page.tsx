@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { HubRedirect } from "@/components/ui/HubRedirect";
+import { PracticeHubScreen } from "@/components/screens/PracticeHubScreen";
 
-export const metadata: Metadata = { title: "Practice · Kite Maths", robots: { index: false } };
+export const metadata: Metadata = { title: "Practice · Kite Maths" };
 
 export default function Page() {
-  return <HubRedirect section="practice" />;
+  return <PracticeHubScreen />;
 }

@@ -11,16 +11,16 @@ import { ArrowRightIcon, CheckIcon, LockIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton, StorageNotice } from "@/components/ui/Screen";
 import { allLessonEvidence } from "@/engine/evidence";
 import { lessonsEvidenced, recommendNext, reviewSkills } from "@/engine/journey";
-import { answeredToday, badgesFor, DAILY_GOAL, levelFor, STARS, streakFor, totalStars } from "@/engine/rewards";
-import { routes } from "@/lib/routes";
+import { answeredToday, DAILY_GOAL, levelFor, STARS, streakFor, totalStars } from "@/engine/rewards";
+import { JOURNEY_STAGES, STAGE_LABEL } from "@/engine/topicJourney";
+import { DEFAULT_PLAN } from "@/engine/progress";
+import { routes, topicRoutes } from "@/lib/routes";
 import { useHydrated, useLearner, useNow } from "@/lib/store";
-import { TOPICS } from "@/topics";
+import { topicById } from "@/topics";
+import { continueJourney, journeyCards } from "@/topics/overview";
+import { PLAN_KIND_LABEL, weeklyPlan } from "@/topics/plan";
 import { useTopicState } from "@/topics/context";
 import { ActiveTopicProvider } from "@/topics/ActiveTopic";
-import { WORLDS } from "@/topics/worlds";
-import { startedTopics } from "@/topics/recommend";
-
-const islandCount = WORLDS.reduce((n, w) => n + w.islands.length, 0);
 
 /** Each lesson card gets its own pastel tile, in turn. */
 const TILES = ["bg-tile-orange", "bg-tile-pink", "bg-tile-blue", "bg-tile-yellow", "bg-tile-green", "bg-tile-sky"];
@@ -62,11 +62,14 @@ function KidHome() {
   // FR-011 AC3: a lesson is done when it has independent evidence, not when its last page was reached.
   const done = lessonsEvidenced(topic, inTopic);
   const evidence = new Map(allLessonEvidence(topic, inTopic).map((e) => [e.lessonId, e]));
-  const lessonCount = TOPICS.reduce((n, t) => n + t.lessons.length, 0);
-  const badges = badgesFor(learner, startedTopics(learner).flatMap((t) => t.skills), lessonCount, now);
-  const won = badges.filter((b) => b.earned);
   const nextIndex = rec.kind === "lesson" ? topic.lessons.findIndex((l) => l.id === rec.lessonId) : -1;
   // R1 (content audit): Home shows the next three unfinished lessons; the island map lists them all.
+  // D-043 step 3: Continue Learning picks up the topic journey worked in last; with none open, the next step on the island.
+  const cont = brandNew ? null : continueJourney(learner);
+  const contTopic = cont ? topicById(cont.def.topicId) : undefined;
+  // Today's plan: the first day of the weekly plan (PARENT-003), rebuilt from the evidence each time.
+  const plan = brandNew ? null : weeklyPlan(learner, now, learner.settings.planDays ?? DEFAULT_PLAN.days, learner.settings.planMinutes ?? DEFAULT_PLAN.minutes)[0];
+  const journeys = journeyCards(learner);
   const upcoming = topic.lessons.map((l, i) => ({ l, i })).filter(({ l }) => evidence.get(l.id)!.status !== "evidenced").slice(0, 3);
 
   return (
@@ -82,16 +85,35 @@ function KidHome() {
               {greeting(now)}
               {name ? `, ${name}` : ""}
             </p>
-            <h1 id="next-title" className="display mt-3 text-heading-1 sm:text-display-1">
-              {brandNew ? <>I&apos;m Kip. Let&apos;s find your start!</> : next.title}
+            {!brandNew && <p className="mt-3 text-label font-extrabold uppercase tracking-wide text-brand-strong">Continue learning</p>}
+            <h1 id="next-title" className={`display text-heading-1 sm:text-display-1 ${brandNew ? "mt-3" : "mt-1"}`}>
+              {brandNew ? <>I&apos;m Kip. Let&apos;s find your start!</> : cont ? cont.def.title : next.title}
             </h1>
-            <p className="mt-3 max-w-xl text-lg text-ink">
-              {brandNew ? <>A short warm-up game finds the right {topic.title} lesson for you.</> : <RichText text={next.line} />}
-            </p>
-            <ButtonLink href={brandNew ? links.start() : next.href} size="xl" className="mt-6 w-full sm:w-auto">
-              {brandNew ? "Play the warm-up" : next.cta} <ArrowRightIcon size={20} />
+            {cont ? (
+              <>
+                <p className="mt-3 max-w-xl text-lg text-ink">
+                  {contTopic?.title ?? cont.def.topicId} · Step {cont.progress.reached + 1} of {JOURNEY_STAGES.length}: {STAGE_LABEL[JOURNEY_STAGES[cont.progress.reached]]}
+                </p>
+                <ol className="mt-3 flex max-w-sm gap-1.5" aria-label={`Step ${cont.progress.reached + 1} of ${JOURNEY_STAGES.length}`}>
+                  {JOURNEY_STAGES.map((st, i) => (
+                    <li key={st} className={`h-2 flex-1 rounded-full ${i < cont.progress.reached ? "bg-ok" : i === cont.progress.reached ? "bg-brand" : "bg-surface"}`}>
+                      <span className="sr-only">
+                        {STAGE_LABEL[st]}
+                        {i < cont.progress.reached ? ", done" : i === cont.progress.reached ? ", up next" : ""}
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              </>
+            ) : (
+              <p className="mt-3 max-w-xl text-lg text-ink">
+                {brandNew ? <>A short warm-up game finds the right {topic.title} lesson for you.</> : <RichText text={next.line} />}
+              </p>
+            )}
+            <ButtonLink href={brandNew ? links.start() : cont ? topicRoutes(cont.def.topicId).learn(cont.def.concept) : next.href} size="xl" className="mt-6 w-full sm:w-auto">
+              {brandNew ? "Play the warm-up" : cont ? "Continue" : next.cta} <ArrowRightIcon size={20} />
             </ButtonLink>
-            {!brandNew && nextIndex >= 0 && (
+            {!brandNew && !cont && nextIndex >= 0 && (
               <p className="mt-4 text-body font-semibold text-ink-2">
                 Lesson {nextIndex + 1} of {topic.lessons.length} · about {topic.lessons[nextIndex].minutes} minutes
               </p>
@@ -133,11 +155,69 @@ function KidHome() {
       {/* Stars, streak and today's goal in one strip. */}
       <section aria-label="Your progress">
         <ul className="grid grid-cols-3 gap-2 rounded-[24px] border border-line bg-surface p-3 shadow-[var(--shadow-card)] sm:gap-4 sm:p-4">
-          <Stat href={routes.badges()} pic="star" value={String(stars)} label={`stars · level ${level.level}`} />
+          <Stat href={routes.progress()} pic="star" value={String(stars)} label={`stars · level ${level.level}`} />
           <Stat pic="flame" value={String(streak.current)} label={streak.current === 1 ? "day streak" : "days streak"} />
           <Stat href={links.practice()} pic="target" value={`${today}/${DAILY_GOAL}`} label="today" />
         </ul>
       </section>
+
+      {/* D-043 step 3: today's plan, from the weekly plan the grown-up sets. */}
+      {plan && plan.items.length > 0 && (
+        <section aria-labelledby="plan-title">
+          <h2 id="plan-title" className="display text-heading-2">
+            Today&apos;s plan
+          </h2>
+          <p className="mt-1 text-body text-ink-2">About {plan.minutes} minutes</p>
+          <ol className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {plan.items.map((it, i) => (
+              <li key={it.href + i} className="flex">
+                <Link href={it.href} className="card flex flex-1 items-center gap-3 p-4 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-full bg-brand-soft text-lg font-extrabold text-brand-strong" aria-hidden>
+                    {i + 1}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-label font-bold text-muted">
+                      {PLAN_KIND_LABEL[it.kind]} · {it.minutes} min
+                    </span>
+                    <span className="block font-extrabold leading-snug text-ink">{it.title}</span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+
+      {/* D-043: the topic journeys (Learn, Practise, Apply, Check, Complete), with Emma's voice. */}
+      {!brandNew && journeys.length > 0 && (
+        <section aria-labelledby="learn-title">
+          <h2 id="learn-title" className="display text-heading-2">
+            Learn a new idea with Emma
+          </h2>
+          <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+            {journeys.map(({ def, progress }) => {
+              const finished = !!progress && progress.reached >= JOURNEY_STAGES.length - 1;
+              const state = !progress ? `Year ${def.year} · watch, step through or try it` : finished ? "Done · watch again any time" : `Step ${progress.reached + 1} of ${JOURNEY_STAGES.length}: ${STAGE_LABEL[JOURNEY_STAGES[progress.reached]]}`;
+              return (
+                <li key={`${def.topicId}/${def.concept}`} className="flex">
+                  <Link href={topicRoutes(def.topicId).learn(def.concept)} className="card flex flex-1 items-center gap-3 p-4 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
+                    <span className="grid size-14 shrink-0 place-items-center rounded-[18px] bg-sun-soft" aria-hidden>
+                      <PaperIcon name={topicById(def.topicId)?.look.icon ?? "bulb"} size={38} />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block font-extrabold leading-snug text-ink">{def.title}</span>
+                      <span className={`mt-0.5 flex items-center gap-1 text-label font-bold ${finished ? "text-ok" : "text-ink-2"}`}>
+                        {finished && <CheckIcon size={15} strokeWidth={3} />}
+                        {state}
+                      </span>
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
 
       {/* Up next on the island: the next lessons, then the big challenge. */}
       <section aria-labelledby="island-title">
@@ -235,24 +315,6 @@ function KidHome() {
           </li>
         </ol>
       </section>
-
-      {/* Other places to go, kept small so they never compete with the main button. */}
-      <nav aria-label="More to do" className="flex flex-wrap gap-3">
-        <ButtonLink href={links.practice()} variant="secondary">
-          <Pic name="target" size={24} /> Practice
-        </ButtonLink>
-        <ButtonLink href={routes.badges()} variant="secondary">
-          <Pic name="medal" size={24} /> Badges · {won.length} of {badges.length}
-        </ButtonLink>
-        <ButtonLink href={routes.journey()} variant="secondary">
-          <Pic name="map" size={24} /> World map · {islandCount} islands
-        </ButtonLink>
-        {topic.ui.FreeLab && (
-          <ButtonLink href={links.lab()} variant="secondary">
-            <Pic name="lab" size={24} /> The lab
-          </ButtonLink>
-        )}
-      </nav>
 
       <footer className="pb-4">
         <p className="text-label text-muted">3D pictures: Microsoft Fluent Emoji, MIT licence.</p>

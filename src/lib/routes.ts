@@ -8,8 +8,14 @@ export const routes = {
   badges: () => "/badges",
   /** Onboarding: sends a new learner to the first topic's warm-up. */
   start: () => "/start",
-  /** Practice hub: chooses a topic to practise. */
+  /** D-043 step 3: every topic as a grid, with progress. */
+  topics: () => "/topics",
+  /** Practice hub (D-043 step 3): what to practise, across the topics. */
   practice: () => "/practice",
+  /** D-043 step 3: the big challenges and practice mocks. */
+  tests: () => "/tests",
+  /** D-043 step 3: the mastery ring and a bar per topic. */
+  progress: () => "/progress",
   /** Lab hub: chooses a topic's lab. */
   lab: () => "/lab",
   parent: () => "/parent",

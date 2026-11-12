@@ -8,18 +8,21 @@ import { Hud } from "@/components/kid/Hud";
 import { routes, topicRoutes } from "@/lib/routes";
 import { updateLearner, updateTopic, useHydrated, useLearner } from "@/lib/store";
 import { completePracticeSession, setSettings } from "@/engine/progress";
-import { topicById } from "@/topics";
-import { activeTopic } from "@/topics/recommend";
-import { ArrowLeftIcon, BeakerIcon, CloseIcon, HomeIcon, KiteIcon, MapIcon, ParentIcon, PracticeIcon, SoundIcon } from "./Icons";
+import { ArrowLeftIcon, CloseIcon, HomeIcon, MapIcon, ParentIcon, PracticeIcon, ResultsIcon, SoundIcon, TrophyIcon } from "./Icons";
 import { Pic } from "@/components/paper/Pic";
 
+/** D-043 step 3: Home, Topics, Practice, Tests, Progress. The map, labs and badges are reached from these pages. */
 const KID_NAV = [
   { href: "/", label: "Home", Icon: HomeIcon },
-  { href: "/journey", label: "Map", Icon: MapIcon },
+  { href: "/topics", label: "Topics", Icon: MapIcon },
   { href: "/practice", label: "Practice", Icon: PracticeIcon },
-  { href: "/lab", label: "Lab", Icon: BeakerIcon },
-  { href: "/badges", label: "Badges", Icon: KiteIcon },
+  { href: "/tests", label: "Tests", Icon: TrophyIcon },
+  { href: "/progress", label: "Progress", Icon: ResultsIcon },
 ];
+
+/** Topic sections that belong under Practice and Tests; every other topic page is under Topics. */
+const PRACTICE_SECTIONS = ["practice"];
+const TEST_SECTIONS = ["check", "recheck", "mock"];
 
 const PARENT_NAV = [
   { href: routes.parent(), label: "Overview" },
@@ -37,15 +40,19 @@ export function topicPath(pathname: string): { topicId: string; section: string 
   return m ? { topicId: m[1], section: m[2] ?? "" } : null;
 }
 
-function isActive(pathname: string, href: string) {
+export function isActive(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
   const tp = topicPath(pathname);
   if (tp) {
-    if (href === "/practice") return tp.section === "practice";
-    if (href === "/lab") return tp.section === "lab";
-    if (href === "/journey") return tp.section !== "practice" && tp.section !== "lab";
+    if (href === "/practice") return PRACTICE_SECTIONS.includes(tp.section);
+    if (href === "/tests") return TEST_SECTIONS.includes(tp.section);
+    if (href === "/topics") return !PRACTICE_SECTIONS.includes(tp.section) && !TEST_SECTIONS.includes(tp.section);
+    return false;
   }
-  return pathname === href || pathname.startsWith(`${href}/`);
+  const under = (base: string) => pathname === base || pathname.startsWith(`${base}/`);
+  if (href === "/topics") return under("/topics") || under("/journey") || under("/lab");
+  if (href === "/progress") return under("/progress") || under("/badges");
+  return under(href);
 }
 
 export type ShellMode = "kid" | "focus" | "parent";
@@ -97,13 +104,6 @@ export function AppShell({ children }: { children: ReactNode }) {
   const mode = shellMode(pathname, (id) => !!learner.topics[id]?.practice.active);
   const tp = topicPath(pathname);
   const inPractice = tp?.section === "practice";
-  const navTopicId = tp?.topicId ?? activeTopic(learner).id;
-  const navTopic = topicRoutes(navTopicId);
-  // UX-005, DEF-005: no placeholder destinations. Islands without a lab get no Lab tab.
-  const hasLab = !!topicById(navTopicId)?.ui.FreeLab;
-  const kidNav = KID_NAV.filter((n) => n.href !== "/lab" || hasLab);
-  /** Practice and Lab open the island the learner is in (or their active one). */
-  const navHref = (href: string) => (href === "/practice" ? navTopic.practice() : href === "/lab" ? navTopic.lab() : href);
 
   return (
     <MotionConfig reducedMotion="user">
@@ -147,14 +147,14 @@ export function AppShell({ children }: { children: ReactNode }) {
             <Logo />
             <nav aria-label="Main" className="hidden lg:block">
               <ul className="flex flex-wrap items-center gap-1">
-                {kidNav.map(({ href, label, Icon }) => {
+                {KID_NAV.map(({ href, label, Icon }) => {
                   const active = isActive(pathname, href);
                   return (
                     <li key={href}>
                       <Link
-                        href={navHref(href)}
+                        href={href}
                         aria-current={active ? "page" : undefined}
-                        className={`flex h-11 items-center gap-2 rounded-full px-4 text-base transition-colors ${
+                        className={`flex h-11 items-center gap-1.5 rounded-full px-3 text-base transition-colors ${
                           active ? "bg-brand-soft font-bold text-brand-strong" : "font-semibold text-ink-2 hover:bg-sunk"
                         }`}
                       >
@@ -174,7 +174,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 aria-label="Grown-ups"
                 className="ml-1 hidden min-h-11 min-w-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-3 text-label font-semibold text-ink-2 hover:bg-sunk sm:flex"
               >
-                <ParentIcon size={18} /> <span className="hidden md:inline">Grown-ups</span>
+                <ParentIcon size={18} /> <span className="hidden md:inline lg:hidden 2xl:inline">Grown-ups</span>
               </Link>
             </div>
           </div>
@@ -196,7 +196,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   return (
                     <li key={href}>
                       <Link
-                        href={navHref(href)}
+                        href={href}
                         aria-current={active ? "page" : undefined}
                         className={`flex min-h-11 items-center whitespace-nowrap rounded-full px-4 text-label ${active ? "bg-brand-soft font-bold text-brand-strong" : "font-semibold text-ink-2 hover:bg-sunk hover:text-ink"}`}
                       >
@@ -228,13 +228,13 @@ export function AppShell({ children }: { children: ReactNode }) {
           aria-label="Main"
           className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] lg:hidden"
         >
-          <ul className={`mx-auto grid max-w-xl ${kidNav.length === 5 ? "grid-cols-5" : "grid-cols-4"}`}>
-            {kidNav.map(({ href, label, Icon }) => {
+          <ul className={`mx-auto grid max-w-xl grid-cols-5`}>
+            {KID_NAV.map(({ href, label, Icon }) => {
               const active = isActive(pathname, href);
               return (
                 <li key={href}>
                   <Link
-                    href={navHref(href)}
+                    href={href}
                     aria-current={active ? "page" : undefined}
                     className={`flex min-h-16 min-w-0 flex-col items-center justify-center gap-1 px-0.5 py-1 text-center text-label leading-tight [overflow-wrap:anywhere] ${active ? "font-bold text-brand-strong" : "font-semibold text-muted"}`}
                   >

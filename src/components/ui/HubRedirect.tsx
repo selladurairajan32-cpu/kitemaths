@@ -8,10 +8,10 @@ import { useHydrated, useLearner } from "@/lib/store";
 import { topicById } from "@/topics";
 import { activeTopic } from "@/topics/recommend";
 
-type Section = "practice" | "lab" | "start";
+type Section = "lab" | "start";
 
 /**
- * `/practice`, `/lab` and `/start` open the learner's current island (DEF-014), not always Fractions. An island without a
+ * `/lab` and `/start` open the learner's current island (DEF-014; `/practice` is a hub since D-043 step 3), not always Fractions. An island without a
  * lab sends `/lab` to its map instead (UX-005: no placeholder destinations).
  */
 export function HubRedirect({ section }: { section: Section }) {
@@ -20,7 +20,7 @@ export function HubRedirect({ section }: { section: Section }) {
   const router = useRouter();
   const topic = activeTopic(learner);
   const links = topicRoutes(topic.id);
-  const target = section === "lab" ? (topicById(topic.id)?.ui.FreeLab ? links.lab() : links.island()) : section === "start" ? links.start() : links.practice();
+  const target = section === "lab" ? (topicById(topic.id)?.ui.FreeLab ? links.lab() : links.island()) : links.start();
   useEffect(() => {
     if (hydrated) router.replace(target);
   }, [hydrated, router, target]);

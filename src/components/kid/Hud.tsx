@@ -43,9 +43,9 @@ export function Hud({ compact = false }: { compact?: boolean }) {
 
   return (
     <Link
-      href={routes.badges()}
+      href={routes.progress()}
       className="flex items-center gap-2 rounded-full"
-      aria-label={`${stars} stars, level ${level.level}${streak.current ? `, ${streak.current} day streak` : ""}. See your badges.`}
+      aria-label={`${stars} stars, level ${level.level}, ${level.needed - level.into} more to level ${level.level + 1}${streak.current ? `, ${streak.current} day streak` : ""}. See your progress.`}
     >
       <span className="relative flex min-h-11 items-center gap-1.5 rounded-full bg-tile-yellow pl-1.5 pr-3.5">
         <motion.span
@@ -73,7 +73,15 @@ export function Hud({ compact = false }: { compact?: boolean }) {
           )}
         </AnimatePresence>
       </span>
-      {!compact && <span className="hidden whitespace-nowrap text-label font-semibold text-muted xl:inline">Level {level.level}</span>}
+      {/* D-043 step 3: the level and the stars still needed for the next one, as a bar (the "XP" in the concept images). */}
+      {!compact && (
+        <span className="hidden min-h-11 flex-col justify-center gap-1 sm:flex lg:hidden xl:flex" data-testid="hud-level">
+          <span className="whitespace-nowrap text-label font-bold leading-none text-ink-2">Level {level.level}</span>
+          <span className="block h-1.5 w-16 overflow-hidden rounded-full bg-sunk" aria-hidden>
+            <span className="block h-full rounded-full bg-sun-strong" style={{ width: `${Math.round((level.into / level.needed) * 100)}%` }} />
+          </span>
+        </span>
+      )}
       <span className="flex min-h-11 items-center gap-1 rounded-full bg-tile-orange pl-1.5 pr-3.5" title={`${streak.current} day streak`}>
         <Pic name="flame" size={28} muted={!streak.activeToday} />
         <span className={`text-lg font-extrabold tabular-nums leading-none ${streak.activeToday ? "text-ink" : "text-muted"}`}>{streak.current}</span>
