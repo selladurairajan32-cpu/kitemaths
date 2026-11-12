@@ -6,7 +6,8 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
 
 | | Commit | What it holds |
 |---|---|---|
-| `claude/practical-knuth-9126wx` | same as `main` | **Latest work.** Everything below, pushed. Start new work from here. |
+| `claude/clever-cori-42fmz0` | `claude/practical-knuth-9126wx` + step 3 | **Latest work: D-043 step 3, the kid pages.** Pushed, not merged, not deployed. Start new work from here. |
+| `claude/practical-knuth-9126wx` | same as `main` | Everything up to D-043 step 2. |
 | `main` (production, https://kitemaths.vercel.app) | `0fedc65` + this record | Everything up to D-043 step 2, deployed on request (D-044, CH-091): the journey is live. |
 
 - A new session gets its own `claude/…` branch from the platform. Base it on `claude/practical-knuth-9126wx`
@@ -24,23 +25,22 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
 - **Emma's teaching voice** (Kokoro), teacher scripts with `[pause]` and `[think]`, and pizza visuals for fractions.
 - Report: `reports/D-043-step-2-report.md`.
 
+- **Kid pages (step 3)**, built, READY FOR QA, not deployed: navigation Home · Topics · Practice · Tests · Progress with a
+  level bar; Home with Continue Learning and today's plan; `/topics`, `/practice` (now a hub), `/tests`, `/progress`
+  (mastery ring and topic bars). Report: `reports/D-043-step-3-report.md` (CH-092, CH-093).
+
 **Next (D-043 plan, in order):**
-1. **Step 3, kid pages in the concept-image style.**
-   - Navigation: Home · Topics · Practice · Tests · Progress, with XP.
-   - Home: Continue Learning (the last journey and its step) and a learning plan.
-   - A Topics grid with progress.
-   - Progress: a mastery ring and topic bars.
-   - The images the Product Owner sent are described in D-043. The flow matters, not the exact UI. No violet tokens.
-2. **The ten hardest concepts on the journey,** in batches of 4. Each one needs:
+1. **The ten hardest concepts on the journey,** in batches of 4. Each one needs:
    - a script;
    - a Manim scene;
    - `build.py`;
    - Learn, Try it and Notes components;
    - a `kit/journeys.ts` entry.
-3. **Public homepage and parent dashboard.**
-4. **Supabase accounts** (parent logins, children as profiles), then one production launch.
+2. **Public homepage and parent dashboard.**
+3. **Supabase accounts** (parent logins, children as profiles), then one production launch.
 
 **Open questions for the Product Owner:**
+- XP: keep stars with a level bar, or call them XP? Should today's plan tick items off? Keep `/practice` as a hub?
 - Lengthen the Check stage (the concept images show about 8 questions; it is 2 today, and changing it changes MAST-001)?
 - A reasoning question for ratio.
 
@@ -53,6 +53,7 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
 | Journey screens | `src/components/journey/` (`JourneyScreen`, `LearnStage`, `stages`) |
 | Learn and Notes per concept | `src/topics/kit/explanations.tsx` → `src/topics/<island>/explain/` |
 | One script per concept (film cues, story beats, voice lines) | `engine/explainScript.ts`; scripts listed in `kit/explainScripts.ts` |
+| Kid pages (Topics, Practice, Tests, Progress) and their numbers | `src/components/screens/*Screen.tsx`, `kid/Overview.tsx`; pure `engine/overview.ts`, `topics/overview.ts` |
 | Films and voices | `tools/films/` (README); media in `public/films/<concept>/` and `public/voice/<concept>/` |
 
 ## Making films and voices in a fresh container
@@ -82,6 +83,7 @@ npm run build
 Browser checks (production build on a port; Playwright's Chromium is preinstalled):
 - `node docs/product/verification/journey.cjs <out> 3123`
 - `node docs/product/verification/ratio-3d.cjs <out> 3123`
+- `node docs/product/verification/kid-pages.cjs <out> 3123`
 
 Stop old servers with `pkill -f next-server`: the server renames itself, and a stale one serves the old build.
 

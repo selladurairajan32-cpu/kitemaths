@@ -6,7 +6,7 @@ breaking changes, so read the relevant guide in `node_modules/next/dist/docs/` b
 
 ## Working rules (from the Product Owner, D-002, D-006, D-012)
 
-- **Development branch only.** The latest work is on `claude/practical-knuth-9126wx` (see `docs/product/HANDOFF.md`); a new
+- **Development branch only.** The latest work is on `claude/clever-cori-42fmz0` (see `docs/product/HANDOFF.md`); a new
   session works on the branch it is given, based on that one. No pull request, merge or deployment unless the Product
   Owner explicitly asks. Production is https://kitemaths.vercel.app (Vercel deploys `main`). R1 was merged to `main` and deployed on 9 Nov 2026 at the Product Owner's explicit request (D-027), the content differentiation changes the same day (D-029), the typography changes (D-031), the D-037 build (CH-069), the D-038 build (CH-074), the D-039 build (CH-077) D-040/D-041 Phase 1 (D-042, CH-086) and D-043 step 2 (D-044, CH-091), each a one-off exception to the sign-in rule; any further deployment still needs an explicit request.
 - **No change to existing child-facing screens** (appearance or behaviour) unless an item says so. Screen migration, the
@@ -38,7 +38,9 @@ only accepted items may have `accepted` cases. Update `test-cases.csv` in the sa
 
 **New session? Read `docs/product/HANDOFF.md` first:** branches, what is done, what is next, and how to rebuild films.
 
-`docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Last recorded
+`docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Latest: D-043 step 3
+built (kid pages: navigation Home, Topics, Practice, Tests, Progress; `/topics`, `/practice` hub, `/tests`, `/progress`;
+CH-092, CH-093; `reports/D-043-step-3-report.md`; READY FOR QA, not deployed; work on `claude/clever-cori-42fmz0`). Last recorded
 decision: D-043 (a teaching flow, not a page: the topic journey `/t/[topic]/learn/[concept]` (Learn → Practise →
 Apply → Check → Complete; `components/journey/`, `engine/topicJourney.ts`, data in `kit/journeys.ts`, saved as
 `LearnerState.journeys`; `/explain` redirects); Emma's voice (Kokoro) with teacher scripts and `[pause]`/`[think]`; pizza
