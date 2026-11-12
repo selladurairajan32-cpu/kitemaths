@@ -4,7 +4,7 @@
 |---|---|
 | **Decision** | D-046 (12 Nov 2026): fine-tune the two topic journeys first, in the look and feel of the concept images (similar, not copied). |
 | **Changes** | CH-095 (look and feel), CH-096 (checks) in `DECISIONS.md` |
-| **Status** | READY FOR QA. **Nothing is accepted.** Not deployed. |
+| **Status** | READY FOR QA. **Nothing is accepted.** Deployed to production on 12 Nov 2026 at the Product Owner's request (D-047, CH-097): 28 of 28 live checks pass. |
 | **Date** | 12 November 2026 |
 
 ## 1. What the Product Owner decided along the way

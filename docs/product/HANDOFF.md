@@ -7,13 +7,13 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
 | | Commit | What it holds |
 |---|---|---|
 | `claude/clever-cori-42fmz0` | same as `main` | **Latest work: D-043 step 3, the kid pages.** Start new work from here. |
-| `main` (production, https://kitemaths.vercel.app) | `dd88b94` + this record | Everything up to D-043 step 3, deployed on request (D-045, CH-094): the kid pages are live. |
+| `main` (production, https://kitemaths.vercel.app) | `724aac4` + this record | Everything up to D-046 phase 1, deployed on request (D-047, CH-097): the restyled journeys are live. |
 | `claude/practical-knuth-9126wx` | `ada819a` | Everything up to D-043 step 2. |
 
 - A new session gets its own `claude/…` branch from the platform. Base it on `claude/practical-knuth-9126wx`
   (`git fetch origin claude/practical-knuth-9126wx && git checkout -b <new-branch> FETCH_HEAD`), or ask the Product Owner.
 - **No deployment, merge or PR without an explicit request.** The D-040 rule stands: production waits until sign-in works
-  end to end; D-042, D-044 and D-045 were one-offs. A deployment means fast-forwarding `main` after CI is green, then running
+  end to end; D-042, D-044, D-045 and D-047 were one-offs. A deployment means fast-forwarding `main` after CI is green, then running
   `verification/live-check.cjs` and recording a CH entry. The session's network must allow `kitemaths.vercel.app` (the
   personal environment "kitemaths" does).
 
@@ -30,7 +30,7 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
   level bar; Home with Continue Learning and today's plan; `/topics`, `/practice` (now a hub), `/tests`, `/progress`
   (mastery ring and topic bars). Report: `reports/D-043-step-3-report.md` (CH-092, CH-093).
 
-- **D-046 phase 1** (built, READY FOR QA, not deployed): the two journeys in the sky-and-glass look of the concept
+- **D-046 phase 1** (built, READY FOR QA, deployed on request, D-047, CH-097): the two journeys in the sky-and-glass look of the concept
   images; stars are called XP; 2D pizzas kept (the Product Owner's choice). Report: `reports/D-046-phase-1-report.md`
   (CH-095, CH-096). **Next: D-046 phase 2**, the same look on Home, Topics, Practice, Tests and Progress.
 
