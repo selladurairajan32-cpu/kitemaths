@@ -1,7 +1,8 @@
 // Usage: node docs/product/verification/live-check.cjs <outDir>
 // D-037 deployment check on https://kitemaths.vercel.app with cache-busting loads: Home, the Measures island, the Long
-// multiplication animated step 4, a Measures lesson, the D-038 thousandths lesson, the D-039 drawing lab and the mock
-// with the ISEB profile, at 390 and 1280px. Records the
+// multiplication animated step 4, a Measures lesson, the D-038 thousandths lesson, the D-039 drawing lab, the mock
+// with the ISEB profile, and the D-040/D-041 explanation pages (fractions: the film loads and Step through draws; ratio:
+// the 3D stage draws in Step through), at 390 and 1280px. Records the
 // HTTP status, one content check per page and console errors. Developer evidence, not independent QA.
 const { chromium } = require('playwright');
 const OUT = process.argv[2]; const BASE = 'https://kitemaths.vercel.app';
@@ -27,6 +28,17 @@ const cb = () => `?cb=${Date.now()}`;
     await p.goto(BASE + '/t/shapes-angles/lesson/construct/1' + cb(), { waitUntil: 'networkidle' });
     await p.evaluate(() => { const s = JSON.parse(localStorage.getItem('kite-maths:v2')); s.topics['shapes-angles'].lessons.construct = { step: 3, furthestStep: 3, completed: false }; localStorage.setItem('kite-maths:v2', JSON.stringify(s)); });
     await go('draw-tool', '/t/shapes-angles/lesson/construct/4', async () => (await p.getByRole('slider', { name: 'Ruler: length of the base' }).count()) > 0);
+    // D-041: the three-way fractions explanation: the film loads with its length, and Step through draws its stage.
+    await go('explain-fractions', '/t/fractions-2/explain/add-different', async () => {
+      const film = await p.waitForFunction(() => { const v = document.querySelector('video'); return v && v.readyState >= 1 && Math.round(v.duration); }, null, { timeout: 15000 }).then((h) => h.jsonValue()).catch(() => 0);
+      await p.getByRole('tab', { name: /^Step through/ }).click();
+      return film === 59 && (await p.locator('#mode-panel svg[viewBox="0 0 720 400"]').count()) > 0;
+    });
+    // D-040, D-041: the ratio explanation: Step through draws the WebGL stage.
+    await go('explain-ratio', '/t/ratio-algebra/explain/ratio', async () => {
+      await p.getByRole('tab', { name: /^Step through/ }).click();
+      return (await p.locator('[data-stage="webgl"] canvas').waitFor({ timeout: 15000 }).then(() => true).catch(() => false));
+    });
     await go('mock', '/t/mock-exams/mock', async () => { await p.getByRole('button', { name: /^ISEB Common Pre-Tests/ }).click(); return (await p.getByText(/40 minutes/).count()) > 0 && (await p.getByRole('button', { name: 'Answer sheet (A to E)' }).count()) > 0; });
   }
   require('fs').writeFileSync(`${OUT}/report.json`, JSON.stringify(report, null, 1));
