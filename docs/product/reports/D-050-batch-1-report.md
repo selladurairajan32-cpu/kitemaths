@@ -4,7 +4,7 @@
 |---|---|
 | **Decision** | D-050 (12 Nov 2026): "go ahead with these four", from a proposal made in the session. |
 | **Changes** | CH-101 (question makers), CH-102 (the four journeys), CH-103 (checks) in `DECISIONS.md` |
-| **Status** | READY FOR QA. **Nothing is accepted.** Not deployed. |
+| **Status** | READY FOR QA. **Nothing is accepted.** Deployed to production on 12 Nov 2026 at the Product Owner's request (D-051, CH-104): 36 of 36 live checks pass. |
 | **Date** | 12 November 2026 |
 
 ## 1. The four concepts

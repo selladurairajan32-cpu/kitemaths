@@ -7,13 +7,13 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
 | | Commit | What it holds |
 |---|---|---|
 | `claude/clever-cori-42fmz0` | same as `main` | **Latest work: D-043 step 3, the kid pages.** Start new work from here. |
-| `main` (production, https://kitemaths.vercel.app) | `0d1852c` + this record | Everything up to D-046 phase 2, deployed on request (D-049, CH-100): the restyled journeys and kid pages are live. |
+| `main` (production, https://kitemaths.vercel.app) | `5bd4070` + this record | Everything up to D-050 batch 1, deployed on request (D-051, CH-104): six journeys are live. |
 | `claude/practical-knuth-9126wx` | `ada819a` | Everything up to D-043 step 2. |
 
 - A new session gets its own `claude/…` branch from the platform. Base it on `claude/practical-knuth-9126wx`
   (`git fetch origin claude/practical-knuth-9126wx && git checkout -b <new-branch> FETCH_HEAD`), or ask the Product Owner.
 - **No deployment, merge or PR without an explicit request.** The D-040 rule stands: production waits until sign-in works
-  end to end; D-042, D-044, D-045, D-047 and D-049 were one-offs. A deployment means fast-forwarding `main` after CI is green, then running
+  end to end; D-042, D-044, D-045, D-047, D-049 and D-051 were one-offs. A deployment means fast-forwarding `main` after CI is green, then running
   `verification/live-check.cjs` and recording a CH entry. The session's network must allow `kitemaths.vercel.app` (the
   personal environment "kitemaths" does).
 
@@ -36,7 +36,7 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
 - **D-046 phase 2** (built, READY FOR QA, deployed on request, D-049, CH-100; D-048): the same look on Home, Topics, Practice, Tests and
   Progress; yellow Check answer in every question. Report: `reports/D-046-phase-2-report.md` (CH-098, CH-099).
 
-- **D-050 batch 1** (built, READY FOR QA, not deployed): journeys for comparing decimals, percentages of amounts,
+- **D-050 batch 1** (built, READY FOR QA, deployed on request, D-051, CH-104): journeys for comparing decimals, percentages of amounts,
   multiplying fractions and remainders in real life (six journeys in all). Report: `reports/D-050-batch-1-report.md`
   (CH-101 to CH-103). Pattern for a new concept: makers in `<island>/journey.ts`; `<island>/explain/<x>Script.ts`,
   `<X>Stage.tsx`, `<X>Try.tsx`, `<X>Page.tsx`; entries in `kit/journeys.ts`, `kit/explanationIndex.ts`,

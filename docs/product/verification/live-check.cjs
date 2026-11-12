@@ -46,6 +46,14 @@ const cb = () => `?cb=${Date.now()}`;
     await go('practice-hub', '/practice', async () => (await p.getByRole('heading', { name: 'Quick practice' }).count()) > 0);
     await go('tests', '/tests', async () => (await p.getByRole('heading', { name: 'Big challenges' }).count()) > 0);
     await go('progress', '/progress', async () => (await p.locator('[aria-label^="Mastery:"]').count()) > 0 && (await p.getByRole('navigation', { name: 'Main' }).first().getByRole('link', { name: 'Progress', exact: true }).getAttribute('aria-current')) === 'page');
+    // D-050: the four new journeys: the page, the film's length, and the journey bar.
+    for (const [path, secs] of [['/t/decimals/learn/compare-decimals', 106], ['/t/percentages/learn/percent-of-amount', 97.5], ['/t/fractions-2/learn/multiply-fractions', 94.5], ['/t/multiply-divide/learn/remainders', 97]]) {
+      await go(path.split('/').pop(), path, async () => {
+        await p.getByRole('tab', { name: /^Watch/ }).click();
+        const film = await p.waitForFunction(() => { const v = document.querySelector('video'); return v && v.readyState >= 1 && Math.round(v.duration * 2) / 2; }, null, { timeout: 15000 }).then((h) => h.jsonValue()).catch(() => 0);
+        return film === secs && (await p.getByRole('list', { name: 'Your learning journey' }).count()) > 0;
+      });
+    }
     await go('mock', '/t/mock-exams/mock', async () => { await p.getByRole('button', { name: /^ISEB Common Pre-Tests/ }).click(); return (await p.getByText(/40 minutes/).count()) > 0 && (await p.getByRole('button', { name: 'Answer sheet (A to E)' }).count()) > 0; });
   }
   require('fs').writeFileSync(`${OUT}/report.json`, JSON.stringify(report, null, 1));
