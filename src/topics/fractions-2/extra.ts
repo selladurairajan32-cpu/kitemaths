@@ -48,7 +48,7 @@ const divideSteps = (a: Fraction, k: number) => {
   return `Keep the top, ${a.n}. Bottom: ${a.d} × ${k} = ${raw.d}. So ${f(a)} ÷ ${k} = ${f(raw)}${s.d !== raw.d ? `, which simplifies to ${f(s)}` : ""}`;
 };
 
-function timesQuestion(r: Rng, a: Fraction, b: Fraction, prompt: string) {
+export function timesQuestion(r: Rng, a: Fraction, b: Fraction, prompt: string) {
   const raw = { n: a.n * b.n, d: a.d * b.d };
   const right = multiply(a, b);
   const { options, answer } = fractionOptions(r, right, raw, [

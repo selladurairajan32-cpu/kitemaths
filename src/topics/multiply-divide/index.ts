@@ -1,4 +1,5 @@
 import { defineTopic, genFor, int, pick, withExtras, withHints } from "@/topics/kit/define";
+import { remainderJourneyExtra } from "./journey";
 import { multiplyDivideExtra } from "./extra";
 import { num } from "@/topics/kit/evaluate";
 import type { Template } from "@/topics/kit/types";
@@ -799,4 +800,4 @@ export const multiplyDivide = defineTopic(withExtras({
     { lessonId: "divide", template: "md-div" },
     { lessonId: "factors", template: "md-factor" },
   ],
-}, multiplyDivideExtra));
+}, multiplyDivideExtra, remainderJourneyExtra));

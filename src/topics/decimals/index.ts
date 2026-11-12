@@ -1,4 +1,5 @@
 import { defineTopic, genFor, int, pick, withExtras, withHints } from "@/topics/kit/define";
+import { compareJourneyExtra } from "./journey";
 import { decimalsExtra } from "./extra";
 import { num } from "@/topics/kit/evaluate";
 import type { ChooseOption, Template } from "@/topics/kit/types";
@@ -655,4 +656,4 @@ export const decimals = defineTopic(withExtras({
     { lessonId: "add-sub", template: "dc-add" },
     { lessonId: "times-ten", template: "dc-times-ten" },
   ],
-}, decimalsExtra));
+}, decimalsExtra, compareJourneyExtra));

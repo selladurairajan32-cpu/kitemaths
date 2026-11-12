@@ -1,4 +1,5 @@
-import { defineTopic, genFor, int, pick, withHints } from "@/topics/kit/define";
+import { defineTopic, genFor, int, pick, withExtras, withHints } from "@/topics/kit/define";
+import { amountsJourneyExtra } from "./journey";
 import { num } from "@/topics/kit/evaluate";
 import type { ChooseOption, KitVisual, Template } from "@/topics/kit/types";
 
@@ -398,7 +399,7 @@ const templates = withHints(baseTemplates, {
   "pc-problems-stretch": () => ["Work out the new price after the rise.", "Then find 10% of that new price and take it off."],
 });
 
-export const percentages = defineTopic({
+export const percentages = defineTopic(withExtras({
   id: T,
   title: "Percentages",
   subtitle: "Per cent means out of 100: percentages as fractions and decimals, percentages of amounts, sales and problems",
@@ -587,4 +588,4 @@ export const percentages = defineTopic({
     { lessonId: "amounts", template: "pc-of-amount" },
     { lessonId: "problems", template: "pc-sale" },
   ],
-});
+}, amountsJourneyExtra));
