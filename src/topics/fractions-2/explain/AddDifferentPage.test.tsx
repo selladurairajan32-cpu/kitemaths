@@ -31,8 +31,8 @@ describe("three ways to learn: adding fractions with different denominators (D-0
     expect(video.getAttribute("poster")).toBe("/films/add-different/poster.jpg");
     expect(video.autoplay).toBe(false);
     expect(screen.getByText("Read the transcript")).toBeTruthy();
-    expect(screen.getByRole("button", { name: /How do we add one third and one quarter/ })).toBeTruthy();
-    expect(screen.getByRole("button", { name: "Cut into twelfths" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /Sam ate one third of a pizza/ })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Common denominator" })).toBeTruthy();
   });
 
   it("remembers the chosen way for next time, and moves between ways with the arrow keys", async () => {
@@ -41,7 +41,7 @@ describe("three ways to learn: adding fractions with different denominators (D-0
     await user.click(tab("Step through"));
     expect(getLearner().settings.explainMode).toBe("step");
     expect(window.location.hash).toBe("#step");
-    expect(screen.getByText(/How do we add/)).toBeTruthy();
+    expect(screen.getByText(/How much did they eat altogether/)).toBeTruthy();
     tab("Step through").focus();
     await user.keyboard("{ArrowRight}");
     expect(tab("Try it").getAttribute("aria-selected")).toBe("true");
@@ -71,25 +71,25 @@ describe("three ways to learn: adding fractions with different denominators (D-0
     expect(tab("Try it").getAttribute("aria-selected")).toBe("true");
   });
 
-  it("does Try it by keyboard: cut until the pieces match, then place all seven twelfths", async () => {
+  it("does Try it by keyboard: cut the pizzas until the slices match, then place all seven twelfths", async () => {
     const user = userEvent.setup();
     history.replaceState(null, "", "/t/fractions-2/explain/add-different#try");
     render(<AddDifferentPage />);
-    const rows = screen.getByLabelText(/Rows across the third/);
-    const cols = screen.getByLabelText(/Columns down the quarter/);
-    fireEvent.change(rows, { target: { value: "2" } });
-    expect(screen.getByText(/6 pieces and 4 pieces: not the same size yet/)).toBeTruthy();
-    fireEvent.change(rows, { target: { value: "4" } });
-    fireEvent.change(cols, { target: { value: "3" } });
-    expect(screen.getByText(/both wholes have 12 equal pieces/)).toBeTruthy();
+    const sam = screen.getByLabelText(/Sam's cutter/);
+    const zara = screen.getByLabelText(/Zara's cutter/);
+    fireEvent.change(sam, { target: { value: "2" } });
+    expect(screen.getByText(/6 slices and 4 slices: not the same size yet/)).toBeTruthy();
+    fireEvent.change(sam, { target: { value: "4" } });
+    fireEvent.change(zara, { target: { value: "3" } });
+    expect(screen.getByText(/both pizzas have 12 slices/)).toBeTruthy();
     for (let i = 0; i < 7; i++) {
-      const piece = screen.getAllByRole("button", { name: /twelfth: place it/ })[0]!;
+      const piece = screen.getAllByRole("button", { name: /put it on the pizza/ })[0]!;
       piece.focus();
       await user.keyboard("{Enter}");
     }
     await act(async () => {});
     expect(screen.getByText("Four twelfths and three twelfths make seven twelfths.")).toBeTruthy();
-    expect(screen.getByRole("img", { name: "The whole: 7 of 12 twelfths filled" })).toBeTruthy();
+    expect(screen.getByRole("img", { name: "The whole pizza: 7 of 12 slices" })).toBeTruthy();
   });
 
   it("ends every way with the same island question, marked by the island", async () => {
