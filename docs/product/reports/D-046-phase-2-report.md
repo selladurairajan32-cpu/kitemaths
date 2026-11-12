@@ -4,7 +4,7 @@
 |---|---|
 | **Decision** | D-048 (12 Nov 2026): "go ahead with phase 2"; the narrowed palette rule is confirmed; the Check button inside questions becomes the yellow "Check answer" everywhere. |
 | **Changes** | CH-098 (look and feel), CH-099 (checks) in `DECISIONS.md` |
-| **Status** | READY FOR QA. **Nothing is accepted.** Not deployed. |
+| **Status** | READY FOR QA. **Nothing is accepted.** Deployed to production on 12 Nov 2026 at the Product Owner's request (D-049, CH-100): 28 of 28 live checks pass. |
 | **Date** | 12 November 2026 |
 
 ## 1. What changed for the child
