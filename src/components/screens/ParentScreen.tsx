@@ -276,7 +276,7 @@ function ParentOverview() {
           </label>
           <Toggle
             label="Sound effects"
-            hint="Chimes for right answers, stars and level-ups."
+            hint="Chimes for right answers, XP and level-ups."
             on={learner.settings.sound}
             onChange={(v) => updateLearner((s) => setSettings(s, { sound: v }))}
           />
@@ -321,7 +321,7 @@ function ParentOverview() {
           <ul className="mt-1 list-disc space-y-1 pl-5">
             <li>A first name and school year, only if you add them. Both are optional.</li>
             <li>These settings, and the weekly plan workload.</li>
-            <li>Answers, lesson progress, stars and badges, so progress and reports work.</li>
+            <li>Answers, lesson progress, XP and badges, so progress and reports work.</li>
             <li>All of it stays in this browser on this device. Nothing is sent to a server, and there is no account.</li>
           </ul>
         </details>

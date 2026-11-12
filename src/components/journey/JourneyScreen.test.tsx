@@ -41,7 +41,7 @@ describe("topic journey: Learn, Practise, Apply, Check, Complete (D-043)", () =>
   it("goes on to Practise when the child is ready, and Learn stays open to revisit", async () => {
     const user = userEvent.setup();
     show();
-    await user.click(await screen.findByRole("button", { name: /I'm ready: Practise/ }));
+    await user.click(await screen.findByRole("button", { name: /Practise this/ }));
     expect(stageButton(/^2\. Practise$/).getAttribute("aria-current")).toBe("step");
     expect(screen.getByRole("list", { name: "Practice levels" })).toBeTruthy();
     expect((stageButton(/^1\. Learn, done/) as HTMLButtonElement).disabled).toBe(false);

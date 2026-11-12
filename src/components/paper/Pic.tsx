@@ -11,6 +11,9 @@ export const PIC_NAMES = [
   "place-value", "rounding", "thermometer", "plus", "times", "divide", "decimal", "coin", "clock",
   "area", "angle", "compass", "chart", "ratio", "bulb", "exam", "target", "dice", "trophy", "recheck",
   "kite", "star", "flame", "book", "lab", "map", "lock", "party", "medal", "sun", "books", "rocket", "glowing-star",
+  // D-046: the guide (a child waving, and pointing), the avatar, and pictures for the journey pages.
+  "guide-wave", "guide-point", "avatar", "clapper", "ladder", "brain", "play", "warning", "check", "memo", "cloud", "sparkles",
+  "waving", "gear", "high-voltage",
 ] as const;
 
 export type PicName = (typeof PIC_NAMES)[number];

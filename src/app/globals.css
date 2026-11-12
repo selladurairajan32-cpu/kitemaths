@@ -5,7 +5,8 @@
  * A calm white base, one friendly font (Nunito) at easy reading sizes, one blue action,
  * white cards with soft shadows, and the fun carried by 3D pictures (public/3d).
  * Fractions keep their data colours: coral numerator, blue denominator.
- * No gradients and no violet.
+ * No violet. D-046: gradients and frosted glass only in the sky and glass styles below (.sky-*, .glass*), for the
+ * sky-and-glass look the Product Owner asked for; everything else stays flat.
  */
 @theme static {
   /* Ground, surfaces and ink: a calm, clean base (the "Crystal" look). */
@@ -60,6 +61,15 @@
   --color-leaf: #3dae6b;
   --color-leaf-soft: #dcf3e5;
   --color-fire: #ff7a2f;
+
+  /* D-046: the sky the kid pages sit in, its hills, and the yellow "go" button of the concept images. */
+  --color-sky-top: #a9d4ff;
+  --color-sky-mid: #d6ebff;
+  --color-sky-low: #eef7ff;
+  --color-hill: #b8e39c;
+  --color-hill-far: #d3efc0;
+  --color-cta: #ffc83d; /* ink on it is about 10:1 */
+  --color-cta-strong: #d99a00;
 
   --font-sans: var(--font-nunito), ui-rounded, ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-nunito), ui-rounded, ui-sans-serif, system-ui, sans-serif;
@@ -178,7 +188,8 @@
     font-size: 1.125rem; /* 18px: easy reading for young readers */
     font-weight: 600;
     line-height: 1.6;
-    background: var(--color-paper);
+    /* D-046: transparent, so the kid pages' sky (fixed behind the content) shows; the page ground stays on html. */
+    background: transparent;
     font-variant-numeric: tabular-nums;
     /* UX-003 AC3: a word wider than its box breaks rather than pushing the page sideways at large text sizes. */
     overflow-wrap: anywhere;
@@ -202,6 +213,36 @@
 
 @layer components {
   /* A paper panel: white on the sky, separated by tone, never by a shadow. */
+  /*
+   * D-046: the sky behind the kid pages (soft clouds over a blue that fades towards the hills), and frosted glass for
+   * panels on it. Text never sits on the sky's gradient alone below the header: it sits on glass or white cards.
+   */
+  .sky-backdrop {
+    background:
+      radial-gradient(60rem 18rem at 12% 8%, rgb(255 255 255 / 0.75), transparent 70%),
+      radial-gradient(48rem 14rem at 88% 22%, rgb(255 255 255 / 0.6), transparent 70%),
+      linear-gradient(180deg, var(--color-sky-top) 0%, var(--color-sky-mid) 38%, var(--color-sky-low) 100%);
+  }
+  .glass {
+    background: rgb(255 255 255 / 0.74);
+    border: 1px solid rgb(255 255 255 / 0.9);
+    box-shadow: 0 12px 32px rgb(37 99 235 / 0.12);
+    backdrop-filter: blur(14px) saturate(1.2);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  }
+  /* A stronger glass for the header and the bottom bar, so their text keeps full contrast. */
+  .glass-strong {
+    background: rgb(255 255 255 / 0.9);
+    border: 1px solid rgb(255 255 255 / 0.95);
+    box-shadow: 0 10px 28px rgb(37 99 235 / 0.14);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  /* The selected way to learn: the brand blue, a little deeper at the bottom. */
+  .glass-selected {
+    background: linear-gradient(180deg, var(--color-brand) 0%, var(--color-brand-strong) 100%); /* white text: 5.2:1 or more */
+    box-shadow: 0 14px 30px rgb(37 99 235 / 0.35);
+  }
   .card {
     background: var(--color-surface);
     border: 1px solid var(--color-line);
@@ -235,6 +276,16 @@
     border-bottom-width: 1px;
     margin-bottom: 2px;
   }
+}
+
+/* D-046: the same when the child turns motion off in the app. */
+[data-motion="reduced"] *,
+[data-motion="reduced"] *::before,
+[data-motion="reduced"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

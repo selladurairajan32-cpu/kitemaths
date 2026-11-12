@@ -155,7 +155,7 @@ function KidHome() {
       {/* Stars, streak and today's goal in one strip. */}
       <section aria-label="Your progress">
         <ul className="grid grid-cols-3 gap-2 rounded-[24px] border border-line bg-surface p-3 shadow-[var(--shadow-card)] sm:gap-4 sm:p-4">
-          <Stat href={routes.progress()} pic="star" value={String(stars)} label={`stars · level ${level.level}`} />
+          <Stat href={routes.progress()} pic="star" value={String(stars)} label={`XP · level ${level.level}`} />
           <Stat pic="flame" value={String(streak.current)} label={streak.current === 1 ? "day streak" : "days streak"} />
           <Stat href={links.practice()} pic="target" value={`${today}/${DAILY_GOAL}`} label="today" />
         </ul>
@@ -307,7 +307,7 @@ function KidHome() {
                       <LockIcon size={16} /> Best after all {topic.lessons.length} lessons
                     </>
                   ) : (
-                    `+${STARS.check} stars`
+                    `+${STARS.check} XP`
                   )}
                 </span>
               </span>

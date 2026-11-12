@@ -72,7 +72,7 @@ export function TestsScreen() {
         <h2 id="challenges-title" className="display text-heading-2">
           Big challenges
         </h2>
-        <p className="mt-1 text-body text-ink-2">One for each topic you have started. Best after the topic&apos;s lessons; +{STARS.check} stars each time.</p>
+        <p className="mt-1 text-body text-ink-2">One for each topic you have started. Best after the topic&apos;s lessons; +{STARS.check} XP each time.</p>
         <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {topics.map((t) => {
             const tl = topicLearner(learner, t.id);

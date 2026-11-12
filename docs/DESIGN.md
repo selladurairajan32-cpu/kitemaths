@@ -50,7 +50,8 @@ Tokens live in `src/app/globals.css` (`@theme static`, so every token exists as 
 | `num` / `den` | coral / blue | Fraction numerator and denominator |
 | `ok`, `warn` | green, amber | Right answers and hints |
 
-No gradients and no violet (`src/design.test.ts` checks).
+No violet. Gradients and frosted glass only in the sky and glass styles (`.sky-*`, `.glass*` in `globals.css`), for the
+sky-and-glass look of the kid pages (D-046); everything else stays flat (`src/design.test.ts` checks).
 
 ## Shape and depth
 

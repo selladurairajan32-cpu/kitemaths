@@ -3,7 +3,7 @@
 import { MotionConfig } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { Hud } from "@/components/kid/Hud";
 import { routes, topicRoutes } from "@/lib/routes";
 import { updateLearner, updateTopic, useHydrated, useLearner } from "@/lib/store";
@@ -98,15 +98,37 @@ function SoundToggle() {
   );
 }
 
+/**
+ * D-046: the sky behind the kid pages: a soft blue with clouds, and two green hills along the bottom. Fixed, behind
+ * everything, and decorative only.
+ */
+function SkyBackdrop() {
+  return (
+    <div className="sky-backdrop pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden>
+      <Pic name="cloud" size={150} className="absolute -left-6 top-24 opacity-80" />
+      <Pic name="cloud" size={110} className="absolute right-[6%] top-40 opacity-70" />
+      <Pic name="cloud" size={80} className="absolute left-[46%] top-12 hidden opacity-60 md:block" />
+      <svg className="absolute inset-x-0 bottom-0 h-40 w-full sm:h-56" viewBox="0 0 1440 220" preserveAspectRatio="none">
+        <path d="M0 120 C 220 40, 420 60, 620 110 S 1040 170, 1440 70 L 1440 220 L 0 220 Z" fill="var(--color-hill-far)" />
+        <path d="M0 170 C 260 110, 520 130, 760 165 S 1180 200, 1440 140 L 1440 220 L 0 220 Z" fill="var(--color-hill)" />
+      </svg>
+    </div>
+  );
+}
+
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const learner = useLearner();
   const mode = shellMode(pathname, (id) => !!learner.topics[id]?.practice.active);
+  // D-046: the child's own reduced-motion switch also stops CSS transitions and animations (globals.css).
+  useEffect(() => {
+    document.documentElement.dataset.motion = learner.settings.reducedMotion ? "reduced" : "";
+  }, [learner.settings.reducedMotion]);
   const tp = topicPath(pathname);
   const inPractice = tp?.section === "practice";
 
   return (
-    <MotionConfig reducedMotion="user">
+    <MotionConfig reducedMotion={learner.settings.reducedMotion ? "always" : "user"}>
       <a
         href="#main"
         className="sr-only z-50 rounded-lg bg-ink px-4 py-2 text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
@@ -114,8 +136,11 @@ export function AppShell({ children }: { children: ReactNode }) {
         Skip to content
       </a>
 
+      {/* D-046: kid pages sit in a sky with soft clouds and hills; the grown-ups' area stays plain. */}
+      {mode !== "parent" && <SkyBackdrop />}
+
       {mode === "focus" && (
-        <header className="sticky top-0 z-40 border-b border-line bg-surface">
+        <header className="glass-strong sticky top-0 z-40">
           <div className="mx-auto flex min-h-14 max-w-6xl flex-wrap items-center justify-between gap-x-3 gap-y-1 px-3 py-1 sm:px-6">
             <Link
               href={tp ? (inPractice ? topicRoutes(tp.topicId).practice() : tp.section === "facts" ? topicRoutes(tp.topicId).facts() : tp.section === "strategies" ? topicRoutes(tp.topicId).strategies() : topicRoutes(tp.topicId).island()) : routes.journey()}
@@ -142,8 +167,8 @@ export function AppShell({ children }: { children: ReactNode }) {
       )}
 
       {mode === "kid" && (
-        <header className="sticky top-0 z-40 border-b border-line bg-surface">
-          <div className="mx-auto flex min-h-[4.5rem] max-w-6xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-2 sm:px-6">
+        <header className="sticky top-0 z-40 px-2 pt-2 sm:px-4 sm:pt-3">
+          <div className="glass-strong mx-auto flex min-h-16 max-w-6xl flex-wrap items-center justify-between gap-x-3 gap-y-2 rounded-[28px] px-3 py-1.5 sm:px-5">
             <Logo />
             <nav aria-label="Main" className="hidden lg:block">
               <ul className="flex flex-wrap items-center gap-1">
@@ -154,8 +179,8 @@ export function AppShell({ children }: { children: ReactNode }) {
                       <Link
                         href={href}
                         aria-current={active ? "page" : undefined}
-                        className={`flex h-11 items-center gap-1.5 rounded-full px-3 text-base transition-colors ${
-                          active ? "bg-brand-soft font-bold text-brand-strong" : "font-semibold text-ink-2 hover:bg-sunk"
+                        className={`flex h-11 items-center gap-1.5 rounded-full px-3.5 text-base transition-colors ${
+                          active ? "bg-brand font-bold text-on-brand shadow-[0_6px_16px_rgb(37_99_235/0.3)]" : "font-semibold text-ink-2 hover:bg-brand-soft hover:text-ink"
                         }`}
                       >
                         <Icon size={20} />
@@ -167,7 +192,9 @@ export function AppShell({ children }: { children: ReactNode }) {
               </ul>
             </nav>
             <div className="flex flex-wrap items-center gap-1.5">
-              <SoundToggle />
+              <span className="hidden sm:block">
+                <SoundToggle />
+              </span>
               <Hud />
               <Link
                 href={routes.parent()}
@@ -226,7 +253,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       {mode === "kid" && (
         <nav
           aria-label="Main"
-          className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] lg:hidden"
+          className="glass-strong fixed inset-x-0 bottom-0 z-40 rounded-t-[24px] pb-[env(safe-area-inset-bottom)] lg:hidden"
         >
           <ul className={`mx-auto grid max-w-xl grid-cols-5`}>
             {KID_NAV.map(({ href, label, Icon }) => {
@@ -238,7 +265,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                     aria-current={active ? "page" : undefined}
                     className={`flex min-h-16 min-w-0 flex-col items-center justify-center gap-1 px-0.5 py-1 text-center text-label leading-tight [overflow-wrap:anywhere] ${active ? "font-bold text-brand-strong" : "font-semibold text-muted"}`}
                   >
-                    <span className={`grid h-8 w-full max-w-14 place-items-center rounded-full transition-colors ${active ? "bg-brand-soft" : ""}`}>
+                    <span className={`grid h-8 w-full max-w-14 place-items-center rounded-full transition-colors ${active ? "bg-brand text-on-brand" : ""}`}>
                       <Icon size={22} />
                     </span>
                     {label}

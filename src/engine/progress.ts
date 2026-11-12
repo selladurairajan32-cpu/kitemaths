@@ -70,6 +70,8 @@ export interface LearnerSettings {
   explainMode?: string;
   /** D-041: whether Step through speaks each step. Unset means on. */
   explainVoice?: boolean;
+  /** D-046: the child's own "reduced motion" switch, on top of the device setting. Unset means follow the device. */
+  reducedMotion?: boolean;
 }
 
 export const DEFAULT_PLAN = { days: 5, minutes: 15 } as const;

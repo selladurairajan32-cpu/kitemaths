@@ -114,7 +114,7 @@ function Intro({ focusSkill }: { focusSkill: string | null }) {
         line={
           <>
             {PRACTICE_SESSION_LENGTH} questions that get trickier as you get stronger. If you get stuck, Kip helps. Win up to{" "}
-            <strong className="text-ink">{PRACTICE_SESSION_LENGTH * 3} stars</strong>!
+            <strong className="text-ink">{PRACTICE_SESSION_LENGTH * 3} XP</strong>!
           </>
         }
       >

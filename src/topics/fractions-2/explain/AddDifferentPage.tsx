@@ -2,6 +2,7 @@
 
 import { FilmPlayer } from "@/components/explain/modes/FilmPlayer";
 import { StepThrough } from "@/components/explain/modes/StepThrough";
+import { KeyIdeaCard } from "@/components/journey/JourneyChrome";
 import { LearnStage } from "@/components/journey/LearnStage";
 import { RichText } from "@/components/math/RichText";
 import { CheckIcon } from "@/components/ui/Icons";
@@ -26,6 +27,7 @@ export function AddDifferentLearn() {
   return (
     <LearnStage
       minutes={j.minutes}
+      keyIdea={<KeyIdeaCard def={j} />}
       modes={{
         watch: <FilmPlayer concept={S.concept} film={S.film} title={S.title} />,
         step: <StepThrough story={S.story} stage={(scene, _caption, still) => <FracStageView scene={scene} still={still} />} voiceBase={`/voice/${S.concept}`} label="Fractions story" />,

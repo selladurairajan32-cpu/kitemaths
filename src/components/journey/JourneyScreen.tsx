@@ -3,20 +3,24 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
-import { ArrowRightIcon, CheckIcon, CloseIcon, HomeIcon, LockIcon } from "@/components/ui/Icons";
+import { ArrowRightIcon, CloseIcon, HomeIcon } from "@/components/ui/Icons";
+import { Pic } from "@/components/paper/Pic";
 import { ScreenSkeleton } from "@/components/ui/Screen";
-import { countApplied, countPractised, finishStage, JOURNEY_STAGES, openStage, STAGE_LABEL, startJourney, type JourneyProgress } from "@/engine/topicJourney";
+import { countApplied, countPractised, finishStage, JOURNEY_STAGES, openStage, startJourney, type JourneyProgress } from "@/engine/topicJourney";
+import { setSettings } from "@/engine/progress";
 import { routes } from "@/lib/routes";
 import { updateLearner, useHydrated, useLearner } from "@/lib/store";
 import { useTopicState } from "@/topics/context";
 import { ConceptLearn, ConceptNotes } from "@/topics/kit/explanations";
 import { journeyFor } from "@/topics/kit/journeys";
+import { JourneyBar, LearnStrip } from "./JourneyChrome";
 import { CheckStage, checkDone, CompleteStage, QuestionStage } from "./stages";
 
 /**
  * D-043: the topic journey, one stage on screen at a time: ① Learn ② Practise ③ Apply ④ Check ⑤ Complete. A journey
  * bar shows where the child is (stages unlock in order and can be revisited); one button leads on; Notes open in a
- * panel at any stage. Progress is saved per concept, so the child can come back to the same place.
+ * panel at any stage. Progress is saved per concept, so the child can come back to the same place. D-046: in the
+ * sky-and-glass look, with a journey bar of 3D pictures, a Reduced motion switch, and a strip under Learn.
  */
 
 
@@ -77,42 +81,34 @@ export function JourneyScreen({ concept }: { concept: string }) {
       <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-label font-bold text-ink-2">
         <Link href={routes.dashboard()} className="inline-flex min-h-11 items-center gap-1 hover:text-ink" aria-label="Home"><HomeIcon size={18} /></Link>
         <span aria-hidden>›</span>
+        <Link href={routes.topics()} className="inline-flex min-h-11 items-center hover:text-ink">Topics</Link>
+        <span aria-hidden>›</span>
         <Link href={links.island()} className="inline-flex min-h-11 items-center hover:text-ink">{topic.title}</Link>
         <span aria-hidden>›</span>
         <span className="text-ink" aria-current="page">{def.title}</span>
       </nav>
       <header className="flex flex-wrap items-center gap-3">
-        <h1 ref={heading} tabIndex={-1} className="display min-w-0 flex-1 text-heading-2 outline-none sm:text-heading-1">{def.title}</h1>
+        <h1 ref={heading} tabIndex={-1} className="display min-w-0 text-heading-2 outline-none sm:text-heading-1">{def.title}</h1>
         <span className="rounded-full bg-brand px-3 py-1 text-label font-extrabold text-on-brand">Year {def.year}</span>
-        <Button variant="secondary" onClick={() => setNotes(true)}>Notes</Button>
+        <span className="flex-1" />
+        <button
+          type="button"
+          aria-pressed={!!learner.settings.reducedMotion}
+          onClick={() => updateLearner((s) => setSettings(s, { reducedMotion: !s.settings.reducedMotion }))}
+          className={`inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-label font-bold shadow-[var(--shadow-card)] ${learner.settings.reducedMotion ? "bg-ink text-white" : "bg-surface text-ink hover:bg-brand-soft"}`}
+        >
+          <Pic name="waving" size={22} /> Reduced motion
+        </button>
+        <button type="button" onClick={() => setNotes(true)} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-surface px-4 text-label font-bold text-ink shadow-[var(--shadow-card)] hover:bg-brand-soft">
+          <Pic name="memo" size={22} /> Notes
+        </button>
       </header>
 
-      <ol className="m-0 grid list-none grid-cols-5 gap-1 p-0 sm:gap-2" aria-label="Your learning journey">
-        {JOURNEY_STAGES.map((s, i) => {
-          const open = i <= p.reached;
-          const current = i === p.stage;
-          const done = i < p.reached;
-          return (
-            <li key={s} className="flex flex-col items-center gap-1">
-              <button
-                type="button"
-                disabled={!open}
-                onClick={() => set((x) => openStage(x, i), true)}
-                aria-current={current ? "step" : undefined}
-                aria-label={`${i + 1}. ${STAGE_LABEL[s]}${done ? ", done" : open ? "" : ", locked"}`}
-                className={`grid size-11 place-items-center rounded-full text-body font-extrabold transition sm:size-12 ${current ? "bg-brand text-on-brand shadow-[var(--shadow-lift)]" : done ? "bg-ok text-on-brand" : open ? "bg-surface text-ink ring-2 ring-line" : "bg-sunk text-ink-2"} disabled:cursor-not-allowed`}
-              >
-                {done && !current ? <CheckIcon size={18} strokeWidth={3} /> : !open ? <LockIcon size={14} /> : i + 1}
-              </button>
-              <span className={`text-center text-label font-bold ${current ? "text-brand-strong" : "text-ink-2"}`}>{STAGE_LABEL[s]}</span>
-            </li>
-          );
-        })}
-      </ol>
+      <JourneyBar p={p} onOpen={(i) => set((x) => openStage(x, i), true)} />
 
       <section aria-labelledby="stage-title">
         <h2 id="stage-title" className={stage === "practise" || stage === "apply" || stage === "check" ? "mb-3 text-title font-extrabold text-ink" : "sr-only"}>
-          {{ learn: "Learn it", practise: "Practise", apply: "Use it in real life", check: "Check your understanding", complete: "Complete" }[stage]}
+          {{ learn: "Learn it", practise: "Practise: build your understanding", apply: "Apply: use it in real life", check: "Mastery check: show what you understand", complete: "Complete" }[stage]}
         </h2>
         {stage === "learn" && <ConceptLearn topicId={topic.id} concept={concept} />}
         {stage === "practise" && <QuestionStage def={def} list={def.practise} done={p.practised} startedAt={p.startedAt} kind="practise" onAnswered={() => set(countPractised)} />}
@@ -121,11 +117,12 @@ export function JourneyScreen({ concept }: { concept: string }) {
         {stage === "complete" && <CompleteStage def={def} progress={p} onReview={() => set((x) => openStage(x, 0), true)} onPractise={() => set((x) => ({ ...openStage(x, 1), practised: 0 }), true)} />}
       </section>
 
-      {/* One way on. Sticky only on Learn: question stages have their own sticky Check bar, so the button joins the
-          page flow there, once the child can move on. */}
-      {stage !== "complete" && (stage === "learn" || ready) && (
-        <div className={`${stage === "learn" ? "sticky bottom-3 z-10" : ""} flex justify-end`}>
-          <Button variant="go" size="xl" disabled={!ready} onClick={() => set(finishStage, true)} className="shadow-[var(--shadow-lift)]">
+      {/* One way on. Under Learn, the strip ends with "Practise this"; question stages show the button once the child
+          can move on (they have their own sticky Check bar). */}
+      {stage === "learn" && <LearnStrip def={def} onNotes={() => setNotes(true)} onPractise={() => set(finishStage, true)} />}
+      {stage !== "complete" && stage !== "learn" && ready && (
+        <div className="flex justify-end">
+          <Button variant="cta" size="xl" onClick={() => set(finishStage, true)} className="shadow-[var(--shadow-lift)]">
             {nextLabel} <ArrowRightIcon size={20} />
           </Button>
         </div>

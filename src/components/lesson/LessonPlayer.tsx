@@ -146,7 +146,7 @@ export function LessonPlayer({ lesson, urlStep }: { lesson: Lesson; urlStep?: nu
         </div>
         {firstTime && (
           <p className="mt-6 flex items-center gap-2 text-xl font-semibold text-ink">
-            <StarGlyph size={26} /> +{STARS.lesson} bonus stars
+            <StarGlyph size={26} /> +{STARS.lesson} bonus XP
           </p>
         )}
         <section className="mt-6 rounded-[16px] bg-surface p-5 sm:p-6" aria-labelledby="can-now">

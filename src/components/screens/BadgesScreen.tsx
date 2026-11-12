@@ -35,7 +35,7 @@ export function BadgesScreen() {
               <Pic name="star" size={40} />
               <span className="leading-tight">
                 <span className="block text-2xl font-extrabold text-ink">{stars}</span>
-                <span className="block text-label font-semibold text-muted">stars</span>
+                <span className="block text-label font-semibold text-muted">XP</span>
               </span>
             </span>
             <span className="flex items-center gap-2 rounded-[20px] bg-surface px-4 py-3 shadow-[var(--shadow-card)]">

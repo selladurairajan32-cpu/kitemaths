@@ -7,7 +7,8 @@ import { timedCues, type FilmScript } from "@/engine/explainScript";
 /**
  * D-041 *Watch*: the concept's narrated film. Captions are on by default and built from the same script the film was
  * voiced from; the transcript below follows the film and jumps to a line when pressed; chapter buttons jump to a part.
- * Nothing plays until the child presses play.
+ * Nothing plays until the child presses play. D-046: chapters beside the video with their times (the one playing is
+ * marked), and Captions and Transcript buttons above it.
  */
 
 /** Where the films live: `public/films` now, a storage bucket later (FILMS_BASE_URL). */
@@ -24,17 +25,26 @@ export function FilmPlayer({ concept, film, title }: { concept: string; film: Fi
   const video = useRef<HTMLVideoElement>(null);
   const cues = useMemo(() => timedCues(film), [film]);
   const [now, setNow] = useState(0);
+  const [captions, setCaptions] = useState(true);
+  const track = useRef<TextTrack | null>(null);
 
   useEffect(() => {
     const v = video.current;
     if (!v || typeof v.addTextTrack !== "function" || typeof VTTCue === "undefined") return;
-    const track = v.addTextTrack("captions", "English", "en");
-    for (const c of cues) track.addCue(new VTTCue(c.start, c.end, plainCaption(c.text)));
-    track.mode = "showing";
+    const t = v.addTextTrack("captions", "English", "en");
+    for (const c of cues) t.addCue(new VTTCue(c.start, c.end, plainCaption(c.text)));
+    t.mode = "showing";
+    track.current = t;
     return () => {
-      track.mode = "disabled";
+      t.mode = "disabled";
+      track.current = null;
     };
   }, [cues]);
+  const toggleCaptions = () => {
+    const on = !captions;
+    setCaptions(on);
+    if (track.current) track.current.mode = on ? "showing" : "hidden";
+  };
 
   const jump = (t: number) => {
     const v = video.current;
@@ -46,34 +56,49 @@ export function FilmPlayer({ concept, film, title }: { concept: string; film: Fi
   const current = cues.find((c) => now >= c.start && now < c.end)?.id;
   const length = cues.at(-1)?.end ?? 0;
 
+  const chapters = film.chapters.map((ch) => ({ ...ch, at: cues.find((c) => c.id === ch.cue)!.start }));
+  const playing = [...chapters].reverse().find((ch) => now >= ch.at)?.cue;
+
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-title font-extrabold text-ink">Watch: {title}</h2>
-        <p className="text-label font-bold text-ink-2">{clock(length)} · turn the sound on</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-label font-bold text-ink-2">{clock(length)} · turn the sound on</span>
+          <button type="button" aria-pressed={captions} onClick={toggleCaptions} className={`min-h-11 rounded-full px-4 text-label font-bold shadow-[var(--shadow-card)] ${captions ? "bg-ink text-white" : "bg-surface text-ink hover:bg-brand-soft"}`}>
+            Captions
+          </button>
+        </div>
       </div>
-      <video
-        ref={video}
-        controls
-        playsInline
-        preload="metadata"
-        poster={posterSrc(concept)}
-        src={filmSrc(concept)}
-        onTimeUpdate={(e) => setNow(e.currentTarget.currentTime)}
-        className="aspect-video w-full rounded-[20px] bg-sunk"
-        aria-label={`Film: ${title}. Captions are on; the transcript is below.`}
-      />
-      <div role="group" aria-label="Jump to a part" className="flex flex-wrap gap-2">
-        {film.chapters.map((ch) => {
-          const at = cues.find((c) => c.id === ch.cue)!.start;
-          return (
-            <button key={ch.cue} type="button" onClick={() => jump(at)} className="min-h-11 rounded-full bg-sunk px-4 text-label font-bold text-ink hover:bg-brand-soft">
-              {ch.title}
-            </button>
-          );
-        })}
+      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_15rem]">
+        <video
+          ref={video}
+          controls
+          playsInline
+          preload="metadata"
+          poster={posterSrc(concept)}
+          src={filmSrc(concept)}
+          onTimeUpdate={(e) => setNow(e.currentTarget.currentTime)}
+          className="aspect-video w-full rounded-[22px] bg-ink shadow-[var(--shadow-lift)]"
+          aria-label={`Film: ${title}. Captions are on; the transcript is below.`}
+        />
+        <section aria-labelledby={`chapters-${concept}`} className="flex flex-col gap-1 rounded-[22px] bg-surface p-3 shadow-[var(--shadow-card)]">
+          <h3 id={`chapters-${concept}`} className="px-2 text-body font-extrabold text-ink">Chapters</h3>
+          <div role="group" aria-label="Jump to a part" className="flex flex-col gap-1">
+            {chapters.map((ch, i) => {
+              const on = playing === ch.cue && now > 0;
+              return (
+                <button key={ch.cue} type="button" onClick={() => jump(ch.at)} aria-current={on ? "true" : undefined} className={`grid min-h-11 grid-cols-[1.5rem_1fr_auto] items-center gap-2 rounded-[14px] px-2 py-1.5 text-left text-label font-bold ${on ? "bg-brand-soft text-brand-strong" : "text-ink hover:bg-sunk"}`}>
+                  <span aria-hidden className={`grid size-6 place-items-center rounded-full text-label ${on ? "bg-brand text-on-brand" : "bg-sunk text-ink-2"}`}>{i + 1}</span>
+                  <span>{ch.title}</span>
+                  <span aria-hidden className="tabular-nums text-ink-2">{clock(ch.at)}</span>
+                </button>
+              );
+            })}
+          </div>
+        </section>
       </div>
-      <details className="rounded-[20px] border border-line bg-surface p-3">
+      <details className="rounded-[20px] bg-surface p-3 shadow-[var(--shadow-card)]">
         <summary className="min-h-11 cursor-pointer content-center px-1 text-body font-bold text-ink">Read the transcript</summary>
         <ol className="m-0 mt-2 flex list-none flex-col gap-1 p-0">
           {cues.map((c) => (

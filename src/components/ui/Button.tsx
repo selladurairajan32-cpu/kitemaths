@@ -8,9 +8,10 @@ import type { ButtonHTMLAttributes, ComponentProps, ReactNode, Ref } from "react
  * - secondary: paper with a quiet control edge.
  * - quiet: text only, for hints and back links.
  * - ink: near-black, the one action in the grown-ups' area.
+ * - cta: yellow with ink text, the "go on" action in the topic journey (D-046).
  * "go", "sun" and "soft" are older names kept so callers read naturally.
  */
-type Variant = "primary" | "go" | "sun" | "secondary" | "ghost" | "quiet" | "soft" | "ink";
+type Variant = "primary" | "go" | "sun" | "cta" | "secondary" | "ghost" | "quiet" | "soft" | "ink";
 type Size = "md" | "lg" | "xl";
 
 const PRIMARY = "press bg-brand text-on-brand border-brand-strong hover:bg-[color-mix(in_srgb,var(--color-brand)_86%,black)] disabled:bg-line-strong disabled:border-line-strong";
@@ -19,6 +20,8 @@ const variants: Record<Variant, string> = {
   primary: PRIMARY,
   go: PRIMARY,
   sun: PRIMARY,
+  // D-046: the yellow "go on" button of the concept images (Practise this, Start learning, Check answer). Ink on it.
+  cta: "press bg-cta text-ink border-cta-strong font-extrabold hover:bg-[color-mix(in_srgb,var(--color-cta)_88%,black)] disabled:bg-line-strong disabled:border-line-strong disabled:text-ink-2",
   secondary: "bg-surface text-ink border-[1.5px] border-line-strong hover:bg-raised disabled:text-muted disabled:border-line",
   soft: "bg-surface text-ink border-[1.5px] border-line-strong hover:bg-raised disabled:text-muted disabled:border-line",
   ghost: "text-ink-2 hover:bg-sunk disabled:text-muted",

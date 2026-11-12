@@ -61,7 +61,7 @@ TC-UX-002.1.2,UX-002,AC1,unit,automated,passing,src/design-tokens.test.ts::defin
 TC-UX-002.1.3,UX-002,AC1,unit,automated,passing,src/design-tokens.test.ts::keeps state colours readable and the focus ring visible,
 TC-UX-002.1.4,UX-002,AC1,unit,automated,passing,"src/design-tokens.test.ts::meets the contrast minimum for every supported pairing at its real size and weight, without rounding",52 pairings in UX-004 §2.3; corrected 5 Nov (DEF-022)
 TC-UX-002.1.5,UX-002,AC1,unit,automated,passing,"src/design-tokens.test.ts::adds no violet token (D-013: the undefined violet classes are fixed in R1, DEF-009)",
-TC-UX-002.1.6,UX-002,AC1,unit,automated,passing,src/design.test.ts::keeps violet and gradients out of the stylesheet,Palette rule
+TC-UX-002.1.6,UX-002,AC1,unit,automated,passing,"src/design.test.ts::keeps violet out of the stylesheet, and gradients and glass only in the sky and glass styles (D-046)",Palette rule; narrowed by D-046 (sky and glass styles only)
 TC-UX-002.1.7,UX-002,AC1,visual-a11y-qa,manual,review-pending,,"Specimen /design-specimen at 390px and 1280px, with a browser contrast audit of computed colours (docs/product/verification/)"
 TC-UX-002.2.1,UX-002,AC2,unit,automated,passing,src/design-tokens.test.ts::does not let one-off text sizes or hex colours grow (ratchet),"Baselines on 4 Nov: 224 one-off text sizes, 15 .tsx files with hex (RC-006); one-off text sizes lowered to 24 on 9 Nov when screens adopted the type tokens (CH-046)"
 TC-UX-002.2.2,UX-002,AC2,unit,automated,passing,src/design.test.ts::names only paper icons that exist,Icons come from one registry
@@ -670,3 +670,5 @@ TC-MAST-003.1.7,MAST-003,AC1,component,automated,passing,"src/components/screens
 TC-MAST-003.1.8,MAST-003,AC1,component,automated,passing,src/components/screens/KidPages.test.tsx::draws the mastery ring and a bar per topic from the engine's own counts,Kid pages (D-043 step 3)
 TC-MAST-003.1.9,MAST-003,AC1,component,automated,passing,src/components/screens/KidPages.test.tsx::lists the big challenge for each started topic and the practice mocks,Kid pages (D-043 step 3)
 TC-MAST-003.1.10,MAST-003,AC1,component,automated,passing,"src/components/screens/KidPages.test.tsx::offers practice in the current topic first, then quick practice",Kid pages (D-043 step 3)
+TC-UX-006.1.60,UX-006,AC1,unit,automated,passing,"src/topics/kit/journeys.test.ts::draws 1/3 + 1/4 as 4 and 3 twelfths, and 35 shared 2 : 3 as five parts of 7",Journey key ideas (D-046)
+TC-UX-006.1.61,UX-006,AC1,unit,automated,passing,"src/topics/kit/journeys.test.ts::gives every journey a key idea, a mistake to watch out for, and a bar that fits its cells",Journey key ideas (D-046)

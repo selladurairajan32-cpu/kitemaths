@@ -62,7 +62,7 @@ export function StarPop({ amount, show }: { amount: number; show: boolean }) {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25, ease: "easeOut" }}
-          aria-label={`You earned ${amount} stars`}
+          aria-label={`You earned ${amount} XP`}
         >
           +{amount} <Pic name="star" size={28} />
         </motion.span>

@@ -168,7 +168,9 @@ describe("design tokens (UX-002, UX-003, UX-004)", () => {
     expect(used.length).toBeGreaterThan(10);
     expect(used.filter((u) => !allowed.has(u.d))).toEqual([]);
     const shell = readFileSync(join(ROOT, "src/components/ui/AppShell.tsx"), "utf8");
-    expect(shell).toContain('<MotionConfig reducedMotion="user">');
+    // Follows the device setting, or "always" when the child turns motion off themselves (D-046).
+    expect(shell).toContain('<MotionConfig reducedMotion={learner.settings.reducedMotion ? "always" : "user"}>');
+    expect(shell).toContain('document.documentElement.dataset.motion = learner.settings.reducedMotion ? "reduced" : "";');
     expect(css).toMatch(/@media \(prefers-reduced-motion: reduce\)[\s\S]*?transition-duration: 0\.01ms !important/);
     // Kip's idle sway is decoration: off unless a screen asks for it.
     expect(readFileSync(join(ROOT, "src/components/kid/Kip.tsx"), "utf8")).toMatch(/float = false/);

@@ -120,7 +120,7 @@ export function AssessmentScreen() {
             You got <strong className="text-ink">{lastScore}</strong> out of {last.order.length} — all by yourself.
           </p>
           <p className="mx-auto mt-4 inline-flex items-center gap-2 rounded-full bg-surface px-4 py-2 text-lg font-extrabold shadow-[var(--shadow-card)]">
-            +{STARS.check} <Pic name="star" size={28} /> bonus stars
+            +{STARS.check} <Pic name="star" size={28} /> bonus XP
           </p>
           {strongNow.length > 0 && (
             <p className="mt-4 text-ink-2">
@@ -151,9 +151,9 @@ export function AssessmentScreen() {
           <IntroTitle className="display text-heading-2 sm:text-heading-1">The big challenge</IntroTitle>
         </div>
       </div>
-      <KipSays mood="happy" tone="sky" className="mt-5" speak={`There are ${items.length} questions, two for every skill, and no hints. Take your time and do your best thinking. You'll earn ${STARS.check} bonus stars for finishing.`}>
+      <KipSays mood="happy" tone="sky" className="mt-5" speak={`There are ${items.length} questions, two for every skill, and no hints. Take your time and do your best thinking. You'll earn ${STARS.check} bonus XP for finishing.`}>
         {items.length} questions — two for every skill — and <strong>no hints</strong>. Take your time and do your best thinking! Finishing earns{" "}
-        <strong>{STARS.check} bonus stars</strong>.
+        <strong>{STARS.check} bonus XP</strong>.
       </KipSays>
 
       {last && (

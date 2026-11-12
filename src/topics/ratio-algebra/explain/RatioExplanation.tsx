@@ -3,6 +3,7 @@
 import { useState, type ComponentType, type KeyboardEvent, type ReactNode } from "react";
 import { FilmPlayer } from "@/components/explain/modes/FilmPlayer";
 import { StepThrough } from "@/components/explain/modes/StepThrough";
+import { KeyIdeaCard } from "@/components/journey/JourneyChrome";
 import { LearnStage } from "@/components/journey/LearnStage";
 import { RichText } from "@/components/math/RichText";
 import { Button } from "@/components/ui/Button";
@@ -259,6 +260,7 @@ export function RatioLearn({ Stage3D }: { Stage3D?: ComponentType<StageProps> })
   return (
     <LearnStage
       minutes={journeyFor(S.topicId, S.concept)?.minutes}
+      keyIdea={<KeyIdeaCard def={journeyFor(S.topicId, S.concept)!} />}
       modes={{
         watch: <FilmPlayer concept={S.concept} film={S.film} title={S.title} />,
         step: <StepThrough story={S.story} stage={(scene, label, still) => (Stage3D && !still ? <Stage3D scene={scene} label={label} /> : <RatioSceneSvg scene={scene} />)} voiceBase={`/voice/${S.concept}`} label="Ratio story" />,

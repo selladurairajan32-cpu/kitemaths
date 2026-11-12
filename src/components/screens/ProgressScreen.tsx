@@ -54,7 +54,7 @@ export function ProgressScreen() {
         </div>
       </section>
 
-      <section aria-label="Stars, level and streak">
+      <section aria-label="XP, level and streak">
         <ul className="grid gap-3 sm:grid-cols-3">
           <li className="card flex items-center gap-3 p-4">
             <Pic name="star" size={40} />
@@ -66,7 +66,7 @@ export function ProgressScreen() {
                 <span className="block h-full rounded-full bg-sun-strong" style={{ width: `${Math.round((level.into / level.needed) * 100)}%` }} />
               </span>
               <span className="mt-1 block text-label font-semibold text-ink-2">
-                {stars} stars · {level.needed - level.into} more to level {level.level + 1}
+                {stars} XP · {level.needed - level.into} more to level {level.level + 1}
               </span>
             </span>
           </li>
