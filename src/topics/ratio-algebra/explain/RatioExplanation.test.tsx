@@ -1,13 +1,18 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { resetLearner } from "@/lib/store";
 import { RatioExplanation } from "./RatioExplanation";
 
-/** D-040: the ratio explanation page in jsdom, on the 2.5D picture (no WebGL here). */
+/** D-040, D-041: the ratio explanation page in jsdom, on the 2.5D picture (no WebGL here), in the three-way shell. */
 
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: () => {}, replace: () => {} }), usePathname: () => "/t/ratio-algebra/explain/ratio" }));
 
-beforeEach(() => history.replaceState(null, "", "/t/ratio-algebra/explain/ratio"));
+beforeEach(() => {
+  resetLearner();
+  // Most tests use Step through, the story; the first checks the default.
+  history.replaceState(null, "", "/t/ratio-algebra/explain/ratio#step");
+});
 
 /** The checkpoint's own answer box (the final check below has one too). */
 const checkpointInput = () => within(screen.getByText("Quick check").closest("section")!).getByLabelText("Your answer");
@@ -20,10 +25,14 @@ async function toCheckpoint(user: ReturnType<typeof userEvent.setup>) {
 }
 
 describe("ratio explanation page (D-040)", () => {
-  it("opens on the visual story with a caption, playback controls and the later chapters locked", () => {
+  it("opens on Watch with the ratio film, and Step through has the story with a caption, controls and locked chapters", async () => {
+    const user = userEvent.setup();
+    history.replaceState(null, "", "/t/ratio-algebra/explain/ratio");
     render(<RatioExplanation />);
     expect(screen.getByRole("heading", { level: 1, name: /Ratio and proportion/ })).toBeTruthy();
-    expect(screen.getByRole("tab", { name: "Visual story", selected: true })).toBeTruthy();
+    expect(screen.getByRole("tab", { name: /^Watch/, selected: true })).toBeTruthy();
+    expect(document.querySelector("video")!.getAttribute("src")).toBe("/films/ratio/film.mp4");
+    await user.click(screen.getByRole("tab", { name: /^Step through/ }));
     expect(screen.getByText(/2 blue cubes and 3 orange cubes make one group/)).toBeTruthy();
     expect(screen.getByRole("button", { name: "Play" })).toBeTruthy();
     const chapters = screen.getByRole("navigation", { name: "Chapters" });
@@ -45,16 +54,17 @@ describe("ratio explanation page (D-040)", () => {
     await user.click(checkpointCheck());
     expect(screen.getByText("Yes, that's right!")).toBeTruthy();
     await user.click(screen.getByRole("button", { name: /Next chapter: Sharing/ }));
-    expect(screen.getByText(/Share 35 sweets in the ratio 2 : 3/)).toBeTruthy();
+    expect(screen.getAllByText(/Share 35 sweets in the ratio 2 : 3/).some((el) => el.closest("[aria-live]"))).toBe(true);
   });
 
-  it("switches tabs with the arrow keys and remembers the tab in the address", async () => {
+  it("switches the More about ratio tabs with the arrow keys, without changing the way to learn", async () => {
     const user = userEvent.setup();
     render(<RatioExplanation />);
-    screen.getByRole("tab", { name: "Visual story" }).focus();
+    screen.getByRole("tab", { name: "Step by step" }).focus();
     await user.keyboard("{ArrowRight}");
-    expect(screen.getByRole("tab", { name: "Step by step", selected: true })).toBeTruthy();
-    expect(window.location.hash).toBe("#steps");
+    expect(screen.getByRole("tab", { name: "Real-life example", selected: true })).toBeTruthy();
+    expect(window.location.hash).toBe("#step");
+    await user.click(screen.getByRole("tab", { name: "Step by step" }));
     expect(screen.getByText(/35 ÷ 5 =/)).toBeTruthy();
   });
 
@@ -80,7 +90,7 @@ describe("ratio explanation page (D-040)", () => {
   it("walks a child through sharing by hand in Try it, by keyboard", async () => {
     const user = userEvent.setup();
     render(<RatioExplanation />);
-    await user.click(screen.getByRole("tab", { name: "Try it" }));
+    await user.click(screen.getByRole("tab", { name: /^Try it/ }));
     await user.type(screen.getByLabelText("How many sweets are in one group?"), "4{Enter}");
     for (let i = 0; i < 5; i++) await user.click(screen.getByRole("button", { name: "Deal one group of 4" }));
     await user.type(screen.getByLabelText("How many sweets does Amir get?"), "15{Enter}");

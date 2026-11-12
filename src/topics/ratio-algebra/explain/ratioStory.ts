@@ -1,3 +1,4 @@
+import type { ExplainScript } from "@/engine/explainScript";
 import type { Chapter } from "@/engine/story";
 import { scaleAmount, shareInRatio } from "@/maths/ratio";
 
@@ -28,9 +29,9 @@ export const RATIO_STORY: Chapter<RatioScene>[] = [
     id: "for-every",
     title: "For every",
     beats: [
-      { id: "one-group", caption: "2 blue cubes and 3 orange cubes make one group. The ratio is 2 : 3: for every 2 blue, there are 3 orange.", ms: 4800, scene: { kind: "groups", groups: 1, a: RATIO.a, b: RATIO.b } },
-      { id: "two-groups", caption: "Add another group. Now there are 4 blue and 6 orange, still 2 : 3.", ms: 4200, scene: { kind: "groups", groups: 2, a: RATIO.a, b: RATIO.b, count: true } },
-      { id: "three-groups", caption: "Three groups: 6 blue and 9 orange. However many groups, every group has 2 blue and 3 orange.", ms: 4800, scene: { kind: "groups", groups: 3, a: RATIO.a, b: RATIO.b, count: true } },
+      { id: "one-group", caption: "2 blue cubes and 3 orange cubes make one group. The ratio is 2 : 3: for every 2 blue, there are 3 orange.", ms: 10100, scene: { kind: "groups", groups: 1, a: RATIO.a, b: RATIO.b } },
+      { id: "two-groups", caption: "Add another group. Now there are 4 blue and 6 orange, still 2 : 3.", ms: 6700, scene: { kind: "groups", groups: 2, a: RATIO.a, b: RATIO.b, count: true } },
+      { id: "three-groups", caption: "Three groups: 6 blue and 9 orange. However many groups, every group has 2 blue and 3 orange.", ms: 7500, scene: { kind: "groups", groups: 3, a: RATIO.a, b: RATIO.b, count: true } },
     ],
     checkpoint: { prompt: "In the ratio 2 : 3, how many orange cubes go with 6 blue cubes?", answer: 9, hint: "6 blue is 3 groups of 2. Each group has 3 orange.", replayBeat: 2, worked: "6 blue is 3 groups of 2, and each group has 3 orange: 3 × 3 = 9 orange." },
   },
@@ -38,10 +39,10 @@ export const RATIO_STORY: Chapter<RatioScene>[] = [
     id: "sharing",
     title: "Sharing",
     beats: [
-      { id: "pile", caption: `Share ${RATIO.total} sweets in the ratio 2 : 3.`, ms: 3800, scene: { kind: "share", total: RATIO.total, a: RATIO.a, b: RATIO.b, stage: "pile" } },
-      { id: "groups", caption: `Each group takes 2 + 3 = ${share.partCount} sweets. ${RATIO.total} ÷ ${share.partCount} = ${share.onePart} groups, so one part is ${share.onePart}.`, ms: 5600, scene: { kind: "share", total: RATIO.total, a: RATIO.a, b: RATIO.b, stage: "groups" } },
-      { id: "jars", caption: `Blue gets 2 parts: 2 × ${share.onePart} = ${share.shares[0]}. Orange gets 3 parts: 3 × ${share.onePart} = ${share.shares[1]}.`, ms: 5600, scene: { kind: "share", total: RATIO.total, a: RATIO.a, b: RATIO.b, stage: "jars" } },
-      { id: "bar", caption: `As a bar: 5 equal parts of ${share.onePart}. ${share.shares[0]} + ${share.shares[1]} = ${RATIO.total}, so nothing is left over.`, ms: 4800, scene: { kind: "share", total: RATIO.total, a: RATIO.a, b: RATIO.b, stage: "bar" } },
+      { id: "pile", caption: `Share ${RATIO.total} sweets in the ratio 2 : 3.`, ms: 4400, scene: { kind: "share", total: RATIO.total, a: RATIO.a, b: RATIO.b, stage: "pile" } },
+      { id: "groups", caption: `Each group takes 2 + 3 = ${share.partCount} sweets. ${RATIO.total} ÷ ${share.partCount} = ${share.onePart} groups, so one part is ${share.onePart}.`, ms: 9000, scene: { kind: "share", total: RATIO.total, a: RATIO.a, b: RATIO.b, stage: "groups" } },
+      { id: "jars", caption: `Blue gets 2 parts: 2 × ${share.onePart} = ${share.shares[0]}. Orange gets 3 parts: 3 × ${share.onePart} = ${share.shares[1]}.`, ms: 7800, scene: { kind: "share", total: RATIO.total, a: RATIO.a, b: RATIO.b, stage: "jars" } },
+      { id: "bar", caption: `As a bar: 5 equal parts of ${share.onePart}. ${share.shares[0]} + ${share.shares[1]} = ${RATIO.total}, so nothing is left over.`, ms: 7800, scene: { kind: "share", total: RATIO.total, a: RATIO.a, b: RATIO.b, stage: "bar" } },
     ],
     checkpoint: { prompt: "Share 20 sweets in the ratio 3 : 1. How many are in the bigger share?", answer: 15, hint: "First add the parts: 3 + 1 = 4. Then find one part: 20 ÷ 4.", replayBeat: 1, worked: "3 + 1 = 4 parts. 20 ÷ 4 = 5 in one part. The bigger share is 3 parts: 3 × 5 = 15." },
   },
@@ -49,9 +50,35 @@ export const RATIO_STORY: Chapter<RatioScene>[] = [
     id: "scaling",
     title: "Scaling",
     beats: [
-      { id: "recipe-4", caption: `Pancakes for ${RECIPE.base} people need ${RECIPE.eggs} eggs and ${RECIPE.milk} ml of milk.`, ms: 4200, scene: recipe(RECIPE.base) },
-      { id: "recipe-6", caption: `For 6 people, that is 1.5 times as many: ${six.kind === "recipe" ? six.eggs : 0} eggs and ${six.kind === "recipe" ? six.milk : 0} ml of milk. Every amount scales by the same number.`, ms: 5600, scene: six },
+      { id: "recipe-4", caption: `Pancakes for ${RECIPE.base} people need ${RECIPE.eggs} eggs and ${RECIPE.milk} ml of milk.`, ms: 5200, scene: recipe(RECIPE.base) },
+      { id: "recipe-6", caption: `For 6 people, that is 1.5 times as many: ${six.kind === "recipe" ? six.eggs : 0} eggs and ${six.kind === "recipe" ? six.milk : 0} ml of milk. Every amount scales by the same number.`, ms: 9400, scene: six },
     ],
     checkpoint: { prompt: `Pancakes for ${RECIPE.base} people need ${RECIPE.milk} ml of milk. How much milk is needed for 8 people, in ml?`, answer: scaleAmount(RECIPE.milk, RECIPE.base, 8), unit: "ml", hint: "8 people is twice as many as 4 people.", replayBeat: 1, worked: `8 is 2 × 4, so double everything: 2 × ${RECIPE.milk} = ${scaleAmount(RECIPE.milk, RECIPE.base, 8)} ml.` },
   },
 ];
+
+/** D-041: the ratio explanation for all three ways to learn: the story above for Step through, and the film's cues. */
+export const RATIO_SCRIPT: ExplainScript<RatioScene> = {
+  topicId: "ratio-algebra",
+  concept: "ratio",
+  title: "Ratio and proportion: sharing in a ratio",
+  story: RATIO_STORY,
+  film: {
+    cues: [
+      { id: "intro", text: "What does a ratio like 2 to 3 mean? Let's find out.", s: 5.5 },
+      { id: "group", text: "2 blue cubes and 3 orange cubes make one group. For every 2 blue, there are 3 orange.", s: 7.5 },
+      { id: "more", text: "Add more groups: 4 blue and 6 orange, then 6 blue and 9 orange. Every group is still 2 to 3.", s: 9 },
+      { id: "share", text: `Now share ${RATIO.total} sweets in the ratio 2 to 3.`, s: 5 },
+      { id: "parts", text: `Each group takes 2 plus 3, which is ${share.partCount} sweets. ${RATIO.total} divided by ${share.partCount} is ${share.onePart}, so there are ${share.onePart} groups.`, s: 9 },
+      { id: "jars", text: `Blue gets 2 parts: 2 times ${share.onePart} is ${share.shares[0]}. Orange gets 3 parts: 3 times ${share.onePart} is ${share.shares[1]}.`, s: 8 },
+      { id: "check", text: `${share.shares[0]} plus ${share.shares[1]} is ${RATIO.total}, so nothing is left over.`, s: 5 },
+      { id: "remember", text: "Remember: add the parts, divide to find one part, then multiply for each share.", s: 7.5 },
+    ],
+    chapters: [
+      { title: "For every", cue: "intro" },
+      { title: "Sharing", cue: "share" },
+      { title: "One part", cue: "parts" },
+      { title: "Remember", cue: "remember" },
+    ],
+  },
+};

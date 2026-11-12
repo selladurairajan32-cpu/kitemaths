@@ -54,10 +54,15 @@ export function timedCues(film: FilmScript): TimedCue[] {
 
 export const filmLength = (film: FilmScript) => timedCues(film).at(-1)?.end ?? 0;
 
-/** Words as they are spoken: a fraction in markup is two words ("one third"), markup itself is silent. */
+/**
+ * Words as they are spoken: a fraction in markup is two words ("one third"), a sign is a word ("plus", "equals"; "÷" is
+ * two, "divided by"), a ratio colon is a word ("to"), and markup itself is silent.
+ */
 export function spokenWords(text: string): number {
   return text
     .replace(/\{\d+\/\d+\}/g, " w w ")
+    .replace(/÷/g, " w w ")
+    .replace(/[+=×−]|(?<=\d\s*):(?=\s*\d)/g, " w ")
     .replace(/\*\*/g, " ")
     .split(/\s+/)
     .filter((w) => /[A-Za-z0-9]/.test(w)).length;

@@ -1,0 +1,101 @@
+{
+ "note": "Generated from the explanation script by src/topics/kit/explainScripts.test.ts. Do not edit.",
+ "topicId": "fractions-2",
+ "concept": "add-different",
+ "title": "Adding fractions with different denominators",
+ "cues": [
+  {
+   "id": "question",
+   "start": 0,
+   "end": 4.5,
+   "caption": "How do we add one third and one quarter?",
+   "say": "How do we add one third and one quarter?"
+  },
+  {
+   "id": "mistake",
+   "start": 4.5,
+   "end": 11.5,
+   "caption": "A common mistake: add the tops and add the bottoms to get two sevenths. That's wrong.",
+   "say": "A common mistake: add the tops and add the bottoms to get two sevenths. That's wrong."
+  },
+  {
+   "id": "pictures",
+   "start": 11.5,
+   "end": 20.1,
+   "caption": "Here is one third, and here is one quarter. The pieces are different sizes, so we can't just count them together.",
+   "say": "Here is one third, and here is one quarter. The pieces are different sizes, so we can't just count them together."
+  },
+  {
+   "id": "cut",
+   "start": 20.1,
+   "end": 28.7,
+   "caption": "The trick: cut both into the same size pieces. Cut the third into 4 rows, and the quarter into 3 columns.",
+   "say": "The trick: cut both into the same size pieces. Cut the third into 4 rows, and the quarter into 3 columns."
+  },
+  {
+   "id": "twelve",
+   "start": 28.7,
+   "end": 34.2,
+   "caption": "Now each whole has 3 times 4, which is 12 equal parts.",
+   "say": "Now each whole has 3 times 4, which is 12 equal parts."
+  },
+  {
+   "id": "count",
+   "start": 34.2,
+   "end": 41.7,
+   "caption": "Count the shaded parts. One third is four twelfths. One quarter is three twelfths.",
+   "say": "Count the shaded parts. One third is four twelfths. One quarter is three twelfths."
+  },
+  {
+   "id": "add",
+   "start": 41.7,
+   "end": 50.2,
+   "caption": "Now the pieces match, so we can add them: 4 twelfths and 3 twelfths make 7 twelfths.",
+   "say": "Now the pieces match, so we can add them: 4 twelfths and 3 twelfths make 7 twelfths."
+  },
+  {
+   "id": "remember",
+   "start": 50.2,
+   "end": 59.2,
+   "caption": "Remember: make the denominators the same first, then add the numerators. One third plus one quarter is seven twelfths.",
+   "say": "Remember: make the denominators the same first, then add the numerators. One third plus one quarter is seven twelfths."
+  }
+ ],
+ "beats": [
+  {
+   "id": "question",
+   "seconds": 4.2,
+   "say": "How do we add one third and one quarter?"
+  },
+  {
+   "id": "mistake",
+   "seconds": 10.4,
+   "say": "Adding the tops and the bottoms gives two sevenths. But two sevenths is smaller than one third on its own, so that can't be right."
+  },
+  {
+   "id": "pictures",
+   "seconds": 8.6,
+   "say": "Here is one third and one quarter. The shaded pieces are different sizes, so we can't count them together yet."
+  },
+  {
+   "id": "cut",
+   "seconds": 7.8,
+   "say": "Cut both into the same size pieces: cut the third into 4 rows and the quarter into 3 columns."
+  },
+  {
+   "id": "count",
+   "seconds": 9.2,
+   "say": "Now each whole has 3 times 4 = 12 equal pieces. One third is 4 twelfths, and one quarter is 3 twelfths."
+  },
+  {
+   "id": "combine",
+   "seconds": 10.2,
+   "say": "The pieces match, so put them together: 4 twelfths and 3 twelfths make 7 twelfths. one third + one quarter = seven twelfths."
+  },
+  {
+   "id": "summary",
+   "seconds": 7.4,
+   "say": "Remember: make the pieces the same size first, then add the tops. The bottom stays the same."
+  }
+ ]
+}

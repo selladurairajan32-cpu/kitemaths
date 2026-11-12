@@ -1,99 +1,41 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect, useState, type ComponentType, type KeyboardEvent, type ReactNode } from "react";
-import { CheckpointCard } from "@/components/explain/story/CheckpointCard";
-import { StoryControls } from "@/components/explain/story/StoryControls";
-import { useStory } from "@/components/explain/story/useStory";
+import { useState, type ComponentType, type KeyboardEvent, type ReactNode } from "react";
+import { ExplainShell } from "@/components/explain/modes/ExplainShell";
+import { FilmPlayer } from "@/components/explain/modes/FilmPlayer";
+import { FinalCheck } from "@/components/explain/modes/FinalCheck";
+import { StepThrough } from "@/components/explain/modes/StepThrough";
 import { RichText } from "@/components/math/RichText";
 import { Button } from "@/components/ui/Button";
 import { ArrowRightIcon, CheckIcon } from "@/components/ui/Icons";
 import { scaleAmount, shareInRatio } from "@/maths/ratio";
 import { topicRoutes } from "@/lib/routes";
-import { topicById } from "@/topics";
 import { genId } from "@/topics/kit/define";
-import type { KitQuestion, KitResponse } from "@/topics/kit/types";
-import { RATIO_STORY, RECIPE, type RatioScene } from "./ratioStory";
+import { RATIO_SCRIPT, RECIPE, type RatioScene } from "./ratioStory";
 import { RatioSceneSvg } from "./RatioSceneSvg";
 
 /**
- * D-040: the ratio and proportion explanation page. A story stage (3D where the device can, otherwise the 2.5D
- * picture) with playback, captions and chapter checkpoints; step-by-step, real-life and try-it tabs; a side rail with
- * the common mistake, fading hints and why it works; and a final check. Everything the stage shows is also in words.
+ * D-040: the ratio and proportion explanation page. D-041: in the shared three-way shell: *Watch* the ratio film,
+ * *Step through* the story stage (3D where the device can, otherwise the 2.5D picture) with a voice, captions and
+ * chapter checkpoints, or *Try it* by sharing sweets by hand. Below: step by step, a real-life example and key notes; a
+ * side rail with the common mistake, fading hints and why it works; and the final check. Everything the stage shows
+ * is also in words.
  */
 
 export type StageProps = { scene: RatioScene; label: string };
-const TABS = [
-  { id: "story", label: "Visual story" },
+const MORE = [
   { id: "steps", label: "Step by step" },
   { id: "real-life", label: "Real-life example" },
-  { id: "try", label: "Try it" },
   { id: "notes", label: "Key notes" },
 ] as const;
-type TabId = (typeof TABS)[number]["id"];
+type MoreId = (typeof MORE)[number]["id"];
 const TOPIC = "ratio-algebra";
-
-function readHash(): TabId {
-  if (typeof window === "undefined") return "story";
-  const h = window.location.hash.slice(1);
-  return (TABS.find((t) => t.id === h)?.id ?? "story") as TabId;
-}
 
 /** The stage: the 3D scene passed in, or the 2.5D picture. */
 function Stage({ scene, label, Stage3D }: StageProps & { Stage3D?: ComponentType<StageProps> }) {
   return (
     <div className="relative overflow-hidden rounded-[24px] bg-linear-to-b from-sky-soft to-brand-soft p-2 sm:p-4">
       {Stage3D ? <Stage3D scene={scene} label={label} /> : <RatioSceneSvg scene={scene} />}
-    </div>
-  );
-}
-
-function StoryPanel({ Stage3D }: { Stage3D?: ComponentType<StageProps> }) {
-  const [state, dispatch] = useStory(RATIO_STORY);
-  const [mode, setMode] = useState<"animated" | "steps">("animated");
-  const ch = RATIO_STORY[state.chapter]!;
-  const beat = ch.beats[state.beat]!;
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-title font-extrabold text-ink">
-          Chapter {state.chapter + 1} of {RATIO_STORY.length}: {ch.title}
-        </h2>
-        <div role="group" aria-label="Learning mode" className="flex rounded-full bg-sunk p-1">
-          {(["animated", "steps"] as const).map((m) => (
-            <button key={m} type="button" aria-pressed={mode === m} onClick={() => setMode(m)} className={`min-h-11 rounded-full px-4 text-label font-bold ${mode === m ? "bg-surface text-brand-strong shadow-[var(--shadow-card)]" : "text-ink-2"}`}>
-              {m === "animated" ? "Animated" : "Step view"}
-            </button>
-          ))}
-        </div>
-      </div>
-      {mode === "animated" ? (
-        <>
-          <Stage scene={beat.scene} label={beat.caption} Stage3D={Stage3D} />
-          <p aria-live="polite" className="min-h-14 rounded-[18px] bg-surface px-4 py-3 text-lg font-bold text-ink shadow-[var(--shadow-card)]">
-            {beat.caption}
-          </p>
-          <StoryControls chapters={RATIO_STORY} state={state} dispatch={dispatch} label="Ratio story" />
-        </>
-      ) : (
-        <ol className="grid gap-3 sm:grid-cols-2">
-          {ch.beats.map((b, i) => (
-            <li key={b.id} className="flex flex-col gap-2 rounded-[20px] border border-line bg-surface p-3">
-              <span className="text-label font-bold text-brand-strong">Step {i + 1}</span>
-              <div className="rounded-[14px] bg-linear-to-b from-sky-soft to-brand-soft p-2">
-                <RatioSceneSvg scene={b.scene} />
-              </div>
-              <p className="text-body font-semibold text-ink">{b.caption}</p>
-            </li>
-          ))}
-          <li className="sm:col-span-2">
-            <Button onClick={() => { setMode("animated"); dispatch({ type: "skip" }); for (let i = 0; i < ch.beats.length; i++) dispatch({ type: "skip" }); }}>
-              I&apos;ve read it: go to the quick check
-            </Button>
-          </li>
-        </ol>
-      )}
-      <CheckpointCard chapters={RATIO_STORY} state={state} dispatch={dispatch} />
     </div>
   );
 }
@@ -275,87 +217,32 @@ function Rail() {
   );
 }
 
-/** A real island question to finish, marked by the island's own evaluator. */
-function FinalCheck() {
-  const topic = topicById(TOPIC)!;
-  const q = topic.questionById(genId(TOPIC, "ra-ratio", 2, 4)) as KitQuestion;
-  const { Input } = topic.questions;
-  const [response, setResponse] = useState<KitResponse | null>(null);
-  const [result, setResult] = useState<{ correct: boolean; feedback?: string } | null>(null);
-  return (
-    <section aria-labelledby="final-title" className="flex flex-col gap-3 rounded-[24px] border-2 border-brand bg-surface p-5 shadow-[var(--shadow-card)]">
-      <p className="text-label font-bold text-brand-strong">Mini-checkpoint</p>
-      <h2 id="final-title" className="text-title font-extrabold text-ink"><RichText text={q.prompt} /></h2>
-      <Input question={q} response={response} onChange={(r) => { setResponse(r as KitResponse | null); setResult(null); }} locked={!!result?.correct} orderKey="ratio-final" />
-      <div className="flex flex-wrap items-center gap-3">
-        <Button disabled={!response || !!result?.correct} onClick={() => { const ev = topic.questions.evaluate(q, response!); setResult({ correct: ev.correct, feedback: ev.feedback }); }}>
-          Check
-        </Button>
-        {result && (
-          <p role="status" className={`text-body font-bold ${result.correct ? "text-ok" : "text-warn"}`}>
-            {result.correct ? "Correct! " : "Not yet. "}
-            {result.correct ? <RichText text={q.explanation} /> : (result.feedback ?? q.hint)}
-          </p>
-        )}
-      </div>
-    </section>
-  );
-}
-
-export function RatioExplanation({ Stage3D }: { Stage3D?: ComponentType<StageProps> }) {
-  const [tab, setTab] = useState<TabId>("story");
-  useEffect(() => {
-    const sync = () => setTab(readHash());
-    sync();
-    window.addEventListener("hashchange", sync);
-    return () => window.removeEventListener("hashchange", sync);
-  }, []);
-  const choose = (id: TabId) => {
-    setTab(id);
-    history.replaceState(null, "", `#${id}`);
-  };
+/** More about ratio: plain tabs (the address keeps the way to learn, so these don't change it). */
+function More({ Stage3D }: { Stage3D?: ComponentType<StageProps> }) {
+  const [tab, setTab] = useState<MoreId>("steps");
   const onTabKey = (e: KeyboardEvent<HTMLButtonElement>, i: number) => {
-    const n = e.key === "ArrowRight" ? i + 1 : e.key === "ArrowLeft" ? i - 1 : e.key === "Home" ? 0 : e.key === "End" ? TABS.length - 1 : null;
+    const n = e.key === "ArrowRight" ? i + 1 : e.key === "ArrowLeft" ? i - 1 : e.key === "Home" ? 0 : e.key === "End" ? MORE.length - 1 : null;
     if (n === null) return;
     e.preventDefault();
-    const next = TABS[(n + TABS.length) % TABS.length]!;
-    choose(next.id);
-    document.getElementById(`tab-${next.id}`)?.focus();
+    const next = MORE[(n + MORE.length) % MORE.length]!;
+    setTab(next.id);
+    document.getElementById(`more-${next.id}`)?.focus();
   };
-  const panels: Record<TabId, ReactNode> = {
-    story: <StoryPanel Stage3D={Stage3D} />,
-    steps: <StepsPanel />,
-    "real-life": <RealLifePanel Stage3D={Stage3D} />,
-    try: <TryPanel Stage3D={Stage3D} />,
-    notes: <NotesPanel />,
-  };
-
+  const panels: Record<MoreId, ReactNode> = { steps: <StepsPanel />, "real-life": <RealLifePanel Stage3D={Stage3D} />, notes: <NotesPanel /> };
   return (
-    <div className="mx-auto flex max-w-6xl flex-col gap-6">
-      <header className="flex items-center gap-4 rounded-[28px] bg-linear-to-r from-brand-soft to-sky-soft p-4 sm:p-6">
-        <Link href={topicRoutes(TOPIC).island()} className="grid size-12 shrink-0 place-items-center rounded-full bg-surface text-ink shadow-[var(--shadow-card)] hover:bg-sunk" aria-label="Back to Ratio and algebra">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M15 5l-7 7 7 7" /></svg>
-        </Link>
-        <span className="hidden size-16 shrink-0 place-items-center rounded-[20px] bg-surface text-title font-extrabold text-brand-strong shadow-[var(--shadow-card)] sm:grid" aria-hidden>
-          a : b
-        </span>
-        <div className="min-w-0">
-          <p className="text-label font-bold text-ink-2">Topic explanation</p>
-          <h1 className="display text-heading-2 sm:text-heading-1">Ratio and proportion: sharing in a ratio</h1>
-        </div>
-      </header>
-
-      <div role="tablist" aria-label="Ways to learn" className="flex gap-2 overflow-x-auto pb-1">
-        {TABS.map((t, i) => (
+    <section aria-labelledby="more-title" className="flex flex-col gap-3">
+      <h2 id="more-title" className="text-title font-extrabold text-ink">More about ratio</h2>
+      <div role="tablist" aria-labelledby="more-title" className="flex gap-2 overflow-x-auto pb-1">
+        {MORE.map((t, i) => (
           <button
             key={t.id}
-            id={`tab-${t.id}`}
+            id={`more-${t.id}`}
             role="tab"
             type="button"
             aria-selected={tab === t.id}
-            aria-controls={`panel-${t.id}`}
+            aria-controls={`more-panel-${t.id}`}
             tabIndex={tab === t.id ? 0 : -1}
-            onClick={() => choose(t.id)}
+            onClick={() => setTab(t.id)}
             onKeyDown={(e) => onTabKey(e, i)}
             className={`min-h-12 shrink-0 whitespace-nowrap rounded-full px-5 text-body font-bold ${tab === t.id ? "bg-brand text-on-brand shadow-[var(--shadow-card)]" : "border border-line bg-surface text-ink hover:bg-sunk"}`}
           >
@@ -363,14 +250,28 @@ export function RatioExplanation({ Stage3D }: { Stage3D?: ComponentType<StagePro
           </button>
         ))}
       </div>
-
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-        <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} className="min-w-0 rounded-[28px] border border-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-6">
-          {panels[tab]}
-        </div>
-        <Rail />
+      <div role="tabpanel" id={`more-panel-${tab}`} aria-labelledby={`more-${tab}`} className="min-w-0 rounded-[28px] border border-line bg-surface p-4 shadow-[var(--shadow-card)] sm:p-6">
+        {panels[tab]}
       </div>
+    </section>
+  );
+}
 
+export function RatioExplanation({ Stage3D }: { Stage3D?: ComponentType<StageProps> }) {
+  const S = RATIO_SCRIPT;
+  return (
+    <ExplainShell
+      title={S.title}
+      tile="a : b"
+      back={{ href: topicRoutes(TOPIC).island(), label: "Back to Ratio and algebra" }}
+      modes={{
+        watch: <FilmPlayer concept={S.concept} film={S.film} title={S.title} />,
+        step: <StepThrough story={S.story} stage={(scene, label, still) => (Stage3D && !still ? <Stage3D scene={scene} label={label} /> : <RatioSceneSvg scene={scene} />)} voiceBase={`/voice/${S.concept}`} label="Ratio story" />,
+        try: <TryPanel Stage3D={Stage3D} />,
+      }}
+      rail={<Rail />}
+    >
+      <More Stage3D={Stage3D} />
       <section aria-labelledby="takeaway-title" className="flex flex-col gap-2 rounded-[24px] bg-ok-soft p-5">
         <h2 id="takeaway-title" className="text-title font-extrabold text-ink">Key takeaway</h2>
         <ul className="m-0 flex flex-col gap-1.5 pl-0">
@@ -379,7 +280,7 @@ export function RatioExplanation({ Stage3D }: { Stage3D?: ComponentType<StagePro
           ))}
         </ul>
       </section>
-      <FinalCheck />
-    </div>
+      <FinalCheck topicId={TOPIC} questionId={genId(TOPIC, "ra-ratio", 2, 4)} orderKey="ratio-final" />
+    </ExplainShell>
   );
 }

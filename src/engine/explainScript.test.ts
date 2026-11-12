@@ -12,9 +12,13 @@ const ok: ExplainScript<null> = {
 };
 
 describe("explanation scripts (D-041)", () => {
-  it("counts spoken words: a fraction is two words, markup is silent", () => {
-    expect(spokenWords("**{1/3}** + {1/4} = ?")).toBe(4);
-    expect(spokenWords("3 × 4 = 12 equal parts")).toBe(5);
+  it("counts spoken words: a fraction is two words, a sign is a word, markup is silent", () => {
+    // one third / plus / one quarter / equals: 6 (the ? is silent).
+    expect(spokenWords("**{1/3}** + {1/4} = ?")).toBe(6);
+    // 3 times 4 equals 12 equal parts: 7.
+    expect(spokenWords("3 × 4 = 12 equal parts")).toBe(7);
+    // 35 divided by 5 is 7; the ratio 2 to 3: 6 + 5.
+    expect(spokenWords("35 ÷ 5 is 7; the ratio 2 : 3")).toBe(11);
     expect(neededMs("One two three.")).toBe(3 * 380 + 400);
   });
 

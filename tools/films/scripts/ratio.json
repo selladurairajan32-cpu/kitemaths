@@ -1,0 +1,111 @@
+{
+ "note": "Generated from the explanation script by src/topics/kit/explainScripts.test.ts. Do not edit.",
+ "topicId": "ratio-algebra",
+ "concept": "ratio",
+ "title": "Ratio and proportion: sharing in a ratio",
+ "cues": [
+  {
+   "id": "intro",
+   "start": 0,
+   "end": 5.5,
+   "caption": "What does a ratio like 2 to 3 mean? Let's find out.",
+   "say": "What does a ratio like 2 to 3 mean? Let's find out."
+  },
+  {
+   "id": "group",
+   "start": 5.5,
+   "end": 13,
+   "caption": "2 blue cubes and 3 orange cubes make one group. For every 2 blue, there are 3 orange.",
+   "say": "2 blue cubes and 3 orange cubes make one group. For every 2 blue, there are 3 orange."
+  },
+  {
+   "id": "more",
+   "start": 13,
+   "end": 22,
+   "caption": "Add more groups: 4 blue and 6 orange, then 6 blue and 9 orange. Every group is still 2 to 3.",
+   "say": "Add more groups: 4 blue and 6 orange, then 6 blue and 9 orange. Every group is still 2 to 3."
+  },
+  {
+   "id": "share",
+   "start": 22,
+   "end": 27,
+   "caption": "Now share 35 sweets in the ratio 2 to 3.",
+   "say": "Now share 35 sweets in the ratio 2 to 3."
+  },
+  {
+   "id": "parts",
+   "start": 27,
+   "end": 36,
+   "caption": "Each group takes 2 plus 3, which is 5 sweets. 35 divided by 5 is 7, so there are 7 groups.",
+   "say": "Each group takes 2 plus 3, which is 5 sweets. 35 divided by 5 is 7, so there are 7 groups."
+  },
+  {
+   "id": "jars",
+   "start": 36,
+   "end": 44,
+   "caption": "Blue gets 2 parts: 2 times 7 is 14. Orange gets 3 parts: 3 times 7 is 21.",
+   "say": "Blue gets 2 parts: 2 times 7 is 14. Orange gets 3 parts: 3 times 7 is 21."
+  },
+  {
+   "id": "check",
+   "start": 44,
+   "end": 49,
+   "caption": "14 plus 21 is 35, so nothing is left over.",
+   "say": "14 plus 21 is 35, so nothing is left over."
+  },
+  {
+   "id": "remember",
+   "start": 49,
+   "end": 56.5,
+   "caption": "Remember: add the parts, divide to find one part, then multiply for each share.",
+   "say": "Remember: add the parts, divide to find one part, then multiply for each share."
+  }
+ ],
+ "beats": [
+  {
+   "id": "one-group",
+   "seconds": 10.1,
+   "say": "2 blue cubes and 3 orange cubes make one group. The ratio is 2 to 3: for every 2 blue, there are 3 orange."
+  },
+  {
+   "id": "two-groups",
+   "seconds": 6.7,
+   "say": "Add another group. Now there are 4 blue and 6 orange, still 2 to 3."
+  },
+  {
+   "id": "three-groups",
+   "seconds": 7.5,
+   "say": "Three groups: 6 blue and 9 orange. However many groups, every group has 2 blue and 3 orange."
+  },
+  {
+   "id": "pile",
+   "seconds": 4.4,
+   "say": "Share 35 sweets in the ratio 2 to 3."
+  },
+  {
+   "id": "groups",
+   "seconds": 9,
+   "say": "Each group takes 2 + 3 = 5 sweets. 35 divided by 5 = 7 groups, so one part is 7."
+  },
+  {
+   "id": "jars",
+   "seconds": 7.8,
+   "say": "Blue gets 2 parts: 2 times 7 = 14. Orange gets 3 parts: 3 times 7 = 21."
+  },
+  {
+   "id": "bar",
+   "seconds": 7.8,
+   "say": "As a bar: 5 equal parts of 7. 14 + 21 = 35, so nothing is left over."
+  },
+  {
+   "id": "recipe-4",
+   "seconds": 5.2,
+   "say": "Pancakes for 4 people need 2 eggs and 300 ml of milk."
+  },
+  {
+   "id": "recipe-6",
+   "seconds": 9.4,
+   "say": "For 6 people, that is 1.5 times as many: 3 eggs and 450 ml of milk. Every amount scales by the same number."
+  }
+ ]
+}

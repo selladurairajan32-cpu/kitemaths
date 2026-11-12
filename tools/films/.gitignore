@@ -1,0 +1,4 @@
+# D-041 film pipeline: renders, voice models and samples stay local.
+out/
+voices/
+__pycache__/

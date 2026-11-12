@@ -30,3 +30,7 @@ if (typeof window.PointerEvent === "undefined") {
 
 // Animations finish instantly in component tests, so AnimatePresence swaps panels without waiting for frames.
 MotionGlobalConfig.skipAnimations = true;
+
+// jsdom has no media playback (D-041 voices and films): playing resolves at once and pausing does nothing.
+Object.defineProperty(HTMLMediaElement.prototype, "play", { configurable: true, value: () => Promise.resolve() });
+Object.defineProperty(HTMLMediaElement.prototype, "pause", { configurable: true, value: () => {} });
