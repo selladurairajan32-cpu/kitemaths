@@ -6,15 +6,16 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
 
 | | Commit | What it holds |
 |---|---|---|
-| `claude/clever-cori-42fmz0` | `claude/practical-knuth-9126wx` + step 3 | **Latest work: D-043 step 3, the kid pages.** Pushed, not merged, not deployed. Start new work from here. |
-| `claude/practical-knuth-9126wx` | same as `main` | Everything up to D-043 step 2. |
-| `main` (production, https://kitemaths.vercel.app) | `0fedc65` + this record | Everything up to D-043 step 2, deployed on request (D-044, CH-091): the journey is live. |
+| `claude/clever-cori-42fmz0` | same as `main` | **Latest work: D-043 step 3, the kid pages.** Start new work from here. |
+| `main` (production, https://kitemaths.vercel.app) | `dd88b94` + this record | Everything up to D-043 step 3, deployed on request (D-045, CH-094): the kid pages are live. |
+| `claude/practical-knuth-9126wx` | `ada819a` | Everything up to D-043 step 2. |
 
 - A new session gets its own `claude/…` branch from the platform. Base it on `claude/practical-knuth-9126wx`
   (`git fetch origin claude/practical-knuth-9126wx && git checkout -b <new-branch> FETCH_HEAD`), or ask the Product Owner.
 - **No deployment, merge or PR without an explicit request.** The D-040 rule stands: production waits until sign-in works
-  end to end; D-042 and D-044 were one-offs. A deployment means fast-forwarding `main` after CI is green, then running
-  `verification/live-check.cjs` and recording a CH entry.
+  end to end; D-042, D-044 and D-045 were one-offs. A deployment means fast-forwarding `main` after CI is green, then running
+  `verification/live-check.cjs` and recording a CH entry. The session's network must allow `kitemaths.vercel.app` (the
+  personal environment "kitemaths" does).
 
 ## Where the redesign is (D-040 → D-041 → D-043)
 
@@ -25,7 +26,7 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
 - **Emma's teaching voice** (Kokoro), teacher scripts with `[pause]` and `[think]`, and pizza visuals for fractions.
 - Report: `reports/D-043-step-2-report.md`.
 
-- **Kid pages (step 3)**, built, READY FOR QA, not deployed: navigation Home · Topics · Practice · Tests · Progress with a
+- **Kid pages (step 3)**, built, READY FOR QA, deployed on request (D-045, CH-094): navigation Home · Topics · Practice · Tests · Progress with a
   level bar; Home with Continue Learning and today's plan; `/topics`, `/practice` (now a hub), `/tests`, `/progress`
   (mastery ring and topic bars). Report: `reports/D-043-step-3-report.md` (CH-092, CH-093).
 

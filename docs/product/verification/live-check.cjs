@@ -2,7 +2,8 @@
 // D-037 deployment check on https://kitemaths.vercel.app with cache-busting loads: Home, the Measures island, the Long
 // multiplication animated step 4, a Measures lesson, the D-038 thousandths lesson, the D-039 drawing lab, the mock
 // with the ISEB profile, and the D-040/D-041/D-043 topic journeys (fractions: the film loads and Step through draws; ratio:
-// the 3D stage draws in Step through), at 390 and 1280px. Records the
+// the 3D stage draws in Step through), and the D-043 step 3 kid pages (Home continues the journey, Topics, Practice,
+// Tests, Progress), at 390 and 1280px. Records the
 // HTTP status, one content check per page and console errors. Developer evidence, not independent QA.
 const { chromium } = require('playwright');
 const OUT = process.argv[2]; const BASE = 'https://kitemaths.vercel.app';
@@ -39,6 +40,12 @@ const cb = () => `?cb=${Date.now()}`;
       await p.getByRole('tab', { name: /^Step through/ }).click();
       return (await p.locator('[data-stage="webgl"] canvas').waitFor({ timeout: 15000 }).then(() => true).catch(() => false));
     });
+    // D-043 step 3: the kid pages and their navigation; Home continues the journey opened last above (ratio).
+    await go('home-continue', '/', async () => (await p.getByRole('link', { name: /^Continue/ }).getAttribute('href')) === '/t/ratio-algebra/learn/ratio');
+    await go('topics', '/topics', async () => (await p.getByRole('list', { name: 'Topics' }).getByRole('listitem').count()) >= 20);
+    await go('practice-hub', '/practice', async () => (await p.getByRole('heading', { name: 'Quick practice' }).count()) > 0);
+    await go('tests', '/tests', async () => (await p.getByRole('heading', { name: 'Big challenges' }).count()) > 0);
+    await go('progress', '/progress', async () => (await p.locator('[aria-label^="Mastery:"]').count()) > 0 && (await p.getByRole('navigation', { name: 'Main' }).first().getByRole('link', { name: 'Progress', exact: true }).getAttribute('aria-current')) === 'page');
     await go('mock', '/t/mock-exams/mock', async () => { await p.getByRole('button', { name: /^ISEB Common Pre-Tests/ }).click(); return (await p.getByText(/40 minutes/).count()) > 0 && (await p.getByRole('button', { name: 'Answer sheet (A to E)' }).count()) > 0; });
   }
   require('fs').writeFileSync(`${OUT}/report.json`, JSON.stringify(report, null, 1));

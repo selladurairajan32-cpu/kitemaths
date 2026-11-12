@@ -4,7 +4,7 @@
 |---|---|
 | **Decision** | D-043 (12 Nov 2026), step 3: kid pages in the concept-image style. The flow matters, not the exact UI. |
 | **Changes** | CH-092 (pages), CH-093 (browser check) in `DECISIONS.md` |
-| **Status** | READY FOR QA. **Nothing is accepted.** Not deployed (the D-040 sign-in rule stands). |
+| **Status** | READY FOR QA. **Nothing is accepted.** Deployed to production on 12 Nov 2026 at the Product Owner's request (D-045, CH-094): 28 of 28 live checks pass. |
 | **Date** | 12 November 2026 |
 
 ## 1. What changed for the child
