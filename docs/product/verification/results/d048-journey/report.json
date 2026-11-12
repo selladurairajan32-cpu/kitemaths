@@ -1,0 +1,178 @@
+{
+ "errors": [],
+ "redirect": {
+  "phone": "/t/fractions-2/learn/add-different",
+  "tablet": "/t/fractions-2/learn/add-different",
+  "desk": "/t/fractions-2/learn/add-different"
+ },
+ "axe": {
+  "phone-learn-watch": [],
+  "phone-learn-step": [],
+  "phone-learn-try": [],
+  "phone-practise": [],
+  "phone-apply": [],
+  "phone-check": [],
+  "phone-complete": [],
+  "tablet-learn-watch": [],
+  "tablet-learn-step": [],
+  "tablet-learn-try": [],
+  "tablet-practise": [],
+  "tablet-apply": [],
+  "tablet-check": [],
+  "tablet-complete": [],
+  "desk-learn-watch": [],
+  "desk-learn-step": [],
+  "desk-learn-try": [],
+  "desk-practise": [],
+  "desk-apply": [],
+  "desk-check": [],
+  "desk-complete": []
+ },
+ "heights": {
+  "phone-learn": 2.83,
+  "phone-practise": 2.03,
+  "phone-complete": 2,
+  "tablet-learn": 2.2,
+  "tablet-practise": 1.3,
+  "tablet-complete": 1.09,
+  "desk-learn": 1.4,
+  "desk-practise": 0.99,
+  "desk-complete": 1.14
+ },
+ "overflow": {
+  "phone-learn": 0,
+  "phone-practise": 0,
+  "phone-complete": 0,
+  "tablet-learn": 0,
+  "tablet-practise": 0,
+  "tablet-complete": 0,
+  "desk-learn": 0,
+  "desk-practise": 0,
+  "desk-complete": 0
+ },
+ "learn": {
+  "phone": {
+   "film": 103,
+   "voices": [
+    "hook"
+   ],
+   "tryDone": true
+  },
+  "tablet": {
+   "film": 103,
+   "voices": [
+    "hook"
+   ],
+   "tryDone": true
+  },
+  "desk": {
+   "film": 103,
+   "voices": [
+    "hook"
+   ],
+   "tryDone": true
+  }
+ },
+ "practise": {
+  "phone": {
+   "tries": [
+    2,
+    2,
+    1,
+    1,
+    1,
+    2,
+    3
+   ],
+   "followUps": 1,
+   "nextShown": true
+  },
+  "tablet": {
+   "tries": [
+    2,
+    2,
+    3,
+    1,
+    2,
+    3,
+    1
+   ],
+   "followUps": 5,
+   "nextShown": true
+  },
+  "desk": {
+   "tries": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    3,
+    2
+   ],
+   "followUps": 8,
+   "nextShown": true
+  }
+ },
+ "apply": {
+  "phone": {
+   "tries": [
+    3,
+    2,
+    3
+   ]
+  },
+  "tablet": {
+   "tries": [
+    3,
+    3,
+    2
+   ]
+  },
+  "desk": {
+   "tries": [
+    3,
+    3,
+    2
+   ]
+  }
+ },
+ "check": {
+  "phone": {
+   "result": "You got 0 of 2 right."
+  },
+  "tablet": {
+   "result": "You got 0 of 2 right."
+  },
+  "desk": {
+   "result": "You got 0 of 2 right."
+  }
+ },
+ "complete": {
+  "phone": {
+   "heading": "Good effort!",
+   "strands": 3
+  },
+  "tablet": {
+   "heading": "Good effort!",
+   "strands": 3
+  },
+  "desk": {
+   "heading": "Good effort!",
+   "strands": 3
+  }
+ },
+ "resumed": {
+  "phone": true,
+  "tablet": true,
+  "desk": true
+ },
+ "narrow": {
+  "learn": 0,
+  "practise": 0
+ },
+ "reduced": {
+  "tryDone": true
+ },
+ "shots": 21
+}

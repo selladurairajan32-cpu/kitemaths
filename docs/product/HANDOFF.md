@@ -32,7 +32,9 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
 
 - **D-046 phase 1** (built, READY FOR QA, deployed on request, D-047, CH-097): the two journeys in the sky-and-glass look of the concept
   images; stars are called XP; 2D pizzas kept (the Product Owner's choice). Report: `reports/D-046-phase-1-report.md`
-  (CH-095, CH-096). **Next: D-046 phase 2**, the same look on Home, Topics, Practice, Tests and Progress.
+  (CH-095, CH-096).
+- **D-046 phase 2** (built, READY FOR QA, not deployed; D-048): the same look on Home, Topics, Practice, Tests and
+  Progress; yellow Check answer in every question. Report: `reports/D-046-phase-2-report.md` (CH-098, CH-099).
 
 **Next (D-043 plan, in order):**
 1. **The ten hardest concepts on the journey,** in batches of 4. Each one needs:
@@ -45,8 +47,6 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
 3. **Supabase accounts** (parent logins, children as profiles), then one production launch.
 
 **Open questions for the Product Owner:**
-- Confirm the narrowed palette rule (gradients and glass only in the sky and glass styles; D-046 report section 3).
-- Make the in-question Check button the yellow "Check answer" everywhere?
 - XP: keep stars with a level bar, or call them XP? Should today's plan tick items off? Keep `/practice` as a hub?
 - Lengthen the Check stage (the concept images show about 8 questions; it is 2 today, and changing it changes MAST-001)?
 - A reasoning question for ratio.

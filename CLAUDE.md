@@ -38,7 +38,9 @@ only accepted items may have `accepted` cases. Update `test-cases.csv` in the sa
 
 **New session? Read `docs/product/HANDOFF.md` first:** branches, what is done, what is next, and how to rebuild films.
 
-`docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Latest: D-046 phase 1
+`docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Latest: D-046 phase 2
+built (D-048: the same look on Home, Topics, Practice, Tests, Progress; yellow Check answer; palette rule confirmed;
+CH-098, CH-099; `reports/D-046-phase-2-report.md`; READY FOR QA, not deployed). Before that: D-046 phase 1
 built (the two journeys in the sky-and-glass look; XP instead of stars; 2D pizzas kept; `.sky-*`/`.glass*` are the only
 places for gradients and frosted glass; CH-095, CH-096; `reports/D-046-phase-1-report.md`; READY FOR QA; deployed 12 Nov on request, D-047, CH-097;
 next: phase 2, the same look on the kid pages). Before that: D-043 step 3
