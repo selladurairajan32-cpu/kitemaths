@@ -53,7 +53,7 @@ export function TestsScreen() {
               const ready = readyForRecheck(m);
               const links = topicRoutes(t.id);
               return (
-                <li key={s.id} className="card flex flex-wrap items-center justify-between gap-3 p-4">
+                <li key={s.id} className="glass rounded-[24px] flex flex-wrap items-center justify-between gap-3 p-4">
                   <span className="min-w-0">
                     <span className="block font-extrabold text-ink">{s.title}</span>
                     <span className="block text-label font-semibold text-ink-2">{t.title}</span>

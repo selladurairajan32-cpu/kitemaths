@@ -35,6 +35,8 @@ export interface JourneyDef {
   keyIdea: string;
   /** D-046: the common mistake to watch out for, in the child's words (RichText). */
   misconception: string;
+  /** D-046: the 3D picture for this concept on Home (a name in public/3d). */
+  pic: string;
   /** D-046: three short notes for the strip under Learn (the full method is behind the Method button). */
   keyNotes: string[];
   /** D-046: the key idea as a bar model: `cells` equal parts, the first `blue` then `orange` filled, and a caption. */
@@ -74,6 +76,7 @@ export const JOURNEYS: JourneyDef[] = [
     },
     method: ["Find a number both denominators go into (multiply them if nothing smaller works).", "Change each fraction: multiply its top and bottom by the same number.", "Add or take away the tops. Keep the bottom.", "Simplify if you can, and check it makes sense."],
     keyIdea: "Make the slices the same size, then add the tops. {1/3} = {4/12} and {1/4} = {3/12}, so together they make {7/12}.",
+    pic: "pizza",
     keyNotes: ["Find a common denominator", "Change each fraction to match", "Add the tops, keep the bottom"],
     keyBar: { cells: 12, blue: 4, orange: 3, caption: "{4/12} + {3/12} = {7/12}" },
     misconception: "Never add the bottoms: {1/3} + {1/4} is not {2/7}. The bottom number says how big the slices are.",
@@ -103,6 +106,7 @@ export const JOURNEYS: JourneyDef[] = [
     strands: { "ra-ratio-for-every": "concept", "ra-ratio": "concept", "ra-ratio-stretch": "application" },
     method: ["Add the parts of the ratio to find how many in one group.", "Divide the total by that to find one part.", "Multiply one part by each number in the ratio.", "Check: the shares add up to the total."],
     keyIdea: "Add the parts to find the groups: 2 + 3 = 5. Share the total into those equal parts, then give each colour its parts.",
+    pic: "ratio",
     keyNotes: ["Add the parts: 2 + 3 = 5", "Divide the total by 5", "Multiply by each colour's parts"],
     keyBar: { cells: 5, blue: 2, orange: 3, caption: "5 equal parts of 7: blue 2 × 7 = 14, orange 3 × 7 = 21" },
     misconception: "2 : 3 doesn't mean 2 out of 3. It means 2 for every 3, so one group is 5.",

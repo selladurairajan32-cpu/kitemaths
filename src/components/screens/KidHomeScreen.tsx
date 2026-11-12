@@ -5,7 +5,7 @@ import { Kip, KipSays } from "@/components/kid/Kip";
 import { kidNext } from "@/components/kid/kidText";
 import { RichText } from "@/components/math/RichText";
 import { PaperIcon } from "@/components/paper/PaperIcon";
-import { Pic, type PicName } from "@/components/paper/Pic";
+import { isPicName, Pic } from "@/components/paper/Pic";
 import { ButtonLink } from "@/components/ui/Button";
 import { ArrowRightIcon, CheckIcon, LockIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton, StorageNotice } from "@/components/ui/Screen";
@@ -13,6 +13,8 @@ import { allLessonEvidence } from "@/engine/evidence";
 import { lessonsEvidenced, recommendNext, reviewSkills } from "@/engine/journey";
 import { answeredToday, DAILY_GOAL, levelFor, STARS, streakFor, totalStars } from "@/engine/rewards";
 import { JOURNEY_STAGES, STAGE_LABEL } from "@/engine/topicJourney";
+import { STAGE_PIC } from "@/components/journey/JourneyChrome";
+import { ProgressBar, ProgressRing } from "@/components/ui/Progress";
 import { DEFAULT_PLAN } from "@/engine/progress";
 import { routes, topicRoutes } from "@/lib/routes";
 import { useHydrated, useLearner, useNow } from "@/lib/store";
@@ -76,41 +78,80 @@ function KidHome() {
     <div className="space-y-10 sm:space-y-12">
       <StorageNotice />
 
-      {/* What to do next: the one question this screen answers, with one button (D-037). */}
-      <section className="relative overflow-hidden rounded-[32px] border border-line bg-brand-soft px-5 py-8 sm:px-10 sm:py-10" aria-labelledby="next-title">
-        <div className="flex items-center gap-8">
-          <div className="min-w-0 flex-1">
-            <p className="flex items-center gap-2 text-lg font-semibold text-ink-2">
-              <Pic name="sun" size={30} priority />
-              {greeting(now)}
-              {name ? `, ${name}` : ""}
-            </p>
-            {!brandNew && <p className="mt-3 text-label font-extrabold uppercase tracking-wide text-brand-strong">Continue learning</p>}
-            <h1 id="next-title" className={`display text-heading-1 sm:text-display-1 ${brandNew ? "mt-3" : "mt-1"}`}>
-              {brandNew ? <>I&apos;m Kip. Let&apos;s find your start!</> : cont ? cont.def.title : next.title}
+      {/* D-046 phase 2: hello from the guide, with the streak, today's goal and the level ring (concept images). */}
+      <section aria-labelledby="hello-title" className="grid items-center gap-4 lg:grid-cols-[minmax(0,1fr)_auto]">
+        <div className="flex items-end gap-4">
+          <Pic name="guide-wave" size={128} priority className="hidden shrink-0 sm:block" />
+          <div className="min-w-0">
+            <h1 id="hello-title" className="display flex flex-wrap items-center gap-2 text-heading-1 sm:text-display-2">
+              Hi{name ? ` ${name}` : " there"}! <Pic name="waving" size={44} />
             </h1>
+            <p className="mt-1 text-lg font-semibold text-ink-2">
+              {greeting(now)}.{" "}
+              {streak.current > 0 ? `You're on a ${streak.current}-day streak` : "Let's build your maths today"}
+              {!brandNew && ` · ${today} of ${DAILY_GOAL} questions today`}
+              {streak.current > 0 && <Pic name="flame" size={22} className="ml-1 align-text-bottom" />}
+            </p>
+          </div>
+        </div>
+        <Link href={routes.progress()} className="glass flex items-center gap-4 rounded-[28px] p-3 pr-6 hover:-translate-y-0.5" aria-label={`Level ${level.level}: ${stars} XP, ${level.needed - level.into} XP to level ${level.level + 1}. See your progress.`}>
+          <ProgressRing value={level.into / level.needed} size={84} label={`Level ${level.level}`}>
+            <span className="display text-title leading-none text-ink">{level.level}</span>
+          </ProgressRing>
+          <span>
+            <span className="block text-title font-extrabold text-ink">Level {level.level}</span>
+            <span className="block text-label font-bold text-ink-2">{level.title}</span>
+            <span className="block text-label font-bold text-brand-strong">{level.needed - level.into} XP to level {level.level + 1}</span>
+          </span>
+        </Link>
+      </section>
+
+      {/* Continue Learning: the one thing to do next, with one yellow button (D-037, D-043 step 3). */}
+      <section className="glass relative overflow-hidden rounded-[32px] px-5 py-6 sm:px-8 sm:py-8" aria-labelledby="next-title">
+        <div className="flex items-center gap-6">
+          <div className="min-w-0 flex-1">
+            <p className="flex items-center gap-2 text-label font-extrabold uppercase tracking-wide text-brand-strong">
+              <Pic name="play" size={24} /> {brandNew ? "Let's begin" : "Continue learning"}
+            </p>
+            <h2 id="next-title" className="display mt-2 text-heading-2 sm:text-heading-1">
+              {brandNew ? <>I&apos;m Kip. Let&apos;s find your start!</> : cont ? cont.def.title : next.title}
+            </h2>
             {cont ? (
               <>
-                <p className="mt-3 max-w-xl text-lg text-ink">
+                <p className="mt-2 max-w-xl text-lg text-ink">
                   {contTopic?.title ?? cont.def.topicId} · Step {cont.progress.reached + 1} of {JOURNEY_STAGES.length}: {STAGE_LABEL[JOURNEY_STAGES[cont.progress.reached]]}
                 </p>
-                <ol className="mt-3 flex max-w-sm gap-1.5" aria-label={`Step ${cont.progress.reached + 1} of ${JOURNEY_STAGES.length}`}>
-                  {JOURNEY_STAGES.map((st, i) => (
-                    <li key={st} className={`h-2 flex-1 rounded-full ${i < cont.progress.reached ? "bg-ok" : i === cont.progress.reached ? "bg-brand" : "bg-surface"}`}>
-                      <span className="sr-only">
-                        {STAGE_LABEL[st]}
-                        {i < cont.progress.reached ? ", done" : i === cont.progress.reached ? ", up next" : ""}
-                      </span>
-                    </li>
-                  ))}
+                <ol className="mt-4 flex max-w-xl items-center gap-1 sm:gap-2" aria-label={`Your learning path: step ${cont.progress.reached + 1} of ${JOURNEY_STAGES.length}`}>
+                  {JOURNEY_STAGES.map((st, i) => {
+                    const doneStage = i < cont.progress.reached;
+                    const here = i === cont.progress.reached;
+                    return (
+                      <li key={st} className={`flex min-w-0 flex-1 flex-col items-center gap-1 rounded-[16px] px-1 py-2 ${here ? "bg-brand-soft ring-2 ring-brand" : ""}`}>
+                        <span className="relative">
+                          <Pic name={STAGE_PIC[st]} size={30} muted={!doneStage && !here} />
+                          {doneStage && (
+                            <span className="absolute -bottom-1 -right-1 grid size-4 place-items-center rounded-full bg-ok-bright text-white ring-2 ring-white" aria-hidden>
+                              <CheckIcon size={9} strokeWidth={4} />
+                            </span>
+                          )}
+                        </span>
+                        <span className={`whitespace-nowrap text-label leading-tight [overflow-wrap:normal] ${here ? "font-extrabold text-brand-strong" : "font-semibold text-ink-2"}`}>{STAGE_LABEL[st]}</span>
+                        <span className="sr-only">{doneStage ? ", done" : here ? ", up next" : ""}</span>
+                      </li>
+                    );
+                  })}
                 </ol>
+                <div className="mt-3 flex max-w-xl items-center gap-3">
+                  <ProgressBar value={cont.progress.reached / JOURNEY_STAGES.length} tone="ok" label="Journey progress" className="h-3" />
+                  <span className="whitespace-nowrap text-label font-bold text-ink-2">{cont.progress.reached} of {JOURNEY_STAGES.length} steps</span>
+                </div>
               </>
             ) : (
-              <p className="mt-3 max-w-xl text-lg text-ink">
+              <p className="mt-2 max-w-xl text-lg text-ink">
                 {brandNew ? <>A short warm-up game finds the right {topic.title} lesson for you.</> : <RichText text={next.line} />}
               </p>
             )}
-            <ButtonLink href={brandNew ? links.start() : cont ? topicRoutes(cont.def.topicId).learn(cont.def.concept) : next.href} size="xl" className="mt-6 w-full sm:w-auto">
+            <ButtonLink href={brandNew ? links.start() : cont ? topicRoutes(cont.def.topicId).learn(cont.def.concept) : next.href} variant="cta" size="xl" className="mt-6 w-full sm:w-auto">
               {brandNew ? "Play the warm-up" : cont ? "Continue" : next.cta} <ArrowRightIcon size={20} />
             </ButtonLink>
             {!brandNew && !cont && nextIndex >= 0 && (
@@ -120,12 +161,18 @@ function KidHome() {
             )}
           </div>
           <div className="hidden shrink-0 sm:block" aria-hidden>
-            <Kip mood={brandNew ? "cheer" : "happy"} size={150} />
+            {brandNew || !cont ? (
+              <Kip mood={brandNew ? "cheer" : "happy"} size={150} />
+            ) : (
+              <span className="grid size-40 place-items-center rounded-full bg-surface shadow-[var(--shadow-lift)]">
+                {isPicName(cont.def.pic) ? <Pic name={cont.def.pic} size={112} /> : <PaperIcon name={contTopic?.look.icon ?? "bulb"} size={104} />}
+              </span>
+            )}
           </div>
         </div>
       </section>
 
-      {/* One message from Kip at most: a skill to revisit, else the warm-up, else the streak. */}
+      {/* One message from Kip at most: a skill to revisit, else the warm-up. */}
       {review.length > 0 ? (
         <KipSays mood="think" tone="sun" speak={`Let's revisit ${skillById(review[0]).title}.`}>
           Let&apos;s revisit <strong>{skillById(review[0]).title}</strong>.{" "}
@@ -140,26 +187,7 @@ function KidHome() {
             Play the warm-up
           </Link>
         </KipSays>
-      ) : !brandNew ? (
-        <KipSays mood="happy" tone="sky">
-          {!streak.activeToday
-            ? streak.current === 0
-              ? "Answer just one question today to start a streak!"
-              : `Answer one question today to keep your ${streak.current}-day streak!`
-            : today < DAILY_GOAL
-              ? `Streak safe! ${DAILY_GOAL - today} more question${DAILY_GOAL - today === 1 ? "" : "s"} for today's goal.`
-              : `Goal done! Come back tomorrow for a ${streak.current + 1}-day streak.`}
-        </KipSays>
       ) : null}
-
-      {/* Stars, streak and today's goal in one strip. */}
-      <section aria-label="Your progress">
-        <ul className="grid grid-cols-3 gap-2 rounded-[24px] border border-line bg-surface p-3 shadow-[var(--shadow-card)] sm:gap-4 sm:p-4">
-          <Stat href={routes.progress()} pic="star" value={String(stars)} label={`XP · level ${level.level}`} />
-          <Stat pic="flame" value={String(streak.current)} label={streak.current === 1 ? "day streak" : "days streak"} />
-          <Stat href={links.practice()} pic="target" value={`${today}/${DAILY_GOAL}`} label="today" />
-        </ul>
-      </section>
 
       {/* D-043 step 3: today's plan, from the weekly plan the grown-up sets. */}
       {plan && plan.items.length > 0 && (
@@ -171,7 +199,7 @@ function KidHome() {
           <ol className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {plan.items.map((it, i) => (
               <li key={it.href + i} className="flex">
-                <Link href={it.href} className="card flex flex-1 items-center gap-3 p-4 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
+                <Link href={it.href} className="glass flex flex-1 items-center gap-3 rounded-[24px] p-4 transition hover:-translate-y-0.5">
                   <span className="grid size-10 shrink-0 place-items-center rounded-full bg-brand-soft text-lg font-extrabold text-brand-strong" aria-hidden>
                     {i + 1}
                   </span>
@@ -200,9 +228,9 @@ function KidHome() {
               const state = !progress ? `Year ${def.year} · watch, step through or try it` : finished ? "Done · watch again any time" : `Step ${progress.reached + 1} of ${JOURNEY_STAGES.length}: ${STAGE_LABEL[JOURNEY_STAGES[progress.reached]]}`;
               return (
                 <li key={`${def.topicId}/${def.concept}`} className="flex">
-                  <Link href={topicRoutes(def.topicId).learn(def.concept)} className="card flex flex-1 items-center gap-3 p-4 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
+                  <Link href={topicRoutes(def.topicId).learn(def.concept)} className="glass flex flex-1 items-center gap-3 rounded-[24px] p-4 transition hover:-translate-y-0.5">
                     <span className="grid size-14 shrink-0 place-items-center rounded-[18px] bg-sun-soft" aria-hidden>
-                      <PaperIcon name={topicById(def.topicId)?.look.icon ?? "bulb"} size={38} />
+                      {isPicName(def.pic) ? <Pic name={def.pic} size={40} /> : <PaperIcon name={topicById(def.topicId)?.look.icon ?? "bulb"} size={38} />}
                     </span>
                     <span className="min-w-0">
                       <span className="block font-extrabold leading-snug text-ink">{def.title}</span>
@@ -321,19 +349,4 @@ function KidHome() {
       </footer>
     </div>
   );
-}
-
-/** One number in the progress strip. */
-function Stat({ href, pic, value, label }: { href?: string; pic: PicName; value: string; label: string }) {
-  const body = (
-    <>
-      <Pic name={pic} size={32} />
-      <span className="min-w-0">
-        <span className="block text-title font-extrabold leading-tight text-ink">{value}</span>
-        <span className="block text-label font-bold leading-tight text-ink-2">{label}</span>
-      </span>
-    </>
-  );
-  const cls = "flex min-h-14 items-center gap-2 rounded-[16px] p-1.5 sm:gap-3 sm:p-2";
-  return <li>{href ? <Link href={href} className={`${cls} hover:bg-raised`}>{body}</Link> : <div className={cls}>{body}</div>}</li>;
 }

@@ -3,12 +3,13 @@ import { Pic, type PicName } from "@/components/paper/Pic";
 import { Kip, type KipMood } from "./Kip";
 
 /**
- * The top of a kids' screen in the Crystal look: a soft blue panel with Kip or a 3D picture,
- * one big friendly title, a line that says what this is, and the actions. Matches the Home hero.
+ * The top of a kids' screen: a glass panel on the sky (D-046) with a 3D picture, Kip or the guide, one big friendly
+ * title, a line that says what this is, and the actions. Matches the Home hero.
  */
 export function ScreenHero({
   pic,
   kip,
+  guide,
   title,
   line,
   children,
@@ -19,6 +20,8 @@ export function ScreenHero({
   pic?: PicName;
   /** Or Kip himself. */
   kip?: KipMood;
+  /** Or the guide (the 3D child), waving. */
+  guide?: boolean;
   title: ReactNode;
   line?: ReactNode;
   /** Actions under the line. */
@@ -28,13 +31,15 @@ export function ScreenHero({
   aside?: ReactNode;
 }) {
   return (
-    <section className="rounded-[32px] bg-[#edf3ff] px-5 py-7 sm:px-10 sm:py-10" aria-labelledby={titleId}>
+    <section className="glass rounded-[32px] px-5 py-7 sm:px-10 sm:py-9" aria-labelledby={titleId}>
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex min-w-0 flex-col gap-5 sm:flex-row sm:items-center">
-          {kip ? (
+          {guide ? (
+            <Pic name="guide-wave" size={112} priority className="shrink-0" />
+          ) : kip ? (
             <Kip mood={kip} size={104} className="shrink-0" />
           ) : pic ? (
-            <span className="grid size-24 shrink-0 place-items-center rounded-[28px] bg-surface shadow-[var(--shadow-card)]" aria-hidden>
+            <span className="grid size-24 shrink-0 place-items-center rounded-full bg-surface shadow-[var(--shadow-card)]" aria-hidden>
               <Pic name={pic} size={68} priority />
             </span>
           ) : null}

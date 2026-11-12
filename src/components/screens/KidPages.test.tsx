@@ -52,7 +52,8 @@ describe("kid pages (D-043 step 3)", () => {
     const def = journeyFor("fractions-2", "add-different")!;
     updateLearner((s) => ({ ...s, results: [answer("fractions.compare", true, 500)], journeys: { "fractions-2/add-different": { stage: 2, reached: 2, startedAt: 1000, practised: 7, applied: 0 } } }));
     render(<KidHomeScreen />);
-    expect(await screen.findByRole("heading", { level: 1, name: def.title })).toBeTruthy();
+    expect(await screen.findByRole("heading", { level: 1, name: /^Hi there!/ })).toBeTruthy();
+    expect(screen.getByRole("heading", { level: 2, name: def.title })).toBeTruthy();
     expect(screen.getByText(/Fractions 2 · Step 3 of 5: Apply/)).toBeTruthy();
     expect(screen.getByRole("link", { name: /^Continue/ }).getAttribute("href")).toBe("/t/fractions-2/learn/add-different");
     expect(screen.getByRole("heading", { name: "Today's plan" })).toBeTruthy();

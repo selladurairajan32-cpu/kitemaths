@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { isPicName } from "@/components/paper/Pic";
 import { journeyFor, JOURNEYS } from "./journeys";
 
 /** D-046: each journey's Key idea bar says the same as the maths, checked against hand-worked answers. */
@@ -20,6 +21,7 @@ describe("journey key ideas (D-046)", () => {
       expect(j.keyIdea.length, j.concept).toBeGreaterThan(20);
       expect(j.misconception.length, j.concept).toBeGreaterThan(20);
       expect(j.keyBar.blue + j.keyBar.orange, j.concept).toBeLessThanOrEqual(j.keyBar.cells);
+      expect(isPicName(j.pic), j.concept).toBe(true);
     }
   });
 });

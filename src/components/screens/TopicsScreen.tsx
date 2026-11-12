@@ -35,12 +35,12 @@ export function TopicsScreen() {
   const started = all.filter(({ o }) => o.started).length;
 
   const chip = (active: boolean) =>
-    `flex min-h-11 items-center whitespace-nowrap rounded-full px-4 text-label font-bold transition-colors ${active ? "bg-ink text-white" : "border-[1.5px] border-line-strong bg-surface text-ink-2 hover:bg-raised"}`;
+    `flex min-h-11 items-center whitespace-nowrap rounded-full px-4 text-label font-bold transition-colors ${active ? "bg-brand text-on-brand shadow-[0_6px_16px_rgb(37_99_235/0.3)]" : "bg-surface text-ink-2 shadow-[var(--shadow-card)] hover:bg-brand-soft"}`;
 
   return (
     <div className="space-y-8">
       <ScreenHero
-        pic="map"
+        guide
         titleId="topics-title"
         title="Topics"
         line={`${all.length} topics to explore. You have started ${started}. Pick one to see its lessons, or carry on where you are.`}
@@ -81,9 +81,7 @@ export function TopicsScreen() {
               <li key={topic.id} className="flex">
                 <Link
                   href={topicRoutes(topic.id).island()}
-                  className={`flex flex-1 flex-col gap-4 rounded-[24px] border bg-surface p-4 shadow-[var(--shadow-card)] transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)] sm:p-5 ${
-                    isHere ? "border-2 border-brand" : "border-line"
-                  }`}
+                  className={`glass flex flex-1 flex-col gap-4 rounded-[24px] p-4 transition hover:-translate-y-0.5 sm:p-5 ${isHere ? "ring-2 ring-brand" : ""}`}
                 >
                   <span className="flex items-start gap-3">
                     <span className={`relative grid size-16 shrink-0 place-items-center rounded-[20px] ${TILES[i % TILES.length]}`} aria-hidden>
@@ -95,7 +93,9 @@ export function TopicsScreen() {
                       )}
                     </span>
                     <span className="min-w-0">
-                      <span className="block text-title font-extrabold leading-snug text-ink">{topic.title}</span>
+                      <span className="flex items-center justify-between gap-2 text-title font-extrabold leading-snug text-ink">
+                        {topic.title} <ArrowRightIcon size={20} className="shrink-0 text-brand-strong" />
+                      </span>
                       <span className="block text-label text-ink-2">{topic.subtitle}</span>
                       <span className="mt-1 block text-label font-semibold text-muted">{yearsText(topic.years)}</span>
                     </span>

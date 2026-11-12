@@ -37,7 +37,7 @@ export function ProgressScreen() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[32px] border border-line bg-brand-soft px-5 py-7 sm:px-10 sm:py-10" aria-labelledby="progress-title">
+      <section className="glass rounded-[32px] px-5 py-7 sm:px-10 sm:py-10" aria-labelledby="progress-title">
         <div className="flex flex-col items-center gap-8 sm:flex-row">
           <MasteryRing s={ring} />
           <div className="min-w-0 flex-1">
@@ -56,7 +56,7 @@ export function ProgressScreen() {
 
       <section aria-label="XP, level and streak">
         <ul className="grid gap-3 sm:grid-cols-3">
-          <li className="card flex items-center gap-3 p-4">
+          <li className="glass rounded-[24px] flex items-center gap-3 p-4">
             <Pic name="star" size={40} />
             <span className="min-w-0 flex-1">
               <span className="block text-title font-extrabold text-ink">
@@ -70,7 +70,7 @@ export function ProgressScreen() {
               </span>
             </span>
           </li>
-          <li className="card flex items-center gap-3 p-4">
+          <li className="glass rounded-[24px] flex items-center gap-3 p-4">
             <Pic name="flame" size={40} muted={!streak.activeToday} />
             <span>
               <span className="block text-title font-extrabold text-ink">
@@ -80,7 +80,7 @@ export function ProgressScreen() {
             </span>
           </li>
           <li className="flex">
-            <Link href={routes.badges()} className="card flex flex-1 items-center gap-3 p-4 hover:bg-raised">
+            <Link href={routes.badges()} className="glass rounded-[24px] flex flex-1 items-center gap-3 p-4 hover:-translate-y-0.5">
               <Pic name="medal" size={40} />
               <span className="min-w-0 flex-1">
                 <span className="block text-title font-extrabold text-ink">
@@ -100,7 +100,7 @@ export function ProgressScreen() {
         <ul className="mt-4 space-y-3">
           {mine.map(({ topic, o }) => (
             <li key={topic.id}>
-              <Link href={topicRoutes(topic.id).island()} className="card grid grid-cols-[3.5rem_1fr] items-center gap-x-4 gap-y-2 p-4 hover:bg-raised sm:grid-cols-[3.5rem_14rem_1fr]">
+              <Link href={topicRoutes(topic.id).island()} className="glass rounded-[24px] grid grid-cols-[3.5rem_1fr] items-center gap-x-4 gap-y-2 p-4 hover:-translate-y-0.5 sm:grid-cols-[3.5rem_14rem_1fr]">
                 <span className="grid size-14 place-items-center rounded-[18px] bg-tile-blue" aria-hidden>
                   <PaperIcon name={topic.look.icon} size={38} />
                 </span>
@@ -111,13 +111,30 @@ export function ProgressScreen() {
                   </span>
                 </span>
                 <span className="col-span-2 sm:col-span-1">
-                  <TopicBar o={o} label={topic.title} />
+                  <span className="flex items-center gap-3">
+                    <span className="min-w-0 flex-1">
+                      <TopicBar o={o} label={topic.title} />
+                    </span>
+                    <span className="w-12 text-right text-body font-extrabold tabular-nums text-ink" aria-hidden>
+                      {o.skills ? Math.round((o.mastered / o.skills) * 100) : 0}%
+                    </span>
+                  </span>
                   {o.needsReview > 0 && <span className="mt-1 block text-label font-bold text-num-strong">{o.needsReview === 1 ? "1 skill" : `${o.needsReview} skills`} to look at again</span>}
                 </span>
               </Link>
             </li>
           ))}
         </ul>
+        <div className="glass mt-6 flex flex-col items-start gap-4 rounded-[28px] p-5 sm:flex-row sm:items-center">
+          <Pic name="guide-point" size={96} className="shrink-0" />
+          <div className="min-w-0 flex-1">
+            <h3 className="text-title font-extrabold text-ink">How well do you really understand?</h3>
+            <p className="text-body text-ink-2">A skill counts as mastered when you get it right in practice and then again in a check, with no hints. The bars show mastered skills in green.</p>
+          </div>
+          <Link href={routes.tests()} className="inline-flex min-h-12 items-center gap-2 rounded-full bg-brand px-5 font-bold text-on-brand shadow-[var(--shadow-card)]">
+            Take a check <ArrowRightIcon size={18} />
+          </Link>
+        </div>
         {notYet > 0 && (
           <Link href={routes.topics()} className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-lg font-bold text-brand-strong underline underline-offset-4">
             {notYet} more topics to start <ArrowRightIcon size={18} />

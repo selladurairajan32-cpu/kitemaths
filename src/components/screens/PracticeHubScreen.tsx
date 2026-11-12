@@ -54,7 +54,7 @@ export function PracticeHubScreen() {
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
             {review.map(({ topic, skill }) => (
               <li key={skill} className="flex">
-                <Link href={topicRoutes(topic.id).practice(skill)} className="card flex flex-1 items-center justify-between gap-3 p-4 hover:bg-raised">
+                <Link href={topicRoutes(topic.id).practice(skill)} className="glass rounded-[24px] flex flex-1 items-center justify-between gap-3 p-4 hover:-translate-y-0.5">
                   <span className="min-w-0">
                     <span className="block font-extrabold text-ink">{topic.skillById(skill).title}</span>
                     <span className="block text-label font-semibold text-ink-2">{topic.title}</span>
@@ -75,7 +75,7 @@ export function PracticeHubScreen() {
           <ul className="mt-4 grid gap-3 sm:grid-cols-3">
             {quick.map((q) => (
               <li key={q.id} className="flex">
-                <Link href={q.href} className="card flex flex-1 items-center gap-3 p-4 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
+                <Link href={q.href} className="glass rounded-[24px] flex flex-1 items-center gap-3 p-4 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
                   <span className="grid size-14 shrink-0 place-items-center rounded-[18px] bg-tile-green" aria-hidden>
                     <Pic name={q.pic} size={40} />
                   </span>
@@ -97,7 +97,7 @@ export function PracticeHubScreen() {
         <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {mine.map(({ topic, o }) => (
             <li key={topic.id} className="flex">
-              <Link href={topicRoutes(topic.id).practice()} className="card flex flex-1 flex-col gap-3 p-4 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
+              <Link href={topicRoutes(topic.id).practice()} className="glass rounded-[24px] flex flex-1 flex-col gap-3 p-4 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
                 <span className="flex items-center gap-3">
                   <span className="grid size-12 shrink-0 place-items-center rounded-[16px] bg-tile-blue" aria-hidden>
                     <PaperIcon name={topic.look.icon} size={34} />

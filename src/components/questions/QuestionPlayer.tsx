@@ -176,8 +176,8 @@ function FollowUp({
       />
       {problem && <p className="rounded-[16px] bg-warn-soft px-4 py-3 text-base font-semibold text-warn">{problem}</p>}
       <div className="flex justify-end">
-        <Button type="submit" size="lg" disabled={submitted || !isResponseComplete(question, response)}>
-          Check
+        <Button type="submit" variant="cta" size="lg" disabled={submitted || !isResponseComplete(question, response)}>
+          Check answer
         </Button>
       </div>
     </form>
@@ -335,8 +335,9 @@ export function QuestionPlayer({
             ) : (
               <span />
             )}
-            <Button type="submit" size="xl" disabled={!complete} className="min-w-0 flex-1 sm:min-w-48 sm:flex-none">
-              {state.attempts > 0 ? "Check again" : "Check"}
+            {/* D-048: the yellow "Check answer" of the concept images, everywhere a question is answered. */}
+            <Button type="submit" variant="cta" size="xl" disabled={!complete} className="min-w-0 flex-1 sm:min-w-48 sm:flex-none">
+              {state.attempts > 0 ? "Check again" : "Check answer"}
             </Button>
           </div>
         )}
