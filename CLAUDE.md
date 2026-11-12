@@ -33,10 +33,14 @@ breaking changes, so read the relevant guide in `node_modules/next/dist/docs/` b
 Test-case rule: every test file must be referenced by a test case; automated references must exist (`file::title`);
 only accepted items may have `accepted` cases. Update `test-cases.csv` in the same commit as any test change.
 
-## State (11 Nov 2026)
+## State (12 Nov 2026)
 
 `docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Last recorded
-decision: D-039 (on-screen ruler-and-protractor drawing tool for Y6.GPS.1, `shapes-angles/explain/ConstructLab.tsx`,
+decision: D-040 (premium redesign from reference images; Phase 1 built: a WebGL 3D ratio explanation page at
+`/t/ratio-algebra/explain/ratio`, three.js + React Three Fiber in `ratio-algebra/explain/RatioStage3D.tsx` with a 2.5D
+SVG fallback, story machine `engine/story.ts`, registry `kit/explanationIndex.ts` + `kit/explanations.tsx`; CH-078 to
+CH-081; later phases: kid pages, public homepage and dashboards, Supabase accounts; **no production deployment until
+sign-in works end to end**; report `docs/product/reports/D-040-phase-1-report.md`; READY FOR QA). D-039 (on-screen ruler-and-protractor drawing tool for Y6.GPS.1, `shapes-angles/explain/ConstructLab.tsx`,
 kit lab `triangle-construct`, `maths/geometry.ts`; Y6.GPS.1 addressed; CH-075; report
 `docs/product/reports/D-039-build-report.md`; READY FOR QA, nothing accepted; deployed 11 Nov, CH-077). D-038 (the last 7 untaught Year 3–6 objectives built: thousandths, decimal × and ÷, two unknowns,
 triangle and parallelogram area, lines, drawing to size (recognition only, partial); no statutory objective is

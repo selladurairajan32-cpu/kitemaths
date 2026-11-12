@@ -17,6 +17,7 @@ pull requests and on pushes to `main` only, so it has not run on the development
 | `new-topics.cjs` | D-037 Phase C: the first step of all 18 new lessons and the practice mock (ISEB profile, answer sheet, 2 timed sections, two-part questions) at 390 and 1280px, with axe-core, console errors and sideways overflow | `node docs/product/verification/new-topics.cjs <outDir> <port>` |
 | `live-check.cjs` | D-037 deployment: five pages on the live site at 390 and 1280px, with cache-busting loads, HTTP status, a content check per page and console errors | `node docs/product/verification/live-check.cjs <outDir>` |
 | `draw-tool.cjs` | D-039 (Y6.GPS.1): the drawing lab by real pointer drags at 390 and 1280px, by keyboard only and with reduced motion; axe-core at every stage and console errors | `node docs/product/verification/draw-tool.cjs <outDir> <port>` |
+| `ratio-3d.cjs` | D-040: the ratio explanation page at 390, 768 and 1280px: WebGL drawing, chapters and checkpoints, drag to turn, Try it by keyboard, axe on every tab, reduced motion, frame rate with 4× CPU throttling, and that the home page does not download the 3D code | `node docs/product/verification/ratio-3d.cjs <outDir> <port>` |
 | `compare-generated-questions.mjs` | ARCH-003: every generated question is identical before and after the maths extraction (step 3) | see the script header |
 
 **`capture-screens.cjs` setup.** It captures 19 screens and states at both 1280×900 and 390×844, in Chromium, with
@@ -47,6 +48,11 @@ reduced motion and a device scale of 1. They are:
 possible screen, state or behaviour is unchanged.
 
 ## Results
+
+`results/d040-p1/` holds the runs on 12 Nov 2026 for D-040 Phase 1 (`ratio-3d/report.json`): WebGL draws at three
+widths, all chapters and checkpoints pass, drag to turn and keyboard Try it work, 0 axe violations, 0 console errors,
+reduced motion uses the 2.5D picture, 49 fps at phone width with 4× CPU throttling, and the home page does not load the
+3D code. `zoom200-phone.png` is the page at 200% text (sideways overflow 0 at 320, 390 and 1280px).
 
 `results/d039-live/` holds the production check on 11 Nov 2026 after the D-039 deployment (`main` at `dc4324e`): 14 page loads including the drawing lab, all 200 with the expected content, 0 console errors.
 

@@ -19,7 +19,7 @@ export function StoryControls<S>({ chapters, state, dispatch, label }: { chapter
 
   return (
     <div className="flex flex-col gap-3" role="group" aria-label={`${label} controls`}>
-      <div className="flex items-center gap-2 sm:gap-3">
+      <div className="flex flex-wrap items-center gap-2 sm:gap-3">
         <button
           type="button"
           onClick={() => dispatch({ type: state.playing ? "pause" : "play" })}
@@ -39,7 +39,7 @@ export function StoryControls<S>({ chapters, state, dispatch, label }: { chapter
         <button type="button" onClick={() => dispatch({ type: "skip" })} disabled={state.atEnd} className={btn} aria-label="Skip to the next part">
           <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden><path d="M6 5v14l9-7z" fill="currentColor" /><rect x="16" y="5" width="3" height="14" rx="1" fill="currentColor" /></svg>
         </button>
-        <div className="relative min-w-0 flex-1">
+        <div className="relative order-last min-w-0 basis-full sm:order-none sm:basis-0 sm:flex-1">
           <input
             type="range"
             min={0}

@@ -1,5 +1,6 @@
 "use client";
 
+import { explanationsFor } from "@/topics/kit/explanationIndex";
 import Link from "next/link";
 import { Kip, KipSays } from "@/components/kid/Kip";
 import { KID_STATUS } from "@/components/kid/kidText";
@@ -158,6 +159,18 @@ export function SkyMapScreen() {
           </span>
         </KipSays>
       )}
+
+      {explanationsFor(topic.id).map((e) => (
+        // D-040: an animated 3D explanation of this island's hardest idea.
+        <Link key={e.id} href={links.explain(e.id)} className="flex items-center gap-4 rounded-[24px] border-2 border-brand bg-linear-to-r from-brand-soft to-sky-soft p-4 shadow-[var(--shadow-card)] transition hover:shadow-[var(--shadow-lift)]">
+          <Pic name="lab" size={48} />
+          <span className="min-w-0 flex-1">
+            <span className="block text-title font-extrabold text-ink">See it in 3D: {e.title}</span>
+            <span className="block text-body text-ink-2">An animated explanation with quick checks along the way.</span>
+          </span>
+          <ArrowRightIcon size={20} className="shrink-0 text-ink-2" />
+        </Link>
+      ))}
 
       {topic.id === FACTS_TOPIC && (
         // R2: the times-tables island's facts area (TT-004 to TT-012).

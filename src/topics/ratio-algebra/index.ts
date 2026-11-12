@@ -501,6 +501,7 @@ export const ratioAlgebra = defineTopic(withExtras({
           body: ["A **ratio** compares amounts. **2 : 3** means for every **2** blue, there are **3** orange.", "If there are 10 blue, that's 5 groups of 2, so there are 5 × 3 = **15** orange."],
           visual: { kind: "bar", parts: [{ label: "", tone: "brand" }, { label: "", tone: "brand" }, { label: "", tone: "num" }, { label: "", tone: "num" }, { label: "", tone: "num" }], note: "2 blue : 3 orange" },
         },
+        { type: "lab", title: "See it in 3D", body: [], explainer: "ratio-3d", numbers: [], challenges: [] },
         {
           type: "worked",
           title: "Watch me share",

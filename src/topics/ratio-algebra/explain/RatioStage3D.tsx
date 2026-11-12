@@ -165,6 +165,15 @@ function Jug({ milk, palette }: { milk: number; palette: Palette }) {
   );
 }
 
+/** Draws a fresh frame whenever the stage comes back on screen: while off screen nothing renders, so it may be stale. */
+function RedrawWhenShown({ visible }: { visible: boolean }) {
+  const invalidate = useThree((s) => s.invalidate);
+  useEffect(() => {
+    if (visible) invalidate();
+  }, [visible, invalidate]);
+  return null;
+}
+
 function Scene({ scene, palette }: { scene: RatioScene; palette: Palette }) {
   const { items, labels, jars, jug } = useMemo(() => layout(scene), [scene]);
   const fixtures: Fixture[] = [...jars.map((x) => ({ key: `jar${x}`, node: <Jar x={x} palette={palette} /> })), ...(jug !== undefined ? [{ key: "jug", node: <Jug milk={jug} palette={palette} /> }] : [])];
@@ -213,6 +222,7 @@ export function RatioStage3D({ scene, label }: StageProps) {
     <div ref={box} className="relative aspect-[5/3] w-full cursor-grab touch-none active:cursor-grabbing" data-stage="webgl" aria-hidden title={label}>
       <Canvas flat shadows dpr={[1, 1.75]} frameloop={visible ? "demand" : "never"} camera={{ position: [0, 3.5, 7.1], fov: 42 }} gl={{ antialias: true, alpha: true }}>
         <Scene scene={scene} palette={ready.palette} />
+        <RedrawWhenShown visible={visible} />
       </Canvas>
       <p className="pointer-events-none absolute bottom-2 right-3 rounded-full bg-surface/80 px-2 text-label font-semibold text-ink-2">Drag to turn the table</p>
     </div>

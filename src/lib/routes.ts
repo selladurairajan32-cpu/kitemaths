@@ -51,6 +51,8 @@ export function topicRoutes(topicId: string) {
     strategiesRun: (mode: "compare" | "choose" | "timed") => `${base}/strategies/${mode}`,
     /** Practice mock tests (R5), only on the mock-exams island. */
     mock: () => `${base}/mock`,
+    /** Animated topic explanations (D-040), where the island has one. */
+    explain: (concept: string) => `${base}/explain/${concept}`,
   };
 }
 
