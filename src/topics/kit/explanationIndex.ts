@@ -8,7 +8,11 @@ export interface ExplanationInfo {
   title: string;
 }
 
-export const EXPLANATIONS: ExplanationInfo[] = [{ topicId: "ratio-algebra", id: "ratio", title: "Ratio and proportion: sharing in a ratio" }];
+export const EXPLANATIONS: ExplanationInfo[] = [
+  { topicId: "ratio-algebra", id: "ratio", title: "Ratio and proportion: sharing in a ratio" },
+  // D-041 pilot: watch, step through or try it.
+  { topicId: "fractions-2", id: "add-different", title: "Adding fractions with different denominators" },
+];
 
 export const explanationsFor = (topicId: string) => EXPLANATIONS.filter((e) => e.topicId === topicId);
 export const explanationById = (topicId: string, id: string) => EXPLANATIONS.find((e) => e.topicId === topicId && e.id === id);

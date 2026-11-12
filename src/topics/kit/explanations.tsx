@@ -11,6 +11,7 @@ const Loading = () => <div className="mx-auto min-h-[40rem] max-w-6xl animate-pu
 
 const PAGES: Record<string, ComponentType> = {
   "ratio-algebra/ratio": dynamic(() => import("@/topics/ratio-algebra/explain/RatioPage").then((m) => m.RatioPage), { loading: Loading }),
+  "fractions-2/add-different": dynamic(() => import("@/topics/fractions-2/explain/AddDifferentPage").then((m) => m.AddDifferentPage), { loading: Loading }),
 };
 
 export function ExplanationScreen({ topicId, concept }: { topicId: string; concept: string }) {

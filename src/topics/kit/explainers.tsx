@@ -17,6 +17,8 @@ const LABS: Record<string, ComponentType<LabStepProps>> = {
   "long-multiplication-try": dynamic(() => import("@/topics/multiply-divide/explain/LongMultiplicationLab").then((m) => m.LongMultiplicationTry), { loading: Loading }),
   // D-040: a short lesson step that previews and opens the 3D ratio explanation.
   "ratio-3d": dynamic(() => import("@/topics/ratio-algebra/explain/RatioPreview").then((m) => m.RatioPreview), { loading: Loading }),
+  // D-041: the lesson step that opens the three-way explanation of adding fractions with different denominators.
+  "add-fractions-modes": dynamic(() => import("@/topics/fractions-2/explain/AddDifferentPreview").then((m) => m.AddDifferentPreview), { loading: Loading }),
   // D-039 (Y6.GPS.1): draw a triangle with an on-screen ruler and protractor.
   "triangle-construct": dynamic(() => import("@/topics/shapes-angles/explain/ConstructLab").then((m) => m.ConstructLab), { loading: Loading }),
 };
