@@ -153,18 +153,24 @@ function OnePiece({ total, tone, same }: { total: number; tone: BarTone; same: b
   );
 }
 
+/** Cut a bar's pieces smaller, or undo a cut: two big buttons with words on them, and what the bar is cut into now. */
 function CutStepper({ who, cut, onCut }: { who: string; cut: number; onCut: (cut: number) => void }) {
-  const btn = "press grid size-12 shrink-0 place-items-center rounded-full text-heading-2 font-extrabold leading-none disabled:opacity-40";
+  const btn = "press inline-flex min-h-12 shrink-0 items-center justify-center gap-2 rounded-full px-5 text-body font-extrabold disabled:opacity-40";
   return (
-    <div role="group" aria-label={`Cut ${who} bar`} className="flex shrink-0 items-center gap-1.5">
-      <button type="button" className={`${btn} bg-sunk text-ink hover:bg-line`} onClick={() => onCut(cut - 1)} disabled={cut <= 1} aria-label={`Fewer cuts in ${who} bar`}>
-        −
-      </button>
-      <output className="min-w-36 text-center text-label font-bold text-ink-2" aria-live="polite">
+    <div role="group" aria-label={`Cut ${who} bar`} className="flex shrink-0 flex-wrap items-center gap-2">
+      <output className="text-label font-bold text-ink-2" aria-live="polite">
         {cut === 1 ? "not cut yet" : `each piece cut into ${cut}`}
       </output>
-      <button type="button" className={`${btn} bg-ink text-white hover:bg-ink-2`} onClick={() => onCut(cut + 1)} disabled={cut >= MAX_CUT} aria-label={`Cut ${who} bar into smaller pieces`}>
-        +
+      <button type="button" className={`${btn} border-line-strong bg-sunk text-ink hover:bg-line`} onClick={() => onCut(cut - 1)} disabled={cut <= 1} aria-label={`Fewer cuts in ${who} bar`}>
+        Undo
+      </button>
+      <button type="button" className={`${btn} border-ink-2 bg-ink text-white hover:bg-ink-2`} onClick={() => onCut(cut + 1)} disabled={cut >= MAX_CUT} aria-label={`Cut ${who} bar into smaller pieces`}>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <circle cx="6" cy="6" r="3" />
+          <circle cx="6" cy="18" r="3" />
+          <path d="M8.5 8 20 19M8.5 16 20 5" />
+        </svg>
+        Cut
       </button>
     </div>
   );
@@ -217,8 +223,8 @@ export function BarsBoard({
         return (
           <div key={i} className="flex flex-col gap-2">
             <div className="flex min-h-12 flex-wrap items-center justify-between gap-x-4 gap-y-1">
-              <p className="flex items-center gap-2.5 text-title font-extrabold text-ink">
-                <span className={`size-3.5 shrink-0 rounded-full ${i === 0 ? "bg-den" : "bg-num"}`} aria-hidden />
+              <p className="display flex items-center gap-2.5 text-heading-2 text-ink">
+                <span className={`size-4 shrink-0 rounded-full ${i === 0 ? "bg-den" : "bg-num"}`} aria-hidden />
                 {row.name}
                 <FractionNotation n={row.f.n} d={row.f.d} size="md" />
                 {renamed && cut > 1 && (
@@ -237,7 +243,7 @@ export function BarsBoard({
       })}
       {together && same && (
         <Reveal className="flex flex-col gap-2 border-t-2 border-dashed border-line-strong pt-3">
-          <p className="flex min-h-10 items-center gap-2.5 text-title font-extrabold text-ink">
+          <p className="display flex min-h-10 items-center gap-2.5 text-heading-2 text-ink">
             Together
             {togetherLabel && (
               <>

@@ -4,7 +4,6 @@ import type { JourneyProgress } from "@/engine/topicJourney";
 import { TOPICS } from "./index";
 import { topicRoutes } from "@/lib/routes";
 import { JOURNEYS, type JourneyDef } from "./kit/journeys";
-import { hasStudyPlan } from "./kit/study";
 import { activeTopic, mapOrder } from "./recommend";
 import type { TopicModule } from "./types";
 
@@ -37,12 +36,11 @@ export function journeyCards(state: LearnerState): { def: JourneyDef; progress: 
 }
 
 /**
- * D-062: where a sub-topic (a lesson) is taught, so every page sends the child to the same place: the lesson canvas
- * where its skill has one (D-060), the topic learning page where the topic has a study plan (D-054), else the lesson.
+ * D-064: where a sub-topic (a lesson) is taught, so every page sends the child to the same single place: the lesson
+ * canvas where its skill has one (D-060), else its lesson.
  */
 export function subTopicHref(topicId: string, lessonId: string, skill: string | null | undefined): string {
   const links = topicRoutes(topicId);
   const canvas = skill ? JOURNEYS.find((j) => j.topicId === topicId && j.skill === skill && j.canvas) : undefined;
-  if (canvas) return links.learn(canvas.concept);
-  return hasStudyPlan(topicId) ? links.study(lessonId) : links.lesson(lessonId);
+  return canvas ? links.learn(canvas.concept) : links.lesson(lessonId);
 }

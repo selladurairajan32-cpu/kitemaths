@@ -1,31 +1,32 @@
 "use client";
 
-import Link from "next/link";
+import { CountUp } from "@/components/explain/CountUp";
+import { WORLD_FIELD, CYCLE, FIELDS } from "@/components/kid/fields";
+import { Kip } from "@/components/kid/Kip";
 import { kidNext } from "@/components/kid/kidText";
-import { Column, NextStep, PageTitle, Row, Rows, Section, Steps } from "@/components/kid/Plain";
+import { GoLink, Heading, Hero, Lift, Page, Pips, Pop } from "@/components/kid/Play";
 import { RichText } from "@/components/math/RichText";
 import { PaperIcon } from "@/components/paper/PaperIcon";
-import { ButtonLink } from "@/components/ui/Button";
-import { ArrowRightIcon } from "@/components/ui/Icons";
+import { Pic } from "@/components/paper/Pic";
+import { ProgressRing } from "@/components/ui/Progress";
 import { ScreenSkeleton, StorageNotice } from "@/components/ui/Screen";
-import { allLessonEvidence } from "@/engine/evidence";
-import { lessonsEvidenced, recommendNext, reviewSkills } from "@/engine/journey";
-import { journeyDone } from "@/engine/overview";
+import { recommendNext, reviewSkills } from "@/engine/journey";
 import { DEFAULT_PLAN } from "@/engine/progress";
-import { answeredToday, DAILY_GOAL, levelFor, STARS, streakFor, totalStars } from "@/engine/rewards";
+import { answeredToday, DAILY_GOAL, levelFor, streakFor, totalStars } from "@/engine/rewards";
 import { CANVAS_LABEL, CANVAS_PHASES, canvasReached, JOURNEY_STAGES, STAGE_LABEL } from "@/engine/topicJourney";
 import { routes, topicRoutes } from "@/lib/routes";
 import { useHydrated, useLearner, useNow } from "@/lib/store";
 import { topicById } from "@/topics";
 import { ActiveTopicProvider } from "@/topics/ActiveTopic";
 import { useTopicState } from "@/topics/context";
-import { continueJourney, journeyCards, subTopicHref } from "@/topics/overview";
+import { continueJourney, subTopicHref } from "@/topics/overview";
 import { PLAN_KIND_LABEL, weeklyPlan } from "@/topics/plan";
+import { WORLDS } from "@/topics/worlds";
 
 /**
- * Home (D-043 step 3). D-062: in the plain language of the lesson canvas. The first thing on the page is the one thing
- * to do next, with the only yellow button. Under it, in quiet rows: today's plan, the hands-on lessons, and what is
- * next in the child's topic. The child's numbers are one line, not four tiles.
+ * Home (D-064, the Playground look). A child sees three things, top to bottom: a hello, the ONE thing to do next (a big
+ * card with a picture and the page's only yellow button), and how they are doing in three numbers. Under that, today's
+ * plan as numbered cards and a door to all the topics. Nothing else.
  */
 
 function greeting(now: number) {
@@ -63,8 +64,6 @@ function KidHome() {
   const review = reviewSkills(topic, inTopic);
   const name = learner.profile.name.trim();
   // FR-011 AC3: a lesson is done when it has independent evidence, not when its last page was reached.
-  const done = lessonsEvidenced(topic, inTopic);
-  const evidence = new Map(allLessonEvidence(topic, inTopic).map((e) => [e.lessonId, e]));
   const nextIndex = rec.kind === "lesson" ? topic.lessons.findIndex((l) => l.id === rec.lessonId) : -1;
   // R1 (content audit): Home shows the next three unfinished lessons; the island map lists them all.
   // D-043 step 3: Continue Learning picks up the topic journey worked in last; with none open, the next step on the island.
@@ -72,180 +71,142 @@ function KidHome() {
   const contTopic = cont ? topicById(cont.def.topicId) : undefined;
   // Today's plan: the first day of the weekly plan (PARENT-003), rebuilt from the evidence each time.
   const plan = brandNew ? null : weeklyPlan(learner, now, learner.settings.planDays ?? DEFAULT_PLAN.days, learner.settings.planMinutes ?? DEFAULT_PLAN.minutes)[0];
-  // D-062: the lessons taught on the canvas, apart from the one Continue already offers; the film journeys are reached from their topic's page.
-  const journeys = journeyCards(learner).filter(({ def }) => def.canvas && def !== cont?.def);
   // A lesson on the canvas has six steps; a journey in the earlier layout has five.
   const steps = cont ? (cont.def.canvas ? { count: CANVAS_PHASES.length, at: canvasReached(cont.progress), label: CANVAS_LABEL[CANVAS_PHASES[Math.min(canvasReached(cont.progress), CANVAS_PHASES.length - 1)]!] } : { count: JOURNEY_STAGES.length, at: cont.progress.reached, label: STAGE_LABEL[JOURNEY_STAGES[cont.progress.reached]!] }) : null;
-  const upcoming = topic.lessons.map((l, i) => ({ l, i })).filter(({ l }) => evidence.get(l.id)!.status !== "evidenced").slice(0, 3);
+
+  // Where the next thing opens, what it is called, and its picture.
+  const nextLesson = rec.kind === "lesson" ? topic.lessons[nextIndex] : undefined;
+  const go = brandNew
+    ? { href: links.start(), label: "Play the warm-up", title: "Let's find your start!", line: `A quick warm-up game finds the right ${topic.title} lesson for you.` }
+    : cont && steps
+      ? { href: topicRoutes(cont.def.topicId).learn(cont.def.concept), label: "Continue", title: cont.def.title, line: `${contTopic?.title ?? cont.def.topicId} · Step ${steps.at + 1} of ${steps.count}: ${steps.label}` }
+      : { href: nextLesson ? subTopicHref(topic.id, nextLesson.id, topic.skills.find((k) => k.lessonId === nextLesson.id)?.id) : next.href, label: next.cta, title: next.title, line: next.line };
+  const nextIcon = cont ? (contTopic?.look.icon ?? "bulb") : next.icon;
 
   return (
-    <Column>
+    <Page>
       <StorageNotice />
 
-      <PageTitle
-        id="hello-title"
-        eyebrow={greeting(now)}
-        title={<>Hi {name || "there"}!</>}
-        line={
-          <>
-            {streak.current > 0 ? `You're on a ${streak.current}-day streak. ` : "Let's build your maths today. "}
-            {!brandNew && `${today} of ${DAILY_GOAL} questions done today.`}
-          </>
-        }
-      />
+      <Hero id="hello-title" tag={greeting(now)} title={<>Hi {name || "there"}!</>} line={streak.current > 1 ? `${streak.current} days in a row. Keep it going!` : "Ready for some maths?"} picture={<Kip mood="cheer" size={150} />} />
 
-      {/* The one thing to do next, with the one yellow button (D-037, D-043 step 3). */}
-      <NextStep
-        id="next-title"
-        label={brandNew ? "Start here" : cont ? "Continue learning" : next.kicker}
-        title={brandNew ? <>I&apos;m Kip. Let&apos;s find your start!</> : cont ? cont.def.title : next.title}
-        line={
-          brandNew ? (
-            <>A short warm-up game finds the right {topic.title} lesson for you.</>
-          ) : cont && steps ? (
-            <>
-              {contTopic?.title ?? cont.def.topicId} · Step {steps.at + 1} of {steps.count}: {steps.label}
-            </>
-          ) : (
-            <RichText text={next.line} />
-          )
-        }
-        action={
-          <>
-            <ButtonLink href={brandNew ? links.start() : cont ? topicRoutes(cont.def.topicId).learn(cont.def.concept) : next.href} variant="cta" size="xl" className="w-full sm:w-auto">
-              {brandNew ? "Play the warm-up" : cont ? "Continue" : next.cta} <ArrowRightIcon size={20} />
-            </ButtonLink>
-            {!brandNew && !cont && nextIndex >= 0 && (
-              <span className="text-body font-semibold text-ink-2">
-                Lesson {nextIndex + 1} of {topic.lessons.length} · about {topic.lessons[nextIndex].minutes} minutes
-              </span>
-            )}
-          </>
-        }
-      >
-        {cont && steps && <Steps count={steps.count} done={steps.at} label={`Your learning path: step ${steps.at + 1} of ${steps.count}`} />}
-      </NextStep>
+      {/* The one thing to do next: the only yellow button on the page. */}
+      <Pop className="-mt-4 sm:-mt-6">
+        <section aria-labelledby="next-title" className="flex flex-col gap-5 rounded-[var(--radius-hero)] border-4 border-ink bg-surface p-5 sm:flex-row sm:items-center sm:gap-7 sm:p-7">
+          <span className="grid size-24 shrink-0 place-items-center rounded-[28px] bg-tile-yellow sm:size-32" aria-hidden>
+            {brandNew ? <Pic name="rocket" size={84} /> : <PaperIcon name={nextIcon} size={84} />}
+          </span>
+          <div className="flex min-w-0 flex-1 flex-col items-start gap-2">
+            <p className="rounded-full bg-ink px-4 py-1 text-label font-extrabold text-white">{brandNew ? "Start here" : cont ? "Carry on" : "Next up"}</p>
+            <h2 id="next-title" className="display text-heading-2 text-ink sm:text-heading-1">
+              {go.title}
+            </h2>
+            <p className="text-body-lg text-ink-2">
+              <RichText text={go.line} />
+            </p>
+            {cont && steps && <Pips count={steps.count} done={steps.at} label={`Your learning path: step ${steps.at + 1} of ${steps.count}`} />}
+          </div>
+          <GoLink href={go.href} className="w-full shrink-0 sm:w-auto">
+            {go.label}
+          </GoLink>
+        </section>
+      </Pop>
 
-      <ul aria-label="Your numbers" className="m-0 flex list-none flex-wrap gap-x-8 gap-y-3 border-y border-line p-0 py-4">
+      {/* How I am doing: three numbers, each with a picture. */}
+      <ul aria-label="Your numbers" className="m-0 grid list-none grid-cols-3 gap-3 p-0 sm:gap-5">
         {[
-          { n: `${level.level}`, label: `Level · ${level.title}`, href: routes.progress(), aria: `Level ${level.level}: ${stars} XP, ${level.needed - level.into} XP to level ${level.level + 1}. See your progress.` },
-          { n: `${stars}`, label: "XP earned" },
-          { n: `${streak.current}`, label: streak.current === 1 ? "Day in a row" : "Days in a row" },
-          { n: `${today}/${DAILY_GOAL}`, label: "Questions today" },
-        ].map((c) => {
+          { key: "level", tint: "bg-tile-blue", node: <ProgressRing value={level.into / level.needed} size={64} label={`Level ${level.level}`}><span className="display text-title leading-none text-ink">{level.level}</span></ProgressRing>, big: null as number | null, label: `Level ${level.level}`, small: level.title, href: routes.progress(), aria: `Level ${level.level}: ${stars} XP, ${level.needed - level.into} XP to level ${level.level + 1}. See your progress.` },
+          { key: "streak", tint: "bg-tile-orange", node: <Pic name="flame" size={56} muted={streak.current === 0} />, big: streak.current, label: streak.current === 1 ? "day in a row" : "days in a row", small: `Best: ${streak.best}` },
+          { key: "today", tint: "bg-tile-green", node: <Pic name="target" size={56} />, big: today, label: `of ${DAILY_GOAL} today`, small: today >= DAILY_GOAL ? "Goal done!" : "Your daily goal" },
+        ].map((c, i) => {
           const inner = (
             <>
-              <span className="display text-heading-2 leading-none text-ink">{c.n}</span>
-              <span className="text-label font-bold text-ink-2">{c.label}</span>
+              <span className="shrink-0">{c.node}</span>
+              <span className="min-w-0">
+                <span className="display block text-heading-2 leading-tight text-ink">
+                  {c.big !== null && <CountUp value={c.big} />} <span className="text-title">{c.label}</span>
+                </span>
+                <span className="hidden text-label font-bold text-ink-2 sm:block">{c.small}</span>
+              </span>
             </>
           );
+          const cls = `flex h-full flex-col items-center gap-2 rounded-[28px] p-4 text-center sm:flex-row sm:gap-4 sm:p-5 sm:text-left ${c.tint}`;
           return (
-            <li key={c.label}>
-              {c.href ? (
-                <Link href={c.href} aria-label={c.aria} className="flex min-h-11 items-baseline gap-2 underline-offset-4 hover:underline">
-                  {inner}
-                </Link>
-              ) : (
-                <span className="flex min-h-11 items-baseline gap-2">{inner}</span>
-              )}
+            <li key={c.key}>
+              <Pop i={i + 1} className="h-full">
+                {c.href ? (
+                  <Lift href={c.href} aria-label={c.aria} className={cls}>
+                    {inner}
+                  </Lift>
+                ) : (
+                  <div className={cls}>{inner}</div>
+                )}
+              </Pop>
             </li>
           );
         })}
       </ul>
 
-      {/* One nudge at most: a skill to revisit, else the warm-up. */}
+      {/* One nudge at most: a skill to look at again, else the warm-up. */}
       {(review.length > 0 || warmUpOpen) && (
-        <Rows>
-          {review.length > 0 ? (
-            <Row href={links.practice(review[0])} mark={{ kind: "pic", node: <PaperIcon name="target" size={26} /> }} title={<>Let&apos;s revisit {skillById(review[0]).title}</>} line="A few questions on just this skill." trail="Practise it" />
-          ) : (
-            <Row href={links.start()} mark={{ kind: "pic", node: <PaperIcon name="bulb" size={26} /> }} title={`New to ${topic.title}?`} line="A warm-up finds where to start." trail="Play the warm-up" />
-          )}
-        </Rows>
+        <Lift href={review.length > 0 ? links.practice(review[0]) : links.start()} className="flex items-center gap-4 rounded-[28px] bg-tile-pink p-4 sm:p-5">
+          <Pic name={review.length > 0 ? "recheck" : "sparkles"} size={56} />
+          <span className="min-w-0 flex-1">
+            <span className="block text-title font-extrabold text-ink">{review.length > 0 ? <>Let&apos;s look again at {skillById(review[0]).title}</> : <>New to {topic.title}?</>}</span>
+            <span className="block text-body text-ink-2">{review.length > 0 ? "A few quick questions will make it strong." : "A warm-up game finds where to start."}</span>
+          </span>
+          <span className="hidden shrink-0 rounded-full bg-surface px-5 py-2 text-body font-extrabold text-ink sm:block">{review.length > 0 ? "Practise it" : "Play the warm-up"}</span>
+        </Lift>
       )}
 
-      {/* D-043 step 3: today's plan, from the weekly plan the grown-up sets. */}
+      {/* Today's plan, from the weekly plan the grown-up sets (D-043 step 3). */}
       {plan && plan.items.length > 0 && (
-        <Section id="plan-title" title="Today's plan" line={`About ${plan.minutes} minutes, one step at a time`}>
-          <Rows ordered>
-            {plan.items.map((it, i) => (
-              <Row key={it.href + i} href={it.href} mark={{ kind: "number", n: i + 1 }} title={it.title} line={`${PLAN_KIND_LABEL[it.kind]} · ${it.minutes} min`} />
-            ))}
-          </Rows>
-        </Section>
-      )}
-
-      {/* D-060: the lessons taught on the canvas. */}
-      {!brandNew && journeys.length > 0 && (
-        <Section id="learn-title" title="Hands-on lessons" line="Guess, try it with your hands, then see why it works">
-          <Rows>
-            {journeys.map(({ def, progress }) => {
-              const finished = !!progress && journeyDone(progress);
-              const at = progress ? canvasReached(progress) : 0;
+        <section aria-labelledby="plan-title" className="flex flex-col gap-4">
+          <Heading id="plan-title" picture={<Pic name="memo" size={40} />} side={<span className="text-body font-bold text-ink-2">About {plan.minutes} minutes</span>}>
+            Today&apos;s plan
+          </Heading>
+          <ol className="m-0 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3">
+            {plan.items.map((it, i) => {
+              const f = CYCLE[i % CYCLE.length]!;
               return (
-                <Row
-                  key={`${def.topicId}/${def.concept}`}
-                  href={topicRoutes(def.topicId).learn(def.concept)}
-                  mark={finished ? { kind: "done" } : { kind: "pic", node: <PaperIcon name={topicById(def.topicId)?.look.icon ?? "bulb"} size={26} /> }}
-                  title={def.title}
-                  line={!progress ? `${topicById(def.topicId)?.title ?? ""} · Year ${def.year}` : finished ? "Done · open it again any time" : `Step ${at + 1} of ${CANVAS_PHASES.length}: ${CANVAS_LABEL[CANVAS_PHASES[Math.min(at, CANVAS_PHASES.length - 1)]!]}`}
-                />
+                <li key={it.href + i} className="flex">
+                  <Pop i={i} className="flex flex-1">
+                    <Lift href={it.href} className={`flex flex-1 items-center gap-4 rounded-[28px] p-5 ${f.soft}`}>
+                      <span className={`display grid size-14 shrink-0 place-items-center rounded-full text-heading-2 ${f.bg} ${f.text}`} aria-hidden>
+                        {i + 1}
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-title font-extrabold leading-snug text-ink">{it.title}</span>
+                        <span className="block text-body font-semibold text-ink-2">
+                          {PLAN_KIND_LABEL[it.kind]} · {it.minutes} min
+                        </span>
+                      </span>
+                    </Lift>
+                  </Pop>
+                </li>
               );
             })}
-          </Rows>
-        </Section>
+          </ol>
+        </section>
       )}
 
-      {/* Up next in the topic: the next lessons, then the big challenge. */}
-      <Section
-        id="island-title"
-        title={<>Up next in {topic.title}</>}
-        line={`${done} of ${topic.lessons.length} lessons done`}
-        action={
-          <Link href={links.island()} className="inline-flex min-h-11 items-center gap-1.5 text-body font-bold text-brand-strong underline underline-offset-4">
-            See all lessons <ArrowRightIcon size={18} />
-          </Link>
-        }
-      >
-        <Rows ordered>
-          {upcoming.map(({ l, i }) => {
-            const p = inTopic.lessons[l.id];
-            const e = evidence.get(l.id)!;
-            const isNext = (rec.kind === "lesson" && rec.lessonId === l.id) || (rec.kind === "practice" && !!rec.focusSkill && rec.focusSkill === e.skill && e.status === "needs-evidence");
-            const status =
-              e.status === "needs-evidence"
-                ? "Finished · practise to complete it"
-                : e.status === "needs-review"
-                  ? "Let's revisit this"
-                  : isNext
-                    ? p
-                      ? `Step ${Math.min(p.furthestStep + 1, l.steps.length)} of ${l.steps.length}`
-                      : "Up next"
-                    : `${l.minutes} min`;
-            return (
-              <Row
-                key={l.id}
-                href={isNext && e.status === "needs-evidence" && e.skill ? links.practice(e.skill) : subTopicHref(topic.id, l.id, e.skill)}
-                mark={isNext ? { kind: "here", n: i + 1 } : { kind: "number", n: i + 1 }}
-                current={isNext}
-                label={`Lesson ${i + 1}: ${l.title}. ${status}`}
-                title={l.title}
-                line={status}
-              />
-            );
-          })}
-          <Row
-            href={links.check()}
-            mark={inTopic.assessment.last ? { kind: "done" } : { kind: "pic", node: <PaperIcon name="trophy" size={26} /> }}
-            title="The big challenge"
-            line={inTopic.assessment.last ? "Done · try again any time" : done < topic.lessons.length ? `Best after all ${topic.lessons.length} lessons` : `+${STARS.check} XP`}
-          />
-        </Rows>
-      </Section>
+      {/* The door to every topic: the six worlds as pictures. */}
+      <Lift href={routes.topics()} aria-label="Explore all the topics" className={`flex flex-col items-start gap-5 rounded-[var(--radius-hero)] p-6 sm:flex-row sm:items-center sm:p-8 ${FIELDS.navy.bg} ${FIELDS.navy.text}`}>
+        <span className="min-w-0 flex-1">
+          <span className="display block text-heading-2 sm:text-heading-1">Explore all the topics</span>
+          <span className="block text-body-lg font-semibold">Six worlds of maths. Pick any one you like.</span>
+        </span>
+        <span className="flex shrink-0 gap-2" aria-hidden>
+          {WORLDS.map((w) => (
+            <span key={w.id} className={`grid size-12 place-items-center rounded-full sm:size-14 ${(WORLD_FIELD[w.id] ?? FIELDS.blue).soft}`}>
+              <PaperIcon name={w.icon} size={34} />
+            </span>
+          ))}
+        </span>
+      </Lift>
 
       <footer>
         <p className="text-label text-muted">3D pictures: Microsoft Fluent Emoji, MIT licence.</p>
       </footer>
-    </Column>
+    </Page>
   );
 }

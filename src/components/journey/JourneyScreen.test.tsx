@@ -11,19 +11,19 @@ import type { KitQuestion } from "@/topics/kit/types";
 import { JourneyScreen } from "./JourneyScreen";
 import { journeyQuestionId } from "./stages";
 
-/** D-043: the topic journey in jsdom: one stage at a time, unlocking in order, saved and resumed. */
+/** (D-064: on a journey still in this layout; adding fractions moved to the lesson canvas.) D-043: the topic journey in jsdom: one stage at a time, unlocking in order, saved and resumed. */
 
-vi.mock("next/navigation", () => ({ useRouter: () => ({ push: () => {}, replace: () => {} }), usePathname: () => "/t/fractions-2/learn/add-different" }));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ push: () => {}, replace: () => {} }), usePathname: () => "/t/percentages/learn/percent-of-amount" }));
 
-const KEY = "fractions-2/add-different";
-const def = journeyFor("fractions-2", "add-different")!;
+const KEY = "percentages/percent-of-amount";
+const def = journeyFor("percentages", "percent-of-amount")!;
 const at = (p: Partial<JourneyProgress>) => updateLearner((s) => ({ ...s, journeys: { [KEY]: { stage: 0, reached: 0, startedAt: 1000, practised: 0, applied: 0, ...p } } }));
-const show = () => render(<TopicProvider topicId="fractions-2"><JourneyScreen concept="add-different" /></TopicProvider>);
+const show = () => render(<TopicProvider topicId="percentages"><JourneyScreen concept="percent-of-amount" /></TopicProvider>);
 const stageButton = (name: RegExp) => within(screen.getByRole("list", { name: "Your learning journey" })).getByRole("button", { name });
 
 beforeEach(() => {
   resetLearner();
-  history.replaceState(null, "", "/t/fractions-2/learn/add-different");
+  history.replaceState(null, "", "/t/percentages/learn/percent-of-amount");
 });
 
 describe("topic journey: Learn, Practise, Apply, Check, Complete (D-043)", () => {
@@ -31,7 +31,7 @@ describe("topic journey: Learn, Practise, Apply, Check, Complete (D-043)", () =>
     show();
     expect(await screen.findByRole("heading", { level: 1, name: def.title })).toBeTruthy();
     expect(screen.getByText("Year 6")).toBeTruthy();
-    expect(within(screen.getByRole("navigation", { name: "Breadcrumb" })).getByRole("link", { name: "Fractions 2" })).toBeTruthy();
+    expect(within(screen.getByRole("navigation", { name: "Breadcrumb" })).getByRole("link", { name: "Percentages" })).toBeTruthy();
     expect(stageButton(/^1\. Learn$/).getAttribute("aria-current")).toBe("step");
     for (const s of [/^2\. Practise, locked/, /^3\. Apply, locked/, /^4\. Check, locked/, /^5\. Complete, locked/]) expect((stageButton(s) as HTMLButtonElement).disabled).toBe(true);
     expect(await screen.findByRole("heading", { name: "Choose how you want to learn" })).toBeTruthy();
@@ -61,7 +61,7 @@ describe("topic journey: Learn, Practise, Apply, Check, Complete (D-043)", () =>
     await user.click(screen.getByRole("button", { name: "Why?" }));
     expect(screen.getByText(def.why)).toBeTruthy();
     // Answer the first question (a number) correctly; the oracle is the island's own generated answer.
-    const q = topicById("fractions-2")!.questionById(journeyQuestionId(def, def.practise, 0, 1000, 0)) as KitQuestion;
+    const q = topicById("percentages")!.questionById(journeyQuestionId(def, def.practise, 0, 1000, 0)) as KitQuestion;
     if (q.kind !== "number") throw new Error("expected a number question first");
     const section = screen.getByRole("region", { name: "Question 1" });
     await user.type(within(section).getByRole("textbox"), String(q.answer));
@@ -78,7 +78,7 @@ describe("topic journey: Learn, Practise, Apply, Check, Complete (D-043)", () =>
     show();
     await user.click(await screen.findByRole("button", { name: "Notes" }));
     const dialog = screen.getByRole("dialog", { name: "Notes" });
-    expect(await within(dialog).findByText("Common denominator")).toBeTruthy();
+    expect(await within(dialog).findByText("Per cent (%)")).toBeTruthy();
     await user.keyboard("{Escape}");
     expect(screen.queryByRole("dialog")).toBeNull();
   });
@@ -89,15 +89,15 @@ describe("topic journey: Learn, Practise, Apply, Check, Complete (D-043)", () =>
     show();
     expect(await screen.findByText("Show what you know!")).toBeTruthy();
     await user.click(screen.getByRole("button", { name: /Start the check/ }));
-    const learner = getLearner().topics["fractions-2"]!;
+    const learner = getLearner().topics["percentages"]!;
     expect(learner.recheck?.skill).toBe(def.skill);
     expect(learner.recheck?.order.length).toBeGreaterThan(0);
     expect(screen.getByText(new RegExp(`Check: ${def.title}`))).toBeTruthy();
   });
 
   it("completes with the island's mastery level and this topic's strands, and comes back to the same stage", async () => {
-    const r = (key: string, correct: boolean, t: number): ItemResult => ({ questionId: `g:fractions-2.${key}:2:${t}`, skill: def.skill, context: "practice", correct, firstTry: correct, attempts: 1, hintsUsed: 0, misconceptions: [], at: t });
-    updateLearner((s) => ({ ...s, results: [r("f2-add-diff", true, 2000), r("f2-diff-apply", true, 2001), r("f2-diff-why", false, 2002)] }));
+    const r = (key: string, correct: boolean, t: number): ItemResult => ({ questionId: `g:percentages.${key}:2:${t}`, skill: def.skill, context: "practice", correct, firstTry: correct, attempts: 1, hintsUsed: 0, misconceptions: [], at: t });
+    updateLearner((s) => ({ ...s, results: [r("pc-of-amount", true, 2000), r("pc-amount-word", true, 2001), r("pc-amount-why", false, 2002)] }));
     at({ stage: 4, reached: 4 });
     const { unmount } = show();
     expect(await screen.findByRole("heading", { name: "Topic complete!" })).toBeTruthy();

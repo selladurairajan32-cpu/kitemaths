@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CheckStage, checkDone, journeyQuestionId } from "@/components/journey/stages";
-import { Kip } from "@/components/kid/Kip";
+import { Confetti } from "@/components/kid/Celebrate";
+import { Pic } from "@/components/paper/Pic";
 import { RichText } from "@/components/math/RichText";
 import { QuestionPlayer } from "@/components/questions/QuestionPlayer";
 import { Button, buttonClass } from "@/components/ui/Button";
@@ -17,7 +18,7 @@ import { updateLearner, useHydrated, useLearner } from "@/lib/store";
 import { useTopicState } from "@/topics/context";
 import { canvasLessonFor } from "@/topics/kit/canvasLessons";
 import { journeyFor, type JourneyDef, type JourneyQuestion, type PractiseLevel } from "@/topics/kit/journeys";
-import { CanvasShell, Dock, Phase, Say, Trail } from "./Canvas";
+import { CanvasShell, Dock, Phase, PHASE_FIELD, Say, Trail } from "./Canvas";
 import type { CanvasLesson } from "./lesson";
 
 /**
@@ -50,18 +51,18 @@ function Questions({ def, lesson, list, done, startedAt, kind, onAnswered, onNex
   return (
     <Phase id={`${kind}-${done}`}>
       <div className="flex flex-col gap-3">
-        <p id="phase-title" className="flex flex-wrap items-center justify-between gap-2 text-label font-extrabold uppercase tracking-widest text-muted">
-          <span>
+        <p id="phase-title" className="flex flex-wrap items-center justify-between gap-2">
+          <span className={`rounded-full px-4 py-1 text-label font-extrabold ${PHASE_FIELD[kind]!.bg} ${PHASE_FIELD[kind]!.text}`}>
             {name}
             {item.level ? ` · ${LEVEL[item.level]}` : ""}
           </span>
-          <span className="normal-case tracking-normal">
+          <span className="display text-title text-ink">
             Question {done + 1} of {list.length}
           </span>
         </p>
         <div className="flex gap-1.5" aria-hidden>
           {list.map((_, i) => (
-            <span key={i} className={`h-2 flex-1 rounded-full ${i < done ? "bg-ok-bright" : i === done ? "bg-ink" : "bg-sunk"}`} />
+            <span key={i} className={`h-3 flex-1 rounded-full ${i < done ? "bg-ok-bright" : i === done ? "bg-ink" : "bg-sunk"}`} />
           ))}
         </div>
         {note && (
@@ -113,11 +114,13 @@ function Summary({ def, lesson, progress, onReview, onPractise }: { def: Journey
   const lookBack = lesson.lookBack?.(progress.guess);
   return (
     <Phase id="summary">
-      <div className="flex items-center gap-4">
-        <Kip mood={review ? "think" : "cheer"} size={72} />
-        <div className="min-w-0 flex-1">
-          <Say eyebrow="What you've shown" title={review ? "Good work. A bit more practice will make it stick." : "You can do this now."} text={def.title} />
-        </div>
+      <div className={`relative flex flex-col items-center gap-3 rounded-[var(--radius-hero)] px-6 py-8 text-center ${review ? "bg-tile-yellow" : "bg-tile-green"}`}>
+        {!review && <Confetti burstKey={`done-${progress.startedAt}`} pieces={36} />}
+        <Pic name={review ? "glowing-star" : "trophy"} size={112} />
+        <h1 id="phase-title" className="display text-heading-1 text-ink sm:text-display-2">
+          {review ? "Good work. A bit more practice will make it stick." : "You can do this now!"}
+        </h1>
+        <p className="text-body-lg font-bold text-ink-2">{def.title}</p>
       </div>
       {lookBack && (
         <p className="rounded-[var(--radius-panel)] bg-sun-soft p-5 text-body-lg font-semibold text-ink">
@@ -190,7 +193,7 @@ function CalmToggle() {
   const learner = useLearner();
   const on = !!learner.settings.reducedMotion;
   return (
-    <button type="button" aria-pressed={on} onClick={() => updateLearner((s) => setSettings(s, { reducedMotion: !s.settings.reducedMotion }))} className={`min-h-11 shrink-0 rounded-full px-3 text-label font-bold ${on ? "bg-ink text-white" : "text-ink-2 hover:bg-sunk"}`}>
+    <button type="button" aria-pressed={on} onClick={() => updateLearner((s) => setSettings(s, { reducedMotion: !s.settings.reducedMotion }))} className={`hidden min-h-11 shrink-0 rounded-full px-4 text-label font-extrabold sm:block ${on ? "bg-ink text-white" : "bg-sunk text-ink hover:bg-line"}`}>
       Less motion
     </button>
   );

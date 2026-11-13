@@ -1,21 +1,20 @@
 "use client";
 
-import Link from "next/link";
 import { Fragment } from "react";
+import { FIELDS, WORLD_FIELD } from "@/components/kid/fields";
+import { Kip } from "@/components/kid/Kip";
 import { KID_STATUS } from "@/components/kid/kidText";
-import { Column, NextStep, PageTitle, Row, Rows, Section, Steps, type Mark } from "@/components/kid/Plain";
+import { Fill, GoLink, Heading, Lift, Page, Pop, Stop as StopDot } from "@/components/kid/Play";
 import { RichText } from "@/components/math/RichText";
 import { PaperIcon, type IconName } from "@/components/paper/PaperIcon";
-import { ButtonLink } from "@/components/ui/Button";
-import { ArrowLeftIcon, ArrowRightIcon } from "@/components/ui/Icons";
-import { ProgressBar } from "@/components/ui/Progress";
+import { ArrowLeftIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 import { allLessonEvidence, unmetPrerequisites, type LessonEvidence } from "@/engine/evidence";
 import { factStates } from "@/engine/facts";
 import { isPracticeMilestoneMet, recommendNext, reviewSkills, strongSkills } from "@/engine/journey";
 import { skillMastery } from "@/engine/mastery";
-import { STARS } from "@/engine/rewards";
 import { journeyDone } from "@/engine/overview";
+import { STARS } from "@/engine/rewards";
 import { CANVAS_LABEL, CANVAS_PHASES, canvasReached } from "@/engine/topicJourney";
 import { routes as appRoutes } from "@/lib/routes";
 import { useHydrated, useLearner } from "@/lib/store";
@@ -50,17 +49,14 @@ interface Stop {
   part?: string;
   /** D-062: where a lesson on the canvas has got to, 0 to 6; undefined when the sub-topic is not taught there. */
   phase?: number;
-  /** D-062: the same idea as a film with guided steps (a topic journey in the earlier layout). */
-  film?: string;
   minutes?: number;
 }
 
 /**
- * A topic's page: its sub-topics in teaching order, then mixed practice and the big challenge (FR-011). A lesson counts
- * as done only with independent evidence (CUR-002 §4); reaching its end is shown as "finished", with the practice that
- * completes it. D-062: one plain list with one thing to do next. Each sub-topic opens where it is taught best: the
- * lesson canvas where it has one (D-060), the topic learning page where the topic has a study plan (D-054), else the
- * lesson. A sub-topic that also has a film journey offers it as a second way in.
+ * A topic's page: its sub-topics as a path (FR-011). A lesson counts as done only with independent evidence (CUR-002
+ * §4); reaching its end is shown as "finished", with the practice that completes it. D-064, the Playground look: a
+ * winding path of big round stops, green when done, yellow where the child is, with the page's one yellow button at
+ * that stop. Every stop opens one place: the lesson canvas where the sub-topic has one (D-060), else its lesson.
  */
 export function SkyMapScreen() {
   const hydrated = useHydrated();
@@ -119,7 +115,6 @@ export function SkyMapScreen() {
         ...look,
         part: partOf.get(l.id),
         phase,
-        film: journey && !journey.canvas ? links.learn(journey.concept) : undefined,
         minutes: l.minutes,
         kicker: `Lesson ${i + 1}`,
         title: l.title,
@@ -165,119 +160,151 @@ export function SkyMapScreen() {
 
   const current = stops.find((s) => s.status === "current") ?? stops.find((s) => s.status === "open");
   const world = WORLDS.find((w) => w.id === topic.world);
+  const field = WORLD_FIELD[topic.world] ?? FIELDS.blue;
   const lessonCount = lessons.length;
-  const mark = (s: Stop, i: number): Mark => (s.status === "done" ? { kind: "done" } : i < lessonCount ? (s === current ? { kind: "here", n: i + 1 } : { kind: "number", n: i + 1 }) : { kind: "pic", node: <PaperIcon name={s.icon} size={26} /> });
-  // The topic's special areas (facts, mocks, methods), as plain rows.
+  // The topic's special areas (facts, mocks, methods), and any journey that belongs to no lesson here.
   const areas: { href: string; icon: IconName; title: string; line: string }[] = [
     ...(topic.id === FACTS_TOPIC ? [{ href: links.facts(), icon: "times" as IconName, title: "My times-table facts", line: `${factStates(learner.results).filter((x) => x.status === "known").length} of 66 facts known. Practise or check them.` }] : []),
     ...(topic.id === "mock-exams" ? [{ href: links.mock(), icon: "trophy" as IconName, title: "Practice mock", line: "Practise like a real test, then see what to work on." }] : []),
     ...(topic.id === "mental-maths" ? [{ href: links.strategies(), icon: "bulb" as IconName, title: "Mental maths methods", line: "Pick the best method, and try the one-minute challenge." }] : []),
+    ...JOURNEYS.filter((j) => j.topicId === topic.id && !topic.lessons.some((l) => evidence.get(l.id)?.skill === j.skill)).map((j) => ({ href: links.learn(j.concept), icon: "bulb" as IconName, title: j.title, line: "Learn it step by step, then practise and check what you know." })),
   ];
-  // Journeys that belong to no lesson here keep their own row, so nothing that was reachable is lost.
-  const loose = JOURNEYS.filter((j) => j.topicId === topic.id && !topic.lessons.some((l) => evidence.get(l.id)?.skill === j.skill));
+  /** The path sways from side to side on a wide screen; on a phone it runs straight down. */
+  const SWAY = ["sm:ml-0", "sm:ml-14", "sm:ml-28", "sm:ml-14"];
 
   return (
-    <Column>
-      <div className="flex flex-col gap-3">
-        <Link href={appRoutes.topics()} className="inline-flex min-h-11 items-center gap-1.5 self-start text-label font-bold text-ink-2 hover:text-ink">
-          <ArrowLeftIcon size={16} /> All topics
-        </Link>
-        <PageTitle id="island-title" eyebrow={world?.title} title={topic.title} line={topic.subtitle}>
-          <div className="mt-2 flex max-w-md items-center gap-3">
-            <ProgressBar value={doneCount / stops.length} tone="ok" label={`${doneCount} of ${stops.length} done`} className="h-2.5" />
-            <span className="whitespace-nowrap text-label font-bold text-ink-2">
-              {doneCount} of {stops.length} done
-            </span>
+    <Page>
+      <section aria-labelledby="island-title" className={`flex flex-col gap-5 rounded-[var(--radius-hero)] px-6 py-7 sm:px-10 sm:py-9 ${field.bg} ${field.text}`}>
+        <Lift href={appRoutes.topics()} className="inline-flex min-h-11 items-center gap-2 self-start rounded-full bg-white/20 px-4 text-body font-extrabold">
+          <ArrowLeftIcon size={18} strokeWidth={3} /> All topics
+        </Lift>
+        <div className="flex items-center gap-5">
+          <span className="grid size-24 shrink-0 place-items-center rounded-[28px] bg-surface sm:size-28" aria-hidden>
+            <PaperIcon name={topic.look.icon} size={76} />
+          </span>
+          <div className="flex min-w-0 flex-1 flex-col gap-2">
+            {world && <p className="text-body font-extrabold">{world.title}</p>}
+            <h1 id="island-title" className="display text-heading-1 sm:text-display-1">
+              {topic.title}
+            </h1>
+            <div className="flex max-w-md items-center gap-3">
+              <Fill value={doneCount / stops.length} label={`${doneCount} of ${stops.length} done`} onDark />
+              <span className="whitespace-nowrap text-body font-extrabold">
+                {doneCount} of {stops.length} done
+              </span>
+            </div>
           </div>
-        </PageTitle>
-      </div>
+        </div>
+      </section>
 
-      {current && (
-        <NextStep
-          id="next-title"
-          label={review.length > 0 ? "Make it strong again" : doneCount === 0 && current === stops[0] ? "Start here" : "Next"}
-          title={review.length > 0 ? skillById(review[0]).title : current.title}
-          line={review.length > 0 ? "A few questions on just this skill." : <RichText text={current.line} />}
-          action={
-            <ButtonLink href={review.length > 0 ? routes.practice(review[0]) : (current.extra?.href ?? current.href)} variant="cta" size="xl">
-              {review.length > 0 ? "Practise it" : (current.extra?.label ?? (current.phase ? "Carry on" : "Start"))} <ArrowRightIcon size={20} />
-            </ButtonLink>
-          }
-        >
-          {current.phase !== undefined && review.length === 0 && <Steps count={CANVAS_PHASES.length} done={current.phase} label={`Step ${Math.min(current.phase + 1, CANVAS_PHASES.length)} of ${CANVAS_PHASES.length}`} />}
-        </NextStep>
+      {review.length > 0 && (
+        <Lift href={routes.practice(review[0])} className="flex items-center gap-4 rounded-[28px] bg-tile-pink p-4 sm:p-5">
+          <PaperIcon name="target" size={52} />
+          <span className="min-w-0 flex-1">
+            <span className="block text-title font-extrabold text-ink">Let&apos;s make {skillById(review[0]).title} strong again</span>
+            <span className="block text-body text-ink-2">A few quick questions on just this.</span>
+          </span>
+          <span className="hidden shrink-0 rounded-full bg-surface px-5 py-2 text-body font-extrabold text-ink sm:block">Practise it</span>
+        </Lift>
       )}
 
-      <Section id="path-title" title="Sub-topics" line="In the order that works best. You can open any of them.">
-        <Rows ordered label="Lessons and challenges">
-          {stops.map((s, i) => (
-            <Fragment key={s.key}>
-              {s.part && (
-                <li role="presentation" className="pb-2 pt-6 text-label font-extrabold uppercase tracking-widest text-muted first:pt-1">
-                  {s.part}
-                </li>
-              )}
-              {i === lessonCount && <li role="presentation" className="pb-2 pt-6 text-label font-extrabold uppercase tracking-widest text-muted">Then</li>}
-              <Row
-                href={s.href}
-                mark={mark(s, i)}
-                current={s === current}
-                label={`${s.title}${s.status === "done" ? ". Done." : s === current ? ". Next up." : ""}`}
-                title={s.title}
-                line={<RichText text={s.line} />}
-                trail={s.status === "done" ? "Done" : s.phase ? `${Math.min(s.phase, CANVAS_PHASES.length)} of ${CANVAS_PHASES.length}` : s.phase === 0 ? "Hands-on" : undefined}
-                below={
-                  (s.bestAfter || s.extra || s.film) && (
-                    <div className="flex flex-col items-start gap-1">
-                      {s.bestAfter && <p className="rounded-[14px] bg-sun-soft px-3 py-1.5 text-label text-ink">{s.bestAfter}</p>}
-                      {s.extra && (
-                        <Link href={s.extra.href} className="inline-flex min-h-11 items-center text-label font-bold text-brand-strong underline underline-offset-4">
-                          {s.extra.label}
-                          <span className="sr-only">: {s.title}</span>
-                        </Link>
-                      )}
-                      {s.film && (
-                        <Link href={s.film} className="inline-flex min-h-11 items-center text-label font-bold text-brand-strong underline underline-offset-4">
-                          Watch the film and try it<span className="sr-only">: {s.title}</span>
-                        </Link>
+      <section aria-labelledby="path-title" className="flex flex-col gap-5">
+        <Heading id="path-title">Your path</Heading>
+        <ol aria-label="Lessons and challenges" className="relative m-0 flex list-none flex-col gap-4 p-0">
+          <span className="absolute bottom-10 left-10 top-10 -ml-0.5 border-l-4 border-dashed border-line-strong sm:hidden" aria-hidden />
+          {stops.map((s, i) => {
+            const here = s === current;
+            const state = s.status === "done" ? "done" : here ? "here" : "open";
+            const main = here && s.extra ? s.extra : { href: s.href, label: s.phase ? "Carry on" : i >= lessonCount ? "Go" : "Start" };
+            return (
+              <Fragment key={s.key}>
+                {s.part && (
+                  <li role="presentation" className={`mt-3 self-start rounded-full px-5 py-1.5 text-body font-extrabold first:mt-0 ${field.soft} text-ink`}>
+                    {s.part}
+                  </li>
+                )}
+                {i === lessonCount && (
+                  <li role="presentation" className="mt-3 self-start rounded-full bg-tile-yellow px-5 py-1.5 text-body font-extrabold text-ink">
+                    Then show what you know
+                  </li>
+                )}
+                <li className={`relative ${SWAY[i % SWAY.length]}`} aria-current={here ? "step" : undefined}>
+                  <Pop i={i}>
+                    <div className={`flex items-center gap-4 rounded-[28px] ${here ? "border-4 border-ink bg-surface p-3 sm:p-4" : "p-1"}`}>
+                      <Lift href={s.href} aria-label={`${s.title}${s.status === "done" ? ". Done." : here ? ". Next up." : ""}`} className="rounded-full">
+                        <StopDot state={state}>{i < lessonCount ? i + 1 : <PaperIcon name={s.icon} size={40} />}</StopDot>
+                      </Lift>
+                      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                        <p className={`leading-snug text-ink ${here ? "display text-heading-2" : "text-title font-extrabold"}`}>{s.title}</p>
+                        <p className="text-body text-ink-2">
+                          {/* A stop still to come says only how long it takes; the stop the child is on says what it is about. */}
+                          <RichText text={!here && s.minutes && s.line.startsWith(`${s.minutes} min ·`) ? `${s.minutes} minutes` : s.line} />
+                        </p>
+                        {s.bestAfter && <p className="mt-1 self-start rounded-[14px] bg-sun-soft px-3 py-1.5 text-label text-ink">{s.bestAfter}</p>}
+                        {!here && s.extra && (
+                          <Lift href={s.extra.href} className="inline-flex min-h-11 items-center self-start text-body font-extrabold text-brand-strong underline underline-offset-4">
+                            {s.extra.label}
+                            <span className="sr-only">: {s.title}</span>
+                          </Lift>
+                        )}
+                      </div>
+                      {here && (
+                        <div className="hidden shrink-0 items-center gap-3 sm:flex">
+                          <Kip mood="cheer" size={64} float />
+                          <GoLink href={main.href}>{main.label}</GoLink>
+                        </div>
                       )}
                     </div>
-                  )
-                }
-              />
-            </Fragment>
-          ))}
-        </Rows>
-      </Section>
+                    {here && (
+                      <GoLink href={main.href} className="mt-3 w-full sm:hidden">
+                        {main.label}
+                      </GoLink>
+                    )}
+                  </Pop>
+                </li>
+              </Fragment>
+            );
+          })}
+        </ol>
+      </section>
 
-      {(areas.length > 0 || loose.length > 0) && (
-        <Section id="more-title" title="More in this topic">
-          <Rows>
+      {areas.length > 0 && (
+        <section aria-labelledby="more-title" className="flex flex-col gap-4">
+          <Heading id="more-title">More to do here</Heading>
+          <ul className="m-0 grid list-none gap-4 p-0 sm:grid-cols-2">
             {areas.map((a) => (
-              <Row key={a.href} href={a.href} mark={{ kind: "pic", node: <PaperIcon name={a.icon} size={26} /> }} title={a.title} line={a.line} />
+              <li key={a.href} className="flex">
+                <Lift href={a.href} className={`flex flex-1 items-center gap-4 rounded-[28px] p-5 ${field.soft}`}>
+                  <span className="grid size-16 shrink-0 place-items-center rounded-full bg-surface" aria-hidden>
+                    <PaperIcon name={a.icon} size={40} />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-title font-extrabold text-ink">{a.title}</span>
+                    <span className="block text-body text-ink-2">{a.line}</span>
+                  </span>
+                </Lift>
+              </li>
             ))}
-            {loose.map((j) => (
-              <Row key={j.concept} href={links.learn(j.concept)} mark={{ kind: "pic", node: <PaperIcon name="bulb" size={26} /> }} title={j.title} line="Learn it step by step, then practise and check what you know." />
-            ))}
-          </Rows>
-        </Section>
+          </ul>
+        </section>
       )}
 
-      <Section id="skills-title" title="My skills" line="Open one to practise just that skill.">
-        <Rows>
+      <section aria-labelledby="skills-title" className="flex flex-col gap-4">
+        <Heading id="skills-title">My skills</Heading>
+        <ul className="m-0 flex list-none flex-wrap gap-3 p-0">
           {topic.skills.map((sk) => {
             const st = KID_STATUS[skillMastery(sk.id, learner.results).status];
             return (
-              <li key={sk.id} className="border-t border-line last:border-b">
-                <Link href={routes.practice(sk.id)} className="-mx-3 flex min-h-14 items-center justify-between gap-3 rounded-[var(--radius-control)] px-3 py-2 hover:bg-raised">
-                  <span className="min-w-0 text-body font-semibold text-ink">{sk.title}</span>
-                  <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-label font-bold ${st.cls}`}>{st.label}</span>
-                </Link>
+              <li key={sk.id}>
+                <Lift href={routes.practice(sk.id)} className="flex min-h-12 items-center gap-3 rounded-full border-2 border-line-strong bg-surface py-1.5 pl-5 pr-2 hover:bg-raised">
+                  <span className="min-w-0 text-body font-bold text-ink">{sk.title}</span>
+                  <span className={`shrink-0 whitespace-nowrap rounded-full px-3 py-1 text-label font-extrabold ${st.cls}`}>{st.label}</span>
+                </Lift>
               </li>
             );
           })}
-        </Rows>
-      </Section>
-    </Column>
+        </ul>
+      </section>
+    </Page>
   );
 }

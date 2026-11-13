@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { LessonStudioScreen } from "@/components/screens/LessonStudioScreen";
 import { topicById } from "@/topics";
+import { subTopicHref } from "@/topics/overview";
+import { topicRoutes } from "@/lib/routes";
 
 export const instant = false;
 
@@ -16,6 +18,10 @@ export async function generateMetadata({ params }: PageProps<"/t/[topic]/lesson/
 
 export default async function Page({ params }: PageProps<"/t/[topic]/lesson/[lessonId]">) {
   const { topic, lessonId } = await params;
-  if (!topicById(topic)?.lessonById(lessonId)) notFound();
+  const t = topicById(topic);
+  if (!t?.lessonById(lessonId)) notFound();
+  // D-064: a sub-topic taught on the lesson canvas has one home; its earlier lesson address sends the child there.
+  const home = subTopicHref(topic, lessonId, t.skills.find((k) => k.lessonId === lessonId)?.id);
+  if (home !== topicRoutes(topic).lesson(lessonId)) redirect(home);
   return <LessonStudioScreen lessonId={lessonId} />;
 }

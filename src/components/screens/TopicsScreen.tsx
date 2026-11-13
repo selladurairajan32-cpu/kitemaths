@@ -1,22 +1,23 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
+import { FIELDS, WORLD_FIELD } from "@/components/kid/fields";
 import { TopicBar, yearsText } from "@/components/kid/Overview";
-import { Column, PageTitle, Row, Rows, Section } from "@/components/kid/Plain";
+import { Heading, Hero, Lift, Page, Pop } from "@/components/kid/Play";
+import { Pic } from "@/components/paper/Pic";
 import { PaperIcon } from "@/components/paper/PaperIcon";
-import { ArrowRightIcon } from "@/components/ui/Icons";
+import { CheckIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton } from "@/components/ui/Screen";
-import { routes, topicRoutes } from "@/lib/routes";
+import { topicRoutes } from "@/lib/routes";
 import { useHydrated, useLearner } from "@/lib/store";
 import { topicOverviews } from "@/topics/overview";
 import { activeTopic } from "@/topics/recommend";
 import { WORLDS } from "@/topics/worlds";
 
 /**
- * D-043 step 3: every topic, with progress. Filter by world or by the child's school year; each row opens the topic's
- * page and says how far the child has got (skills from MAST-001, lessons from CUR-002 evidence). D-062: one plain list
- * per world, a row per topic, so all the topics can be seen without a long scroll.
+ * Topics (D-064, the Playground look): every topic as a picture tile, grouped into its world. Each world has its own
+ * colour, so a child finds "the orange ones" again. A tile says one thing in words (the topic's name) and shows how far
+ * the child has got as a bar (skills from MAST-001). Filter by world, or by the child's school year.
  */
 export function TopicsScreen() {
   const hydrated = useHydrated();
@@ -32,85 +33,84 @@ export function TopicsScreen() {
   const shown = all.filter(({ topic }) => (world === "all" || topic.world === world) && (!mine || year === null || topic.years.includes(year)));
   const started = all.filter(({ o }) => o.started).length;
 
-  const chip = (active: boolean) =>
-    `flex min-h-11 items-center whitespace-nowrap rounded-full px-4 text-label font-bold transition-colors ${active ? "bg-ink text-white" : "bg-sunk text-ink-2 hover:bg-line"}`;
-
   return (
-    <Column>
-      <PageTitle id="topics-title" title="Topics" line={`${all.length} topics. You have started ${started}. Pick one to see its sub-topics.`}>
-        <div className="mt-3 flex flex-col gap-2">
-          <div role="group" aria-label="Show topics from" className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
-            <button type="button" aria-pressed={world === "all"} onClick={() => setWorld("all")} className={chip(world === "all")}>
-              All topics
-            </button>
-            {WORLDS.map((w) => (
-              <button key={w.id} type="button" aria-pressed={world === w.id} onClick={() => setWorld(w.id)} className={chip(world === w.id)}>
+    <Page>
+      <Hero id="topics-title" field={FIELDS.teal} title="Pick a topic" line={started > 0 ? `You have started ${started} of ${all.length}. Carry on, or try a new one.` : `${all.length} topics in six worlds. Start anywhere you like.`} picture={<Pic name="map" size={140} />} />
+
+      <div className="flex flex-col gap-2">
+        <div role="group" aria-label="Show topics from" className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
+          <button type="button" aria-pressed={world === "all"} onClick={() => setWorld("all")} className={`press flex min-h-12 items-center whitespace-nowrap rounded-full border-2 px-5 text-body font-extrabold ${world === "all" ? "border-ink bg-ink text-white" : "border-line-strong bg-surface text-ink hover:bg-raised"}`}>
+            All topics
+          </button>
+          {WORLDS.map((w) => {
+            const f = WORLD_FIELD[w.id] ?? FIELDS.blue;
+            const on = world === w.id;
+            return (
+              <button key={w.id} type="button" aria-pressed={on} onClick={() => setWorld(w.id)} className={`press flex min-h-12 items-center gap-2 whitespace-nowrap rounded-full border-2 py-1 pl-2 pr-5 text-body font-extrabold ${on ? `border-transparent ${f.bg} ${f.text}` : "border-line-strong bg-surface text-ink hover:bg-raised"}`}>
+                <span className={`grid size-9 place-items-center rounded-full ${on ? "bg-surface" : f.soft}`} aria-hidden>
+                  <PaperIcon name={w.icon} size={24} />
+                </span>
                 {w.title}
               </button>
-            ))}
-          </div>
-          {year !== null && (
-            <label className="inline-flex min-h-11 cursor-pointer items-center gap-2 self-start text-label font-bold text-ink-2">
-              <input type="checkbox" checked={mine} onChange={(e) => setMine(e.target.checked)} className="size-5 accent-brand" />
-              Only Year {year} topics
-            </label>
-          )}
+            );
+          })}
         </div>
-      </PageTitle>
+        {year !== null && (
+          <label className="inline-flex min-h-11 cursor-pointer items-center gap-2 self-start text-body font-bold text-ink-2">
+            <input type="checkbox" checked={mine} onChange={(e) => setMine(e.target.checked)} className="size-6 accent-brand" />
+            Only Year {year} topics
+          </label>
+        )}
+      </div>
 
       {shown.length === 0 ? (
-        <p className="rounded-[24px] bg-sunk p-6 text-body text-ink-2">No topics here for Year {year}. Untick &ldquo;Only Year {year} topics&rdquo; to see them all.</p>
+        <p className="rounded-[28px] bg-sunk p-6 text-body-lg text-ink-2">No topics here for Year {year}. Untick &ldquo;Only Year {year} topics&rdquo; to see them all.</p>
       ) : (
         WORLDS.map((w) => {
           const mine = shown.filter(({ topic }) => topic.world === w.id);
           if (mine.length === 0) return null;
+          const f = WORLD_FIELD[w.id] ?? FIELDS.blue;
           return (
-            <Section key={w.id} id={`world-${w.id}`} title={w.title}>
-              <Rows label={`${w.title} topics`}>
-                {mine.map(({ topic, o }) => {
+            <section key={w.id} aria-labelledby={`world-${w.id}`} className="flex flex-col gap-4">
+              <Heading id={`world-${w.id}`} picture={<span className={`grid size-12 place-items-center rounded-full ${f.soft}`} aria-hidden><PaperIcon name={w.icon} size={32} /></span>}>
+                {w.title}
+              </Heading>
+              <ul className="m-0 grid list-none grid-cols-2 gap-3 p-0 sm:gap-5 lg:grid-cols-4" aria-label={`${w.title} topics`}>
+                {mine.map(({ topic, o }, i) => {
                   const isHere = topic.id === here;
                   const finished = o.skills > 0 && o.mastered === o.skills;
                   return (
-                    <Row
-                      key={topic.id}
-                      href={topicRoutes(topic.id).island()}
-                      mark={finished ? { kind: "done" } : { kind: "pic", node: <PaperIcon name={topic.look.icon} size={28} /> }}
-                      current={isHere}
-                      title={
-                        <span className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
-                          {topic.title}
-                          {isHere && <span className="rounded-full bg-ink px-2.5 py-0.5 text-label font-bold text-white">You are here</span>}
-                        </span>
-                      }
-                      line={
-                        <span className="flex flex-col gap-1.5">
-                          <span>
-                            {yearsText(topic.years)} · {o.lessonsDone} of {o.lessons} lessons · {o.mastered} of {o.skills} skills mastered
+                    <li key={topic.id} className="flex">
+                      <Pop i={i} className="flex flex-1">
+                        <Lift href={topicRoutes(topic.id).island()} className={`relative flex flex-1 flex-col overflow-hidden rounded-[28px] border-4 bg-surface ${isHere ? "border-ink" : "border-transparent ring-2 ring-line"}`}>
+                          <span className={`relative grid h-28 place-items-center sm:h-32 ${f.soft}`} aria-hidden>
+                            <PaperIcon name={topic.look.icon} size={76} />
+                            {finished && (
+                              <span className="absolute right-3 top-3 grid size-9 place-items-center rounded-full bg-ok-bright text-white">
+                                <CheckIcon size={18} strokeWidth={3.5} />
+                              </span>
+                            )}
                           </span>
-                          {o.started && (
-                            <span className="block max-w-xs">
+                          {isHere && <span className="absolute left-3 top-3 rounded-full bg-field-yellow px-3 py-0.5 text-label font-extrabold text-ink">You are here</span>}
+                          <span className="flex flex-1 flex-col gap-2 p-4">
+                            <span className="display block text-title leading-tight text-ink">{topic.title}</span>
+                            <span className="mt-auto block">
                               <TopicBar o={o} label={topic.title} />
                             </span>
-                          )}
-                          {!o.started && (
-                            <span className="sr-only">
-                              <TopicBar o={o} label={topic.title} />
+                            <span className="block text-label font-bold text-ink-2">
+                              {o.started ? `${o.lessonsDone} of ${o.lessons} lessons done` : yearsText(topic.years)}
                             </span>
-                          )}
-                        </span>
-                      }
-                    />
+                          </span>
+                        </Lift>
+                      </Pop>
+                    </li>
                   );
                 })}
-              </Rows>
-            </Section>
+              </ul>
+            </section>
           );
         })
       )}
-
-      <Link href={routes.journey()} className="inline-flex min-h-11 items-center gap-1.5 self-start text-body font-bold text-brand-strong underline underline-offset-4">
-        See them on the world map <ArrowRightIcon size={18} />
-      </Link>
-    </Column>
+    </Page>
   );
 }

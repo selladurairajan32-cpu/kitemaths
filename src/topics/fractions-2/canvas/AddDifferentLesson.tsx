@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 import { Dock, Dots, LensSwitch, Phase, Say } from "@/components/canvas/Canvas";
 import { BarsBoard, FractionBar, piecesMatch, Reveal, TogetherBar, type BarRow } from "@/components/canvas/FractionBars";
 import type { CanvasLesson } from "@/components/canvas/lesson";
+import { Confetti } from "@/components/kid/Celebrate";
 import { FractionNotation } from "@/components/math/FractionNotation";
 import { RichText } from "@/components/math/RichText";
 import { Button } from "@/components/ui/Button";
@@ -37,6 +38,8 @@ const GUESSES: { id: string; f?: Fraction; verdict: string }[] = [
   { id: "unsure", verdict: "Good: now you'll find out. Together they reach past half a bar. We can't name the amount yet, because the pieces are different sizes." },
 ];
 
+const GUESS_TINT = ["bg-tile-pink", "bg-tile-green", "bg-tile-sky", "bg-tile-yellow"];
+
 function Discover({ guess, onGuess, onDone }: { guess?: string; onGuess: (guess: string) => void; onDone: () => void }) {
   const picked = GUESSES.find((g) => g.id === guess);
   return (
@@ -45,10 +48,10 @@ function Discover({ guess, onGuess, onDone }: { guess?: string; onGuess: (guess:
       <BarsBoard rows={ROWS} cuts={[1, 1]} ruler={false} />
       {!picked ? (
         <fieldset className="m-0 flex flex-col gap-3 border-0 p-0">
-          <legend className="mb-3 p-0 text-title font-extrabold text-ink">What do you think? Have a guess.</legend>
+          <legend className="display mb-3 p-0 text-heading-2 text-ink">What do you think? Have a guess.</legend>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {GUESSES.map((g) => (
-              <button key={g.id} type="button" onClick={() => { playSound("tap"); onGuess(g.id); }} className="press grid min-h-24 place-items-center rounded-[var(--radius-tile)] border-2 border-line-strong bg-surface p-3 text-title font-extrabold text-ink hover:border-ink hover:bg-raised">
+            {GUESSES.map((g, i) => (
+              <button key={g.id} type="button" onClick={() => { playSound("tap"); onGuess(g.id); }} className={`press grid min-h-28 place-items-center rounded-[28px] border-line-strong p-3 text-title font-extrabold text-ink transition-transform hover:-translate-y-1 ${GUESS_TINT[i % GUESS_TINT.length]}`}>
                 {g.f ? <FractionNotation n={g.f.n} d={g.f.d} size="lg" /> : "Not sure yet"}
               </button>
             ))}
@@ -57,12 +60,12 @@ function Discover({ guess, onGuess, onDone }: { guess?: string; onGuess: (guess:
       ) : (
         <Reveal className="flex flex-col gap-4 border-t-2 border-dashed border-line-strong pt-4">
           <div className="flex flex-col gap-2">
-            <p className="text-title font-extrabold text-ink">Together</p>
+            <p className="display text-heading-2 text-ink">Together</p>
             <TogetherBar a={SAM} b={ZARA} label="Sam's piece and Zara's piece end to end: more than half a bar" />
           </div>
           {picked.f && (
             <div className="flex flex-col gap-2">
-              <p className="flex items-center gap-2.5 text-title font-extrabold text-ink">
+              <p className="display flex items-center gap-2.5 text-heading-2 text-ink">
                 Your guess <FractionNotation n={picked.f.n} d={picked.f.d} size="md" />
               </p>
               <FractionBar f={picked.f} tone="guess" label={`Your guess: ${picked.f.n} of ${picked.f.d} ${partName(picked.f.d)} shaded`} />
@@ -115,7 +118,10 @@ function Round({ index, onNext }: { index: number; onNext: () => void }) {
   return (
     <>
       <Say eyebrow={`Explore · ${index + 1} of ${ROUNDS.length}`} title={round.title} text={round.text} />
-      <BarsBoard rows={round.rows} cuts={cuts} onCut={joined ? undefined : onCut} together={joined} />
+      <div className="relative">
+        {joined && <Confetti burstKey={`join-${index}`} />}
+        <BarsBoard rows={round.rows} cuts={cuts} onCut={joined ? undefined : onCut} together={joined} />
+      </div>
       {!same ? (
         <Dock>{exploreCoach(round.rows, cuts, moves)}</Dock>
       ) : !joined ? (

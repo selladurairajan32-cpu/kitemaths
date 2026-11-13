@@ -97,17 +97,17 @@ describe("kid pages (D-043 step 3)", () => {
     expect(await screen.findByRole("heading", { level: 1, name: "Fractions 2" })).toBeTruthy();
     expect(screen.getByRole("link", { name: /All topics/ }).getAttribute("href")).toBe("/topics");
     const list = screen.getByRole("list", { name: "Lessons and challenges" });
-    const links = within(list).getAllByRole("link").map((a) => a.getAttribute("href"));
-    // The lesson on the canvas opens the canvas; the others open the topic learning page; a film journey is a second way in.
+    const links = [...new Set(within(list).getAllByRole("link").map((a) => a.getAttribute("href")))];
+    // D-064: every stop opens one place. The lesson on the canvas opens the canvas; the others open their lesson.
     expect(links).toContain("/t/fractions-2/learn/add-different");
-    expect(links).toContain("/t/fractions-2/study/simplify");
-    expect(links).toContain("/t/fractions-2/learn/multiply-fractions");
+    expect(links).toContain("/t/fractions-2/lesson/simplify");
+    expect(links.filter((h) => h!.includes("/study") || h!.includes("/learn/multiply"))).toEqual([]);
     expect(links.slice(-2)).toEqual(["/t/fractions-2/practice", "/t/fractions-2/check"]);
     expect(within(list).getByText("Part 2: Adding and subtracting")).toBeTruthy();
-    // New learner: the first sub-topic is next, and it is the page's one yellow button.
-    const next = screen.getByRole("heading", { level: 2, name: "Simplest form" }).closest("section")!;
-    expect(within(next).getByRole("link", { name: /^Start/ }).getAttribute("href")).toBe("/t/fractions-2/study/simplify");
-    expect(document.querySelectorAll(".bg-cta")).toHaveLength(1);
+    // New learner: the first sub-topic is where they are, and it carries the page's one yellow button.
+    const here = within(list).getAllByRole("listitem").find((li) => li.getAttribute("aria-current") === "step")!;
+    expect(within(here).getByText("Simplest form")).toBeTruthy();
+    expect(new Set(within(here).getAllByRole("link", { name: /^Start/ }).map((a) => a.getAttribute("href")))).toEqual(new Set(["/t/fractions-2/lesson/simplify"]));
     expect(within(screen.getByRole("heading", { name: "My skills" }).closest("section")!).getAllByRole("link")).toHaveLength(topicById("fractions-2")!.skills.length);
   });
 
