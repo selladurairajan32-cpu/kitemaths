@@ -16,7 +16,7 @@ const OUT = process.argv[2] || 'docs/product/verification/results/d060-canvas', 
     const cut = async (who, n) => { for (let i = 0; i < n; i++) await click(`Cut ${who} bar into smaller pieces`); };
     const sideways = async () => p.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
     await p.goto(B + '/t/fractions-2/learn/add-different', { waitUntil: 'networkidle' });
-    const nav = await p.getByRole('navigation', { name: 'Main' }).count();
+    const nav = await p.getByRole('combobox', { name: 'Choose a lesson' }).count();
     await shot('1-discover');
     await p.getByRole('group', { name: /Have a guess/ }).getByRole('button').first().click(); await shot('1-discover-tested');
     await click(/Find out why/); await shot('2-explore');
@@ -63,9 +63,9 @@ const OUT = process.argv[2] || 'docs/product/verification/results/d060-canvas', 
     await shot('6-prove-done');
     await click(/See what you/); await shot('7-summary');
     const summary = await p.getByRole('heading', { name: 'What your answers show' }).count();
-    const ok = nav === 0 && summary === 1 && errs.length === 0 && !(await sideways());
+    const ok = nav === 1 && summary === 1 && errs.length === 0 && !(await sideways());
     failed ||= !ok;
-    console.log(vw, ok ? 'PASS' : 'FAIL', { siteNavigation: nav, summary, sideways: await sideways(), errors: errs.slice(0, 5) });
+    console.log(vw, ok ? 'PASS' : 'FAIL', { studioHeader: nav, summary, sideways: await sideways(), errors: errs.slice(0, 5) });
     await ctx.close();
   }
   await b.close();

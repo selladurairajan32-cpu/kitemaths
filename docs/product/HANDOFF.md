@@ -53,13 +53,12 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
   Browser walk: `node docs/product/verification/lesson-canvas.cjs`. **Waiting for the Product Owner's verdict on the
   pilot before any other concept moves to the canvas.** `journey-e2e.cjs` still opens this concept and expects the older layout.
 
-- **D-064 Playground look** (built, READY FOR QA, deployed on request, D-065, CH-120; replaces D-062's plain pages, which the Product Owner
-  rejected as hard to read): Home, Topics, the topic page (`SkyMapScreen`, a path of round stops) and the canvas lesson on
-  `components/kid/Play.tsx`. One yellow button per page. `subTopicHref` (`topics/overview.ts`) sends a sub-topic to the
-  canvas where it has one, else its lesson. The earlier adding-fractions lesson, its film and voice are deleted (CH-119).
-  Kept but not linked from the flow: the study page (`/t/fractions-2/study`), the world map, the five film journeys.
-  Checks: `node docs/product/verification/full-flow.cjs` and `lesson-canvas.cjs`. Still in the earlier look: Practice,
-  Tests, Progress, the header, the parent pages and every other lesson.
+- **D-066 the first prototype's look** (built, READY FOR QA, not deployed; replaces D-064's Playground look): the
+  reference https://kite-maths-fractions.vercel.app is this repo's commit `0979298` (`git show 0979298:<path>` for any
+  original file). Tokens, fonts (Lexend, Fraunces), `.card`, `.eyebrow`, `Button` and the header are the prototype's.
+  Home = Dashboard (`KidHomeScreen`), topic page = "Your learning journey" (`SkyMapScreen`), hands-on lesson = Lesson
+  Studio (`canvas/Canvas.tsx`, `LessonCanvas.tsx`). Checks: `full-flow.cjs`, `lesson-canvas.cjs`. Still in their
+  earlier layouts (with the new colours and fonts): Practice, Tests, Progress, the older lessons, the parent pages.
 
 **Next (D-043 plan, in order):**
 1. **The ten hardest concepts on the journey** (4 done in batch 1; 6 to go), in batches of 4. Each one needs:
