@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { LessonCanvas } from "@/components/canvas/LessonCanvas";
 import { JourneyScreen } from "@/components/journey/JourneyScreen";
 import { journeyFor, JOURNEYS } from "@/topics/kit/journeys";
 
@@ -20,6 +21,8 @@ export async function generateMetadata({ params }: PageProps<"/t/[topic]/learn/[
 
 export default async function Page({ params }: PageProps<"/t/[topic]/learn/[concept]">) {
   const { topic, concept } = await params;
-  if (!journeyFor(topic, concept)) notFound();
-  return <JourneyScreen concept={concept} />;
+  const journey = journeyFor(topic, concept);
+  if (!journey) notFound();
+  // D-060: the redesign pilot teaches this concept on the lesson canvas; the others keep the topic journey.
+  return journey.canvas ? <LessonCanvas concept={concept} /> : <JourneyScreen concept={concept} />;
 }

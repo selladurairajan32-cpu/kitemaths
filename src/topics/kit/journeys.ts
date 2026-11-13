@@ -41,6 +41,8 @@ export interface JourneyDef {
   keyNotes: string[];
   /** D-046: the key idea as a bar model: `cells` equal parts, the first `blue` then `orange` filled, and a caption. */
   keyBar: { cells: number; blue: number; orange: number; caption: string };
+  /** D-060: this concept is taught on the lesson canvas (`components/canvas`), the pilot of the redesign. */
+  canvas?: true;
 }
 
 export const JOURNEYS: JourneyDef[] = [
@@ -48,6 +50,7 @@ export const JOURNEYS: JourneyDef[] = [
     topicId: "fractions-2",
     concept: "add-different",
     skill: "fractions-2.add-different",
+    canvas: true,
     year: 6,
     title: "Add fractions with different denominators",
     minutes: { watch: "about 2 min", step: "3–5 min", try: "3–5 min" },

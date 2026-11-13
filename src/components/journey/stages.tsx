@@ -53,7 +53,7 @@ function HowWeCheck() {
   );
 }
 
-function CheckLayout({ children }: { children: React.ReactNode }) {
+function CheckPanel({ children }: { children: React.ReactNode }) {
   return (
     <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_19rem]">
       <div className="panel min-w-0 rounded-[28px] p-4 sm:p-6">{children}</div>
@@ -164,8 +164,12 @@ export function checkDone(def: JourneyDef, progress: JourneyProgress, rechecks: 
   return (rechecks[def.skill]?.completedAt ?? 0) >= progress.startedAt;
 }
 
-export function CheckStage({ def, progress }: { def: JourneyDef; progress: JourneyProgress }) {
+/** D-060: on the lesson canvas the check stands alone (`bare`): no side panel, and the canvas gives the introduction. */
+const Bare = ({ children }: { children: React.ReactNode }) => <div className="min-w-0">{children}</div>;
+
+export function CheckStage({ def, progress, bare = false }: { def: JourneyDef; progress: JourneyProgress; bare?: boolean }) {
   const { topic, learner, update } = useTopicState();
+  const CheckLayout = bare ? Bare : CheckPanel;
   const r = learner.recheck;
   const m = skillMastery(def.skill, learner.results);
   if (r && r.skill === def.skill) {
@@ -203,13 +207,15 @@ export function CheckStage({ def, progress }: { def: JourneyDef; progress: Journ
   return (
     <CheckLayout>
       <div className="flex flex-col items-start gap-4">
-        <div className="flex items-end gap-3">
-          <Pic name="guide-wave" size={96} className="shrink-0" />
-          <div className="rounded-[22px] rounded-bl-[6px] bg-surface p-4 shadow-[var(--shadow-card)]">
-            <p className="text-lg font-bold">Show what you know!</p>
-            <p className="text-body">New questions on your own: no hints, and you find out how you did at the end.</p>
+        {!bare && (
+          <div className="flex items-end gap-3">
+            <Pic name="guide-wave" size={96} className="shrink-0" />
+            <div className="rounded-[22px] rounded-bl-[6px] bg-surface p-4 shadow-[var(--shadow-card)]">
+              <p className="text-lg font-bold">Show what you know!</p>
+              <p className="text-body">New questions on your own: no hints, and you find out how you did at the end.</p>
+            </div>
           </div>
-        </div>
+        )}
         {r && r.skill !== def.skill && <p className="text-body text-ink-2">Starting this check replaces an unfinished check on another skill.</p>}
         <Button
           variant="cta"

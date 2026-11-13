@@ -10,6 +10,7 @@ import { updateLearner, updateTopic, useHydrated, useLearner } from "@/lib/store
 import { completePracticeSession, setSettings } from "@/engine/progress";
 import { ArrowLeftIcon, CloseIcon, HomeIcon, MapIcon, ParentIcon, PracticeIcon, ResultsIcon, SoundIcon, TrophyIcon } from "./Icons";
 import { Pic } from "@/components/paper/Pic";
+import { journeyFor } from "@/topics/kit/journeys";
 
 /** D-043 step 3: Home, Topics, Practice, Tests, Progress. The map, labs and badges are reached from these pages. */
 const KID_NAV = [
@@ -55,13 +56,15 @@ export function isActive(pathname: string, href: string) {
   return under(href);
 }
 
-export type ShellMode = "kid" | "focus" | "parent";
+export type ShellMode = "kid" | "focus" | "parent" | "canvas";
 
 /** Which chrome a route gets. Focus mode hides navigation so activities fill a phone screen. */
 export function shellMode(pathname: string, practiceActive: (topicId: string) => boolean): ShellMode {
   if (pathname.startsWith("/parent") || pathname.startsWith("/results")) return "parent";
   const tp = topicPath(pathname);
   if (!tp) return "kid";
+  // D-060: a lesson on the canvas brings its own frame, so the shell shows no navigation at all.
+  if (tp.section === "learn" && journeyFor(tp.topicId, pathname.split("/")[4] ?? "")?.canvas) return "canvas";
   if (["lesson", "check", "recheck", "start"].includes(tp.section)) return "focus";
   // R2: a fact session (not the facts hub or the explorer) fills the screen like a lesson.
   if (/^\/t\/[^/]+\/facts\/(practice|untimed|diagnostic|timed)/.test(pathname)) return "focus";
@@ -222,9 +225,11 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <main
         id="main"
-        className={`mx-auto w-full max-w-6xl px-4 sm:px-6 ${
-          mode === "focus" ? "pb-6 pt-4 sm:pt-6" : mode === "kid" ? "pb-28 pt-4 lg:pb-16 lg:pt-6" : "pb-16 pt-6"
-        }`}
+        className={
+          mode === "canvas"
+            ? "w-full"
+            : `mx-auto w-full max-w-6xl px-4 sm:px-6 ${mode === "focus" ? "pb-6 pt-4 sm:pt-6" : mode === "kid" ? "pb-28 pt-4 lg:pb-16 lg:pt-6" : "pb-16 pt-6"}`
+        }
       >
         {children}
       </main>

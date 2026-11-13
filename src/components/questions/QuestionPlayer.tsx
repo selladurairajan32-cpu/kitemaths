@@ -195,6 +195,7 @@ export function QuestionPlayer({
   orderKey,
   autoFocus = false,
   autoHint = true,
+  aid,
 }: {
   question: Question;
   context: ResultContext;
@@ -207,6 +208,8 @@ export function QuestionPlayer({
   autoFocus?: boolean;
   /** FR-010: false once the skill is secure, so a hint is offered rather than shown. */
   autoHint?: boolean;
+  /** D-060: a hands-on model for this question, shown between the prompt and the answer (the lesson canvas). */
+  aid?: ReactNode;
 }) {
   const topic = useTopic();
   const { Input: QuestionInput, evaluate, inputProblem, isComplete: isResponseComplete, answerText } = topic.questions;
@@ -284,6 +287,7 @@ export function QuestionPlayer({
       {state.stage === "correct" && <Confetti burstKey={episodeId} pieces={state.attempts === 1 && state.hintsUsed === 0 ? 28 : 18} />}
       <form ref={scope} onSubmit={submit} className="space-y-6 rounded-[28px] border border-line bg-surface px-5 pb-5 pt-6 shadow-[var(--shadow-card)] sm:p-8">
         <QuestionPrompt key={returned} q={q} focusOnMount={autoFocus || returned > 0} autoRead={returned === 0} />
+        {aid}
         <QuestionInput
           question={q}
           response={response}
