@@ -1,6 +1,6 @@
 # D-060: the lesson canvas pilot
 
-13 November 2026. Developer report. Status: **READY FOR QA, not accepted, not deployed.**
+13 November 2026. Developer report. Status: **READY FOR QA, not accepted.** Deployed to production on 13 November at the Product Owner's request, to try with a child (D-061, CH-115).
 
 The Product Owner asked for the learning experience to be rethought from the ground up, starting with one complete
 topic, so that the design can be judged on whether it improves learning. This is that pilot: **adding fractions with

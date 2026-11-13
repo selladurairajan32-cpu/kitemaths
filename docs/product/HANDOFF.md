@@ -46,7 +46,7 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
   stage, world and peer colours; `--color-field-*` tokens, white text at 5:1 or more). No gradients or glass anywhere
   (`design.test.ts`). CH-105, CH-106.
 
-- **D-060 lesson canvas pilot** (built, READY FOR QA, not deployed): `fractions-2/add-different` is taught full screen in six
+- **D-060 lesson canvas pilot** (built, READY FOR QA, deployed on request, D-061, CH-115): `fractions-2/add-different` is taught full screen in six
   phases (Discover → Explore → Understand → Practise → Apply → Prove it). Generic frame in `components/canvas/`; the
   concept's own phases in `topics/fractions-2/canvas/`; registry `kit/canvasLessons.tsx`; switched on by `canvas: true`
   in `kit/journeys.ts`. Report and design direction: `reports/D-060-lesson-canvas-pilot-report.md` (CH-113, CH-114).
