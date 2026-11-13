@@ -1,18 +1,16 @@
 "use client";
 
-import { Fragment } from "react";
-import { FIELDS, WORLD_FIELD } from "@/components/kid/fields";
-import { Kip } from "@/components/kid/Kip";
-import { KID_STATUS } from "@/components/kid/kidText";
-import { Fill, GoLink, Heading, Lift, Page, Pop, Stop as StopDot } from "@/components/kid/Play";
+import { motion } from "motion/react";
+import Link from "next/link";
 import { RichText } from "@/components/math/RichText";
 import { PaperIcon, type IconName } from "@/components/paper/PaperIcon";
-import { ArrowLeftIcon } from "@/components/ui/Icons";
+import { buttonClass } from "@/components/ui/Button";
+import { CheckIcon, FlagIcon, PracticeIcon } from "@/components/ui/Icons";
+import { ProgressBar } from "@/components/ui/Progress";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 import { allLessonEvidence, unmetPrerequisites, type LessonEvidence } from "@/engine/evidence";
 import { factStates } from "@/engine/facts";
-import { isPracticeMilestoneMet, recommendNext, reviewSkills, strongSkills } from "@/engine/journey";
-import { skillMastery } from "@/engine/mastery";
+import { isPracticeMilestoneMet, phaseStatuses, practiceResultsCount, PRACTICE_READY_RESULTS, recommendNext, reviewSkills, strongSkills } from "@/engine/journey";
 import { journeyDone } from "@/engine/overview";
 import { STARS } from "@/engine/rewards";
 import { CANVAS_LABEL, CANVAS_PHASES, canvasReached } from "@/engine/topicJourney";
@@ -21,8 +19,8 @@ import { useHydrated, useLearner } from "@/lib/store";
 import { topicOf } from "@/topics";
 import { useTopicState } from "@/topics/context";
 import { JOURNEYS } from "@/topics/kit/journeys";
-import { subTopicHref } from "@/topics/overview";
 import { studyPlan } from "@/topics/kit/study";
+import { subTopicHref } from "@/topics/overview";
 import { FACTS_TOPIC } from "@/topics/times-tables/facts";
 import { WORLDS } from "@/topics/worlds";
 
@@ -52,11 +50,20 @@ interface Stop {
   minutes?: number;
 }
 
+type NodeStatus = "done" | "active" | "next" | "upcoming";
+
+function Node({ status, index }: { status: NodeStatus; index: number }) {
+  const cls = { done: "bg-ok text-white", active: "bg-ink text-white ring-4 ring-ink/10", next: "bg-surface text-ink ring-2 ring-ink", upcoming: "bg-surface text-muted ring-1 ring-line-strong" }[status];
+  return <span className={`relative z-10 grid size-10 shrink-0 place-items-center rounded-full text-label font-semibold ${cls}`}>{status === "done" ? <CheckIcon size={18} /> : index}</span>;
+}
+
+const STATUS_TEXT: Record<NodeStatus, string> = { done: "Completed", active: "In progress", next: "Recommended next", upcoming: "Coming up" };
+
 /**
- * A topic's page: its sub-topics as a path (FR-011). A lesson counts as done only with independent evidence (CUR-002
- * §4); reaching its end is shown as "finished", with the practice that completes it. D-064, the Playground look: a
- * winding path of big round stops, green when done, yellow where the child is, with the page's one yellow button at
- * that stop. Every stop opens one place: the lesson canvas where the sub-topic has one (D-060), else its lesson.
+ * A topic's page, as the first prototype's "Your learning journey" (D-066): every sub-topic in teaching order on a
+ * numbered line, then the practice milestone and the mastery check; "How you'll learn" beside it. A lesson counts as done
+ * only with independent evidence (CUR-002 §4). Each sub-topic opens one place: the hands-on lesson where it has one
+ * (D-060), else its lesson.
  */
 export function SkyMapScreen() {
   const hydrated = useHydrated();
@@ -160,151 +167,192 @@ export function SkyMapScreen() {
 
   const current = stops.find((s) => s.status === "current") ?? stops.find((s) => s.status === "open");
   const world = WORLDS.find((w) => w.id === topic.world);
-  const field = WORLD_FIELD[topic.world] ?? FIELDS.blue;
-  const lessonCount = lessons.length;
-  // The topic's special areas (facts, mocks, methods), and any journey that belongs to no lesson here.
+  const practiced = practiceResultsCount(topic, learner);
+  const firstForm = Object.values(topic.assessment.forms)[0] ?? [];
   const areas: { href: string; icon: IconName; title: string; line: string }[] = [
-    ...(topic.id === FACTS_TOPIC ? [{ href: links.facts(), icon: "times" as IconName, title: "My times-table facts", line: `${factStates(learner.results).filter((x) => x.status === "known").length} of 66 facts known. Practise or check them.` }] : []),
+    ...(topic.id === FACTS_TOPIC ? [{ href: links.facts(), icon: "times" as IconName, title: "My times-table facts", line: `${factStates(learner.results).filter((x) => x.status === "known").length} of 66 facts known.` }] : []),
     ...(topic.id === "mock-exams" ? [{ href: links.mock(), icon: "trophy" as IconName, title: "Practice mock", line: "Practise like a real test, then see what to work on." }] : []),
     ...(topic.id === "mental-maths" ? [{ href: links.strategies(), icon: "bulb" as IconName, title: "Mental maths methods", line: "Pick the best method, and try the one-minute challenge." }] : []),
-    ...JOURNEYS.filter((j) => j.topicId === topic.id && !topic.lessons.some((l) => evidence.get(l.id)?.skill === j.skill)).map((j) => ({ href: links.learn(j.concept), icon: "bulb" as IconName, title: j.title, line: "Learn it step by step, then practise and check what you know." })),
+    ...JOURNEYS.filter((j) => j.topicId === topic.id && !topic.lessons.some((l) => evidence.get(l.id)?.skill === j.skill)).map((j) => ({ href: links.learn(j.concept), icon: "bulb" as IconName, title: j.title, line: "Learn it step by step, then practise and check." })),
+    { href: links.lab(), icon: "lab" as IconName, title: "Free lab", line: "Explore on your own with the topic's models." },
   ];
-  /** The path sways from side to side on a wide screen; on a phone it runs straight down. */
-  const SWAY = ["sm:ml-0", "sm:ml-14", "sm:ml-28", "sm:ml-14"];
+  const node = (s: (typeof stops)[number]): NodeStatus => (s.status === "done" ? "done" : s === current ? (s.phase || s.line.startsWith("Carry on") ? "active" : "next") : s.phase ? "active" : "upcoming");
+  const practiceStop = stops[lessons.length]!;
+  const checkStop = stops[lessons.length + 1]!;
 
   return (
-    <Page>
-      <section aria-labelledby="island-title" className={`flex flex-col gap-5 rounded-[var(--radius-hero)] px-6 py-7 sm:px-10 sm:py-9 ${field.bg} ${field.text}`}>
-        <Lift href={appRoutes.topics()} className="inline-flex min-h-11 items-center gap-2 self-start rounded-full bg-white/20 px-4 text-body font-extrabold">
-          <ArrowLeftIcon size={18} strokeWidth={3} /> All topics
-        </Lift>
-        <div className="flex items-center gap-5">
-          <span className="grid size-24 shrink-0 place-items-center rounded-[28px] bg-surface sm:size-28" aria-hidden>
-            <PaperIcon name={topic.look.icon} size={76} />
-          </span>
-          <div className="flex min-w-0 flex-1 flex-col gap-2">
-            {world && <p className="text-body font-extrabold">{world.title}</p>}
-            <h1 id="island-title" className="display text-heading-1 sm:text-display-1">
-              {topic.title}
-            </h1>
-            <div className="flex max-w-md items-center gap-3">
-              <Fill value={doneCount / stops.length} label={`${doneCount} of ${stops.length} done`} onDark />
-              <span className="whitespace-nowrap text-body font-extrabold">
-                {doneCount} of {stops.length} done
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
+    <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
+      <div>
+        <header className="mb-6">
+          <p className="eyebrow">{topic.title}</p>
+          <h1 id="island-title" className="display text-heading-1 sm:text-display-2">
+            Your learning journey
+          </h1>
+          <p className="mt-2 max-w-xl text-body text-ink-2">
+            {lessons.length} short lessons{topic.subtitle ? `: ${topic.subtitle.charAt(0).toLowerCase()}${topic.subtitle.slice(1)}` : ""}. Then practise until you&apos;re secure, and show your mastery.
+          </p>
+          <p className="mt-3 text-label text-muted">
+            {world ? `${world.title} · ` : ""}
+            {doneCount} of {stops.length} done ·{" "}
+            <Link href={appRoutes.topics()} className="font-medium text-den hover:underline">
+              All topics
+            </Link>
+          </p>
+        </header>
 
-      {review.length > 0 && (
-        <Lift href={routes.practice(review[0])} className="flex items-center gap-4 rounded-[28px] bg-tile-pink p-4 sm:p-5">
-          <PaperIcon name="target" size={52} />
-          <span className="min-w-0 flex-1">
-            <span className="block text-title font-extrabold text-ink">Let&apos;s make {skillById(review[0]).title} strong again</span>
-            <span className="block text-body text-ink-2">A few quick questions on just this.</span>
-          </span>
-          <span className="hidden shrink-0 rounded-full bg-surface px-5 py-2 text-body font-extrabold text-ink sm:block">Practise it</span>
-        </Lift>
-      )}
+        {review.length > 0 && (
+          <p className="mb-4 rounded-2xl border border-warn/30 bg-warn-soft px-4 py-3 text-body text-ink-2">
+            <strong className="text-ink">{skillById(review[0]).title}</strong> needs another look.{" "}
+            <Link href={routes.practice(review[0])} className="font-medium text-den underline underline-offset-4">
+              Practise it
+            </Link>
+          </p>
+        )}
 
-      <section aria-labelledby="path-title" className="flex flex-col gap-5">
-        <Heading id="path-title">Your path</Heading>
-        <ol aria-label="Lessons and challenges" className="relative m-0 flex list-none flex-col gap-4 p-0">
-          <span className="absolute bottom-10 left-10 top-10 -ml-0.5 border-l-4 border-dashed border-line-strong sm:hidden" aria-hidden />
-          {stops.map((s, i) => {
-            const here = s === current;
-            const state = s.status === "done" ? "done" : here ? "here" : "open";
-            const main = here && s.extra ? s.extra : { href: s.href, label: s.phase ? "Carry on" : i >= lessonCount ? "Go" : "Start" };
+        <ol aria-label="Lessons and challenges" className="relative space-y-3">
+          <span className="absolute bottom-6 left-[1.2rem] top-6 w-0.5 bg-line" aria-hidden />
+          {stops.slice(0, lessons.length).map((s, i) => {
+            const status = node(s);
+            const l = lessons[i]!;
+            const primary = status === "next" || status === "active";
             return (
-              <Fragment key={s.key}>
-                {s.part && (
-                  <li role="presentation" className={`mt-3 self-start rounded-full px-5 py-1.5 text-body font-extrabold first:mt-0 ${field.soft} text-ink`}>
-                    {s.part}
-                  </li>
-                )}
-                {i === lessonCount && (
-                  <li role="presentation" className="mt-3 self-start rounded-full bg-tile-yellow px-5 py-1.5 text-body font-extrabold text-ink">
-                    Then show what you know
-                  </li>
-                )}
-                <li className={`relative ${SWAY[i % SWAY.length]}`} aria-current={here ? "step" : undefined}>
-                  <Pop i={i}>
-                    <div className={`flex items-center gap-4 rounded-[28px] ${here ? "border-4 border-ink bg-surface p-3 sm:p-4" : "p-1"}`}>
-                      <Lift href={s.href} aria-label={`${s.title}${s.status === "done" ? ". Done." : here ? ". Next up." : ""}`} className="rounded-full">
-                        <StopDot state={state}>{i < lessonCount ? i + 1 : <PaperIcon name={s.icon} size={40} />}</StopDot>
-                      </Lift>
-                      <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                        <p className={`leading-snug text-ink ${here ? "display text-heading-2" : "text-title font-extrabold"}`}>{s.title}</p>
-                        <p className="text-body text-ink-2">
-                          {/* A stop still to come says only how long it takes; the stop the child is on says what it is about. */}
-                          <RichText text={!here && s.minutes && s.line.startsWith(`${s.minutes} min ·`) ? `${s.minutes} minutes` : s.line} />
-                        </p>
-                        {s.bestAfter && <p className="mt-1 self-start rounded-[14px] bg-sun-soft px-3 py-1.5 text-label text-ink">{s.bestAfter}</p>}
-                        {!here && s.extra && (
-                          <Lift href={s.extra.href} className="inline-flex min-h-11 items-center self-start text-body font-extrabold text-brand-strong underline underline-offset-4">
-                            {s.extra.label}
-                            <span className="sr-only">: {s.title}</span>
-                          </Lift>
-                        )}
-                      </div>
-                      {here && (
-                        <div className="hidden shrink-0 items-center gap-3 sm:flex">
-                          <Kip mood="cheer" size={64} float />
-                          <GoLink href={main.href}>{main.label}</GoLink>
-                        </div>
+              <motion.li key={s.key} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: Math.min(i, 10) * 0.04 }} className="relative flex gap-4" aria-current={s === current ? "step" : undefined}>
+                <Node status={status} index={i + 1} />
+                <div className={`card min-w-0 flex-1 p-4 sm:p-5 ${primary ? "ring-1 ring-ink/15" : ""}`}>
+                  {s.part && <p className="eyebrow mb-2">{s.part}</p>}
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="min-w-0">
+                      <p className="flex flex-wrap items-center gap-2 text-label">
+                        <span className="rounded-full bg-sunk px-2 py-0.5 font-semibold text-ink-2">{s.phase !== undefined ? "Hands-on" : l.phase}</span>
+                        <span className="text-muted">
+                          {l.minutes} min · {s.phase !== undefined ? `${CANVAS_PHASES.length} steps` : `${l.steps.length} steps`}
+                        </span>
+                        <span className={status === "done" ? "font-medium text-ok" : status === "next" ? "font-medium text-den" : "text-muted"}>{STATUS_TEXT[status]}</span>
+                      </p>
+                      <h2 className="mt-1.5 font-sans text-title font-semibold">{s.title}</h2>
+                      <p className="text-label text-ink-2">
+                        <RichText text={s.line.startsWith("Carry on") || s.status === "done" ? s.line : l.summary} />
+                      </p>
+                      {s.bestAfter && <p className="mt-1.5 rounded-xl bg-warn-soft px-3 py-1.5 text-label text-ink-2">{s.bestAfter}</p>}
+                      {s.extra && (
+                        <Link href={s.extra.href} className="mt-1 inline-flex min-h-11 items-center text-label font-medium text-den hover:underline">
+                          {s.extra.label}
+                          <span className="sr-only">: {s.title}</span>
+                        </Link>
                       )}
                     </div>
-                    {here && (
-                      <GoLink href={main.href} className="mt-3 w-full sm:hidden">
-                        {main.label}
-                      </GoLink>
-                    )}
-                  </Pop>
-                </li>
-              </Fragment>
+                    <Link href={s.href} className={buttonClass(primary ? "primary" : "secondary", "md", "shrink-0")}>
+                      {status === "done" ? "Review" : status === "active" ? "Continue" : "Start"}
+                      <span className="sr-only"> {s.title}</span>
+                    </Link>
+                  </div>
+                  {status === "active" && s.phase !== undefined && <ProgressBar value={s.phase / CANVAS_PHASES.length} label={`${s.title} progress`} className="mt-3" />}
+                </div>
+              </motion.li>
             );
           })}
-        </ol>
-      </section>
 
-      {areas.length > 0 && (
-        <section aria-labelledby="more-title" className="flex flex-col gap-4">
-          <Heading id="more-title">More to do here</Heading>
-          <ul className="m-0 grid list-none gap-4 p-0 sm:grid-cols-2">
+          <li className="relative flex gap-4">
+            <Node status={node(practiceStop)} index={lessons.length + 1} />
+            <div className={`card min-w-0 flex-1 p-4 sm:p-5 ${practiceStop === current ? "ring-1 ring-ink/15" : ""}`}>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="min-w-0">
+                  <p className="flex items-center gap-2 text-label">
+                    <span className="rounded-full bg-sunk px-2 py-0.5 font-semibold text-ink-2">Practise</span>
+                    <span className={node(practiceStop) === "done" ? "font-medium text-ok" : node(practiceStop) === "next" ? "font-medium text-den" : "text-muted"}>{STATUS_TEXT[node(practiceStop)]}</span>
+                  </p>
+                  <h2 className="mt-1.5 flex items-center gap-2 font-sans text-title font-semibold">
+                    <PracticeIcon size={18} /> Practice milestone
+                  </h2>
+                  <p className="text-label text-ink-2">
+                    Answer at least {PRACTICE_READY_RESULTS} practice questions and make {needStrong} skills secure.
+                  </p>
+                </div>
+                <Link href={practiceStop.href} className={buttonClass(practiceStop === current ? "primary" : "secondary", "md", "shrink-0")}>
+                  Practise<span className="sr-only"> (practice milestone)</span>
+                </Link>
+              </div>
+              <div className="mt-3 grid gap-2 text-label text-muted sm:grid-cols-2">
+                <div>
+                  <ProgressBar value={Math.min(1, practiced / PRACTICE_READY_RESULTS)} label="Practice questions answered" tone="den" />
+                  <p className="mt-1">
+                    {Math.min(practiced, PRACTICE_READY_RESULTS)} / {PRACTICE_READY_RESULTS} questions
+                  </p>
+                </div>
+                <div>
+                  <ProgressBar value={Math.min(1, strong / needStrong)} label="Skills secure" tone="ok" />
+                  <p className="mt-1">
+                    {Math.min(strong, needStrong)} / {needStrong} skills secure
+                  </p>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <li className="relative flex gap-4">
+            <Node status={node(checkStop)} index={lessons.length + 2} />
+            <div className={`card min-w-0 flex-1 p-4 sm:p-5 ${checkStop === current ? "ring-1 ring-ink/15" : ""}`}>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="min-w-0">
+                  <p className="flex items-center gap-2 text-label">
+                    <span className="rounded-full bg-sunk px-2 py-0.5 font-semibold text-ink-2">Master</span>
+                    <span className={node(checkStop) === "done" ? "font-medium text-ok" : node(checkStop) === "next" ? "font-medium text-den" : "text-muted"}>{STATUS_TEXT[node(checkStop)]}</span>
+                  </p>
+                  <h2 className="mt-1.5 flex items-center gap-2 font-sans text-title font-semibold">
+                    <FlagIcon size={18} /> Mastery check
+                  </h2>
+                  <p className="text-label text-ink-2">
+                    {firstForm.length} questions on your own, with no hints. {checkStop.line}
+                  </p>
+                </div>
+                <Link href={checkStop.href} className={buttonClass(checkStop === current ? "primary" : "secondary", "md", "shrink-0")}>
+                  {learner.assessment.status === "in-progress" ? "Resume check" : learner.assessment.last ? "Retake check" : "Open check"}
+                </Link>
+              </div>
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
+        <div className="card p-5">
+          <h2 className="font-sans text-body font-semibold">How you&apos;ll learn</h2>
+          <p className="mt-1 text-label text-ink-2">Every topic follows the same path, so understanding comes before testing.</p>
+          <ol className="mt-4 space-y-3">
+            {phaseStatuses(topic, learner).map(({ phase, status }, i) => (
+              <li key={phase} className="flex gap-3">
+                <span className={`grid size-6 shrink-0 place-items-center rounded-full text-label font-semibold ${status === "done" ? "bg-ok text-white" : status === "current" ? "bg-ink text-white" : "bg-sunk text-muted"}`}>
+                  {status === "done" ? <CheckIcon size={12} /> : i + 1}
+                </span>
+                <div>
+                  <p className="text-label font-medium">{phase}</p>
+                  <p className="text-label text-muted">{topic.phaseDescriptions[phase]}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <div className="card p-5">
+          <h2 id="more-title" className="font-sans text-body font-semibold">
+            More in this topic
+          </h2>
+          <ul className="mt-3 space-y-1">
             {areas.map((a) => (
-              <li key={a.href} className="flex">
-                <Lift href={a.href} className={`flex flex-1 items-center gap-4 rounded-[28px] p-5 ${field.soft}`}>
-                  <span className="grid size-16 shrink-0 place-items-center rounded-full bg-surface" aria-hidden>
-                    <PaperIcon name={a.icon} size={40} />
+              <li key={a.href}>
+                <Link href={a.href} className="-mx-2 flex items-center gap-3 rounded-xl p-2 hover:bg-sunk">
+                  <span className="grid size-10 shrink-0 place-items-center rounded-full bg-sunk" aria-hidden>
+                    <PaperIcon name={a.icon} size={24} />
                   </span>
                   <span className="min-w-0">
-                    <span className="block text-title font-extrabold text-ink">{a.title}</span>
-                    <span className="block text-body text-ink-2">{a.line}</span>
+                    <span className="block text-label font-medium text-ink">{a.title}</span>
+                    <span className="block text-label text-muted">{a.line}</span>
                   </span>
-                </Lift>
+                </Link>
               </li>
             ))}
           </ul>
-        </section>
-      )}
-
-      <section aria-labelledby="skills-title" className="flex flex-col gap-4">
-        <Heading id="skills-title">My skills</Heading>
-        <ul className="m-0 flex list-none flex-wrap gap-3 p-0">
-          {topic.skills.map((sk) => {
-            const st = KID_STATUS[skillMastery(sk.id, learner.results).status];
-            return (
-              <li key={sk.id}>
-                <Lift href={routes.practice(sk.id)} className="flex min-h-12 items-center gap-3 rounded-full border-2 border-line-strong bg-surface py-1.5 pl-5 pr-2 hover:bg-raised">
-                  <span className="min-w-0 text-body font-bold text-ink">{sk.title}</span>
-                  <span className={`shrink-0 whitespace-nowrap rounded-full px-3 py-1 text-label font-extrabold ${st.cls}`}>{st.label}</span>
-                </Lift>
-              </li>
-            );
-          })}
-        </ul>
-      </section>
-    </Page>
+        </div>
+      </aside>
+    </div>
   );
 }

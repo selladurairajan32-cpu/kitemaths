@@ -27,12 +27,13 @@ const answer = (skill: string, correct: boolean, at: number): ItemResult => ({ q
 beforeEach(() => resetLearner());
 
 describe("kid pages (D-043 step 3)", () => {
-  it("navigates by Home, Topics, Practice, Tests and Progress, and marks the section a page belongs to", () => {
+  it("navigates by Dashboard, Topics, Practice, Tests and Progress, and marks the section a page belongs to", () => {
     render(<AppShell>page</AppShell>);
     const navs = screen.getAllByRole("navigation", { name: "Main" });
     for (const nav of navs) {
       expect(within(nav).getAllByRole("link").map((a) => [a.textContent, a.getAttribute("href")])).toEqual([
-        ["Home", "/"],
+        // D-066: the first prototype's name for Home on the wide bar; the phone's bar says "Home".
+        [navs.length > 1 && nav === navs[1] ? "Home" : "Dashboard", "/"],
         ["Topics", "/topics"],
         ["Practice", "/practice"],
         ["Tests", "/tests"],
@@ -54,18 +55,18 @@ describe("kid pages (D-043 step 3)", () => {
     const def = journeyFor("fractions-2", "add-different")!;
     updateLearner((s) => ({ ...s, results: [answer("fractions.compare", true, 500)], journeys: { "fractions-2/add-different": { stage: 2, reached: 2, startedAt: 1000, practised: 7, applied: 0 } } }));
     render(<KidHomeScreen />);
-    expect(await screen.findByRole("heading", { level: 1, name: /^Hi there!/ })).toBeTruthy();
-    expect(screen.getByRole("heading", { level: 2, name: def.title })).toBeTruthy();
+    expect(await screen.findByRole("heading", { level: 1, name: "Your maths dashboard" })).toBeTruthy();
+    expect(screen.getByRole("heading", { level: 3, name: def.title })).toBeTruthy();
     // The lesson is on the canvas, so Home counts its six steps (Apply is the fifth).
     expect(screen.getByText(/Fractions 2 · Step 5 of 6: Apply/)).toBeTruthy();
-    expect(screen.getByRole("img", { name: "Your learning path: step 5 of 6" })).toBeTruthy();
     expect(screen.getByRole("link", { name: /^Continue/ }).getAttribute("href")).toBe("/t/fractions-2/learn/add-different");
-    expect(screen.getByRole("heading", { name: "Today's plan" })).toBeTruthy();
+    // D-066: the prototype's dashboard has no plan; the weekly plan stays in the grown-ups' area.
+    expect(screen.queryByRole("heading", { name: "Today's plan" })).toBeNull();
     // D-062: the lesson being continued is not listed a second time under "Hands-on lessons".
     expect(screen.queryByRole("heading", { name: "Hands-on lessons" })).toBeNull();
     expect(JOURNEYS.filter((j) => j.canvas)).toHaveLength(1);
-    // One yellow button on the page: the one thing to do next.
-    expect(document.querySelectorAll(".bg-cta")).toHaveLength(1);
+    // D-066: the dashboard's current topic card names the topic and its learning phases.
+    expect(screen.getByRole("list", { name: "Learning phases" })).toBeTruthy();
   });
 
   it("offers to continue a lesson begun on the canvas even before any question is answered", async () => {
@@ -73,7 +74,9 @@ describe("kid pages (D-043 step 3)", () => {
     render(<KidHomeScreen />);
     expect((await screen.findByRole("link", { name: /^Continue/ })).getAttribute("href")).toBe("/t/fractions-2/learn/add-different");
     expect(screen.getByText(/Fractions 2 · Step 2 of 6: Explore/)).toBeTruthy();
-    expect(screen.queryByRole("link", { name: /^Play the warm-up/ })?.classList.contains("bg-cta") ?? false).toBe(false);
+    // The dark button continues the lesson; the warm-up is only offered as a link in a note.
+    expect(screen.getByRole("link", { name: /^Continue lesson/ }).className).toContain("bg-ink");
+    expect(screen.queryByRole("link", { name: /^Play the warm-up/ })?.className ?? "").not.toContain("bg-ink");
   });
 
   it("shows every topic in a list with its progress, filtered by world", async () => {
@@ -94,7 +97,9 @@ describe("kid pages (D-043 step 3)", () => {
 
   it("lists a topic's sub-topics in teaching order with one thing to do next, and opens each where it is taught", async () => {
     render(<TopicProvider topicId="fractions-2"><SkyMapScreen /></TopicProvider>);
-    expect(await screen.findByRole("heading", { level: 1, name: "Fractions 2" })).toBeTruthy();
+    // D-066: the first prototype's "Your learning journey", for this topic.
+    expect(await screen.findByRole("heading", { level: 1, name: "Your learning journey" })).toBeTruthy();
+    expect(screen.getByText("Fractions 2", { selector: "p" })).toBeTruthy();
     expect(screen.getByRole("link", { name: /All topics/ }).getAttribute("href")).toBe("/topics");
     const list = screen.getByRole("list", { name: "Lessons and challenges" });
     const links = [...new Set(within(list).getAllByRole("link").map((a) => a.getAttribute("href")))];
@@ -104,11 +109,12 @@ describe("kid pages (D-043 step 3)", () => {
     expect(links.filter((h) => h!.includes("/study") || h!.includes("/learn/multiply"))).toEqual([]);
     expect(links.slice(-2)).toEqual(["/t/fractions-2/practice", "/t/fractions-2/check"]);
     expect(within(list).getByText("Part 2: Adding and subtracting")).toBeTruthy();
-    // New learner: the first sub-topic is where they are, and it carries the page's one yellow button.
+    // New learner: the first sub-topic is recommended next, with the page's dark Start button.
     const here = within(list).getAllByRole("listitem").find((li) => li.getAttribute("aria-current") === "step")!;
-    expect(within(here).getByText("Simplest form")).toBeTruthy();
+    expect(within(here).getByRole("heading", { name: "Simplest form" })).toBeTruthy();
     expect(new Set(within(here).getAllByRole("link", { name: /^Start/ }).map((a) => a.getAttribute("href")))).toEqual(new Set(["/t/fractions-2/lesson/simplify"]));
-    expect(within(screen.getByRole("heading", { name: "My skills" }).closest("section")!).getAllByRole("link")).toHaveLength(topicById("fractions-2")!.skills.length);
+    expect(screen.getByRole("heading", { name: "How you'll learn" })).toBeTruthy();
+    expect(screen.getByRole("link", { name: /Free lab/ }).getAttribute("href")).toBe("/t/fractions-2/lab");
   });
 
   it("shows how far a lesson on the canvas has got, and a topic without a study plan opens its lessons", async () => {

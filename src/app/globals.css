@@ -1,7 +1,9 @@
 @import "tailwindcss";
 
 /*
- * Kite Maths design system v3: "Crystal". See docs/DESIGN.md.
+ * Kite Maths design system. D-066: the look of the first prototype (2 Nov 2026), restored at the Product Owner's request:
+ * warm paper, Lexend for reading and Fraunces for titles, ink buttons, white cards with a hairline edge.
+ * (Earlier: v3 "Crystal". See docs/DESIGN.md.)
  * A calm white base, one friendly font (Nunito) at easy reading sizes, one blue action,
  * white cards with soft shadows, and the fun carried by 3D pictures (public/3d).
  * Fractions keep their data colours: coral numerator, blue denominator.
@@ -9,20 +11,20 @@
  */
 @theme static {
   /* Ground, surfaces and ink: a calm, clean base (the "Crystal" look). */
-  --color-paper: #ffffff; /* page ground: white everywhere (D-052; was #f6f8fd) */
+  --color-paper: #faf8f4; /* page ground: white everywhere (D-052; was #f6f8fd) */
   --color-surface: #ffffff; /* cards */
-  --color-sunk: #edf2fa; /* one tone step below the ground: tracks, chips */
-  --color-raised: #f8faff; /* hover and quiet panels inside white cards */
-  --color-ink: #1b2559;
-  --color-ink-2: #3a4466; /* body text, about 9.4:1 on white (darkened for clarity, D-037) */
-  --color-muted: #4b5573; /* labels and meta, about 7.5:1 on white (darkened for clarity, D-037) */
-  --color-line: #d8e0ee; /* card borders (stronger, D-037) */
-  --color-line-strong: #d3dcec; /* control borders */
+  --color-sunk: #f3f0ea; /* one tone step below the ground: tracks, chips */
+  --color-raised: #f8f5ef; /* hover and quiet panels inside white cards */
+  --color-ink: #1b2130;
+  --color-ink-2: #3a4254; /* body text, about 9.4:1 on white (darkened for clarity, D-037) */
+  --color-muted: #646c7d; /* labels and meta, about 7.5:1 on white (darkened for clarity, D-037) */
+  --color-line: #e6e1d8; /* card borders (stronger, D-037) */
+  --color-line-strong: #cfc8bb; /* control borders */
 
   /* The one action colour: a clear, friendly blue. */
-  --color-brand: #2563eb;
-  --color-brand-strong: #1d4ed8;
-  --color-brand-soft: #e8f0ff;
+  --color-brand: #1b2130;
+  --color-brand-strong: #234fa8;
+  --color-brand-soft: #f3f0ea;
   --color-on-brand: #ffffff; /* text on the action colour, 5.2:1 */
 
   /* Pastel tiles behind 3D pictures */
@@ -34,21 +36,21 @@
   --color-tile-sky: #e0f5fd;
 
   /* Data: numerator / shaded parts */
-  --color-num: #f4623a;
-  --color-num-strong: #a3361a;
-  --color-num-soft: #fde5dc;
+  --color-num: #e0603f;
+  --color-num-strong: #a3361a; /* kept from v3: the prototype\'s #c24a2b falls below 4.5:1 for small digits on tints */
+  --color-num-soft: #fde6dd;
   /* Data: denominator / all parts */
-  --color-den: #2f6fd8;
+  --color-den: #2e64d0;
   --color-den-strong: #1d55b8;
-  --color-den-soft: #dfeafb;
+  --color-den-soft: #e1eafb;
 
   /* Status */
-  --color-ok: #167a4b;
-  --color-ok-bright: #22a565;
-  --color-ok-soft: #e3f8ee;
-  --color-warn: #8a5300;
+  --color-ok: #1f8a5b;
+  --color-ok-bright: #1f8a5b;
+  --color-ok-soft: #def3e8;
+  --color-warn: #a86a12;
   --color-warn-bright: #f2a516;
-  --color-warn-soft: #fff4d6;
+  --color-warn-soft: #fbf0da;
 
   /* Paper colours: used by the drawn fraction pictures */
   --color-kite-red: #e8343f;
@@ -78,15 +80,15 @@
   --color-cta: #ffc83d; /* ink on it is about 10:1 */
   --color-cta-strong: #d99a00;
 
-  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-comic), ui-rounded, ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-lexend), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
   /* D-057: the faint squared paper of an exercise book, behind banners. */
-  --color-card-edge: #dbe5fb;
+  --color-card-edge: #e6e1d8;
 
-  --radius-card: 24px;
+  --radius-card: 1.25rem;
   /* D-052: a faint lift only; edges come from a 1px line (a border or a shadow, not both at full strength). */
-  --shadow-card: 0 1px 2px rgba(27, 37, 89, 0.06);
-  --shadow-lift: 0 8px 20px rgba(27, 37, 89, 0.08);
+  --shadow-card: 0 1px 2px rgba(27, 33, 48, 0.04), 0 4px 16px -6px rgba(27, 33, 48, 0.08);
+  --shadow-lift: 0 2px 4px rgba(27, 33, 48, 0.06), 0 12px 32px -12px rgba(27, 33, 48, 0.18);
 
   /*
    * UX-002 / UX-003 / UX-004 tokens (R0 step 2, D-013). Additive: new names only, so no existing
@@ -225,51 +227,49 @@
   h2,
   h3 {
     font-family: var(--font-display);
-    font-weight: 700;
+    font-weight: 600;
   }
 }
 
 @layer components {
-  /* A paper panel: white on the sky, separated by tone, never by a shadow. */
-  /*
-   * D-052: white everywhere. A panel is a solid white surface with a thin line and a soft shadow (no glass, no
-   * gradient); the selected way to learn is the solid brand blue.
-   */
-  /* D-057: cards have a thick, soft edge (the reference site's card), still no shadow. */
+  /* D-066: the prototype's card. A panel is the same card (older screens use the name). */
+  .card,
   .panel {
-    background: var(--color-surface);
-    border: 3px solid var(--color-card-edge);
-  }
-  /* D-058: a section that spans the whole window, whatever column it sits in. */
-  .band {
-    margin-inline: calc(50% - 50vw);
-  }
-  /* D-057: squared paper behind banners: thin lines every 32px, drawn as an SVG tile (no gradient). */
-  .paper-grid {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M32 0V32M0 32H32' fill='none' stroke='%231b2559' stroke-opacity='0.07' stroke-width='1.5'/%3E%3C/svg%3E");
-  }
-  .panel-selected {
-    background: var(--color-brand);
-    border: 1px solid var(--color-brand-strong);
-    box-shadow: 0 8px 20px rgb(37 99 235 / 0.22);
-  }
-  .card {
     background: var(--color-surface);
     border: 1px solid var(--color-line);
     border-radius: var(--radius-card);
     box-shadow: var(--shadow-card);
   }
-  /* Screen and section titles: one face, tight tracking. */
+  /* A section of a page: no colour band, no full-width bleed (D-066). */
+  .band {
+    margin-inline: 0;
+  }
+  .paper-grid {
+    background-image: none;
+  }
+  .panel-selected {
+    background: var(--color-ink);
+    border: 1px solid var(--color-ink);
+    border-radius: var(--radius-card);
+  }
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  /* Screen and section titles: Fraunces, semibold, tight tracking. */
   .display {
     font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: -0.01em;
+    font-weight: 600;
+    letter-spacing: -0.015em;
     line-height: 1.15;
   }
   /*
-   * Tactile press (kid exception 3): a darker bottom edge drawn as a border,
-   * not a shadow, that sinks when pressed. Only on the primary button and
-   * answer tiles.
+   * Tactile press (kid exception 3) on answer tiles: a darker bottom edge drawn as a border, not a shadow, that sinks when
+   * pressed.
    */
   .press {
     border-bottom-width: 3px;

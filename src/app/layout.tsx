@@ -1,14 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import { Comic_Neue, DM_Sans } from "next/font/google";
+import { Fraunces, Lexend } from "next/font/google";
 import { AppShell } from "@/components/ui/AppShell";
 import "./globals.css";
 
 /**
- * D-057: two faces. DM Sans for reading (clear, open, even numerals) and Comic Neue for titles (friendly, handwritten
- * feel, still easy to read), the pairing studied on the reference site.
+ * D-066: the first prototype's two faces. Lexend for reading (designed for easy reading, with open, even letters) and
+ * Fraunces for titles.
  */
-const dmSans = DM_Sans({ variable: "--font-dm-sans", subsets: ["latin"] });
-const comicNeue = Comic_Neue({ variable: "--font-comic", subsets: ["latin"], weight: ["400", "700"] });
+const lexend = Lexend({ variable: "--font-lexend", subsets: ["latin"] });
+const fraunces = Fraunces({ variable: "--font-fraunces", subsets: ["latin"], axes: ["opsz"] });
 
 export const metadata: Metadata = {
   title: "Kite Maths · Maths for Years 3 to 6",
@@ -16,12 +16,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: "#faf8f4",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en-GB" className={`${dmSans.variable} ${comicNeue.variable} antialiased`}>
+    <html lang="en-GB" className={`${lexend.variable} ${fraunces.variable} antialiased`}>
       <body className="min-h-dvh">
         <AppShell>{children}</AppShell>
       </body>

@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { FIELDS, WORLD_FIELD } from "@/components/kid/fields";
 import { TopicBar, yearsText } from "@/components/kid/Overview";
-import { Heading, Hero, Lift, Page, Pop } from "@/components/kid/Play";
-import { Pic } from "@/components/paper/Pic";
+import Link from "next/link";
+import { motion } from "motion/react";
 import { PaperIcon } from "@/components/paper/PaperIcon";
 import { CheckIcon } from "@/components/ui/Icons";
+import { KID_STATUS } from "@/components/kid/kidText";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 import { topicRoutes } from "@/lib/routes";
 import { useHydrated, useLearner } from "@/lib/store";
@@ -15,9 +15,9 @@ import { activeTopic } from "@/topics/recommend";
 import { WORLDS } from "@/topics/worlds";
 
 /**
- * Topics (D-064, the Playground look): every topic as a picture tile, grouped into its world. Each world has its own
- * colour, so a child finds "the orange ones" again. A tile says one thing in words (the topic's name) and shows how far
- * the child has got as a bar (skills from MAST-001). Filter by world, or by the child's school year.
+ * Topics, in the first prototype's look (D-066): a page header, filters as outlined pills (the active one ink), and each
+ * world's topics as white cards with the topic's picture, its name, what it covers and how far the child has got (skills
+ * from MAST-001, lessons from CUR-002 evidence). Filter by world, or by the child's school year.
  */
 export function TopicsScreen() {
   const hydrated = useHydrated();
@@ -33,77 +33,87 @@ export function TopicsScreen() {
   const shown = all.filter(({ topic }) => (world === "all" || topic.world === world) && (!mine || year === null || topic.years.includes(year)));
   const started = all.filter(({ o }) => o.started).length;
 
-  return (
-    <Page>
-      <Hero id="topics-title" field={FIELDS.teal} title="Pick a topic" line={started > 0 ? `You have started ${started} of ${all.length}. Carry on, or try a new one.` : `${all.length} topics in six worlds. Start anywhere you like.`} picture={<Pic name="map" size={140} />} />
+  const chip = (on: boolean) => `flex min-h-11 items-center gap-2 whitespace-nowrap rounded-full border px-4 text-label font-medium transition-colors ${on ? "border-ink bg-ink text-white" : "border-line-strong bg-surface text-ink hover:bg-sunk"}`;
 
-      <div className="flex flex-col gap-2">
-        <div role="group" aria-label="Show topics from" className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
-          <button type="button" aria-pressed={world === "all"} onClick={() => setWorld("all")} className={`press flex min-h-12 items-center whitespace-nowrap rounded-full border-2 px-5 text-body font-extrabold ${world === "all" ? "border-ink bg-ink text-white" : "border-line-strong bg-surface text-ink hover:bg-raised"}`}>
+  return (
+    <div className="space-y-8">
+      <header>
+        <p className="eyebrow">Topics</p>
+        <h1 id="topics-title" className="display text-heading-1 sm:text-display-2">
+          Choose a topic
+        </h1>
+        <p className="mt-2 max-w-xl text-body text-ink-2">
+          {all.length} topics for Years 3 to 6 and the 11+, in six worlds. You have started {started}. Each topic has short lessons, then practice, then a
+          mastery check.
+        </p>
+      </header>
+
+      <div className="space-y-3">
+        <p className="text-label font-medium text-ink">Show topics from</p>
+        <div role="group" aria-label="Show topics from" className="flex flex-wrap gap-2">
+          <button type="button" aria-pressed={world === "all"} onClick={() => setWorld("all")} className={chip(world === "all")}>
             All topics
           </button>
-          {WORLDS.map((w) => {
-            const f = WORLD_FIELD[w.id] ?? FIELDS.blue;
-            const on = world === w.id;
-            return (
-              <button key={w.id} type="button" aria-pressed={on} onClick={() => setWorld(w.id)} className={`press flex min-h-12 items-center gap-2 whitespace-nowrap rounded-full border-2 py-1 pl-2 pr-5 text-body font-extrabold ${on ? `border-transparent ${f.bg} ${f.text}` : "border-line-strong bg-surface text-ink hover:bg-raised"}`}>
-                <span className={`grid size-9 place-items-center rounded-full ${on ? "bg-surface" : f.soft}`} aria-hidden>
-                  <PaperIcon name={w.icon} size={24} />
-                </span>
-                {w.title}
-              </button>
-            );
-          })}
+          {WORLDS.map((w) => (
+            <button key={w.id} type="button" aria-pressed={world === w.id} onClick={() => setWorld(w.id)} className={chip(world === w.id)}>
+              {w.title}
+            </button>
+          ))}
         </div>
         {year !== null && (
-          <label className="inline-flex min-h-11 cursor-pointer items-center gap-2 self-start text-body font-bold text-ink-2">
-            <input type="checkbox" checked={mine} onChange={(e) => setMine(e.target.checked)} className="size-6 accent-brand" />
+          <label className="inline-flex min-h-11 cursor-pointer items-center gap-2 text-label font-medium text-ink-2">
+            <input type="checkbox" checked={mine} onChange={(e) => setMine(e.target.checked)} className="size-5 accent-ink" />
             Only Year {year} topics
           </label>
         )}
       </div>
 
       {shown.length === 0 ? (
-        <p className="rounded-[28px] bg-sunk p-6 text-body-lg text-ink-2">No topics here for Year {year}. Untick &ldquo;Only Year {year} topics&rdquo; to see them all.</p>
+        <p className="rounded-[var(--radius-card)] border border-dashed border-line-strong p-6 text-body text-ink-2">No topics here for Year {year}. Untick &ldquo;Only Year {year} topics&rdquo; to see them all.</p>
       ) : (
         WORLDS.map((w) => {
           const mine = shown.filter(({ topic }) => topic.world === w.id);
           if (mine.length === 0) return null;
-          const f = WORLD_FIELD[w.id] ?? FIELDS.blue;
           return (
-            <section key={w.id} aria-labelledby={`world-${w.id}`} className="flex flex-col gap-4">
-              <Heading id={`world-${w.id}`} picture={<span className={`grid size-12 place-items-center rounded-full ${f.soft}`} aria-hidden><PaperIcon name={w.icon} size={32} /></span>}>
+            <section key={w.id} aria-labelledby={`world-${w.id}`} className="space-y-3">
+              <h2 id={`world-${w.id}`} className="eyebrow">
                 {w.title}
-              </Heading>
-              <ul className="m-0 grid list-none grid-cols-2 gap-3 p-0 sm:gap-5 lg:grid-cols-4" aria-label={`${w.title} topics`}>
+              </h2>
+              <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-label={`${w.title} topics`}>
                 {mine.map(({ topic, o }, i) => {
                   const isHere = topic.id === here;
                   const finished = o.skills > 0 && o.mastered === o.skills;
+                  const status = finished ? KID_STATUS.mastered : o.started ? KID_STATUS.developing : KID_STATUS["not-started"];
                   return (
-                    <li key={topic.id} className="flex">
-                      <Pop i={i} className="flex flex-1">
-                        <Lift href={topicRoutes(topic.id).island()} className={`relative flex flex-1 flex-col overflow-hidden rounded-[28px] border-4 bg-surface ${isHere ? "border-ink" : "border-transparent ring-2 ring-line"}`}>
-                          <span className={`relative grid h-28 place-items-center sm:h-32 ${f.soft}`} aria-hidden>
-                            <PaperIcon name={topic.look.icon} size={76} />
-                            {finished && (
-                              <span className="absolute right-3 top-3 grid size-9 place-items-center rounded-full bg-ok-bright text-white">
-                                <CheckIcon size={18} strokeWidth={3.5} />
-                              </span>
-                            )}
+                    <motion.li key={topic.id} className="flex" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: Math.min(i, 6) * 0.04 }}>
+                      <Link href={topicRoutes(topic.id).island()} aria-label={`${topic.title}. ${yearsText(topic.years)}. ${o.lessonsDone} of ${o.lessons} lessons done, ${o.mastered} of ${o.skills} skills mastered.${isHere ? " You are here." : ""}`} className={`card flex flex-1 flex-col gap-3 p-5 transition-shadow hover:shadow-[var(--shadow-lift)] ${isHere ? "ring-1 ring-ink/15" : ""}`}>
+                        <span className="flex items-start justify-between gap-3">
+                          <span className="grid size-12 shrink-0 place-items-center rounded-full bg-sunk" aria-hidden>
+                            <PaperIcon name={topic.look.icon} size={30} />
                           </span>
-                          {isHere && <span className="absolute left-3 top-3 rounded-full bg-field-yellow px-3 py-0.5 text-label font-extrabold text-ink">You are here</span>}
-                          <span className="flex flex-1 flex-col gap-2 p-4">
-                            <span className="display block text-title leading-tight text-ink">{topic.title}</span>
-                            <span className="mt-auto block">
-                              <TopicBar o={o} label={topic.title} />
+                          {finished ? (
+                            <span className="grid size-7 place-items-center rounded-full bg-ok text-white" aria-hidden>
+                              <CheckIcon size={15} />
                             </span>
-                            <span className="block text-label font-bold text-ink-2">
-                              {o.started ? `${o.lessonsDone} of ${o.lessons} lessons done` : yearsText(topic.years)}
+                          ) : (
+                            <span className="rounded-full bg-sunk px-2.5 py-0.5 text-label font-medium text-muted">{yearsText(topic.years)}</span>
+                          )}
+                        </span>
+                        <span className="block">
+                          <span className="block font-sans text-title font-semibold text-ink">{topic.title}</span>
+                          <span className="mt-0.5 block text-label text-ink-2">{topic.subtitle}</span>
+                        </span>
+                        <span className="mt-auto block space-y-2 pt-1">
+                          <TopicBar o={o} label={topic.title} />
+                          <span className="flex flex-wrap items-center justify-between gap-2 text-label text-muted">
+                            <span>
+                              {o.lessonsDone} / {o.lessons} lessons · {o.mastered} / {o.skills} mastered
                             </span>
+                            {isHere ? <span className="font-medium text-den">You are here</span> : <span className={`rounded-full px-2.5 py-0.5 font-medium ${status.cls}`}>{status.label}</span>}
                           </span>
-                        </Lift>
-                      </Pop>
-                    </li>
+                        </span>
+                      </Link>
+                    </motion.li>
                   );
                 })}
               </ul>
@@ -111,6 +121,6 @@ export function TopicsScreen() {
           );
         })
       )}
-    </Page>
+    </div>
   );
 }

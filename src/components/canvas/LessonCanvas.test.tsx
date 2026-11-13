@@ -32,23 +32,26 @@ const cut = async (user: ReturnType<typeof userEvent.setup>, who: string, times:
 beforeEach(() => resetLearner());
 
 describe("lesson canvas: Discover, Explore, Understand, Practise, Apply, Prove it (D-060)", () => {
-  it("is switched on for the pilot concept only, and the shell hides its navigation there", () => {
+  it("is switched on for the pilot concept only, inside the site's normal header and navigation (the Lesson Studio)", () => {
     expect(JOURNEYS.filter((j) => j.canvas).map((j) => `${j.topicId}/${j.concept}`)).toEqual([KEY]);
     expect(canvasLessonFor("fractions-2", "add-different")).toBeTruthy();
-    expect(shellMode("/t/fractions-2/learn/add-different", () => false)).toBe("canvas");
+    expect(shellMode("/t/fractions-2/learn/add-different", () => false)).toBe("kid");
     expect(shellMode("/t/fractions-2/learn/multiply-fractions", () => false)).toBe("kid");
     expect(shellMode("/t/fractions-2", () => false)).toBe("kid");
   });
 
   it("starts on Discover with one question and a guess to make; the other steps are locked and nothing is taught yet", async () => {
     show();
-    expect(await screen.findByRole("heading", { level: 1, name: "How much chocolate did they eat altogether?" })).toBeTruthy();
+    expect(await screen.findByRole("heading", { level: 2, name: "How much chocolate did they eat altogether?" })).toBeTruthy();
     expect(step(/^Discover, this step$/).getAttribute("aria-current")).toBe("step");
     for (const s of [/^Explore, locked$/, /^Understand, locked$/, /^Practise, locked$/, /^Apply, locked$/, /^Prove it, locked$/]) expect(step(s).disabled).toBe(true);
     expect(screen.getByRole("group", { name: "What do you think? Have a guess." })).toBeTruthy();
     expect(screen.queryByRole("button", { name: /Find out why/ })).toBeNull();
     expect(screen.queryByText("Together")).toBeNull();
-    expect(screen.getByRole("link", { name: /Leave the lesson/ }).getAttribute("href")).toBe("/t/fractions-2");
+    // D-066: the Lesson Studio header: the topic's name, a chooser of its lessons (this one picked), and the free lab.
+    expect(screen.getByRole("heading", { level: 1, name: "Fractions 2" })).toBeTruthy();
+    expect((screen.getByRole("combobox", { name: "Choose a lesson" }) as HTMLSelectElement).value).toBe("/t/fractions-2/learn/add-different");
+    expect(screen.getByRole("link", { name: /Free lab/ }).getAttribute("href")).toBe("/t/fractions-2/lab");
   });
 
   it("tests the common wrong guess against the real amount, saves the guess, and only then leads on", async () => {
@@ -69,7 +72,7 @@ describe("lesson canvas: Discover, Explore, Understand, Practise, Apply, Prove i
     const user = userEvent.setup();
     at({ learn: 1, learnReached: 1 });
     show();
-    expect(await screen.findByRole("heading", { level: 1, name: "Make every piece the same size" })).toBeTruthy();
+    expect(await screen.findByRole("heading", { level: 2, name: "Make every piece the same size" })).toBeTruthy();
     expect(screen.getByText("Press + to cut a bar into smaller pieces.")).toBeTruthy();
     await cut(user, "Sam's", 1);
     // Sixths and quarters: Zara's pieces are now the bigger ones, and nothing can be joined.
@@ -103,15 +106,15 @@ describe("lesson canvas: Discover, Explore, Understand, Practise, Apply, Prove i
     const user = userEvent.setup();
     at({ learn: 2, learnReached: 2 });
     show();
-    expect(await screen.findByRole("heading", { level: 1, name: "Different sizes can't be counted together" })).toBeTruthy();
+    expect(await screen.findByRole("heading", { level: 2, name: "Different sizes can't be counted together" })).toBeTruthy();
     const tabs = screen.getByRole("tablist", { name: "Ways to see it" });
     expect(within(tabs).getAllByRole("tab").map((t) => t.textContent)).toEqual(["Picture", "Story", "Numbers"]);
     await user.click(screen.getByRole("button", { name: /^Next/ }));
     await user.click(within(tabs).getByRole("tab", { name: "Story" }));
-    expect(screen.getByRole("heading", { level: 1, name: "Find a piece size that fits both" })).toBeTruthy();
+    expect(screen.getByRole("heading", { level: 2, name: "Find a piece size that fits both" })).toBeTruthy();
     expect(screen.getByText(/A clock face has 12 five-minute slices/)).toBeTruthy();
     await user.click(within(tabs).getByRole("tab", { name: "Numbers" }));
-    expect(screen.getByRole("heading", { level: 1, name: "Find a piece size that fits both" })).toBeTruthy();
+    expect(screen.getByRole("heading", { level: 2, name: "Find a piece size that fits both" })).toBeTruthy();
     expect(screen.getByText("3 times table")).toBeTruthy();
     // Step 3 asks one question on a new fraction; a wrong answer is explained and Next stays shut.
     await user.click(screen.getByRole("button", { name: /^Next/ }));
@@ -164,7 +167,7 @@ describe("lesson canvas: Discover, Explore, Understand, Practise, Apply, Prove i
     const user = userEvent.setup();
     at({ stage: 3, reached: 3 });
     show();
-    expect(await screen.findByRole("heading", { level: 1, name: "Show what you know" })).toBeTruthy();
+    expect(await screen.findByRole("heading", { level: 2, name: "Show what you know" })).toBeTruthy();
     await user.click(screen.getByRole("button", { name: /Start the check/ }));
     const learner = getLearner().topics["fractions-2"]!;
     expect(learner.recheck?.skill).toBe(def.skill);

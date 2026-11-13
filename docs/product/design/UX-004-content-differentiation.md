@@ -148,9 +148,9 @@ Minimum is the accessibility requirement. Target is the stronger product goal.
 | `--color-num-strong` | `--color-challenge-soft` | challenge: fraction digits (inline), numerator | 16.56 | 600 | text | 4.5:1 | — | 6.53:1 |
 | `--color-den-strong` | `--color-challenge-soft` | challenge: fraction digits (inline), denominator with tint | 16.56 | 600 | text | 4.5:1 | — | 6.65:1 |
 | `--color-num-strong` | `--color-surface` | card: fraction digits (inline), numerator | 16.56 | 600 | text | 4.5:1 | — | 6.77:1 |
-| `--color-den` | `--color-surface` | card: fraction digits (inline), denominator | 16.56 | 600 | text | 4.5:1 | — | 4.78:1 |
-| `--color-den` | `--color-surface` | card: fraction digits (sm), denominator | 16 | 600 | text | 4.5:1 | — | 4.78:1 |
-| `--color-den` | `--color-surface` | card: fraction digits (md), denominator | 24 | 600 | text | 3:1 | — | 4.78:1 |
+| `--color-den` | `--color-surface` | card: fraction digits (inline), denominator | 16.56 | 600 | text | 4.5:1 | — | 5.45:1 |
+| `--color-den` | `--color-surface` | card: fraction digits (sm), denominator | 16 | 600 | text | 4.5:1 | — | 5.45:1 |
+| `--color-den` | `--color-surface` | card: fraction digits (md), denominator | 24 | 600 | text | 3:1 | — | 5.45:1 |
 | `--color-den-strong` | `--color-surface` | card: compact fraction digits (label), denominator | 15 | 600 | text | 4.5:1 | — | 6.89:1 |
 | `--color-num-strong` | `--color-surface` | card: compact fraction digits (label), numerator | 15 | 600 | text | 4.5:1 | — | 6.77:1 |
 | `--color-on-strong` | `--color-success-edge` | success: tick badge icon | 40 | 800 | graphic | 3:1 | — | 3.16:1 |
@@ -161,10 +161,10 @@ Minimum is the accessibility requirement. Target is the stronger product goal.
 | `--color-incorrect` | `--color-incorrect-soft` | incorrect: tile label | 15 | 500 | text | 4.5:1 | — | 5.61:1 |
 | `--color-selected` | `--color-selected-soft` | selected: tile label | 15 | 500 | text | 4.5:1 | — | 12.60:1 |
 | `--color-disabled-ink` | `--color-disabled-soft` | disabled: tile and button label | 15 | 500 | text | 4.5:1 | — | 4.98:1 |
-| `--color-ink` | `--color-surface` | card: headings and prompt | 18 | 500 | text | 4.5:1 | 7:1 | 14.42:1 |
-| `--color-ink-2` | `--color-surface` | card: reading text | 18 | 600 | text | 4.5:1 | 7:1 | 9.55:1 |
-| `--color-muted` | `--color-surface` | card: labels and meta | 15 | 600 | text | 4.5:1 | — | 7.37:1 |
-| `--color-on-brand` | `--color-brand` | primary button label | 20 | 800 | text | 3:1 | — | 5.16:1 |
+| `--color-ink` | `--color-surface` | card: headings and prompt | 18 | 500 | text | 4.5:1 | 7:1 | 16.06:1 |
+| `--color-ink-2` | `--color-surface` | card: reading text | 18 | 600 | text | 4.5:1 | 7:1 | 10.06:1 |
+| `--color-muted` | `--color-surface` | card: labels and meta | 15 | 600 | text | 4.5:1 | — | 5.27:1 |
+| `--color-on-brand` | `--color-brand` | primary button label | 20 | 800 | text | 3:1 | — | 16.06:1 |
 | `--color-focus` | `--color-surface` | focus ring on a card | 3 | 0 | graphic | 3:1 | — | 5.16:1 |
 | `--color-focus` | `--color-paper` | focus ring on the page | 3 | 0 | graphic | 3:1 | — | 5.17:1 (page white since D-052; 4.86:1 before) |
 
