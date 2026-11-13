@@ -57,17 +57,18 @@ describe("kid pages (D-043 step 3)", () => {
     expect(screen.getByText(/Fractions 2 · Step 3 of 5: Apply/)).toBeTruthy();
     expect(screen.getByRole("link", { name: /^Continue/ }).getAttribute("href")).toBe("/t/fractions-2/learn/add-different");
     expect(screen.getByRole("heading", { name: "Today's plan" })).toBeTruthy();
-    expect(within(screen.getByRole("heading", { name: "Learn a new idea with Emma" }).parentElement!).getAllByRole("link")).toHaveLength(JOURNEYS.length);
+    expect(within(screen.getByRole("heading", { name: "Learn a new idea with Emma" }).closest("section")!).getAllByRole("link")).toHaveLength(JOURNEYS.length);
   });
 
   it("shows every topic in a grid with its progress, filtered by world", async () => {
     const user = userEvent.setup();
     render(<TopicsScreen />);
-    const grid = await screen.findByRole("list", { name: "Topics" });
-    expect(within(grid).getAllByRole("listitem")).toHaveLength(TOPICS.length);
+    // D-058: one list per world, each in its own band.
+    const items = (lists: HTMLElement[]) => lists.flatMap((l) => within(l).getAllByRole("listitem"));
+    expect(items(await screen.findAllByRole("list", { name: / topics$/ }))).toHaveLength(TOPICS.length);
     const fdp = WORLDS.find((w) => w.id === "fdp")!;
     await user.click(screen.getByRole("button", { name: fdp.title }));
-    const shown = within(screen.getByRole("list", { name: "Topics" })).getAllByRole("listitem");
+    const shown = items(screen.getAllByRole("list", { name: / topics$/ }));
     expect(shown).toHaveLength(TOPICS.filter((t) => t.world === "fdp").length);
     expect(screen.getByRole("button", { name: fdp.title }).getAttribute("aria-pressed")).toBe("true");
     expect(within(shown[0]!).getByRole("img", { name: new RegExp(`skills mastered`) })).toBeTruthy();

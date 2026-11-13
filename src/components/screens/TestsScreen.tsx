@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Band } from "@/components/kid/Band";
 import { ScreenHero } from "@/components/kid/ScreenHero";
 import { PaperIcon } from "@/components/paper/PaperIcon";
 import { Pic } from "@/components/paper/Pic";
@@ -44,12 +45,8 @@ export function TestsScreen() {
       <ScreenHero pic="trophy" field={FIELDS.orange} titleId="tests-title" eyebrow="Show what you know" title={<>Your <span className="text-field-orange">tests</span></>} line="Show what you know. A big challenge checks a whole topic; a practice mock is like a real 11+ paper." />
 
       {rechecks.length > 0 && (
-        <section aria-labelledby="recheck-title">
-          <h2 id="recheck-title" className="display text-heading-2">
-            Check again
-          </h2>
-          <p className="mt-1 text-body text-ink-2">A check showed these need another look. Practise first, then a short recheck updates the skill.</p>
-          <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+        <Band tone="peach" id="recheck-title" eyebrow="Fix it" title="Check again" line="A check showed these need another look. Practise first, then a short recheck updates the skill.">
+          <ul className="grid gap-4 sm:grid-cols-2">
             {rechecks.map(({ t, s, m }) => {
               const ready = readyForRecheck(m);
               const links = topicRoutes(t.id);
@@ -66,15 +63,22 @@ export function TestsScreen() {
               );
             })}
           </ul>
-        </section>
+        </Band>
       )}
 
-      <section aria-labelledby="challenges-title">
-        <h2 id="challenges-title" className="display text-heading-2">
-          Big challenges
-        </h2>
-        <p className="mt-1 text-body text-ink-2">One for each topic you have started. Best after the topic&apos;s lessons; +{STARS.check} XP each time.</p>
-        <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <Band
+        tone="grid"
+        id="challenges-title"
+        eyebrow="One per topic"
+        title="Big challenges"
+        line={`One for each topic you have started. Best after the topic's lessons; +${STARS.check} XP each time.`}
+        action={
+          <ButtonLink href={routes.topics()} variant="secondary" size="lg">
+            Start another topic <ArrowRightIcon size={18} />
+          </ButtonLink>
+        }
+      >
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {topics.map((t) => {
             const tl = topicLearner(learner, t.id);
             const a = tl.assessment;
@@ -110,22 +114,16 @@ export function TestsScreen() {
             );
           })}
         </ul>
-        <Link href={routes.topics()} className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-lg font-bold text-brand-strong underline underline-offset-4">
-          Start another topic <ArrowRightIcon size={18} />
-        </Link>
-      </section>
+      </Band>
 
       {mockTopic && (
-        <section aria-labelledby="mock-title" className="rounded-[32px] bg-tile-sky px-5 py-7 sm:px-8">
-          <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-            <span className="grid size-20 shrink-0 place-items-center rounded-[24px] bg-surface shadow-[var(--shadow-card)]" aria-hidden>
+        <Band tone="pink" id="mock-title" eyebrow="Like the real thing" title="Practice mocks" line="A timed paper with questions from every area, set up like the 11+ test you choose.">
+          <div className="mx-auto flex max-w-3xl flex-col items-center gap-5 rounded-[28px] bg-surface p-6 text-center sm:flex-row sm:text-left">
+            <span className="grid size-20 shrink-0 place-items-center rounded-full bg-tile-pink" aria-hidden>
               <Pic name="exam" size={56} />
             </span>
             <div className="min-w-0 flex-1">
-              <h2 id="mock-title" className="display text-heading-2">
-                Practice mocks
-              </h2>
-              <p className="mt-1 text-body text-ink-2">
+              <p className="text-body text-ink-2">
                 {lastMock
                   ? `You have done ${mocks.length} ${mocks.length === 1 ? "mock" : "mocks"}. Last time: ${lastMock.correct} of ${lastMock.total} right.`
                   : "A timed paper with questions from every area, set up like the 11+ test you choose. For practice only: it doesn't predict a result."}
@@ -135,7 +133,7 @@ export function TestsScreen() {
               {lastMock ? "Another mock" : "Try a mock"} <ArrowRightIcon size={20} />
             </ButtonLink>
           </div>
-        </section>
+        </Band>
       )}
     </div>
   );

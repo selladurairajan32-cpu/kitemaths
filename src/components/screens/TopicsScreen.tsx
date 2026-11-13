@@ -15,6 +15,10 @@ import { topicOverviews } from "@/topics/overview";
 import { activeTopic } from "@/topics/recommend";
 import { WORLDS } from "@/topics/worlds";
 import { FIELDS, WORLD_FIELD } from "@/components/kid/fields";
+import { Band, type BandTone } from "@/components/kid/Band";
+
+/** D-058: each world in its own band, so the worlds read as separate places. */
+const WORLD_BAND: Record<string, BandTone> = { number: "grid", calc: "sky", fdp: "peach", measure: "mint", shape: "rose", summit: "sunk" };
 
 
 /**
@@ -75,8 +79,21 @@ export function TopicsScreen() {
       {shown.length === 0 ? (
         <p className="rounded-[24px] bg-sunk p-6 text-body text-ink-2">No topics here for Year {year}. Untick &ldquo;Only Year {year} topics&rdquo; to see them all.</p>
       ) : (
-        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-label="Topics">
-          {shown.map(({ topic, o }) => {
+        <div className="space-y-12">
+          {WORLDS.map((w, wi) => {
+            const mine = shown.filter(({ topic }) => topic.world === w.id);
+            if (mine.length === 0) return null;
+            return (
+              <Band
+                key={w.id}
+                tone={WORLD_BAND[w.id] ?? "grid"}
+                id={`world-${w.id}`}
+                eyebrow={`World ${wi + 1}`}
+                title={w.title}
+                line={`${mine.length} ${mine.length === 1 ? "topic" : "topics"}: ${mine.map(({ topic }) => topic.title).join(", ")}`}
+              >
+                <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3" aria-label={`${w.title} topics`}>
+                  {mine.map(({ topic, o }) => {
             const isHere = topic.id === here;
             const finished = o.skills > 0 && o.mastered === o.skills;
             const journeys = JOURNEYS.filter((j) => j.topicId === topic.id).length;
@@ -124,7 +141,11 @@ export function TopicsScreen() {
               </li>
             );
           })}
-        </ul>
+                </ul>
+              </Band>
+            );
+          })}
+        </div>
       )}
     </div>
   );

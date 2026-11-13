@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Band } from "@/components/kid/Band";
 import { ScreenHero } from "@/components/kid/ScreenHero";
 import { TopicBar } from "@/components/kid/Overview";
 import { PaperIcon } from "@/components/paper/PaperIcon";
@@ -48,11 +49,8 @@ export function PracticeHubScreen() {
       </ScreenHero>
 
       {review.length > 0 && (
-        <section aria-labelledby="review-title">
-          <h2 id="review-title" className="display text-heading-2">
-            Look at again
-          </h2>
-          <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+        <Band tone="peach" id="review-title" eyebrow="Fix it" title="Look at again" line="A check showed these need another look. A little practice puts them right.">
+          <ul className="grid gap-4 sm:grid-cols-2">
             {review.map(({ topic, skill }) => (
               <li key={skill} className="flex">
                 <Link href={topicRoutes(topic.id).practice(skill)} className="panel rounded-[24px] flex flex-1 items-center justify-between gap-3 p-4 hover:-translate-y-0.5">
@@ -65,37 +63,42 @@ export function PracticeHubScreen() {
               </li>
             ))}
           </ul>
-        </section>
+        </Band>
       )}
 
       {quick.length > 0 && (
-        <section aria-labelledby="quick-title">
-          <h2 id="quick-title" className="display text-heading-2">
-            Quick practice
-          </h2>
-          <ul className="mt-4 grid gap-3 sm:grid-cols-3">
-            {quick.map((q) => (
+        <Band tone="pink" id="quick-title" eyebrow="Five minutes" title="Quick practice" line="Short, sharp rounds to keep the basics fast.">
+          <ul className="grid gap-5 sm:grid-cols-3">
+            {quick.map((q, qi) => (
               <li key={q.id} className="flex">
-                <Link href={q.href} className="panel rounded-[24px] flex flex-1 items-center gap-3 p-4 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
-                  <span className="grid size-14 shrink-0 place-items-center rounded-[18px] bg-tile-green" aria-hidden>
-                    <Pic name={q.pic} size={40} />
+                <Link href={q.href} className={`flex flex-1 flex-col items-center gap-3 rounded-[24px] bg-surface p-6 text-center transition hover:rotate-0 hover:-translate-y-1 ${qi % 2 ? "rotate-[1.5deg]" : "-rotate-[1.5deg]"}`}>
+                  <span className="grid size-24 shrink-0 place-items-center rounded-full bg-tile-pink" aria-hidden>
+                    <Pic name={q.pic} size={64} />
                   </span>
                   <span className="min-w-0">
-                    <span className="block font-extrabold leading-snug text-ink">{q.title}</span>
+                    <span className="display block text-heading-2 leading-snug text-ink">{q.title}</span>
                     <span className="block text-label text-ink-2">{q.line}</span>
                   </span>
                 </Link>
               </li>
             ))}
           </ul>
-        </section>
+        </Band>
       )}
 
-      <section aria-labelledby="mine-title">
-        <h2 id="mine-title" className="display text-heading-2">
-          Your topics
-        </h2>
-        <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <Band
+        tone="grid"
+        id="mine-title"
+        eyebrow="Your topics"
+        title="Practise a whole topic"
+        line="Every question counts towards mastering the topic's skills."
+        action={
+          <ButtonLink href={routes.topics()} variant="secondary" size="lg">
+            Practise another topic <ArrowRightIcon size={18} />
+          </ButtonLink>
+        }
+      >
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {mine.map(({ topic, o }) => (
             <li key={topic.id} className="flex">
               <Link href={topicRoutes(topic.id).practice()} className="panel rounded-[24px] flex flex-1 flex-col gap-3 p-4 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]">
@@ -113,10 +116,7 @@ export function PracticeHubScreen() {
             </li>
           ))}
         </ul>
-        <Link href={routes.topics()} className="mt-4 inline-flex min-h-11 items-center gap-1.5 text-lg font-bold text-brand-strong underline underline-offset-4">
-          Practise another topic <ArrowRightIcon size={18} />
-        </Link>
-      </section>
+      </Band>
     </div>
   );
 }

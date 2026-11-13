@@ -202,6 +202,8 @@
     font-variant-numeric: tabular-nums;
     /* UX-003 AC3: a word wider than its box breaks rather than pushing the page sideways at large text sizes. */
     overflow-wrap: anywhere;
+    /* D-058: full-width bands reach the window edges; nothing may scroll the page sideways. */
+    overflow-x: clip;
   }
   :focus-visible {
     outline: 3px solid var(--color-brand);
@@ -237,6 +239,10 @@
   .panel {
     background: var(--color-surface);
     border: 3px solid var(--color-card-edge);
+  }
+  /* D-058: a section that spans the whole window, whatever column it sits in. */
+  .band {
+    margin-inline: calc(50% - 50vw);
   }
   /* D-057: squared paper behind banners: thin lines every 32px, drawn as an SVG tile (no gradient). */
   .paper-grid {

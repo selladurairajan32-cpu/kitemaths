@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Kip, KipSays } from "@/components/kid/Kip";
 import { Eyebrow } from "@/components/kid/Eyebrow";
+import { Band } from "@/components/kid/Band";
 import { Scallop } from "@/components/kid/Scallop";
 import { kidNext } from "@/components/kid/kidText";
 import { RichText } from "@/components/math/RichText";
@@ -208,52 +209,45 @@ function KidHome() {
         </KipSays>
       ) : null}
 
-      {/* D-043 step 3: today's plan, from the weekly plan the grown-up sets. */}
+      {/* D-043 step 3: today's plan, from the weekly plan the grown-up sets. D-058: its own strong pink band, cards tilted. */}
       {plan && plan.items.length > 0 && (
-        <section aria-labelledby="plan-title">
-          <h2 id="plan-title" className="display text-heading-2">
-            Today&apos;s plan
-          </h2>
-          <p className="mt-1 text-body text-ink-2">About {plan.minutes} minutes</p>
-          <ol className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <Band tone="pink" id="plan-title" eyebrow="Today" title="Today's plan" line={`About ${plan.minutes} minutes, one step at a time`}>
+          <ol className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {plan.items.map((it, i) => (
               <li key={it.href + i} className="flex">
-                <Link href={it.href} className="panel flex flex-1 items-center gap-3 rounded-[24px] p-4 transition hover:-translate-y-0.5">
-                  <span className={`grid size-10 shrink-0 place-items-center rounded-full text-lg font-extrabold ${CYCLE[i % CYCLE.length]!.bg} ${CYCLE[i % CYCLE.length]!.text}`} aria-hidden>
+                <Link href={it.href} className={`flex flex-1 items-center gap-4 rounded-[24px] bg-surface p-5 transition hover:rotate-0 hover:-translate-y-1 ${i % 2 ? "rotate-[1.5deg]" : "-rotate-[1.5deg]"}`}>
+                  <span className={`display grid size-12 shrink-0 place-items-center rounded-full text-title ${CYCLE[i % CYCLE.length]!.bg} ${CYCLE[i % CYCLE.length]!.text}`} aria-hidden>
                     {i + 1}
                   </span>
                   <span className="min-w-0">
-                    <span className="block text-label font-bold text-muted">
+                    <span className="block text-label font-bold text-ink-2">
                       {PLAN_KIND_LABEL[it.kind]} · {it.minutes} min
                     </span>
-                    <span className="block font-extrabold leading-snug text-ink">{it.title}</span>
+                    <span className="block text-title font-extrabold leading-snug text-ink">{it.title}</span>
                   </span>
                 </Link>
               </li>
             ))}
           </ol>
-        </section>
+        </Band>
       )}
 
       {/* D-043: the topic journeys (Learn, Practise, Apply, Check, Complete), with Emma's voice. */}
       {!brandNew && journeys.length > 0 && (
-        <section aria-labelledby="learn-title">
-          <h2 id="learn-title" className="display text-heading-2">
-            Learn a new idea with Emma
-          </h2>
-          <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+        <Band tone="mint" id="learn-title" eyebrow="Learn with Emma" title="Learn a new idea with Emma" line="Watch a short film, step through it, or try it by hand">
+          <ul className="grid gap-4 sm:grid-cols-2">
             {journeys.map(({ def, progress }, ji) => {
               const finished = !!progress && progress.reached >= JOURNEY_STAGES.length - 1;
               const state = !progress ? `Year ${def.year} · watch, step through or try it` : finished ? "Done · watch again any time" : `Step ${progress.reached + 1} of ${JOURNEY_STAGES.length}: ${STAGE_LABEL[JOURNEY_STAGES[progress.reached]]}`;
               return (
                 <li key={`${def.topicId}/${def.concept}`} className="flex">
-                  <Link href={topicRoutes(def.topicId).learn(def.concept)} className={`flex flex-1 items-center gap-3 rounded-[24px] p-4 transition hover:-translate-y-0.5 ${CYCLE[ji % CYCLE.length]!.bg} ${CYCLE[ji % CYCLE.length]!.text}`}>
-                    <span className="grid size-14 shrink-0 place-items-center rounded-full bg-surface" aria-hidden>
+                  <Link href={topicRoutes(def.topicId).learn(def.concept)} className="panel flex flex-1 items-center gap-4 rounded-[24px] p-4 transition hover:-translate-y-0.5">
+                    <span className={`grid size-16 shrink-0 place-items-center rounded-full ${CYCLE[ji % CYCLE.length]!.soft}`} aria-hidden>
                       {isPicName(def.pic) ? <Pic name={def.pic} size={40} /> : <PaperIcon name={topicById(def.topicId)?.look.icon ?? "bulb"} size={38} />}
                     </span>
                     <span className="min-w-0">
-                      <span className="block font-extrabold leading-snug">{def.title}</span>
-                      <span className="mt-0.5 flex items-center gap-1 text-label font-bold">
+                      <span className="block text-title font-extrabold leading-snug text-ink">{def.title}</span>
+                      <span className={`mt-0.5 flex items-center gap-1 text-label font-bold ${CYCLE[ji % CYCLE.length]!.ink}`}>
                         {finished && <CheckIcon size={15} strokeWidth={3} />}
                         {state}
                       </span>
@@ -263,24 +257,22 @@ function KidHome() {
               );
             })}
           </ul>
-        </section>
+        </Band>
       )}
 
       {/* Up next on the island: the next lessons, then the big challenge. */}
-      <section aria-labelledby="island-title">
-        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h2 id="island-title" className="display text-heading-2">
-              Up next: {topic.title}
-            </h2>
-            <p className="mt-1 text-body text-ink-2">
-              {done} of {topic.lessons.length} lessons done
-            </p>
-          </div>
-          <Link href={links.island()} className="inline-flex min-h-11 items-center gap-1.5 text-lg font-bold text-brand-strong underline underline-offset-4">
+      <Band
+        tone="grid"
+        id="island-title"
+        eyebrow="Your topic"
+        title={<>Up next: <span className="text-field-blue">{topic.title}</span></>}
+        line={`${done} of ${topic.lessons.length} lessons done`}
+        action={
+          <ButtonLink href={links.island()} variant="secondary" size="lg">
             See all lessons <ArrowRightIcon size={18} />
-          </Link>
-        </div>
+          </ButtonLink>
+        }
+      >
         <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
           {upcoming.map(({ l, i }) => {
             const p = inTopic.lessons[l.id];
@@ -361,7 +353,7 @@ function KidHome() {
             </Link>
           </li>
         </ol>
-      </section>
+      </Band>
 
       <footer className="pb-4">
         <p className="text-label text-muted">3D pictures: Microsoft Fluent Emoji, MIT licence.</p>

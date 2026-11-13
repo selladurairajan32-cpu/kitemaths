@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Band } from "@/components/kid/Band";
 import { MasteryKey, MasteryRing, TopicBar } from "@/components/kid/Overview";
 import { PaperIcon } from "@/components/paper/PaperIcon";
 import { Scallop } from "@/components/kid/Scallop";
@@ -95,11 +96,8 @@ export function ProgressScreen() {
         </ul>
       </section>
 
-      <section aria-labelledby="bars-title">
-        <h2 id="bars-title" className="display text-heading-2">
-          Your topics
-        </h2>
-        <ul className="mt-4 space-y-3">
+      <Band tone="sky" id="bars-title" eyebrow="Topic by topic" title="Your topics" line="Green is mastered. A skill is mastered when you get it right in practice and then in a check.">
+        <ul className="space-y-3">
           {mine.map(({ topic, o }) => (
             <li key={topic.id}>
               <Link href={topicRoutes(topic.id).island()} className="panel rounded-[24px] grid grid-cols-[3.5rem_1fr] items-center gap-x-4 gap-y-2 p-4 hover:-translate-y-0.5 sm:grid-cols-[3.5rem_14rem_1fr]">
@@ -142,7 +140,7 @@ export function ProgressScreen() {
             {notYet} more topics to start <ArrowRightIcon size={18} />
           </Link>
         )}
-      </section>
+      </Band>
     </div>
   );
 }
