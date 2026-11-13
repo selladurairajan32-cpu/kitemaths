@@ -76,3 +76,23 @@ an optional hands-on aid and a look-back sentence), an entry in `kit/canvasLesso
   concept.
 - Home, Topics, Progress, the parent pages and the other lessons are not redesigned. That is the next step if the
   pilot is judged to work.
+
+## Addendum, D-062: the pages that lead to the lesson
+
+The Product Owner liked the pilot and asked for Home, Topics and the sub-topics page to follow, so one flow is whole.
+
+| Page | Before | Now |
+|---|---|---|
+| Home | Greeting banner, four number tiles, then the thing to do third; six journey cards | The thing to do next comes first, with the only yellow button; numbers in one line; plan and next lessons as rows |
+| Topics | 21 picture cards in six coloured bands, about 6,600 px tall at 1280 | One row per topic under each world, about 2,800 px |
+| Topic page | Two "Learn it" banners, a zigzag of lesson cards, and (Fractions 2) a separate study page from Topics | One list of sub-topics in teaching order with one next step; each opens where it is taught |
+
+Found on the way: a child who had only begun the canvas lesson was treated as a new learner on Home, so Home did not
+offer to continue it. Fixed and tested.
+
+Evidence (developer): `npm test`, lint, typecheck and build pass; `verification/full-flow.cjs` clicks Home → Topics →
+Fractions 2 → Different denominators → the lesson → back → Home at 1280 and 390px and passes (screenshots in
+`verification/results/d062-flow/`).
+
+Not redesigned: Practice, Tests, Progress, the topic learning page, the parent pages, the site header and the other
+lessons. `kid-pages.cjs` expects the earlier Home and Topics pages.
