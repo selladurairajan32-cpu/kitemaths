@@ -41,7 +41,7 @@ export function PracticeHubScreen() {
 
   return (
     <div className="space-y-10">
-      <ScreenHero pic="target" field={FIELDS.green} titleId="practice-title" title="Practice" line={`${today} of ${DAILY_GOAL} questions done today. Practice makes each skill stronger, and it counts towards mastery.`}>
+      <ScreenHero pic="target" field={FIELDS.green} titleId="practice-title" eyebrow="Get stronger" title={<>Time to <span className="text-field-green">practise</span></>} line={`${today} of ${DAILY_GOAL} questions done today. Practice makes each skill stronger, and it counts towards mastery.`}>
         <ButtonLink href={topicRoutes(active.id).practice()} variant="cta" size="xl">
           {resuming ? "Carry on" : "Practise"} {active.title} <ArrowRightIcon size={20} />
         </ButtonLink>

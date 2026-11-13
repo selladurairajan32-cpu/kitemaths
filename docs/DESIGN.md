@@ -21,7 +21,7 @@ A calm white base, and all the colour and fun carried by **3D pictures** and the
 
 ## Type
 
-One font, **Nunito** (`src/app/layout.tsx`): soft rounded letters with open shapes, easy and pleasant for
+Two fonts since D-057: **DM Sans** for reading and **Comic Neue** for titles (`src/app/layout.tsx`). Before D-057, one font, **Nunito**: soft rounded letters with open shapes, easy and pleasant for
 young readers.
 
 | Use | Size | Weight |

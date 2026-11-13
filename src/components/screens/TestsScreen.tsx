@@ -41,7 +41,7 @@ export function TestsScreen() {
 
   return (
     <div className="space-y-10">
-      <ScreenHero pic="trophy" field={FIELDS.orange} titleId="tests-title" title="Tests" line="Show what you know. A big challenge checks a whole topic; a practice mock is like a real 11+ paper." />
+      <ScreenHero pic="trophy" field={FIELDS.orange} titleId="tests-title" eyebrow="Show what you know" title={<>Your <span className="text-field-orange">tests</span></>} line="Show what you know. A big challenge checks a whole topic; a practice mock is like a real 11+ paper." />
 
       {rechecks.length > 0 && (
         <section aria-labelledby="recheck-title">

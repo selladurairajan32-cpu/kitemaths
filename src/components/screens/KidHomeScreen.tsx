@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { Kip, KipSays } from "@/components/kid/Kip";
+import { Eyebrow } from "@/components/kid/Eyebrow";
+import { Scallop } from "@/components/kid/Scallop";
 import { kidNext } from "@/components/kid/kidText";
 import { RichText } from "@/components/math/RichText";
 import { PaperIcon } from "@/components/paper/PaperIcon";
@@ -79,33 +81,49 @@ function KidHome() {
     <div className="space-y-10 sm:space-y-12">
       <StorageNotice />
 
-      {/* D-046 phase 2: hello from the guide, with the streak, today's goal and the level ring (concept images). */}
-      <section aria-labelledby="hello-title" className="grid items-center gap-4 lg:grid-cols-[minmax(0,1fr)_auto]">
-        <div className="flex items-end gap-4">
-          <Pic name="guide-wave" size={128} priority className="hidden shrink-0 sm:block" />
+      {/* D-057: hello on a pale squared-paper banner (the reference site's hero), the level beside it, then four counters. */}
+      <section aria-labelledby="hello-title" className="paper-grid relative overflow-hidden rounded-[32px] bg-tile-blue px-6 pb-10 pt-8 sm:px-10 sm:pb-12">
+        <div className="grid items-center gap-6 lg:grid-cols-[minmax(0,1fr)_auto]">
           <div className="min-w-0">
-            <h1 id="hello-title" className="display flex flex-wrap items-center gap-2 text-heading-2 sm:text-heading-1">
-              Hi{name ? ` ${name}` : " there"}! <Pic name="waving" size={44} />
+            <Eyebrow>{greeting(now)}</Eyebrow>
+            <h1 id="hello-title" className="display mt-3 text-heading-1 sm:text-display-1">
+              Hi <span className="text-field-blue">{name || "there"}!</span>
             </h1>
-            <p className="mt-1 text-lg font-semibold text-ink-2">
-              {greeting(now)}.{" "}
-              {streak.current > 0 ? `You're on a ${streak.current}-day streak` : "Let's build your maths today"}
-              {!brandNew && ` · ${today} of ${DAILY_GOAL} questions today`}
-              {streak.current > 0 && <Pic name="flame" size={22} className="ml-1 align-text-bottom" />}
+            <p className="mt-2 max-w-xl text-body-lg text-ink-2">
+              {streak.current > 0 ? `You're on a ${streak.current}-day streak. ` : "Let's build your maths today. "}
+              {!brandNew && `${today} of ${DAILY_GOAL} questions done today.`}
             </p>
+            <Link href={routes.progress()} className="mt-5 inline-flex items-center gap-4 rounded-[28px] bg-field-yellow p-3 pr-6 text-ink transition hover:-translate-y-0.5" aria-label={`Level ${level.level}: ${stars} XP, ${level.needed - level.into} XP to level ${level.level + 1}. See your progress.`}>
+              <ProgressRing value={level.into / level.needed} size={72} label={`Level ${level.level}`}>
+                <span className="display text-title leading-none text-ink">{level.level}</span>
+              </ProgressRing>
+              <span>
+                <span className="block text-title font-extrabold text-ink">Level {level.level} · {level.title}</span>
+                <span className="block text-label font-bold text-ink">{level.needed - level.into} XP to level {level.level + 1}</span>
+              </span>
+            </Link>
+          </div>
+          <div className="hidden shrink-0 sm:block" aria-hidden>
+            <Pic name="guide-wave" size={180} priority />
           </div>
         </div>
-        <Link href={routes.progress()} className="flex items-center gap-4 rounded-[28px] bg-field-yellow p-3 pr-6 text-ink transition hover:-translate-y-0.5" aria-label={`Level ${level.level}: ${stars} XP, ${level.needed - level.into} XP to level ${level.level + 1}. See your progress.`}>
-          <ProgressRing value={level.into / level.needed} size={84} label={`Level ${level.level}`}>
-            <span className="display text-title leading-none text-ink">{level.level}</span>
-          </ProgressRing>
-          <span>
-            <span className="block text-title font-extrabold text-ink">Level {level.level}</span>
-            <span className="block text-label font-bold text-ink-2">{level.title}</span>
-            <span className="block text-label font-bold text-ink">{level.needed - level.into} XP to level {level.level + 1}</span>
-          </span>
-        </Link>
+        <Scallop />
       </section>
+
+      <ul className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4" aria-label="Your numbers">
+        {[
+          { n: `${stars}`, label: "XP earned", line: "From every answer and lesson", tint: "bg-tile-blue", ink: "text-field-blue" },
+          { n: `${streak.current}`, label: streak.current === 1 ? "Day in a row" : "Days in a row", line: `Best: ${streak.best}`, tint: "bg-tile-pink", ink: "text-field-pink" },
+          { n: `${today}/${DAILY_GOAL}`, label: "Questions today", line: "Your daily goal", tint: "bg-tile-green", ink: "text-field-green" },
+          { n: `${done}/${topic.lessons.length}`, label: "Lessons done", line: topic.title, tint: "bg-tile-orange", ink: "text-field-orange" },
+        ].map((c) => (
+          <li key={c.label} className={`rounded-[24px] px-4 py-5 text-center ${c.tint}`}>
+            <span className={`display block text-display-2 leading-none ${c.ink}`}>{c.n}</span>
+            <span className={`mt-2 block text-title font-extrabold ${c.ink}`}>{c.label}</span>
+            <span className="mt-0.5 block text-label text-ink-2">{c.line}</span>
+          </li>
+        ))}
+      </ul>
 
       {/* Continue Learning: the one thing to do next, with one yellow button (D-037, D-043 step 3). */}
       <section className="relative overflow-hidden rounded-[32px] bg-field-blue px-5 py-6 text-white sm:px-8 sm:py-8" aria-labelledby="next-title">

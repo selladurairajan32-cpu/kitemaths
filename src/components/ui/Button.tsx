@@ -14,15 +14,15 @@ import type { ButtonHTMLAttributes, ComponentProps, ReactNode, Ref } from "react
 type Variant = "primary" | "go" | "sun" | "cta" | "secondary" | "ghost" | "quiet" | "soft" | "ink";
 type Size = "md" | "lg" | "xl";
 
-const PRIMARY = "press bg-brand text-on-brand border-brand-strong hover:bg-[color-mix(in_srgb,var(--color-brand)_86%,black)] disabled:bg-line-strong disabled:border-line-strong";
+const PRIMARY = "press shadow-[0_0_0_4px_rgb(37_99_235/0.16)] bg-brand text-on-brand border-brand-strong hover:bg-[color-mix(in_srgb,var(--color-brand)_86%,black)] disabled:bg-line-strong disabled:border-line-strong";
 
 const variants: Record<Variant, string> = {
   primary: PRIMARY,
   go: PRIMARY,
   sun: PRIMARY,
   // D-046: the yellow "go on" button of the concept images (Practise this, Start learning, Check answer). Ink on it.
-  cta: "press bg-cta text-ink border-cta-strong font-extrabold hover:bg-[color-mix(in_srgb,var(--color-cta)_88%,black)] disabled:bg-line-strong disabled:border-line-strong disabled:text-ink-2",
-  secondary: "bg-surface text-ink border-[1.5px] border-line-strong hover:bg-raised disabled:text-muted disabled:border-line",
+  cta: "press shadow-[0_0_0_4px_rgb(255_200_61/0.35)] bg-cta text-ink border-cta-strong font-extrabold hover:bg-[color-mix(in_srgb,var(--color-cta)_88%,black)] disabled:bg-line-strong disabled:border-line-strong disabled:text-ink-2",
+  secondary: "bg-surface text-brand-strong border-2 border-card-edge hover:bg-raised disabled:text-muted disabled:border-line",
   soft: "bg-surface text-ink border-[1.5px] border-line-strong hover:bg-raised disabled:text-muted disabled:border-line",
   ghost: "text-ink-2 hover:bg-sunk disabled:text-muted",
   quiet: "text-ink-2 hover:bg-sunk disabled:text-muted",

@@ -44,10 +44,11 @@ export function TopicsScreen() {
         guide
         field={FIELDS.blue}
         titleId="topics-title"
-        title="Topics"
+        eyebrow="Learn"
+        title={<>All your <span className="text-field-blue">topics</span></>}
         line={`${all.length} topics to explore. You have started ${started}. Pick one to see its lessons, or carry on where you are.`}
       >
-        <Link href={routes.journey()} className="inline-flex min-h-11 items-center gap-1.5 text-lg font-bold text-white underline underline-offset-4">
+        <Link href={routes.journey()} className="inline-flex min-h-11 items-center gap-1.5 text-lg font-bold text-brand-strong underline underline-offset-4">
           See them on the world map <ArrowRightIcon size={18} />
         </Link>
       </ScreenHero>
@@ -83,43 +84,41 @@ export function TopicsScreen() {
               <li key={topic.id} className="flex">
                 <Link
                   href={hasStudyPlan(topic.id) ? topicRoutes(topic.id).study() : topicRoutes(topic.id).island()}
-                  className={`panel flex flex-1 flex-col overflow-hidden rounded-[24px] transition hover:-translate-y-0.5 ${isHere ? "ring-4 ring-brand" : ""}`}
+                  className={`panel flex flex-1 flex-col gap-4 rounded-[28px] p-5 transition hover:-translate-y-0.5 ${isHere ? "border-brand" : ""}`}
                 >
-                  {/* D-052: the topic's world colour, so a child can tell the worlds apart at a glance. */}
-                  <span className={`flex items-center gap-3 px-4 py-3 sm:px-5 ${(WORLD_FIELD[topic.world] ?? FIELDS.blue).bg} ${(WORLD_FIELD[topic.world] ?? FIELDS.blue).text}`}>
-                    <span className="relative grid size-14 shrink-0 place-items-center rounded-full bg-surface" aria-hidden>
-                      <PaperIcon name={topic.look.icon} size={38} />
-                      {finished && (
-                        <span className="absolute -bottom-1 -right-1 grid size-6 place-items-center rounded-full bg-ok-bright text-white ring-2 ring-white">
-                          <CheckIcon size={12} strokeWidth={3} />
-                        </span>
-                      )}
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-title font-extrabold leading-snug">{topic.title}</span>
-                      <span className="block text-label font-bold">{yearsText(topic.years)}</span>
-                    </span>
-                    <ArrowRightIcon size={22} className="shrink-0" />
+                  {/* D-057: the reference site's course card: title first, a picture panel, then the facts in rows. */}
+                  <span className="flex items-start justify-between gap-3">
+                    <span className="display block text-heading-2 leading-tight text-ink">{topic.title}</span>
+                    <span className={`shrink-0 rounded-full px-3 py-0.5 text-label font-extrabold ${(WORLD_FIELD[topic.world] ?? FIELDS.blue).bg} ${(WORLD_FIELD[topic.world] ?? FIELDS.blue).text}`}>{yearsText(topic.years)}</span>
                   </span>
-                  <span className="flex flex-1 flex-col gap-3 p-4 sm:p-5">
-                    <span className="block text-label text-ink-2">{topic.subtitle}</span>
+                  <span className={`paper-grid relative grid h-36 place-items-center rounded-[22px] ${(WORLD_FIELD[topic.world] ?? FIELDS.blue).soft}`} aria-hidden>
+                    <span className="grid size-24 place-items-center rounded-full bg-surface">
+                      <PaperIcon name={topic.look.icon} size={64} />
+                    </span>
+                    {finished && (
+                      <span className="absolute right-3 top-3 grid size-8 place-items-center rounded-full bg-ok-bright text-white">
+                        <CheckIcon size={16} strokeWidth={3} />
+                      </span>
+                    )}
+                  </span>
+                  <span className="block text-body text-ink-2">{topic.subtitle}</span>
                   <span className="mt-auto block space-y-2">
                     <TopicBar o={o} label={topic.title} />
                     <span className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-label font-semibold text-ink-2">
                       <span>
-                        {o.mastered} of {o.skills} skills mastered
+                        <b className="text-ink">{o.mastered}</b> of {o.skills} skills mastered
                       </span>
                       <span>
-                        {o.lessonsDone} of {o.lessons} lessons
+                        <b className="text-ink">{o.lessonsDone}</b> of {o.lessons} lessons
                       </span>
                     </span>
-                    {(isHere || journeys > 0) && (
+                    {(isHere || journeys > 0 || hasStudyPlan(topic.id)) && (
                       <span className="flex flex-wrap gap-2">
                         {isHere && <span className="rounded-full bg-brand-soft px-3 py-0.5 text-label font-bold text-brand-strong">You are here</span>}
+                        {hasStudyPlan(topic.id) && <span className="rounded-full bg-field-navy px-3 py-0.5 text-label font-bold text-white">New: 11+ and GCSE</span>}
                         {journeys > 0 && <span className="rounded-full bg-sun-soft px-3 py-0.5 text-label font-bold text-ink">Learn with Emma</span>}
                       </span>
                     )}
-                  </span>
                   </span>
                 </Link>
               </li>

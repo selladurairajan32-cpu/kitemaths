@@ -232,7 +232,7 @@ export default function DesignSpecimenPage() {
         </p>
       </header>
 
-      <Section id="type" item="UX-003" title="Type scale" note="One font, Nunito. Each token sets size and line height together.">
+      <Section id="type" item="UX-003" title="Type scale" note="DM Sans for reading, Comic Neue for titles (D-057). Each token sets size and line height together.">
         <ul className="divide-y divide-line">
           {TYPE_SCALE.map((t) => (
             <li key={t.token} className="grid gap-2 py-4 sm:grid-cols-[12rem_1fr] sm:gap-6">

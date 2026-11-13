@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { MasteryKey, MasteryRing, TopicBar } from "@/components/kid/Overview";
 import { PaperIcon } from "@/components/paper/PaperIcon";
+import { Scallop } from "@/components/kid/Scallop";
 import { Pic } from "@/components/paper/Pic";
 import { ArrowRightIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton } from "@/components/ui/Screen";
@@ -37,7 +38,7 @@ export function ProgressScreen() {
 
   return (
     <div className="space-y-8">
-      <section className="rounded-[32px] bg-tile-sky px-5 py-7 sm:px-10 sm:py-10" aria-labelledby="progress-title">
+      <section className="paper-grid relative overflow-hidden rounded-[32px] bg-tile-sky px-5 pb-12 pt-7 sm:px-10 sm:pb-14 sm:pt-10" aria-labelledby="progress-title">
         <div className="flex flex-col items-center gap-8 sm:flex-row">
           <MasteryRing s={ring} />
           <div className="min-w-0 flex-1">
@@ -52,6 +53,7 @@ export function ProgressScreen() {
             </div>
           </div>
         </div>
+        <Scallop />
       </section>
 
       <section aria-label="XP, level and streak">

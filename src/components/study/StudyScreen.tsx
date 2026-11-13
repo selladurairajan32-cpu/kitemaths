@@ -7,6 +7,7 @@ import { ReadAloud } from "@/components/kid/ReadAloud";
 import { FilmPlayer } from "@/components/explain/modes/FilmPlayer";
 import { WorkedExample } from "@/components/lesson/WorkedExample";
 import { RichText } from "@/components/math/RichText";
+import { Scallop } from "@/components/kid/Scallop";
 import { PaperIcon } from "@/components/paper/PaperIcon";
 import { QuestionPlayer, type ResultDraft } from "@/components/questions/QuestionPlayer";
 import { Button, ButtonLink } from "@/components/ui/Button";
@@ -41,9 +42,34 @@ export function StudyScreen({ part }: { part?: string }) {
   const done = subs.filter((s) => learner.lessons[s.lesson.id]?.completed).length;
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[17rem_minmax(0,1fr)] lg:gap-10">
+    <div className="space-y-8">
+    {/* D-057: the page banner of the reference site: squared paper, breadcrumbs, the topic's picture on the right. */}
+    <section aria-label={`${topic.title}: where you are`} className="paper-grid relative overflow-hidden rounded-[32px] bg-tile-orange px-6 pb-9 pt-6 sm:px-10">
+      <div className="flex items-center justify-between gap-6">
+        <div className="min-w-0">
+          <nav aria-label="Breadcrumb" className="text-label font-semibold text-ink-2">
+            <Link href={routes.topics()} className="font-bold text-ink underline-offset-4 hover:underline">
+              Topics
+            </Link>
+            <span aria-hidden> / </span>
+            <span>{topic.title}</span>
+          </nav>
+          <p className="display mt-2 text-heading-1 sm:text-display-2">
+            {topic.title}
+          </p>
+          <p className="mt-1 text-body text-ink-2">
+            {done} of {subs.length} sub-topics done · practice stops after each part · a topic test at the end
+          </p>
+        </div>
+        <span className="hidden size-28 shrink-0 place-items-center rounded-full bg-surface sm:grid" aria-hidden>
+          <PaperIcon name={topic.look.icon} size={76} />
+        </span>
+      </div>
+      <Scallop />
+    </section>
+    <div className="grid gap-6 lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-10">
       <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
-        <div className="hidden lg:block">
+        <div className="hidden rounded-[28px] bg-raised p-5 lg:block">
           <TopicList plan={plan} current={item.part} done={done} total={subs.length} />
         </div>
         <details className="panel rounded-[20px] lg:hidden">
@@ -65,6 +91,7 @@ export function StudyScreen({ part }: { part?: string }) {
         {item.kind === "test" && <TopicTest subs={subs} />}
       </div>
     </div>
+    </div>
   );
 }
 
@@ -74,20 +101,12 @@ function TopicList({ plan, current, done, total, compact = false }: { plan: Stud
     <nav aria-label={`${topic.title} sub-topics`}>
       {!compact && (
         <div className="mb-4">
-          <Link href={routes.topics()} className="text-label font-bold text-brand-strong underline underline-offset-4">
-            All topics
-          </Link>
-          <div className="mt-2 flex items-center gap-3">
-            <span className={`grid size-12 shrink-0 place-items-center rounded-full ${FIELDS.orange.bg}`} aria-hidden>
-              <PaperIcon name={topic.look.icon} size={32} />
-            </span>
-            <p className="text-title font-extrabold leading-tight text-ink">{topic.title}</p>
-          </div>
-          <div className="mt-3 h-2 overflow-hidden rounded-full bg-sunk" aria-hidden>
+          <p className="display text-title text-ink">Sub-topics</p>
+          <div className="mt-2 h-2 overflow-hidden rounded-full bg-sunk" aria-hidden>
             <span className="block h-full rounded-full bg-ok-bright" style={{ width: `${Math.round((done / total) * 100)}%` }} />
           </div>
           <p className="mt-1 text-label font-semibold text-ink-2">
-            {done} of {total} sub-topics done
+            {done} of {total} done
           </p>
         </div>
       )}
@@ -124,8 +143,8 @@ function TopicList({ plan, current, done, total, compact = false }: { plan: Stud
                 <span className="min-w-0 flex-1">
                   {label}
                   {finished && <span className="sr-only"> (done)</span>}
+                  {i.kind === "sub" && deepFor(topic.id, i.lesson.id) && <span className="mt-0.5 block text-label font-extrabold text-field-navy">11+ and GCSE</span>}
                 </span>
-                {i.kind === "sub" && deepFor(topic.id, i.lesson.id) && <span className="shrink-0 rounded-full bg-field-navy px-2 py-0.5 text-label font-extrabold text-white">GCSE</span>}
               </Link>
             </li>
           );

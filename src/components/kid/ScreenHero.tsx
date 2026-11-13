@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 import { Pic, type PicName } from "@/components/paper/Pic";
 import type { Field } from "./fields";
 import { Kip, type KipMood } from "./Kip";
+import { Eyebrow } from "./Eyebrow";
+import { Scallop } from "./Scallop";
 
 /**
  * The top of a kids' screen: a colour field (D-052) or a white panel, with a 3D picture, Kip or the guide, one big friendly
@@ -17,6 +19,7 @@ export function ScreenHero({
   children,
   titleId,
   aside,
+  eyebrow,
 }: {
   /** A 3D picture in a white tile. */
   pic?: PicName;
@@ -33,32 +36,34 @@ export function ScreenHero({
   titleId?: string;
   /** Something on the right on wide screens (a figure, a picture). */
   aside?: ReactNode;
+  /** D-057: a small label above the title. */
+  eyebrow?: ReactNode;
 }) {
+  // D-057: a pale banner on squared paper, rounded off at the bottom, with the picture large on the right.
+  const tint = field?.soft ?? "bg-tile-blue";
+  const picture = guide ? (
+    <Pic name="guide-wave" size={150} priority />
+  ) : kip ? (
+    <Kip mood={kip} size={130} />
+  ) : pic ? (
+    <span className="grid size-36 place-items-center rounded-full bg-surface" aria-hidden>
+      <Pic name={pic} size={96} priority />
+    </span>
+  ) : null;
   return (
-    <section className={`rounded-[32px] px-5 py-7 sm:px-10 sm:py-9 ${field ? `${field.bg} ${field.text}` : "panel"}`} aria-labelledby={titleId}>
+    <section className={`paper-grid relative overflow-hidden rounded-[32px] px-6 pb-10 pt-8 sm:px-10 sm:pb-12 sm:pt-10 ${tint}`} aria-labelledby={titleId}>
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex min-w-0 flex-col gap-5 sm:flex-row sm:items-center">
-          {guide ? (
-            <span className={`grid size-28 shrink-0 place-items-center rounded-full ${field ? "bg-surface" : ""}`} aria-hidden>
-              <Pic name="guide-wave" size={96} priority />
-            </span>
-          ) : kip ? (
-            <Kip mood={kip} size={104} className="shrink-0" />
-          ) : pic ? (
-            <span className="grid size-24 shrink-0 place-items-center rounded-full bg-surface shadow-[var(--shadow-card)]" aria-hidden>
-              <Pic name={pic} size={68} priority />
-            </span>
-          ) : null}
-          <div className="min-w-0">
-            <h1 id={titleId} className="display text-heading-1 sm:text-display-2">
-              {title}
-            </h1>
-            {line && <div className={`mt-2 max-w-2xl text-lg ${field ? "" : "text-ink-2"}`}>{line}</div>}
-            {children && <div className="mt-6 flex flex-wrap items-center gap-3">{children}</div>}
-          </div>
+        <div className="min-w-0 flex-1">
+          {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
+          <h1 id={titleId} className={`display text-heading-1 sm:text-display-2 ${eyebrow ? "mt-3" : ""}`}>
+            {title}
+          </h1>
+          {line && <div className="mt-3 max-w-2xl text-body-lg text-ink-2">{line}</div>}
+          {children && <div className="mt-6 flex flex-wrap items-center gap-3">{children}</div>}
         </div>
-        {aside && <div className="shrink-0">{aside}</div>}
+        {aside ? <div className="shrink-0">{aside}</div> : picture && <div className="hidden shrink-0 sm:block" aria-hidden>{picture}</div>}
       </div>
+      <Scallop />
     </section>
   );
 }
