@@ -54,7 +54,7 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
   pilot before any other concept moves to the canvas.** `journey.cjs`, `journey-look.cjs` and `journey-e2e.cjs` still
   open this concept and expect the older layout: point them at another journey before using them.
 
-- **D-062 plain pages** (built, READY FOR QA, not deployed): Home, Topics and the topic page (`SkyMapScreen`, every topic) on
+- **D-062 plain pages** (built, READY FOR QA, deployed on request, D-063, CH-117): Home, Topics and the topic page (`SkyMapScreen`, every topic) on
   `components/kid/Plain.tsx`: one next step with the only yellow button, then quiet rows. `subTopicHref` in
   `topics/overview.ts` decides where a sub-topic opens (canvas, study page, or lesson). Click-through:
   `node docs/product/verification/full-flow.cjs`. `kid-pages.cjs` expects the earlier Home and Topics. Not redesigned
