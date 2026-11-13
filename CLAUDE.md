@@ -38,7 +38,7 @@ only accepted items may have `accepted` cases. Update `test-cases.csv` in the sa
 
 **New session? Read `docs/product/HANDOFF.md` first:** branches, what is done, what is next, and how to rebuild films.
 
-`docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Latest: D-052/D-053 built (white and
+`docs/product/STATUS.md` is the authoritative status register; check it rather than this summary. Latest: D-060 built (redesign pilot: `fractions-2/add-different` on the full-screen lesson canvas, six phases Discover, Explore, Understand, Practise, Apply, Prove it; `components/canvas/`, `topics/fractions-2/canvas/`, `kit/canvasLessons.tsx`, `canvas: true` in `kit/journeys.ts`; questions, marking and MAST-001 unchanged; CH-113, CH-114; `reports/D-060-lesson-canvas-pilot-report.md`; READY FOR QA, not deployed; no other concept moves to the canvas until the Product Owner judges the pilot). Before that: D-052/D-053 built (white and
 clean with colour fields per stage, world and banner, `kid/fields.ts`, `--color-field-*`; no gradients or glass, the
 original palette guard restored; question screens as one sheet with "Question N of M"; CH-105, CH-106; READY FOR QA,
 not deployed). Before that: D-050 batch 1

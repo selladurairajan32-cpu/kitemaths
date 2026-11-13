@@ -46,6 +46,14 @@ Read this first in a new session, after `CLAUDE.md` and `AGENTS.md`. `STATUS.md`
   stage, world and peer colours; `--color-field-*` tokens, white text at 5:1 or more). No gradients or glass anywhere
   (`design.test.ts`). CH-105, CH-106.
 
+- **D-060 lesson canvas pilot** (built, READY FOR QA, not deployed): `fractions-2/add-different` is taught full screen in six
+  phases (Discover → Explore → Understand → Practise → Apply → Prove it). Generic frame in `components/canvas/`; the
+  concept's own phases in `topics/fractions-2/canvas/`; registry `kit/canvasLessons.tsx`; switched on by `canvas: true`
+  in `kit/journeys.ts`. Report and design direction: `reports/D-060-lesson-canvas-pilot-report.md` (CH-113, CH-114).
+  Browser walk: `node docs/product/verification/lesson-canvas.cjs`. **Waiting for the Product Owner's verdict on the
+  pilot before any other concept moves to the canvas.** `journey.cjs`, `journey-look.cjs` and `journey-e2e.cjs` still
+  open this concept and expect the older layout: point them at another journey before using them.
+
 **Next (D-043 plan, in order):**
 1. **The ten hardest concepts on the journey** (4 done in batch 1; 6 to go), in batches of 4. Each one needs:
    - a script;
