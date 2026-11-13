@@ -1,25 +1,31 @@
 "use client";
 
-import { explanationsFor } from "@/topics/kit/explanationIndex";
 import Link from "next/link";
-import { Kip, KipSays } from "@/components/kid/Kip";
+import { Fragment } from "react";
 import { KID_STATUS } from "@/components/kid/kidText";
-import { ScreenHero } from "@/components/kid/ScreenHero";
+import { Column, NextStep, PageTitle, Row, Rows, Section, Steps, type Mark } from "@/components/kid/Plain";
 import { RichText } from "@/components/math/RichText";
 import { PaperIcon, type IconName } from "@/components/paper/PaperIcon";
-import { isPicName, Pic } from "@/components/paper/Pic";
-import { ArrowLeftIcon, ArrowRightIcon, CheckIcon } from "@/components/ui/Icons";
+import { ButtonLink } from "@/components/ui/Button";
+import { ArrowLeftIcon, ArrowRightIcon } from "@/components/ui/Icons";
+import { ProgressBar } from "@/components/ui/Progress";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 import { allLessonEvidence, unmetPrerequisites, type LessonEvidence } from "@/engine/evidence";
+import { factStates } from "@/engine/facts";
 import { isPracticeMilestoneMet, recommendNext, reviewSkills, strongSkills } from "@/engine/journey";
 import { skillMastery } from "@/engine/mastery";
 import { STARS } from "@/engine/rewards";
+import { journeyDone } from "@/engine/overview";
+import { CANVAS_LABEL, CANVAS_PHASES, canvasReached } from "@/engine/topicJourney";
 import { routes as appRoutes } from "@/lib/routes";
-import { useHydrated } from "@/lib/store";
-import { useTopicState } from "@/topics/context";
+import { useHydrated, useLearner } from "@/lib/store";
 import { topicOf } from "@/topics";
-import { factStates } from "@/engine/facts";
+import { useTopicState } from "@/topics/context";
+import { JOURNEYS } from "@/topics/kit/journeys";
+import { subTopicHref } from "@/topics/overview";
+import { studyPlan } from "@/topics/kit/study";
 import { FACTS_TOPIC } from "@/topics/times-tables/facts";
+import { WORLDS } from "@/topics/worlds";
 
 type Status = "done" | "current" | "open";
 
@@ -40,18 +46,26 @@ interface Stop {
   bestAfter?: string;
   status: Status;
   reward: number;
+  /** D-062: the heading of the part this sub-topic starts (topics with a study plan). */
+  part?: string;
+  /** D-062: where a lesson on the canvas has got to, 0 to 6; undefined when the sub-topic is not taught there. */
+  phase?: number;
+  /** D-062: the same idea as a film with guided steps (a topic journey in the earlier layout). */
+  film?: string;
+  minutes?: number;
 }
 
-/** Lessons sway left and right to keep the island-path feel, without fixed heights, so text can grow (UX-003 AC3). */
-const SWAY = ["sm:ml-0", "sm:ml-16", "sm:ml-28", "sm:ml-16"];
-
 /**
- * The island map: the child's learning journey (FR-011). A lesson counts as done only with independent evidence
- * (CUR-002 §4); reaching its end is shown as "finished", with the practice that completes it.
+ * A topic's page: its sub-topics in teaching order, then mixed practice and the big challenge (FR-011). A lesson counts
+ * as done only with independent evidence (CUR-002 §4); reaching its end is shown as "finished", with the practice that
+ * completes it. D-062: one plain list with one thing to do next. Each sub-topic opens where it is taught best: the
+ * lesson canvas where it has one (D-060), the topic learning page where the topic has a study plan (D-054), else the
+ * lesson. A sub-topic that also has a film journey offers it as a second way in.
  */
 export function SkyMapScreen() {
   const hydrated = useHydrated();
   const { topic, learner, links } = useTopicState();
+  const all = useLearner();
   const { skillById, lessonLook } = topic;
   const routes = { ...links, assessment: links.check };
   if (!hydrated) return <ScreenSkeleton />;
@@ -85,20 +99,32 @@ export function SkyMapScreen() {
     }
   };
 
+  const plan = studyPlan(topic);
+  const partOf = new Map(plan.flatMap((it) => (it.kind === "sub" && it.partTitle ? [[it.lesson.id, it.partTitle] as const] : [])));
+  // Sub-topics in teaching order: the study plan's where there is one (any lesson it leaves out follows).
+  const planned = plan.flatMap((it) => (it.kind === "sub" ? [it.lesson] : []));
+  const lessons = [...planned, ...topic.lessons.filter((l) => !planned.includes(l))];
   const stops: Stop[] = [
-    ...topic.lessons.map((l, i): Stop => {
+    ...lessons.map((l, i): Stop => {
       const e = evidence.get(l.id)!;
+      const journey = e.skill ? JOURNEYS.find((j) => j.topicId === topic.id && j.skill === e.skill) : undefined;
+      const saved = journey ? all.journeys?.[`${topic.id}/${journey.concept}`] : undefined;
+      const phase = journey?.canvas ? (saved ? (journeyDone(saved) ? CANVAS_PHASES.length : canvasReached(saved)) : 0) : undefined;
       const look = lessonLook(l.id);
       const current = (rec.kind === "lesson" && rec.lessonId === l.id) || (rec.kind === "practice" && rec.focusSkill !== null && rec.focusSkill === e.skill && e.status === "needs-evidence");
       const unmet = e.status === "not-started" ? unmetPrerequisites(topic, learner, l.id) : [];
       return {
         key: l.id,
-        href: routes.lesson(l.id),
+        href: subTopicHref(topic.id, l.id, e.skill),
         ...look,
+        part: partOf.get(l.id),
+        phase,
+        film: journey && !journey.canvas ? links.learn(journey.concept) : undefined,
+        minutes: l.minutes,
         kicker: `Lesson ${i + 1}`,
         title: l.title,
         outcome: e.skill ? skillById(e.skill).title : undefined,
-        line: lessonLine(e, l.minutes, l.summary, l.steps.length),
+        line: phase !== undefined && phase > 0 && phase < CANVAS_PHASES.length && e.status !== "evidenced" ? `Carry on: ${CANVAS_LABEL[CANVAS_PHASES[phase]!]}, step ${phase + 1} of ${CANVAS_PHASES.length}.` : lessonLine(e, l.minutes, l.summary, l.steps.length),
         extra:
           (e.status === "needs-evidence" || e.status === "needs-review") && e.skill
             ? { href: routes.practice(e.skill), label: e.status === "needs-review" ? "Practise it" : "Finish with practice" }
@@ -137,157 +163,121 @@ export function SkyMapScreen() {
   ];
   const doneCount = stops.filter((s) => s.status === "done").length;
 
+  const current = stops.find((s) => s.status === "current") ?? stops.find((s) => s.status === "open");
+  const world = WORLDS.find((w) => w.id === topic.world);
+  const lessonCount = lessons.length;
+  const mark = (s: Stop, i: number): Mark => (s.status === "done" ? { kind: "done" } : i < lessonCount ? (s === current ? { kind: "here", n: i + 1 } : { kind: "number", n: i + 1 }) : { kind: "pic", node: <PaperIcon name={s.icon} size={26} /> });
+  // The topic's special areas (facts, mocks, methods), as plain rows.
+  const areas: { href: string; icon: IconName; title: string; line: string }[] = [
+    ...(topic.id === FACTS_TOPIC ? [{ href: links.facts(), icon: "times" as IconName, title: "My times-table facts", line: `${factStates(learner.results).filter((x) => x.status === "known").length} of 66 facts known. Practise or check them.` }] : []),
+    ...(topic.id === "mock-exams" ? [{ href: links.mock(), icon: "trophy" as IconName, title: "Practice mock", line: "Practise like a real test, then see what to work on." }] : []),
+    ...(topic.id === "mental-maths" ? [{ href: links.strategies(), icon: "bulb" as IconName, title: "Mental maths methods", line: "Pick the best method, and try the one-minute challenge." }] : []),
+  ];
+  // Journeys that belong to no lesson here keep their own row, so nothing that was reachable is lost.
+  const loose = JOURNEYS.filter((j) => j.topicId === topic.id && !topic.lessons.some((l) => evidence.get(l.id)?.skill === j.skill));
+
   return (
-    <div className="mx-auto max-w-3xl space-y-5">
-      <Link href={appRoutes.journey()} className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-1 text-label font-semibold text-muted hover:text-ink">
-        <ArrowLeftIcon size={16} /> World map
-      </Link>
-      <ScreenHero
-        pic={isPicName(topic.look.icon) ? topic.look.icon : "map"}
-        titleId="island-title"
-        title={topic.title}
-        line={`${doneCount} of ${stops.length} done.`}
-      />
-
-      {review.length > 0 && (
-        <KipSays mood="think" tone="sun" speak={`Let's make ${skillById(review[0]).title} strong again.`}>
-          <span>
-            Let&apos;s make <strong>{skillById(review[0]).title}</strong> strong again!{" "}
-            <Link href={routes.practice(review[0])} className="font-semibold text-brand underline underline-offset-2">
-              Practise it
-            </Link>
-          </span>
-        </KipSays>
-      )}
-
-      {explanationsFor(topic.id).map((e) => (
-        // D-040, D-041, D-043: a topic journey for this island's hardest idea: learn three ways, practise, apply, check.
-        <Link key={e.id} href={links.learn(e.id)} className="flex items-center gap-4 rounded-[24px] border-2 border-brand bg-linear-to-r from-brand-soft to-sky-soft p-4 shadow-[var(--shadow-card)] transition hover:shadow-[var(--shadow-lift)]">
-          <Pic name="lab" size={48} />
-          <span className="min-w-0 flex-1">
-            <span className="block text-title font-extrabold text-ink">Learn it: {e.title}</span>
-            <span className="block text-body text-ink-2">Watch, step through or try it, then practise, apply and check what you know.</span>
-          </span>
-          <ArrowRightIcon size={20} className="shrink-0 text-ink-2" />
+    <Column>
+      <div className="flex flex-col gap-3">
+        <Link href={appRoutes.topics()} className="inline-flex min-h-11 items-center gap-1.5 self-start text-label font-bold text-ink-2 hover:text-ink">
+          <ArrowLeftIcon size={16} /> All topics
         </Link>
-      ))}
-
-      {topic.id === FACTS_TOPIC && (
-        // R2: the times-tables island's facts area (TT-004 to TT-012).
-        <Link href={links.facts()} className="flex items-center gap-4 rounded-[24px] border-2 border-brand bg-surface p-4 shadow-[var(--shadow-card)] transition hover:shadow-[var(--shadow-lift)]">
-          <Pic name="times" size={48} />
-          <span className="min-w-0 flex-1">
-            <span className="block text-title font-extrabold text-ink">My times-table facts</span>
-            <span className="block text-body text-ink-2">
-              {factStates(learner.results).filter((x) => x.status === "known").length} of 66 facts known. Practise or check them.
+        <PageTitle id="island-title" eyebrow={world?.title} title={topic.title} line={topic.subtitle}>
+          <div className="mt-2 flex max-w-md items-center gap-3">
+            <ProgressBar value={doneCount / stops.length} tone="ok" label={`${doneCount} of ${stops.length} done`} className="h-2.5" />
+            <span className="whitespace-nowrap text-label font-bold text-ink-2">
+              {doneCount} of {stops.length} done
             </span>
-          </span>
-          <ArrowRightIcon size={20} className="shrink-0 text-ink-2" />
-        </Link>
+          </div>
+        </PageTitle>
+      </div>
+
+      {current && (
+        <NextStep
+          id="next-title"
+          label={review.length > 0 ? "Make it strong again" : doneCount === 0 && current === stops[0] ? "Start here" : "Next"}
+          title={review.length > 0 ? skillById(review[0]).title : current.title}
+          line={review.length > 0 ? "A few questions on just this skill." : <RichText text={current.line} />}
+          action={
+            <ButtonLink href={review.length > 0 ? routes.practice(review[0]) : (current.extra?.href ?? current.href)} variant="cta" size="xl">
+              {review.length > 0 ? "Practise it" : (current.extra?.label ?? (current.phase ? "Carry on" : "Start"))} <ArrowRightIcon size={20} />
+            </ButtonLink>
+          }
+        >
+          {current.phase !== undefined && review.length === 0 && <Steps count={CANVAS_PHASES.length} done={current.phase} label={`Step ${Math.min(current.phase + 1, CANVAS_PHASES.length)} of ${CANVAS_PHASES.length}`} />}
+        </NextStep>
       )}
 
-      {topic.id === "mock-exams" && (
-        // R5: practice mock tests with analysis (EXAM-005, EXAM-006).
-        <Link href={links.mock()} className="flex items-center gap-4 rounded-[24px] border-2 border-brand bg-surface p-4 shadow-[var(--shadow-card)] transition hover:shadow-[var(--shadow-lift)]">
-          <Pic name="exam" size={48} />
-          <span className="min-w-0 flex-1">
-            <span className="block text-title font-extrabold text-ink">Practice mock</span>
-            <span className="block text-body text-ink-2">Practise like a real test, then see what to work on.</span>
-          </span>
-          <ArrowRightIcon size={20} className="shrink-0 text-ink-2" />
-        </Link>
+      <Section id="path-title" title="Sub-topics" line="In the order that works best. You can open any of them.">
+        <Rows ordered label="Lessons and challenges">
+          {stops.map((s, i) => (
+            <Fragment key={s.key}>
+              {s.part && (
+                <li role="presentation" className="pb-2 pt-6 text-label font-extrabold uppercase tracking-widest text-muted first:pt-1">
+                  {s.part}
+                </li>
+              )}
+              {i === lessonCount && <li role="presentation" className="pb-2 pt-6 text-label font-extrabold uppercase tracking-widest text-muted">Then</li>}
+              <Row
+                href={s.href}
+                mark={mark(s, i)}
+                current={s === current}
+                label={`${s.title}${s.status === "done" ? ". Done." : s === current ? ". Next up." : ""}`}
+                title={s.title}
+                line={<RichText text={s.line} />}
+                trail={s.status === "done" ? "Done" : s.phase ? `${Math.min(s.phase, CANVAS_PHASES.length)} of ${CANVAS_PHASES.length}` : s.phase === 0 ? "Hands-on" : undefined}
+                below={
+                  (s.bestAfter || s.extra || s.film) && (
+                    <div className="flex flex-col items-start gap-1">
+                      {s.bestAfter && <p className="rounded-[14px] bg-sun-soft px-3 py-1.5 text-label text-ink">{s.bestAfter}</p>}
+                      {s.extra && (
+                        <Link href={s.extra.href} className="inline-flex min-h-11 items-center text-label font-bold text-brand-strong underline underline-offset-4">
+                          {s.extra.label}
+                          <span className="sr-only">: {s.title}</span>
+                        </Link>
+                      )}
+                      {s.film && (
+                        <Link href={s.film} className="inline-flex min-h-11 items-center text-label font-bold text-brand-strong underline underline-offset-4">
+                          Watch the film and try it<span className="sr-only">: {s.title}</span>
+                        </Link>
+                      )}
+                    </div>
+                  )
+                }
+              />
+            </Fragment>
+          ))}
+        </Rows>
+      </Section>
+
+      {(areas.length > 0 || loose.length > 0) && (
+        <Section id="more-title" title="More in this topic">
+          <Rows>
+            {areas.map((a) => (
+              <Row key={a.href} href={a.href} mark={{ kind: "pic", node: <PaperIcon name={a.icon} size={26} /> }} title={a.title} line={a.line} />
+            ))}
+            {loose.map((j) => (
+              <Row key={j.concept} href={links.learn(j.concept)} mark={{ kind: "pic", node: <PaperIcon name="bulb" size={26} /> }} title={j.title} line="Learn it step by step, then practise and check what you know." />
+            ))}
+          </Rows>
+        </Section>
       )}
 
-      {topic.id === "mental-maths" && (
-        // R3: the mental-maths island's methods lab (MM-009 to MM-011).
-        <Link href={links.strategies()} className="flex items-center gap-4 rounded-[24px] border-2 border-brand bg-surface p-4 shadow-[var(--shadow-card)] transition hover:shadow-[var(--shadow-lift)]">
-          <Pic name="bulb" size={48} />
-          <span className="min-w-0 flex-1">
-            <span className="block text-title font-extrabold text-ink">Mental maths methods</span>
-            <span className="block text-body text-ink-2">Pick the best method, and try the one-minute challenge.</span>
-          </span>
-          <ArrowRightIcon size={20} className="shrink-0 text-ink-2" />
-        </Link>
-      )}
-
-      <section className="rounded-[32px] bg-sky-soft px-3 py-5 sm:px-5" aria-label="Lessons and challenges">
-        <ol className="relative space-y-4">
-          <span className="absolute bottom-8 left-[2.375rem] top-8 w-1 rounded-full bg-surface sm:hidden" aria-hidden />
-          {stops.map((s, i) => {
-            const ring =
-              s.status === "done" ? "ring-[5px] ring-ok-bright" : s.status === "current" ? "ring-[6px] ring-brand" : "ring-4 ring-line";
-            const stateText = s.status === "done" ? "Done" : s.status === "current" ? "Next up" : "";
-            return (
-              <li key={s.key} className={`relative flex min-w-0 items-start gap-3 sm:gap-4 ${SWAY[i % SWAY.length]}`} aria-current={s.status === "current" ? "step" : undefined}>
-                <Link href={s.href} className="group relative shrink-0 rounded-full" aria-label={`${s.title}${stateText ? `. ${stateText}.` : ""}`}>
-                  <span className={`relative grid size-[4.75rem] place-items-center rounded-full bg-surface shadow-[var(--shadow-card)] transition-transform group-hover:-translate-y-0.5 ${ring}`}>
-                    <PaperIcon name={s.icon} size={44} muted={s.status === "open" && i > topic.lessons.length} />
-                    {s.status === "done" && (
-                      <span className="absolute -right-1 -top-1 grid size-8 place-items-center rounded-full bg-ok-bright text-white ring-[3px] ring-white">
-                        <CheckIcon size={16} strokeWidth={3} />
-                      </span>
-                    )}
-                  </span>
-                </Link>
-                <div className={`min-w-0 flex-1 rounded-[24px] bg-surface p-4 shadow-[var(--shadow-card)] ${s.status === "current" ? "ring-2 ring-brand" : ""}`}>
-                  <p className="flex flex-wrap items-center gap-2 text-label font-bold text-ink-2">
-                    {s.kicker}
-                    {s.status === "current" && <span className="rounded-full bg-brand px-2.5 py-0.5 text-on-brand">Next</span>}
-                    {s.status === "done" && <span className="rounded-full bg-ok-soft px-2.5 py-0.5 text-ok">Done</span>}
-                  </p>
-                  <p className="text-title font-extrabold text-ink">
-                    <Link href={s.href} className="hover:underline">
-                      {s.title}
-                    </Link>
-                  </p>
-                  <p className="mt-0.5 text-body text-ink-2">
-                    {/* Lesson summaries can hold fraction markup such as {1/2}. */}
-                    <RichText text={s.line} />
-                  </p>
-                  {s.bestAfter && <p className="mt-1.5 rounded-[14px] bg-sun-soft px-3 py-1.5 text-label text-ink">{s.bestAfter}</p>}
-                  <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1">
-                    {s.extra && (
-                      <Link href={s.extra.href} className="inline-flex min-h-11 items-center text-label font-bold text-brand underline underline-offset-2">
-                        {s.extra.label}
-                        <span className="sr-only">: {s.title}</span>
-                      </Link>
-                    )}
-                    {s.reward > 0 && s.status !== "done" && (
-                      <span className="inline-flex items-center gap-1 text-label font-bold text-ink">
-                        +{s.reward} <Pic name="star" size={20} />
-                      </span>
-                    )}
-                  </div>
-                </div>
-                {s.status === "current" && (
-                  <div className="hidden shrink-0 self-center lg:block" aria-hidden>
-                    <Kip size={56} mood="cheer" />
-                  </div>
-                )}
-              </li>
-            );
-          })}
-        </ol>
-      </section>
-
-      <section className="card p-5" aria-labelledby="skills-title">
-        <h2 id="skills-title" className="display text-title">
-          My skills
-        </h2>
-        <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+      <Section id="skills-title" title="My skills" line="Open one to practise just that skill.">
+        <Rows>
           {topic.skills.map((sk) => {
             const st = KID_STATUS[skillMastery(sk.id, learner.results).status];
             return (
-              <li key={sk.id}>
-                <Link href={routes.practice(sk.id)} className="flex items-center justify-between gap-3 rounded-[20px] bg-paper px-3 py-2.5 hover:bg-sunk">
-                  <span className="min-w-0 text-body font-semibold">{sk.title}</span>
+              <li key={sk.id} className="border-t border-line last:border-b">
+                <Link href={routes.practice(sk.id)} className="-mx-3 flex min-h-14 items-center justify-between gap-3 rounded-[var(--radius-control)] px-3 py-2 hover:bg-raised">
+                  <span className="min-w-0 text-body font-semibold text-ink">{sk.title}</span>
                   <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-label font-bold ${st.cls}`}>{st.label}</span>
                 </Link>
               </li>
             );
           })}
-        </ul>
-      </section>
-    </div>
+        </Rows>
+      </Section>
+    </Column>
   );
 }

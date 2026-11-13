@@ -2,28 +2,21 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ScreenHero } from "@/components/kid/ScreenHero";
 import { TopicBar, yearsText } from "@/components/kid/Overview";
+import { Column, PageTitle, Row, Rows, Section } from "@/components/kid/Plain";
 import { PaperIcon } from "@/components/paper/PaperIcon";
-import { ArrowRightIcon, CheckIcon } from "@/components/ui/Icons";
+import { ArrowRightIcon } from "@/components/ui/Icons";
 import { ScreenSkeleton } from "@/components/ui/Screen";
 import { routes, topicRoutes } from "@/lib/routes";
 import { useHydrated, useLearner } from "@/lib/store";
-import { JOURNEYS } from "@/topics/kit/journeys";
-import { hasStudyPlan } from "@/topics/kit/study";
 import { topicOverviews } from "@/topics/overview";
 import { activeTopic } from "@/topics/recommend";
 import { WORLDS } from "@/topics/worlds";
-import { FIELDS, WORLD_FIELD } from "@/components/kid/fields";
-import { Band, type BandTone } from "@/components/kid/Band";
-
-/** D-058: each world in its own band, so the worlds read as separate places. */
-const WORLD_BAND: Record<string, BandTone> = { number: "grid", calc: "sky", fdp: "peach", measure: "mint", shape: "rose", summit: "sunk" };
-
 
 /**
- * D-043 step 3: every topic in one grid, with progress. Filter by world or by the child's school year; each card opens
- * the topic's island and says how far the child has got (skills from MAST-001, lessons from CUR-002 evidence).
+ * D-043 step 3: every topic, with progress. Filter by world or by the child's school year; each row opens the topic's
+ * page and says how far the child has got (skills from MAST-001, lessons from CUR-002 evidence). D-062: one plain list
+ * per world, a row per topic, so all the topics can be seen without a long scroll.
  */
 export function TopicsScreen() {
   const hydrated = useHydrated();
@@ -40,113 +33,84 @@ export function TopicsScreen() {
   const started = all.filter(({ o }) => o.started).length;
 
   const chip = (active: boolean) =>
-    `flex min-h-11 items-center whitespace-nowrap rounded-full px-4 text-label font-bold transition-colors ${active ? "bg-brand text-on-brand shadow-[0_6px_16px_rgb(37_99_235/0.3)]" : "bg-surface text-ink-2 shadow-[var(--shadow-card)] hover:bg-brand-soft"}`;
+    `flex min-h-11 items-center whitespace-nowrap rounded-full px-4 text-label font-bold transition-colors ${active ? "bg-ink text-white" : "bg-sunk text-ink-2 hover:bg-line"}`;
 
   return (
-    <div className="space-y-8">
-      <ScreenHero
-        guide
-        field={FIELDS.blue}
-        titleId="topics-title"
-        eyebrow="Learn"
-        title={<>All your <span className="text-field-blue">topics</span></>}
-        line={`${all.length} topics to explore. You have started ${started}. Pick one to see its lessons, or carry on where you are.`}
-      >
-        <Link href={routes.journey()} className="inline-flex min-h-11 items-center gap-1.5 text-lg font-bold text-brand-strong underline underline-offset-4">
-          See them on the world map <ArrowRightIcon size={18} />
-        </Link>
-      </ScreenHero>
-
-      <div className="space-y-3">
-        <div role="group" aria-label="Show topics from" className="flex gap-2 overflow-x-auto pb-1">
-          <button type="button" aria-pressed={world === "all"} onClick={() => setWorld("all")} className={chip(world === "all")}>
-            All topics
-          </button>
-          {WORLDS.map((w) => (
-            <button key={w.id} type="button" aria-pressed={world === w.id} onClick={() => setWorld(w.id)} className={chip(world === w.id)}>
-              {w.title}
+    <Column>
+      <PageTitle id="topics-title" title="Topics" line={`${all.length} topics. You have started ${started}. Pick one to see its sub-topics.`}>
+        <div className="mt-3 flex flex-col gap-2">
+          <div role="group" aria-label="Show topics from" className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
+            <button type="button" aria-pressed={world === "all"} onClick={() => setWorld("all")} className={chip(world === "all")}>
+              All topics
             </button>
-          ))}
+            {WORLDS.map((w) => (
+              <button key={w.id} type="button" aria-pressed={world === w.id} onClick={() => setWorld(w.id)} className={chip(world === w.id)}>
+                {w.title}
+              </button>
+            ))}
+          </div>
+          {year !== null && (
+            <label className="inline-flex min-h-11 cursor-pointer items-center gap-2 self-start text-label font-bold text-ink-2">
+              <input type="checkbox" checked={mine} onChange={(e) => setMine(e.target.checked)} className="size-5 accent-brand" />
+              Only Year {year} topics
+            </label>
+          )}
         </div>
-        {year !== null && (
-          <label className="inline-flex min-h-11 cursor-pointer items-center gap-2 text-label font-bold text-ink-2">
-            <input type="checkbox" checked={mine} onChange={(e) => setMine(e.target.checked)} className="size-5 accent-brand" />
-            Only Year {year} topics
-          </label>
-        )}
-      </div>
+      </PageTitle>
 
       {shown.length === 0 ? (
         <p className="rounded-[24px] bg-sunk p-6 text-body text-ink-2">No topics here for Year {year}. Untick &ldquo;Only Year {year} topics&rdquo; to see them all.</p>
       ) : (
-        <div className="space-y-12">
-          {WORLDS.map((w, wi) => {
-            const mine = shown.filter(({ topic }) => topic.world === w.id);
-            if (mine.length === 0) return null;
-            return (
-              <Band
-                key={w.id}
-                tone={WORLD_BAND[w.id] ?? "grid"}
-                id={`world-${w.id}`}
-                eyebrow={`World ${wi + 1}`}
-                title={w.title}
-                line={`${mine.length} ${mine.length === 1 ? "topic" : "topics"}: ${mine.map(({ topic }) => topic.title).join(", ")}`}
-              >
-                <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3" aria-label={`${w.title} topics`}>
-                  {mine.map(({ topic, o }) => {
-            const isHere = topic.id === here;
-            const finished = o.skills > 0 && o.mastered === o.skills;
-            const journeys = JOURNEYS.filter((j) => j.topicId === topic.id).length;
-            return (
-              <li key={topic.id} className="flex">
-                <Link
-                  href={hasStudyPlan(topic.id) ? topicRoutes(topic.id).study() : topicRoutes(topic.id).island()}
-                  className={`panel flex flex-1 flex-col gap-4 rounded-[28px] p-5 transition hover:-translate-y-0.5 ${isHere ? "border-brand" : ""}`}
-                >
-                  {/* D-057: the reference site's course card: title first, a picture panel, then the facts in rows. */}
-                  <span className="flex items-start justify-between gap-3">
-                    <span className="display block text-heading-2 leading-tight text-ink">{topic.title}</span>
-                    <span className={`shrink-0 rounded-full px-3 py-0.5 text-label font-extrabold ${(WORLD_FIELD[topic.world] ?? FIELDS.blue).bg} ${(WORLD_FIELD[topic.world] ?? FIELDS.blue).text}`}>{yearsText(topic.years)}</span>
-                  </span>
-                  <span className={`paper-grid relative grid h-36 place-items-center rounded-[22px] ${(WORLD_FIELD[topic.world] ?? FIELDS.blue).soft}`} aria-hidden>
-                    <span className="grid size-24 place-items-center rounded-full bg-surface">
-                      <PaperIcon name={topic.look.icon} size={64} />
-                    </span>
-                    {finished && (
-                      <span className="absolute right-3 top-3 grid size-8 place-items-center rounded-full bg-ok-bright text-white">
-                        <CheckIcon size={16} strokeWidth={3} />
-                      </span>
-                    )}
-                  </span>
-                  <span className="block text-body text-ink-2">{topic.subtitle}</span>
-                  <span className="mt-auto block space-y-2">
-                    <TopicBar o={o} label={topic.title} />
-                    <span className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 text-label font-semibold text-ink-2">
-                      <span>
-                        <b className="text-ink">{o.mastered}</b> of {o.skills} skills mastered
-                      </span>
-                      <span>
-                        <b className="text-ink">{o.lessonsDone}</b> of {o.lessons} lessons
-                      </span>
-                    </span>
-                    {(isHere || journeys > 0 || hasStudyPlan(topic.id)) && (
-                      <span className="flex flex-wrap gap-2">
-                        {isHere && <span className="rounded-full bg-brand-soft px-3 py-0.5 text-label font-bold text-brand-strong">You are here</span>}
-                        {hasStudyPlan(topic.id) && <span className="rounded-full bg-field-navy px-3 py-0.5 text-label font-bold text-white">New: 11+ and GCSE</span>}
-                        {journeys > 0 && <span className="rounded-full bg-sun-soft px-3 py-0.5 text-label font-bold text-ink">Learn with Emma</span>}
-                      </span>
-                    )}
-                  </span>
-                </Link>
-              </li>
-            );
-          })}
-                </ul>
-              </Band>
-            );
-          })}
-        </div>
+        WORLDS.map((w) => {
+          const mine = shown.filter(({ topic }) => topic.world === w.id);
+          if (mine.length === 0) return null;
+          return (
+            <Section key={w.id} id={`world-${w.id}`} title={w.title}>
+              <Rows label={`${w.title} topics`}>
+                {mine.map(({ topic, o }) => {
+                  const isHere = topic.id === here;
+                  const finished = o.skills > 0 && o.mastered === o.skills;
+                  return (
+                    <Row
+                      key={topic.id}
+                      href={topicRoutes(topic.id).island()}
+                      mark={finished ? { kind: "done" } : { kind: "pic", node: <PaperIcon name={topic.look.icon} size={28} /> }}
+                      current={isHere}
+                      title={
+                        <span className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
+                          {topic.title}
+                          {isHere && <span className="rounded-full bg-ink px-2.5 py-0.5 text-label font-bold text-white">You are here</span>}
+                        </span>
+                      }
+                      line={
+                        <span className="flex flex-col gap-1.5">
+                          <span>
+                            {yearsText(topic.years)} · {o.lessonsDone} of {o.lessons} lessons · {o.mastered} of {o.skills} skills mastered
+                          </span>
+                          {o.started && (
+                            <span className="block max-w-xs">
+                              <TopicBar o={o} label={topic.title} />
+                            </span>
+                          )}
+                          {!o.started && (
+                            <span className="sr-only">
+                              <TopicBar o={o} label={topic.title} />
+                            </span>
+                          )}
+                        </span>
+                      }
+                    />
+                  );
+                })}
+              </Rows>
+            </Section>
+          );
+        })
       )}
-    </div>
+
+      <Link href={routes.journey()} className="inline-flex min-h-11 items-center gap-1.5 self-start text-body font-bold text-brand-strong underline underline-offset-4">
+        See them on the world map <ArrowRightIcon size={18} />
+      </Link>
+    </Column>
   );
 }

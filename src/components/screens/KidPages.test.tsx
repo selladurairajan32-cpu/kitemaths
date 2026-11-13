@@ -10,7 +10,9 @@ import { TOPICS, topicById } from "@/topics";
 import { journeyFor, JOURNEYS } from "@/topics/kit/journeys";
 import { activeTopic } from "@/topics/recommend";
 import { WORLDS } from "@/topics/worlds";
+import { TopicProvider } from "@/topics/context";
 import { KidHomeScreen } from "./KidHomeScreen";
+import { SkyMapScreen } from "./SkyMapScreen";
 import { PracticeHubScreen } from "./PracticeHubScreen";
 import { ProgressScreen } from "./ProgressScreen";
 import { TestsScreen } from "./TestsScreen";
@@ -54,16 +56,30 @@ describe("kid pages (D-043 step 3)", () => {
     render(<KidHomeScreen />);
     expect(await screen.findByRole("heading", { level: 1, name: /^Hi there!/ })).toBeTruthy();
     expect(screen.getByRole("heading", { level: 2, name: def.title })).toBeTruthy();
-    expect(screen.getByText(/Fractions 2 · Step 3 of 5: Apply/)).toBeTruthy();
+    // The lesson is on the canvas, so Home counts its six steps (Apply is the fifth).
+    expect(screen.getByText(/Fractions 2 · Step 5 of 6: Apply/)).toBeTruthy();
+    expect(screen.getByRole("img", { name: "Your learning path: step 5 of 6" })).toBeTruthy();
     expect(screen.getByRole("link", { name: /^Continue/ }).getAttribute("href")).toBe("/t/fractions-2/learn/add-different");
     expect(screen.getByRole("heading", { name: "Today's plan" })).toBeTruthy();
-    expect(within(screen.getByRole("heading", { name: "Learn a new idea with Emma" }).closest("section")!).getAllByRole("link")).toHaveLength(JOURNEYS.length);
+    // D-062: the lesson being continued is not listed a second time under "Hands-on lessons".
+    expect(screen.queryByRole("heading", { name: "Hands-on lessons" })).toBeNull();
+    expect(JOURNEYS.filter((j) => j.canvas)).toHaveLength(1);
+    // One yellow button on the page: the one thing to do next.
+    expect(document.querySelectorAll(".bg-cta")).toHaveLength(1);
   });
 
-  it("shows every topic in a grid with its progress, filtered by world", async () => {
+  it("offers to continue a lesson begun on the canvas even before any question is answered", async () => {
+    updateLearner((s) => ({ ...s, journeys: { "fractions-2/add-different": { stage: 0, reached: 0, startedAt: 1000, practised: 0, applied: 0, learn: 1, learnReached: 1 } } }));
+    render(<KidHomeScreen />);
+    expect((await screen.findByRole("link", { name: /^Continue/ })).getAttribute("href")).toBe("/t/fractions-2/learn/add-different");
+    expect(screen.getByText(/Fractions 2 · Step 2 of 6: Explore/)).toBeTruthy();
+    expect(screen.queryByRole("link", { name: /^Play the warm-up/ })?.classList.contains("bg-cta") ?? false).toBe(false);
+  });
+
+  it("shows every topic in a list with its progress, filtered by world", async () => {
     const user = userEvent.setup();
     render(<TopicsScreen />);
-    // D-058: one list per world, each in its own band.
+    // D-062: one plain list per world, and every topic opens its own page of sub-topics.
     const items = (lists: HTMLElement[]) => lists.flatMap((l) => within(l).getAllByRole("listitem"));
     expect(items(await screen.findAllByRole("list", { name: / topics$/ }))).toHaveLength(TOPICS.length);
     const fdp = WORLDS.find((w) => w.id === "fdp")!;
@@ -72,6 +88,38 @@ describe("kid pages (D-043 step 3)", () => {
     expect(shown).toHaveLength(TOPICS.filter((t) => t.world === "fdp").length);
     expect(screen.getByRole("button", { name: fdp.title }).getAttribute("aria-pressed")).toBe("true");
     expect(within(shown[0]!).getByRole("img", { name: new RegExp(`skills mastered`) })).toBeTruthy();
+    expect(shown.map((li) => within(li).getByRole("link").getAttribute("href")).sort()).toEqual(TOPICS.filter((t) => t.world === "fdp").map((t) => `/t/${t.id}`).sort());
+    expect(shown.some((li) => within(li).getByRole("link").getAttribute("href") === "/t/fractions-2")).toBe(true);
+  });
+
+  it("lists a topic's sub-topics in teaching order with one thing to do next, and opens each where it is taught", async () => {
+    render(<TopicProvider topicId="fractions-2"><SkyMapScreen /></TopicProvider>);
+    expect(await screen.findByRole("heading", { level: 1, name: "Fractions 2" })).toBeTruthy();
+    expect(screen.getByRole("link", { name: /All topics/ }).getAttribute("href")).toBe("/topics");
+    const list = screen.getByRole("list", { name: "Lessons and challenges" });
+    const links = within(list).getAllByRole("link").map((a) => a.getAttribute("href"));
+    // The lesson on the canvas opens the canvas; the others open the topic learning page; a film journey is a second way in.
+    expect(links).toContain("/t/fractions-2/learn/add-different");
+    expect(links).toContain("/t/fractions-2/study/simplify");
+    expect(links).toContain("/t/fractions-2/learn/multiply-fractions");
+    expect(links.slice(-2)).toEqual(["/t/fractions-2/practice", "/t/fractions-2/check"]);
+    expect(within(list).getByText("Part 2: Adding and subtracting")).toBeTruthy();
+    // New learner: the first sub-topic is next, and it is the page's one yellow button.
+    const next = screen.getByRole("heading", { level: 2, name: "Simplest form" }).closest("section")!;
+    expect(within(next).getByRole("link", { name: /^Start/ }).getAttribute("href")).toBe("/t/fractions-2/study/simplify");
+    expect(document.querySelectorAll(".bg-cta")).toHaveLength(1);
+    expect(within(screen.getByRole("heading", { name: "My skills" }).closest("section")!).getAllByRole("link")).toHaveLength(topicById("fractions-2")!.skills.length);
+  });
+
+  it("shows how far a lesson on the canvas has got, and a topic without a study plan opens its lessons", async () => {
+    updateLearner((s) => ({ ...s, journeys: { "fractions-2/add-different": { stage: 1, reached: 1, startedAt: 1000, practised: 2, applied: 0 } } }));
+    const { unmount } = render(<TopicProvider topicId="fractions-2"><SkyMapScreen /></TopicProvider>);
+    expect(await screen.findByText("Carry on: Practise, step 4 of 6.")).toBeTruthy();
+    unmount();
+    render(<TopicProvider topicId="decimals"><SkyMapScreen /></TopicProvider>);
+    const first = topicById("decimals")!.lessons[0]!;
+    const list = await screen.findByRole("list", { name: "Lessons and challenges" });
+    expect(within(list).getAllByRole("link")[0]!.getAttribute("href")).toBe(`/t/decimals/lesson/${first.id}`);
   });
 
   it("draws the mastery ring and a bar per topic from the engine's own counts", async () => {
