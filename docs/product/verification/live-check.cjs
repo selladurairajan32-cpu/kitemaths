@@ -30,10 +30,16 @@ const cb = () => `?cb=${Date.now()}`;
     await p.evaluate(() => { const s = JSON.parse(localStorage.getItem('kite-maths:v2')); s.topics['shapes-angles'].lessons.construct = { step: 3, furthestStep: 3, completed: false }; localStorage.setItem('kite-maths:v2', JSON.stringify(s)); });
     await go('draw-tool', '/t/shapes-angles/lesson/construct/4', async () => (await p.getByRole('slider', { name: 'Ruler: length of the base' }).count()) > 0);
     // D-041, D-043: the fractions journey's Learn stage: the film loads with its length, and Step through draws its stage.
-    await go('explain-fractions', '/t/fractions-2/learn/add-different', async () => {
+    // D-060: the lesson canvas pilot opens on Discover, full screen, with no site navigation; a guess shows the two bars.
+    await go('canvas-fractions', '/t/fractions-2/learn/add-different', async () => {
+      const start = (await p.getByRole('heading', { level: 1, name: 'How much chocolate did they eat altogether?' }).count()) > 0 && (await p.getByRole('navigation', { name: 'Main' }).count()) === 0;
+      await p.getByRole('group', { name: /Have a guess/ }).getByRole('button').first().click();
+      return start && (await p.getByRole('img', { name: /Your guess/ }).count()) > 0 && (await p.getByRole('button', { name: /Find out why/ }).count()) > 0;
+    });
+    // D-041, D-043: a topic journey in the earlier layout: the film loads and the journey bar shows.
+    await go('journey-film', '/t/fractions-2/learn/multiply-fractions', async () => {
       const film = await p.waitForFunction(() => { const v = document.querySelector('video'); return v && v.readyState >= 1 && Math.round(v.duration); }, null, { timeout: 15000 }).then((h) => h.jsonValue()).catch(() => 0);
-      await p.getByRole('tab', { name: /^Step through/ }).click();
-      return film === 103 && (await p.locator('#mode-panel svg[viewBox="0 0 720 400"]').count()) > 0 && (await p.getByRole('list', { name: 'Your learning journey' }).count()) > 0;
+      return film > 0 && (await p.getByRole('list', { name: 'Your learning journey' }).count()) > 0;
     });
     // D-040, D-041: the ratio explanation: Step through draws the WebGL stage.
     await go('explain-ratio', '/t/ratio-algebra/learn/ratio', async () => {
